@@ -23,6 +23,7 @@ import { buildPublicBettingMap }            from '../services/publicBetting';
 import { getTeamPowerRating, compareToLine } from '../services/powerRatings';
 import { detectSteamMoves }                 from '../services/steamDetector';
 import { getATSSituation }                  from '../services/atsDatabase';
+import { loadSignalWeights }               from '../services/retroAnalysis';
 import { getSessionQuota }                  from '../api/oddsApiClient';
 import { generateAltLines, buildAltLineParlays, printAltLineParlayReport } from '../services/altLineParlayEngine';
 import { saveParlayPicks } from '../services/closingLineTracker';
@@ -153,9 +154,11 @@ export async function runAltParlays(sportKey: string = 'basketball_nba') {
     const aggregated = aggregateProps(allRawProps);
     console.log(`\n  Scoring ${aggregated.length} prop markets with full intelligence...`);
 
+    const learnedWeights = (() => { try { return loadSignalWeights(); } catch { return {}; } })();
     const scored = await scoreAllPropsWithIntelligence(
       aggregated, 24, contextMap, sportKey,
-      { injuryMap, lineupMap, publicBetting, powerRatings, steamMoves, atsSituations }
+      { injuryMap, lineupMap, publicBetting, powerRatings, steamMoves, atsSituations },
+      learnedWeights
     );
 
     if (scored.length === 0) {

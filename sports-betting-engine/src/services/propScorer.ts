@@ -119,6 +119,7 @@ function scoreProp(
 
 import { buildPropPredictions } from './propIntelligence';
 import { findPlayerId, getPlayerProfile } from './playerStats';
+import { applyLearnedWeights } from './retroAnalysis';
 
 export async function scoreAllPropsWithIntelligence(
   props: AggregatedProp[],
@@ -133,7 +134,8 @@ export async function scoreAllPropsWithIntelligence(
     steamMoves?: any[];
     atsSituations?: Map<string, any>;
     weatherMap?: Map<string, any>;
-  }
+  },
+  learnedWeights: Record<string, number> = {}
 ): Promise<ScoredProp[]> {
   // Enrich props with team/position using roster lookup (best effort)
   const enrichedProps = await Promise.all(props.map(async (prop) => {
@@ -201,8 +203,8 @@ export async function scoreAllPropsWithIntelligence(
   const predictions = await buildPropPredictions(propInputs, contextMap, sportKey, extraIntel)
     .catch(() => new Map());
 
-  // Score all props with intelligence adjustment
-  const baseScored = scoreAllProps(props, windowHours);
+  // Score all props with intelligence adjustment (pass contextMap for B2B detection)
+  const baseScored = scoreAllProps(props, windowHours, sportKey, contextMap);
 
   return baseScored.map(scored => {
     const key = `${scored.playerName}__${scored.statType}__${scored.side}`;
@@ -255,9 +257,13 @@ export async function scoreAllPropsWithIntelligence(
       ...intelReasons,
     ].slice(0, 5);
 
+    // Apply learned signal weights on top of intelligence adjustment
+    const signalNames = (prediction.signals ?? []).map((s: any) => s.type);
+    const weightedScore = applyLearnedWeights(adjustedScore, signalNames, learnedWeights);
+
     return {
       ...scored,
-      score: adjustedScore,
+      score: weightedScore,
       prediction,
       intelligenceScore,
       fullReasoning: cleanReasoning,
@@ -268,7 +274,8 @@ export async function scoreAllPropsWithIntelligence(
 export function scoreAllProps(
   props: AggregatedProp[],
   windowHours = 24,
-  sportKey: string = 'basketball_nba'
+  sportKey: string = 'basketball_nba',
+  contextMap?: Map<string, any>
 ): ScoredProp[] {
   const userBookKeys = getUserBookKeys();
   const scored: ScoredProp[] = [];
@@ -328,9 +335,13 @@ export function scoreAllProps(
       // Require at least 2 signals
       if (signals.length < 2) continue;
 
+      // Check if either team in this game is on a back-to-back from context
+      const ctx = contextMap?.get(prop.eventId ?? '');
+      const isB2B = !!(ctx?.homeRest?.isBackToBack || ctx?.awayRest?.isBackToBack);
+
       const score = scoreProp(
         priceDiff, prop.lineGap, prop.juiceGap,
-        prop.bookCount, false // back-to-back data added in future
+        prop.bookCount, isB2B && side === 'Over'
       );
 
       // Build reasoning
@@ -394,7 +405,7 @@ export function scoreAllProps(
         signalCount: signals.length,
         lineGapAlert,
         juiceGapAlert,
-        isBackToBack: false,
+        isBackToBack: isB2B,
         fullReasoning: reasoning,
       });
     }

@@ -40,6 +40,9 @@ function requireAuth(req: express.Request, res: express.Response, next: express.
   next();
 }
 
+// ── Concurrent scan guard ──
+const activeScans = new Set<string>();
+
 // ── Allowed commands ──
 const ALLOWED: Record<string, string> = {
   morning: 'morning', midday: 'midday', full: 'full',
@@ -101,6 +104,11 @@ app.get('/api/stream/:command', requireAuth, (req, res) => {
     return;
   }
 
+  if (activeScans.has(command)) {
+    res.status(409).json({ error: `Scan '${command}' is already running` });
+    return;
+  }
+
   // Set up Server-Sent Events
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
@@ -111,6 +119,8 @@ app.get('/api/stream/:command', requireAuth, (req, res) => {
   const send = (type: string, data: string) => {
     res.write(`event: ${type}\ndata: ${JSON.stringify(data)}\n\n`);
   };
+
+  activeScans.add(command);
 
   const args = ALLOWED[command].split(' ');
   const proc = spawn('node', ['--require', 'ts-node/register', 'src/index.ts', ...args], {
@@ -136,6 +146,7 @@ app.get('/api/stream/:command', requireAuth, (req, res) => {
   });
 
   proc.on('close', (code) => {
+    activeScans.delete(command);
     const ok = code === 0;
     send('done', ok ? 'SUCCESS' : 'ERROR');
     res.end();
@@ -159,7 +170,7 @@ app.get('/api/stream/:command', requireAuth, (req, res) => {
   });
 
   // Clean up if client disconnects
-  req.on('close', () => { try { proc.kill(); } catch {} });
+  req.on('close', () => { try { proc.kill(); } catch {} activeScans.delete(command); });
 });
 
 // ── Fallback non-streaming run (kept for compatibility) ──

@@ -267,7 +267,7 @@ export async function runSportScan(
         steamMoves,
         atsSituations,
         weatherMap,
-      });
+      }, learnedWeights);
       return scored.slice(0, PROP_CONFIG.TOP_N);
     }, []);
   }

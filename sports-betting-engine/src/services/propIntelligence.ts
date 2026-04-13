@@ -64,20 +64,21 @@ function getStatFromProfile(profile: PlayerProfile, statType: string): {
     return { l5: profile.l5PPG, season: profile.seasonPPG, l10: profile.l10PPG };
   }
   if (t.includes('rebound') || t === 'reb') {
-    return { l5: profile.l5RPG, season: profile.seasonRPG, l10: profile.l10PPG };
+    return { l5: profile.l5RPG, season: profile.seasonRPG, l10: profile.seasonRPG };
   }
   if (t.includes('assist') || t === 'ast') {
-    return { l5: profile.l5APG, season: profile.seasonAPG, l10: profile.l10PPG };
+    return { l5: profile.l5APG, season: profile.seasonAPG, l10: profile.seasonAPG };
   }
   if (t.includes('three') || t === '3pm' || t === 'threes') {
-    return { l5: profile.l5_3PG, season: profile.season3PG, l10: profile.l5_3PG };
+    return { l5: profile.l5_3PG, season: profile.season3PG, l10: profile.season3PG };
   }
   // PRA (points + rebounds + assists)
   if (t.includes('pra') || t.includes('points+')) {
+    const seasonPRA = profile.seasonPPG + profile.seasonRPG + profile.seasonAPG;
     return {
       l5: profile.l5PPG + profile.l5RPG + profile.l5APG,
-      season: profile.seasonPPG + profile.seasonRPG + profile.seasonAPG,
-      l10: profile.l10PPG,
+      season: seasonPRA,
+      l10: seasonPRA,
     };
   }
   return { l5: profile.l5PPG, season: profile.seasonPPG, l10: profile.l10PPG };

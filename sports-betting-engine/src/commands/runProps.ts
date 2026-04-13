@@ -26,6 +26,7 @@ import { getSessionQuota }           from '../api/oddsApiClient';
 import { getSportByKey }             from '../config/sports';
 import { EventSummary }              from '../types/odds';
 import { scorePitcherProp, printPitcherPropReport } from '../services/mlbPitcherIntelligence';
+import { loadSignalWeights } from '../services/retroAnalysis';
 
 function safeSync<T>(fn: () => T, fallback: T): T {
   try { return fn(); } catch { return fallback; }
@@ -157,6 +158,7 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
       }
     }, undefined);
 
+    const learnedWeights = safeSync(() => loadSignalWeights(), {});
     console.log('  [OK] Intelligence suite built. Fetching prop lines...');
 
     // -- Step 3: Fetch prop lines (same method as sport scan) ----
@@ -200,7 +202,8 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
         powerRatings,
         steamMoves,
         atsSituations,
-      }
+      },
+      learnedWeights
     )).slice(0, PROP_CONFIG.TOP_N);
 
     // -- Step 5: Print ------------------------------------------
