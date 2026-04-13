@@ -18,6 +18,7 @@ import { runFixResults }      from './commands/runFixResults';
 import { runLineMonitor }     from './commands/runLineMonitor';
 import { runFirstScorer }     from './commands/runFirstScorer';
 import { runTeasers }         from './commands/runTeasers';
+import { runLateGames }       from './commands/runLateGames';
 import { printWeeklySummary } from './services/weeklySummary';
 
 const args = process.argv.slice(2);
@@ -71,11 +72,7 @@ async function main() {
     case 'monitor': case 'linemonitor':
       await runLineMonitor(); break;
     case 'lategames': case 'late':
-      // Run single-sport scan but only for games starting in next 3 hours
-      process.env.WINDOW_HOURS_OVERRIDE = '3';
-      await (await import('./commands/runSportScan')).runSportScan('basketball_nba');
-      delete process.env.WINDOW_HOURS_OVERRIDE;
-      break;
+      await runLateGames({ forceRefresh }); break;
     case 'firstbasket': case 'fb':
       await runFirstScorer('basketball_nba'); break;
     case 'firsttd': case 'ftd':
