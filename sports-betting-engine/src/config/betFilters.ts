@@ -25,7 +25,10 @@ export const BET_FILTERS = {
   MIN_BOOKS_NCAA: 2,                   // NCAA markets thin
 
   // Minimum hours until game
+  // Props: 0.25 (15 min) -- books pull lines right at tip
+  // Game lines: 1.0 -- need time to act on the edge
   MIN_HOURS_UNTIL_GAME: 1,
+  MIN_HOURS_UNTIL_GAME_PROPS: 0.25,
 
   // Recent movement window
   RECENT_MOVEMENT_HOURS: 2,

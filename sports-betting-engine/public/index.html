@@ -220,6 +220,7 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
       <button class="scan-btn prop" onclick="runCmd('sgp-nfl','NFL SGP')"><span class="num">15</span>NFL SGP</button>
       <button class="scan-btn prop" onclick="runCmd('firstbasket','First Basket')"><span class="num">28</span>First Basket</button>
       <button class="scan-btn prop" onclick="runCmd('firsttd','First TD')"><span class="num">29</span>First TD</button>
+      <button class="scan-btn prop" onclick="runCmd('teasers','NFL Teasers')"><span class="num">30</span>NFL Teasers</button>
     </div>
 
     <!-- TRACKING -->
@@ -241,6 +242,7 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
     <div class="btn-grid">
       <button class="scan-btn" onclick="runCmd('mock','Preview')"><span class="num">25</span>Preview</button>
       <button class="scan-btn prime" onclick="runCmd('lategames','Late Games (90min)')"><span class="num">LG</span>Late Games 90min</button>
+      <button class="scan-btn track" onclick="runMonitor()" id="monitor-btn" title="One-shot line movement check"><span class="num">27</span>Line Monitor</button>
     </div>
 
     <!-- OUTPUT PANEL -->
@@ -371,6 +373,12 @@ async function doLogout() {
 function showDashboard() {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('dashboard').style.display = 'block';
+}
+
+// ── Line monitor (one-shot check from web) ──
+function runMonitor() {
+  // Web version runs one check and exits -- continuous polling requires CLI
+  runCmd('monitor', 'Line Monitor (1 check)');
 }
 
 // ── Run command with SSE streaming ──

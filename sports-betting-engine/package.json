@@ -40,6 +40,7 @@
     "firstbasket": "node --require ts-node/register src/index.ts firstbasket",
     "firsttd": "node --require ts-node/register src/index.ts firsttd",
     "lategames": "node --require ts-node/register src/index.ts lategames",
+    "teasers": "node --require ts-node/register src/index.ts teasers",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

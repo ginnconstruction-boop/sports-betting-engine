@@ -8,6 +8,7 @@
 
 import { AggregatedProp, PropOffer } from './propNormalizer';
 import { PROP_CONFIG } from '../config/propConfig';
+import { BET_FILTERS } from '../config/betFilters';
 import { getUserBookKeys, getBookmakerDisplayName } from '../config/bookmakers';
 
 export interface ScoredProp {
@@ -282,7 +283,9 @@ export function scoreAllProps(
 
   for (const prop of props) {
     const hours = hoursUntil(prop.gameTime);
-    if (hours < 1 || hours > windowHours) continue;
+    // Exclude in-progress and already-started games
+    if (hours < BET_FILTERS.MIN_HOURS_UNTIL_GAME_PROPS) continue;
+    if (hours > windowHours) continue;
     if (prop.bookCount < 2) continue; // need at least 2 books
 
     // Process both Over and Under

@@ -73,9 +73,14 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
       allSummaries.push(...aggregateAllEvents(normalizeEvents(events, key)));
     }
 
-    const upcoming = allSummaries.filter(e => hoursUntil(e.startTime) > 0 && hoursUntil(e.startTime) <= windowHours);
+    const allToday = allSummaries.filter(e => hoursUntil(e.startTime) <= windowHours);
+    const inProgress = allToday.filter(e => hoursUntil(e.startTime) <= 0);
+    const upcoming = allToday.filter(e => hoursUntil(e.startTime) > 0);
+    if (inProgress.length > 0) {
+      console.log(`  [SKIP] ${inProgress.length} game(s) already in progress -- excluded from props.`);
+    }
     if (upcoming.length === 0) {
-      console.log('\n  No upcoming NBA games found today.\n');
+      console.log(`\n  No upcoming ${sportLabel2} games found today.\n`);
       return;
     }
     console.log(`  Found ${upcoming.length} NBA game(s). Building full intelligence suite...`);

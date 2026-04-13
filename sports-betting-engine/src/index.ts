@@ -17,6 +17,7 @@ import { runAltParlays }      from './commands/runAltParlays';
 import { runFixResults }      from './commands/runFixResults';
 import { runLineMonitor }     from './commands/runLineMonitor';
 import { runFirstScorer }     from './commands/runFirstScorer';
+import { runTeasers }         from './commands/runTeasers';
 import { printWeeklySummary } from './services/weeklySummary';
 
 const args = process.argv.slice(2);
@@ -79,6 +80,8 @@ async function main() {
       await runFirstScorer('basketball_nba'); break;
     case 'firsttd': case 'ftd':
       await runFirstScorer('americanfootball_nfl'); break;
+    case 'teasers': case 'teaser':
+      await runTeasers({ forceRefresh }); break;
     case 'historical': case 'history':
       if (subcommand === 'fetch')  await runHistorical('fetch', args[2]);
       else if (subcommand === 'build') await runHistorical('build');

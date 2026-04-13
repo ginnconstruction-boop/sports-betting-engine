@@ -57,6 +57,8 @@ const ALLOWED: Record<string, string> = {
   mock: 'mock', fixresults: 'fixresults',
   firstbasket: 'firstbasket', firsttd: 'firsttd',
   lategames: 'lategames',
+  monitor: 'monitor',
+  teasers: 'teasers',
   mlbprops: 'mlbprops', nhlprops: 'nhlprops', nflprops: 'nflprops',
 };
 

@@ -68,11 +68,14 @@ echo  -- FIRST SCORER PROPS ----------------------------------------
 echo   28  NBA First Basket props
 echo   29  NFL First TD props
 echo.
+echo  -- NFL TEASERS (key number crossings) -----------------------
+echo   30  NFL Teasers  (6, 6.5, 7 point -- crosses 3 and 7)
+echo.
 echo  -- OTHER ----------------------------------------------------
 echo   25  Preview output (no credits)
 echo   26  Exit
 echo.
-set /p CHOICE="Enter number (1-27) or 11b/11c/11d: "
+set /p CHOICE="Enter number (1-30) or 11b/11c/11d: "
 
 IF "%CHOICE%"=="1"   call npm run morning   & goto DONE
 IF "%CHOICE%"=="2"   call npm run midday    & goto DONE
@@ -106,6 +109,7 @@ IF "%CHOICE%"=="26"  exit /b 0
 IF "%CHOICE%"=="27"  call npm run monitor   & goto DONE
 IF "%CHOICE%"=="28"  call npm run firstbasket & goto DONE
 IF "%CHOICE%"=="29"  call npm run firsttd    & goto DONE
+IF "%CHOICE%"=="30"  call npm run teasers    & goto DONE
 
 echo   Invalid selection.
 
