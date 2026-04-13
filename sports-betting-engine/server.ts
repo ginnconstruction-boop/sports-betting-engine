@@ -318,6 +318,25 @@ app.get('/api/signals', requireAuth, (req, res) => {
   } catch { res.json({ weights: {}, performance: [], totalGraded: 0 }); }
 });
 
+// ── Auto-grade pending picks from ESPN scores ──
+app.post('/api/autograde', requireAuth, async (req, res) => {
+  try {
+    const { autoGradePicks, buildRetroReport } = require('./src/services/retroAnalysis');
+    const graded: number = await autoGradePicks();
+    const report = buildRetroReport();
+    res.json({
+      ok: true,
+      graded,
+      totalGraded: report.picksAnalyzed,
+      record: report.overallRecord,
+      weightAdjustments: report.weightAdjustments,
+      insights: report.insights.slice(0, 3),
+    });
+  } catch (err: any) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
 // ── Health ──
 app.get('/api/health', (_, res) => res.json({ ok: true, ts: new Date().toISOString() }));
 

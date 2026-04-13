@@ -147,6 +147,11 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
 
 /* MOBILE */
 @media(max-width:600px){.main{padding:1rem}.btn-grid{grid-template-columns:repeat(2,1fr)}.topbar{padding:.6rem 1rem}.topbar-logo{font-size:1.1rem}.picks-search{width:100px}}
+#toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);min-width:260px;max-width:520px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:.9rem 1.2rem;font-size:.8rem;line-height:1.5;white-space:pre-line;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.5);opacity:0;transition:opacity .25s;pointer-events:none}
+#toast.show{opacity:1}
+#toast.green{border-color:var(--green);color:var(--green)}
+#toast.yellow{border-color:var(--yellow);color:var(--yellow)}
+#toast.red{border-color:var(--red);color:var(--red)}
 </style>
 </head>
 <body>
@@ -174,6 +179,7 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
       <button class="icon-btn" id="picks-toggle-btn" onclick="togglePicks()" title="All Picks">PICKS</button>
       <button class="icon-btn" id="charts-toggle-btn" onclick="toggleCharts()" title="Charts & Analytics">CHARTS</button>
       <button class="icon-btn" id="signals-toggle-btn" onclick="toggleSignals()" title="Signal Performance">SIGNALS</button>
+      <button class="icon-btn" id="autograde-btn" onclick="runAutoGrade()" title="Auto-grade pending picks from ESPN scores">GRADE</button>
       <button class="logout-btn" onclick="doLogout()">LOGOUT</button>
     </div>
   </div>
@@ -373,6 +379,31 @@ async function doLogout() {
 function showDashboard() {
   document.getElementById('login-screen').style.display = 'none';
   document.getElementById('dashboard').style.display = 'block';
+}
+
+// ── Auto-grade pending picks ──
+async function runAutoGrade() {
+  const btn = document.getElementById('autograde-btn');
+  btn.disabled = true; btn.textContent = 'GRADING...';
+  try {
+    const r = await fetch('/api/autograde', { method:'POST', headers:{'x-auth-token':authToken} });
+    const d = await r.json();
+    if (!d.ok) throw new Error(d.error || 'Grade failed');
+    const rec = d.record;
+    const adjCount = Object.keys(d.weightAdjustments||{}).length;
+    const lines = [
+      `Graded ${d.graded} new pick(s). Total graded: ${d.totalGraded}.`,
+      rec ? `Record: ${rec.wins}W-${rec.losses}L-${rec.pushes}P  (${rec.winRate}% win rate)` : '',
+      adjCount > 0 ? `${adjCount} signal weight(s) updated.` : 'No weight changes.',
+      ...(d.insights||[]),
+    ].filter(Boolean);
+    showToast(lines.join('\n'), d.graded > 0 ? 'green' : 'yellow');
+    if (d.graded > 0) { allPicksCache = null; loadStats(); }
+  } catch(e) {
+    showToast('Auto-grade failed: ' + e.message, 'red');
+  } finally {
+    btn.disabled = false; btn.textContent = 'GRADE';
+  }
 }
 
 // ── Line monitor (one-shot check from web) ──
@@ -703,6 +734,7 @@ async function loadPicksTable() {
       <td>${book}</td>
       <td style="color:var(--green);font-weight:bold">${price}</td>
       <td><span style="color:${p.grade?.startsWith('A')?'var(--green)':'var(--yellow)'}">${p.grade||'?'}</span></td>
+      <td style="color:var(--muted)">${typeof p.kellyPct==='number'?p.kellyPct.toFixed(1)+'%':'--'}</td>
       <td>${resultCell}</td>
       <td style="color:${profitVal!=null&&profitVal>=0?'var(--green)':'var(--red)'}">${profitStr}</td>
     </tr>`;
@@ -713,6 +745,7 @@ async function loadPicksTable() {
       <th ${thClick('date')}>Date${sortArrow('date')}</th>
       <th>Sport</th><th>Game</th><th>Type</th><th>Pick</th><th>Book</th><th>Price</th>
       <th ${thClick('score')}>Grade${sortArrow('score')}</th>
+      <th title="Quarter-Kelly stake % of bankroll">Kelly%</th>
       <th>Result</th>
       <th ${thClick('profit')}>P&amp;L${sortArrow('profit')}</th>
     </tr></thead>
@@ -1027,6 +1060,18 @@ async function loadSignals() {
     body.innerHTML = `<div style="padding:1.5rem;text-align:center;color:var(--red)">Error: ${e.message}</div>`;
   }
 }
+
+// ── Toast notification ──
+let _toastTimer = null;
+function showToast(msg, color='green') {
+  let el = document.getElementById('toast');
+  if (!el) { el = document.createElement('div'); el.id='toast'; document.body.appendChild(el); }
+  el.textContent = msg;
+  el.className = 'show ' + color;
+  if (_toastTimer) clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => { el.className = color; }, 5000);
+}
 </script>
+<div id="toast"></div>
 </body>
 </html>

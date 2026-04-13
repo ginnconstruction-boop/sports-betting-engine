@@ -364,6 +364,7 @@ export async function runSportScan(
         bestBook: b.bestUserBook,
         grade: b.grade,
         score: b.score,
+        kellyPct: b.kellyPct,
       })));
     } catch { }
   }

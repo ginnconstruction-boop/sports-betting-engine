@@ -47,6 +47,7 @@ export interface PickRecord {
   // Optional: game result tracking (manual entry)
   gameResult: 'WIN' | 'LOSS' | 'PUSH' | 'PENDING';
   notes: string;
+  kellyPct?: number;             // quarter-Kelly stake % at time of pick
 }
 
 export interface CLVSummary {
@@ -120,6 +121,7 @@ export function savePicksFromTopTen(
     bestBook: string;
     grade: string;
     score: number;
+    kellyPct?: number;
   }>
 ): PickRecord[] {
   const existing = loadPicks();
@@ -159,6 +161,7 @@ export function savePicksFromTopTen(
       closingFetchedAt: '',
       gameResult: 'PENDING',
       notes: '',
+      kellyPct: bet.kellyPct,
     };
     newPicks.push(pick);
   }

@@ -187,7 +187,7 @@ export async function runMiddayFinalCard(options: { forceRefresh?: boolean } = {
       eventId: (b as any).eventId ?? '', matchup: b.matchup,
       startTime: b.startTime, betType: b.betType, side: b.side,
       bestPrice: b.bestUserPrice, bestLine: b.bestUserLine ?? null,
-      bestBook: b.bestUserBook, grade: b.grade, score: b.score,
+      bestBook: b.bestUserBook, grade: b.grade, score: b.score, kellyPct: b.kellyPct,
     })));
   } catch { }
 

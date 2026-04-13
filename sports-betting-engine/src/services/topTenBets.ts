@@ -30,6 +30,7 @@ import { ConfirmedLineup, LineupNews } from './lineupConfirmation';
 import { MarketEfficiencyScore } from './marketEfficiency';
 import { CLVProjection } from './clvProjection';
 import { BET_FILTERS } from '../config/betFilters';
+import { calculateKelly, scoreToProbability } from './propEdgeFactors';
 import { MarketIntelligence } from './sharpIntelligence';
 import { GameWeather } from './weatherData';
 import { ESPNInjury } from './espnData';
@@ -81,6 +82,7 @@ export interface ScoredBet {
   priceMovementDetail: string;
   isRecentMovement: boolean;        // #2
   fullReasoning: string[];
+  kellyPct: number;                 // quarter-Kelly % of bankroll
 }
 
 export interface TopTenOptions {
@@ -757,6 +759,8 @@ export function scoreAllBets(
       const tier = getTier(best.score, best.signalCount, (event as any).sportKey);
       const tierIcon = tier === 'BET' ? '[HOT] BET' : tier === 'LEAN' ? '[OK] LEAN' : '? MONITOR';
 
+      const winProb = scoreToProbability(best.score);
+      const kellyResult = calculateKelly(winProb, best.bestUserPrice > 0 ? best.bestUserPrice : (best.consensusPrice ?? -110));
       candidates.push({
         rank: 0, tier, grade: scoreToGrade(best.score), score: best.score,
         priceScore: best.priceScore, lineScore: best.lineScore, sharpScore: best.sharpScore,
@@ -778,6 +782,7 @@ export function scoreAllBets(
         lineMovementAlert: best.movement.lineAlert, lineMovementDetail: best.movement.lineDetail,
         priceMovementAlert: best.movement.priceAlert, priceMovementDetail: best.movement.priceDetail,
         isRecentMovement: best.recentMove, fullReasoning,
+        kellyPct: kellyResult.recommendedBetPct,
       });
     }
   }
@@ -985,15 +990,12 @@ export function printTopTen(bets: ScoredBet[], windowHours = 24): void {
     }
     p(`  +---------------------------------------------------------`);
     p(`  |  ${bet.betType.padEnd(12)}  [OK] BET: ${bet.side}`);
-    // Bankroll suggestion using Kelly fraction
+    // Proper quarter-Kelly sizing using model win probability vs implied probability
     const bankroll = parseFloat(process.env.BANKROLL ?? '0');
-    const kellyFull = bet.priceDiff > 0
-      ? (bet.priceDiff / 100) * 0.25  // fractional Kelly (25%)
-      : 0.01;
-    const kellyPct = Math.max(0.5, Math.min(3, Math.round(kellyFull * 1000) / 10));
+    const kPct = bet.kellyPct > 0 ? bet.kellyPct : 0.5;
     const bankrollLine = bankroll > 0
-      ? `  |  [$] Bankroll: ${kellyPct}% of $${bankroll.toFixed(0)} = $${Math.round(bankroll * kellyPct / 100)} suggested`
-      : `  |  [$] Kelly: ${kellyPct}% of bankroll (set BANKROLL=1000 in .env for $ amounts)`;
+      ? `  |  [$] Kelly: ${kPct.toFixed(1)}% of $${bankroll.toFixed(0)} = $${Math.round(bankroll * kPct / 100)} suggested`
+      : `  |  [$] Kelly: ${kPct.toFixed(1)}% of bankroll (set BANKROLL=<amount> in .env for $ sizing)`;
     p(bankrollLine);
     p(`  |  [PIN] Best   : ${bet.bestUserBook.padEnd(10)}  ${userPriceStr}${userLineStr}`);
     if (bet.altUserBook && bet.altUserPrice !== null) {
