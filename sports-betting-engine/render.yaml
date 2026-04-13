@@ -1,0 +1,32 @@
+services:
+  - type: web
+    name: sports-betting-engine
+    runtime: node
+    rootDir: sports-betting-engine
+    buildCommand: npm install
+    startCommand: node -r ts-node/register/transpile-only server.ts
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ODDS_API_KEY
+        sync: false
+      - key: DASHBOARD_USER
+        sync: false
+      - key: DASHBOARD_PASS
+        sync: false
+      - key: SESSION_SECRET
+        sync: false
+      - key: BANKROLL
+        value: "1000"
+      - key: ALERT_EMAIL_ENABLED
+        value: "false"
+      - key: LINE_MONITOR_ENABLED
+        value: "false"
+      - key: LINE_MONITOR_INTERVAL_MINS
+        value: "60"
+      - key: SNAPSHOT_DIR
+        value: /var/data/snapshots
+      - key: NPM_CONFIG_PRODUCTION
+        value: "false"
+      - key: TS_NODE_TRANSPILE_ONLY
+        value: "true" 

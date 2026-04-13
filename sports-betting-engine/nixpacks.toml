@@ -1,0 +1,11 @@
+[phases.setup]
+nixPkgs = ["nodejs_20"]
+
+[phases.install]
+cmds = ["npm install --include=dev"]
+
+[phases.build]
+cmds = ["echo 'skipping tsc build'"]
+
+[start]
+cmd = "node -r ts-node/register/transpile-only server.ts"

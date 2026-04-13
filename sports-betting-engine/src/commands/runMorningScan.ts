@@ -1,0 +1,345 @@
+// ============================================================
+// src/commands/runMorningScan.ts
+// Morning scan -- full elite model
+// Every intelligence step is fully fault-tolerant
+// A failed ESPN/weather/news call never blocks the Top 10
+// ============================================================
+
+import * as dotenv from 'dotenv';
+dotenv.config();
+
+import { getOddsForAllSports, getSessionQuota } from '../api/oddsApiClient';
+import { normalizeEvents } from '../services/normalizeOdds';
+import { aggregateAllEvents } from '../services/aggregateMarkets';
+import { saveSnapshot, loadLatestSnapshot } from '../services/snapshotStore';
+import { getTopBets, printTopTen } from '../services/topTenBets';
+import { analyzeSharpIntelligence } from '../services/sharpIntelligence';
+import { getESPNInjuries } from '../services/espnData';
+import { getEnhancedInjuries } from '../services/directInjuryScraper';
+import { getGameWeather, isOutdoorSport } from '../services/weatherData';
+import { buildAllContextPackages } from '../services/contextIntelligence';
+import { savePicksFromTopTen } from '../services/closingLineTracker';
+import { checkSituationalAngles } from '../services/situationalAngles';
+import { scoreAllMarketEfficiency } from '../services/marketEfficiency';
+import { getAllCLVProjections } from '../services/clvProjection';
+import { getGamePowerRatings, compareToLine } from '../services/powerRatings';
+import { buildPublicBettingMap } from '../services/publicBetting';
+import { buildAdvancedStatsMap } from '../services/advancedStats';
+import { buildGameImpactSummary } from '../services/playerImpact';
+import { detectSteamMoves } from '../services/steamDetector';
+import { getATSSituation, updateATSFromPicks } from '../services/atsDatabase';
+import { compareToOpeningLines, saveOpeningLines } from '../services/lineOpener';
+import { buildCalibrationModel } from '../services/mlCalibration';
+import { buildLineupMap } from '../services/lineupConfirmation';
+import { buildHistoricalFromSnapshots } from '../services/historicalOdds';
+import { autoGradePicks, buildRetroReport, printRetroReport, loadSignalWeights } from '../services/retroAnalysis';
+import { rebuildPNL } from '../services/winLossTracker';
+import { generateDailyReport, printDailyReportPath } from '../services/dailyReport';
+import { sendAlerts } from '../services/alertService';
+import { getEnabledSports } from '../config/sports';
+import { INITIAL_MARKETS, EventSummary } from '../types/odds';
+
+async function safeRun<T>(label: string, fn: () => Promise<T>, fallback: T): Promise<T> {
+  try {
+    return await fn();
+  } catch (err: any) {
+    // Intelligence failures are non-fatal -- just log and continue
+    process.stderr.write(`  [skip] ${label}: ${err?.message ?? String(err)}\n`);
+    return fallback;
+  }
+}
+
+function safeRunSync<T>(label: string, fn: () => T, fallback: T): T {
+  try {
+    return fn();
+  } catch (err: any) {
+    process.stderr.write(`  [skip] ${label}: ${err?.message ?? String(err)}\n`);
+    return fallback;
+  }
+}
+
+export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
+  const sportKeys = getEnabledSports().map(s => s.key);
+
+  // -- Step 0: Retrospective analysis ------------------------
+  // Auto-grade yesterday's picks, identify what went wrong,
+  // adjust signal weights for today's scoring
+  console.log('\n  Grading yesterday\'s picks from ESPN scores...');
+  const newlyGraded = await safeRun('retro grading', () => autoGradePicks(), 0);
+  if (newlyGraded > 0) {
+    console.log(`  Auto-graded ${newlyGraded} pick(s) from yesterday.`);
+    // Auto-write ESPN grades into P&L -- no manual entry needed
+    safeRunSync('auto pnl update', () => rebuildPNL(), undefined);
+    console.log('  P&L updated automatically from ESPN scores.');
+  }
+  const retroReport = safeRunSync('retro report', () => buildRetroReport(), null);
+  const learnedWeights = safeRunSync('signal weights', () => loadSignalWeights(), {});
+  if (retroReport && retroReport.picksAnalyzed >= 5) {
+    printRetroReport(retroReport);
+  }
+
+  // MLB/NHL timing note -- morning scan runs at 7-8 AM but MLB/NHL lines
+  // may not be fully posted yet. Best to run options 5 and 6 separately
+  // at 11 AM (MLB) and noon (NHL) for full coverage.
+  const _morningHour = new Date().getHours();
+  if (_morningHour < 10) {
+    console.log('  [NOTE] MLB and NHL lines may not be fully posted yet at this hour.');
+    console.log('  Run option 5 (MLB) at 11 AM and option 6 (NHL) at noon for best coverage.\n');
+  }
+
+  // -- Step 1: Fetch odds (required -- this one can fail loudly) --
+  const { results: rawBySport } = await getOddsForAllSports(
+    sportKeys, INITIAL_MARKETS, options.forceRefresh ?? false
+  );
+
+  const allSummaries: EventSummary[] = [];
+  for (const [sportKey, events] of rawBySport) {
+    const rows = normalizeEvents(events, sportKey);
+    allSummaries.push(...aggregateAllEvents(rows));
+  }
+
+  const priorSnapshot = loadLatestSnapshot('MORNING_SCAN');
+  const priorSummaries = priorSnapshot?.eventSummaries ?? [];
+
+  // -- Step 2: Save opening lines ------------------------------
+  safeRunSync('opening lines', () => {
+    saveOpeningLines(allSummaries.map(e => ({
+      eventId: e.eventId, matchup: e.matchup, sportKey: e.sportKey,
+      spread: e.aggregatedMarkets['spreads']?.sides[0]?.consensusLine ?? undefined,
+      total: e.aggregatedMarkets['totals']?.sides[0]?.consensusLine ?? undefined,
+      homeML: e.aggregatedMarkets['h2h']?.sides.find(s =>
+        s.outcomeName.toLowerCase().includes(e.homeTeam.toLowerCase().split(' ').pop() ?? '')
+      )?.consensusPrice ?? undefined,
+    })));
+  }, undefined);
+
+  // -- Step 3: Sharp intelligence ------------------------------
+  const sharpIntel = safeRunSync('sharp intel',
+    () => analyzeSharpIntelligence(allSummaries, priorSummaries),
+    new Map()
+  );
+
+  // -- Step 4: ESPN injuries -----------------------------------
+  const injuryMap = new Map<string, any[]>();
+  for (const sportKey of sportKeys) {
+    await safeRun(`injuries ${sportKey}`, async () => {
+      const espnInj = await getESPNInjuries(sportKey);
+      const injuries = await getEnhancedInjuries(sportKey, espnInj);
+      for (const [team, list] of injuries) {
+        for (const event of allSummaries) {
+          const homeLast = event.homeTeam.split(' ').pop() ?? '';
+          const awayLast = event.awayTeam.split(' ').pop() ?? '';
+          if (team.includes(homeLast) || team.includes(awayLast)) {
+            const existing = injuryMap.get(event.eventId) ?? [];
+            injuryMap.set(event.eventId, [...existing, ...list]);
+          }
+        }
+      }
+    }, undefined);
+  }
+
+  // -- Step 5: Weather -----------------------------------------
+  const weatherMap = new Map<string, any>();
+  for (const event of allSummaries) {
+    if (isOutdoorSport(event.sportKey)) {
+      await safeRun(`weather ${event.matchup}`, async () => {
+        const weather = await getGameWeather(event.sportKey, '', event.homeTeam, event.startTime);
+        if (weather) weatherMap.set(event.eventId, weather);
+      }, undefined);
+    }
+  }
+
+  console.log('\n  Pulling intelligence data...');
+
+  // -- Step 6: Context intelligence ----------------------------
+  const contextMap = await safeRun('context intelligence',
+    () => buildAllContextPackages(allSummaries.map(e => ({
+      eventId: e.eventId, matchup: e.matchup, sportKey: e.sportKey,
+      homeTeam: e.homeTeam, awayTeam: e.awayTeam, gameTime: e.startTime,
+    }))),
+    new Map()
+  );
+
+  // -- Step 7: Situational angles ------------------------------
+  const situationalAngles = new Map<string, any[]>();
+  for (const event of allSummaries) {
+    safeRunSync(`angles ${event.matchup}`, () => {
+      const ctx = contextMap.get(event.eventId);
+      const angles = checkSituationalAngles(
+        event.sportKey, event.homeTeam, event.awayTeam,
+        ctx?.homeForm ?? null, ctx?.awayForm ?? null,
+        ctx?.homeRest ?? null, ctx?.awayRest ?? null,
+        event.aggregatedMarkets['spreads']?.sides[0]?.consensusLine ?? null,
+        event.aggregatedMarkets['totals']?.sides[0]?.consensusLine ?? null,
+      );
+      if (angles.length > 0) situationalAngles.set(event.eventId, angles);
+    }, undefined);
+  }
+
+  // -- Step 8: Market efficiency -------------------------------
+  const marketEfficiency = safeRunSync('market efficiency',
+    () => scoreAllMarketEfficiency(allSummaries),
+    new Map()
+  );
+
+  // -- Step 9: CLV projections ---------------------------------
+  const hoursMap = new Map(allSummaries.map(e => [
+    e.eventId,
+    Math.max(0, (new Date(e.startTime).getTime() - Date.now()) / 3600000)
+  ]));
+  const clvProjections = safeRunSync('CLV projections',
+    () => getAllCLVProjections(allSummaries, priorSummaries, hoursMap),
+    new Map()
+  );
+
+  // -- Step 10: Power ratings ----------------------------------
+  const powerRatings = new Map<string, any>();
+  for (let i = 0; i < allSummaries.length; i += 4) {
+    await Promise.allSettled(allSummaries.slice(i, i + 4).map(async (event) => {
+      await safeRun(`power ratings ${event.matchup}`, async () => {
+        const { home, away } = await getGamePowerRatings(event.sportKey, event.homeTeam, event.awayTeam);
+        if (home && away) {
+          const postedSpread = event.aggregatedMarkets['spreads']?.sides.find(s =>
+            s.outcomeName.toLowerCase().includes(event.homeTeam.toLowerCase().split(' ').pop() ?? '')
+          )?.consensusLine ?? 0;
+          powerRatings.set(event.eventId, { home, away, comparison: compareToLine(home, away, postedSpread, event.sportKey) });
+        }
+      }, undefined);
+    }));
+  }
+
+  // -- Step 11: Public betting ---------------------------------
+  const publicBetting = await safeRun('public betting',
+    () => buildPublicBettingMap(allSummaries.map(e => ({
+      eventId: e.eventId, sportKey: e.sportKey, homeTeam: e.homeTeam, awayTeam: e.awayTeam
+    }))),
+    new Map()
+  );
+
+  // -- Step 12: Advanced stats ---------------------------------
+  await safeRun('advanced stats',
+    () => buildAdvancedStatsMap(allSummaries.map(e => ({
+      eventId: e.eventId, sportKey: e.sportKey, homeTeam: e.homeTeam, awayTeam: e.awayTeam
+    }))),
+    new Map()
+  );
+
+  // -- Step 13: Player impact ----------------------------------
+  const playerImpacts = new Map<string, any>();
+  for (const event of allSummaries) {
+    await safeRun(`player impact ${event.matchup}`, async () => {
+      const injuries = injuryMap.get(event.eventId) ?? [];
+      const homeLast = event.homeTeam.split(' ').pop() ?? '';
+      const awayLast = event.awayTeam.split(' ').pop() ?? '';
+      const homeInj = injuries.filter((i: any) => (i.team ?? '').includes(homeLast));
+      const awayInj = injuries.filter((i: any) => (i.team ?? '').includes(awayLast));
+      if (homeInj.length > 0 || awayInj.length > 0) {
+        const impact = await buildGameImpactSummary(
+          event.sportKey, event.eventId, event.homeTeam, event.awayTeam,
+          homeInj.map((i: any) => ({ playerName: i.playerName ?? '', position: i.position ?? '', status: i.status ?? '' })),
+          awayInj.map((i: any) => ({ playerName: i.playerName ?? '', position: i.position ?? '', status: i.status ?? '' })),
+        );
+        playerImpacts.set(event.eventId, impact);
+      }
+    }, undefined);
+  }
+
+  // -- Step 14: Steam detection --------------------------------
+  const steamMoves = safeRunSync('steam detection',
+    () => detectSteamMoves(allSummaries),
+    []
+  );
+
+  // -- Step 15: ATS database -----------------------------------
+  safeRunSync('ATS update', () => updateATSFromPicks(), undefined);
+  const atsSituations = new Map<string, any>();
+  for (const event of allSummaries) {
+    safeRunSync(`ATS ${event.matchup}`, () => {
+      const spreadLine = event.aggregatedMarkets['spreads']?.sides[0]?.consensusLine ?? null;
+      atsSituations.set(event.eventId, getATSSituation(event.sportKey, event.homeTeam, event.awayTeam, spreadLine));
+    }, undefined);
+  }
+
+  // -- Step 16: Line openers -----------------------------------
+  const lineOpeners = new Map<string, any>();
+  for (const event of allSummaries) {
+    safeRunSync(`opener ${event.matchup}`, () => {
+      const comp = compareToOpeningLines(
+        event.eventId, event.matchup,
+        event.aggregatedMarkets['spreads']?.sides[0]?.consensusLine ?? null,
+        event.aggregatedMarkets['totals']?.sides[0]?.consensusLine ?? null,
+        event.aggregatedMarkets['h2h']?.sides.find(s =>
+          s.outcomeName.toLowerCase().includes(event.homeTeam.toLowerCase().split(' ').pop() ?? '')
+        )?.consensusPrice ?? null,
+      );
+      lineOpeners.set(event.eventId, comp);
+    }, undefined);
+  }
+
+  // -- Step 17: ML calibration ---------------------------------
+  const calibrationModel = safeRunSync('ML calibration',
+    () => buildCalibrationModel(),
+    null
+  );
+
+  // -- Step 18: Lineup confirmation ----------------------------
+  const lineupMap = await safeRun('lineup confirmation',
+    () => buildLineupMap(allSummaries.map(e => ({
+      eventId: e.eventId, sportKey: e.sportKey,
+      homeTeam: e.homeTeam, awayTeam: e.awayTeam, gameTime: e.startTime,
+    }))),
+    new Map()
+  );
+
+  // -- Step 19: Historical DB update ---------------------------
+  safeRunSync('historical DB', () => buildHistoricalFromSnapshots(), 0);
+
+  // -- Step 20: Save snapshot ----------------------------------
+  const quota = getSessionQuota();
+  safeRunSync('save snapshot', () => saveSnapshot('MORNING_SCAN', allSummaries, quota, 0, []), undefined);
+
+  // -- Step 21: Top 10 -- full elite model ----------------------
+  const topBets = getTopBets(allSummaries, 20, {
+    windowHours: 24,
+    priorSummaries: priorSummaries.length > 0 ? priorSummaries : undefined,
+    sharpIntel, weatherMap, injuryMap, contextMap,
+    situationalAngles, marketEfficiency, clvProjections, powerRatings,
+    publicBetting, playerImpacts, steamMoves, atsSituations, lineOpeners,
+    calibrationModel, lineupMap,
+    learnedWeights,
+  }); // 20 candidates -- sport diversity logic ensures all sports represented
+  printTopTen(topBets, 24);
+
+  // -- Auto-generate daily HTML report (printable as PDF)
+  safeRunSync('daily report', () => {
+    const filepath = generateDailyReport(topBets, []);
+    printDailyReportPath(filepath);
+  }, undefined);
+
+  // -- Send email/SMS alerts for A+ plays
+  await safeRun('alerts', () => sendAlerts(
+    topBets.map(b => ({
+      sport: b.sport,
+      matchup: b.matchup,
+      betType: b.betType,
+      side: b.side,
+      bestUserBook: b.bestUserBook,
+      bestUserPrice: b.bestUserPrice,
+      grade: b.grade,
+      score: b.score,
+      tier: b.tier,
+      hoursUntilGame: b.hoursUntilGame,
+    })),
+    'Morning Scan'
+  ), undefined);
+
+  // -- Step 22: Save picks for CLV tracking --------------------
+  safeRunSync('save picks', () => savePicksFromTopTen(topBets), []);
+
+  console.log(`  API requests used  : ${quota.requestsMade}`);
+  console.log(`  Credits remaining  : ${quota.remainingRequests ?? 'unknown'}`);
+  if (calibrationModel && !calibrationModel.isCalibrated) {
+    console.log(`  ML calibration     : ${calibrationModel.recommendation}`);
+  }
+  console.log('');
+}
