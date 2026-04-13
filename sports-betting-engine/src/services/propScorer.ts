@@ -369,6 +369,11 @@ export function scoreAllProps(
         reasoning.push(`? All lines: ${lineSpread}`);
       }
 
+      // Stale book warning
+      if (prop.hasStaleBooks && prop.staleBooks.length > 0) {
+        reasoning.push(`[!] STALE: ${prop.staleBooks.join(', ')} may not have updated in 6+ hrs -- verify line before betting`);
+      }
+
       scored.push({
         rank: 0,
         grade: scoreToGrade(score),

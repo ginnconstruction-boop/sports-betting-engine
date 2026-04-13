@@ -28,9 +28,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-mono);min-hei
 
 /* DASHBOARD */
 #dashboard{display:none;min-height:100vh}
-.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:.75rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.topbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:.75rem 1.5rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;flex-wrap:wrap;gap:.5rem}
 .topbar-logo{font-family:var(--font-ui);font-weight:900;font-size:1.4rem;color:var(--green)}
-.topbar-right{display:flex;align-items:center;gap:1rem}
+.topbar-right{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
 .topbar-status{font-size:.7rem;color:var(--muted);letter-spacing:.1em}
 .logout-btn,.icon-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:var(--font-mono);font-size:.75rem;padding:.4rem .8rem;border-radius:4px;cursor:pointer;transition:all .15s}
 .logout-btn:hover{border-color:var(--red);color:var(--red)}
@@ -86,13 +86,18 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-mono);min-hei
 
 /* PICKS TABLE */
 #picks-panel{display:none;margin-top:1.5rem;background:var(--bg2);border:1px solid var(--border);border-radius:8px;overflow:hidden}
-.picks-header{background:var(--bg3);border-bottom:1px solid var(--border);padding:.6rem 1rem;display:flex;align-items:center;justify-content:space-between}
-.picks-title{font-family:var(--font-ui);font-weight:700;font-size:.85rem;letter-spacing:.1em}
-.picks-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:.2rem .4rem;border-radius:3px}
+.picks-header{background:var(--bg3);border-bottom:1px solid var(--border);padding:.6rem 1rem;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.picks-title{font-family:var(--font-ui);font-weight:700;font-size:.85rem;letter-spacing:.1em;flex:none}
+.picks-filters{display:flex;gap:.35rem;align-items:center;flex-wrap:wrap;flex:1}
+.picks-search{background:var(--bg2);border:1px solid var(--border);color:var(--text);font-family:var(--font-mono);font-size:.72rem;padding:.3rem .6rem;border-radius:4px;outline:none;width:140px;transition:border-color .15s}
+.picks-search:focus{border-color:var(--blue)}
+.picks-sport-sel{background:var(--bg2);border:1px solid var(--border);color:var(--text);font-family:var(--font-mono);font-size:.72rem;padding:.3rem .5rem;border-radius:4px;outline:none;cursor:pointer}
+.picks-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:1rem;padding:.2rem .4rem;border-radius:3px;margin-left:auto}
 .picks-close:hover{background:var(--border);color:var(--text)}
 #picks-table-wrap{overflow-x:auto;max-height:60vh;overflow-y:auto}
 table.picks-tbl{width:100%;border-collapse:collapse;font-size:.75rem}
-table.picks-tbl th{background:#0d2a1a;color:var(--green);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;padding:6px 8px;text-align:left;position:sticky;top:0}
+table.picks-tbl th{background:#0d2a1a;color:var(--green);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;padding:6px 8px;text-align:left;position:sticky;top:0;cursor:pointer;user-select:none}
+table.picks-tbl th:hover{color:var(--text)}
 table.picks-tbl td{padding:5px 8px;border-bottom:1px solid var(--border);vertical-align:middle}
 table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
 .result-badge{display:inline-block;padding:2px 7px;border-radius:3px;font-weight:700;font-size:.65rem}
@@ -104,13 +109,44 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
 .result-btn.w{border-color:var(--green);color:var(--green)}.result-btn.w:hover{background:var(--green);color:#000}
 .result-btn.l{border-color:var(--red);color:var(--red)}.result-btn.l:hover{background:var(--red);color:#000}
 .result-btn.p{border-color:var(--yellow);color:var(--yellow)}.result-btn.p:hover{background:var(--yellow);color:#000}
+.pagination{display:flex;align-items:center;justify-content:center;gap:.5rem;padding:.6rem;border-top:1px solid var(--border);font-size:.75rem;color:var(--muted)}
+.page-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);font-family:var(--font-mono);font-size:.72rem;padding:.25rem .6rem;border-radius:4px;cursor:pointer;transition:all .15s}
+.page-btn:hover:not(:disabled){border-color:var(--blue);color:var(--blue)}
+.page-btn:disabled{opacity:.3;cursor:default}
+.page-btn.active{border-color:var(--green);color:var(--green)}
+
+/* CHARTS PANEL */
+#charts-panel{display:none;margin-top:1.5rem;background:var(--bg2);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.charts-header{background:var(--bg3);border-bottom:1px solid var(--border);padding:.6rem 1rem;display:flex;align-items:center;justify-content:space-between}
+.charts-title{font-family:var(--font-ui);font-weight:700;font-size:.85rem;letter-spacing:.1em}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;padding:1rem}
+@media(max-width:640px){.charts-grid{grid-template-columns:1fr}}
+.chart-card{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:.75rem}
+.chart-card.wide{grid-column:1/-1}
+.chart-label{font-family:var(--font-ui);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem}
+.chart-empty{color:var(--muted);font-size:.75rem;padding:.5rem 0;text-align:center}
+
+/* SIGNALS PANEL */
+#signals-panel{display:none;margin-top:1.5rem;background:var(--bg2);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.signals-header{background:var(--bg3);border-bottom:1px solid var(--border);padding:.6rem 1rem;display:flex;align-items:center;justify-content:space-between}
+.signals-title{font-family:var(--font-ui);font-weight:700;font-size:.85rem;letter-spacing:.1em}
+#signals-body{padding:.75rem;max-height:60vh;overflow-y:auto}
+.signal-row{display:flex;align-items:center;gap:.5rem;padding:.4rem 0;border-bottom:1px solid var(--border);font-size:.75rem}
+.signal-name{width:220px;flex-shrink:0;color:var(--text)}
+.signal-bar-wrap{flex:1;background:var(--bg);border-radius:3px;height:8px;overflow:hidden}
+.signal-bar{height:8px;border-radius:3px;transition:width .4s}
+.signal-meta{font-size:.68rem;color:var(--muted);white-space:nowrap;width:110px;text-align:right}
+.signal-weight{font-size:.68rem;padding:1px 5px;border-radius:3px;white-space:nowrap}
+.signal-weight.boost{background:rgba(57,211,83,.15);color:var(--green)}
+.signal-weight.penalize{background:rgba(248,81,73,.15);color:var(--red)}
+.signal-weight.neutral{background:rgba(125,133,144,.1);color:var(--muted)}
 
 /* SPINNER */
 .spinner{width:28px;height:28px;border:2px solid var(--border);border-top-color:var(--green);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* MOBILE */
-@media(max-width:600px){.main{padding:1rem}.btn-grid{grid-template-columns:repeat(2,1fr)}.topbar{padding:.6rem 1rem}.topbar-logo{font-size:1.1rem}}
+@media(max-width:600px){.main{padding:1rem}.btn-grid{grid-template-columns:repeat(2,1fr)}.topbar{padding:.6rem 1rem}.topbar-logo{font-size:1.1rem}.picks-search{width:100px}}
 </style>
 </head>
 <body>
@@ -136,6 +172,8 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
       <button class="icon-btn" id="history-toggle-btn" onclick="toggleHistory()" title="Scan History">HISTORY</button>
       <button class="icon-btn" onclick="openReports()" title="Saved Reports">REPORTS</button>
       <button class="icon-btn" id="picks-toggle-btn" onclick="togglePicks()" title="All Picks">PICKS</button>
+      <button class="icon-btn" id="charts-toggle-btn" onclick="toggleCharts()" title="Charts & Analytics">CHARTS</button>
+      <button class="icon-btn" id="signals-toggle-btn" onclick="toggleSignals()" title="Signal Performance">SIGNALS</button>
       <button class="logout-btn" onclick="doLogout()">LOGOUT</button>
     </div>
   </div>
@@ -170,7 +208,7 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
     </div>
 
     <!-- PROPS -->
-    <div class="section-label">Player Props & Parlays</div>
+    <div class="section-label">Player Props &amp; Parlays</div>
     <div class="btn-grid">
       <button class="scan-btn prop" onclick="runCmd('props','NBA Props')"><span class="num">11</span>NBA Props</button>
       <button class="scan-btn prop" onclick="runCmd('mlbprops','MLB Props')"><span class="num">11b</span>MLB Props</button>
@@ -185,7 +223,7 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
     </div>
 
     <!-- TRACKING -->
-    <div class="section-label">Tracking & Reports</div>
+    <div class="section-label">Tracking &amp; Reports</div>
     <div class="btn-grid">
       <button class="scan-btn track" onclick="togglePicks()"><span class="num">16</span>Enter Results</button>
       <button class="scan-btn track" onclick="runCmd('record','W/L Report')"><span class="num">17</span>W/L Report</button>
@@ -230,19 +268,53 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
     <!-- PICKS PANEL -->
     <div id="picks-panel">
       <div class="picks-header">
-        <span class="picks-title">PICKS LOG &amp; RESULTS ENTRY</span>
-        <div style="display:flex;gap:.5rem;align-items:center">
-          <button class="result-btn w" style="font-size:.7rem;padding:3px 10px" onclick="filterPicks('today')">TODAY</button>
-          <button class="result-btn p" style="font-size:.7rem;padding:3px 10px" onclick="filterPicks('yesterday')">YESTERDAY</button>
-          <button class="result-btn l" style="font-size:.7rem;padding:3px 10px;border-color:var(--muted);color:var(--muted)" onclick="filterPicks('pending')">PENDING</button>
-          <button class="result-btn p" style="font-size:.7rem;padding:3px 10px;border-color:var(--muted);color:var(--muted)" onclick="filterPicks('all')">ALL</button>
+        <span class="picks-title">PICKS LOG</span>
+        <div class="picks-filters">
+          <button class="result-btn w" style="font-size:.7rem;padding:3px 10px" onclick="setFilter('today')">TODAY</button>
+          <button class="result-btn p" style="font-size:.7rem;padding:3px 10px" onclick="setFilter('yesterday')">YESTERDAY</button>
+          <button class="result-btn l" style="font-size:.7rem;padding:3px 10px;border-color:var(--muted);color:var(--muted)" onclick="setFilter('pending')">PENDING</button>
+          <button class="result-btn p" style="font-size:.7rem;padding:3px 10px;border-color:var(--muted);color:var(--muted)" onclick="setFilter('all')">ALL</button>
+          <select class="picks-sport-sel" id="sport-filter" onchange="setFilter(currentFilter)">
+            <option value="">All Sports</option>
+            <option value="NBA">NBA</option>
+            <option value="NFL">NFL</option>
+            <option value="MLB">MLB</option>
+            <option value="NHL">NHL</option>
+            <option value="NCAAB">NCAAB</option>
+            <option value="NCAAF">NCAAF</option>
+          </select>
+          <input class="picks-search" type="text" id="picks-search" placeholder="Search team/pick..." oninput="setFilter(currentFilter)"/>
         </div>
         <button class="picks-close" onclick="togglePicks()">&#x2715;</button>
       </div>
       <div id="picks-table-wrap">
         <div id="picks-loading" style="padding:1.5rem;text-align:center;color:var(--muted)">Loading picks...</div>
       </div>
+      <div class="pagination" id="picks-pagination" style="display:none"></div>
     </div>
+
+    <!-- CHARTS PANEL -->
+    <div id="charts-panel">
+      <div class="charts-header">
+        <span class="charts-title">ANALYTICS &amp; CHARTS</span>
+        <button class="output-close" onclick="toggleCharts()">&#x2715;</button>
+      </div>
+      <div class="charts-grid" id="charts-body">
+        <div style="grid-column:1/-1;padding:1.5rem;text-align:center;color:var(--muted);font-size:.8rem">Loading charts...</div>
+      </div>
+    </div>
+
+    <!-- SIGNALS PANEL -->
+    <div id="signals-panel">
+      <div class="signals-header">
+        <span class="signals-title">SIGNAL PERFORMANCE &amp; WEIGHTS</span>
+        <button class="output-close" onclick="toggleSignals()">&#x2715;</button>
+      </div>
+      <div id="signals-body">
+        <div style="padding:1.5rem;text-align:center;color:var(--muted);font-size:.8rem">Loading signal data...</div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -251,6 +323,12 @@ let authToken = localStorage.getItem('sbe_token') || '';
 let currentBtn = null;
 let currentES = null;
 let fullOutputText = '';
+let allPicksCache = [];
+let currentFilter = 'all';
+let currentPage = 1;
+const PAGE_SIZE = 25;
+let picksSortCol = 'date';
+let picksSortDir = -1;
 
 // ── Init ──
 window.onload = function() {
@@ -297,7 +375,6 @@ function showDashboard() {
 
 // ── Run command with SSE streaming ──
 function runCmd(cmd, label) {
-  // Cancel any running stream
   if (currentES) { currentES.close(); currentES = null; }
   if (currentBtn) { currentBtn.classList.remove('running'); currentBtn = null; }
 
@@ -318,13 +395,10 @@ function runCmd(cmd, label) {
   const pdfBtn2 = document.getElementById('pdf-btn');
   if (pdfBtn2) pdfBtn2.style.display = 'none';
 
-  // Mark button as running
   const btn = event?.currentTarget;
   if (btn) { btn.classList.add('running'); currentBtn = btn; }
 
   setTimeout(() => panel.scrollIntoView({behavior:'smooth',block:'start'}), 100);
-
-  // Start streaming directly
   streamSSE(cmd, label, content, dot, btn);
 }
 
@@ -335,6 +409,12 @@ async function streamSSE(cmd, label, content, dot, btn) {
     });
 
     if (resp.status === 401) { doLogout(); resolve(); return; }
+    if (resp.status === 409) {
+      content.innerHTML = `<div style="padding:1.5rem;color:var(--yellow)">Scan '${cmd}' is already running. Wait for it to finish.</div>`;
+      dot.style.display = 'none';
+      if (btn) btn.classList.remove('running');
+      resolve(); return;
+    }
 
     const reader = resp.body.getReader();
     const decoder = new TextDecoder();
@@ -369,10 +449,8 @@ async function streamSSE(cmd, label, content, dot, btn) {
         } else if (evType === 'done') {
           dot.style.display = 'none';
           if (btn) btn.classList.remove('running');
-          // Show Save PDF button now that scan is complete
           const pdfBtn = document.getElementById('pdf-btn');
           if (pdfBtn) pdfBtn.style.display = 'inline-block';
-          // Refresh stats after tracking commands
           loadStats();
           resolve();
         }
@@ -405,7 +483,7 @@ function colorize(text) {
     const e = line.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     if (/\[HOT\]|Grade: A\+|##########|\[OK\] Saved/.test(e)) return `<span class="line-green">${e}</span>`;
     if (/LEAN|Grade: [AB]|SOLID|#######/.test(e)) return `<span class="line-yellow">${e}</span>`;
-    if (/LOSS|error|failed|Error/.test(e)) return `<span class="line-red">${e}</span>`;
+    if (/LOSS|error|failed|Error|\[!\] STALE/.test(e)) return `<span class="line-red">${e}</span>`;
     if (/FanDuel|BetMGM|Credits|API|CLK/.test(e)) return `<span class="line-blue">${e}</span>`;
     if (/^[\s]*[-=+|]/.test(e)) return `<span class="line-header">${e}</span>`;
     if (/^[\s]*$/.test(e)) return `<span class="line-muted">${e}</span>`;
@@ -419,6 +497,7 @@ async function loadStats() {
     const r = await fetch('/api/picks',{headers:{'x-auth-token':authToken}});
     if (!r.ok) return;
     const picks = await r.json();
+    allPicksCache = picks;
     if (!picks.length) return;
     const graded = picks.filter(p => p.gameResult !== 'PENDING');
     const wins   = graded.filter(p => p.gameResult === 'WIN').length;
@@ -443,9 +522,8 @@ async function loadStats() {
 
 // ── History ──
 async function toggleHistory() {
+  closeOtherPanels('history');
   const panel = document.getElementById('history-panel');
-  const picksPanel = document.getElementById('picks-panel');
-  picksPanel.style.display = 'none';
   const btn = document.getElementById('history-toggle-btn');
   if (panel.style.display !== 'none') {
     panel.style.display = 'none'; btn.classList.remove('active'); return;
@@ -492,12 +570,26 @@ function showHistoryItem(idx) {
   panel.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-// ── Picks table with inline results entry ──
+// ── Panel manager ──
+function closeOtherPanels(except) {
+  const panels = {
+    history: ['history-panel','history-toggle-btn'],
+    picks:   ['picks-panel','picks-toggle-btn'],
+    charts:  ['charts-panel','charts-toggle-btn'],
+    signals: ['signals-panel','signals-toggle-btn'],
+  };
+  for (const [key, [panelId, btnId]] of Object.entries(panels)) {
+    if (key !== except) {
+      document.getElementById(panelId).style.display = 'none';
+      document.getElementById(btnId)?.classList.remove('active');
+    }
+  }
+}
+
+// ── Picks table ──
 async function togglePicks() {
+  closeOtherPanels('picks');
   const panel = document.getElementById('picks-panel');
-  const histPanel = document.getElementById('history-panel');
-  histPanel.style.display = 'none';
-  document.getElementById('history-toggle-btn').classList.remove('active');
   const btn = document.getElementById('picks-toggle-btn');
   if (panel.style.display !== 'none') {
     panel.style.display = 'none'; btn.classList.remove('active'); return;
@@ -508,73 +600,158 @@ async function togglePicks() {
   await loadPicksTable();
 }
 
+function setFilter(filter) {
+  currentFilter = filter;
+  currentPage = 1;
+  loadPicksTable();
+}
+
+function getFilteredPicks() {
+  const todayStr = new Date().toISOString().slice(0,10);
+  const yesterdayStr = new Date(Date.now()-86400000).toISOString().slice(0,10);
+  const sportSel = document.getElementById('sport-filter')?.value || '';
+  const searchVal = (document.getElementById('picks-search')?.value || '').toLowerCase().trim();
+
+  let filtered = allPicksCache;
+
+  if (currentFilter === 'today')
+    filtered = filtered.filter(p => (p.date||p.gameTime||'').slice(0,10) === todayStr);
+  else if (currentFilter === 'yesterday')
+    filtered = filtered.filter(p => (p.date||p.gameTime||'').slice(0,10) === yesterdayStr);
+  else if (currentFilter === 'pending')
+    filtered = filtered.filter(p => !p.gameResult || p.gameResult === 'PENDING');
+
+  if (sportSel)
+    filtered = filtered.filter(p => (p.sport||'').toUpperCase() === sportSel);
+
+  if (searchVal)
+    filtered = filtered.filter(p =>
+      (p.matchup||'').toLowerCase().includes(searchVal) ||
+      (p.side||'').toLowerCase().includes(searchVal) ||
+      (p.betType||'').toLowerCase().includes(searchVal)
+    );
+
+  // Sort
+  filtered = [...filtered].sort((a,b) => {
+    let av, bv;
+    if (picksSortCol === 'date') { av = new Date(a.date||a.gameTime||0).getTime(); bv = new Date(b.date||b.gameTime||0).getTime(); }
+    else if (picksSortCol === 'score') { av = a.score||0; bv = b.score||0; }
+    else if (picksSortCol === 'profit') { av = a.profit||0; bv = b.profit||0; }
+    else return 0;
+    return picksSortDir * (av - bv);
+  });
+
+  return filtered;
+}
+
 async function loadPicksTable() {
   const wrap = document.getElementById('picks-table-wrap');
-  wrap.innerHTML = '<div id="picks-loading" style="padding:1.5rem;text-align:center;color:var(--muted)">Loading...</div>';
-  try {
-    const r = await fetch('/api/picks',{headers:{'x-auth-token':authToken}});
-    const picks = await r.json();
-    if (!picks.length) {
-      wrap.innerHTML = '<div style="padding:1.5rem;text-align:center;color:var(--muted);font-size:.85rem">No picks logged yet. Run a scan to start tracking.</div>';
+  const paginationEl = document.getElementById('picks-pagination');
+
+  if (!allPicksCache.length) {
+    wrap.innerHTML = '<div id="picks-loading" style="padding:1.5rem;text-align:center;color:var(--muted)">Loading...</div>';
+    try {
+      const r = await fetch('/api/picks',{headers:{'x-auth-token':authToken}});
+      allPicksCache = await r.json();
+    } catch {
+      wrap.innerHTML = '<div style="padding:1.5rem;text-align:center;color:var(--red)">Error loading picks</div>';
       return;
     }
-    // Apply filter
-    const todayStr = new Date().toISOString().slice(0,10);
-    const yesterdayStr = new Date(Date.now()-86400000).toISOString().slice(0,10);
-    let filtered = picks;
-    if (currentFilter === 'today') {
-      filtered = picks.filter(p => (p.date||p.gameTime||'').slice(0,10) === todayStr);
-    } else if (currentFilter === 'yesterday') {
-      filtered = picks.filter(p => (p.date||p.gameTime||'').slice(0,10) === yesterdayStr);
-    } else if (currentFilter === 'pending') {
-      filtered = picks.filter(p => !p.gameResult || p.gameResult === 'PENDING');
+  }
+
+  const filtered = getFilteredPicks();
+
+  if (!filtered.length) {
+    wrap.innerHTML = `<div style="padding:1.5rem;text-align:center;color:var(--muted);font-size:.85rem">No picks found for current filters.</div>`;
+    paginationEl.style.display = 'none';
+    return;
+  }
+
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  if (currentPage > totalPages) currentPage = totalPages;
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const pageItems = filtered.slice(start, start + PAGE_SIZE);
+
+  const sortArrow = (col) => picksSortCol === col ? (picksSortDir === 1 ? ' &#x25B2;' : ' &#x25BC;') : '';
+  const thClick = (col) => `onclick="sortPicks('${col}')"`;
+
+  const rows = pageItems.map(p => {
+    const date = (p.date||p.gameTime||'').slice(0,10);
+    const price = typeof p.pickedPrice==='number'&&isFinite(p.pickedPrice) ? `${p.pickedPrice>0?'+':''}${p.pickedPrice}` : 'n/a';
+    const book  = (p.pickedBook&&p.pickedBook!=='undefined') ? p.pickedBook : 'Unknown';
+    const result = p.gameResult || 'PENDING';
+    const isPending = result === 'PENDING';
+    const resultCell = isPending
+      ? `<button class="result-btn w" onclick="enterResult('${p.pickId}','WIN')">W</button><button class="result-btn l" onclick="enterResult('${p.pickId}','LOSS')">L</button><button class="result-btn p" onclick="enterResult('${p.pickId}','PUSH')">P</button>`
+      : `<span class="result-badge ${result}">${result}</span>`;
+    const profitVal = typeof p.profit === 'number' ? p.profit : null;
+    const profitStr = profitVal != null ? `${profitVal>=0?'+':''}$${Math.round(profitVal)}` : '--';
+    return `<tr>
+      <td style="color:var(--muted)">${date}</td>
+      <td>${p.sport||''}</td>
+      <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${p.matchup||''}">${p.matchup||''}</td>
+      <td>${p.betType||''}</td>
+      <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${p.side||''}">${p.side||''}</td>
+      <td>${book}</td>
+      <td style="color:var(--green);font-weight:bold">${price}</td>
+      <td><span style="color:${p.grade?.startsWith('A')?'var(--green)':'var(--yellow)'}">${p.grade||'?'}</span></td>
+      <td>${resultCell}</td>
+      <td style="color:${profitVal!=null&&profitVal>=0?'var(--green)':'var(--red)'}">${profitStr}</td>
+    </tr>`;
+  }).join('');
+
+  wrap.innerHTML = `<table class="picks-tbl">
+    <thead><tr>
+      <th ${thClick('date')}>Date${sortArrow('date')}</th>
+      <th>Sport</th><th>Game</th><th>Type</th><th>Pick</th><th>Book</th><th>Price</th>
+      <th ${thClick('score')}>Grade${sortArrow('score')}</th>
+      <th>Result</th>
+      <th ${thClick('profit')}>P&amp;L${sortArrow('profit')}</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+
+  // Pagination
+  if (totalPages <= 1) {
+    paginationEl.style.display = 'none';
+  } else {
+    paginationEl.style.display = 'flex';
+    let pages = '';
+    pages += `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage<=1?'disabled':''}>&#x2039;</button>`;
+    const range = pageRange(currentPage, totalPages);
+    for (const p of range) {
+      if (p === '...') pages += `<span style="color:var(--muted);padding:0 .25rem">...</span>`;
+      else pages += `<button class="page-btn ${p===currentPage?'active':''}" onclick="goPage(${p})">${p}</button>`;
     }
-    if (filtered.length === 0) {
-      wrap.innerHTML = `<div style="padding:1.5rem;text-align:center;color:var(--muted);font-size:.85rem">No picks found for filter: ${currentFilter.toUpperCase()}</div>`;
-      return;
-    }
-    const sorted = [...filtered].sort((a,b) => new Date(b.date||b.gameTime||0)-new Date(a.date||a.gameTime||0));
-    const rows = sorted.map(p => {
-      const date = (p.date||p.gameTime||'').slice(0,10);
-      const price = typeof p.pickedPrice==='number'&&isFinite(p.pickedPrice) ? `${p.pickedPrice>0?'+':''}${p.pickedPrice}` : 'n/a';
-      const book  = (p.pickedBook&&p.pickedBook!=='undefined') ? p.pickedBook : 'Unknown';
-      const result = p.gameResult || 'PENDING';
-      const isPending = result === 'PENDING';
-      const resultCell = isPending
-        ? `<button class="result-btn w" onclick="enterResult('${p.pickId}','WIN')">W</button><button class="result-btn l" onclick="enterResult('${p.pickId}','LOSS')">L</button><button class="result-btn p" onclick="enterResult('${p.pickId}','PUSH')">P</button>`
-        : `<span class="result-badge ${result}">${result}</span>`;
-      const profit = p.profit != null ? `${p.profit>=0?'+':''}$${p.profit}` : '--';
-      return `<tr>
-        <td style="color:var(--muted)">${date}</td>
-        <td>${p.sport||''}</td>
-        <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${p.matchup}">${p.matchup}</td>
-        <td>${p.betType||''}</td>
-        <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${p.side}">${p.side}</td>
-        <td>${book}</td>
-        <td style="color:var(--green);font-weight:bold">${price}</td>
-        <td><span style="color:${p.grade?.startsWith('A')?'var(--green)':'var(--yellow)'}">${p.grade||'?'}</span></td>
-        <td>${resultCell}</td>
-        <td style="color:${p.profit>=0?'var(--green)':'var(--red)'}">${profit}</td>
-      </tr>`;
-    }).join('');
-    wrap.innerHTML = `<table class="picks-tbl">
-      <thead><tr><th>Date</th><th>Sport</th><th>Game</th><th>Type</th><th>Pick</th><th>Book</th><th>Price</th><th>Grade</th><th>Result</th><th>P&L</th></tr></thead>
-      <tbody>${rows}</tbody>
-    </table>`;
-  } catch(e) {
-    wrap.innerHTML = `<div style="padding:1.5rem;text-align:center;color:var(--red)">Error loading picks: ${e.message}</div>`;
+    pages += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage>=totalPages?'disabled':''}>&#x203A;</button>`;
+    pages += `<span style="color:var(--muted);font-size:.7rem">${filtered.length} picks</span>`;
+    paginationEl.innerHTML = pages;
   }
 }
 
-let currentFilter = 'all';
-function filterPicks(filter) {
-  currentFilter = filter;
+function pageRange(cur, total) {
+  if (total <= 7) return Array.from({length:total},(_,i)=>i+1);
+  const r = [];
+  if (cur <= 4) { r.push(1,2,3,4,5,'...',total); }
+  else if (cur >= total-3) { r.push(1,'...',total-4,total-3,total-2,total-1,total); }
+  else { r.push(1,'...',cur-1,cur,cur+1,'...',total); }
+  return r;
+}
+
+function goPage(p) {
+  currentPage = p;
+  loadPicksTable();
+  document.getElementById('picks-panel').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function sortPicks(col) {
+  if (picksSortCol === col) picksSortDir *= -1;
+  else { picksSortCol = col; picksSortDir = -1; }
+  currentPage = 1;
   loadPicksTable();
 }
 
 function savePDF() {
-  // Opens the latest report in a new tab -- user clicks Ctrl+P -> Save as PDF
-  // Token passed as query param since window.open can't send custom headers
   window.open('/api/report/latest?token=' + encodeURIComponent(authToken), '_blank');
 }
 
@@ -582,14 +759,9 @@ async function openReports() {
   try {
     const r = await fetch('/api/reports', { headers: { 'x-auth-token': authToken } });
     const reports = await r.json();
-    if (!reports.length) {
-      alert('No saved reports yet. Run a scan first.');
-      return;
-    }
-    // Build a simple modal with report list
+    if (!reports.length) { alert('No saved reports yet. Run a scan first.'); return; }
     const existing = document.getElementById('reports-modal');
     if (existing) existing.remove();
-
     const modal = document.createElement('div');
     modal.id = 'reports-modal';
     modal.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.8);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem';
@@ -606,15 +778,11 @@ async function openReports() {
               <button onclick="window.open('/api/report/${rp.name}?token=' + encodeURIComponent(authToken),'_blank')" style="background:none;border:1px solid var(--green);color:var(--green);font-family:var(--font-mono);font-size:.7rem;padding:.25rem .6rem;border-radius:3px;cursor:pointer">OPEN</button>
             </div>`).join('')}
         </div>
-        <div style="padding:.6rem 1rem;border-top:1px solid var(--border);font-size:.7rem;color:var(--muted)">
-          Open any report, then Ctrl+P (or Cmd+P) and choose "Save as PDF"
-        </div>
+        <div style="padding:.6rem 1rem;border-top:1px solid var(--border);font-size:.7rem;color:var(--muted)">Open any report, then Ctrl+P (or Cmd+P) and choose "Save as PDF"</div>
       </div>`;
     document.body.appendChild(modal);
     modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
-  } catch(e) {
-    alert('Error loading reports: ' + e.message);
-  }
+  } catch(e) { alert('Error loading reports: ' + e.message); }
 }
 
 async function enterResult(pickId, result) {
@@ -626,13 +794,229 @@ async function enterResult(pickId, result) {
     });
     const d = await r.json();
     if (d.ok) {
-      await loadPicksTable();
+      // Update cache in place so we don't need a full reload
+      const idx = allPicksCache.findIndex(p => p.pickId === pickId);
+      if (idx >= 0) {
+        allPicksCache[idx].gameResult = result;
+        allPicksCache[idx].profit = d.profit;
+      }
+      loadPicksTable();
       loadStats();
     } else {
       alert('Error: ' + (d.error || 'Failed to save result'));
     }
+  } catch(e) { alert('Error: ' + e.message); }
+}
+
+// ── Charts ──
+async function toggleCharts() {
+  closeOtherPanels('charts');
+  const panel = document.getElementById('charts-panel');
+  const btn = document.getElementById('charts-toggle-btn');
+  if (panel.style.display !== 'none') {
+    panel.style.display = 'none'; btn.classList.remove('active'); return;
+  }
+  btn.classList.add('active');
+  panel.style.display = 'block';
+  panel.scrollIntoView({behavior:'smooth',block:'start'});
+  await renderCharts();
+}
+
+async function renderCharts() {
+  const body = document.getElementById('charts-body');
+  try {
+    // Use cached picks or fetch
+    if (!allPicksCache.length) {
+      const r = await fetch('/api/picks',{headers:{'x-auth-token':authToken}});
+      allPicksCache = await r.json();
+    }
+    const graded = allPicksCache.filter(p => p.gameResult === 'WIN' || p.gameResult === 'LOSS');
+
+    if (graded.length < 3) {
+      body.innerHTML = '<div style="grid-column:1/-1;padding:2rem;text-align:center;color:var(--muted);font-size:.8rem">Not enough graded picks for charts yet. Need at least 3 graded results.</div>';
+      return;
+    }
+
+    body.innerHTML = `
+      <div class="chart-card wide">
+        <div class="chart-label">Cumulative P&amp;L Over Time</div>
+        <div id="chart-roi"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-label">Win Rate by Sport</div>
+        <div id="chart-sport"></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-label">Win Rate by Grade</div>
+        <div id="chart-grade"></div>
+      </div>
+    `;
+
+    drawROIChart(graded);
+    drawBarChart('chart-sport', calcBySport(graded));
+    drawBarChart('chart-grade', calcByGrade(graded));
   } catch(e) {
-    alert('Error: ' + e.message);
+    body.innerHTML = `<div style="grid-column:1/-1;padding:2rem;text-align:center;color:var(--red)">Error loading chart data: ${e.message}</div>`;
+  }
+}
+
+function calcBySport(graded) {
+  const map = {};
+  for (const p of graded) {
+    const k = p.sport || 'Unknown';
+    if (!map[k]) map[k] = {wins:0,losses:0};
+    if (p.gameResult==='WIN') map[k].wins++; else map[k].losses++;
+  }
+  return Object.entries(map)
+    .filter(([,d]) => d.wins+d.losses >= 2)
+    .map(([label,d]) => ({ label, winRate: Math.round(d.wins/(d.wins+d.losses)*100), total: d.wins+d.losses }))
+    .sort((a,b) => b.winRate - a.winRate);
+}
+
+function calcByGrade(graded) {
+  const map = {};
+  for (const p of graded) {
+    const k = p.grade || '?';
+    if (!map[k]) map[k] = {wins:0,losses:0};
+    if (p.gameResult==='WIN') map[k].wins++; else map[k].losses++;
+  }
+  return Object.entries(map)
+    .filter(([,d]) => d.wins+d.losses >= 2)
+    .map(([label,d]) => ({ label, winRate: Math.round(d.wins/(d.wins+d.losses)*100), total: d.wins+d.losses }))
+    .sort((a,b) => b.label.localeCompare(a.label));
+}
+
+function drawROIChart(graded) {
+  const el = document.getElementById('chart-roi');
+  if (!el) return;
+
+  // Sort by date
+  const sorted = [...graded].sort((a,b) => new Date(a.date||a.gameTime||0) - new Date(b.date||b.gameTime||0));
+
+  let cum = 0;
+  const points = sorted.map(p => {
+    const price = (typeof p.pickedPrice==='number'&&isFinite(p.pickedPrice)) ? p.pickedPrice : -110;
+    if (p.gameResult==='WIN') cum += price>0 ? price : (100/Math.abs(price))*100;
+    else cum -= 100;
+    return cum;
+  });
+
+  const W = 680, H = 120, PAD = 30;
+  const minV = Math.min(0, ...points);
+  const maxV = Math.max(0, ...points);
+  const range = maxV - minV || 1;
+  const toY = v => PAD + (1 - (v - minV) / range) * (H - PAD*2);
+  const toX = i => PAD + (i / Math.max(points.length-1,1)) * (W - PAD*2);
+
+  const pathD = points.map((v,i) => `${i===0?'M':'L'}${toX(i).toFixed(1)},${toY(v).toFixed(1)}`).join(' ');
+  const zeroY = toY(0).toFixed(1);
+  const lastColor = points[points.length-1] >= 0 ? '#39d353' : '#f85149';
+  const gradId = 'roi-grad';
+
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" style="width:100%;height:auto">
+    <defs>
+      <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="${lastColor}" stop-opacity="0.3"/>
+        <stop offset="100%" stop-color="${lastColor}" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <line x1="${PAD}" y1="${zeroY}" x2="${W-PAD}" y2="${zeroY}" stroke="#21262d" stroke-width="1" stroke-dasharray="4,3"/>
+    <text x="${PAD-4}" y="${(parseFloat(zeroY)+4).toFixed(1)}" fill="#7d8590" font-size="9" text-anchor="end">$0</text>
+    <text x="${PAD-4}" y="${(toY(maxV)+4).toFixed(1)}" fill="#7d8590" font-size="9" text-anchor="end">$${Math.round(maxV)}</text>
+    <text x="${PAD-4}" y="${(toY(minV)+4).toFixed(1)}" fill="#7d8590" font-size="9" text-anchor="end">$${Math.round(minV)}</text>
+    <path d="${pathD} L${toX(points.length-1).toFixed(1)},${H-PAD} L${toX(0).toFixed(1)},${H-PAD} Z" fill="url(#${gradId})"/>
+    <path d="${pathD}" fill="none" stroke="${lastColor}" stroke-width="2" stroke-linejoin="round"/>
+    <text x="${W/2}" y="${H-4}" fill="#7d8590" font-size="9" text-anchor="middle">${sorted.length} picks</text>
+  </svg>`;
+}
+
+function drawBarChart(elId, data) {
+  const el = document.getElementById(elId);
+  if (!el || !data.length) { if(el) el.innerHTML='<div class="chart-empty">Not enough data</div>'; return; }
+
+  const H = 22;
+  const rows = data.map(d => {
+    const color = d.winRate >= 55 ? '#39d353' : d.winRate >= 45 ? '#f0c040' : '#f85149';
+    return `<div style="display:flex;align-items:center;gap:.5rem;margin-bottom:6px;font-size:.72rem">
+      <span style="width:44px;text-align:right;color:var(--muted);flex-shrink:0">${d.label}</span>
+      <div style="flex:1;background:var(--bg);border-radius:3px;height:${H}px;overflow:hidden;position:relative">
+        <div style="width:${d.winRate}%;height:100%;background:${color};opacity:.7;border-radius:3px;transition:width .4s"></div>
+        <span style="position:absolute;left:6px;top:50%;transform:translateY(-50%);font-size:.7rem;color:#fff;font-weight:bold">${d.winRate}%</span>
+      </div>
+      <span style="width:30px;color:var(--muted);font-size:.68rem">${d.total}g</span>
+    </div>`;
+  }).join('');
+  el.innerHTML = rows;
+}
+
+// ── Signals ──
+async function toggleSignals() {
+  closeOtherPanels('signals');
+  const panel = document.getElementById('signals-panel');
+  const btn = document.getElementById('signals-toggle-btn');
+  if (panel.style.display !== 'none') {
+    panel.style.display = 'none'; btn.classList.remove('active'); return;
+  }
+  btn.classList.add('active');
+  panel.style.display = 'block';
+  panel.scrollIntoView({behavior:'smooth',block:'start'});
+  await loadSignals();
+}
+
+async function loadSignals() {
+  const body = document.getElementById('signals-body');
+  try {
+    const r = await fetch('/api/signals',{headers:{'x-auth-token':authToken}});
+    const data = await r.json();
+
+    if (!data.performance.length && !Object.keys(data.weights).length) {
+      body.innerHTML = '<div style="padding:1.5rem;text-align:center;color:var(--muted);font-size:.8rem">No signal data yet. Signal performance builds after 3+ graded picks per signal.</div>';
+      return;
+    }
+
+    const totalGraded = data.totalGraded;
+    let html = `<div style="padding:.5rem .75rem;font-size:.72rem;color:var(--muted);border-bottom:1px solid var(--border)">
+      Based on ${totalGraded} graded picks &nbsp;|&nbsp; Weight > 1.0 = boosted &nbsp;|&nbsp; Weight &lt; 1.0 = penalized
+    </div>`;
+
+    if (data.performance.length) {
+      html += `<div style="padding:.4rem .75rem;font-size:.65rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;display:flex;gap:.5rem">
+        <span style="width:220px">Signal</span><span style="flex:1">Win Rate</span><span style="width:110px;text-align:right">Samples &nbsp; Weight</span>
+      </div>`;
+      for (const s of data.performance) {
+        const color = s.winRate >= 55 ? '#39d353' : s.winRate >= 45 ? '#f0c040' : '#f85149';
+        const weightClass = s.weight > 1.05 ? 'boost' : s.weight < 0.95 ? 'penalize' : 'neutral';
+        const weightLabel = s.weight !== 1.0 ? `${s.weight}x` : 'neutral';
+        html += `<div class="signal-row">
+          <span class="signal-name">${s.signal}</span>
+          <div class="signal-bar-wrap">
+            <div class="signal-bar" style="width:${s.winRate}%;background:${color}"></div>
+          </div>
+          <span class="signal-meta">${s.winRate}% &nbsp; ${s.wins}W/${s.losses}L</span>
+          <span class="signal-weight ${weightClass}">${weightLabel}</span>
+        </div>`;
+      }
+    }
+
+    // Show any weights that don't have performance data yet (from file only)
+    const perfSigs = new Set(data.performance.map(p => p.signal));
+    const extraWeights = Object.entries(data.weights).filter(([k]) => !perfSigs.has(k));
+    if (extraWeights.length) {
+      html += `<div style="padding:.4rem .75rem .2rem;font-size:.65rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;border-top:1px solid var(--border);margin-top:.25rem">Learned weights (no performance data yet)</div>`;
+      for (const [sig, w] of extraWeights) {
+        const weightClass = w > 1.05 ? 'boost' : w < 0.95 ? 'penalize' : 'neutral';
+        html += `<div class="signal-row">
+          <span class="signal-name">${sig}</span>
+          <div class="signal-bar-wrap"><div class="signal-bar" style="width:50%;background:var(--muted)"></div></div>
+          <span class="signal-meta">no data</span>
+          <span class="signal-weight ${weightClass}">${w}x</span>
+        </div>`;
+      }
+    }
+
+    body.innerHTML = html;
+  } catch(e) {
+    body.innerHTML = `<div style="padding:1.5rem;text-align:center;color:var(--red)">Error: ${e.message}</div>`;
   }
 }
 </script>

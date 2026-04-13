@@ -280,6 +280,42 @@ app.get('/api/report/:filename', requireAuth, (req, res) => {
   } catch { res.status(500).send('Error loading report'); }
 });
 
+// ── Signal weights + retro performance ──
+app.get('/api/signals', requireAuth, (req, res) => {
+  try {
+    const weightsFile = path.join(SNAPSHOT_DIR, 'signal_weights.json');
+    const retroFile   = path.join(SNAPSHOT_DIR, 'retro_analysis.json');
+    const weights: Record<string, number> = fs.existsSync(weightsFile)
+      ? JSON.parse(fs.readFileSync(weightsFile, 'utf-8'))
+      : {};
+    // Build signal performance from retro_analysis picks
+    const retroPicks: any[] = fs.existsSync(retroFile)
+      ? JSON.parse(fs.readFileSync(retroFile, 'utf-8'))
+      : [];
+    const graded = retroPicks.filter((p: any) => p.gameResult === 'WIN' || p.gameResult === 'LOSS');
+    const sigMap: Record<string, { wins: number; losses: number }> = {};
+    for (const pick of graded) {
+      for (const sig of (pick.signals ?? [])) {
+        const k = sig.toUpperCase();
+        if (!sigMap[k]) sigMap[k] = { wins: 0, losses: 0 };
+        if (pick.gameResult === 'WIN') sigMap[k].wins++;
+        else sigMap[k].losses++;
+      }
+    }
+    const performance = Object.entries(sigMap)
+      .filter(([, d]) => d.wins + d.losses >= 3)
+      .map(([signal, d]) => ({
+        signal,
+        wins: d.wins,
+        losses: d.losses,
+        winRate: Math.round(d.wins / (d.wins + d.losses) * 100),
+        weight: weights[signal] ?? 1.0,
+      }))
+      .sort((a, b) => b.winRate - a.winRate);
+    res.json({ weights, performance, totalGraded: graded.length });
+  } catch { res.json({ weights: {}, performance: [], totalGraded: 0 }); }
+});
+
 // ── Health ──
 app.get('/api/health', (_, res) => res.json({ ok: true, ts: new Date().toISOString() }));
 

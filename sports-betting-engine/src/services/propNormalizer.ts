@@ -66,6 +66,9 @@ export interface AggregatedProp {
   juiceGap: number | null;        // difference in over juice across books
   bookCount: number;
   fetchedAt: string;
+  // Stale book detection
+  hasStaleBooks: boolean;         // true if any book hasn't updated in 6+ hrs
+  staleBooks: string[];           // names of stale books
 }
 
 const MARKET_LABELS: Record<string, string> = {
@@ -225,6 +228,18 @@ export function aggregateProps(rows: NormalizedProp[]): AggregatedProp[] {
 
     const uniqueBooks = new Set(propRows.map(r => r.bookmakerKey));
 
+    // Flag stale books (last_update older than 6 hours)
+    const STALE_PROP_THRESHOLD_MS = 6 * 60 * 60 * 1000;
+    const staleBooks: string[] = [];
+    for (const offer of [...overOffers, ...underOffers]) {
+      if (offer.lastUpdate) {
+        const age = Date.now() - new Date(offer.lastUpdate).getTime();
+        if (age > STALE_PROP_THRESHOLD_MS && !staleBooks.includes(offer.bookmakerTitle)) {
+          staleBooks.push(offer.bookmakerTitle);
+        }
+      }
+    }
+
     aggregated.push({
       eventId: sample.eventId,
       matchup: sample.matchup,
@@ -253,6 +268,8 @@ export function aggregateProps(rows: NormalizedProp[]): AggregatedProp[] {
       juiceGap,
       bookCount: uniqueBooks.size,
       fetchedAt: sample.fetchedAt,
+      hasStaleBooks: staleBooks.length > 0,
+      staleBooks,
     });
   }
 
