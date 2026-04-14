@@ -239,7 +239,7 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
       <button class="scan-btn track" onclick="runCmd('clv','CLV Report')"><span class="num">20</span>CLV Report</button>
       <button class="scan-btn track" onclick="runCmd('calibrate','Calibration')"><span class="num">21</span>Calibration</button>
       <button class="scan-btn track" onclick="runCmd('historical','Historical Odds')"><span class="num">22</span>Historical Odds</button>
-      <button class="scan-btn track" onclick="runCmd('clv-picks','All Picks')"><span class="num">23</span>All Picks</button>
+      <button class="scan-btn track" onclick="togglePicks()"><span class="num">23</span>All Picks</button>
       <button class="scan-btn track" onclick="runCmd('fixresults','Fix Results')"><span class="num">24</span>Fix Results</button>
     </div>
 
@@ -564,7 +564,7 @@ async function toggleHistory() {
   closeOtherPanels('history');
   const panel = document.getElementById('history-panel');
   const btn = document.getElementById('history-toggle-btn');
-  if (panel.style.display !== 'none') {
+  if (panel.style.display === 'block') {
     panel.style.display = 'none'; btn.classList.remove('active'); return;
   }
   btn.classList.add('active');
@@ -630,7 +630,7 @@ async function togglePicks() {
   closeOtherPanels('picks');
   const panel = document.getElementById('picks-panel');
   const btn = document.getElementById('picks-toggle-btn');
-  if (panel.style.display !== 'none') {
+  if (panel.style.display === 'block') {
     panel.style.display = 'none'; btn.classList.remove('active'); return;
   }
   btn.classList.add('active');
@@ -854,7 +854,7 @@ async function toggleCharts() {
   closeOtherPanels('charts');
   const panel = document.getElementById('charts-panel');
   const btn = document.getElementById('charts-toggle-btn');
-  if (panel.style.display !== 'none') {
+  if (panel.style.display === 'block') {
     panel.style.display = 'none'; btn.classList.remove('active'); return;
   }
   btn.classList.add('active');
@@ -995,7 +995,7 @@ async function toggleSignals() {
   closeOtherPanels('signals');
   const panel = document.getElementById('signals-panel');
   const btn = document.getElementById('signals-toggle-btn');
-  if (panel.style.display !== 'none') {
+  if (panel.style.display === 'block') {
     panel.style.display = 'none'; btn.classList.remove('active'); return;
   }
   btn.classList.add('active');
