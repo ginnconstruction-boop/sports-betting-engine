@@ -686,6 +686,7 @@ function getFilteredPicks() {
 async function loadPicksTable() {
   const wrap = document.getElementById('picks-table-wrap');
   const paginationEl = document.getElementById('picks-pagination');
+  paginationEl.style.display = 'none';
 
   if (!allPicksCache.length) {
     wrap.innerHTML = '<div id="picks-loading" style="padding:1.5rem;text-align:center;color:var(--muted)">Loading...</div>';
@@ -702,72 +703,87 @@ async function loadPicksTable() {
 
   if (!filtered.length) {
     wrap.innerHTML = `<div style="padding:1.5rem;text-align:center;color:var(--muted);font-size:.85rem">No picks found for current filters.</div>`;
-    paginationEl.style.display = 'none';
     return;
   }
 
-  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
-  if (currentPage > totalPages) currentPage = totalPages;
-  const start = (currentPage - 1) * PAGE_SIZE;
-  const pageItems = filtered.slice(start, start + PAGE_SIZE);
+  // Split into BET (A+/A/B+) and LEAN (B and below)
+  const BET_GRADES = ['A+', 'A', 'B+'];
+  const betPicks  = filtered.filter(p => BET_GRADES.includes(p.grade));
+  const leanPicks = filtered.filter(p => !BET_GRADES.includes(p.grade));
+
+  function sectionRecord(picks) {
+    const graded = picks.filter(p => p.gameResult === 'WIN' || p.gameResult === 'LOSS');
+    const w = graded.filter(p => p.gameResult === 'WIN').length;
+    const l = graded.filter(p => p.gameResult === 'LOSS').length;
+    const pct = (w + l) > 0 ? Math.round(w / (w + l) * 100) : null;
+    const pending = picks.filter(p => !p.gameResult || p.gameResult === 'PENDING').length;
+    let txt = graded.length ? `${w}W &ndash; ${l}L` : 'No results yet';
+    if (pct !== null) txt += `&nbsp;&nbsp;<span style="color:${pct>=55?'var(--green)':pct>=45?'var(--yellow)':'var(--red)'}">${pct}%</span>`;
+    if (pending) txt += `&nbsp;&nbsp;<span style="color:var(--muted)">${pending} pending</span>`;
+    return txt;
+  }
 
   const sortArrow = (col) => picksSortCol === col ? (picksSortDir === 1 ? ' &#x25B2;' : ' &#x25BC;') : '';
   const thClick = (col) => `onclick="sortPicks('${col}')"`;
+  const thead = `<thead><tr>
+    <th ${thClick('date')}>Date${sortArrow('date')}</th>
+    <th>Sport</th><th>Game</th><th>Type</th><th>Pick</th><th>Book</th><th>Price</th>
+    <th ${thClick('score')}>Grade${sortArrow('score')}</th>
+    <th title="Quarter-Kelly stake % of bankroll">Kelly%</th>
+    <th>Result</th>
+    <th ${thClick('profit')}>P&amp;L${sortArrow('profit')}</th>
+  </tr></thead>`;
 
-  const rows = pageItems.map(p => {
-    const date = (p.date||p.gameTime||'').slice(0,10);
-    const price = typeof p.pickedPrice==='number'&&isFinite(p.pickedPrice) ? `${p.pickedPrice>0?'+':''}${p.pickedPrice}` : 'n/a';
-    const book  = (p.pickedBook&&p.pickedBook!=='undefined') ? p.pickedBook : 'Unknown';
-    const result = p.gameResult || 'PENDING';
-    const isPending = result === 'PENDING';
-    const resultCell = isPending
-      ? `<button class="result-btn w" onclick="enterResult('${p.pickId}','WIN')">W</button><button class="result-btn l" onclick="enterResult('${p.pickId}','LOSS')">L</button><button class="result-btn p" onclick="enterResult('${p.pickId}','PUSH')">P</button>`
-      : `<span class="result-badge ${result}">${result}</span>`;
-    const profitVal = typeof p.profit === 'number' ? p.profit : null;
-    const profitStr = profitVal != null ? `${profitVal>=0?'+':''}$${Math.round(profitVal)}` : '--';
-    return `<tr>
-      <td style="color:var(--muted)">${date}</td>
-      <td>${p.sport||''}</td>
-      <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${p.matchup||''}">${p.matchup||''}</td>
-      <td>${p.betType||''}</td>
-      <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${p.side||''}">${p.side||''}</td>
-      <td>${book}</td>
-      <td style="color:var(--green);font-weight:bold">${price}</td>
-      <td><span style="color:${p.grade?.startsWith('A')?'var(--green)':'var(--yellow)'}">${p.grade||'?'}</span></td>
-      <td style="color:var(--muted)">${typeof p.kellyPct==='number'?p.kellyPct.toFixed(1)+'%':'--'}</td>
-      <td>${resultCell}</td>
-      <td style="color:${profitVal!=null&&profitVal>=0?'var(--green)':'var(--red)'}">${profitStr}</td>
-    </tr>`;
-  }).join('');
-
-  wrap.innerHTML = `<table class="picks-tbl">
-    <thead><tr>
-      <th ${thClick('date')}>Date${sortArrow('date')}</th>
-      <th>Sport</th><th>Game</th><th>Type</th><th>Pick</th><th>Book</th><th>Price</th>
-      <th ${thClick('score')}>Grade${sortArrow('score')}</th>
-      <th title="Quarter-Kelly stake % of bankroll">Kelly%</th>
-      <th>Result</th>
-      <th ${thClick('profit')}>P&amp;L${sortArrow('profit')}</th>
-    </tr></thead>
-    <tbody>${rows}</tbody>
-  </table>`;
-
-  // Pagination
-  if (totalPages <= 1) {
-    paginationEl.style.display = 'none';
-  } else {
-    paginationEl.style.display = 'flex';
-    let pages = '';
-    pages += `<button class="page-btn" onclick="goPage(${currentPage-1})" ${currentPage<=1?'disabled':''}>&#x2039;</button>`;
-    const range = pageRange(currentPage, totalPages);
-    for (const p of range) {
-      if (p === '...') pages += `<span style="color:var(--muted);padding:0 .25rem">...</span>`;
-      else pages += `<button class="page-btn ${p===currentPage?'active':''}" onclick="goPage(${p})">${p}</button>`;
-    }
-    pages += `<button class="page-btn" onclick="goPage(${currentPage+1})" ${currentPage>=totalPages?'disabled':''}>&#x203A;</button>`;
-    pages += `<span style="color:var(--muted);font-size:.7rem">${filtered.length} picks</span>`;
-    paginationEl.innerHTML = pages;
+  function buildRows(picks) {
+    return picks.map(p => {
+      const date = (p.date||p.gameTime||'').slice(0,10);
+      const price = typeof p.pickedPrice==='number'&&isFinite(p.pickedPrice) ? `${p.pickedPrice>0?'+':''}${p.pickedPrice}` : 'n/a';
+      const book  = (p.pickedBook&&p.pickedBook!=='undefined') ? p.pickedBook : 'Unknown';
+      const result = p.gameResult || 'PENDING';
+      const isPending = result === 'PENDING';
+      const resultCell = isPending
+        ? `<button class="result-btn w" onclick="enterResult('${p.pickId}','WIN')">W</button><button class="result-btn l" onclick="enterResult('${p.pickId}','LOSS')">L</button><button class="result-btn p" onclick="enterResult('${p.pickId}','PUSH')">P</button>`
+        : `<span class="result-badge ${result}">${result}</span>`;
+      const profitVal = typeof p.profit === 'number' ? p.profit : null;
+      const profitStr = profitVal != null ? `${profitVal>=0?'+':''}$${Math.round(profitVal)}` : '--';
+      const gradeColor = p.grade==='A+'||p.grade==='A' ? 'var(--green)' : p.grade==='B+' ? 'var(--yellow)' : 'var(--muted)';
+      return `<tr>
+        <td style="color:var(--muted)">${date}</td>
+        <td>${p.sport||''}</td>
+        <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${p.matchup||''}">${p.matchup||''}</td>
+        <td>${p.betType||''}</td>
+        <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${p.side||''}">${p.side||''}</td>
+        <td>${book}</td>
+        <td style="color:var(--green);font-weight:bold">${price}</td>
+        <td><span style="color:${gradeColor};font-weight:bold">${p.grade||'?'}</span></td>
+        <td style="color:var(--muted)">${typeof p.kellyPct==='number'?p.kellyPct.toFixed(1)+'%':'--'}</td>
+        <td>${resultCell}</td>
+        <td style="color:${profitVal!=null&&profitVal>=0?'var(--green)':'var(--red)'}">${profitStr}</td>
+      </tr>`;
+    }).join('');
   }
+
+  let html = '';
+
+  if (betPicks.length) {
+    html += `<div style="display:flex;align-items:center;gap:1rem;padding:.6rem 1rem;background:rgba(0,255,136,.06);border-bottom:1px solid rgba(0,255,136,.15)">
+      <span style="color:var(--green);font-weight:700;font-size:.8rem;letter-spacing:.08em">BET PLAYS</span>
+      <span style="font-size:.78rem;color:var(--fg)">${sectionRecord(betPicks)}</span>
+      <span style="margin-left:auto;color:var(--muted);font-size:.7rem">${betPicks.length} pick${betPicks.length!==1?'s':''}</span>
+    </div>
+    <table class="picks-tbl">${thead}<tbody>${buildRows(betPicks)}</tbody></table>`;
+  }
+
+  if (leanPicks.length) {
+    html += `<div style="display:flex;align-items:center;gap:1rem;padding:.6rem 1rem;background:rgba(255,214,0,.04);border-top:${betPicks.length?'2px solid var(--border)':'none'};border-bottom:1px solid rgba(255,214,0,.12);margin-top:${betPicks.length?'1rem':'0'}">
+      <span style="color:var(--yellow);font-weight:700;font-size:.8rem;letter-spacing:.08em">LEAN PLAYS</span>
+      <span style="font-size:.78rem;color:var(--fg)">${sectionRecord(leanPicks)}</span>
+      <span style="margin-left:auto;color:var(--muted);font-size:.7rem">${leanPicks.length} pick${leanPicks.length!==1?'s':''}</span>
+    </div>
+    <table class="picks-tbl">${thead}<tbody>${buildRows(leanPicks)}</tbody></table>`;
+  }
+
+  wrap.innerHTML = html;
 }
 
 function pageRange(cur, total) {
