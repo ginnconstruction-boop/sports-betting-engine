@@ -39,9 +39,17 @@ import { sendAlerts } from '../services/alertService';
 import { getEnabledSports } from '../config/sports';
 import { INITIAL_MARKETS, EventSummary } from '../types/odds';
 
-async function safeRun<T>(label: string, fn: () => Promise<T>, fallback: T): Promise<T> {
+// Wrap a promise with a timeout so no single step can hang forever
+function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const t = setTimeout(() => reject(new Error(`${label} timed out after ${ms / 1000}s`)), ms);
+    promise.then(v => { clearTimeout(t); resolve(v); }, e => { clearTimeout(t); reject(e); });
+  });
+}
+
+async function safeRun<T>(label: string, fn: () => Promise<T>, fallback: T, timeoutMs = 30000): Promise<T> {
   try {
-    return await fn();
+    return await withTimeout(fn(), timeoutMs, label);
   } catch (err: any) {
     // Intelligence failures are non-fatal -- just log and continue
     process.stderr.write(`  [skip] ${label}: ${err?.message ?? String(err)}\n`);
@@ -59,12 +67,14 @@ function safeRunSync<T>(label: string, fn: () => T, fallback: T): T {
 }
 
 export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
+  console.log('\n  Morning scan started — loading intelligence data...');
   const sportKeys = getEnabledSports().map(s => s.key);
+  console.log(`  Sports in scope: ${sportKeys.join(', ')}`);
 
   // -- Step 0: Retrospective analysis ------------------------
   // Auto-grade yesterday's picks, identify what went wrong,
   // adjust signal weights for today's scoring
-  console.log('\n  Grading yesterday\'s picks from ESPN scores...');
+  console.log('\n  [0/22] Grading yesterday\'s picks from ESPN scores...');
   const newlyGraded = await safeRun('retro grading', () => autoGradePicks(), 0);
   if (newlyGraded > 0) {
     console.log(`  Auto-graded ${newlyGraded} pick(s) from yesterday.`);
@@ -88,6 +98,7 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
   }
 
   // -- Step 1: Fetch odds (required -- this one can fail loudly) --
+  console.log('  [1/22] Fetching odds from The Odds API...');
   const { results: rawBySport } = await getOddsForAllSports(
     sportKeys, INITIAL_MARKETS, options.forceRefresh ?? false
   );
@@ -120,6 +131,7 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
   );
 
   // -- Step 4: ESPN injuries -----------------------------------
+  console.log('  [4/22] Fetching injury reports...');
   const injuryMap = new Map<string, any[]>();
   for (const sportKey of sportKeys) {
     await safeRun(`injuries ${sportKey}`, async () => {
@@ -193,6 +205,7 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
   );
 
   // -- Step 10: Power ratings ----------------------------------
+  console.log('  [10/22] Computing power ratings...');
   const powerRatings = new Map<string, any>();
   for (let i = 0; i < allSummaries.length; i += 4) {
     await Promise.allSettled(allSummaries.slice(i, i + 4).map(async (event) => {
@@ -283,12 +296,14 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
   );
 
   // -- Step 18: Lineup confirmation ----------------------------
+  console.log('  [18/22] Confirming lineups...');
   const lineupMap = await safeRun('lineup confirmation',
     () => buildLineupMap(allSummaries.map(e => ({
       eventId: e.eventId, sportKey: e.sportKey,
       homeTeam: e.homeTeam, awayTeam: e.awayTeam, gameTime: e.startTime,
     }))),
-    new Map()
+    new Map(),
+    60000  // 60s -- ESPN lineup calls can be slow
   );
 
   // -- Step 19: Historical DB update ---------------------------

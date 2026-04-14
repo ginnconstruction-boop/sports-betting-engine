@@ -125,12 +125,24 @@ app.get('/api/stream/:command', requireAuth, (req, res) => {
   activeScans.add(command);
 
   const args = ALLOWED[command].split(' ');
-  const proc = spawn('node', ['--require', 'ts-node/register', 'src/index.ts', ...args], {
+  // transpile-only: skip TS type-checking so the process starts instantly
+  const proc = spawn('node', ['--require', 'ts-node/register/transpile-only', 'src/index.ts', ...args], {
     cwd: __dirname,
     env: { ...process.env },
   });
 
   let fullOutput = '';
+
+  // Hard 12-minute timeout -- kills the subprocess if it ever hangs
+  const SCAN_TIMEOUT_MS = 12 * 60 * 1000;
+  const timeoutHandle = setTimeout(() => {
+    try { proc.kill(); } catch {}
+    activeScans.delete(command);
+    send('line', '\n[ERROR] Scan timed out after 12 minutes. Check server logs.\n');
+    send('done', 'ERROR');
+    res.end();
+    saveHistory({ command, label, timestamp: new Date().toISOString(), output: fullOutput + '\n[TIMEOUT]', ok: false });
+  }, SCAN_TIMEOUT_MS);
 
   proc.stdout.on('data', (chunk: Buffer) => {
     const text = chunk.toString();
@@ -148,6 +160,7 @@ app.get('/api/stream/:command', requireAuth, (req, res) => {
   });
 
   proc.on('close', (code) => {
+    clearTimeout(timeoutHandle);
     activeScans.delete(command);
     const ok = code === 0;
     send('done', ok ? 'SUCCESS' : 'ERROR');
@@ -172,7 +185,7 @@ app.get('/api/stream/:command', requireAuth, (req, res) => {
   });
 
   // Clean up if client disconnects
-  req.on('close', () => { try { proc.kill(); } catch {} activeScans.delete(command); });
+  req.on('close', () => { clearTimeout(timeoutHandle); try { proc.kill(); } catch {} activeScans.delete(command); });
 });
 
 // ── Fallback non-streaming run (kept for compatibility) ──
