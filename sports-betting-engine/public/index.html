@@ -53,11 +53,24 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-mono);min-hei
 .scan-btn .num{font-family:var(--font-mono);font-size:.65rem;color:var(--muted);min-width:1.4rem}
 
 /* STATS BAR */
-.stats-bar{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.5rem;margin-bottom:1rem}
+.stats-bar{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.5rem;margin-bottom:.6rem}
 .stat-card{background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:.75rem}
 .stat-label{font-size:.65rem;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-bottom:.25rem}
 .stat-value{font-family:var(--font-ui);font-weight:700;font-size:1.4rem;color:var(--text)}
 .stat-value.green{color:var(--green)}.stat-value.red{color:var(--red)}.stat-value.yellow{color:var(--yellow)}
+
+/* PER-SPORT STATS BAR */
+.sport-stats-bar{display:flex;align-items:center;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap}
+.sport-stats-label{font-size:.58rem;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;white-space:nowrap;padding:.3rem .5rem;background:var(--bg3);border:1px solid var(--border);border-radius:4px;font-family:var(--font-mono)}
+.sport-stats-cards{display:flex;gap:.4rem;flex-wrap:wrap;flex:1}
+.sport-card{background:var(--bg3);border:1px solid var(--border);border-radius:5px;padding:.4rem .65rem;cursor:pointer;transition:border-color .15s;min-width:90px}
+.sport-card:hover{border-color:var(--green)}
+.sport-card.active{border-color:var(--green);background:rgba(63,185,80,.07)}
+.sport-card-name{font-size:.6rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-bottom:.18rem}
+.sport-card-record{font-family:var(--font-ui);font-weight:700;font-size:1rem;line-height:1}
+.sport-card-record.green{color:var(--green)}.sport-card-record.red{color:var(--red)}.sport-card-record.yellow{color:var(--yellow)}
+.sport-card-sub{font-size:.6rem;color:var(--muted);margin-top:.15rem;display:flex;gap:.4rem}
+.sport-card-sub span.up{color:var(--green)}.sport-card-sub span.dn{color:var(--red)}
 
 /* OUTPUT PANEL */
 #output-panel{display:none;margin-top:1.5rem;background:var(--bg2);border:1px solid var(--border);border-radius:8px;overflow:hidden}
@@ -191,6 +204,12 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
       <div class="stat-card"><div class="stat-label">Record</div><div class="stat-value" id="stat-record">--</div></div>
       <div class="stat-card"><div class="stat-label">Win Rate</div><div class="stat-value" id="stat-winpct">--</div></div>
       <div class="stat-card"><div class="stat-label">Profit</div><div class="stat-value" id="stat-profit">--</div></div>
+    </div>
+
+    <!-- PER-SPORT STATS -->
+    <div class="sport-stats-bar" id="sport-stats-bar" style="display:none">
+      <div class="sport-stats-label">BY SPORT</div>
+      <div class="sport-stats-cards" id="sport-stats-cards"></div>
     </div>
 
     <!-- FULL SCANS -->
@@ -556,7 +575,91 @@ async function loadStats() {
     const pr = document.getElementById('stat-profit');
     pr.textContent = graded.length ? `${profit>=0?'+':''}$${Math.round(profit)}` : '--';
     pr.className = 'stat-value ' + (profit>=0?'green':'red');
+
+    // ── Per-sport breakdown ──
+    renderSportStats(picks);
   } catch {}
+}
+
+// Sport name display map
+const SPORT_DISPLAY = {
+  basketball_nba:'NBA', baseball_mlb:'MLB', icehockey_nhl:'NHL',
+  basketball_ncaab:'NCAAB', americanfootball_nfl:'NFL',
+  americanfootball_ncaaf:'NCAAF', baseball_ncaa:'NCAA Baseball',
+};
+function sportLabel(key) {
+  return SPORT_DISPLAY[key] || (key||'').replace('_',' ').toUpperCase().replace('AMERICANFOOTBALL','FOOTBALL').replace('BASKETBALL','BBALL').replace('ICEHOCKEY','HOCKEY').replace('BASEBALL','BASE');
+}
+
+let activeSportFilter = null;
+
+function renderSportStats(picks) {
+  // Build per-sport map from ALL picks (graded + pending)
+  const map = {};
+  for (const p of picks) {
+    const k = p.sportKey || p.sport || 'other';
+    if (!map[k]) map[k] = { wins:0, losses:0, pushes:0, pending:0, profit:0, total:0 };
+    map[k].total++;
+    const price = (typeof p.pickedPrice==='number'&&isFinite(p.pickedPrice)) ? p.pickedPrice : -110;
+    if (p.gameResult==='WIN')       { map[k].wins++;    map[k].profit += price>0 ? price : (100/Math.abs(price))*100; }
+    else if (p.gameResult==='LOSS') { map[k].losses++;  map[k].profit -= 100; }
+    else if (p.gameResult==='PUSH') { map[k].pushes++; }
+    else                            { map[k].pending++; }
+  }
+
+  const sports = Object.entries(map).sort((a,b) => b[1].total - a[1].total);
+  if (!sports.length) { document.getElementById('sport-stats-bar').style.display='none'; return; }
+
+  const cards = sports.map(([key, d]) => {
+    const label = sportLabel(key);
+    const graded = d.wins + d.losses;
+    const pct = graded > 0 ? Math.round(d.wins/graded*100) : null;
+    const cls = pct===null ? '' : pct>=55?'green':pct>=45?'yellow':'red';
+    const profitStr = graded>0 ? `${d.profit>=0?'+':''}$${Math.round(d.profit)}` : '';
+    const profitCls = d.profit>=0?'up':'dn';
+    const isActive = activeSportFilter === key;
+    return `<div class="sport-card${isActive?' active':''}" onclick="filterBySport('${key}')" title="Click to filter picks by ${label}">
+      <div class="sport-card-name">${label}</div>
+      <div class="sport-card-record ${cls}">${d.wins}-${d.losses}${d.pushes>0?'-'+d.pushes:''}</div>
+      <div class="sport-card-sub">
+        <span>${pct!==null?pct+'%':'--'}</span>
+        ${profitStr?`<span class="${profitCls}">${profitStr}</span>`:''}
+        ${d.pending>0?`<span style="color:var(--muted)">${d.pending} live</span>`:''}
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('sport-stats-cards').innerHTML = cards;
+  document.getElementById('sport-stats-bar').style.display = 'flex';
+}
+
+function filterBySport(key) {
+  // Toggle: clicking same sport clears filter, clicking new sport sets it
+  activeSportFilter = activeSportFilter === key ? null : key;
+  // Update sport filter dropdown in picks panel to match
+  const sel = document.getElementById('sport-filter');
+  if (sel) {
+    if (activeSportFilter) {
+      // Find matching option by sportKey or sport label
+      const label = sportLabel(activeSportFilter);
+      for (const opt of sel.options) {
+        if (opt.value === activeSportFilter || opt.value === label || opt.text === label) {
+          sel.value = opt.value; break;
+        }
+      }
+    } else {
+      sel.value = '';
+    }
+  }
+  // Re-render sport cards to update active state
+  if (allPicksCache) renderSportStats(allPicksCache);
+  // Open picks panel filtered to this sport
+  if (activeSportFilter) {
+    setFilter(currentFilter);
+    if (document.getElementById('picks-panel').style.display !== 'block') togglePicks();
+  } else {
+    setFilter(currentFilter);
+  }
 }
 
 // ── History ──
@@ -660,8 +763,18 @@ function getFilteredPicks() {
   else if (currentFilter === 'pending')
     filtered = filtered.filter(p => !p.gameResult || p.gameResult === 'PENDING');
 
-  if (sportSel)
-    filtered = filtered.filter(p => (p.sport||'').toUpperCase() === sportSel);
+  // Sport filter: match by sportKey (from sport card click) OR sport display name (from dropdown)
+  if (activeSportFilter) {
+    filtered = filtered.filter(p =>
+      (p.sportKey||'') === activeSportFilter ||
+      (p.sport||'').toUpperCase() === sportLabel(activeSportFilter)
+    );
+  } else if (sportSel) {
+    filtered = filtered.filter(p =>
+      (p.sport||'').toUpperCase() === sportSel.toUpperCase() ||
+      (p.sportKey||'') === sportSel
+    );
+  }
 
   if (searchVal)
     filtered = filtered.filter(p =>
