@@ -32,7 +32,11 @@ import { compareToOpeningLines, saveOpeningLines } from '../services/lineOpener'
 import { buildCalibrationModel } from '../services/mlCalibration';
 import { buildLineupMap } from '../services/lineupConfirmation';
 import { buildHistoricalFromSnapshots } from '../services/historicalOdds';
-import { autoGradePicks, buildRetroReport, printRetroReport, loadSignalWeights } from '../services/retroAnalysis';
+import { autoGradePicks, buildRetroReport, printRetroReport, loadSignalWeights, buildCLVWeightReport, loadCLVWeights } from '../services/retroAnalysis';
+import { getOfficialsReports } from '../services/officialsTendencies';
+import { buildTravelFatigueMap } from '../services/travelFatigue';
+import { buildMotivationMap } from '../services/motivationAngles';
+import { buildH2HMap } from '../services/matchupHistory';
 import { rebuildPNL } from '../services/winLossTracker';
 import { generateDailyReport, printDailyReportPath } from '../services/dailyReport';
 import { sendAlerts } from '../services/alertService';
@@ -306,6 +310,51 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
     60000  // 60s -- ESPN lineup calls can be slow
   );
 
+  // -- Step 18b: Officials tendencies (MLB umpires / NBA refs) --
+  console.log('  [18b] Fetching officials tendencies...');
+  const officialsMap = new Map<string, any[]>();
+  for (const sportKey of ['baseball_mlb', 'basketball_nba']) {
+    if (sportKeys.includes(sportKey)) {
+      const reports = await safeRun(`officials ${sportKey}`,
+        () => getOfficialsReports(sportKey), new Map(), 20000);
+      for (const [k, v] of reports) officialsMap.set(k, v);
+    }
+  }
+
+  // -- Step 18c: Travel fatigue --
+  console.log('  [18c] Computing travel fatigue...');
+  const travelFatigueMap = await safeRun('travel fatigue',
+    () => buildTravelFatigueMap(allSummaries.map(e => ({
+      eventId: e.eventId, sportKey: e.sportKey, homeTeam: e.homeTeam, awayTeam: e.awayTeam
+    }))),
+    new Map(), 60000
+  );
+
+  // -- Step 18d: Motivation angles --
+  console.log('  [18d] Analyzing motivation factors...');
+  const motivationMap = await safeRun('motivation',
+    () => buildMotivationMap(allSummaries.map(e => ({
+      eventId: e.eventId, sportKey: e.sportKey,
+      homeTeam: e.homeTeam, awayTeam: e.awayTeam, gameTime: e.startTime
+    }))),
+    new Map(), 30000
+  );
+
+  // -- Step 18e: H2H matchup history --
+  console.log('  [18e] Loading H2H matchup history...');
+  const h2hMap = await safeRun('h2h history',
+    () => buildH2HMap(allSummaries.map(e => ({
+      eventId: e.eventId, sportKey: e.sportKey, homeTeam: e.homeTeam, awayTeam: e.awayTeam
+    }))),
+    new Map(), 60000
+  );
+
+  // -- Step 18f: CLV weight report --
+  const clvWeights = safeRunSync('clv weights', () => {
+    buildCLVWeightReport();
+    return loadCLVWeights();
+  }, {} as Record<string, number>);
+
   // -- Step 19: Historical DB update ---------------------------
   safeRunSync('historical DB', () => buildHistoricalFromSnapshots(), 0);
 
@@ -321,7 +370,12 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
     situationalAngles, marketEfficiency, clvProjections, powerRatings,
     publicBetting, playerImpacts, steamMoves, atsSituations, lineOpeners,
     calibrationModel, lineupMap,
-    learnedWeights,
+    learnedWeights: { ...learnedWeights, ...clvWeights }, // merge CLV weights into learned weights
+    officialsMap,
+    travelFatigueMap,
+    motivationMap,
+    h2hMap,
+    clvWeights,
   }); // 20 candidates -- sport diversity logic ensures all sports represented
   printTopTen(topBets, 24);
 

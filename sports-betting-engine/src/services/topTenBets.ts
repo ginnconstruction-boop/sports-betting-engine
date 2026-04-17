@@ -34,6 +34,11 @@ import { calculateKelly, scoreToProbability } from './propEdgeFactors';
 import { MarketIntelligence } from './sharpIntelligence';
 import { GameWeather } from './weatherData';
 import { ESPNInjury } from './espnData';
+import { OfficialsReport } from './officialsTendencies';
+import { TravelFatigueReport } from './travelFatigue';
+import { PinnacleEdge, extractPinnacleEdges } from './pinnacleBenchmark';
+import { MotivationReport } from './motivationAngles';
+import { H2HReport } from './matchupHistory';
 
 // ------------------------------------
 // Types
@@ -105,6 +110,11 @@ export interface TopTenOptions {
   calibrationModel?: CalibrationModel | null;
   lineupMap?: Map<string, any>;
   learnedWeights?: Record<string, number>;  // from retroAnalysis
+  officialsMap?: Map<string, OfficialsReport[]>;
+  travelFatigueMap?: Map<string, TravelFatigueReport>;
+  motivationMap?: Map<string, MotivationReport>;
+  h2hMap?: Map<string, H2HReport>;
+  clvWeights?: Record<string, number>;
 }
 
 // ------------------------------------
@@ -366,6 +376,9 @@ export function scoreAllBets(
   const gameEntryCount = new Map<string, number>();
   const candidates: ScoredBet[] = [];
 
+  // Extract Pinnacle edges upfront (sync, no network call)
+  const pinnacleEdgeMap = extractPinnacleEdges(summaries, userBookKeys);
+
   for (const event of summaries) {
     const hours = hoursUntil(event.startTime);
 
@@ -423,6 +436,23 @@ export function scoreAllBets(
       const powerBonus = powerComparison?.isBeatPinnacle ? 10
         : powerComparison?.confidence === 'high' ? 6
         : powerComparison?.confidence === 'medium' ? 3 : 0;
+
+      // Officials tendencies (MLB umpire / NBA refs)
+      const officialsReports = options.officialsMap?.get(event.eventId) ?? [];
+      const officialsBonus = officialsReports.length > 0
+        ? Math.min(officialsReports.reduce((s, r) => s + r.ouEdge, 0), 12) : 0;
+
+      // Travel fatigue
+      const fatigueReport = options.travelFatigueMap?.get(event.eventId);
+      const fatigueBonus = fatigueReport?.fatigueEdge !== 'neutral' ? fatigueReport?.fatigueScoreBonus ?? 0 : 0;
+
+      // Motivation
+      const motivationReport = options.motivationMap?.get(event.eventId);
+      const motivationBonus = Math.min(Math.abs(motivationReport?.netBonus ?? 0), 12);
+
+      // H2H
+      const h2hReport = options.h2hMap?.get(event.eventId);
+      const h2hBonus = h2hReport?.scoreBonus ?? 0;
 
       let maxLineDiff: number | null = null;
       for (const side of market.sides) {
@@ -584,13 +614,21 @@ export function scoreAllBets(
         );
         const clvBonus = clvProj?.isBeatingProjectedClose ? 8 : 0;
 
+        // Pinnacle edge for this specific side
+        const pinnacleEdgesForEvent = pinnacleEdgeMap.get(event.eventId) ?? [];
+        const pinnacleEdge = pinnacleEdgesForEvent.find(
+          pe => pe.marketKey === marketKey && pe.sideName === side.outcomeName
+        );
+        const pinnacleSharpScore = pinnacleEdge?.sharpScore ?? 0;
+
         // MLB run line penalty
         const mlbRunLinePenalty = isMLBRunLine ? -BET_FILTERS.MLB_RUN_LINE_PENALTY : 0;
 
-        // Apply all bonuses: Tier 1 + Tier 2/3
+        // Apply all bonuses: Tier 1 + Tier 2/3 + New intelligence modules
         const tier1Bonus = angleBonus + clvBonus + powerBonus;
         const tier2Bonus = rlmBonus + playerImpactBonus + steamBonus + atsBonus + openerBonus;
-        const allBonuses = contextAdj + tier1Bonus + tier2Bonus + mlbRunLinePenalty;
+        const tier3Bonus = officialsBonus + fatigueBonus + motivationBonus + h2hBonus + pinnacleSharpScore;
+        const allBonuses = contextAdj + tier1Bonus + tier2Bonus + tier3Bonus + mlbRunLinePenalty;
         const preMultiplier = Math.max(0, Math.min(rawTotal + allBonuses, 100));
         const preCalibration = Math.max(0, Math.min(Math.round(preMultiplier * efficiencyMultiplier), 100));
 
@@ -744,6 +782,25 @@ export function scoreAllBets(
       // Tier 1: Market efficiency
       if (efficiencyData?.edgePotential === 'very_high' || efficiencyData?.edgePotential === 'high') {
         fullReasoning.push(`[~] MARKET: ${efficiencyData.detail}`);
+      }
+
+      // New intelligence modules
+      if (officialsReports.length > 0) {
+        for (const r of officialsReports) {
+          if (r.ouEdge >= 4) fullReasoning.push(`[REF] ${r.detail}`);
+        }
+      }
+      if (fatigueReport && fatigueReport.fatigueEdge !== 'neutral') {
+        fullReasoning.push(`[TRAVEL] ${fatigueReport.detail}`);
+      }
+      if (motivationReport && Math.abs(motivationReport.netBonus) >= 5) {
+        fullReasoning.push(`[MOTIV] ${motivationReport.summary}`);
+      }
+      if (h2hReport && h2hReport.scoreBonus >= 6) {
+        fullReasoning.push(`[H2H] ${h2hReport.detail}`);
+      }
+      if (pinnacleEdge && Math.abs(pinnacleEdge.sharpScore) >= 10) {
+        fullReasoning.push(`[PINNACLE] ${pinnacleEdge.detail}`);
       }
 
       // Append context signals and news to fullReasoning

@@ -61,7 +61,7 @@ const POSITION_IMPACT: Record<string, Record<string, { scoring: number; spread: 
     'PG':  { scoring: 8,  spread: 4  },
   },
   americanfootball_nfl: {
-    'QB':  { scoring: 10, spread: 7  },
+    'QB':  { scoring: 10, spread: 10 },  // starter-level QB out = ~10 pt swing
     'RB':  { scoring: 4,  spread: 2  },
     'WR':  { scoring: 4,  spread: 2  },
     'TE':  { scoring: 3,  spread: 1.5 },
@@ -72,7 +72,7 @@ const POSITION_IMPACT: Record<string, Record<string, { scoring: number; spread: 
     'S':   { scoring: 2,  spread: 1  },
   },
   baseball_mlb: {
-    'SP':  { scoring: 3,  spread: 1.5 },
+    'SP':  { scoring: 5,  spread: 2.5 },  // scheduled SP change is huge for totals
     'RP':  { scoring: 1,  spread: 0.5 },
     'C':   { scoring: 1,  spread: 0.5 },
     '1B':  { scoring: 1.5, spread: 0.5 },
@@ -83,11 +83,30 @@ const POSITION_IMPACT: Record<string, Record<string, { scoring: number; spread: 
     'DH':  { scoring: 1.5, spread: 0.5 },
   },
   icehockey_nhl: {
-    'G':   { scoring: 0.5, spread: 0.3 },
-    'D':   { scoring: 0.3, spread: 0.2 },
-    'LW':  { scoring: 0.4, spread: 0.2 },
-    'RW':  { scoring: 0.4, spread: 0.2 },
-    'C':   { scoring: 0.5, spread: 0.25 },
+    'G':  { scoring: 6, spread: 3 },    // Goalie is critical
+    'D':  { scoring: 3, spread: 1.5 },
+    'LW': { scoring: 4, spread: 2 },
+    'RW': { scoring: 4, spread: 2 },
+    'C':  { scoring: 5, spread: 2.5 },
+    'F':  { scoring: 4, spread: 2 },    // Generic forward
+  },
+  basketball_ncaab: {
+    'C':   { scoring: 9,  spread: 5  },  // college star removal = more variance
+    'PF':  { scoring: 8,  spread: 4.5 },
+    'SF':  { scoring: 8,  spread: 4.5 },
+    'SG':  { scoring: 7,  spread: 3.5 },
+    'PG':  { scoring: 9,  spread: 5  },
+  },
+  americanfootball_ncaaf: {
+    'QB':  { scoring: 12, spread: 12 },  // college QB removal = even larger swing
+    'RB':  { scoring: 5,  spread: 2.5 },
+    'WR':  { scoring: 5,  spread: 2.5 },
+    'TE':  { scoring: 3,  spread: 1.5 },
+    'OL':  { scoring: 3,  spread: 1.5 },
+    'DL':  { scoring: 2,  spread: 1.5 },
+    'LB':  { scoring: 2,  spread: 1.5 },
+    'CB':  { scoring: 3,  spread: 1.5 },
+    'S':   { scoring: 2,  spread: 1  },
   },
 };
 
@@ -98,6 +117,42 @@ const STATUS_MULTIPLIER: Record<string, number> = {
   'Questionable': 0.4,
   'Probable': 0.15,
 };
+
+// ------------------------------------
+// Position tier detection
+// Star: scoring > 20% of team average (roughly 1.5x base position impact)
+// ------------------------------------
+
+export type PlayerTier = 'star' | 'starter' | 'backup';
+
+export async function getPositionTier(
+  sportKey: string,
+  playerId: string,
+  position: string
+): Promise<PlayerTier> {
+  try {
+    const stats = await getPlayerSeasonStats(sportKey, playerId);
+    const ppg = stats.pointsPerGame;
+    if (!ppg) return 'starter';
+
+    // Approximate league averages per position to classify tiers
+    const STAR_PPG_THRESHOLDS: Record<string, Record<string, number>> = {
+      basketball_nba: { PG: 20, SG: 18, SF: 17, PF: 16, C: 15 },
+      americanfootball_nfl: { QB: 25, RB: 12, WR: 10, TE: 8, OL: 5, DL: 5, LB: 5, CB: 5, S: 5 },
+      baseball_mlb: { SP: 15, RP: 5, C: 8, '1B': 8, '2B': 7, '3B': 8, SS: 8, OF: 8, DH: 8 },
+      icehockey_nhl: { G: 0, D: 20, LW: 25, RW: 25, C: 30, F: 22 },
+    };
+
+    const thresholds = STAR_PPG_THRESHOLDS[sportKey] ?? {};
+    const starThreshold = thresholds[position] ?? 15;
+
+    if (ppg >= starThreshold) return 'star';
+    if (ppg >= starThreshold * 0.6) return 'starter';
+    return 'backup';
+  } catch {
+    return 'starter';
+  }
+}
 
 async function getPlayerSeasonStats(
   sportKey: string,
@@ -141,10 +196,14 @@ function calculatePlayerImpact(
   team: string,
   position: string,
   status: string,
-  playerPPG: number | null
+  playerPPG: number | null,
+  tier: PlayerTier = 'starter'
 ): PlayerImpactData {
   const positionWeights = POSITION_IMPACT[sportKey]?.[position] ?? { scoring: 2, spread: 1 };
   const statusMultiplier = STATUS_MULTIPLIER[status] ?? 0.5;
+
+  // Star players get 1.5x position impact multiplier
+  const tierMultiplier = tier === 'star' ? 1.5 : tier === 'backup' ? 0.6 : 1.0;
 
   // If we have actual PPG data, use it; otherwise use position baseline
   let scoringImpact: number;
@@ -153,15 +212,15 @@ function calculatePlayerImpact(
   if (playerPPG && playerPPG > 0) {
     // Player's actual contribution -- when they're out, team loses roughly 60% of their output
     // (other players pick up slack, lineup adjustments, etc.)
-    scoringImpact = Math.round(playerPPG * 0.6 * statusMultiplier * 10) / 10;
-    basis = `Based on ${playerPPG} PPG -- team loses ~${scoringImpact} pts when ${status}`;
+    scoringImpact = Math.round(playerPPG * 0.6 * statusMultiplier * tierMultiplier * 10) / 10;
+    basis = `Based on ${playerPPG} PPG (${tier}) -- team loses ~${scoringImpact} pts when ${status}`;
   } else {
     // Use position baseline
-    scoringImpact = Math.round(positionWeights.scoring * statusMultiplier * 10) / 10;
-    basis = `Based on ${position} position baseline -- ${status} status`;
+    scoringImpact = Math.round(positionWeights.scoring * statusMultiplier * tierMultiplier * 10) / 10;
+    basis = `Based on ${position} position baseline (${tier}) -- ${status} status`;
   }
 
-  const spreadImpact = Math.round(positionWeights.spread * statusMultiplier * 10) / 10;
+  const spreadImpact = Math.round(positionWeights.spread * statusMultiplier * tierMultiplier * 10) / 10;
   const confidence: PlayerImpactData['confidence'] = playerPPG ? 'high' : position ? 'medium' : 'low';
 
   return {
@@ -198,27 +257,31 @@ export async function buildGameImpactSummary(
 
   for (const injury of homeActive) {
     let ppg: number | null = null;
+    let tier: PlayerTier = 'starter';
     if (injury.athleteId) {
       try {
         const stats = await getPlayerSeasonStats(sportKey, injury.athleteId);
         ppg = stats.pointsPerGame;
+        tier = await getPositionTier(sportKey, injury.athleteId, injury.position).catch(() => 'starter');
       } catch { }
     }
     homeImpacts.push(calculatePlayerImpact(
-      sportKey, injury.playerName, homeTeam, injury.position, injury.status, ppg
+      sportKey, injury.playerName, homeTeam, injury.position, injury.status, ppg, tier
     ));
   }
 
   for (const injury of awayActive) {
     let ppg: number | null = null;
+    let tier: PlayerTier = 'starter';
     if (injury.athleteId) {
       try {
         const stats = await getPlayerSeasonStats(sportKey, injury.athleteId);
         ppg = stats.pointsPerGame;
+        tier = await getPositionTier(sportKey, injury.athleteId, injury.position).catch(() => 'starter');
       } catch { }
     }
     awayImpacts.push(calculatePlayerImpact(
-      sportKey, injury.playerName, awayTeam, injury.position, injury.status, ppg
+      sportKey, injury.playerName, awayTeam, injury.position, injury.status, ppg, tier
     ));
   }
 

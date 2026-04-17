@@ -14,6 +14,7 @@ const SNAPSHOT_DIR = process.env.SNAPSHOT_DIR ?? './snapshots';
 const PICKS_FILE   = path.join(SNAPSHOT_DIR, 'picks_log.json');
 const RETRO_FILE   = path.join(SNAPSHOT_DIR, 'retro_analysis.json');
 const WEIGHTS_FILE = path.join(SNAPSHOT_DIR, 'signal_weights.json');
+const CLV_WEIGHTS_FILE = path.join(SNAPSHOT_DIR, 'clv_weights.json');
 
 // ------------------------------------
 // Types
@@ -743,4 +744,123 @@ export function applyLearnedWeights(
 
   if (applied === 0) return baseScore;
   return Math.max(0, Math.min(100, Math.round(baseScore * multiplier)));
+}
+
+// ------------------------------------
+// CLV Auto-Tuning Feedback Loop
+// Analyzes which signals produced best Closing Line Value
+// ------------------------------------
+
+export interface CLVSignalAnalysis {
+  signalCombo: string[];     // list of signals that were present
+  avgCLV: number;            // average CLV when this combo present
+  sampleSize: number;
+  clvEdge: number;           // how much better than baseline CLV
+  recommendedBoost: number;  // multiplier to apply: 0.8 - 1.5
+}
+
+export interface CLVWeightReport {
+  dateAnalyzed: string;
+  totalPicksWithCLV: number;
+  baselineCLV: number;        // avg CLV across all picks
+  topCombos: CLVSignalAnalysis[];
+  bottomCombos: CLVSignalAnalysis[];
+  signalCLVMap: Record<string, number>;  // signal -> avg CLV when present
+  autoAdjustments: Record<string, number>; // signal -> recommended weight multiplier
+}
+
+export function buildCLVWeightReport(): CLVWeightReport {
+  const picks = loadPicks();
+  const picksWithCLV = picks.filter((p: any) => p.clvActual !== null && p.clvActual !== undefined);
+
+  const totalPicksWithCLV = picksWithCLV.length;
+
+  // Baseline CLV = average across all picks with CLV recorded
+  const baselineCLV = totalPicksWithCLV > 0
+    ? Math.round(
+        (picksWithCLV.reduce((s: number, p: any) => s + (p.clvActual ?? 0), 0) / totalPicksWithCLV) * 100
+      ) / 100
+    : 0;
+
+  // Per-signal CLV analysis
+  const signalCLVAccum: Record<string, { sum: number; count: number }> = {};
+
+  for (const pick of picksWithCLV) {
+    const signals: string[] = (pick.signals ?? []).map((s: string) => s.toUpperCase());
+    for (const sig of signals) {
+      if (!signalCLVAccum[sig]) signalCLVAccum[sig] = { sum: 0, count: 0 };
+      signalCLVAccum[sig].sum += pick.clvActual ?? 0;
+      signalCLVAccum[sig].count++;
+    }
+  }
+
+  const signalCLVMap: Record<string, number> = {};
+  const autoAdjustments: Record<string, number> = {};
+
+  for (const [sig, { sum, count }] of Object.entries(signalCLVAccum)) {
+    if (count < 3) continue; // need minimum samples
+    const avgCLV = Math.round((sum / count) * 100) / 100;
+    signalCLVMap[sig] = avgCLV;
+
+    const clvEdge = avgCLV - baselineCLV;
+    let boost: number;
+    if (clvEdge > 3) boost = 1.4;
+    else if (clvEdge > 1) boost = 1.2;
+    else if (clvEdge > -1) boost = 1.0;
+    else if (clvEdge < -3) boost = 0.7;
+    else boost = 0.8;
+
+    if (boost !== 1.0) autoAdjustments[sig] = boost;
+  }
+
+  // Build top/bottom combos -- single-signal analysis
+  const allAnalyses: CLVSignalAnalysis[] = Object.entries(signalCLVMap).map(([sig, avgCLV]) => ({
+    signalCombo: [sig],
+    avgCLV,
+    sampleSize: signalCLVAccum[sig]?.count ?? 0,
+    clvEdge: Math.round((avgCLV - baselineCLV) * 100) / 100,
+    recommendedBoost: autoAdjustments[sig] ?? 1.0,
+  }));
+
+  allAnalyses.sort((a, b) => b.clvEdge - a.clvEdge);
+  const topCombos = allAnalyses.slice(0, 5);
+  const bottomCombos = [...allAnalyses].reverse().slice(0, 5);
+
+  const report: CLVWeightReport = {
+    dateAnalyzed: new Date().toISOString(),
+    totalPicksWithCLV,
+    baselineCLV,
+    topCombos,
+    bottomCombos,
+    signalCLVMap,
+    autoAdjustments,
+  };
+
+  // Save CLV weights
+  try {
+    if (!fs.existsSync(SNAPSHOT_DIR)) fs.mkdirSync(SNAPSHOT_DIR, { recursive: true });
+    fs.writeFileSync(CLV_WEIGHTS_FILE, JSON.stringify(autoAdjustments, null, 2));
+  } catch { /* non-fatal */ }
+
+  // Merge CLV adjustments into signal_weights.json
+  try {
+    const existingWeights = loadSignalWeights();
+    const merged: Record<string, number> = { ...existingWeights };
+    for (const [sig, boost] of Object.entries(autoAdjustments)) {
+      const existing = existingWeights[sig] ?? 1.0;
+      // Average the two weight sources
+      merged[sig] = Math.round(((existing + boost) / 2) * 100) / 100;
+    }
+    if (Object.keys(merged).length > 0) {
+      saveSignalWeights(merged);
+    }
+  } catch { /* non-fatal */ }
+
+  return report;
+}
+
+export function loadCLVWeights(): Record<string, number> {
+  if (!fs.existsSync(CLV_WEIGHTS_FILE)) return {};
+  try { return JSON.parse(fs.readFileSync(CLV_WEIGHTS_FILE, 'utf-8')); }
+  catch { return {}; }
 }
