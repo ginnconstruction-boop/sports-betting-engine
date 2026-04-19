@@ -133,9 +133,21 @@ app.get('/api/stream/:command', requireAuth, (req, res) => {
 
   let fullOutput = '';
 
+  // Keepalive ping every 20 seconds.
+  // Render's nginx proxy silently drops SSE connections that carry no bytes
+  // for ~30s. ts-node compilation on the free tier can take 30-90s before
+  // the first stdout line appears, so without this the browser sees the
+  // stream close before any scan output arrives.
+  // SSE comment lines (": ...") are ignored by EventSource/fetch readers
+  // but count as bytes on the wire, resetting the proxy idle timer.
+  const keepaliveInterval = setInterval(() => {
+    try { res.write(': keepalive\n\n'); } catch {}
+  }, 20000);
+
   // Hard 12-minute timeout -- kills the subprocess if it ever hangs
   const SCAN_TIMEOUT_MS = 12 * 60 * 1000;
   const timeoutHandle = setTimeout(() => {
+    clearInterval(keepaliveInterval);
     try { proc.kill(); } catch {}
     activeScans.delete(command);
     send('line', '\n[ERROR] Scan timed out after 12 minutes. Check server logs.\n');
@@ -160,6 +172,7 @@ app.get('/api/stream/:command', requireAuth, (req, res) => {
   });
 
   proc.on('close', (code) => {
+    clearInterval(keepaliveInterval);
     clearTimeout(timeoutHandle);
     activeScans.delete(command);
     const ok = code === 0;
@@ -185,7 +198,7 @@ app.get('/api/stream/:command', requireAuth, (req, res) => {
   });
 
   // Clean up if client disconnects
-  req.on('close', () => { clearTimeout(timeoutHandle); try { proc.kill(); } catch {} activeScans.delete(command); });
+  req.on('close', () => { clearInterval(keepaliveInterval); clearTimeout(timeoutHandle); try { proc.kill(); } catch {} activeScans.delete(command); });
 });
 
 // ── Fallback non-streaming run (kept for compatibility) ──
