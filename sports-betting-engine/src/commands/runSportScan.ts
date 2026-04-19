@@ -39,6 +39,12 @@ import { scoreAllPropsWithIntelligence, printTopProps, ScoredProp } from '../ser
 import { detectPropCorrelation } from '../services/propEdgeFactors';
 import { savePicksFromTopTen, savePropPicks, saveParlayPicks } from '../services/closingLineTracker';
 import { findCorrelatedParlays, printSGPReport, SGPLeg } from '../services/sgpCorrelation';
+import { mapAllToDecisionCandidates } from '../services/decisionTypes';
+import { qualifyCandidates, printQualificationSummary } from '../services/qualificationEngine';
+import { enrichWithProbability, printProbabilitySummary } from '../services/probabilityEngine';
+import { applyRisk, printRiskSummary } from '../services/riskEngine';
+import { labelCandidates, printLabelSummary } from '../services/labelEngine';
+import { selectSlate, printSlateSummary } from '../services/slateSelector';
 
 async function safeRun<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
   try { return await fn(); } catch { return fallback; }
@@ -384,6 +390,22 @@ export async function runSportScan(
   if (gameLineBets.length > 0) {
     console.log('\n  -- GAME LINES --------------------------------------------');
     printTopTen(gameLineBets, 24);
+
+    // ── Decision layer (game lines) ───────────────────────────
+    safeSync(() => {
+      const decisionCandidates = mapAllToDecisionCandidates(gameLineBets);
+      const qualResult         = qualifyCandidates(decisionCandidates);
+      const allCandidates      = [...qualResult.qualified, ...qualResult.rejected];
+      printQualificationSummary(qualResult);
+      const enriched           = enrichWithProbability(allCandidates);
+      printProbabilitySummary(enriched);
+      const withRisk           = applyRisk(enriched);
+      printRiskSummary(withRisk);
+      const labeled            = labelCandidates(withRisk);
+      printLabelSummary(labeled);
+      const slateResult        = selectSlate(labeled);
+      printSlateSummary(slateResult);
+    }, undefined);
   } else {
     // Diagnostic -- tell user exactly why no plays qualified
     const isMLBd = sportKey.includes('baseball_mlb');
@@ -429,6 +451,22 @@ export async function runSportScan(
           eventId: (p as any).eventId ?? '',
         })));
       } catch { }
+
+      // ── Decision layer (props) ──────────────────────────────
+      safeSync(() => {
+        const decisionCandidates = mapAllToDecisionCandidates(propBets);
+        const qualResult         = qualifyCandidates(decisionCandidates);
+        const allCandidates      = [...qualResult.qualified, ...qualResult.rejected];
+        printQualificationSummary(qualResult);
+        const enriched           = enrichWithProbability(allCandidates);
+        printProbabilitySummary(enriched);
+        const withRisk           = applyRisk(enriched);
+        printRiskSummary(withRisk);
+        const labeled            = labelCandidates(withRisk);
+        printLabelSummary(labeled);
+        const slateResult        = selectSlate(labeled);
+        printSlateSummary(slateResult);
+      }, undefined);
 
     } else {
       const isNHL = sportKey.includes('nhl');

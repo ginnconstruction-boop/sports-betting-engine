@@ -26,6 +26,12 @@ import { buildCalibrationModel } from '../services/mlCalibration';
 import { buildLineupMap } from '../services/lineupConfirmation';
 import { getEnabledSports } from '../config/sports';
 import { INITIAL_MARKETS, EventSummary } from '../types/odds';
+import { mapAllToDecisionCandidates } from '../services/decisionTypes';
+import { qualifyCandidates, printQualificationSummary } from '../services/qualificationEngine';
+import { enrichWithProbability, printProbabilitySummary } from '../services/probabilityEngine';
+import { applyRisk, printRiskSummary } from '../services/riskEngine';
+import { labelCandidates, printLabelSummary } from '../services/labelEngine';
+import { selectSlate, printSlateSummary } from '../services/slateSelector';
 
 async function safeRun<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
   try { return await fn(); } catch { return fallback; }
@@ -180,6 +186,23 @@ export async function runMiddayFinalCard(options: { forceRefresh?: boolean } = {
     calibrationModel, lineupMap, learnedWeights,
   }); // 20 candidates -- sport diversity logic ensures all sports represented
   printTopTen(topBets, 24);
+
+  // ── Decision layer ──────────────────────────────────────────
+  safeSync(() => {
+    const decisionCandidates = mapAllToDecisionCandidates(topBets);
+    const qualResult         = qualifyCandidates(decisionCandidates);
+    const allCandidates      = [...qualResult.qualified, ...qualResult.rejected];
+    printQualificationSummary(qualResult);
+    const enriched           = enrichWithProbability(allCandidates);
+    printProbabilitySummary(enriched);
+    const withRisk           = applyRisk(enriched);
+    printRiskSummary(withRisk);
+    const labeled            = labelCandidates(withRisk);
+    printLabelSummary(labeled);
+    const slateResult        = selectSlate(labeled);
+    printSlateSummary(slateResult);
+  }, undefined);
+
   // Save picks to log
   try {
     savePicksFromTopTen(topBets.map(b => ({

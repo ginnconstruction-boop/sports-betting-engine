@@ -19,6 +19,12 @@ import { detectSteamMoves } from '../services/steamDetector';
 import { loadSignalWeights } from '../services/retroAnalysis';
 import { getEnabledSports } from '../config/sports';
 import { INITIAL_MARKETS, EventSummary } from '../types/odds';
+import { mapAllToDecisionCandidates } from '../services/decisionTypes';
+import { qualifyCandidates, printQualificationSummary } from '../services/qualificationEngine';
+import { enrichWithProbability, printProbabilitySummary } from '../services/probabilityEngine';
+import { applyRisk, printRiskSummary } from '../services/riskEngine';
+import { labelCandidates, printLabelSummary } from '../services/labelEngine';
+import { selectSlate, printSlateSummary } from '../services/slateSelector';
 
 async function safeRun<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
   try { return await fn(); } catch { return fallback; }
@@ -119,6 +125,22 @@ export async function runLateGames(options: { forceRefresh?: boolean } = {}) {
     console.log('  Games may not meet minimum signal/book requirements.\n');
   } else {
     printTopTen(topBets, WINDOW_HOURS);
+
+    // ── Decision layer ────────────────────────────────────────
+    safeSync(() => {
+      const decisionCandidates = mapAllToDecisionCandidates(topBets);
+      const qualResult         = qualifyCandidates(decisionCandidates);
+      const allCandidates      = [...qualResult.qualified, ...qualResult.rejected];
+      printQualificationSummary(qualResult);
+      const enriched           = enrichWithProbability(allCandidates);
+      printProbabilitySummary(enriched);
+      const withRisk           = applyRisk(enriched);
+      printRiskSummary(withRisk);
+      const labeled            = labelCandidates(withRisk);
+      printLabelSummary(labeled);
+      const slateResult        = selectSlate(labeled);
+      printSlateSummary(slateResult);
+    }, undefined);
   }
 
   const quota = await safeRun(() => getSessionQuota(), { requestsMade: 0, remainingRequests: null });
