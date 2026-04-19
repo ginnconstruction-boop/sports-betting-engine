@@ -125,8 +125,13 @@ app.get('/api/stream/:command', requireAuth, (req, res) => {
   activeScans.add(command);
 
   const args = ALLOWED[command].split(' ');
-  // transpile-only: skip TS type-checking so the process starts instantly
-  const proc = spawn('node', ['--require', 'ts-node/register/transpile-only', 'src/index.ts', ...args], {
+  // Use pre-compiled JS when available (production / post-build).
+  // Falls back to ts-node transpile-only for local dev where dist/ may not exist.
+  const distEntry = path.join(__dirname, 'dist', 'index.js');
+  const nodeArgs  = fs.existsSync(distEntry)
+    ? [distEntry, ...args]
+    : ['--require', 'ts-node/register/transpile-only', 'src/index.ts', ...args];
+  const proc = spawn('node', nodeArgs, {
     cwd: __dirname,
     env: { ...process.env },
   });

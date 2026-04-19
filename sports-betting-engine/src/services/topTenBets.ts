@@ -455,7 +455,9 @@ export function scoreAllBets(
       const h2hBonus = h2hReport?.scoreBonus ?? 0;
 
       // Pinnacle sharp edge (pre-built map, per-event lookup)
-      const pinnacleEdge = pinnacleEdgeMap.get(event.eventId);
+      // Returns the full array for this event; the per-side match is resolved
+      // later (after best side is known) using .find() at the reasoning block.
+      const pinnacleEdgesForEvent = pinnacleEdgeMap.get(event.eventId) ?? [];
 
       let maxLineDiff: number | null = null;
       for (const side of market.sides) {
@@ -802,6 +804,9 @@ export function scoreAllBets(
       if (h2hReport && h2hReport.scoreBonus >= 6) {
         fullReasoning.push(`[H2H] ${h2hReport.detail}`);
       }
+      const pinnacleEdge = pinnacleEdgesForEvent.find(
+        pe => pe.marketKey === marketKey && pe.sideName === side.outcomeName
+      );
       if (pinnacleEdge && Math.abs(pinnacleEdge.sharpScore) >= 10) {
         fullReasoning.push(`[PINNACLE] ${pinnacleEdge.detail}`);
       }

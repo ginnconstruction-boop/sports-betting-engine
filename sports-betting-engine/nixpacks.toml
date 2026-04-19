@@ -5,7 +5,7 @@ nixPkgs = ["nodejs_20"]
 cmds = ["npm install --include=dev"]
 
 [phases.build]
-cmds = ["echo 'skipping tsc build'"]
+cmds = ["npx tsc || true"]
 
 [start]
 cmd = "node -r ts-node/register/transpile-only server.ts"

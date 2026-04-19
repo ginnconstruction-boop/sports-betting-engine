@@ -3,7 +3,7 @@ services:
     name: sports-betting-engine
     runtime: node
     rootDir: sports-betting-engine
-    buildCommand: npm install
+    buildCommand: npm install && (npx tsc || true)
     startCommand: node -r ts-node/register/transpile-only server.ts
     envVars:
       - key: NODE_ENV
