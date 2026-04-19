@@ -14,6 +14,7 @@ import { qualifyCandidates, printQualificationSummary } from '../services/qualif
 import { enrichWithProbability, printProbabilitySummary } from '../services/probabilityEngine';
 import { applyRisk, printRiskSummary } from '../services/riskEngine';
 import { labelCandidates, printLabelSummary } from '../services/labelEngine';
+import { selectSlate, printSlateSummary } from '../services/slateSelector';
 
 export async function runFullScan(options: { forceRefresh?: boolean } = {}) {
   const sportKeys = getEnabledSports().map(s => s.key);
@@ -64,13 +65,31 @@ export async function runFullScan(options: { forceRefresh?: boolean } = {}) {
 
   // -- [DECISION LAYER] Label engine --
   // Independent block -- does not affect existing output, saves, or alerts.
+  // qualifyCandidates is called here so qualificationPassed is set before
+  // labelCandidates runs (the mapper initialises it to false by default).
   try {
     const decisionCandidates = mapAllToDecisionCandidates(topBets);
-    const enriched           = enrichWithProbability(decisionCandidates);
+    const qualResult         = qualifyCandidates(decisionCandidates);
+    const allCandidates      = [...qualResult.qualified, ...qualResult.rejected];
+    const enriched           = enrichWithProbability(allCandidates);
     const withRisk           = applyRisk(enriched);
     const labeled            = labelCandidates(withRisk);
     printLabelSummary(labeled);
   } catch { /* label engine is supplemental -- never block output */ }
+
+  // -- [DECISION LAYER] Slate selector --
+  // Independent block -- identifies best candidates and the single Best Bet
+  // of the Slate.  Does NOT affect existing output, saves, or alerts.
+  try {
+    const decisionCandidates = mapAllToDecisionCandidates(topBets);
+    const qualResult         = qualifyCandidates(decisionCandidates);
+    const allCandidates      = [...qualResult.qualified, ...qualResult.rejected];
+    const enriched           = enrichWithProbability(allCandidates);
+    const withRisk           = applyRisk(enriched);
+    const labeled            = labelCandidates(withRisk);
+    const slateResult        = selectSlate(labeled);
+    printSlateSummary(slateResult);
+  } catch { /* slate selector is supplemental -- never block output */ }
 
   console.log(`  API requests used : ${quota.requestsMade}`);
   console.log(`  Credits remaining : ${quota.remainingRequests ?? 'unknown'}\n`);

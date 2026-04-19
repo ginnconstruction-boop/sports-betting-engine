@@ -48,6 +48,7 @@ import { qualifyCandidates, printQualificationSummary } from '../services/qualif
 import { enrichWithProbability, printProbabilitySummary } from '../services/probabilityEngine';
 import { applyRisk, printRiskSummary } from '../services/riskEngine';
 import { labelCandidates, printLabelSummary } from '../services/labelEngine';
+import { selectSlate, printSlateSummary } from '../services/slateSelector';
 
 // Wrap a promise with a timeout so no single step can hang forever
 function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
@@ -417,12 +418,30 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
   // -- [DECISION LAYER] Label engine --
   // Independent block — runs the full enrichment chain then labels.
   // Does NOT affect existing output, saves, or alerts.
+  // qualifyCandidates is called here so qualificationPassed is set before
+  // labelCandidates runs (the mapper initialises it to false by default).
   safeRunSync('label engine', () => {
     const decisionCandidates = mapAllToDecisionCandidates(topBets);
-    const enriched           = enrichWithProbability(decisionCandidates);
+    const qualResult         = qualifyCandidates(decisionCandidates);
+    const allCandidates      = [...qualResult.qualified, ...qualResult.rejected];
+    const enriched           = enrichWithProbability(allCandidates);
     const withRisk           = applyRisk(enriched);
     const labeled            = labelCandidates(withRisk);
     printLabelSummary(labeled);
+  }, undefined);
+
+  // -- [DECISION LAYER] Slate selector --
+  // Independent block — identifies best candidates and the single Best Bet
+  // of the Slate.  Does NOT affect existing output, saves, or alerts.
+  safeRunSync('slate selector', () => {
+    const decisionCandidates = mapAllToDecisionCandidates(topBets);
+    const qualResult         = qualifyCandidates(decisionCandidates);
+    const allCandidates      = [...qualResult.qualified, ...qualResult.rejected];
+    const enriched           = enrichWithProbability(allCandidates);
+    const withRisk           = applyRisk(enriched);
+    const labeled            = labelCandidates(withRisk);
+    const slateResult        = selectSlate(labeled);
+    printSlateSummary(slateResult);
   }, undefined);
 
   // -- Auto-generate daily HTML report (printable as PDF)

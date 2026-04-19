@@ -454,6 +454,9 @@ export function scoreAllBets(
       const h2hReport = options.h2hMap?.get(event.eventId);
       const h2hBonus = h2hReport?.scoreBonus ?? 0;
 
+      // Pinnacle sharp edge (pre-built map, per-event lookup)
+      const pinnacleEdge = pinnacleEdgeMap.get(event.eventId);
+
       let maxLineDiff: number | null = null;
       for (const side of market.sides) {
         const lines = side.offers.map(o => o.line).filter((l): l is number => l !== null);

@@ -314,6 +314,31 @@ export interface DecisionCandidate {
    * At most 3 reasons populated per candidate.
    */
   labelReasons?: string[];
+
+  // ----------------------------------------------------------
+  // Slate selector output (Phase 7)
+  // Set by slateSelector.selectSlate().
+  // Undefined until that stage runs.
+  // ----------------------------------------------------------
+
+  /**
+   * 1-based position in the final slate ranking.
+   * All input candidates receive a rank regardless of label.
+   */
+  slateRank?: number;
+
+  /**
+   * True on exactly one candidate per slate: the Best Bet.
+   * Only set when the candidate meets all Best Bet eligibility
+   * rules (BET/LEAN + LOW/MODERATE risk + positive adjustedEdge).
+   */
+  isBestBet?: boolean;
+
+  /**
+   * Human-readable reasons explaining the slate selection decision
+   * (rank, label, edge, risk, signal diversity, correlation).
+   */
+  selectionReasons?: string[];
 }
 
 // ============================================================

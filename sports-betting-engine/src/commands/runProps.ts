@@ -33,6 +33,7 @@ import { qualifyCandidates, printQualificationSummary } from '../services/qualif
 import { enrichWithProbability, printProbabilitySummary } from '../services/probabilityEngine';
 import { applyRisk, printRiskSummary } from '../services/riskEngine';
 import { labelCandidates, printLabelSummary } from '../services/labelEngine';
+import { selectSlate, printSlateSummary } from '../services/slateSelector';
 
 function safeSync<T>(fn: () => T, fallback: T): T {
   try { return fn(); } catch { return fallback; }
@@ -258,12 +259,30 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
 
     // -- [DECISION LAYER] Label engine --
     // Independent block — does not affect existing output, saves, or alerts.
+    // qualifyCandidates is called here (not just in the qualify block above)
+    // so that qualificationPassed is correctly set before labelCandidates runs.
     safeSync(() => {
       const decisionCandidates = mapAllToDecisionCandidates(topProps);
-      const enriched           = enrichWithProbability(decisionCandidates);
+      const qualResult         = qualifyCandidates(decisionCandidates);
+      const allCandidates      = [...qualResult.qualified, ...qualResult.rejected];
+      const enriched           = enrichWithProbability(allCandidates);
       const withRisk           = applyRisk(enriched);
       const labeled            = labelCandidates(withRisk);
       printLabelSummary(labeled);
+    }, undefined);
+
+    // -- [DECISION LAYER] Slate selector --
+    // Independent block — identifies best candidates and the single Best Bet
+    // of the Slate.  Does NOT affect existing output, saves, or alerts.
+    safeSync(() => {
+      const decisionCandidates = mapAllToDecisionCandidates(topProps);
+      const qualResult         = qualifyCandidates(decisionCandidates);
+      const allCandidates      = [...qualResult.qualified, ...qualResult.rejected];
+      const enriched           = enrichWithProbability(allCandidates);
+      const withRisk           = applyRisk(enriched);
+      const labeled            = labelCandidates(withRisk);
+      const slateResult        = selectSlate(labeled);
+      printSlateSummary(slateResult);
     }, undefined);
 
     // For MLB: run pitcher-specific analysis on top of standard scoring
