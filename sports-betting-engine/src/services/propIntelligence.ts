@@ -41,6 +41,8 @@ export interface PropPrediction {
   // Summary
   summary: string;
   shouldBet: boolean;
+  // Kelly sizing (populated when americanOdds is provided)
+  kelly?: KellyCriterion;
 }
 
 export interface PropSignal {
@@ -551,11 +553,14 @@ export async function buildPropPredictions(
     position: string;
     statType: string;
     postedLine: number;
+    postedPrice?: number;       // american odds at time of pick (for Kelly sizing)
     side: 'over' | 'under';
     eventId: string;
     homeTeam: string;
     awayTeam: string;
     gameTotal?: number | null;
+    gameSpread?: number | null; // game spread for blowout / OT risk signals
+    marketKey?: string;         // odds-api market key (for market efficiency signal)
   }>,
   contextMap: Map<string, any>,
   sportKey: string = 'basketball_nba',

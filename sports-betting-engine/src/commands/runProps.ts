@@ -49,14 +49,12 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
     : sportKey === 'icehockey_nhl' ? 'NHL'
     : sportKey === 'americanfootball_nfl' ? 'NFL' : 'NBA';
 
-  // Define markets here so they're available for console.log
-  const markets = sportKey === 'americanfootball_nfl'
-    ? PROP_CONFIG.NFL_PROP_MARKETS
-    : sportKey === 'baseball_mlb'
-    ? (PROP_CONFIG as any).MLB_PROP_MARKETS ?? PROP_CONFIG.NBA_PROP_MARKETS
-    : sportKey === 'icehockey_nhl'
-    ? (PROP_CONFIG as any).NHL_PROP_MARKETS ?? PROP_CONFIG.NBA_PROP_MARKETS
-    : PROP_CONFIG.NBA_PROP_MARKETS;
+  // Select the correct market list for the chosen sport
+  const markets: string[] =
+    sportKey === 'americanfootball_nfl' ? PROP_CONFIG.NFL_PROP_MARKETS :
+    sportKey === 'baseball_mlb'         ? PROP_CONFIG.MLB_PROP_MARKETS :
+    sportKey === 'icehockey_nhl'        ? PROP_CONFIG.NHL_PROP_MARKETS :
+    PROP_CONFIG.NBA_PROP_MARKETS;
 
   console.log(`\n  Fetching ${sportLabel2} player props...`);
   console.log('  NOTE: Props use more API credits than game lines.');
@@ -83,7 +81,7 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
       console.log(`\n  No upcoming ${sportLabel2} games found today.\n`);
       return;
     }
-    console.log(`  Found ${upcoming.length} NBA game(s). Building full intelligence suite...`);
+    console.log(`  Found ${upcoming.length} ${sportLabel2} game(s). Building full intelligence suite...`);
 
     // -- Step 2: Build ALL intelligence maps --------------------
 
@@ -169,8 +167,7 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
     // -- Step 3: Fetch prop lines (same method as sport scan) ----
     const allRawProps: any[] = [];
     const maxGames = upcoming.length; // scan all games -- best 5 selected after scoring
-    console.log(`
-  Found ${upcoming.length} NBA game(s). Fetching props for each...`);
+    console.log(`\n  Found ${upcoming.length} ${sportLabel2} game(s). Fetching props for each...`);
     console.log(`  This will use ~${maxGames * 2} API credits.`);
 
     for (const event of upcoming.slice(0, maxGames)) {

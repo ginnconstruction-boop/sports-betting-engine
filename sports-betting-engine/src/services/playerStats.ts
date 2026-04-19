@@ -111,17 +111,14 @@ export async function getPlayerProfile(
   const cached = profileCache.get(cacheKey);
   if (cached && Date.now() - cached.fetchedAt < CACHE_TTL) return cached.profile;
 
-  // Only NBA has full ESPN game-log support in this engine.
+  // Only NBA and NFL have full ESPN game-log support in this engine.
   // MLB and NHL prop intelligence degrades gracefully -- return null so
   // downstream callers skip intelligence adjustment rather than use wrong data.
   if (sportKey !== 'basketball_nba' && sportKey !== 'americanfootball_nfl') {
     return null; // [DEGRADED] no ESPN game-log support for this sport
   }
-  if (sportKey !== 'basketball_nba' && sportKey !== 'americanfootball_nfl') {
-    return null; // [DEGRADED] player ID lookup not supported for this sport
-  }
   const league = sportKey === 'basketball_nba' ? 'nba' : 'nfl';
-  const sport  = sportKey === 'basketball_nba' ? 'basketball' : 'football';;
+  const sport  = sportKey === 'basketball_nba' ? 'basketball' : 'football';
 
   try {
     // Get player game log from ESPN
@@ -335,11 +332,17 @@ export async function findPlayerId(
   teamName: string,
   sportKey: string = 'basketball_nba'
 ): Promise<string | null> {
+  // Only NBA and NFL have ESPN roster/player lookup support.
+  // Return null early for other sports to avoid silently querying NFL endpoints.
+  if (sportKey !== 'basketball_nba' && sportKey !== 'americanfootball_nfl') {
+    return null;
+  }
+
   const cacheKey = `${playerName}__${teamName}`;
   if (playerIdCache.has(cacheKey)) return playerIdCache.get(cacheKey)!;
 
   const league = sportKey === 'basketball_nba' ? 'nba' : 'nfl';
-  const sport = sportKey === 'basketball_nba' ? 'basketball' : 'football';
+  const sport  = sportKey === 'basketball_nba' ? 'basketball' : 'football';
 
   try {
     const last = (s: string) => s.toLowerCase().split(' ').pop() ?? '';
