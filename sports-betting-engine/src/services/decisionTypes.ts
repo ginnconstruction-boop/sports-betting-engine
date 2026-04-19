@@ -159,7 +159,7 @@ export interface DecisionCandidate {
   // ----------------------------------------------------------
   // Decision layer output fields
   // Initialized to neutral defaults by the mapper.
-  // Populated by the qualification engine (and later stages).
+  // Populated by each engine stage in sequence.
   // ----------------------------------------------------------
 
   /** True once the candidate clears all qualification gates. */
@@ -177,6 +177,34 @@ export interface DecisionCandidate {
    * Empty when qualificationPassed is true.
    */
   rejectionReasons: string[];
+
+  // ----------------------------------------------------------
+  // Probability enrichment (Phase 4)
+  // Set by probabilityEngine.enrichWithProbability().
+  // Undefined until that stage runs.
+  // ----------------------------------------------------------
+
+  /**
+   * Estimated win probability derived from the existing score.
+   * Formula: 0.50 + (score / 100) × 0.15  → range [0.50, 0.65]
+   * Conservative first-pass model; sport/role adjustments in later phases.
+   */
+  winProbability?: number;
+
+  /**
+   * Implied win probability calculated directly from bestPrice
+   * using standard American-odds conversion (no vig removal).
+   * Positive odds:  100 / (odds + 100)
+   * Negative odds:  |odds| / (|odds| + 100)
+   */
+  impliedProbabilityFromBestPrice?: number;
+
+  /**
+   * winProbability − impliedProbabilityFromBestPrice.
+   * Positive = model believes true win rate exceeds book's implied price.
+   * Negative = model believes the price overstates our edge.
+   */
+  impliedEdge?: number;
 }
 
 // ============================================================

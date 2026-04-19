@@ -42,9 +42,10 @@ import { generateDailyReport, printDailyReportPath } from '../services/dailyRepo
 import { sendAlerts } from '../services/alertService';
 import { getEnabledSports } from '../config/sports';
 import { INITIAL_MARKETS, EventSummary } from '../types/odds';
-// -- Decision layer (Phase 2) --
+// -- Decision layer --
 import { mapAllToDecisionCandidates } from '../services/decisionTypes';
 import { qualifyCandidates, printQualificationSummary } from '../services/qualificationEngine';
+import { enrichWithProbability, printProbabilitySummary } from '../services/probabilityEngine';
 
 // Wrap a promise with a timeout so no single step can hang forever
 function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
@@ -382,7 +383,7 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
   }); // 20 candidates -- sport diversity logic ensures all sports represented
   printTopTen(topBets, 24);
 
-  // -- [DECISION LAYER] Phase 2: Qualification pass --
+  // -- [DECISION LAYER] Qualification pass --
   // Runs AFTER existing print so output is never disrupted.
   // Operates on the same topBets array; does not change scores,
   // ranking, saves, or alerts.
@@ -390,6 +391,15 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
     const decisionCandidates = mapAllToDecisionCandidates(topBets);
     const qualResult = qualifyCandidates(decisionCandidates);
     printQualificationSummary(qualResult);
+  }, undefined);
+
+  // -- [DECISION LAYER] Probability enrichment --
+  // Independently self-contained block — maps topBets fresh so it
+  // can be removed without touching the qualification block above.
+  safeRunSync('probability enrichment', () => {
+    const decisionCandidates = mapAllToDecisionCandidates(topBets);
+    const enriched = enrichWithProbability(decisionCandidates);
+    printProbabilitySummary(enriched);
   }, undefined);
 
   // -- Auto-generate daily HTML report (printable as PDF)

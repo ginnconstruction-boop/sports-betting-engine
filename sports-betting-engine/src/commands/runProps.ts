@@ -27,9 +27,10 @@ import { getSportByKey }             from '../config/sports';
 import { EventSummary }              from '../types/odds';
 import { scorePitcherProp, printPitcherPropReport } from '../services/mlbPitcherIntelligence';
 import { loadSignalWeights } from '../services/retroAnalysis';
-// -- Decision layer (Phase 2) --
+// -- Decision layer --
 import { mapAllToDecisionCandidates } from '../services/decisionTypes';
 import { qualifyCandidates, printQualificationSummary } from '../services/qualificationEngine';
+import { enrichWithProbability, printProbabilitySummary } from '../services/probabilityEngine';
 
 function safeSync<T>(fn: () => T, fallback: T): T {
   try { return fn(); } catch { return fallback; }
@@ -227,13 +228,21 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
     }
     printTopProps(topProps);
 
-    // -- [DECISION LAYER] Phase 2: Qualification pass --
+    // -- [DECISION LAYER] Qualification pass --
     // Appended after existing prop output; does not affect scores,
     // ranking, saves, or alerts.
     safeSync(() => {
       const decisionCandidates = mapAllToDecisionCandidates(topProps);
       const qualResult = qualifyCandidates(decisionCandidates);
       printQualificationSummary(qualResult);
+    }, undefined);
+
+    // -- [DECISION LAYER] Probability enrichment --
+    // Independent block — remaps from topProps directly.
+    safeSync(() => {
+      const decisionCandidates = mapAllToDecisionCandidates(topProps);
+      const enriched = enrichWithProbability(decisionCandidates);
+      printProbabilitySummary(enriched);
     }, undefined);
 
     // For MLB: run pitcher-specific analysis on top of standard scoring
