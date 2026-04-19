@@ -42,6 +42,9 @@ import { generateDailyReport, printDailyReportPath } from '../services/dailyRepo
 import { sendAlerts } from '../services/alertService';
 import { getEnabledSports } from '../config/sports';
 import { INITIAL_MARKETS, EventSummary } from '../types/odds';
+// -- Decision layer (Phase 2) --
+import { mapAllToDecisionCandidates } from '../services/decisionTypes';
+import { qualifyCandidates, printQualificationSummary } from '../services/qualificationEngine';
 
 // Wrap a promise with a timeout so no single step can hang forever
 function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
@@ -378,6 +381,16 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
     clvWeights,
   }); // 20 candidates -- sport diversity logic ensures all sports represented
   printTopTen(topBets, 24);
+
+  // -- [DECISION LAYER] Phase 2: Qualification pass --
+  // Runs AFTER existing print so output is never disrupted.
+  // Operates on the same topBets array; does not change scores,
+  // ranking, saves, or alerts.
+  safeRunSync('qualification pass', () => {
+    const decisionCandidates = mapAllToDecisionCandidates(topBets);
+    const qualResult = qualifyCandidates(decisionCandidates);
+    printQualificationSummary(qualResult);
+  }, undefined);
 
   // -- Auto-generate daily HTML report (printable as PDF)
   safeRunSync('daily report', () => {
