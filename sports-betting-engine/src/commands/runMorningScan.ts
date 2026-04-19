@@ -46,6 +46,7 @@ import { INITIAL_MARKETS, EventSummary } from '../types/odds';
 import { mapAllToDecisionCandidates } from '../services/decisionTypes';
 import { qualifyCandidates, printQualificationSummary } from '../services/qualificationEngine';
 import { enrichWithProbability, printProbabilitySummary } from '../services/probabilityEngine';
+import { applyRisk, printRiskSummary } from '../services/riskEngine';
 
 // Wrap a promise with a timeout so no single step can hang forever
 function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
@@ -400,6 +401,16 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
     const decisionCandidates = mapAllToDecisionCandidates(topBets);
     const enriched = enrichWithProbability(decisionCandidates);
     printProbabilitySummary(enriched);
+  }, undefined);
+
+  // -- [DECISION LAYER] Risk engine --
+  // Independent block — maps and enriches topBets from scratch.
+  // Does NOT filter candidates; only adds risk fields and prints summary.
+  safeRunSync('risk engine', () => {
+    const decisionCandidates = mapAllToDecisionCandidates(topBets);
+    const enriched           = enrichWithProbability(decisionCandidates);
+    const withRisk           = applyRisk(enriched);
+    printRiskSummary(withRisk);
   }, undefined);
 
   // -- Auto-generate daily HTML report (printable as PDF)

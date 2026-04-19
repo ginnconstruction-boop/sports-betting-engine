@@ -157,6 +157,33 @@ export interface DecisionCandidate {
   hoursUntilGame?: number;
 
   // ----------------------------------------------------------
+  // Risk engine support fields
+  // Populated by the mapper; consumed by riskEngine.applyRisk().
+  // ----------------------------------------------------------
+
+  /**
+   * Named signals that contributed to this candidate's score.
+   * Props: mapped directly from ScoredProp.signals (e.g. ['PRICE_EDGE', 'LINE_GAP']).
+   * Game lines: derived from ScoredBet boolean fields by the mapper.
+   * Used by the risk engine to detect price-only vs. intelligence-backed candidates.
+   */
+  signals?: string[];
+
+  /**
+   * Player position string (e.g. "G", "F", "C", "PG", "SF").
+   * ScoredProp only; undefined for game-line candidates.
+   * Used by the risk engine's volatility/role check.
+   */
+  position?: string;
+
+  /**
+   * Max spread across all book lines for this market (absolute value).
+   * ScoredProp only (from AggregatedProp.lineGap); undefined/null for game lines.
+   * Used by the risk engine's stale-line outlier detection.
+   */
+  lineGap?: number | null;
+
+  // ----------------------------------------------------------
   // Decision layer output fields
   // Initialized to neutral defaults by the mapper.
   // Populated by each engine stage in sequence.
@@ -205,6 +232,87 @@ export interface DecisionCandidate {
    * Negative = model believes the price overstates our edge.
    */
   impliedEdge?: number;
+
+  // ----------------------------------------------------------
+  // Risk engine output (Phase 5)
+  // Set by riskEngine.applyRisk().
+  // Undefined until that stage runs.
+  // ----------------------------------------------------------
+
+  /**
+   * Composite risk score.
+   * +2 = strong signal diversity (non-price signals present)
+   * -2 = price-only signal
+   * -1 = volatility/role risk
+   * -1 = stale line detected
+   * -1 = low edge (impliedEdge < 0.03)
+   * Correlation tagging adds no score penalty (informational only).
+   */
+  riskScore?: number;
+
+  /**
+   * Categorical risk grade derived from riskScore.
+   * LOW      = riskScore >= 2
+   * MODERATE = riskScore 0–1
+   * HIGH     = riskScore < 0
+   */
+  riskGrade?: 'LOW' | 'MODERATE' | 'HIGH';
+
+  /**
+   * Array of active risk flag strings.
+   * Possible values:
+   *   "price_only_signal"  — all signals are market-structure only
+   *   "low_edge"           — impliedEdge < 0.03
+   *   "role_volatility"    — line value suggests bench/role player
+   *   "correlated_game"    — multiple candidates from the same game
+   *   "stale_line_risk"    — one book appears to be an outlier
+   */
+  riskFlags?: string[];
+
+  /**
+   * Win probability after applying risk discounts.
+   * Price-only candidates: winProbability × 0.85 (large gap) or × 0.90 (small gap).
+   * Non-price-only candidates: same as winProbability.
+   */
+  adjustedWinProbability?: number;
+
+  /**
+   * adjustedWinProbability − impliedProbabilityFromBestPrice.
+   * More conservative than impliedEdge; used as the primary edge metric
+   * once the risk engine has run.
+   */
+  adjustedEdge?: number;
+}
+
+// ============================================================
+// Internal mapper helpers
+// ============================================================
+
+/**
+ * Derives a named-signal array from a ScoredBet's available boolean
+ * and string fields.  This approximates the signal names that propScorer
+ * stores directly on ScoredProp.signals, so the risk engine can apply
+ * identical logic to both candidate types.
+ *
+ * Mapping:
+ *   priceDiff > 0            → PRICE_EDGE
+ *   lineDiff > 0             → LINE_GAP
+ *   sharpSignal non-empty    → SHARP_INTEL
+ *   lineMovementAlert        → LINE_MOVEMENT
+ *   priceMovementAlert       → PRICE_MOVEMENT
+ *   fadePublicFlag           → FADE_PUBLIC
+ *   isRecentMovement         → RECENT_MOVEMENT
+ */
+function deriveGameLineSignals(bet: ScoredBet): string[] {
+  const signals: string[] = [];
+  if (bet.priceDiff > 0)                               signals.push('PRICE_EDGE');
+  if (bet.lineDiff !== null && bet.lineDiff > 0)       signals.push('LINE_GAP');
+  if (bet.sharpSignal && bet.sharpSignal.trim() !== '') signals.push('SHARP_INTEL');
+  if (bet.lineMovementAlert)                            signals.push('LINE_MOVEMENT');
+  if (bet.priceMovementAlert)                          signals.push('PRICE_MOVEMENT');
+  if (bet.fadePublicFlag)                              signals.push('FADE_PUBLIC');
+  if (bet.isRecentMovement)                            signals.push('RECENT_MOVEMENT');
+  return signals;
 }
 
 // ============================================================
@@ -231,7 +339,7 @@ function isScoredProp(input: ScoredBet | ScoredProp): input is ScoredProp {
  *  - Never mutates the source object (spreads into a new object).
  *  - Never assumes prop-only fields exist on game-line inputs.
  *  - All decision-layer output fields are initialised to neutral
- *    defaults (qualificationPassed = false, empty arrays).
+ *    defaults (qualificationPassed = false, empty arrays, undefineds).
  *  - Downstream engines overwrite these fields on their own copy.
  */
 export function mapToDecisionCandidate(
@@ -239,7 +347,7 @@ export function mapToDecisionCandidate(
 ): DecisionCandidate {
   // Neutral decision-layer defaults applied to every candidate
   const decisionDefaults = {
-    qualificationPassed: false,
+    qualificationPassed:  false,
     qualificationReasons: [] as string[],
     rejectionReasons:     [] as string[],
   };
@@ -282,6 +390,10 @@ export function mapToDecisionCandidate(
       kellyPct:         undefined,    // prop kelly lives in prediction.kelly
       // Timing
       hoursUntilGame:   prop.hoursUntilGame,
+      // Risk engine support fields — all present on ScoredProp
+      signals:          prop.signals,
+      position:         prop.position ?? undefined,
+      lineGap:          prop.lineGap,
     };
   }
 
@@ -321,6 +433,10 @@ export function mapToDecisionCandidate(
     kellyPct:         bet.kellyPct,
     // Timing
     hoursUntilGame:   bet.hoursUntilGame,
+    // Risk engine support fields — derived from ScoredBet boolean fields
+    signals:          deriveGameLineSignals(bet),
+    position:         undefined,   // no position concept on game lines
+    lineGap:          null,        // AggregatedProp.lineGap has no game-line equivalent
   };
 }
 

@@ -12,6 +12,7 @@ import { INITIAL_MARKETS, EventSummary } from '../types/odds';
 import { mapAllToDecisionCandidates } from '../services/decisionTypes';
 import { qualifyCandidates, printQualificationSummary } from '../services/qualificationEngine';
 import { enrichWithProbability, printProbabilitySummary } from '../services/probabilityEngine';
+import { applyRisk, printRiskSummary } from '../services/riskEngine';
 
 export async function runFullScan(options: { forceRefresh?: boolean } = {}) {
   const sportKeys = getEnabledSports().map(s => s.key);
@@ -50,6 +51,15 @@ export async function runFullScan(options: { forceRefresh?: boolean } = {}) {
     const enriched = enrichWithProbability(decisionCandidates);
     printProbabilitySummary(enriched);
   } catch { /* probability enrichment is supplemental -- never block output */ }
+
+  // -- [DECISION LAYER] Risk engine --
+  // Independent block -- does not filter; only adds risk fields and prints summary.
+  try {
+    const decisionCandidates = mapAllToDecisionCandidates(topBets);
+    const enriched           = enrichWithProbability(decisionCandidates);
+    const withRisk           = applyRisk(enriched);
+    printRiskSummary(withRisk);
+  } catch { /* risk engine is supplemental -- never block output */ }
 
   console.log(`  API requests used : ${quota.requestsMade}`);
   console.log(`  Credits remaining : ${quota.remainingRequests ?? 'unknown'}\n`);

@@ -31,6 +31,7 @@ import { loadSignalWeights } from '../services/retroAnalysis';
 import { mapAllToDecisionCandidates } from '../services/decisionTypes';
 import { qualifyCandidates, printQualificationSummary } from '../services/qualificationEngine';
 import { enrichWithProbability, printProbabilitySummary } from '../services/probabilityEngine';
+import { applyRisk, printRiskSummary } from '../services/riskEngine';
 
 function safeSync<T>(fn: () => T, fallback: T): T {
   try { return fn(); } catch { return fallback; }
@@ -243,6 +244,15 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
       const decisionCandidates = mapAllToDecisionCandidates(topProps);
       const enriched = enrichWithProbability(decisionCandidates);
       printProbabilitySummary(enriched);
+    }, undefined);
+
+    // -- [DECISION LAYER] Risk engine --
+    // Independent block — does not filter; only adds risk fields and prints summary.
+    safeSync(() => {
+      const decisionCandidates = mapAllToDecisionCandidates(topProps);
+      const enriched           = enrichWithProbability(decisionCandidates);
+      const withRisk           = applyRisk(enriched);
+      printRiskSummary(withRisk);
     }, undefined);
 
     // For MLB: run pitcher-specific analysis on top of standard scoring
