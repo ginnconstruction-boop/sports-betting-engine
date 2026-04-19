@@ -32,6 +32,7 @@ import { mapAllToDecisionCandidates } from '../services/decisionTypes';
 import { qualifyCandidates, printQualificationSummary } from '../services/qualificationEngine';
 import { enrichWithProbability, printProbabilitySummary } from '../services/probabilityEngine';
 import { applyRisk, printRiskSummary } from '../services/riskEngine';
+import { labelCandidates, printLabelSummary } from '../services/labelEngine';
 
 function safeSync<T>(fn: () => T, fallback: T): T {
   try { return fn(); } catch { return fallback; }
@@ -253,6 +254,16 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
       const enriched           = enrichWithProbability(decisionCandidates);
       const withRisk           = applyRisk(enriched);
       printRiskSummary(withRisk);
+    }, undefined);
+
+    // -- [DECISION LAYER] Label engine --
+    // Independent block — does not affect existing output, saves, or alerts.
+    safeSync(() => {
+      const decisionCandidates = mapAllToDecisionCandidates(topProps);
+      const enriched           = enrichWithProbability(decisionCandidates);
+      const withRisk           = applyRisk(enriched);
+      const labeled            = labelCandidates(withRisk);
+      printLabelSummary(labeled);
     }, undefined);
 
     // For MLB: run pitcher-specific analysis on top of standard scoring

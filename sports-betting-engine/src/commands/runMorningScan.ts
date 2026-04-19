@@ -47,6 +47,7 @@ import { mapAllToDecisionCandidates } from '../services/decisionTypes';
 import { qualifyCandidates, printQualificationSummary } from '../services/qualificationEngine';
 import { enrichWithProbability, printProbabilitySummary } from '../services/probabilityEngine';
 import { applyRisk, printRiskSummary } from '../services/riskEngine';
+import { labelCandidates, printLabelSummary } from '../services/labelEngine';
 
 // Wrap a promise with a timeout so no single step can hang forever
 function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
@@ -411,6 +412,17 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
     const enriched           = enrichWithProbability(decisionCandidates);
     const withRisk           = applyRisk(enriched);
     printRiskSummary(withRisk);
+  }, undefined);
+
+  // -- [DECISION LAYER] Label engine --
+  // Independent block — runs the full enrichment chain then labels.
+  // Does NOT affect existing output, saves, or alerts.
+  safeRunSync('label engine', () => {
+    const decisionCandidates = mapAllToDecisionCandidates(topBets);
+    const enriched           = enrichWithProbability(decisionCandidates);
+    const withRisk           = applyRisk(enriched);
+    const labeled            = labelCandidates(withRisk);
+    printLabelSummary(labeled);
   }, undefined);
 
   // -- Auto-generate daily HTML report (printable as PDF)

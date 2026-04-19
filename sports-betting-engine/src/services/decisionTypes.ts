@@ -282,6 +282,38 @@ export interface DecisionCandidate {
    * once the risk engine has run.
    */
   adjustedEdge?: number;
+
+  // ----------------------------------------------------------
+  // Label engine output (Phase 6)
+  // Set by labelEngine.labelCandidates().
+  // Undefined until that stage runs.
+  // ----------------------------------------------------------
+
+  /**
+   * Final decision classification.
+   * BET            — clear actionable edge, low/acceptable risk
+   * LEAN           — meaningful edge, moderate risk, worth considering
+   * MONITOR        — borderline edge or high risk, watch for improvement
+   * BEST_PRICE_ONLY — best accessible number exists but no confident signal
+   * PASS           — not qualified, missing data, or risk+edge insufficient
+   */
+  finalDecisionLabel?: 'BET' | 'LEAN' | 'MONITOR' | 'PASS' | 'BEST_PRICE_ONLY';
+
+  /**
+   * Grade derived from finalDecisionLabel + adjustedEdge magnitude.
+   * A+ / A  → BET
+   * B+ / B  → LEAN
+   * C+      → BEST_PRICE_ONLY
+   * C       → MONITOR
+   * D       → PASS
+   */
+  finalGrade?: string;
+
+  /**
+   * Human-readable explanations for the label assignment.
+   * At most 3 reasons populated per candidate.
+   */
+  labelReasons?: string[];
 }
 
 // ============================================================

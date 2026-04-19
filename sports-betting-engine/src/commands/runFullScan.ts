@@ -13,6 +13,7 @@ import { mapAllToDecisionCandidates } from '../services/decisionTypes';
 import { qualifyCandidates, printQualificationSummary } from '../services/qualificationEngine';
 import { enrichWithProbability, printProbabilitySummary } from '../services/probabilityEngine';
 import { applyRisk, printRiskSummary } from '../services/riskEngine';
+import { labelCandidates, printLabelSummary } from '../services/labelEngine';
 
 export async function runFullScan(options: { forceRefresh?: boolean } = {}) {
   const sportKeys = getEnabledSports().map(s => s.key);
@@ -60,6 +61,16 @@ export async function runFullScan(options: { forceRefresh?: boolean } = {}) {
     const withRisk           = applyRisk(enriched);
     printRiskSummary(withRisk);
   } catch { /* risk engine is supplemental -- never block output */ }
+
+  // -- [DECISION LAYER] Label engine --
+  // Independent block -- does not affect existing output, saves, or alerts.
+  try {
+    const decisionCandidates = mapAllToDecisionCandidates(topBets);
+    const enriched           = enrichWithProbability(decisionCandidates);
+    const withRisk           = applyRisk(enriched);
+    const labeled            = labelCandidates(withRisk);
+    printLabelSummary(labeled);
+  } catch { /* label engine is supplemental -- never block output */ }
 
   console.log(`  API requests used : ${quota.requestsMade}`);
   console.log(`  Credits remaining : ${quota.remainingRequests ?? 'unknown'}\n`);
