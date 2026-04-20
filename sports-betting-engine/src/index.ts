@@ -94,4 +94,12 @@ async function main() {
       console.log('  -- Dev --          mock\n');
   }
 }
-main().catch(err => { console.error('Error:', err.message); process.exit(1); });
+main()
+  .then(() => {
+    // Force a clean exit after all output is flushed.
+    // Without this, orphaned ESPN HTTP connections (travelFatigue, H2H, motivation,
+    // officials) keep the Node.js event loop alive indefinitely, which prevents the
+    // subprocess from exiting and causes the dashboard spinner to freeze.
+    process.stdout.write('', () => process.exit(0));
+  })
+  .catch(err => { console.error('Error:', err.message); process.exit(1); });

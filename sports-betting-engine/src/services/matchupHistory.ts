@@ -26,6 +26,8 @@ function fetchJson(url: string): Promise<any> {
       res.on('data', c => { data += c; });
       res.on('end', () => { try { resolve(JSON.parse(data)); } catch { reject(new Error('Parse failed')); } });
     });
+    // unref: don't hold the Node.js event loop open if this request outlives its parent promise
+    req.on('socket', s => s.unref());
     req.on('error', reject);
     req.setTimeout(8000, () => { req.destroy(); reject(new Error('Timeout')); });
   });
