@@ -34,14 +34,26 @@ import { applySportIntelligence, printIntelSummary } from '../services/sportInte
 import { labelCandidates, printLabelSummary } from '../services/labelEngine';
 import { selectSlate, printSlateSummary } from '../services/slateSelector';
 
-async function safeRun<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
-  try { return await fn(); } catch { return fallback; }
+function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const t = setTimeout(() => reject(new Error(`${label} timed out after ${ms / 1000}s`)), ms);
+    promise.then(v => { clearTimeout(t); resolve(v); }, e => { clearTimeout(t); reject(e); });
+  });
+}
+async function safeRun<T>(fn: () => Promise<T>, fallback: T, timeoutMs = 25000): Promise<T> {
+  try { return await withTimeout(fn(), timeoutMs, fn.name || 'step'); } catch { return fallback; }
 }
 function safeSync<T>(fn: () => T, fallback: T): T {
   try { return fn(); } catch { return fallback; }
 }
 
 export async function runMiddayFinalCard(options: { forceRefresh?: boolean } = {}) {
+  console.log('\n');
+  console.log('=================================================================');
+  console.log('  MIDDAY FINAL CARD');
+  console.log('=================================================================');
+  console.log('  Fetching latest odds...\n');
+
   const sportKeys = getEnabledSports().map(s => s.key);
 
   const { results: rawBySport } = await getOddsForAllSports(sportKeys, INITIAL_MARKETS, options.forceRefresh ?? true);
@@ -54,6 +66,7 @@ export async function runMiddayFinalCard(options: { forceRefresh?: boolean } = {
   const priorSummaries = priorSnapshot?.eventSummaries ?? [];
   const sharpIntel = safeSync(() => analyzeSharpIntelligence(allSummaries, priorSummaries), new Map());
 
+  console.log('  Fetching injuries & weather...');
   const injuryMap = new Map<string, any[]>();
   for (const sportKey of sportKeys) {
     await safeRun(async () => {

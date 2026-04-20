@@ -27,8 +27,14 @@ import { applySportIntelligence, printIntelSummary } from '../services/sportInte
 import { labelCandidates, printLabelSummary } from '../services/labelEngine';
 import { selectSlate, printSlateSummary } from '../services/slateSelector';
 
-async function safeRun<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
-  try { return await fn(); } catch { return fallback; }
+function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const t = setTimeout(() => reject(new Error(`${label} timed out after ${ms / 1000}s`)), ms);
+    promise.then(v => { clearTimeout(t); resolve(v); }, e => { clearTimeout(t); reject(e); });
+  });
+}
+async function safeRun<T>(fn: () => Promise<T>, fallback: T, timeoutMs = 25000): Promise<T> {
+  try { return await withTimeout(fn(), timeoutMs, fn.name || 'step'); } catch { return fallback; }
 }
 function safeSync<T>(fn: () => T, fallback: T): T {
   try { return fn(); } catch { return fallback; }
