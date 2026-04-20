@@ -111,6 +111,9 @@ app.get('/api/stream/:command', requireAuth, (req, res) => {
     return;
   }
 
+  // ── [DBG] route entered ──
+  console.error(`[DBG:server] route entered: ${command}`);
+
   // Set up Server-Sent Events
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache');
@@ -122,13 +125,22 @@ app.get('/api/stream/:command', requireAuth, (req, res) => {
     res.write(`event: ${type}\ndata: ${JSON.stringify(data)}\n\n`);
   };
 
+  // ── Immediate first-body-byte write ──
+  // Render's proxy (and some CDN layers) will not forward ANY body bytes until
+  // it sees at least one chunk after the headers.  flushHeaders() sends the
+  // HTTP headers but zero body bytes.  Write a real data event immediately so
+  // the proxy flushes and the browser's reader.read() unblocks right away.
+  send('line', `[stream] ${command} connected — spawning...\n`);
+  console.error(`[DBG:server] stream first-write sent for: ${command}`);
+
   activeScans.add(command);
 
   const args = ALLOWED[command].split(' ');
   // Use pre-compiled JS when available (production / post-build).
   // Falls back to ts-node transpile-only for local dev where dist/ may not exist.
   const distEntry = path.join(__dirname, 'dist', 'index.js');
-  const nodeArgs  = fs.existsSync(distEntry)
+  const usingDist = fs.existsSync(distEntry);
+  const nodeArgs  = usingDist
     ? [distEntry, ...args]
     : ['--require', 'ts-node/register/transpile-only', 'src/index.ts', ...args];
   const proc = spawn('node', nodeArgs, {
@@ -136,18 +148,18 @@ app.get('/api/stream/:command', requireAuth, (req, res) => {
     env: { ...process.env },
   });
 
+  console.error(`[DBG:server] spawned: node ${nodeArgs[0]} ${args[0]} (dist=${usingDist})`);
+
   let fullOutput = '';
 
-  // Keepalive ping every 20 seconds.
-  // Render's nginx proxy silently drops SSE connections that carry no bytes
-  // for ~30s. ts-node compilation on the free tier can take 30-90s before
-  // the first stdout line appears, so without this the browser sees the
-  // stream close before any scan output arrives.
-  // SSE comment lines (": ...") are ignored by EventSource/fetch readers
-  // but count as bytes on the wire, resetting the proxy idle timer.
+  // Keepalive ping every 5 seconds.
+  // Uses a real SSE data event (not just a comment) so that Render's nginx
+  // proxy is forced to flush the chunk downstream.  SSE comment lines are
+  // valid but some proxy layers buffer them; a data event with a special
+  // "keepalive" type is always flushed.  The frontend ignores this event type.
   const keepaliveInterval = setInterval(() => {
-    try { res.write(': keepalive\n\n'); } catch {}
-  }, 20000);
+    try { res.write('event: keepalive\ndata: ""\n\n'); } catch {}
+  }, 5000);
 
   // Hard 12-minute timeout -- kills the subprocess if it ever hangs
   const SCAN_TIMEOUT_MS = 12 * 60 * 1000;
@@ -161,14 +173,24 @@ app.get('/api/stream/:command', requireAuth, (req, res) => {
     saveHistory({ command, label, timestamp: new Date().toISOString(), output: fullOutput + '\n[TIMEOUT]', ok: false });
   }, SCAN_TIMEOUT_MS);
 
+  let firstStdout = true;
   proc.stdout.on('data', (chunk: Buffer) => {
     const text = chunk.toString();
     fullOutput += text;
+    if (firstStdout) {
+      console.error(`[DBG:server] first stdout chunk (${chunk.length}B) for: ${command}`);
+      firstStdout = false;
+    }
     send('line', text);
   });
 
+  let firstStderr = true;
   proc.stderr.on('data', (chunk: Buffer) => {
     const text = chunk.toString();
+    if (firstStderr) {
+      console.error(`[DBG:server] first stderr chunk (${chunk.length}B) for: ${command}`);
+      firstStderr = false;
+    }
     // Only send non-noise stderr
     if (!text.includes('ExperimentalWarning') && !text.includes('DeprecationWarning')) {
       fullOutput += text;
@@ -180,6 +202,7 @@ app.get('/api/stream/:command', requireAuth, (req, res) => {
     clearInterval(keepaliveInterval);
     clearTimeout(timeoutHandle);
     activeScans.delete(command);
+    console.error(`[DBG:server] child closed with code=${code} for: ${command}`);
     const ok = code === 0;
     send('done', ok ? 'SUCCESS' : 'ERROR');
     res.end();

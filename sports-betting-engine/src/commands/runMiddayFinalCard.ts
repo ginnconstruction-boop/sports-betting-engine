@@ -48,15 +48,22 @@ function safeSync<T>(fn: () => T, fallback: T): T {
 }
 
 export async function runMiddayFinalCard(options: { forceRefresh?: boolean } = {}) {
+  // [DBG] stderr is synchronous/unbuffered on Linux — arrives at the server
+  // even if the process crashes before stdout is flushed.
+  process.stderr.write('[DBG:child] runMiddayFinalCard entered\n');
+
   console.log('\n');
   console.log('=================================================================');
   console.log('  MIDDAY FINAL CARD');
   console.log('=================================================================');
   console.log('  Fetching latest odds...\n');
 
+  process.stderr.write('[DBG:child] banner printed — calling getOddsForAllSports\n');
+
   const sportKeys = getEnabledSports().map(s => s.key);
 
   const { results: rawBySport } = await getOddsForAllSports(sportKeys, INITIAL_MARKETS, options.forceRefresh ?? true);
+  process.stderr.write('[DBG:child] getOddsForAllSports returned\n');
   const allSummaries: EventSummary[] = [];
   for (const [sportKey, events] of rawBySport) {
     allSummaries.push(...aggregateAllEvents(normalizeEvents(events, sportKey)));
@@ -94,6 +101,7 @@ export async function runMiddayFinalCard(options: { forceRefresh?: boolean } = {
     }
   }
 
+  process.stderr.write('[DBG:child] injury+weather loops done — pulling intelligence\n');
   console.log('\n  Pulling intelligence data...');
 
   const contextMap = await safeRun(() => buildAllContextPackages(

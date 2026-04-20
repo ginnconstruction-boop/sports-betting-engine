@@ -433,6 +433,7 @@ function runMonitor() {
 
 // ── Run command with SSE streaming ──
 function runCmd(cmd, label) {
+  console.log('[DBG:fe] runCmd fired for:', cmd);
   if (currentES) { currentES.close(); currentES = null; }
   if (currentBtn) { currentBtn.classList.remove('running'); currentBtn = null; }
 
@@ -462,9 +463,11 @@ function runCmd(cmd, label) {
 
 async function streamSSE(cmd, label, content, dot, btn) {
   return new Promise(async (resolve) => {
+    console.log('[DBG:fe] fetch starting for:', `/api/stream/${cmd}`);
     const resp = await fetch(`/api/stream/${cmd}?label=${encodeURIComponent(label)}`, {
       headers: { 'x-auth-token': authToken }
     });
+    console.log('[DBG:fe] response headers received — status:', resp.status, 'content-type:', resp.headers.get('content-type'));
 
     if (resp.status === 401) { doLogout(); resolve(); return; }
     if (resp.status === 409) {
@@ -477,6 +480,8 @@ async function streamSSE(cmd, label, content, dot, btn) {
     const reader = resp.body.getReader();
     const decoder = new TextDecoder();
     let buf = '';
+    let firstChunk = true;
+    let chunkCount = 0;
 
     const flush = () => {
       content.innerHTML = colorize(fullOutputText);
@@ -485,7 +490,12 @@ async function streamSSE(cmd, label, content, dot, btn) {
 
     while (true) {
       const { done, value } = await reader.read();
-      if (done) break;
+      if (done) { console.log('[DBG:fe] reader done (stream closed)'); break; }
+      if (firstChunk) {
+        console.log('[DBG:fe] FIRST CHUNK received from server (', value?.length, 'bytes)');
+        firstChunk = false;
+      }
+      chunkCount++;
       buf += decoder.decode(value, { stream: true });
 
       let idx;
@@ -501,10 +511,14 @@ async function streamSSE(cmd, label, content, dot, btn) {
         try { parsed = JSON.parse(dataMatch[1]); } catch { continue; }
 
         const evType = evMatch ? evMatch[1] : 'line';
+        console.log('[DBG:fe] SSE event type:', evType, '| data length:', typeof parsed === 'string' ? parsed.length : '-');
         if (evType === 'line') {
           fullOutputText += parsed;
           flush();
+        } else if (evType === 'keepalive') {
+          // heartbeat — ignore, used to keep Render proxy connection alive
         } else if (evType === 'done') {
+          console.log('[DBG:fe] done event received — total chunks:', chunkCount);
           dot.style.display = 'none';
           if (btn) btn.classList.remove('running');
           const pdfBtn = document.getElementById('pdf-btn');
