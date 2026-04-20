@@ -43,6 +43,7 @@ import { mapAllToDecisionCandidates } from '../services/decisionTypes';
 import { qualifyCandidates, printQualificationSummary } from '../services/qualificationEngine';
 import { enrichWithProbability, printProbabilitySummary } from '../services/probabilityEngine';
 import { applyRisk, printRiskSummary } from '../services/riskEngine';
+import { applySportIntelligence, printIntelSummary } from '../services/sportIntelligenceEngine';
 import { labelCandidates, printLabelSummary } from '../services/labelEngine';
 import { selectSlate, printSlateSummary } from '../services/slateSelector';
 
@@ -399,7 +400,9 @@ export async function runSportScan(
       printQualificationSummary(qualResult);
       const enriched           = enrichWithProbability(allCandidates);
       printProbabilitySummary(enriched);
-      const withRisk           = applyRisk(enriched);
+      const withIntel          = applySportIntelligence(enriched);
+      printIntelSummary(withIntel);
+      const withRisk           = applyRisk(withIntel);
       printRiskSummary(withRisk);
       const labeled            = labelCandidates(withRisk);
       printLabelSummary(labeled);
@@ -460,7 +463,9 @@ export async function runSportScan(
         printQualificationSummary(qualResult);
         const enriched           = enrichWithProbability(allCandidates);
         printProbabilitySummary(enriched);
-        const withRisk           = applyRisk(enriched);
+        const withIntel          = applySportIntelligence(enriched);
+        printIntelSummary(withIntel);
+        const withRisk           = applyRisk(withIntel);
         printRiskSummary(withRisk);
         const labeled            = labelCandidates(withRisk);
         printLabelSummary(labeled);

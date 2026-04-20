@@ -47,6 +47,7 @@ import { mapAllToDecisionCandidates } from '../services/decisionTypes';
 import { qualifyCandidates, printQualificationSummary } from '../services/qualificationEngine';
 import { enrichWithProbability, printProbabilitySummary } from '../services/probabilityEngine';
 import { applyRisk, printRiskSummary } from '../services/riskEngine';
+import { applySportIntelligence, printIntelSummary } from '../services/sportIntelligenceEngine';
 import { labelCandidates, printLabelSummary } from '../services/labelEngine';
 import { selectSlate, printSlateSummary } from '../services/slateSelector';
 
@@ -411,7 +412,9 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
   safeRunSync('risk engine', () => {
     const decisionCandidates = mapAllToDecisionCandidates(topBets);
     const enriched           = enrichWithProbability(decisionCandidates);
-    const withRisk           = applyRisk(enriched);
+    const withIntel          = applySportIntelligence(enriched);
+    printIntelSummary(withIntel);
+    const withRisk           = applyRisk(withIntel);
     printRiskSummary(withRisk);
   }, undefined);
 
@@ -425,7 +428,8 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
     const qualResult         = qualifyCandidates(decisionCandidates);
     const allCandidates      = [...qualResult.qualified, ...qualResult.rejected];
     const enriched           = enrichWithProbability(allCandidates);
-    const withRisk           = applyRisk(enriched);
+    const withIntel          = applySportIntelligence(enriched);
+    const withRisk           = applyRisk(withIntel);
     const labeled            = labelCandidates(withRisk);
     printLabelSummary(labeled);
   }, undefined);
@@ -438,7 +442,8 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
     const qualResult         = qualifyCandidates(decisionCandidates);
     const allCandidates      = [...qualResult.qualified, ...qualResult.rejected];
     const enriched           = enrichWithProbability(allCandidates);
-    const withRisk           = applyRisk(enriched);
+    const withIntel          = applySportIntelligence(enriched);
+    const withRisk           = applyRisk(withIntel);
     const labeled            = labelCandidates(withRisk);
     const slateResult        = selectSlate(labeled);
     printSlateSummary(slateResult);

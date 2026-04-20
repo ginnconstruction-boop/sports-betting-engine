@@ -272,6 +272,15 @@ export function applyRisk(
     }
 
     // ----------------------------------------------------------
+    // Rule 6: Low quality bet type (sport intelligence layer)
+    // Informational flag only — riskScore unchanged in this pass.
+    // Thresholds will be adjusted in a subsequent calibration pass.
+    // ----------------------------------------------------------
+    if (c.betTypeQualityTier === 'LOW') {
+      flags.push('low_quality_bet_type');
+    }
+
+    // ----------------------------------------------------------
     // Risk grade
     // ----------------------------------------------------------
     const riskGrade: 'LOW' | 'MODERATE' | 'HIGH' =
@@ -344,13 +353,15 @@ export function printRiskSummary(candidates: DecisionCandidate[]): void {
   const staleLine   = withRisk.filter(c => c.riskFlags?.includes('stale_line_risk')).length;
   const correlated  = withRisk.filter(c => c.riskFlags?.includes('correlated_game')).length;
   const volatile    = withRisk.filter(c => c.riskFlags?.includes('role_volatility')).length;
+  const lowQuality  = withRisk.filter(c => c.riskFlags?.includes('low_quality_bet_type')).length;
 
   const edgeSign = avgAdjEdge >= 0 ? '+' : '';
 
-  console.log(
+  let summary =
     `  [RISK]    LOW: ${low} | MODERATE: ${moderate} | HIGH: ${high} | ` +
     `avg adjEdge: ${edgeSign}${(avgAdjEdge * 100).toFixed(1)}% | ` +
     `price_only: ${priceOnly} | stale_line: ${staleLine} | ` +
-    `correlated: ${correlated} | volatile: ${volatile}`
-  );
+    `correlated: ${correlated} | volatile: ${volatile}`;
+  if (lowQuality > 0) summary += ` | low_quality_bet_type: ${lowQuality}`;
+  console.log(summary);
 }

@@ -246,11 +246,23 @@ export function labelCandidates(
 ): DecisionCandidate[] {
   return candidates.map(c => {
     const { label, reasons } = classify(c);
+
+    // Append a note when the sport intelligence layer flagged LOW quality.
+    // This is contextual only — no threshold is changed here.
+    const allReasons = [...reasons];
+    if (
+      c.betTypeQualityTier === 'LOW' &&
+      (c.intelligenceFlags ?? []).length > 0 &&
+      allReasons.length < 3
+    ) {
+      allReasons.push(`low quality bet type: ${(c.intelligenceFlags ?? []).join(', ')}`);
+    }
+
     return {
       ...c,
       finalDecisionLabel: label,
       finalGrade:         toGrade(label, c.adjustedEdge ?? 0),
-      labelReasons:       reasons,
+      labelReasons:       allReasons,
     };
   });
 }

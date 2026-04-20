@@ -234,6 +234,48 @@ export interface DecisionCandidate {
   impliedEdge?: number;
 
   // ----------------------------------------------------------
+  // Sport + Market Intelligence fields (Phase 4.5)
+  // Set by sportIntelligenceEngine.applySportIntelligence().
+  // Undefined until that stage runs.
+  // ----------------------------------------------------------
+
+  /**
+   * 0.0–1.0 quality score for this bet type.
+   * HIGH types (pitcher props, stable game lines): >= 0.75
+   * LOW types (binary batter unders): <= 0.15
+   */
+  betTypeQualityScore?: number;
+
+  /**
+   * Categorical tier derived from betTypeQualityScore.
+   * HIGH   — pitcher props, stable NBA starter props, game lines
+   * MEDIUM — standard NBA props, normal hitter props, game totals
+   * LOW    — binary batter unders (hits/total_bases UNDER 0.5)
+   */
+  betTypeQualityTier?: 'HIGH' | 'MEDIUM' | 'LOW';
+
+  /**
+   * 0.0–1.0 reliability estimate for the market.
+   * Higher = more liquid market with stable multi-book consensus.
+   */
+  marketReliabilityScore?: number;
+
+  /**
+   * 0.0–1.0 estimate of role/usage stability.
+   * Pitcher props and game lines score highest; binary unders lowest.
+   */
+  roleStabilityScore?: number;
+
+  /**
+   * Named flags from the sport intelligence engine.
+   * Possible values:
+   *   "binary_hitter_under"  — line 0.5 Under on a batter stat
+   *   "one_event_kills_bet"  — a single positive outcome voids the wager
+   *   "fragile_prop_type"    — bet structure highly vulnerable to variance
+   */
+  intelligenceFlags?: string[];
+
+  // ----------------------------------------------------------
   // Risk engine output (Phase 5)
   // Set by riskEngine.applyRisk().
   // Undefined until that stage runs.
