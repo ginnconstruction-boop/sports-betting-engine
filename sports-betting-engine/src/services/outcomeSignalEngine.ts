@@ -38,6 +38,7 @@
 // ============================================================
 
 import { DecisionCandidate } from './decisionTypes';
+import { getATSOutcomeSignal } from './atsTracker';
 
 // ── Context input type (Phase C) ─────────────────────────────
 
@@ -459,6 +460,43 @@ function deriveMatchup(
   };
 }
 
+// ── ATS outcome signal — applies to ALL candidates ───────────
+//
+// Routing rules (mirrors positive/negative merge pattern above):
+//   ATS_STRONG → outcomeSignals[] AND signals[] (positive — weighting engine benefits)
+//   ATS_WEAK   → outcomeSignals[] ONLY           (negative — does not inflate diversity)
+//   ATS_NEUTRAL→ skipped entirely               (no information value in neutral label)
+//
+// Gate: getATSOutcomeSignal enforces ≥ 20-game sample internally.
+// This function never fires for thin-data teams.
+
+function applyATSSignal(
+  c:   DecisionCandidate,
+  ctx: OutcomeContext,
+): DecisionCandidate {
+  if (!c.team || !c.sportKey) return c;
+
+  // Resolve home/away using gameSummaries; skip if unresolvable
+  const game = findGame(c, ctx);
+  if (!game) return c;
+
+  const atsSig = getATSOutcomeSignal(c.team, c.sportKey, game.isHome);
+
+  // Skip neutral — nothing actionable to record
+  if (atsSig.signal === 'ATS_NEUTRAL') return c;
+
+  const existingOutcome = c.outcomeSignals ? [...c.outcomeSignals] : [];
+  const existingSignals = c.signals        ? [...c.signals]        : [];
+
+  const newOutcomeSignals = [...new Set([...existingOutcome, atsSig.signal])];
+  // ATS_STRONG only — negative stays in outcomeSignals exclusively
+  const newSignals = atsSig.signal === 'ATS_STRONG'
+    ? [...new Set([...existingSignals, 'ATS_STRONG'])]
+    : existingSignals;
+
+  return { ...c, outcomeSignals: newOutcomeSignals, signals: newSignals };
+}
+
 // ── Core NBA prop enrichment ──────────────────────────────────
 
 /**
@@ -545,15 +583,24 @@ export function applyOutcomeSignals(
   const ctx = context ?? {};
 
   return candidates.map(c => {
-    if (!isNBAProp(c)) return c;
+    // ── Pass 1: ATS signal — runs for ALL candidate types ──────
+    // Requires ≥ 20-game sample (enforced inside getATSOutcomeSignal).
+    // Game line candidates benefit from ATS context; props also eligible
+    // but ATS is primarily a team spread signal.
+    const withATS = applyATSSignal(c, ctx);
+
+    // ── Pass 2: NBA prop enrichment — props only ───────────────
+    if (!isNBAProp(withATS)) return withATS;
 
     // No line — all signals neutral, all scores 50
-    if (c.line === undefined || c.line === null) {
+    if (withATS.line === undefined || withATS.line === null) {
       return {
-        ...c,
+        ...withATS,
         outcomeSignals: [
           'ROLE_NEUTRAL', 'MINUTES_UNKNOWN', 'USAGE_STABLE',
           'INJURY_CONTEXT_NEUTRAL', 'RECENT_FORM_NEUTRAL', 'MATCHUP_NEUTRAL',
+          // Preserve any ATS signal already placed by Pass 1
+          ...(withATS.outcomeSignals?.filter(s => s.startsWith('ATS_')) ?? []),
         ],
         outcomeRoleScore:       50,
         usageTrendScore:        50,
@@ -565,7 +612,7 @@ export function applyOutcomeSignals(
       };
     }
 
-    return { ...c, ...enrichNBAProp(c, ctx) };
+    return { ...withATS, ...enrichNBAProp(withATS, ctx) };
   });
 }
 
@@ -576,6 +623,26 @@ export function applyOutcomeSignals(
  * Suppressed when no NBA props were processed.
  */
 export function printOutcomeSummary(candidates: DecisionCandidate[]): void {
+  // ── ATS summary — all candidates ──────────────────────────
+  const withOutcome = candidates.filter(c => c.outcomeSignals !== undefined);
+  const atsStrong   = withOutcome.filter(c => c.outcomeSignals!.includes('ATS_STRONG')).length;
+  const atsWeak     = withOutcome.filter(c => c.outcomeSignals!.includes('ATS_WEAK')).length;
+  const atsTotal    = atsStrong + atsWeak;
+
+  if (atsTotal > 0) {
+    // Compute avg sample size for candidates that fired an ATS signal
+    const atsFired = withOutcome.filter(
+      c => c.outcomeSignals!.includes('ATS_STRONG') || c.outcomeSignals!.includes('ATS_WEAK')
+    );
+    // sampleSize isn't stored on the candidate — report count only
+    console.log(
+      `  [ATS] signals triggered: ${atsTotal}` +
+      ` | ATS_STRONG: ${atsStrong} | ATS_WEAK: ${atsWeak}` +
+      ` | impact applied: via signalWeightingEngine (max ±2.0% edge per candidate)`
+    );
+  }
+
+  // ── NBA prop outcome summary ───────────────────────────────
   const nbaProps = candidates.filter(
     c => isNBAProp(c) && c.outcomeSignals !== undefined
   );

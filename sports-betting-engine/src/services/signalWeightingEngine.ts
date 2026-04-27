@@ -85,6 +85,13 @@ const NEGATIVE_OUTCOME = new Set([
   'TOUGH_MATCHUP',
 ]);
 
+// ATS outcome signals (routed here from outcomeSignalEngine — NOT direct score bonuses).
+// These are team spread cover-rate signals backed by ≥ 20-game samples.
+// Cap: individual delta is ±0.020 (2%). Combined ATS effect cannot exceed ±0.050 (5%)
+// because only one ATS signal fires per candidate (STRONG xor WEAK, never both).
+const ATS_STRONG_DELTA = +0.020;
+const ATS_WEAK_DELTA   = -0.020;
+
 /** Sharp / market-structural intelligence signals. */
 const SHARP_SIGNALS = new Set([
   'sharp_money',
@@ -187,6 +194,9 @@ function computeDeltas(
   if (profile === 'NBA_GAME') {
     if (hasSet(SHARP_SIGNALS))  deltas.push({ delta: +0.005, reason: 'sharp signal present' });
     if (hasSet(STEAM_SIGNALS))  deltas.push({ delta: +0.004, reason: 'steam move detected' });
+    // ATS — supporting signal only; capped at ±2% (well within ±5% constraint)
+    if (has('ATS_STRONG'))      deltas.push({ delta: ATS_STRONG_DELTA, reason: 'ATS_STRONG — rolling cover trend (≥20 sample)' });
+    if (has('ATS_WEAK'))        deltas.push({ delta: ATS_WEAK_DELTA,   reason: 'ATS_WEAK — rolling cold trend (≥20 sample)' });
   }
 
   // ── NHL_GAME ──────────────────────────────────────────────
@@ -194,6 +204,9 @@ function computeDeltas(
     // Sharp signal especially critical in low-scoring markets
     if (hasSet(SHARP_SIGNALS))  deltas.push({ delta: +0.010, reason: 'sharp signal — NHL critical' });
     if (hasSet(STEAM_SIGNALS))  deltas.push({ delta: +0.006, reason: 'steam move detected' });
+    // ATS — supporting signal only
+    if (has('ATS_STRONG'))      deltas.push({ delta: ATS_STRONG_DELTA, reason: 'ATS_STRONG — rolling cover trend (≥20 sample)' });
+    if (has('ATS_WEAK'))        deltas.push({ delta: ATS_WEAK_DELTA,   reason: 'ATS_WEAK — rolling cold trend (≥20 sample)' });
   }
 
   // ── NHL_PROP ──────────────────────────────────────────────
@@ -202,11 +215,13 @@ function computeDeltas(
     if (hasSet(SHARP_SIGNALS)) deltas.push({ delta: +0.007, reason: 'sharp signal present' });
     if (has('ROLE_UNSTABLE'))  deltas.push({ delta: -0.010, reason: 'ROLE_UNSTABLE — thin market' });
     if (has('MINUTES_RISK'))   deltas.push({ delta: -0.008, reason: 'MINUTES_RISK — thin market' });
+    // ATS not applied to props — team cover % is not a player prop predictor
   }
 
   // ── MLB_PITCHER ───────────────────────────────────────────
   if (profile === 'MLB_PITCHER') {
     if (hasSet(SHARP_SIGNALS))  deltas.push({ delta: +0.008, reason: 'sharp signal — pitcher market' });
+    // ATS not applied to props
   }
 
   // ── MLB_HITTER ────────────────────────────────────────────
@@ -214,23 +229,33 @@ function computeDeltas(
     if (hasSet(SHARP_SIGNALS))       deltas.push({ delta: +0.006, reason: 'sharp signal present' });
     if (has('RECENT_FORM_GOOD'))     deltas.push({ delta: +0.004, reason: 'RECENT_FORM_GOOD — batter in form' });
     if (has('RECENT_FORM_BAD'))      deltas.push({ delta: -0.008, reason: 'RECENT_FORM_BAD — batter struggling' });
+    // ATS not applied to props
   }
 
   // ── MLB_GAME ──────────────────────────────────────────────
   if (profile === 'MLB_GAME') {
     if (hasSet(SHARP_SIGNALS))  deltas.push({ delta: +0.006, reason: 'sharp signal present' });
     if (hasSet(STEAM_SIGNALS))  deltas.push({ delta: +0.005, reason: 'steam move detected' });
+    // ATS — supporting signal only
+    if (has('ATS_STRONG'))      deltas.push({ delta: ATS_STRONG_DELTA, reason: 'ATS_STRONG — rolling cover trend (≥20 sample)' });
+    if (has('ATS_WEAK'))        deltas.push({ delta: ATS_WEAK_DELTA,   reason: 'ATS_WEAK — rolling cold trend (≥20 sample)' });
   }
 
   // ── NCAAB / NCAAF ─────────────────────────────────────────
   if (profile === 'NCAAB_GAME' || profile === 'NCAAF_GAME') {
     if (hasSet(SHARP_SIGNALS))  deltas.push({ delta: +0.006, reason: 'sharp signal — soft market bonus' });
     if (hasSet(STEAM_SIGNALS))  deltas.push({ delta: +0.004, reason: 'steam move detected' });
+    // ATS — supporting signal only
+    if (has('ATS_STRONG'))      deltas.push({ delta: ATS_STRONG_DELTA, reason: 'ATS_STRONG — rolling cover trend (≥20 sample)' });
+    if (has('ATS_WEAK'))        deltas.push({ delta: ATS_WEAK_DELTA,   reason: 'ATS_WEAK — rolling cold trend (≥20 sample)' });
   }
 
   // ── DEFAULT ───────────────────────────────────────────────
   if (profile === 'DEFAULT') {
     if (hasSet(SHARP_SIGNALS))  deltas.push({ delta: +0.004, reason: 'sharp signal present' });
+    // ATS — supporting signal only
+    if (has('ATS_STRONG'))      deltas.push({ delta: ATS_STRONG_DELTA, reason: 'ATS_STRONG — rolling cover trend (≥20 sample)' });
+    if (has('ATS_WEAK'))        deltas.push({ delta: ATS_WEAK_DELTA,   reason: 'ATS_WEAK — rolling cold trend (≥20 sample)' });
   }
 
   return deltas;

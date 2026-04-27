@@ -428,7 +428,13 @@ export function scoreAllBets(
       const playerImpact = options.playerImpacts?.get(event.eventId);
       const playerImpactBonus = playerImpact?.significantImpact ? 8 : 0;
       const atsSituation = options.atsSituations?.get(event.eventId);
-      const atsBonus = Math.min(atsSituation?.atsScoreBonus ?? 0, 10);
+      // ATS scoring removed — atsDatabase (picks_log-based) is self-referential
+      // and not valid for score injection. ATS now routes through:
+      //   outcomeSignalEngine (ATS_STRONG / ATS_WEAK, ≥20-game gate)
+      //     → signalWeightingEngine (±2% edge delta, max ±5% total)
+      //     → risk engine → label engine
+      // atsSituation is kept here for reasoning display only (lines below).
+      const atsBonus = 0;
       const openerComparison = options.lineOpeners?.get(event.eventId);
       const openerBonus = openerComparison?.isLargeMove ? 6 : 0;
       const powerData = options.powerRatings?.get(event.eventId);

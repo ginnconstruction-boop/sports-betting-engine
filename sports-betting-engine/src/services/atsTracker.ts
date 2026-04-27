@@ -427,6 +427,71 @@ export function getATSSignalForScoring(
   };
 }
 
+// ── Public: validated outcome signal for signalWeightingEngine ─
+
+export interface ATSOutcomeSignal {
+  /** Categorized signal label. */
+  signal:     'ATS_STRONG' | 'ATS_WEAK' | 'ATS_NEUTRAL';
+  /** Season or all-time game count — used to enforce the minimum-sample gate. */
+  sampleSize: number;
+  /** Monthly cover % used as the rolling window signal (null if too thin). */
+  coverPct:   number | null;
+}
+
+/**
+ * Returns a validated ATS outcome signal for the outcomeSignalEngine.
+ *
+ * MINIMUM SAMPLE:
+ *   Requires ≥ 20 games in the season or all-time record.
+ *   Monthly-only samples are too thin for a valid structural signal.
+ *
+ * ROLLING WINDOW (recent performance preferred):
+ *   Primary  — monthly cover % when the monthly bucket has ≥ 5 games.
+ *   Fallback — season cover % when monthly is thin but season has ≥ 10 games.
+ *   If neither window has enough games the result is ATS_NEUTRAL.
+ *
+ * THRESHOLDS:
+ *   ≥ 60% cover → ATS_STRONG
+ *   ≤ 40% cover → ATS_WEAK
+ *   Otherwise   → ATS_NEUTRAL
+ */
+export function getATSOutcomeSignal(
+  team:     string,
+  sportKey: string,
+  isHome:   boolean,
+): ATSOutcomeSignal {
+  const neutral: ATSOutcomeSignal = { signal: 'ATS_NEUTRAL', sampleSize: 0, coverPct: null };
+
+  const store = loadStore();
+  const key   = teamKey(team, sportKey);
+  const rec   = store.teamRecords[key];
+  if (!rec) return neutral;
+
+  const split = isHome ? rec.home : rec.away;
+
+  // Total-sample gate: require ≥ 20 in season or all-time bucket
+  const seasonTotal  = split.season.wins  + split.season.losses;
+  const allTimeTotal = split.allTime.wins + split.allTime.losses;
+  const totalSample  = Math.max(seasonTotal, allTimeTotal);
+  if (totalSample < 20) return { ...neutral, sampleSize: totalSample };
+
+  // Rolling signal: prefer monthly, fall back to season
+  const monthlyCount = split.monthly.wins + split.monthly.losses;
+  let coverPct: number | null = null;
+  if (monthlyCount >= 5) {
+    coverPct = winPct(split.monthly);
+  } else if (seasonTotal >= 10) {
+    coverPct = winPct(split.season);
+  }
+  if (coverPct === null) return { ...neutral, sampleSize: totalSample };
+
+  let signal: ATSOutcomeSignal['signal'] = 'ATS_NEUTRAL';
+  if (coverPct >= 60) signal = 'ATS_STRONG';
+  else if (coverPct <= 40) signal = 'ATS_WEAK';
+
+  return { signal, sampleSize: totalSample, coverPct };
+}
+
 // ── Public: build full report for dashboard ───────────────────
 
 export interface ATSReportRow {
