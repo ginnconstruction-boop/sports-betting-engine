@@ -50,6 +50,24 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-mono);min-hei
 .scan-btn.track:hover{border-color:var(--yellow);color:var(--yellow);background:rgba(240,192,64,.05)}
 .scan-btn.running{border-color:var(--green);color:var(--green);animation:pulse 1s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+
+/* DANGER ZONE */
+.danger-zone{margin-top:2.5rem;border:1px solid #6e1a1a;border-radius:8px;background:rgba(248,81,73,.04);padding:1.25rem 1.5rem 1.5rem}
+.danger-zone-header{display:flex;align-items:center;gap:.6rem;margin-bottom:.5rem}
+.danger-zone-icon{font-size:1rem;color:var(--red)}
+.danger-zone-title{font-family:var(--font-ui);font-weight:900;font-size:.75rem;letter-spacing:.25em;text-transform:uppercase;color:var(--red)}
+.danger-zone-desc{font-size:.7rem;color:var(--muted);line-height:1.6;margin-bottom:1rem;padding:.6rem .8rem;background:rgba(248,81,73,.06);border-radius:4px;border-left:2px solid #6e1a1a}
+.danger-zone-desc b{color:#e06060}
+.scan-btn.danger{border-color:#6e1a1a;background:rgba(248,81,73,.06);color:#e06060}
+.scan-btn.danger:hover{border-color:var(--red);color:var(--red);background:rgba(248,81,73,.12)}
+.scan-btn.danger.running{border-color:var(--red);color:var(--red);animation:pulse 1s infinite}
+#reset-confirm-wrap{display:none;margin-top:1rem;padding:.85rem 1rem;background:rgba(248,81,73,.08);border:1px solid #6e1a1a;border-radius:6px}
+#reset-confirm-wrap p{font-size:.75rem;color:#e06060;margin-bottom:.75rem;line-height:1.5}
+.reset-confirm-btns{display:flex;gap:.5rem;flex-wrap:wrap}
+.reset-confirm-yes{background:var(--red);color:#fff;border:none;font-family:var(--font-ui);font-weight:700;font-size:.85rem;letter-spacing:.08em;padding:.6rem 1.2rem;border-radius:5px;cursor:pointer;transition:opacity .15s}
+.reset-confirm-yes:hover{opacity:.85}
+.reset-confirm-no{background:transparent;color:var(--muted);border:1px solid var(--border);font-family:var(--font-mono);font-size:.8rem;padding:.6rem 1rem;border-radius:5px;cursor:pointer;transition:all .15s}
+.reset-confirm-no:hover{border-color:var(--muted);color:var(--text)}
 .scan-btn .num{font-family:var(--font-mono);font-size:.65rem;color:var(--muted);min-width:1.4rem}
 
 /* STATS BAR */
@@ -268,6 +286,38 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
       <button class="scan-btn" onclick="runCmd('mock','Preview')"><span class="num">25</span>Preview</button>
       <button class="scan-btn prime" onclick="runCmd('lategames','Late Games (90min)')"><span class="num">LG</span>Late Games 90min</button>
       <button class="scan-btn track" onclick="runMonitor()" id="monitor-btn" title="One-shot line movement check"><span class="num">27</span>Line Monitor</button>
+    </div>
+
+    <!-- DANGER ZONE -->
+    <div class="danger-zone">
+      <div class="danger-zone-header">
+        <span class="danger-zone-icon">⚠</span>
+        <span class="danger-zone-title">Danger Zone / Admin</span>
+      </div>
+      <div class="danger-zone-desc">
+        These actions are <b>irreversible</b> without restoring a backup. A timestamped backup is
+        created automatically before any data is cleared — stored in
+        <b>snapshots/reset_backups/</b> on the server.<br>
+        <b>Clears:</b> picks log · W/L record · P&amp;L · signal weights · CLV weights<br>
+        <b>Keeps:</b> ATS data · credit log · scan history · raw snapshots
+      </div>
+      <div class="btn-grid" style="max-width:280px">
+        <button class="scan-btn danger" id="reset-trigger-btn" onclick="showResetConfirm()">
+          <span class="num" style="color:#e06060">⚠</span>Reset Tracking Data
+        </button>
+      </div>
+
+      <!-- Two-step confirmation dialog -->
+      <div id="reset-confirm-wrap">
+        <p>
+          This will permanently erase all picks, W/L records, P&amp;L totals, and learned weights.<br>
+          A backup will be saved before anything is deleted. Are you sure?
+        </p>
+        <div class="reset-confirm-btns">
+          <button class="reset-confirm-yes" onclick="executeReset()">Yes, Reset Everything</button>
+          <button class="reset-confirm-no" onclick="cancelReset()">Cancel</button>
+        </div>
+      </div>
     </div>
 
     <!-- OUTPUT PANEL -->
@@ -1202,6 +1252,94 @@ async function loadSignals() {
   } catch(e) {
     body.innerHTML = `<div style="padding:1.5rem;text-align:center;color:var(--red)">Error: ${e.message}</div>`;
   }
+}
+
+// ── Danger Zone: Reset flow ──
+function showResetConfirm() {
+  document.getElementById('reset-confirm-wrap').style.display = 'block';
+  document.getElementById('reset-trigger-btn').disabled = true;
+  document.getElementById('reset-trigger-btn').style.opacity = '.5';
+}
+function cancelReset() {
+  document.getElementById('reset-confirm-wrap').style.display = 'none';
+  document.getElementById('reset-trigger-btn').disabled = false;
+  document.getElementById('reset-trigger-btn').style.opacity = '1';
+}
+function executeReset() {
+  document.getElementById('reset-confirm-wrap').style.display = 'none';
+  document.getElementById('reset-trigger-btn').disabled = false;
+  document.getElementById('reset-trigger-btn').style.opacity = '1';
+  // Stream the reset with ?confirm=RESET appended — server requires this token
+  const panel   = document.getElementById('output-panel');
+  const content = document.getElementById('output-content');
+  const title   = document.getElementById('output-title');
+  const dot     = document.getElementById('streaming-dot');
+  panel.style.display = 'block';
+  title.childNodes[0].textContent = 'RESET TRACKING DATA';
+  dot.style.display = 'inline-block';
+  content.innerHTML = `<div style="padding:2rem;text-align:center">
+    <div class="spinner" style="margin:0 auto 1rem"></div>
+    <div style="color:var(--red);font-size:.8rem;letter-spacing:.1em">RESETTING — CREATING BACKUP FIRST...</div>
+    <div style="color:var(--muted);font-size:.7rem;margin-top:.5rem">Output will stream here as it runs</div>
+  </div>`;
+  fullOutputText = '';
+  const pdfBtn2 = document.getElementById('pdf-btn');
+  if (pdfBtn2) pdfBtn2.style.display = 'none';
+  const resetBtn = document.getElementById('reset-trigger-btn');
+  if (resetBtn) { resetBtn.classList.add('running'); currentBtn = resetBtn; }
+  setTimeout(() => panel.scrollIntoView({behavior:'smooth',block:'start'}), 100);
+  // Pass confirm=RESET as query param — required by server guard
+  const label = 'Reset Tracking Data';
+  streamSSEWithUrl(`/api/stream/reset?confirm=RESET&label=${encodeURIComponent(label)}`, label, content, dot, resetBtn);
+}
+
+async function streamSSEWithUrl(url, label, content, dot, btn) {
+  return new Promise(async (resolve) => {
+    const resp = await fetch(url, { headers: { 'x-auth-token': authToken } });
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({ error: resp.statusText }));
+      content.innerHTML = `<div style="padding:1.5rem;color:var(--red)">Reset blocked: ${err.error || resp.statusText}</div>`;
+      if (dot) dot.style.display = 'none';
+      if (btn) { btn.classList.remove('running'); }
+      showToast('Reset blocked — ' + (err.error || resp.statusText), 'red');
+      return resolve(null);
+    }
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    let firstChunk = true;
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() ?? '';
+      for (const line of lines) {
+        if (line.startsWith('event: done')) {
+          if (dot) dot.style.display = 'none';
+          if (btn) btn.classList.remove('running');
+          const pdfBtn2 = document.getElementById('pdf-btn');
+          if (pdfBtn2) pdfBtn2.style.display = 'inline';
+          showToast('Reset complete — backup saved', 'green');
+          return resolve(null);
+        }
+        if (line.startsWith('data: ')) {
+          try {
+            const text = JSON.parse(line.slice(6));
+            if (text && typeof text === 'string' && !text.startsWith('[stream]')) {
+              if (firstChunk) { content.innerHTML = ''; firstChunk = false; }
+              fullOutputText += text;
+              content.innerHTML = colorize(fullOutputText);
+              content.scrollTop = content.scrollHeight;
+            }
+          } catch {}
+        }
+      }
+    }
+    if (dot) dot.style.display = 'none';
+    if (btn) btn.classList.remove('running');
+    resolve(null);
+  });
 }
 
 // ── Toast notification ──

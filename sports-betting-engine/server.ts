@@ -112,6 +112,14 @@ app.get('/api/stream/:command', requireAuth, (req, res) => {
     return;
   }
 
+  // ── Reset safety gate: require ?confirm=RESET ──
+  if (command === 'reset' && req.query.confirm !== 'RESET') {
+    res.status(400).json({
+      error: 'Reset requires explicit confirmation. Add ?confirm=RESET to the request.',
+    });
+    return;
+  }
+
   // ── [DBG] route entered ──
   console.error(`[DBG:server] route entered: ${command}`);
 
@@ -137,6 +145,8 @@ app.get('/api/stream/:command', requireAuth, (req, res) => {
   activeScans.add(command);
 
   const args = ALLOWED[command].split(' ');
+  // For reset: inject --confirm so runReset.ts knows it was properly authorized
+  if (command === 'reset') args.push('--confirm');
   // Use pre-compiled JS when available (production / post-build).
   // Falls back to ts-node transpile-only for local dev where dist/ may not exist.
   const distEntry = path.join(__dirname, 'dist', 'index.js');
