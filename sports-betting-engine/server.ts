@@ -54,6 +54,7 @@ const ALLOWED: Record<string, string> = {
   results: 'results', record: 'record', retro: 'retro',
   week: 'week', clv: 'clv', calibrate: 'calibrate',
   historical: 'historical', 'clv-picks': 'clv picks',
+  reset: 'reset',
   mock: 'mock', fixresults: 'fixresults',
   firstbasket: 'firstbasket', firsttd: 'firsttd',
   lategames: 'lategames',

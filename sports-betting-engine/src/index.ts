@@ -20,6 +20,7 @@ import { runFirstScorer }     from './commands/runFirstScorer';
 import { runTeasers }         from './commands/runTeasers';
 import { runLateGames }       from './commands/runLateGames';
 import { printWeeklySummary } from './services/weeklySummary';
+import { runReset }           from './commands/runReset';
 
 const args = process.argv.slice(2);
 const command = args[0]?.toLowerCase();
@@ -84,6 +85,8 @@ async function main() {
       else if (subcommand === 'build') await runHistorical('build');
       else                             await runHistorical('report');
       break;
+    // -- Reset -----------------------------------------------
+    case 'reset': runReset(); break;
     // -- Dev -------------------------------------------------
     case 'mock': require('./dev/mockRun'); break;
     default:
