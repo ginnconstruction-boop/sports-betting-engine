@@ -50,6 +50,12 @@ import { applyRisk, printRiskSummary } from '../services/riskEngine';
 import { applySportIntelligence, printIntelSummary } from '../services/sportIntelligenceEngine';
 import { labelCandidates, printLabelSummary } from '../services/labelEngine';
 import { selectSlate, printSlateSummary } from '../services/slateSelector';
+import { validateDataIntegrity, printValidationSummary } from '../services/dataIntegrityValidator';
+import { applySignalDiversity, printSignalDiversitySummary } from '../services/signalDiversityEngine';
+import { applyOutcomeSignals, printOutcomeSummary, OutcomeContext } from '../services/outcomeSignalEngine';
+import { applySignalWeighting, printWeightingSummary } from '../services/signalWeightingEngine';
+import { printCreditStatus } from '../services/creditTracker';
+import { updateATSTracker } from '../services/atsTracker';
 
 // Wrap a promise with a timeout so no single step can hang forever
 function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
@@ -94,6 +100,10 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
     safeRunSync('auto pnl update', () => rebuildPNL(), undefined);
     console.log('  P&L updated automatically from ESPN scores.');
   }
+
+  // Update live ATS tracker — processes completed games from recent snapshots
+  // Runs AFTER grading so scores are already fetched and cached
+  await safeRun('ats tracker', () => updateATSTracker(), 0);
   const retroReport = safeRunSync('retro report', () => buildRetroReport(), null);
   const learnedWeights = safeRunSync('signal weights', () => loadSignalWeights(), {});
   if (retroReport && retroReport.picksAnalyzed >= 5) {
@@ -387,13 +397,29 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
   }); // 20 candidates -- sport diversity logic ensures all sports represented
   printTopTen(topBets, 24);
 
+  // -- [DECISION LAYER] Outcome context (Phase C) --
+  // Built once here; shared across all decision-layer blocks below.
+  // All fields are optional — missing map → that dimension falls back to proxy.
+  const outcomeContext: OutcomeContext = {
+    injuryMap,
+    lineupMap,
+    contextMap,
+    powerRatings,
+    gameSummaries: allSummaries.map(e => ({
+      eventId: e.eventId, homeTeam: e.homeTeam, awayTeam: e.awayTeam, matchup: e.matchup,
+    })),
+  };
+
   // -- [DECISION LAYER] Qualification pass --
   // Runs AFTER existing print so output is never disrupted.
   // Operates on the same topBets array; does not change scores,
   // ranking, saves, or alerts.
   safeRunSync('qualification pass', () => {
     const decisionCandidates = mapAllToDecisionCandidates(topBets);
-    const qualResult = qualifyCandidates(decisionCandidates);
+    const todayEvents = allSummaries.map(e => ({ matchup: e.matchup, homeTeam: e.homeTeam, awayTeam: e.awayTeam }));
+    const validResult = validateDataIntegrity(decisionCandidates, todayEvents);
+    printValidationSummary(validResult);
+    const qualResult  = qualifyCandidates(validResult.valid);
     printQualificationSummary(qualResult);
   }, undefined);
 
@@ -412,9 +438,15 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
   safeRunSync('risk engine', () => {
     const decisionCandidates = mapAllToDecisionCandidates(topBets);
     const enriched           = enrichWithProbability(decisionCandidates);
-    const withIntel          = applySportIntelligence(enriched);
+    const withOutcome        = applyOutcomeSignals(enriched, outcomeContext);
+    printOutcomeSummary(withOutcome);
+    const withIntel          = applySportIntelligence(withOutcome);
     printIntelSummary(withIntel);
-    const withRisk           = applyRisk(withIntel);
+    const withDiversity      = applySignalDiversity(withIntel);
+    printSignalDiversitySummary(withDiversity);
+    const withWeighting      = applySignalWeighting(withDiversity);
+    printWeightingSummary(withWeighting);
+    const withRisk           = applyRisk(withWeighting);
     printRiskSummary(withRisk);
   }, undefined);
 
@@ -425,11 +457,17 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
   // labelCandidates runs (the mapper initialises it to false by default).
   safeRunSync('label engine', () => {
     const decisionCandidates = mapAllToDecisionCandidates(topBets);
-    const qualResult         = qualifyCandidates(decisionCandidates);
+    const todayEvents        = allSummaries.map(e => ({ matchup: e.matchup, homeTeam: e.homeTeam, awayTeam: e.awayTeam }));
+    const validResult        = validateDataIntegrity(decisionCandidates, todayEvents);
+    const qualResult         = qualifyCandidates(validResult.valid);
     const allCandidates      = [...qualResult.qualified, ...qualResult.rejected];
     const enriched           = enrichWithProbability(allCandidates);
-    const withIntel          = applySportIntelligence(enriched);
-    const withRisk           = applyRisk(withIntel);
+    const withOutcome        = applyOutcomeSignals(enriched, outcomeContext);
+    printOutcomeSummary(withOutcome);
+    const withIntel          = applySportIntelligence(withOutcome);
+    const withDiversity      = applySignalDiversity(withIntel);
+    const withWeighting      = applySignalWeighting(withDiversity);
+    const withRisk           = applyRisk(withWeighting);
     const labeled            = labelCandidates(withRisk);
     printLabelSummary(labeled);
   }, undefined);
@@ -439,11 +477,17 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
   // of the Slate.  Does NOT affect existing output, saves, or alerts.
   safeRunSync('slate selector', () => {
     const decisionCandidates = mapAllToDecisionCandidates(topBets);
-    const qualResult         = qualifyCandidates(decisionCandidates);
+    const todayEvents        = allSummaries.map(e => ({ matchup: e.matchup, homeTeam: e.homeTeam, awayTeam: e.awayTeam }));
+    const validResult        = validateDataIntegrity(decisionCandidates, todayEvents);
+    const qualResult         = qualifyCandidates(validResult.valid);
     const allCandidates      = [...qualResult.qualified, ...qualResult.rejected];
     const enriched           = enrichWithProbability(allCandidates);
-    const withIntel          = applySportIntelligence(enriched);
-    const withRisk           = applyRisk(withIntel);
+    const withOutcome        = applyOutcomeSignals(enriched, outcomeContext);
+    printOutcomeSummary(withOutcome);
+    const withIntel          = applySportIntelligence(withOutcome);
+    const withDiversity      = applySignalDiversity(withIntel);
+    const withWeighting      = applySignalWeighting(withDiversity);
+    const withRisk           = applyRisk(withWeighting);
     const labeled            = labelCandidates(withRisk);
     const slateResult        = selectSlate(labeled);
     printSlateSummary(slateResult);
@@ -473,7 +517,21 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
   ), undefined);
 
   // -- Step 22: Save picks for CLV tracking --------------------
-  safeRunSync('save picks', () => savePicksFromTopTen(topBets), []);
+  safeRunSync('save picks', () => savePicksFromTopTen(topBets.map(b => ({
+    sport:      b.sport,
+    sportKey:   (b as any).sportKey ?? '',
+    eventId:    (b as any).eventId  ?? '',
+    matchup:    b.matchup,
+    startTime:  b.startTime,
+    betType:    b.betType,
+    side:       b.side,
+    bestPrice:  b.bestUserPrice,
+    bestLine:   b.bestUserLine ?? null,
+    bestBook:   b.bestUserBook,
+    grade:      b.grade,
+    score:      b.score,
+    kellyPct:   b.kellyPct,
+  }))), []);
 
   console.log(`  API requests used  : ${quota.requestsMade}`);
   console.log(`  Credits remaining  : ${quota.remainingRequests ?? 'unknown'}`);
@@ -481,4 +539,7 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
     console.log(`  ML calibration     : ${calibrationModel.recommendation}`);
   }
   console.log('');
+
+  // Monthly credit budget summary — shows tier, daily target, headroom
+  printCreditStatus();
 }

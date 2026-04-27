@@ -8,6 +8,7 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import * as dotenv from 'dotenv';
 import { RawEvent, RawApiResponse, MarketKey, QuotaUsage, CacheEntry } from '../types/odds';
 import { logger } from '../utils/logger';
+import { recordApiResponse, isBudgetAllowed, getBudgetTier } from '../services/creditTracker';
 
 dotenv.config();
 
@@ -62,6 +63,8 @@ function updateSessionQuota(partial: Partial<QuotaUsage>): void {
   sessionQuota.requestsMade += 1;
   if (partial.remainingRequests !== null && partial.remainingRequests !== undefined) {
     sessionQuota.remainingRequests = partial.remainingRequests;
+    // Feed into monthly credit tracker so budget tiers stay current
+    recordApiResponse(partial.remainingRequests);
   }
   if (partial.usedRequests !== null && partial.usedRequests !== undefined) {
     sessionQuota.usedRequests = partial.usedRequests;
@@ -267,6 +270,7 @@ export async function getOddsForAllSports(
 /**
  * Fetch detailed markets for a specific event.
  * Use for targeted prop or alternate line pulls -- credit-expensive.
+ * Blocked when budget tier is ORANGE or RED (standard call type).
  */
 export async function getEventMarkets(
   sportKey: string,
@@ -275,6 +279,13 @@ export async function getEventMarkets(
   bookmakers?: string,
   oddsFormat = 'american'
 ): Promise<{ event: RawEvent | null; quota: QuotaUsage }> {
+  // Budget guard — props are a 'standard' call, blocked in ORANGE/RED
+  if (!isBudgetAllowed('standard')) {
+    const tier = getBudgetTier();
+    logger.warn(`[BUDGET GUARD] getEventMarkets blocked — tier: ${tier}. Skipping ${sportKey}/${eventId}`);
+    return { event: null, quota: { ...sessionQuota } };
+  }
+
   const client = createClient();
 
   const params: Record<string, string> = {
@@ -304,6 +315,146 @@ export async function getEventMarkets(
     return { event: response.data ?? null, quota: { ...sessionQuota } };
   } catch (err) {
     handleApiError(err, `getEventMarkets(${sportKey}/${eventId})`);
+  }
+}
+
+// ============================================================
+// Upcoming events (FREE — 0 credits)
+// ============================================================
+
+export interface UpcomingEvent {
+  id:           string;
+  sportKey:     string;
+  commenceTime: string;
+  homeTeam:     string;
+  awayTeam:     string;
+}
+
+/**
+ * Fetch upcoming event IDs for a sport WITHOUT pulling odds.
+ * Cost: 0 credits.  Use to discover events before deciding which
+ * ones to spend credits on (e.g., only pull props for events
+ * starting within the next 6 hours).
+ *
+ * Endpoint: GET /v4/sports/{sport}/events
+ */
+export async function getUpcomingEvents(sportKey: string): Promise<UpcomingEvent[]> {
+  const client = createClient();
+  logger.info(`[EVENTS] ${sportKey} — fetching upcoming events (free)`);
+  try {
+    const response: AxiosResponse = await withRetry(() =>
+      client.get(`/sports/${sportKey}/events`, {
+        params: { regions: 'us', oddsFormat: 'american' },
+      })
+    );
+    const quota = parseQuotaHeaders(response.headers as Record<string, string>);
+    updateSessionQuota(quota);
+
+    const raw: any[] = response.data ?? [];
+    return raw.map(e => ({
+      id:           e.id,
+      sportKey:     e.sport_key,
+      commenceTime: e.commence_time,
+      homeTeam:     e.home_team,
+      awayTeam:     e.away_team,
+    }));
+  } catch (err) {
+    handleApiError(err, `getUpcomingEvents(${sportKey})`);
+  }
+}
+
+// ============================================================
+// Completed scores (2 credits per sport per call)
+// ============================================================
+
+export interface CompletedScore {
+  id:           string;   // matches event ID used throughout the app
+  sportKey:     string;
+  commenceTime: string;
+  completed:    boolean;
+  homeTeam:     string;
+  awayTeam:     string;
+  homeScore:    number;
+  awayScore:    number;
+}
+
+/**
+ * Fetch completed game scores for a sport.
+ * Cost: 2 credits per call regardless of daysFrom value.
+ * daysFrom=3 covers games from the last 3 days (weekend catch-up).
+ *
+ * Returns only completed events with valid non-zero scores.
+ * The id field matches the event IDs stored by the scan pipeline,
+ * enabling exact-match grading without fuzzy team-name logic.
+ *
+ * Endpoint: GET /v4/sports/{sport}/scores?daysFrom={n}
+ */
+export async function getCompletedScores(
+  sportKey: string,
+  daysFrom: number = 3
+): Promise<CompletedScore[]> {
+  // Essential call — needed for pick grading; allowed unless RED
+  if (!isBudgetAllowed('essential')) {
+    const tier = getBudgetTier();
+    logger.warn(`[BUDGET GUARD] getCompletedScores blocked — tier: ${tier}`);
+    return [];
+  }
+
+  const client = createClient();
+  logger.info(`[SCORES] ${sportKey} — daysFrom: ${daysFrom}  (~2 credits)`);
+
+  try {
+    const response: AxiosResponse = await withRetry(() =>
+      client.get(`/sports/${sportKey}/scores`, {
+        params: { daysFrom },
+      })
+    );
+    const quota = parseQuotaHeaders(response.headers as Record<string, string>);
+    updateSessionQuota(quota);
+
+    logger.info(
+      `[SCORES OK] ${sportKey} — remaining quota: ${sessionQuota.remainingRequests ?? 'unknown'}`
+    );
+
+    const raw: any[] = response.data ?? [];
+    const results: CompletedScore[] = [];
+
+    for (const e of raw) {
+      if (!e.completed) continue;
+
+      const scores: Array<{ name: string; score: string }> = e.scores ?? [];
+      if (scores.length < 2) continue;
+
+      // Map scores to home/away — the array order isn't guaranteed; match by team name
+      const homeEntry = scores.find(
+        s => (s.name ?? '').toLowerCase() === (e.home_team ?? '').toLowerCase()
+      ) ?? scores[0];
+      const awayEntry = scores.find(
+        s => (s.name ?? '').toLowerCase() === (e.away_team ?? '').toLowerCase()
+      ) ?? scores[1];
+
+      const homeScore = parseFloat(homeEntry?.score ?? '0');
+      const awayScore = parseFloat(awayEntry?.score ?? '0');
+
+      // Skip 0-0 (game not yet complete or data missing)
+      if (homeScore === 0 && awayScore === 0) continue;
+
+      results.push({
+        id:           e.id,
+        sportKey:     e.sport_key,
+        commenceTime: e.commence_time,
+        completed:    true,
+        homeTeam:     e.home_team,
+        awayTeam:     e.away_team,
+        homeScore,
+        awayScore,
+      });
+    }
+
+    logger.info(`[SCORES] ${sportKey} — ${results.length} completed games found`);
+    return results;
+  } catch (err) {
+    handleApiError(err, `getCompletedScores(${sportKey})`);
   }
 }
 

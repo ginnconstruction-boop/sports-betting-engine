@@ -234,6 +234,77 @@ export interface DecisionCandidate {
   impliedEdge?: number;
 
   // ----------------------------------------------------------
+  // Outcome Signal Layer (Phase B)
+  // Set by outcomeSignalEngine.applyOutcomeSignals().
+  // Runs between probability enrichment and sport intelligence.
+  // Undefined on non-NBA / non-prop candidates (pass-through unchanged).
+  // ----------------------------------------------------------
+
+  /**
+   * All outcome-based signal strings produced by the outcome engine.
+   * Possible values (first-pass NBA-only):
+   *   Role:       ROLE_STABLE | ROLE_NEUTRAL | ROLE_UNSTABLE
+   *   Usage:      USAGE_UP | USAGE_STABLE | USAGE_DOWN
+   *   Form:       RECENT_FORM_NEUTRAL  (game-log data not yet available)
+   *   Matchup:    MATCHUP_NEUTRAL      (defensive DB not yet available)
+   *
+   * These signals are for context only — only ROLE_STABLE is also merged
+   * into signals[] so the signal diversity engine can detect multi-signal
+   * candidates correctly.  Negative/neutral signals are deliberately kept
+   * out of signals[] to prevent incorrect risk-bonus triggering.
+   */
+  outcomeSignals?: string[];
+
+  /**
+   * 0–100 estimate of role/usage stability based on posted line value or
+   * actual lineup confirmation data when available.
+   * ROLE_STABLE → 75 | ROLE_NEUTRAL → 50 | ROLE_UNSTABLE → 25
+   * Distinct from sportIntelligenceEngine's roleStabilityScore (0.0–1.0 scale).
+   */
+  outcomeRoleScore?: number;
+
+  /**
+   * 0–100 estimate of usage trend based on line value relative to market
+   * thresholds.  USAGE_UP → 80 | USAGE_STABLE → 50 | USAGE_DOWN → 25
+   */
+  usageTrendScore?: number;
+
+  /**
+   * 0–100 matchup difficulty estimate.
+   * Phase C: derived from opponent defensiveRating when powerRatings are available.
+   * Falls back to 50 (MATCHUP_NEUTRAL) when no power-rating data is present.
+   */
+  matchupScore?: number;
+
+  /**
+   * 0–100 recent-form estimate.
+   * Phase C: derived from team last-5 PPG (homeForm / awayForm) for scoring props.
+   * Falls back to 50 (RECENT_FORM_NEUTRAL) for non-scoring props or when no context.
+   */
+  recentFormScore?: number;
+
+  /**
+   * 0–100 confidence that the player's minutes / role are secure.
+   * Phase C: 85 when lineup confirmed as starter, 15 when scratched,
+   * 50 when no lineup data available (MINUTES_UNKNOWN).
+   */
+  minutesConfidenceScore?: number;
+
+  /**
+   * 0–100 score reflecting whether a teammate injury creates usage opportunity.
+   * Phase C: 75 when Out/Doubtful teammate found on same team; 50 neutral.
+   */
+  injuryOpportunityScore?: number;
+
+  /**
+   * 0–100 opponent defensive quality score for this market type.
+   * Phase C: derived from opponent defensiveRating (PPG allowed).
+   * Poor opponent defense → high score; elite defense → low score.
+   * 50 when no power-rating data available.
+   */
+  defensiveMatchupScore?: number;
+
+  // ----------------------------------------------------------
   // Sport + Market Intelligence fields (Phase 4.5)
   // Set by sportIntelligenceEngine.applySportIntelligence().
   // Undefined until that stage runs.
@@ -311,6 +382,22 @@ export interface DecisionCandidate {
    */
   riskFlags?: string[];
 
+  // ----------------------------------------------------------
+  // Signal diversity (Phase A)
+  // Set by signalDiversityEngine.applySignalDiversity().
+  // Undefined until that stage runs.
+  // ----------------------------------------------------------
+
+  /**
+   * True when all of the candidate's signals are market-structure only
+   * (PRICE_EDGE, LINE_GAP, JUICE_GAP, LINE_VS_CONSENSUS).
+   *
+   * Used by the label engine as an explicit hard guard:
+   * isPriceOnlyCandidate === true → finalDecisionLabel NEVER equals BET,
+   * regardless of riskScore or adjustedEdge.
+   */
+  isPriceOnlyCandidate?: boolean;
+
   /**
    * Win probability after applying risk discounts.
    * Price-only candidates: winProbability × 0.85 (large gap) or × 0.90 (small gap).
@@ -324,6 +411,60 @@ export interface DecisionCandidate {
    * once the risk engine has run.
    */
   adjustedEdge?: number;
+
+  // ----------------------------------------------------------
+  // Signal Weighting (Phase D)
+  // Set by signalWeightingEngine.applySignalWeighting().
+  // Runs BEFORE the risk engine (between signal diversity and risk).
+  // Pipeline: ... → signal diversity → signal weighting → risk → label → slate
+  // ----------------------------------------------------------
+
+  /**
+   * Pre-risk sport/market calibrated edge.
+   * Computed as impliedEdge × sportMultiplier + signalDeltas.
+   * When set, the risk engine uses this as its base instead of
+   * recomputing from adjustedWinProbability − impliedProb.
+   * Preserved for audit — never overwritten after weighting runs.
+   *
+   * Three-stage audit trail:
+   *   impliedEdge          — raw probability delta (probability engine)
+   *   weightedAdjustedEdge — after sport multiplier + signal deltas (weighting engine)
+   *   adjustedEdge         — after price-only risk discount (risk engine)
+   */
+  weightedAdjustedEdge?: number;
+
+  /**
+   * Ordered list of adjustments applied by the weighting engine, e.g.:
+   *   ["NBA_PROP base ×0.88 → 6.2%", "MINUTES_SECURE +0.008", "ROLE_STABLE +0.005"]
+   * Empty array when the profile was matched but no signal deltas applied.
+   */
+  weightingReasons?: string[];
+
+  /**
+   * The base sport/market multiplier applied (e.g. 0.88, 1.05).
+   * 1.0 for neutral/default profiles.
+   * Undefined when the weighting engine has not run on this candidate.
+   */
+  weightingMultiplier?: number;
+
+  /**
+   * The resolved sport/market profile string applied by the weighting engine.
+   * e.g. 'NBA_PROP', 'NHL_GAME', 'MLB_PITCHER', 'NCAAB_GAME', 'DEFAULT'.
+   * Undefined when the weighting engine has not run.
+   */
+  weightingProfile?: string;
+
+  /**
+   * Set by the slate selector when the BET volume cap is exceeded.
+   * Overrides finalDecisionLabel for display and selection purposes only —
+   * finalDecisionLabel itself is never changed (full audit trail preserved).
+   *
+   *   'LEAN'    — candidate was BET but downgraded by the 3-BET slate cap
+   *   'MONITOR' — candidate was BET/LEAN but downgraded by the 5-BET slate cap
+   *
+   * When set, printSlateSummary renders: [BET → LEAN cap] or [BET → MONITOR cap].
+   */
+  forcedTierCap?: 'LEAN' | 'MONITOR';
 
   // ----------------------------------------------------------
   // Label engine output (Phase 6)

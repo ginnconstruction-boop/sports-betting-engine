@@ -166,17 +166,27 @@ function classify(c: DecisionCandidate): Classification {
 
   // ----------------------------------------------------------
   // Priority 4: BET — low risk, real signal diversity, clear edge
+  //
+  // Hard guard: price-only candidates are NEVER labeled BET,
+  // even when riskGrade happens to be LOW or adjustedEdge is large.
+  // isPriceOnlyCandidate is set by signalDiversityEngine and is an
+  // explicit structural check independent of the risk-engine flags.
   // ----------------------------------------------------------
   if (riskGrade === 'LOW' && adjEdge >= EDGE_BET_MIN) {
-    const reasons: string[] = [
-      `signal diversity present, risk LOW, adjusted edge ${pct(adjEdge)}`,
-    ];
-    if ((c.riskFlags?.length ?? 0) === 0) {
-      reasons.push('no risk flags present');
+    // Explicit block — price-only signal cannot earn BET label
+    if (c.isPriceOnlyCandidate) {
+      // Fall through to LEAN / MONITOR / BEST_PRICE_ONLY below
     } else {
-      reasons.push(`active flags: ${c.riskFlags?.join(', ') ?? 'none'}`);
+      const reasons: string[] = [
+        `signal diversity present, risk LOW, adjusted edge ${pct(adjEdge)}`,
+      ];
+      if ((c.riskFlags?.length ?? 0) === 0) {
+        reasons.push('no risk flags present');
+      } else {
+        reasons.push(`active flags: ${c.riskFlags?.join(', ') ?? 'none'}`);
+      }
+      return { label: 'BET', reasons };
     }
-    return { label: 'BET', reasons };
   }
 
   // ----------------------------------------------------------

@@ -293,6 +293,7 @@ export function applyRisk(
     // Price-only candidates receive a discount that brings the
     // Phase 4 "14–17%" raw edges down to a realistic 4–7% range.
     // Non-price-only candidates keep their winProbability unchanged.
+    // adjustedWinProbability is preserved for diagnostic output.
     // ----------------------------------------------------------
     const baseWinProb = c.winProbability ?? 0;
     let adjustedWinProbability = baseWinProb;
@@ -307,11 +308,39 @@ export function applyRisk(
 
     // ----------------------------------------------------------
     // Adjusted edge
+    //
+    // When signalWeightingEngine has run (weightedAdjustedEdge is set),
+    // use the pre-calibrated sport/market edge as the base and apply
+    // the price-only discount multiplicatively on top of it.
+    //
+    // When weighting has not run (e.g. runFullScan, runLiveCheck which
+    // skip the weighting step), fall back to the raw probability formula:
+    //   adjustedWinProbability − impliedProbabilityFromBestPrice
+    // which preserves existing behaviour exactly.
+    //
+    // Three-stage audit trail:
+    //   impliedEdge          (probability engine) — untouched
+    //   weightedAdjustedEdge (weighting engine)   — untouched
+    //   adjustedEdge         (here)               — final value label/slate read
     // ----------------------------------------------------------
     const impliedProb = c.impliedProbabilityFromBestPrice;
-    const adjustedEdge = impliedProb !== undefined
-      ? Math.round((adjustedWinProbability - impliedProb) * 1000) / 1000
-      : undefined;
+
+    let adjustedEdge: number | undefined;
+
+    if (c.weightedAdjustedEdge !== undefined) {
+      // Weighting path: apply price-only discount to the weighted edge.
+      if (priceOnly) {
+        const discountFactor = c.priceDiff > LARGE_PRICE_DIFF_THRESHOLD
+          ? DISCOUNT_LARGE
+          : DISCOUNT_SMALL;
+        adjustedEdge = Math.round(c.weightedAdjustedEdge * discountFactor * 1000) / 1000;
+      } else {
+        adjustedEdge = Math.round(c.weightedAdjustedEdge * 1000) / 1000;
+      }
+    } else if (impliedProb !== undefined) {
+      // Fallback path (no weighting engine): raw probability delta formula.
+      adjustedEdge = Math.round((adjustedWinProbability - impliedProb) * 1000) / 1000;
+    }
 
     return {
       ...c,

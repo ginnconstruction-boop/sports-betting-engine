@@ -9,6 +9,7 @@
 import https from 'https';
 import * as fs from 'fs';
 import * as path from 'path';
+import { getCompletedScores, CompletedScore } from '../api/oddsApiClient';
 
 const SNAPSHOT_DIR = process.env.SNAPSHOT_DIR ?? './snapshots';
 const PICKS_FILE   = path.join(SNAPSHOT_DIR, 'picks_log.json');
@@ -125,6 +126,47 @@ function teamsMatch(searchHome: string, searchAway: string, nameA: string, nameB
          matchPair(a, h, n1, n2) || matchPair(a, h, n2, n1);
 }
 
+// Source 0: Odds API scores — exact eventId match, most reliable
+// Pre-fetched once per sport at the start of autoGradePicks() and
+// stored in a module-level cache for the duration of the run.
+// Key format: "<sportKey>:<eventId>"
+
+const oddsApiScoreCache = new Map<string, { homeScore: number; awayScore: number }>();
+let oddsApiScoreFetchedSports = new Set<string>();
+
+/**
+ * Pre-fetches completed scores from the Odds API for a set of sport keys.
+ * Call once at the start of autoGradePicks() — populates the cache so
+ * individual pick lookups are instant and cost 0 additional credits.
+ * Cost: 2 credits per unique sport key.
+ */
+async function prefetchOddsApiScores(sportKeys: string[]): Promise<void> {
+  const unique = [...new Set(sportKeys)].filter(sk => !oddsApiScoreFetchedSports.has(sk));
+  for (const sk of unique) {
+    try {
+      const scores: CompletedScore[] = await getCompletedScores(sk, 3);
+      for (const s of scores) {
+        oddsApiScoreCache.set(`${sk}:${s.id}`, { homeScore: s.homeScore, awayScore: s.awayScore });
+      }
+      oddsApiScoreFetchedSports.add(sk);
+    } catch { /* non-fatal — ESPN fallback will handle */ }
+  }
+}
+
+/**
+ * Looks up a score from the pre-fetched Odds API cache by exact event ID.
+ * Returns null if the eventId was not found in the cache.
+ */
+function getScoreFromOddsApiCache(
+  sportKey: string,
+  eventId: string | undefined
+): { homeScore: number; awayScore: number; final: boolean } | null {
+  if (!eventId) return null;
+  const entry = oddsApiScoreCache.get(`${sportKey}:${eventId}`);
+  if (!entry) return null;
+  return { ...entry, final: true };
+}
+
 // Source 1: ESPN scoreboard API
 async function getScoreFromESPN(
   sportKey: string, homeTeam: string, awayTeam: string, gameDate: string
@@ -218,22 +260,32 @@ async function getScoreFromESPNSummary(
   } catch { return null; }
 }
 
-// Master score lookup -- tries multiple sources, returns first hit
+// Master score lookup -- tries multiple sources, returns first hit.
+// Priority:
+//   1. Odds API cache (exact eventId match — most reliable, 0 extra credits)
+//   2. ESPN scoreboard API
+//   3. ESPN summary endpoint (handles late night / next-day results)
+//   4. ESPN reversed home/away
 async function getGameScore(
   sportKey: string,
   homeTeam: string,
   awayTeam: string,
-  gameDate: string
+  gameDate: string,
+  eventId?: string,
 ): Promise<{ homeScore: number; awayScore: number; final: boolean } | null> {
-  // Try ESPN scoreboard (primary)
+  // Source 0: Odds API cache — zero cost, exact eventId match
+  const oddsApi = getScoreFromOddsApiCache(sportKey, eventId);
+  if (oddsApi) return oddsApi;
+
+  // Source 1: ESPN scoreboard (primary)
   const espn1 = await getScoreFromESPN(sportKey, homeTeam, awayTeam, gameDate);
   if (espn1) return espn1;
 
-  // Try ESPN summary endpoint (fallback -- handles late night / next-day results)
+  // Source 2: ESPN summary endpoint (fallback -- handles late night / next-day results)
   const espn2 = await getScoreFromESPNSummary(sportKey, homeTeam, awayTeam, gameDate);
   if (espn2) return espn2;
 
-  // Try reversed home/away (sometimes matchup string is stored away @ home)
+  // Source 3: ESPN reversed home/away (sometimes matchup string is stored away @ home)
   const espn3 = await getScoreFromESPN(sportKey, awayTeam, homeTeam, gameDate);
   if (espn3) return { homeScore: espn3.awayScore, awayScore: espn3.homeScore, final: true };
 
@@ -270,12 +322,19 @@ function evaluatePick(
     return 'PUSH';
   }
 
-  if ((betType === 'Total' || betType === 'totals') && line !== null) {
-    const combined = homeScore + awayScore;
-    if (side.toLowerCase().includes('over')) {
-      return combined > line ? 'WIN' : combined < line ? 'LOSS' : 'PUSH';
-    } else {
-      return combined < line ? 'WIN' : combined > line ? 'LOSS' : 'PUSH';
+  if (betType === 'Total' || betType === 'totals') {
+    // Use explicit line; fall back to parsing from side string (e.g. "Over 8.5")
+    const effectiveLine = line ?? (() => {
+      const m = side.match(/(\d+\.?\d*)/);
+      return m ? parseFloat(m[1]) : null;
+    })();
+    if (effectiveLine !== null) {
+      const combined = homeScore + awayScore;
+      if (side.toLowerCase().includes('over')) {
+        return combined > effectiveLine ? 'WIN' : combined < effectiveLine ? 'LOSS' : 'PUSH';
+      } else {
+        return combined < effectiveLine ? 'WIN' : combined > effectiveLine ? 'LOSS' : 'PUSH';
+      }
     }
   }
 
@@ -323,7 +382,43 @@ function saveSignalWeights(weights: Record<string, number>): void {
 
 export async function autoGradePicks(): Promise<number> {
   const picks = loadPicks();
-  const existingRetro = loadRetroResults();
+  let existingRetro = loadRetroResults();
+
+  // ── One-time cleanup: remove entries that were incorrectly stored as PUSH ──
+  // evaluatePick only handles: Moneyline/h2h, Spread/spreads, Total/totals.
+  // Anything else (player props, alt lines, SGPs) falls through to 'PUSH', which
+  // is wrong.  Also purge Spread/Total entries where line=null (can't evaluate).
+  // Purge all such auto-graded PUSH entries so the W/L record is clean.
+  // The corresponding picks are reset to PENDING and re-evaluated below.
+  const GRADEABLE_TYPES = new Set([
+    'Moneyline', 'h2h', 'Spread', 'spreads', 'Total', 'totals',
+  ]);
+  const badIds = new Set(
+    existingRetro
+      .filter(r =>
+        r.autoGraded && r.gameResult === 'PUSH' && (
+          !GRADEABLE_TYPES.has(r.betType) ||
+          ((r.betType === 'Total' || r.betType === 'spreads' || r.betType === 'Spread') &&
+           r.line === null)
+        )
+      )
+      .map(r => r.pickId)
+  );
+  if (badIds.size > 0) {
+    existingRetro = existingRetro.filter(r => !badIds.has(r.pickId));
+    // Also reset those picks to PENDING in picks_log so they're not stuck
+    let changed = false;
+    for (let i = 0; i < picks.length; i++) {
+      const id = picks[i].id ?? picks[i].pickId ?? `${picks[i].matchup}_${picks[i].date}`;
+      if (badIds.has(id)) {
+        picks[i] = { ...picks[i], gameResult: 'PENDING', autoGraded: false };
+        changed = true;
+      }
+    }
+    if (changed) savePicks(picks);
+    saveRetroResults(existingRetro);
+  }
+
   const gradedIds = new Set(existingRetro.map(r => r.pickId));
 
   let newlyGraded = 0;
@@ -342,32 +437,64 @@ export async function autoGradePicks(): Promise<number> {
     );
   });
 
+  // Pre-fetch completed scores from the Odds API once per sport key.
+  // This fills the oddsApiScoreCache used by getGameScore() for exact-match
+  // grading.  Cost: 2 credits per unique sport key (far cheaper than ESPN
+  // scraping and more reliable for sports with bad ESPN mappings).
+  if (toGrade.length > 0) {
+    const normSportKey = (p: any): string => {
+      const s = p.sport ?? p.sportKey ?? 'basketball_nba';
+      if (s === 'NBA')   return 'basketball_nba';
+      if (s === 'NFL')   return 'americanfootball_nfl';
+      if (s === 'MLB')   return 'baseball_mlb';
+      if (s === 'NHL')   return 'icehockey_nhl';
+      if (s === 'NCAAB') return 'basketball_ncaab';
+      if (s === 'NCAAF') return 'americanfootball_ncaaf';
+      return s;
+    };
+    const sportKeys = [...new Set(toGrade.map(normSportKey))];
+    await prefetchOddsApiScores(sportKeys);
+  }
+
   for (const pick of toGrade) {
     try {
+      // Only grade bet types that evaluatePick can actually score.
+      // Props, alt lines, SGPs, and any non-standard type require player-level
+      // stats or are structurally ungradeble — leave them as PENDING forever.
+      if (!GRADEABLE_TYPES.has(pick.betType ?? '')) continue;
+
+      // Spread / Total picks without a stored line can't be evaluated.
+      const pickLine: number | null = pick.pickedLine ?? pick.line ?? null;
+      if ((pick.betType === 'Spread' || pick.betType === 'Total' ||
+           pick.betType === 'spreads' || pick.betType === 'totals') &&
+          pickLine === null) continue;
+
       const [away, home] = (pick.matchup ?? '').split(' @ ');
       if (!away || !home) continue;
 
+      const normKey = (() => {
+        const s = pick.sport ?? pick.sportKey ?? 'basketball_nba';
+        if (s === 'NBA')   return 'basketball_nba';
+        if (s === 'NFL')   return 'americanfootball_nfl';
+        if (s === 'MLB')   return 'baseball_mlb';
+        if (s === 'NHL')   return 'icehockey_nhl';
+        if (s === 'NCAAB') return 'basketball_ncaab';
+        if (s === 'NCAAF') return 'americanfootball_ncaaf';
+        return s;
+      })();
+
       const score = await getGameScore(
-        (() => {
-          const s = pick.sport ?? pick.sportKey ?? 'basketball_nba';
-          // Normalize short names to full sport keys
-          if (s === 'NBA') return 'basketball_nba';
-          if (s === 'NFL') return 'americanfootball_nfl';
-          if (s === 'MLB') return 'baseball_mlb';
-          if (s === 'NHL') return 'icehockey_nhl';
-          if (s === 'NCAAB') return 'basketball_ncaab';
-          if (s === 'NCAAF') return 'americanfootball_ncaaf';
-          return s;
-        })(),
+        normKey,
         home.trim(), away.trim(),
-        pick.gameTime ?? pick.startTime ?? pick.date
+        pick.gameTime ?? pick.startTime ?? pick.date,
+        pick.eventId ?? pick.id ?? undefined,   // passed to Odds API cache lookup
       );
 
       if (!score || !score.final) continue;
 
       const result = evaluatePick(
         pick.betType ?? '', pick.side ?? '',
-        pick.line ?? null,
+        pickLine,
         home.trim(), away.trim(),
         score.homeScore, score.awayScore
       );
@@ -393,7 +520,7 @@ export async function autoGradePicks(): Promise<number> {
         sport: pick.sport,
         betType: pick.betType,
         side: pick.side,
-        line: pick.line ?? null,
+        line: pickLine,
         grade: pick.grade,
         score: pick.score,
         signals: pick.signals ?? [],
@@ -452,9 +579,23 @@ function analyzeMissedSignals(pick: any, result: 'WIN' | 'LOSS' | 'PUSH'): strin
 // Build full retro analysis report
 // ------------------------------------
 
+// Bet types that evaluatePick can actually score (must match GRADEABLE_TYPES in autoGradePicks)
+const REPORT_GRADEABLE = new Set([
+  'Moneyline', 'h2h', 'Spread', 'spreads', 'Total', 'totals',
+]);
+
 export function buildRetroReport(): RetroReport {
   const results = loadRetroResults();
-  const graded = results.filter(r => r.gameResult !== 'PENDING');
+  // Only count bet types that evaluatePick can score.
+  // Props, alt lines, unrecognised types, and Total/Spread with no line
+  // were either never gradeable or were stored as PUSH incorrectly — exclude them.
+  const graded = results.filter(r =>
+    r.gameResult !== 'PENDING' &&
+    REPORT_GRADEABLE.has(r.betType) &&
+    !(r.gameResult === 'PUSH' && r.line === null &&
+      (r.betType === 'Total' || r.betType === 'spreads' ||
+       r.betType === 'Spread' || r.betType === 'totals'))
+  );
 
   const wins = graded.filter(r => r.gameResult === 'WIN').length;
   const losses = graded.filter(r => r.gameResult === 'LOSS').length;

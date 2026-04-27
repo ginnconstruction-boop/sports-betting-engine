@@ -33,6 +33,11 @@ import { applyRisk, printRiskSummary } from '../services/riskEngine';
 import { applySportIntelligence, printIntelSummary } from '../services/sportIntelligenceEngine';
 import { labelCandidates, printLabelSummary } from '../services/labelEngine';
 import { selectSlate, printSlateSummary } from '../services/slateSelector';
+import { validateDataIntegrity, printValidationSummary } from '../services/dataIntegrityValidator';
+import { applySignalDiversity, printSignalDiversitySummary } from '../services/signalDiversityEngine';
+import { applyOutcomeSignals, printOutcomeSummary, OutcomeContext } from '../services/outcomeSignalEngine';
+import { applySignalWeighting, printWeightingSummary } from '../services/signalWeightingEngine';
+import { printCreditStatus } from '../services/creditTracker';
 
 function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
   return new Promise<T>((resolve, reject) => {
@@ -209,17 +214,40 @@ export async function runMiddayFinalCard(options: { forceRefresh?: boolean } = {
   }); // 20 candidates -- sport diversity logic ensures all sports represented
   printTopTen(topBets, 24);
 
+  // -- [DECISION LAYER] Outcome context (Phase C) --
+  const outcomeContext: OutcomeContext = {
+    injuryMap,
+    lineupMap,
+    contextMap,
+    powerRatings,
+    gameSummaries: allSummaries.map(e => ({
+      eventId: e.eventId, homeTeam: e.homeTeam, awayTeam: e.awayTeam, matchup: e.matchup,
+    })),
+  };
+
   // ── Decision layer ──────────────────────────────────────────
   safeSync(() => {
     const decisionCandidates = mapAllToDecisionCandidates(topBets);
-    const qualResult         = qualifyCandidates(decisionCandidates);
+    // Phase A — Step 1: Data integrity validation (before qualification)
+    const todayEvents    = allSummaries.map(e => ({ matchup: e.matchup, homeTeam: e.homeTeam, awayTeam: e.awayTeam }));
+    const validResult    = validateDataIntegrity(decisionCandidates, todayEvents);
+    printValidationSummary(validResult);
+    // Phase A — Step 2: Qualification on verified candidates only
+    const qualResult         = qualifyCandidates(validResult.valid);
     const allCandidates      = [...qualResult.qualified, ...qualResult.rejected];
     printQualificationSummary(qualResult);
     const enriched           = enrichWithProbability(allCandidates);
     printProbabilitySummary(enriched);
-    const withIntel          = applySportIntelligence(enriched);
+    const withOutcome        = applyOutcomeSignals(enriched, outcomeContext);
+    printOutcomeSummary(withOutcome);
+    const withIntel          = applySportIntelligence(withOutcome);
     printIntelSummary(withIntel);
-    const withRisk           = applyRisk(withIntel);
+    // Phase A — Step 3: Signal diversity classification (before risk)
+    const withDiversity      = applySignalDiversity(withIntel);
+    printSignalDiversitySummary(withDiversity);
+    const withWeighting      = applySignalWeighting(withDiversity);
+    printWeightingSummary(withWeighting);
+    const withRisk           = applyRisk(withWeighting);
     printRiskSummary(withRisk);
     const labeled            = labelCandidates(withRisk);
     printLabelSummary(labeled);
@@ -241,4 +269,7 @@ export async function runMiddayFinalCard(options: { forceRefresh?: boolean } = {
   console.log(`  API requests used  : ${quota.requestsMade}`);
   console.log(`  Credits remaining  : ${quota.remainingRequests ?? 'unknown'}`);
   console.log(priorSummaries.length > 0 ? `  Movement vs        : morning scan\n` : `  Tip: Run morning scan first\n`);
+
+  // Monthly credit budget summary — shows tier, daily target, headroom
+  printCreditStatus();
 }

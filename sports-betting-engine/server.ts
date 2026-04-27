@@ -391,6 +391,102 @@ app.post('/api/autograde', requireAuth, async (req, res) => {
   }
 });
 
+// ── ATS Live (Option 1 — built from our scan snapshots) ──
+app.get('/api/ats/live', requireAuth, (req, res) => {
+  try {
+    const { buildATSReport, getATSDivergenceSummary } = require('./src/services/atsTracker');
+    const report     = buildATSReport();
+    const divergence = getATSDivergenceSummary();
+    res.json({ ok: true, report, divergence });
+  } catch (err: any) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+// ── ATS Historical (Option 3 — Odds API backfill) ──
+app.get('/api/ats/historical', requireAuth, (req, res) => {
+  try {
+    const { buildHistoricalReport } = require('./src/services/atsHistorical');
+    const report = buildHistoricalReport();
+    res.json({ ok: true, report });
+  } catch (err: any) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+// ── ATS Divergence (live vs historical comparison) ──
+app.get('/api/ats/divergence', requireAuth, (req, res) => {
+  try {
+    const { getATSDivergenceSummary, loadATSLive }       = require('./src/services/atsTracker');
+    const { loadATSHistorical }                           = require('./src/services/atsHistorical');
+
+    const liveDivergence  = getATSDivergenceSummary();          // within live timeframes
+    const liveStore       = loadATSLive();
+    const histStore       = loadATSHistorical();
+
+    // Cross-dataset divergence: live monthly vs historical overall
+    const crossDivergence: any[] = [];
+    for (const liveKey of Object.keys(liveStore.teamRecords)) {
+      const live = liveStore.teamRecords[liveKey];
+      const hist = histStore.teamRecords[liveKey];
+      if (!hist) continue;
+
+      for (const split of ['home', 'away', 'overall'] as const) {
+        const liveEntry = live[split];
+        const histEntry = split === 'home' ? hist.homeRecord : split === 'away' ? hist.awayRecord : hist.overall;
+        const liveMonthly = liveEntry.monthly;
+        const liveM  = liveMonthly.wins + liveMonthly.losses;
+        const histWL = histEntry.wins + histEntry.losses;
+        if (liveM < 3 || histWL < 5) continue;
+
+        const livePct = Math.round((liveMonthly.wins / liveM) * 100);
+        const histPct = Math.round((histEntry.wins / histWL) * 100);
+        const gap     = livePct - histPct;
+        if (Math.abs(gap) < 15) continue;
+
+        crossDivergence.push({
+          team:    live.team,
+          sport:   live.sportKey,
+          split,
+          livePct,
+          histPct,
+          gap,
+          signal:  gap >= 15 ? 'HOT vs BASELINE' : 'COLD vs BASELINE',
+        });
+      }
+    }
+
+    crossDivergence.sort((a, b) => Math.abs(b.gap) - Math.abs(a.gap));
+
+    res.json({
+      ok: true,
+      liveInternalDivergence: liveDivergence,    // monthly vs all-time within live data
+      crossDatasetDivergence: crossDivergence,   // live monthly vs historical baseline
+      hasHistoricalData: !histStore.gameResults.length === false,
+    });
+  } catch (err: any) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
+// ── ATS Historical Backfill trigger (costs credits — manual only) ──
+app.post('/api/ats/backfill', requireAuth, async (req, res) => {
+  try {
+    const { sportKey, gameDates, seasonLabel } = req.body;
+    if (!sportKey || !Array.isArray(gameDates) || gameDates.length === 0) {
+      return res.status(400).json({ ok: false, error: 'sportKey and gameDates[] required' });
+    }
+    if (gameDates.length > 60) {
+      return res.status(400).json({ ok: false, error: 'Max 60 dates per backfill request (~600 credits)' });
+    }
+    const { runHistoricalBackfill } = require('./src/services/atsHistorical');
+    const result = await runHistoricalBackfill(sportKey, gameDates, seasonLabel ?? 'Historical');
+    res.json({ ok: true, result });
+  } catch (err: any) {
+    res.status(500).json({ ok: false, error: err.message });
+  }
+});
+
 // ── Health ──
 app.get('/api/health', (_, res) => res.json({ ok: true, ts: new Date().toISOString() }));
 

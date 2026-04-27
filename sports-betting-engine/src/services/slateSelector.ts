@@ -69,6 +69,23 @@
 import { DecisionCandidate } from './decisionTypes';
 
 // ============================================================
+// BET volume cap constants
+// ============================================================
+
+/**
+ * Maximum BET-labeled candidates in a single slate before the
+ * weakest ones are capped down to LEAN via forcedTierCap.
+ */
+const BET_LEAN_CAP    = 3;
+
+/**
+ * Maximum BET-labeled candidates before further excess is capped
+ * to MONITOR.  Positions BET_LEAN_CAP+1 through BET_MONITOR_CAP
+ * receive 'LEAN'; positions above BET_MONITOR_CAP receive 'MONITOR'.
+ */
+const BET_MONITOR_CAP = 5;
+
+// ============================================================
 // Types
 // ============================================================
 
@@ -88,7 +105,24 @@ export interface SlateResult {
 // Internal helpers
 // ============================================================
 
-/** Maps finalDecisionLabel to a numeric priority (higher = better). */
+/**
+ * Returns the effective label for ranking and selection, accounting
+ * for forcedTierCap.  finalDecisionLabel is never mutated; this helper
+ * is the single place that resolves the override.
+ *
+ * forcedTierCap only downgrades BET candidates, so:
+ *   BET + forcedTierCap='LEAN'    → LEAN
+ *   BET + forcedTierCap='MONITOR' → MONITOR
+ *   LEAN + forcedTierCap='MONITOR' → MONITOR  (if ever applied)
+ *   anything else                 → finalDecisionLabel unchanged
+ */
+function effectiveLabel(c: DecisionCandidate): DecisionCandidate['finalDecisionLabel'] {
+  if (c.forcedTierCap === 'MONITOR') return 'MONITOR';
+  if (c.forcedTierCap === 'LEAN' && c.finalDecisionLabel === 'BET') return 'LEAN';
+  return c.finalDecisionLabel;
+}
+
+/** Maps a label to a numeric priority (higher = better). */
 function labelPriority(label: DecisionCandidate['finalDecisionLabel']): number {
   switch (label) {
     case 'BET':             return 4;
@@ -98,6 +132,55 @@ function labelPriority(label: DecisionCandidate['finalDecisionLabel']): number {
     case 'PASS':            return 0;
     default:                return 0;
   }
+}
+
+// ============================================================
+// BET volume cap
+// ============================================================
+
+/**
+ * Enforces maximum BET counts on the slate by setting forcedTierCap
+ * on the weakest-edge excess candidates.
+ *
+ * Sort order for "weakest": ascending adjustedEdge (lowest edge capped first).
+ * Positions 4–5 among BETs → forcedTierCap = 'LEAN'
+ * Positions 6+  among BETs → forcedTierCap = 'MONITOR'
+ *
+ * finalDecisionLabel is never changed.  Only forcedTierCap is set.
+ * Returns a new array; inputs are not mutated.
+ */
+function applyBetCap(candidates: DecisionCandidate[]): DecisionCandidate[] {
+  // Collect indices of BET-labeled candidates
+  const betIdxs: number[] = candidates
+    .map((c, i) => c.finalDecisionLabel === 'BET' ? i : -1)
+    .filter(i => i >= 0);
+
+  if (betIdxs.length <= BET_LEAN_CAP) return candidates;  // within cap — no changes
+
+  // Sort by adjustedEdge ASCENDING — weakest BETs are capped first
+  betIdxs.sort(
+    (a, b) => (candidates[a].adjustedEdge ?? 0) - (candidates[b].adjustedEdge ?? 0)
+  );
+  // After sort: betIdxs[0] = weakest edge, betIdxs[last] = strongest edge
+  // We want to KEEP the strongest (last BET_LEAN_CAP), cap the rest.
+  // Re-sort DESCENDING so rank 0 = strongest (protected)
+  betIdxs.sort(
+    (a, b) => (candidates[b].adjustedEdge ?? 0) - (candidates[a].adjustedEdge ?? 0)
+  );
+
+  const result: DecisionCandidate[] = candidates.map(c => ({ ...c }));
+
+  for (let rank = 0; rank < betIdxs.length; rank++) {
+    const idx = betIdxs[rank];
+    if (rank >= BET_MONITOR_CAP) {
+      result[idx] = { ...result[idx], forcedTierCap: 'MONITOR' as const };
+    } else if (rank >= BET_LEAN_CAP) {
+      result[idx] = { ...result[idx], forcedTierCap: 'LEAN' as const };
+    }
+    // rank 0 .. BET_LEAN_CAP-1: top 3 BETs — untouched
+  }
+
+  return result;
 }
 
 /** Small bonus for lower risk — only resolves ties with adjustedEdge. */
@@ -133,13 +216,14 @@ function compositeScore(c: DecisionCandidate): number {
 }
 
 /**
- * Sorts candidates by label priority (desc) then composite score (desc).
+ * Sorts candidates by effective label priority (desc) then composite score (desc).
+ * Uses effectiveLabel() so that forcedTierCap-capped BETs rank as LEAN/MONITOR.
  * Returns a new array — input is not mutated.
  */
 function rankCandidates(candidates: DecisionCandidate[]): DecisionCandidate[] {
   return [...candidates].sort((a, b) => {
     const labelDiff =
-      labelPriority(b.finalDecisionLabel) - labelPriority(a.finalDecisionLabel);
+      labelPriority(effectiveLabel(b)) - labelPriority(effectiveLabel(a));
     if (labelDiff !== 0) return labelDiff;
     return compositeScore(b) - compositeScore(a);
   });
@@ -218,7 +302,8 @@ function pickBestBet(ranked: DecisionCandidate[]): {
   reason:   string;
 } {
   const eligible = ranked.filter(c =>
-    (c.finalDecisionLabel === 'BET' || c.finalDecisionLabel === 'LEAN') &&
+    // Use effectiveLabel — a BET capped to LEAN is still eligible as LEAN
+    (effectiveLabel(c) === 'BET' || effectiveLabel(c) === 'LEAN') &&
     c.qualificationPassed === true &&
     (c.adjustedEdge ?? 0) > 0 &&
     (c.riskGrade === 'LOW' || c.riskGrade === 'MODERATE')
@@ -226,7 +311,7 @@ function pickBestBet(ranked: DecisionCandidate[]): {
 
   if (eligible.length === 0) {
     const anyBetLean = ranked.some(
-      c => c.finalDecisionLabel === 'BET' || c.finalDecisionLabel === 'LEAN'
+      c => effectiveLabel(c) === 'BET' || effectiveLabel(c) === 'LEAN'
     );
     return {
       reason: anyBetLean
@@ -270,8 +355,17 @@ function buildSelectionReasons(
     reasons.push(`Best Bet of the Slate — rank #${rank}`);
   }
 
+  // Show cap override when present
+  if (c.forcedTierCap) {
+    reasons.push(
+      `BET volume cap: ${c.finalDecisionLabel} → ${c.forcedTierCap} ` +
+      `(slate limit of ${c.forcedTierCap === 'LEAN' ? BET_LEAN_CAP : BET_MONITOR_CAP} BETs reached)`
+    );
+  }
+
   reasons.push(
-    `label: ${c.finalDecisionLabel ?? 'unlabeled'}, grade: ${c.finalGrade ?? '?'}`
+    `label: ${effectiveLabel(c) ?? 'unlabeled'}, grade: ${c.finalGrade ?? '?'}` +
+    (c.forcedTierCap ? ` [originally ${c.finalDecisionLabel}]` : '')
   );
 
   if (c.adjustedEdge !== undefined) {
@@ -318,27 +412,31 @@ export function selectSlate(candidates: DecisionCandidate[]): SlateResult {
     return { ranked: [], noBestBetReason: 'no candidates on this slate' };
   }
 
-  // 1. Initial ranking by label priority then composite score.
-  const initialRanked = rankCandidates(candidates);
+  // 1. BET volume cap — set forcedTierCap on excess BETs (by adjustedEdge).
+  //    Runs before ranking so that capped candidates sort as LEAN/MONITOR.
+  const capped = applyBetCap(candidates);
 
-  // 2. One-pass diversity swap on the top 3 slots.
+  // 2. Initial ranking by effective label priority then composite score.
+  const initialRanked = rankCandidates(capped);
+
+  // 3. One-pass diversity swap on the top 3 slots.
   const diverseRanked = applyDiversitySwap(initialRanked);
 
-  // 3. Identify matchups that appear more than once (for annotation).
+  // 4. Identify matchups that appear more than once (for annotation).
   const corrMatchups = new Set<string>();
   const matchupCounts = new Map<string, number>();
-  for (const c of candidates) {
+  for (const c of capped) {
     matchupCounts.set(c.matchup, (matchupCounts.get(c.matchup) ?? 0) + 1);
   }
   for (const [m, n] of matchupCounts) {
     if (n > 1) corrMatchups.add(m);
   }
 
-  // 4. Best Bet selection (operates on the diversity-adjusted order).
+  // 5. Best Bet selection (operates on the diversity-adjusted order).
   const { bestBet: bestBetCandidate, reason: bestBetReason } =
     pickBestBet(diverseRanked);
 
-  // 5. Annotate every candidate with slateRank, isBestBet, selectionReasons.
+  // 6. Annotate every candidate with slateRank, isBestBet, selectionReasons.
   const ranked = diverseRanked.map((c, idx) => {
     const rank     = idx + 1;
     const isBest   = bestBetCandidate !== undefined && c.id === bestBetCandidate.id;
@@ -392,7 +490,9 @@ export function printSlateSummary(result: SlateResult): void {
         : `${bestBet.matchup} ${bestBet.side}`)
     : 'none';
 
-  console.log(`  [SLATE]  ranked: ${ranked.length} | best bet: ${bestBetLabel}`);
+  const cappedCount = ranked.filter(c => c.forcedTierCap !== undefined).length;
+  const capSuffix   = cappedCount > 0 ? ` | BET cap: ${cappedCount} downgraded` : '';
+  console.log(`  [SLATE]  ranked: ${ranked.length} | best bet: ${bestBetLabel}${capSuffix}`);
 
   // ---- Top 3 detail block ----
   const topN = ranked.slice(0, 3);
@@ -401,9 +501,13 @@ export function printSlateSummary(result: SlateResult): void {
     console.log(`  --- Top ${topN.length} slate candidate${plural} ---`);
 
     for (const c of topN) {
-      const label    = c.finalDecisionLabel ?? 'UNLABELED';
-      const grade    = c.finalGrade         ?? '?';
-      const tag      = `[${label}/${grade}]`;
+      // When a BET cap is active, show original → capped label so the
+      // output is self-explanatory (e.g. [BET→LEAN/A cap]).
+      const effLabel = effectiveLabel(c) ?? 'UNLABELED';
+      const grade    = c.finalGrade     ?? '?';
+      const tag      = c.forcedTierCap
+        ? `[${c.finalDecisionLabel}→${c.forcedTierCap}/${grade} cap]`
+        : `[${effLabel}/${grade}]`;
       const name     = c.playerName
         ? `${c.playerName} ${c.market ?? ''} ${c.side}`.trim()
         : `${c.matchup} ${c.side}`;
@@ -413,7 +517,7 @@ export function printSlateSummary(result: SlateResult): void {
       const bestFlag = c.isBestBet ? ' ★ BEST BET' : '';
 
       console.log(
-        `    #${c.slateRank} ${tag.padEnd(22)} ${name.substring(0, 38).padEnd(38)} | ` +
+        `    #${c.slateRank} ${tag.padEnd(24)} ${name.substring(0, 38).padEnd(38)} | ` +
         `adjEdge: ${adjStr} | risk: ${c.riskGrade ?? '?'}${bestFlag}`
       );
       for (const r of (c.selectionReasons ?? []).slice(0, 2)) {
