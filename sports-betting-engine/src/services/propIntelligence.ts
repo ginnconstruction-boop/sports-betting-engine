@@ -542,6 +542,203 @@ export function generatePropPrediction(
   };
 }
 
+// ============================================================
+// MLB-specific signal injection
+//
+// Runs AFTER generatePropPrediction() so it never touches NBA/NHL
+// logic. Fires only when sport = baseball AND the relevant data
+// is present in context/matchup/static tables.
+//
+// Signal types added here:
+//   PARK_FACTOR_EDGE        — static park factor lookup by homeTeam
+//   INNINGS_PROJECTION_EDGE — ctx.pitcherProjection data when present
+//   PITCHER_K_MATCHUP       — matchup detail contains K/strikeout/whiff
+//   OPP_CONTACT_WEAKNESS    — matchup detail contains contact/weak/whiff
+// ============================================================
+
+/**
+ * Park factors by OddsAPI home team name.
+ * Values > 1.0 = hitter-friendly; < 1.0 = pitcher-friendly.
+ * Source: multi-year park factor data (5+ seasons).
+ */
+const MLB_PARK_FACTORS: Record<string, number> = {
+  'Colorado Rockies':     1.15,   // Coors — high altitude
+  'Boston Red Sox':       1.08,   // Fenway — short wall, porch
+  'Cincinnati Reds':      1.06,   // GABP
+  'Texas Rangers':        1.05,   // Globe Life — warm, open roof
+  'New York Yankees':     1.04,   // Yankee Stadium — short RF
+  'Chicago Cubs':         1.03,   // Wrigley — wind-dependent
+  'Toronto Blue Jays':    1.02,   // Rogers Centre
+  'Atlanta Braves':       0.97,   // Truist Park
+  'Los Angeles Dodgers':  0.97,   // Dodger Stadium — spacious
+  'New York Mets':        0.96,   // Citi Field
+  'Seattle Mariners':     0.94,   // T-Mobile Park
+  'Oakland Athletics':    0.94,   // Oakland Coliseum
+  'San Francisco Giants': 0.93,   // Oracle Park — marine layer
+  'San Diego Padres':     0.93,   // Petco Park
+  'Miami Marlins':        0.92,   // loanDepot — spacious
+};
+
+/**
+ * Injects MLB-specific PropSignals into an existing prediction.
+ * Returns the original prediction object unchanged when no signals fire
+ * (no data present, or park factor does not align with bet direction).
+ */
+function injectMLBSignals(
+  prediction:  PropPrediction,
+  prop: {
+    marketKey?: string;
+    playerName: string;
+    team:       string;
+    side:       'over' | 'under';
+  },
+  homeTeam:   string,
+  _awayTeam:  string,
+  ctx:        any,
+  matchupPkg: any | null,
+): PropPrediction {
+  const mlbSignals: PropSignal[] = [];
+  let   mlbAdj     = 0;
+  const mk         = (prop.marketKey ?? '').toLowerCase();
+
+  const isPitcherProp =
+    mk.includes('pitcher') || mk.includes('strikeout') || mk.includes('outs_recorded');
+  const isBatterProp  =
+    mk.includes('batter')      || mk.includes('total_bases') ||
+    mk.includes('hits')        || mk.includes('runs_scored') ||
+    mk.includes('rbi')         || mk.includes('home_run');
+
+  // ── PARK_FACTOR_EDGE ────────────────────────────────────────
+  // Static lookup.  A hitter-friendly park supports batter OVER props
+  // and pitcher UNDER props (harder to go deep); pitcher-friendly parks
+  // support pitcher OVER props and batter UNDER props.
+  const pf = MLB_PARK_FACTORS[homeTeam] ?? null;
+  if (pf !== null && Math.abs(pf - 1.0) >= 0.05) {
+    const hitterPark = pf > 1.0;
+    const aligned =
+      (isBatterProp  && prop.side === 'over'  &&  hitterPark) ||
+      (isBatterProp  && prop.side === 'under' && !hitterPark) ||
+      (isPitcherProp && prop.side === 'over'  && !hitterPark) ||
+      (isPitcherProp && prop.side === 'under' &&  hitterPark);
+    if (aligned) {
+      const contribution = Math.abs(pf - 1.0) >= 0.10 ? 10 : 6;
+      mlbSignals.push({
+        type:              'PARK_FACTOR_EDGE',
+        detail:            `${homeTeam} park factor ${pf.toFixed(2)}x — ${hitterPark ? 'hitter-friendly' : 'pitcher-friendly'}, aligns with ${prop.side}`,
+        impact:            'positive',
+        magnitude:         Math.abs(pf - 1.0) >= 0.10 ? 'high' : 'medium',
+        side:              prop.side,
+        scoreContribution: contribution,
+      });
+      mlbAdj += contribution;
+    }
+  }
+
+  // ── INNINGS_PROJECTION_EDGE ──────────────────────────────────
+  // Fires only when game context carries pitcher projection data.
+  // Deep start (>5 IP projected) benefits pitcher OVER Ks; short
+  // outing (<4.5 IP) benefits pitcher UNDER.
+  if (isPitcherProp) {
+    const projInnings: number | null =
+      ctx?.pitcherProjection?.projectedInnings ??
+      ctx?.startingPitcher?.projectedInnings   ??
+      ctx?.pitcherLines?.projectedInnings      ??
+      null;
+    if (projInnings !== null) {
+      const avgInnings = 5.0;
+      const diff       = projInnings - avgInnings;
+      if (Math.abs(diff) >= 0.5) {
+        const deepStart = diff > 0;
+        const aligned   = (deepStart && prop.side === 'over') || (!deepStart && prop.side === 'under');
+        if (aligned) {
+          const contribution = Math.abs(diff) >= 1.5 ? 12 : 8;
+          mlbSignals.push({
+            type:              'INNINGS_PROJECTION_EDGE',
+            detail:            `Pitcher projected ${projInnings} IP (${diff > 0 ? '+' : ''}${diff.toFixed(1)} vs avg ${avgInnings}) — ${deepStart ? 'deep start, more K opportunities' : 'short outing expected, fewer Ks'}`,
+            impact:            'positive',
+            magnitude:         Math.abs(diff) >= 1.5 ? 'high' : 'medium',
+            side:              prop.side,
+            scoreContribution: contribution,
+          });
+          mlbAdj += contribution;
+        }
+      }
+    }
+  }
+
+  // ── PITCHER_K_MATCHUP ────────────────────────────────────────
+  // Walks the matchup package looking for any entry whose edgeDetail
+  // references strikeout / K-rate / whiff data.  Fires once (best match).
+  if (isPitcherProp && matchupPkg) {
+    outer: for (const [, matchupArr] of matchupPkg.matchups as Map<string, any[]>) {
+      for (const m of matchupArr) {
+        const detail = (m.edgeDetail ?? m.detail ?? '').toLowerCase();
+        const hasKData =
+          detail.includes('strikeout') || detail.includes(' k ') ||
+          detail.includes('k rate')    || detail.includes('whiff');
+        if (hasKData && (m.overEdge || m.underEdge)) {
+          const aligned =
+            (m.overEdge  && prop.side === 'over') ||
+            (m.underEdge && prop.side === 'under');
+          if (aligned) {
+            const contribution = m.matchupGrade === 'elite' ? 12 : 8;
+            mlbSignals.push({
+              type:              'PITCHER_K_MATCHUP',
+              detail:            m.edgeDetail ?? m.detail ?? `Favorable pitcher K matchup`,
+              impact:            'positive',
+              magnitude:         m.matchupGrade === 'elite' ? 'high' : 'medium',
+              side:              prop.side,
+              scoreContribution: contribution,
+            });
+            mlbAdj += contribution;
+            break outer;
+          }
+        }
+      }
+    }
+  }
+
+  // ── OPP_CONTACT_WEAKNESS ────────────────────────────────────
+  // Fires when the player-level matchup entry for this batter references
+  // contact / weakness / whiff data that aligns with the bet direction.
+  if (isBatterProp && matchupPkg) {
+    const playerMatchups: any[] = matchupPkg.matchups.get(prop.playerName) ?? [];
+    for (const m of playerMatchups) {
+      const detail = (m.edgeDetail ?? m.detail ?? '').toLowerCase();
+      const hasContactData =
+        detail.includes('contact') || detail.includes('weak') || detail.includes('whiff');
+      if (hasContactData && (m.overEdge || m.underEdge)) {
+        const aligned =
+          (m.overEdge  && prop.side === 'over') ||
+          (m.underEdge && prop.side === 'under');
+        if (aligned) {
+          const contribution =
+            (m.matchupGrade === 'elite' || m.matchupGrade === 'terrible') ? 10 : 7;
+          mlbSignals.push({
+            type:              'OPP_CONTACT_WEAKNESS',
+            detail:            m.edgeDetail ?? m.detail ?? `Opponent has contact weakness`,
+            impact:            'positive',
+            magnitude:         (m.matchupGrade === 'elite' || m.matchupGrade === 'terrible') ? 'high' : 'medium',
+            side:              prop.side,
+            scoreContribution: contribution,
+          });
+          mlbAdj += contribution;
+          break;
+        }
+      }
+    }
+  }
+
+  // Return original prediction unchanged when nothing fired
+  if (mlbSignals.length === 0) return prediction;
+
+  return {
+    ...prediction,
+    signals:         [...prediction.signals, ...mlbSignals],
+    scoreAdjustment: prediction.scoreAdjustment + mlbAdj,
+  };
+}
+
 // ------------------------------------
 // Batch: generate predictions for multiple props
 // ------------------------------------
@@ -671,7 +868,15 @@ export async function buildPropPredictions(
         );
 
         const key = `${prop.playerName}__${prop.statType}__${prop.side}`;
-        results.set(key, prediction);
+
+        // Inject MLB-specific signals AFTER the base prediction so that
+        // NBA/NHL props are never touched.  injectMLBSignals returns the
+        // original object unchanged when no MLB context data is present.
+        const finalPrediction = sportKey.includes('baseball')
+          ? injectMLBSignals(prediction, prop, homeTeam, awayTeam, ctx, matchupPkg)
+          : prediction;
+
+        results.set(key, finalPrediction);
       } catch { /* individual player errors are non-fatal */ }
     }
   }

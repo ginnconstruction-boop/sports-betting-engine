@@ -213,6 +213,29 @@ export async function scoreAllPropsWithIntelligence(
 
     if (!prediction) return { ...scored, intelligenceScore: 0 };
 
+    // ── Promote non-market signals into signals[] ──────────────────
+    // The base signals[] from scoreAllProps contains only book-comparison
+    // types (PRICE_EDGE, LINE_GAP, JUICE_GAP, LINE_VS_CONSENSUS).
+    // Any intelligence signal from buildPropPredictions that goes beyond
+    // pure price comparison is promoted here so that
+    // signalDiversityEngine.detectPriceOnly() correctly identifies
+    // candidates that have real model backing.
+    //
+    // Only medium/high magnitude signals are promoted — low magnitude
+    // signals do not constitute independent evidence strong enough to
+    // escape the price-only classification on their own.
+    const MARKET_STRUCTURE_SIGNALS = new Set([
+      'PRICE_EDGE', 'LINE_GAP', 'JUICE_GAP', 'LINE_VS_CONSENSUS',
+    ]);
+    const nonMarketIntelSignals = (prediction.signals ?? [])
+      .filter(s => !MARKET_STRUCTURE_SIGNALS.has(s.type))
+      .filter(s => s.magnitude === 'high' || s.magnitude === 'medium')
+      .map(s => s.type);
+
+    const enrichedSignals = nonMarketIntelSignals.length > 0
+      ? [...new Set([...scored.signals, ...nonMarketIntelSignals])]
+      : scored.signals;
+
     // Apply intelligence score adjustment
     const intelligenceScore = Math.min(Math.max(prediction.scoreAdjustment, -30), 30);
     const adjustedScore = Math.max(0, Math.min(100, scored.score + intelligenceScore));
@@ -264,10 +287,14 @@ export async function scoreAllPropsWithIntelligence(
 
     return {
       ...scored,
-      score: weightedScore,
+      score:        weightedScore,
       prediction,
       intelligenceScore,
       fullReasoning: cleanReasoning,
+      // Write enriched signals back so signalDiversityEngine sees them.
+      // signalCount is updated to match so downstream engines agree.
+      signals:      enrichedSignals,
+      signalCount:  enrichedSignals.length,
     };
   }).sort((a, b) => b.score - a.score);
 }
@@ -561,6 +588,6 @@ export function printTopProps(props: ScoredProp[]): void {
   }
 
   console.log(`\n  RAW SIGNAL SCAN — analysis input only. Final Card below is the recommendation.`);
-  console.log(`  Props: FanDuel + BetMGM  |  Min 2 signals  |  HOT BET only in Final Card`);
+  console.log(`  Props: FanDuel + BetMGM  |  Min 2 signals  |  [BET/A] label only in Final Card`);
   console.log(`  NOTE: Always verify player status before placing prop bets\n`);
 }
