@@ -460,20 +460,31 @@ function deriveMatchup(
   };
 }
 
-// ── ATS outcome signal — applies to ALL candidates ───────────
+// ── ATS outcome signal — game-line candidates only ───────────
 //
-// Routing rules (mirrors positive/negative merge pattern above):
-//   ATS_STRONG → outcomeSignals[] AND signals[] (positive — weighting engine benefits)
-//   ATS_WEAK   → outcomeSignals[] ONLY           (negative — does not inflate diversity)
-//   ATS_NEUTRAL→ skipped entirely               (no information value in neutral label)
+// Routing rules:
+//   ATS_STRONG → outcomeSignals[] ONLY  (supporting context — never touches signals[])
+//   ATS_WEAK   → outcomeSignals[] ONLY  (supporting context — never touches signals[])
+//   ATS_NEUTRAL→ skipped entirely       (no information value in neutral label)
 //
+// ATS is deliberately excluded from signals[] so it cannot:
+//   (a) flip a price-only candidate to multi-signal
+//   (b) unlock the BET label on a candidate that has no true predictive signals
+//
+// signals[] is reserved for true independent predictive signals only.
+// ATS is a supporting context signal — it adjusts edge in signalWeightingEngine
+// and is visible in weightingReasons, but it never changes classification.
+//
+// Props are excluded: team cover % is not a player prop predictor.
 // Gate: getATSOutcomeSignal enforces ≥ 20-game sample internally.
-// This function never fires for thin-data teams.
 
 function applyATSSignal(
   c:   DecisionCandidate,
   ctx: OutcomeContext,
 ): DecisionCandidate {
+  // Props excluded — team ATS is not a valid player prop signal
+  if (c.marketType === 'player_prop') return c;
+
   if (!c.team || !c.sportKey) return c;
 
   // Resolve home/away using gameSummaries; skip if unresolvable
@@ -485,16 +496,11 @@ function applyATSSignal(
   // Skip neutral — nothing actionable to record
   if (atsSig.signal === 'ATS_NEUTRAL') return c;
 
-  const existingOutcome = c.outcomeSignals ? [...c.outcomeSignals] : [];
-  const existingSignals = c.signals        ? [...c.signals]        : [];
-
+  // Write to outcomeSignals[] ONLY — signals[] is never touched
+  const existingOutcome   = c.outcomeSignals ? [...c.outcomeSignals] : [];
   const newOutcomeSignals = [...new Set([...existingOutcome, atsSig.signal])];
-  // ATS_STRONG only — negative stays in outcomeSignals exclusively
-  const newSignals = atsSig.signal === 'ATS_STRONG'
-    ? [...new Set([...existingSignals, 'ATS_STRONG'])]
-    : existingSignals;
 
-  return { ...c, outcomeSignals: newOutcomeSignals, signals: newSignals };
+  return { ...c, outcomeSignals: newOutcomeSignals };
 }
 
 // ── Core NBA prop enrichment ──────────────────────────────────

@@ -16,6 +16,9 @@ import { applyRisk, printRiskSummary } from '../services/riskEngine';
 import { applySportIntelligence, printIntelSummary } from '../services/sportIntelligenceEngine';
 import { labelCandidates, printLabelSummary } from '../services/labelEngine';
 import { selectSlate, printSlateSummary } from '../services/slateSelector';
+import { validateDataIntegrity, printValidationSummary } from '../services/dataIntegrityValidator';
+import { applySignalDiversity, printSignalDiversitySummary } from '../services/signalDiversityEngine';
+import { applyOutcomeSignals, printOutcomeSummary, OutcomeContext } from '../services/outcomeSignalEngine';
 
 export async function runFullScan(options: { forceRefresh?: boolean } = {}) {
   const sportKeys = getEnabledSports().map(s => s.key);
@@ -33,6 +36,18 @@ export async function runFullScan(options: { forceRefresh?: boolean } = {}) {
   const quota = getSessionQuota();
   saveSnapshot('FULL_SCAN', allSummaries, quota, 0, []);
 
+  // OutcomeContext — provides gameSummaries so applyATSSignal can resolve
+  // home/away for each candidate. Built once and reused across all decision
+  // layer blocks. No additional API calls required.
+  const outcomeContext: OutcomeContext = {
+    gameSummaries: allSummaries.map(e => ({
+      eventId:  e.eventId,
+      homeTeam: e.homeTeam,
+      awayTeam: e.awayTeam,
+      matchup:  e.matchup,
+    })),
+  };
+
   const topBets = getTopBets(allSummaries, 20, { windowHours: 24 }); // 20 candidates, sport diversity auto-applies
   printTopTen(topBets, 24);
 
@@ -43,7 +58,10 @@ export async function runFullScan(options: { forceRefresh?: boolean } = {}) {
   // Appended after existing output; does not affect scores, ranking, or saves.
   try {
     const decisionCandidates = mapAllToDecisionCandidates(topBets);
-    const qualResult = qualifyCandidates(decisionCandidates);
+    const todayEvents = allSummaries.map(e => ({ matchup: e.matchup, homeTeam: e.homeTeam, awayTeam: e.awayTeam }));
+    const validResult = validateDataIntegrity(decisionCandidates, todayEvents);
+    printValidationSummary(validResult);
+    const qualResult  = qualifyCandidates(validResult.valid);
     printQualificationSummary(qualResult);
   } catch { /* qualification pass is supplemental -- never block output */ }
 
@@ -60,9 +78,13 @@ export async function runFullScan(options: { forceRefresh?: boolean } = {}) {
   try {
     const decisionCandidates = mapAllToDecisionCandidates(topBets);
     const enriched           = enrichWithProbability(decisionCandidates);
-    const withIntel          = applySportIntelligence(enriched);
+    const withOutcome        = applyOutcomeSignals(enriched, outcomeContext);
+    printOutcomeSummary(withOutcome);
+    const withIntel          = applySportIntelligence(withOutcome);
     printIntelSummary(withIntel);
-    const withRisk           = applyRisk(withIntel);
+    const withDiversity      = applySignalDiversity(withIntel);
+    printSignalDiversitySummary(withDiversity);
+    const withRisk           = applyRisk(withDiversity);
     printRiskSummary(withRisk);
   } catch { /* risk engine is supplemental -- never block output */ }
 
@@ -72,11 +94,16 @@ export async function runFullScan(options: { forceRefresh?: boolean } = {}) {
   // labelCandidates runs (the mapper initialises it to false by default).
   try {
     const decisionCandidates = mapAllToDecisionCandidates(topBets);
-    const qualResult         = qualifyCandidates(decisionCandidates);
+    const todayEvents        = allSummaries.map(e => ({ matchup: e.matchup, homeTeam: e.homeTeam, awayTeam: e.awayTeam }));
+    const validResult        = validateDataIntegrity(decisionCandidates, todayEvents);
+    const qualResult         = qualifyCandidates(validResult.valid);
     const allCandidates      = [...qualResult.qualified, ...qualResult.rejected];
     const enriched           = enrichWithProbability(allCandidates);
-    const withIntel          = applySportIntelligence(enriched);
-    const withRisk           = applyRisk(withIntel);
+    const withOutcome        = applyOutcomeSignals(enriched, outcomeContext);
+    printOutcomeSummary(withOutcome);
+    const withIntel          = applySportIntelligence(withOutcome);
+    const withDiversity      = applySignalDiversity(withIntel);
+    const withRisk           = applyRisk(withDiversity);
     const labeled            = labelCandidates(withRisk);
     printLabelSummary(labeled);
   } catch { /* label engine is supplemental -- never block output */ }
@@ -86,11 +113,16 @@ export async function runFullScan(options: { forceRefresh?: boolean } = {}) {
   // of the Slate.  Does NOT affect existing output, saves, or alerts.
   try {
     const decisionCandidates = mapAllToDecisionCandidates(topBets);
-    const qualResult         = qualifyCandidates(decisionCandidates);
+    const todayEvents        = allSummaries.map(e => ({ matchup: e.matchup, homeTeam: e.homeTeam, awayTeam: e.awayTeam }));
+    const validResult        = validateDataIntegrity(decisionCandidates, todayEvents);
+    const qualResult         = qualifyCandidates(validResult.valid);
     const allCandidates      = [...qualResult.qualified, ...qualResult.rejected];
     const enriched           = enrichWithProbability(allCandidates);
-    const withIntel          = applySportIntelligence(enriched);
-    const withRisk           = applyRisk(withIntel);
+    const withOutcome        = applyOutcomeSignals(enriched, outcomeContext);
+    printOutcomeSummary(withOutcome);
+    const withIntel          = applySportIntelligence(withOutcome);
+    const withDiversity      = applySignalDiversity(withIntel);
+    const withRisk           = applyRisk(withDiversity);
     const labeled            = labelCandidates(withRisk);
     const slateResult        = selectSlate(labeled);
     printSlateSummary(slateResult);

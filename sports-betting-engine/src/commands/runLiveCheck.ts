@@ -14,6 +14,9 @@ import { applyRisk, printRiskSummary } from '../services/riskEngine';
 import { applySportIntelligence, printIntelSummary } from '../services/sportIntelligenceEngine';
 import { labelCandidates, printLabelSummary } from '../services/labelEngine';
 import { selectSlate, printSlateSummary } from '../services/slateSelector';
+import { validateDataIntegrity, printValidationSummary } from '../services/dataIntegrityValidator';
+import { applySignalDiversity, printSignalDiversitySummary } from '../services/signalDiversityEngine';
+import { applyOutcomeSignals, printOutcomeSummary, OutcomeContext } from '../services/outcomeSignalEngine';
 
 export async function runLiveCheck(options: { sportKeys?: string[]; forceRefresh?: boolean } = {}) {
   const sportKeys = options.sportKeys ?? getEnabledSports().map(s => s.key);
@@ -35,14 +38,31 @@ export async function runLiveCheck(options: { sportKeys?: string[]; forceRefresh
   // ── Decision layer ──────────────────────────────────────────
   try {
     const decisionCandidates = mapAllToDecisionCandidates(topBets);
-    const qualResult         = qualifyCandidates(decisionCandidates);
+    // Phase A — Step 1: Data integrity validation
+    const todayEvents    = allSummaries.map(e => ({ matchup: e.matchup, homeTeam: e.homeTeam, awayTeam: e.awayTeam }));
+    const validResult    = validateDataIntegrity(decisionCandidates, todayEvents);
+    printValidationSummary(validResult);
+    const qualResult         = qualifyCandidates(validResult.valid);
     const allCandidates      = [...qualResult.qualified, ...qualResult.rejected];
     printQualificationSummary(qualResult);
     const enriched           = enrichWithProbability(allCandidates);
     printProbabilitySummary(enriched);
-    const withIntel          = applySportIntelligence(enriched);
+    const outcomeContext: OutcomeContext = {
+      gameSummaries: allSummaries.map(e => ({
+        eventId:  e.eventId,
+        homeTeam: e.homeTeam,
+        awayTeam: e.awayTeam,
+        matchup:  e.matchup,
+      })),
+    };
+    const withOutcome        = applyOutcomeSignals(enriched, outcomeContext);
+    printOutcomeSummary(withOutcome);
+    const withIntel          = applySportIntelligence(withOutcome);
     printIntelSummary(withIntel);
-    const withRisk           = applyRisk(withIntel);
+    // Phase A — Step 3: Signal diversity classification (before risk)
+    const withDiversity      = applySignalDiversity(withIntel);
+    printSignalDiversitySummary(withDiversity);
+    const withRisk           = applyRisk(withDiversity);
     printRiskSummary(withRisk);
     const labeled            = labelCandidates(withRisk);
     printLabelSummary(labeled);
