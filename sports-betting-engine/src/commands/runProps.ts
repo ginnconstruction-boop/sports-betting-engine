@@ -35,6 +35,10 @@ import { applyRisk, printRiskSummary } from '../services/riskEngine';
 import { applySportIntelligence, printIntelSummary } from '../services/sportIntelligenceEngine';
 import { labelCandidates, printLabelSummary } from '../services/labelEngine';
 import { selectSlate, printSlateSummary } from '../services/slateSelector';
+import { validateDataIntegrity, printValidationSummary } from '../services/dataIntegrityValidator';
+import { applySignalDiversity, printSignalDiversitySummary } from '../services/signalDiversityEngine';
+import { applyOutcomeSignals, printOutcomeSummary, OutcomeContext } from '../services/outcomeSignalEngine';
+import { applySignalWeighting, printWeightingSummary } from '../services/signalWeightingEngine';
 
 function safeSync<T>(fn: () => T, fallback: T): T {
   try { return fn(); } catch { return fallback; }
@@ -232,12 +236,28 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
     }
     printTopProps(topProps);
 
+    // -- [DECISION LAYER] Outcome context (Phase C) --
+    // Built once and shared across all decision-layer blocks below.
+    // lineupMap uses the buildLineupMap result already computed above.
+    const outcomeContext: OutcomeContext = {
+      injuryMap,
+      lineupMap,
+      contextMap,
+      powerRatings,
+      gameSummaries: allSummaries.map(e => ({
+        eventId: e.eventId, homeTeam: e.homeTeam, awayTeam: e.awayTeam, matchup: e.matchup,
+      })),
+    };
+
     // -- [DECISION LAYER] Qualification pass --
     // Appended after existing prop output; does not affect scores,
     // ranking, saves, or alerts.
     safeSync(() => {
       const decisionCandidates = mapAllToDecisionCandidates(topProps);
-      const qualResult = qualifyCandidates(decisionCandidates);
+      const todayEvents = allSummaries.map(e => ({ matchup: e.matchup, homeTeam: e.homeTeam, awayTeam: e.awayTeam }));
+      const validResult = validateDataIntegrity(decisionCandidates, todayEvents);
+      printValidationSummary(validResult);
+      const qualResult  = qualifyCandidates(validResult.valid);
       printQualificationSummary(qualResult);
     }, undefined);
 
@@ -254,9 +274,15 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
     safeSync(() => {
       const decisionCandidates = mapAllToDecisionCandidates(topProps);
       const enriched           = enrichWithProbability(decisionCandidates);
-      const withIntel          = applySportIntelligence(enriched);
+      const withOutcome        = applyOutcomeSignals(enriched, outcomeContext);
+      printOutcomeSummary(withOutcome);
+      const withIntel          = applySportIntelligence(withOutcome);
       printIntelSummary(withIntel);
-      const withRisk           = applyRisk(withIntel);
+      const withDiversity      = applySignalDiversity(withIntel);
+      printSignalDiversitySummary(withDiversity);
+      const withWeighting      = applySignalWeighting(withDiversity);
+      printWeightingSummary(withWeighting);
+      const withRisk           = applyRisk(withWeighting);
       printRiskSummary(withRisk);
     }, undefined);
 
@@ -266,11 +292,17 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
     // so that qualificationPassed is correctly set before labelCandidates runs.
     safeSync(() => {
       const decisionCandidates = mapAllToDecisionCandidates(topProps);
-      const qualResult         = qualifyCandidates(decisionCandidates);
+      const todayEvents        = allSummaries.map(e => ({ matchup: e.matchup, homeTeam: e.homeTeam, awayTeam: e.awayTeam }));
+      const validResult        = validateDataIntegrity(decisionCandidates, todayEvents);
+      const qualResult         = qualifyCandidates(validResult.valid);
       const allCandidates      = [...qualResult.qualified, ...qualResult.rejected];
       const enriched           = enrichWithProbability(allCandidates);
-      const withIntel          = applySportIntelligence(enriched);
-      const withRisk           = applyRisk(withIntel);
+      const withOutcome        = applyOutcomeSignals(enriched, outcomeContext);
+      printOutcomeSummary(withOutcome);
+      const withIntel          = applySportIntelligence(withOutcome);
+      const withDiversity      = applySignalDiversity(withIntel);
+      const withWeighting      = applySignalWeighting(withDiversity);
+      const withRisk           = applyRisk(withWeighting);
       const labeled            = labelCandidates(withRisk);
       printLabelSummary(labeled);
     }, undefined);
@@ -280,11 +312,17 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
     // of the Slate.  Does NOT affect existing output, saves, or alerts.
     safeSync(() => {
       const decisionCandidates = mapAllToDecisionCandidates(topProps);
-      const qualResult         = qualifyCandidates(decisionCandidates);
+      const todayEvents        = allSummaries.map(e => ({ matchup: e.matchup, homeTeam: e.homeTeam, awayTeam: e.awayTeam }));
+      const validResult        = validateDataIntegrity(decisionCandidates, todayEvents);
+      const qualResult         = qualifyCandidates(validResult.valid);
       const allCandidates      = [...qualResult.qualified, ...qualResult.rejected];
       const enriched           = enrichWithProbability(allCandidates);
-      const withIntel          = applySportIntelligence(enriched);
-      const withRisk           = applyRisk(withIntel);
+      const withOutcome        = applyOutcomeSignals(enriched, outcomeContext);
+      printOutcomeSummary(withOutcome);
+      const withIntel          = applySportIntelligence(withOutcome);
+      const withDiversity      = applySignalDiversity(withIntel);
+      const withWeighting      = applySignalWeighting(withDiversity);
+      const withRisk           = applyRisk(withWeighting);
       const labeled            = labelCandidates(withRisk);
       const slateResult        = selectSlate(labeled);
       printSlateSummary(slateResult);

@@ -90,6 +90,11 @@ export const BET_FILTERS = {
   NEWS_REQUIRE_EXACT_TEAM_MATCH: true,
 };
 
+// Unit sizing -- 1 unit = $10
+// Used by printTopTen to express Kelly recommendations as units + dollars
+// Example: Kelly 1.0% of $1,000 bankroll = 1.0u / $10
+export const UNIT_SIZE = 10;
+
 // Context intelligence weights
 export const CONTEXT_WEIGHTS = {
   KEY_PLAYER_OUT_PENALTY:  -15,   // key player missing

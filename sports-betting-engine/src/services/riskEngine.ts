@@ -342,6 +342,25 @@ export function applyRisk(
       adjustedEdge = Math.round((adjustedWinProbability - impliedProb) * 1000) / 1000;
     }
 
+    // ----------------------------------------------------------
+    // Key number adjustment (applied last — before final clamp)
+    // The keyNumberAdjustment is set by keyNumberEngine.applyKeyNumbers()
+    // on SPREAD candidates near sport-specific key numbers.
+    // riskDeltaPct is always ≤ 0 (reduces adjustedEdge, never raises it).
+    // ----------------------------------------------------------
+    if (c.keyNumberAdjustment && c.keyNumberAdjustment.riskDeltaPct < 0) {
+      if (adjustedEdge !== undefined) {
+        adjustedEdge = Math.round(
+          (adjustedEdge + c.keyNumberAdjustment.riskDeltaPct) * 1000
+        ) / 1000;
+        // Clamp to a minimum of -0.50 (-50%) — never produce extreme negative edges
+        adjustedEdge = Math.max(-0.50, adjustedEdge);
+      }
+      // Also knock the risk score down to reflect the structural concern
+      riskScore -= 1;
+      flags.push(`key_number_${c.keyNumberAdjustment.sensitivity}`);
+    }
+
     return {
       ...c,
       riskScore,
@@ -386,11 +405,17 @@ export function printRiskSummary(candidates: DecisionCandidate[]): void {
 
   const edgeSign = avgAdjEdge >= 0 ? '+' : '';
 
+  const keyNumHigh = withRisk.filter(c => c.riskFlags?.includes('key_number_high')).length;
+  const keyNumMed  = withRisk.filter(c => c.riskFlags?.includes('key_number_medium')).length;
+  const keyNumLow  = withRisk.filter(c => c.riskFlags?.includes('key_number_low')).length;
+  const keyNumAny  = keyNumHigh + keyNumMed + keyNumLow;
+
   let summary =
     `  [RISK]    LOW: ${low} | MODERATE: ${moderate} | HIGH: ${high} | ` +
     `avg adjEdge: ${edgeSign}${(avgAdjEdge * 100).toFixed(1)}% | ` +
     `price_only: ${priceOnly} | stale_line: ${staleLine} | ` +
     `correlated: ${correlated} | volatile: ${volatile}`;
-  if (lowQuality > 0) summary += ` | low_quality_bet_type: ${lowQuality}`;
+  if (lowQuality > 0)  summary += ` | low_quality_bet_type: ${lowQuality}`;
+  if (keyNumAny  > 0)  summary += ` | key_number: ${keyNumAny} (H:${keyNumHigh} M:${keyNumMed} L:${keyNumLow})`;
   console.log(summary);
 }

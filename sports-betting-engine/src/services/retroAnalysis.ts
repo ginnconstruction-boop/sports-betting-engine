@@ -10,6 +10,7 @@ import https from 'https';
 import * as fs from 'fs';
 import * as path from 'path';
 import { getCompletedScores, CompletedScore } from '../api/oddsApiClient';
+import { CreditBudgetGuard } from './creditBudgetGuard';
 
 const SNAPSHOT_DIR = process.env.SNAPSHOT_DIR ?? './snapshots';
 const PICKS_FILE   = path.join(SNAPSHOT_DIR, 'picks_log.json');
@@ -32,12 +33,24 @@ export interface RetroResult {
   grade: string;
   score: number;
   signals: string[];           // signal types that fired
-  gameResult: 'WIN' | 'LOSS' | 'PUSH' | 'PENDING';
+  /**
+   * Grading outcome:
+   *   PENDING       — game has not been attempted yet (start time in future or
+   *                   not enough time has passed since game start).
+   *   WIN/LOSS/PUSH — final result, confirmed from score source.
+   *   MISSING_SCORE — grading was attempted after the expected game-end window
+   *                   but no score was found across all 4 sources. Never graded
+   *                   as a loss — treated as unresolvable and excluded from stats.
+   *   VOID          — manually voided (cancelled game, postponed, no action).
+   */
+  gameResult: 'WIN' | 'LOSS' | 'PUSH' | 'PENDING' | 'MISSING_SCORE' | 'VOID';
   actualScore: string | null;  // "112-108" etc
   margin: number | null;       // how much we won/lost by vs the line
   clvActual: number | null;    // actual closing line value
   missedSignals: string[];     // signals that WOULD have helped if present
   autoGraded: boolean;
+  /** Set when grading was attempted but no score was available. */
+  gradingNote?: string;
 }
 
 export interface SignalPerformance {
@@ -58,6 +71,10 @@ export interface RetroReport {
   dateAnalyzed: string;
   picksAnalyzed: number;
   autoGraded: number;
+  /** Picks where score was unresolvable after the game-end window. Never counted as losses. */
+  missingScoreCount: number;
+  /** Manually voided picks (postponed, cancelled). Never counted as losses. */
+  voidCount: number;
   overallRecord: { wins: number; losses: number; pushes: number; winRate: number };
   byGrade: Record<string, { wins: number; losses: number; winRate: number }>;
   bySport: Record<string, { wins: number; losses: number; winRate: number }>;
@@ -93,6 +110,7 @@ function fetchJson(url: string): Promise<any> {
 const ESPN_LEAGUES: Record<string, { sport: string; league: string }> = {
   basketball_nba:          { sport: 'basketball',   league: 'nba' },
   baseball_mlb:            { sport: 'baseball',     league: 'mlb' },
+  baseball_ncaa:           { sport: 'baseball',     league: 'college-baseball' },
   americanfootball_nfl:    { sport: 'football',     league: 'nfl' },
   americanfootball_ncaaf:  { sport: 'football',     league: 'college-football' },
   basketball_ncaab:        { sport: 'basketball',   league: 'mens-college-basketball' },
@@ -377,6 +395,42 @@ function saveSignalWeights(weights: Record<string, number>): void {
 }
 
 // ------------------------------------
+// Time-based grading gate
+// ------------------------------------
+
+/**
+ * Expected game duration in hours per sport key.
+ * Used to determine when a game should be definitively over.
+ * We add a 1-hour buffer beyond the typical duration to handle overtime,
+ * rain delays, and late-night West Coast finishes.
+ */
+const SPORT_GAME_DURATION_HOURS: Record<string, number> = {
+  americanfootball_nfl:   4,   // ~3h typical + buffer
+  americanfootball_ncaaf: 4,
+  basketball_nba:         3,   // ~2.5h typical + buffer
+  basketball_ncaab:       3,
+  baseball_mlb:           5,   // can run very long; 5h = safe buffer
+  baseball_ncaa:          4,   // college games typically shorter than MLB
+  icehockey_nhl:          3,
+};
+const DEFAULT_GAME_DURATION_HOURS = 4;
+
+/**
+ * Returns true when enough time has passed since game start that the game
+ * should definitely be over.
+ *
+ * Gate: gameTime + sport_duration_hours < now
+ *
+ * If this returns false the pick is left as PENDING — we never attempt to
+ * grade a game that may still be in progress.
+ */
+function isGradeReady(gameTime: string, sportKey: string): boolean {
+  const duration   = SPORT_GAME_DURATION_HOURS[sportKey] ?? DEFAULT_GAME_DURATION_HOURS;
+  const expectedEndMs = new Date(gameTime).getTime() + duration * 3_600_000;
+  return Date.now() > expectedEndMs;
+}
+
+// ------------------------------------
 // Auto-grade picks from ESPN scores
 // ------------------------------------
 
@@ -406,11 +460,13 @@ export async function autoGradePicks(): Promise<number> {
   );
   if (badIds.size > 0) {
     existingRetro = existingRetro.filter(r => !badIds.has(r.pickId));
-    // Also reset those picks to PENDING in picks_log so they're not stuck
+    // Reset those picks to PENDING in picks_log so they're re-evaluated below.
+    // Exception: MISSING_SCORE picks are not reset — they've been graded and
+    // are excluded from stats by design.
     let changed = false;
     for (let i = 0; i < picks.length; i++) {
       const id = picks[i].id ?? picks[i].pickId ?? `${picks[i].matchup}_${picks[i].date}`;
-      if (badIds.has(id)) {
+      if (badIds.has(id) && picks[i].gameResult !== 'MISSING_SCORE') {
         picks[i] = { ...picks[i], gameResult: 'PENDING', autoGraded: false };
         changed = true;
       }
@@ -419,22 +475,44 @@ export async function autoGradePicks(): Promise<number> {
     saveRetroResults(existingRetro);
   }
 
+  // Treat MISSING_SCORE and VOID as "done" — never re-attempt grading on them
   const gradedIds = new Set(existingRetro.map(r => r.pickId));
 
   let newlyGraded = 0;
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-  const cutoff = yesterday.toISOString();
+  // Rolling 30-hour window instead of UTC midnight yesterday.
+  // Prevents late US/Eastern and US/Pacific games (commenceTime = next UTC day)
+  // from being skipped until two UTC days after they finish.
+  const cutoff = new Date(Date.now() - 30 * 3_600_000).toISOString();
 
   const toGrade = picks.filter((p: any) => {
     // gameTime is the correct field name (startTime was old name)
     const gameTime = p.gameTime ?? p.startTime;
-    return (
-      (p.gameResult === 'PENDING' || !p.gameResult) &&
-      gameTime &&
-      gameTime < cutoff &&
-      !gradedIds.has(p.id ?? p.pickId ?? `${p.matchup}_${p.date}`)
-    );
+    if (!gameTime) return false;
+    if (gradedIds.has(p.id ?? p.pickId ?? `${p.matchup}_${p.date}`)) return false;
+
+    // Only attempt to grade picks that are genuinely unresolved
+    const status = p.gameResult ?? 'PENDING';
+    if (status !== 'PENDING' && status !== '') return false;
+
+    // Must have started before yesterday's cutoff (original check)
+    if (gameTime >= cutoff) return false;
+
+    // Time-based gate: only grade if the game should be definitively over.
+    // If isGradeReady() returns false the game may still be live — never attempt.
+    const normKey = (() => {
+      const s = p.sport ?? p.sportKey ?? '';
+      if (s === 'NBA')                                    return 'basketball_nba';
+      if (s === 'NFL')                                    return 'americanfootball_nfl';
+      if (s === 'MLB')                                    return 'baseball_mlb';
+      if (s === 'NHL')                                    return 'icehockey_nhl';
+      if (s === 'NCAAB')                                  return 'basketball_ncaab';
+      if (s === 'NCAAF')                                  return 'americanfootball_ncaaf';
+      if (s === 'NCAA Baseball' || s === 'ncaa baseball') return 'baseball_ncaa';
+      return s;
+    })();
+    if (!isGradeReady(gameTime, normKey)) return false;
+
+    return true;
   });
 
   // Pre-fetch completed scores from the Odds API once per sport key.
@@ -444,16 +522,27 @@ export async function autoGradePicks(): Promise<number> {
   if (toGrade.length > 0) {
     const normSportKey = (p: any): string => {
       const s = p.sport ?? p.sportKey ?? 'basketball_nba';
-      if (s === 'NBA')   return 'basketball_nba';
-      if (s === 'NFL')   return 'americanfootball_nfl';
-      if (s === 'MLB')   return 'baseball_mlb';
-      if (s === 'NHL')   return 'icehockey_nhl';
-      if (s === 'NCAAB') return 'basketball_ncaab';
-      if (s === 'NCAAF') return 'americanfootball_ncaaf';
+      if (s === 'NBA')                                    return 'basketball_nba';
+      if (s === 'NFL')                                    return 'americanfootball_nfl';
+      if (s === 'MLB')                                    return 'baseball_mlb';
+      if (s === 'NHL')                                    return 'icehockey_nhl';
+      if (s === 'NCAAB')                                  return 'basketball_ncaab';
+      if (s === 'NCAAF')                                  return 'americanfootball_ncaaf';
+      if (s === 'NCAA Baseball' || s === 'ncaa baseball') return 'baseball_ncaa';
       return s;
     };
     const sportKeys = [...new Set(toGrade.map(normSportKey))];
-    await prefetchOddsApiScores(sportKeys);
+    // Guard the Odds API score prefetch (2 credits per sport key).
+    // If the daily or per-run cap is exhausted, skip the prefetch — ESPN
+    // fallback sources still run and grading continues without penalty.
+    const gradingGuard = new CreditBudgetGuard();
+    const scoreCheck = gradingGuard.canSpend('scores', sportKeys.length);
+    if (!scoreCheck.allowed) {
+      console.warn(`[CreditGuard] Grading score prefetch blocked: ${scoreCheck.reason} (estimated ${scoreCheck.estimatedCost} credits, ${sportKeys.length} sports) — ESPN fallback active`);
+    } else {
+      gradingGuard.spend('scores', sportKeys.length);
+      await prefetchOddsApiScores(sportKeys);
+    }
   }
 
   for (const pick of toGrade) {
@@ -474,12 +563,13 @@ export async function autoGradePicks(): Promise<number> {
 
       const normKey = (() => {
         const s = pick.sport ?? pick.sportKey ?? 'basketball_nba';
-        if (s === 'NBA')   return 'basketball_nba';
-        if (s === 'NFL')   return 'americanfootball_nfl';
-        if (s === 'MLB')   return 'baseball_mlb';
-        if (s === 'NHL')   return 'icehockey_nhl';
-        if (s === 'NCAAB') return 'basketball_ncaab';
-        if (s === 'NCAAF') return 'americanfootball_ncaaf';
+        if (s === 'NBA')                                    return 'basketball_nba';
+        if (s === 'NFL')                                    return 'americanfootball_nfl';
+        if (s === 'MLB')                                    return 'baseball_mlb';
+        if (s === 'NHL')                                    return 'icehockey_nhl';
+        if (s === 'NCAAB')                                  return 'basketball_ncaab';
+        if (s === 'NCAAF')                                  return 'americanfootball_ncaaf';
+        if (s === 'NCAA Baseball' || s === 'ncaa baseball') return 'baseball_ncaa';
         return s;
       })();
 
@@ -490,7 +580,42 @@ export async function autoGradePicks(): Promise<number> {
         pick.eventId ?? pick.id ?? undefined,   // passed to Odds API cache lookup
       );
 
-      if (!score || !score.final) continue;
+      if (!score || !score.final) {
+        // Score not found — but the game-duration window has passed, so this
+        // should be over. Mark as MISSING_SCORE so it's excluded from W/L stats
+        // rather than counting as a loss or sitting as PENDING indefinitely.
+        // We NEVER silently grade a missing-score pick as a loss.
+        const pickIdx2 = picks.findIndex((p: any) =>
+          (p.id ?? p.pickId ?? `${p.matchup}_${p.date}`) ===
+          (pick.id ?? pick.pickId ?? `${pick.matchup}_${pick.date}`)
+        );
+        if (pickIdx2 >= 0 && !picks[pickIdx2].gameResult) {
+          picks[pickIdx2].gameResult  = 'MISSING_SCORE';
+          picks[pickIdx2].autoGraded  = true;
+          picks[pickIdx2].gradingNote = 'score unavailable from all 4 sources after game-end window';
+        }
+        existingRetro.push({
+          pickId:       pick.id ?? pick.pickId ?? `${pick.matchup}_${pick.date}`,
+          date:         pick.date ?? (pick.startTime ?? '').split('T')[0],
+          matchup:      pick.matchup,
+          sport:        pick.sport,
+          betType:      pick.betType,
+          side:         pick.side,
+          line:         pick.pickedLine ?? pick.line ?? null,
+          grade:        pick.grade,
+          score:        pick.score,
+          signals:      pick.signals ?? [],
+          gameResult:   'MISSING_SCORE',
+          actualScore:  null,
+          margin:       null,
+          clvActual:    null,
+          missedSignals:[],
+          autoGraded:   true,
+          gradingNote:  'score unavailable from all 4 sources after game-end window',
+        });
+        newlyGraded++;
+        continue;
+      }
 
       const result = evaluatePick(
         pick.betType ?? '', pick.side ?? '',
@@ -589,13 +714,21 @@ export function buildRetroReport(): RetroReport {
   // Only count bet types that evaluatePick can score.
   // Props, alt lines, unrecognised types, and Total/Spread with no line
   // were either never gradeable or were stored as PUSH incorrectly — exclude them.
+  // MISSING_SCORE and VOID are excluded from W/L stats — never count as losses.
+  // PENDING = game not yet attempted; also excluded.
   const graded = results.filter(r =>
     r.gameResult !== 'PENDING' &&
+    r.gameResult !== 'MISSING_SCORE' &&
+    r.gameResult !== 'VOID' &&
     REPORT_GRADEABLE.has(r.betType) &&
     !(r.gameResult === 'PUSH' && r.line === null &&
       (r.betType === 'Total' || r.betType === 'spreads' ||
        r.betType === 'Spread' || r.betType === 'totals'))
   );
+
+  // Count non-gradeable for transparency in the report output
+  const missingScoreCount = results.filter(r => r.gameResult === 'MISSING_SCORE').length;
+  const voidCount         = results.filter(r => r.gameResult === 'VOID').length;
 
   const wins = graded.filter(r => r.gameResult === 'WIN').length;
   const losses = graded.filter(r => r.gameResult === 'LOSS').length;
@@ -762,6 +895,8 @@ export function buildRetroReport(): RetroReport {
     dateAnalyzed: new Date().toISOString(),
     picksAnalyzed: graded.length,
     autoGraded: results.filter(r => r.autoGraded).length,
+    missingScoreCount,
+    voidCount,
     overallRecord: { wins, losses, pushes, winRate },
     byGrade,
     bySport,
@@ -785,6 +920,12 @@ export function printRetroReport(report: RetroReport): void {
   console.log(`  Picks analyzed  : ${report.picksAnalyzed}`);
   console.log(`  Auto-graded     : ${report.autoGraded}`);
   console.log(`  Overall record  : ${report.overallRecord.wins}-${report.overallRecord.losses}-${report.overallRecord.pushes}  (${report.overallRecord.winRate}% win rate)`);
+  if ((report.missingScoreCount ?? 0) > 0) {
+    console.log(`  Missing scores  : ${report.missingScoreCount}  (excluded from record — never counted as losses)`);
+  }
+  if ((report.voidCount ?? 0) > 0) {
+    console.log(`  Voided          : ${report.voidCount}  (cancelled/postponed — excluded from record)`);
+  }
 
   if (report.picksAnalyzed < 5) {
     console.log('\n  Not enough graded picks for meaningful analysis yet.');
@@ -808,7 +949,10 @@ export function printRetroReport(report: RetroReport): void {
     const total = data.wins + data.losses;
     if (total < 2) continue;
     const icon = data.winRate >= 55 ? '[+]' : data.winRate >= 50 ? '[~]' : '[-]';
-    const label = sport.replace('basketball_','').replace('americanfootball_','').replace('icehockey_','').toUpperCase();
+    const label = sport
+      .replace('basketball_','').replace('americanfootball_','')
+      .replace('icehockey_','').replace('baseball_','')
+      .toUpperCase();
     console.log(`  ${icon} ${label.padEnd(10)} ${data.wins}-${data.losses}  ${data.winRate}%`);
   }
 

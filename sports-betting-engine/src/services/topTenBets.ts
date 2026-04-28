@@ -29,7 +29,7 @@ import { applyLearnedWeights } from './retroAnalysis';
 import { ConfirmedLineup, LineupNews } from './lineupConfirmation';
 import { MarketEfficiencyScore } from './marketEfficiency';
 import { CLVProjection } from './clvProjection';
-import { BET_FILTERS } from '../config/betFilters';
+import { BET_FILTERS, UNIT_SIZE } from '../config/betFilters';
 import { calculateKelly, scoreToProbability } from './propEdgeFactors';
 import { MarketIntelligence } from './sharpIntelligence';
 import { GameWeather } from './weatherData';
@@ -1014,10 +1014,10 @@ export function printTopTen(bets: ScoredBet[], windowHours = 24): void {
   const monTierCount = bets.filter(b => b.tier === 'MONITOR').length;
 
   p('+==============================================================+');
-  p('|                   TOP PLAYS -- FILTERED                      |');
+  p('|            RAW SIGNAL SCAN — analysis input only             |');
   p(`|  ${time.padEnd(60)}|`);
   p(`|  [HOT] BET: ${String(betTierCount).padEnd(3)} | [OK] LEAN: ${String(leanTierCount).padEnd(3)} | ? MONITOR: ${String(monTierCount).padEnd(3)} | Next ${windowHours}hrs          |`);
-  p(`|  Min ${BET_FILTERS.MIN_SIGNALS_REQUIRED} aligned signals | FanDuel + BetMGM only              |`);
+  p(`|  Min ${BET_FILTERS.MIN_SIGNALS_REQUIRED} signals | FanDuel+BetMGM | See FINAL CARD below      |`);
   p('+==============================================================+');
 
   if (bets.length === 0) {
@@ -1061,12 +1061,17 @@ export function printTopTen(bets: ScoredBet[], windowHours = 24): void {
     }
     p(`  +---------------------------------------------------------`);
     p(`  |  ${bet.betType.padEnd(12)}  [OK] BET: ${bet.side}`);
-    // Proper quarter-Kelly sizing using model win probability vs implied probability
+    // Unit sizing: 1u = $UNIT_SIZE ($10). Kelly pct of bankroll → units + dollars.
     const bankroll = parseFloat(process.env.BANKROLL ?? '0');
     const kPct = bet.kellyPct > 0 ? bet.kellyPct : 0.5;
-    const bankrollLine = bankroll > 0
-      ? `  |  [$] Kelly: ${kPct.toFixed(1)}% of $${bankroll.toFixed(0)} = $${Math.round(bankroll * kPct / 100)} suggested`
-      : `  |  [$] Kelly: ${kPct.toFixed(1)}% of bankroll (set BANKROLL=<amount> in .env for $ sizing)`;
+    let bankrollLine: string;
+    if (bankroll > 0) {
+      const dollarAmt  = Math.round(bankroll * kPct / 100);
+      const unitAmt    = dollarAmt / UNIT_SIZE;
+      bankrollLine = `  |  [$] Kelly: ${kPct.toFixed(1)}% of $${bankroll.toFixed(0)} = ${unitAmt.toFixed(1)}u / $${dollarAmt}  (1u = $${UNIT_SIZE})`;
+    } else {
+      bankrollLine = `  |  [$] Kelly: ${kPct.toFixed(1)}% of bankroll  |  1u = $${UNIT_SIZE}  (set BANKROLL in .env for unit sizing)`;
+    }
     p(bankrollLine);
     p(`  |  [PIN] Best   : ${bet.bestUserBook.padEnd(10)}  ${userPriceStr}${userLineStr}`);
     if (bet.altUserBook && bet.altUserPrice !== null) {

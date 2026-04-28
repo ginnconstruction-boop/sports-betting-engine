@@ -533,3 +533,126 @@ export function printSlateSummary(result: SlateResult): void {
     );
   }
 }
+
+// ============================================================
+// Final Card — authoritative post-pipeline output
+// ============================================================
+
+/**
+ * Prints the final recommended card from a completed SlateResult.
+ *
+ * Only shows candidates with actionable labels (BET / LEAN / MONITOR /
+ * BEST_PRICE_ONLY). PASS candidates are excluded — they are not
+ * presented as plays to the user.
+ *
+ * This is the authoritative "recommended plays" surface.  The raw
+ * scanner output (printTopTen) is a signal-analysis input; this
+ * function is the decision-engine output that should be acted on.
+ *
+ * Call once at the end of the decision pipeline in scan runners.
+ */
+export function printFinalCard(result: SlateResult): void {
+  const { ranked, bestBet, noBestBetReason } = result;
+
+  // Filter to actionable labels only — never show PASS candidates
+  const actionable = ranked.filter(c => {
+    const lbl = effectiveLabel(c);
+    return lbl === 'BET' || lbl === 'LEAN' || lbl === 'MONITOR' || lbl === 'BEST_PRICE_ONLY';
+  });
+
+  const time = new Date().toLocaleString('en-US', {
+    timeZone: 'America/Chicago',
+    weekday: 'short', month: 'short', day: 'numeric',
+    hour: 'numeric', minute: '2-digit',
+  });
+
+  const betCnt  = actionable.filter(c => effectiveLabel(c) === 'BET').length;
+  const leanCnt = actionable.filter(c => effectiveLabel(c) === 'LEAN').length;
+  const monCnt  = actionable.filter(c => effectiveLabel(c) === 'MONITOR').length;
+  const bpoCnt  = actionable.filter(c => effectiveLabel(c) === 'BEST_PRICE_ONLY').length;
+
+  console.log('\n');
+  console.log('+==============================================================+');
+  console.log('|         FINAL RECOMMENDED PLAYS — DECISION ENGINE            |');
+  console.log(`|  ${time.padEnd(60)}|`);
+  console.log(
+    `|  BET: ${String(betCnt).padEnd(2)} | LEAN: ${String(leanCnt).padEnd(2)} | ` +
+    `MONITOR: ${String(monCnt).padEnd(2)} | BEST_PRICE: ${String(bpoCnt).padEnd(2)} | ` +
+    `PASS excluded${' '.repeat(15)}|`
+  );
+  console.log('+==============================================================+');
+
+  if (actionable.length === 0) {
+    console.log('\n  No actionable candidates survived the full decision pipeline.');
+    console.log(`  All ${ranked.length} candidate(s) received PASS label.`);
+    if (noBestBetReason) console.log(`  Reason: ${noBestBetReason}`);
+    console.log('  Review the raw signal scan output for context.\n');
+    return;
+  }
+
+  // Helper: print one candidate card
+  function printCard(c: DecisionCandidate): void {
+    const lbl      = effectiveLabel(c) ?? 'UNKNOWN';
+    const grade    = c.finalGrade ?? '?';
+    const capNote  = c.forcedTierCap ? ` [was ${c.finalDecisionLabel}]` : '';
+    const bestFlag = c.isBestBet ? ' ★ BEST BET' : '';
+    const name     = c.playerName
+      ? `${c.playerName} ${c.market ?? ''} ${c.side}`.trim()
+      : `${c.matchup} ${c.side}`;
+    const adjStr   = c.adjustedEdge !== undefined
+      ? `${c.adjustedEdge >= 0 ? '+' : ''}${(c.adjustedEdge * 100).toFixed(1)}%`
+      : 'n/a';
+    const priceStr = c.bestPrice !== undefined
+      ? `${c.bestPrice > 0 ? '+' : ''}${c.bestPrice}`
+      : '';
+
+    console.log(`\n  +---------------------------------------------------------`);
+    console.log(`  |  #${String(c.slateRank).padEnd(3)} [${lbl}/${grade}]${capNote}${bestFlag}`);
+    console.log(`  |  ${name}`);
+    console.log(`  |  adj.edge: ${adjStr}  |  risk: ${c.riskGrade ?? '?'}  |  ${c.sport}`);
+    if (c.bestBook || priceStr) {
+      console.log(`  |  Book: ${(c.bestBook ?? 'n/a').padEnd(14)}  Price: ${priceStr}`);
+    }
+    for (const reason of (c.labelReasons ?? []).slice(0, 2)) {
+      console.log(`  |  → ${reason}`);
+    }
+    console.log(`  +---------------------------------------------------------`);
+  }
+
+  // ---- BET ----
+  const bets = actionable.filter(c => effectiveLabel(c) === 'BET');
+  if (bets.length > 0) {
+    console.log(`\n  ████  BET  (${bets.length})  — all signals aligned, clear actionable edge`);
+    bets.forEach(printCard);
+  }
+
+  // ---- LEAN ----
+  const leans = actionable.filter(c => effectiveLabel(c) === 'LEAN');
+  if (leans.length > 0) {
+    console.log(`\n  ───  LEAN  (${leans.length})  — meaningful edge, acceptable risk`);
+    leans.forEach(printCard);
+  }
+
+  // ---- MONITOR ----
+  const monitors = actionable.filter(c => effectiveLabel(c) === 'MONITOR');
+  if (monitors.length > 0) {
+    console.log(`\n  ───  MONITOR  (${monitors.length})  — worth tracking, confirm closer to game`);
+    monitors.forEach(printCard);
+  }
+
+  // ---- BEST_PRICE_ONLY ----
+  const bestPrices = actionable.filter(c => effectiveLabel(c) === 'BEST_PRICE_ONLY');
+  if (bestPrices.length > 0) {
+    console.log(`\n  ───  BEST PRICE ONLY  (${bestPrices.length})  — best book available, no conviction signal`);
+    bestPrices.forEach(printCard);
+  }
+
+  // ---- No best bet note ----
+  if (!bestBet) {
+    console.log(`\n  Note: ${noBestBetReason ?? 'No best bet identified on this slate.'}`);
+  }
+
+  console.log('\n  Key: BET=edge+signal+low-risk | LEAN=good spot | MONITOR=watch later');
+  console.log('  BEST_PRICE_ONLY=book gap exists, no signal confirmation | PASS=excluded');
+  console.log('  Raw signal scan above is analysis input — this card is the recommendation\n');
+}

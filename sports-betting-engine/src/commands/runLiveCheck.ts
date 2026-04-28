@@ -13,13 +13,39 @@ import { enrichWithProbability, printProbabilitySummary } from '../services/prob
 import { applyRisk, printRiskSummary } from '../services/riskEngine';
 import { applySportIntelligence, printIntelSummary } from '../services/sportIntelligenceEngine';
 import { labelCandidates, printLabelSummary } from '../services/labelEngine';
-import { selectSlate, printSlateSummary } from '../services/slateSelector';
+import { selectSlate, printSlateSummary, printFinalCard } from '../services/slateSelector';
 import { validateDataIntegrity, printValidationSummary } from '../services/dataIntegrityValidator';
 import { applySignalDiversity, printSignalDiversitySummary } from '../services/signalDiversityEngine';
 import { applyOutcomeSignals, printOutcomeSummary, OutcomeContext } from '../services/outcomeSignalEngine';
+import { applyKeyNumbers, printKeyNumberSummary } from '../services/keyNumberEngine';
+import { CreditBudgetGuard } from '../services/creditBudgetGuard';
+import { EventFetchCache } from '../services/eventFetchCache';
 
 export async function runLiveCheck(options: { sportKeys?: string[]; forceRefresh?: boolean } = {}) {
-  const sportKeys = options.sportKeys ?? getEnabledSports().map(s => s.key);
+  const requestedKeys = options.sportKeys ?? getEnabledSports().map(s => s.key);
+
+  // ── Free event pre-flight (0 credits) ───────────────────────
+  // Live check window: 12 hours. Filter out sports with no games soon.
+  const eventCache = new EventFetchCache();
+  await eventCache.prefetch(requestedKeys);
+  const sportKeys = eventCache.filterActive(requestedKeys, 12);
+  eventCache.printSummary(requestedKeys, 12);
+
+  if (sportKeys.length === 0) {
+    console.log('  [EVENTS] No sports have games in the next 12 hours — live check skipped.\n');
+    return;
+  }
+
+  // ── Credit guard ────────────────────────────────────────────
+  const guard = new CreditBudgetGuard();
+
+  const oddsCheck = guard.canSpend('odds', sportKeys.length);
+  if (!oddsCheck.allowed) {
+    console.warn(`[CreditGuard] Live check blocked: ${oddsCheck.reason} (estimated ${oddsCheck.estimatedCost} credits, ${sportKeys.length} sports)`);
+    guard.printStatus();
+    return;
+  }
+  guard.spend('odds', sportKeys.length);
 
   const { results: rawBySport } = await getOddsForAllSports(
     sportKeys, INITIAL_MARKETS, true
@@ -62,13 +88,17 @@ export async function runLiveCheck(options: { sportKeys?: string[]; forceRefresh
     // Phase A — Step 3: Signal diversity classification (before risk)
     const withDiversity      = applySignalDiversity(withIntel);
     printSignalDiversitySummary(withDiversity);
-    const withRisk           = applyRisk(withDiversity);
+    // Key number adjustment — spread proximity risk (after diversity, before risk engine)
+    const withKeyNumbers     = applyKeyNumbers(withDiversity);
+    printKeyNumberSummary(withKeyNumbers);
+    const withRisk           = applyRisk(withKeyNumbers);
     printRiskSummary(withRisk);
     const labeled            = labelCandidates(withRisk);
     printLabelSummary(labeled);
     const slateResult        = selectSlate(labeled);
     printSlateSummary(slateResult);
-  } catch { }
+    printFinalCard(slateResult);
+  } catch (e) { console.warn(`  [DECISION LAYER] pipeline error — final card unavailable: ${e instanceof Error ? e.message : String(e)}`); }
 
   console.log(`  API requests used : ${quota.requestsMade}`);
   console.log(`  Credits remaining : ${quota.remainingRequests ?? 'unknown'}\n`);

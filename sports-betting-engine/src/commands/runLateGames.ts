@@ -26,6 +26,10 @@ import { applyRisk, printRiskSummary } from '../services/riskEngine';
 import { applySportIntelligence, printIntelSummary } from '../services/sportIntelligenceEngine';
 import { labelCandidates, printLabelSummary } from '../services/labelEngine';
 import { selectSlate, printSlateSummary } from '../services/slateSelector';
+import { validateDataIntegrity, printValidationSummary } from '../services/dataIntegrityValidator';
+import { applySignalDiversity, printSignalDiversitySummary } from '../services/signalDiversityEngine';
+import { applyOutcomeSignals, printOutcomeSummary, OutcomeContext } from '../services/outcomeSignalEngine';
+import { applySignalWeighting, printWeightingSummary } from '../services/signalWeightingEngine';
 
 function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
   return new Promise<T>((resolve, reject) => {
@@ -127,6 +131,17 @@ export async function runLateGames(options: { forceRefresh?: boolean } = {}) {
     sharpIntel, injuryMap, contextMap, steamMoves, learnedWeights,
   });
 
+  // -- [DECISION LAYER] Outcome context (Phase C, partial) --
+  // lineupMap and powerRatings are not built in this lightweight scan.
+  // Injury opportunity and team form still available via injuryMap + contextMap.
+  const outcomeContext: OutcomeContext = {
+    injuryMap,
+    contextMap,
+    gameSummaries: allSummaries.map(e => ({
+      eventId: e.eventId, homeTeam: e.homeTeam, awayTeam: e.awayTeam, matchup: e.matchup,
+    })),
+  };
+
   if (topBets.length === 0) {
     console.log('  No qualifying plays found in the 90-minute window.');
     console.log('  Games may not meet minimum signal/book requirements.\n');
@@ -136,14 +151,25 @@ export async function runLateGames(options: { forceRefresh?: boolean } = {}) {
     // ── Decision layer ────────────────────────────────────────
     safeSync(() => {
       const decisionCandidates = mapAllToDecisionCandidates(topBets);
-      const qualResult         = qualifyCandidates(decisionCandidates);
+      // Phase A — Step 1: Data integrity validation
+      const todayEvents    = allSummaries.map(e => ({ matchup: e.matchup, homeTeam: e.homeTeam, awayTeam: e.awayTeam }));
+      const validResult    = validateDataIntegrity(decisionCandidates, todayEvents);
+      printValidationSummary(validResult);
+      const qualResult         = qualifyCandidates(validResult.valid);
       const allCandidates      = [...qualResult.qualified, ...qualResult.rejected];
       printQualificationSummary(qualResult);
       const enriched           = enrichWithProbability(allCandidates);
       printProbabilitySummary(enriched);
-      const withIntel          = applySportIntelligence(enriched);
+      const withOutcome        = applyOutcomeSignals(enriched, outcomeContext);
+      printOutcomeSummary(withOutcome);
+      const withIntel          = applySportIntelligence(withOutcome);
       printIntelSummary(withIntel);
-      const withRisk           = applyRisk(withIntel);
+      // Phase A — Step 3: Signal diversity classification (before risk)
+      const withDiversity      = applySignalDiversity(withIntel);
+      printSignalDiversitySummary(withDiversity);
+      const withWeighting      = applySignalWeighting(withDiversity);
+      printWeightingSummary(withWeighting);
+      const withRisk           = applyRisk(withWeighting);
       printRiskSummary(withRisk);
       const labeled            = labelCandidates(withRisk);
       printLabelSummary(labeled);

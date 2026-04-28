@@ -455,6 +455,14 @@ export interface DecisionCandidate {
   weightingProfile?: string;
 
   /**
+   * Set by keyNumberEngine.applyKeyNumbers() for SPREAD game-line candidates
+   * on sports with defined key numbers (NFL, NBA, NCAAF, NCAAB).
+   * Undefined for all other candidates (props, moneylines, totals, off-season sports).
+   * The riskDeltaPct is read by the risk engine to lower adjustedEdge proportionally.
+   */
+  keyNumberAdjustment?: import('./keyNumberEngine').KeyNumberAdjustment;
+
+  /**
    * Set by the slate selector when the BET volume cap is exceeded.
    * Overrides finalDecisionLabel for display and selection purposes only —
    * finalDecisionLabel itself is never changed (full audit trail preserved).

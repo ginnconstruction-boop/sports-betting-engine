@@ -15,13 +15,43 @@ import { enrichWithProbability, printProbabilitySummary } from '../services/prob
 import { applyRisk, printRiskSummary } from '../services/riskEngine';
 import { applySportIntelligence, printIntelSummary } from '../services/sportIntelligenceEngine';
 import { labelCandidates, printLabelSummary } from '../services/labelEngine';
-import { selectSlate, printSlateSummary } from '../services/slateSelector';
+import { selectSlate, printSlateSummary, printFinalCard } from '../services/slateSelector';
 import { validateDataIntegrity, printValidationSummary } from '../services/dataIntegrityValidator';
 import { applySignalDiversity, printSignalDiversitySummary } from '../services/signalDiversityEngine';
 import { applyOutcomeSignals, printOutcomeSummary, OutcomeContext } from '../services/outcomeSignalEngine';
+import { CreditBudgetGuard } from '../services/creditBudgetGuard';
+import { EventFetchCache } from '../services/eventFetchCache';
+import { applyKeyNumbers, printKeyNumberSummary } from '../services/keyNumberEngine';
 
 export async function runFullScan(options: { forceRefresh?: boolean } = {}) {
-  const sportKeys = getEnabledSports().map(s => s.key);
+  const allSportKeys = getEnabledSports().map(s => s.key);
+
+  // ── Credit guard ────────────────────────────────────────────
+  // Instantiated once per run. canSpend() is checked before each credit-consuming
+  // API call; spend() reserves the credits immediately after the check passes.
+  const guard = new CreditBudgetGuard();
+
+  // ── Free event pre-flight (0 credits) ───────────────────────
+  // Fetch upcoming event IDs for every sport before spending credits.
+  // Sports with no games in the next 24h are filtered out — no point
+  // pulling odds for off-season sports.
+  const eventCache = new EventFetchCache();
+  await eventCache.prefetch(allSportKeys);
+  const sportKeys = eventCache.filterActive(allSportKeys, 24);
+  eventCache.printSummary(allSportKeys, 24);
+
+  if (sportKeys.length === 0) {
+    console.log('  [EVENTS] No sports have games in the next 24 hours — skipping full scan.\n');
+    return;
+  }
+
+  const oddsCheck = guard.canSpend('odds', sportKeys.length);
+  if (!oddsCheck.allowed) {
+    console.warn(`[CreditGuard] Full scan blocked: ${oddsCheck.reason} (estimated ${oddsCheck.estimatedCost} credits, ${sportKeys.length} sports)`);
+    guard.printStatus();
+    return;
+  }
+  guard.spend('odds', sportKeys.length);
 
   const { results: rawBySport } = await getOddsForAllSports(
     sportKeys, INITIAL_MARKETS, options.forceRefresh ?? false
@@ -63,7 +93,7 @@ export async function runFullScan(options: { forceRefresh?: boolean } = {}) {
     printValidationSummary(validResult);
     const qualResult  = qualifyCandidates(validResult.valid);
     printQualificationSummary(qualResult);
-  } catch { /* qualification pass is supplemental -- never block output */ }
+  } catch (e) { console.warn(`  [DECISION LAYER] qualification pass error: ${e instanceof Error ? e.message : String(e)}`); }
 
   // -- [DECISION LAYER] Probability enrichment --
   // Independent block -- remaps from topBets directly.
@@ -71,7 +101,7 @@ export async function runFullScan(options: { forceRefresh?: boolean } = {}) {
     const decisionCandidates = mapAllToDecisionCandidates(topBets);
     const enriched = enrichWithProbability(decisionCandidates);
     printProbabilitySummary(enriched);
-  } catch { /* probability enrichment is supplemental -- never block output */ }
+  } catch (e) { console.warn(`  [DECISION LAYER] probability enrichment error: ${e instanceof Error ? e.message : String(e)}`); }
 
   // -- [DECISION LAYER] Risk engine --
   // Independent block -- does not filter; only adds risk fields and prints summary.
@@ -84,9 +114,11 @@ export async function runFullScan(options: { forceRefresh?: boolean } = {}) {
     printIntelSummary(withIntel);
     const withDiversity      = applySignalDiversity(withIntel);
     printSignalDiversitySummary(withDiversity);
-    const withRisk           = applyRisk(withDiversity);
+    const withKeyNumbers     = applyKeyNumbers(withDiversity);
+    printKeyNumberSummary(withKeyNumbers);
+    const withRisk           = applyRisk(withKeyNumbers);
     printRiskSummary(withRisk);
-  } catch { /* risk engine is supplemental -- never block output */ }
+  } catch (e) { console.warn(`  [DECISION LAYER] risk engine error: ${e instanceof Error ? e.message : String(e)}`); }
 
   // -- [DECISION LAYER] Label engine --
   // Independent block -- does not affect existing output, saves, or alerts.
@@ -103,10 +135,11 @@ export async function runFullScan(options: { forceRefresh?: boolean } = {}) {
     printOutcomeSummary(withOutcome);
     const withIntel          = applySportIntelligence(withOutcome);
     const withDiversity      = applySignalDiversity(withIntel);
-    const withRisk           = applyRisk(withDiversity);
+    const withKeyNumbers     = applyKeyNumbers(withDiversity);
+    const withRisk           = applyRisk(withKeyNumbers);
     const labeled            = labelCandidates(withRisk);
     printLabelSummary(labeled);
-  } catch { /* label engine is supplemental -- never block output */ }
+  } catch (e) { console.warn(`  [DECISION LAYER] label engine error: ${e instanceof Error ? e.message : String(e)}`); }
 
   // -- [DECISION LAYER] Slate selector --
   // Independent block -- identifies best candidates and the single Best Bet
@@ -122,11 +155,13 @@ export async function runFullScan(options: { forceRefresh?: boolean } = {}) {
     printOutcomeSummary(withOutcome);
     const withIntel          = applySportIntelligence(withOutcome);
     const withDiversity      = applySignalDiversity(withIntel);
-    const withRisk           = applyRisk(withDiversity);
+    const withKeyNumbers     = applyKeyNumbers(withDiversity);
+    const withRisk           = applyRisk(withKeyNumbers);
     const labeled            = labelCandidates(withRisk);
     const slateResult        = selectSlate(labeled);
     printSlateSummary(slateResult);
-  } catch { /* slate selector is supplemental -- never block output */ }
+    printFinalCard(slateResult);
+  } catch (e) { console.warn(`  [DECISION LAYER] slate/final card error — final card unavailable: ${e instanceof Error ? e.message : String(e)}`); }
 
   console.log(`  API requests used : ${quota.requestsMade}`);
   console.log(`  Credits remaining : ${quota.remainingRequests ?? 'unknown'}\n`);
