@@ -234,7 +234,11 @@ export async function enterResults(): Promise<void> {
 
 export function rebuildPNL(): PNLRecord {
   const picks = loadPicks();
-  const graded = picks.filter(p => p.gameResult !== 'PENDING');
+  const graded = picks.filter(p =>
+    p.gameResult !== 'PENDING' &&
+    p.gameResult !== 'MISSING_SCORE' &&
+    p.gameResult !== 'VOID'
+  );
 
   const record: PNLRecord = {
     totalPicks: picks.length,

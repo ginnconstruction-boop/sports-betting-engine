@@ -27,6 +27,7 @@ import * as fs   from 'fs';
 import * as path from 'path';
 import { EventSummary }     from '../types/odds';
 import { getCompletedScores, CompletedScore } from '../api/oddsApiClient';
+import { CreditBudgetGuard } from './creditBudgetGuard';
 
 const SNAPSHOT_DIR = process.env.SNAPSHOT_DIR ?? './snapshots';
 const ATS_LIVE_FILE = path.join(SNAPSHOT_DIR, 'ats_live.json');
@@ -312,6 +313,13 @@ export async function updateATSTracker(): Promise<number> {
 
   for (const sportKey of sportKeys) {
     try {
+      const atsGuard = new CreditBudgetGuard();
+      const scoreCheck = atsGuard.canSpend('scores', 1);
+      if (!scoreCheck.allowed) {
+        console.warn(`[CreditGuard] ATS score fetch blocked: ${scoreCheck.reason}`);
+        return 0;
+      }
+      atsGuard.spend('scores', 1);
       const scores: CompletedScore[] = await getCompletedScores(sportKey, 3);
 
       for (const score of scores) {

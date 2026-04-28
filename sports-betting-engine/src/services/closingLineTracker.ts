@@ -45,7 +45,7 @@ export interface PickRecord {
   closingFetched: boolean;
   closingFetchedAt: string;
   // Optional: game result tracking (manual entry)
-  gameResult: 'WIN' | 'LOSS' | 'PUSH' | 'PENDING';
+  gameResult: 'WIN' | 'LOSS' | 'PUSH' | 'PENDING' | 'MISSING_SCORE' | 'VOID';
   notes: string;
   kellyPct?: number;             // quarter-Kelly stake % at time of pick
 }
