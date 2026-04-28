@@ -1,7 +1,7 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
-import { getOddsForAllSports, getSessionQuota } from '../api/oddsApiClient';
+import { getOddsForAllSports, getSessionQuota, countUncachedSports } from '../api/oddsApiClient';
 import { normalizeEvents } from '../services/normalizeOdds';
 import { aggregateAllEvents } from '../services/aggregateMarkets';
 import { getTopBets, printTopTen } from '../services/topTenBets';
@@ -39,13 +39,17 @@ export async function runLiveCheck(options: { sportKeys?: string[]; forceRefresh
   // ── Credit guard ────────────────────────────────────────────
   const guard = new CreditBudgetGuard();
 
-  const oddsCheck = guard.canSpend('odds', sportKeys.length);
-  if (!oddsCheck.allowed) {
-    console.warn(`[CreditGuard] Live check blocked: ${oddsCheck.reason} (estimated ${oddsCheck.estimatedCost} credits, ${sportKeys.length} sports)`);
-    guard.printStatus();
-    return;
+  // Only charge for sports not already in the 5-minute in-memory cache.
+  const uncachedCount = countUncachedSports(sportKeys);
+  if (uncachedCount > 0) {
+    const oddsCheck = guard.canSpend('odds', uncachedCount);
+    if (!oddsCheck.allowed) {
+      console.warn(`[CreditGuard] Live check blocked: ${oddsCheck.reason} (estimated ${oddsCheck.estimatedCost} credits, ${uncachedCount} uncached sports)`);
+      guard.printStatus();
+      return;
+    }
+    guard.spend('odds', uncachedCount);
   }
-  guard.spend('odds', sportKeys.length);
 
   const { results: rawBySport } = await getOddsForAllSports(
     sportKeys, INITIAL_MARKETS, true

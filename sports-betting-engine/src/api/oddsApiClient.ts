@@ -466,6 +466,18 @@ export function getSessionQuota(): QuotaUsage {
 }
 
 /**
+ * Returns the number of sport keys not currently satisfied by the in-memory
+ * cache.  Use this before guard.spend() so credits reflect real API usage
+ * rather than theoretical worst-case.
+ */
+export function countUncachedSports(sportKeys: string[]): number {
+  return sportKeys.filter(sk => {
+    const entry = cache.get(sk);
+    return !entry || Date.now() - entry.fetchedAt >= CACHE_WINDOW_MS;
+  }).length;
+}
+
+/**
  * Clear the in-memory cache for a sport (or all sports).
  */
 export function clearCache(sportKey?: string): void {

@@ -298,6 +298,25 @@ export function scoreAllProps(
 
       if (!consensusPrice) continue;
 
+      // ── MLB hard filter (Step 1) ─────────────────────────────
+      // Binary batter UNDERs at 0.5 are structurally unplayable:
+      // a single hit, total base, or run negates the wager entirely.
+      // These map to binary_hitter_under / one_event_kills_bet /
+      // fragile_prop_type flags in sportIntelligenceEngine and must
+      // never reach scoring regardless of price edge.
+      if (sportKey === 'baseball_mlb' && side === 'Under') {
+        const mk = (prop.marketKey ?? '').toLowerCase();
+        const isBatterMarket =
+          mk.includes('batter') ||
+          mk.includes('total_bases') ||
+          mk.includes('hits') ||
+          mk.includes('runs_scored') ||
+          mk.includes('rbi') ||
+          mk.includes('home_run') ||
+          mk.includes('stolen_base');
+        if (isBatterMarket && !mk.includes('pitcher')) continue;
+      }
+
       // Filter to user-accessible books only for recommendation
       const userOffers = offers.filter(o =>
         userBookKeys.includes(o.bookmakerKey) && o.price !== null
@@ -481,7 +500,9 @@ export function printTopProps(props: ScoredProp[]): void {
       p.grade === 'B+' ? '[#######---]' : p.grade === 'B'  ? '[######----]' :
       p.grade === 'C+' ? '[####------]' : '[###-------]';
 
-    const tierIcon = p.tier === 'BET' ? '[HOT] BET' : p.tier === 'LEAN' ? '[OK] LEAN' : '? MONITOR';
+    // Step 3: tier here is pre-risk (raw signal only).
+    // [HOT] BET is reserved for the post-risk Final Card only.
+    const tierIcon = p.tier === 'BET' ? '[SIG] BET' : p.tier === 'LEAN' ? '[OK] LEAN' : '[~] MONITOR';
     const hours = p.hoursUntilGame < 2 ? `~${Math.round(p.hoursUntilGame * 60)}min` : `~${Math.round(p.hoursUntilGame)}hrs`;
 
     console.log(`\n  +---------------------------------------------------------`);
@@ -524,19 +545,22 @@ export function printTopProps(props: ScoredProp[]): void {
     console.log(`  +---------------------------------------------------------`);
   }
 
+  // Step 6: Output sections — A) actionable signal, B) monitor, C) note
+  // HOT BET label is post-risk only (Final Card). This is the raw signal scan.
   if (betTier.length > 0) {
-    console.log(`\n  ????????????????  [HOT] BET  (${betTier.length})  ?????????????????????????`);
+    console.log(`\n  ── A) RAW SIGNAL BET (${betTier.length}) — pre-risk, see Final Card ──────────────`);
     betTier.forEach(printProp);
   }
   if (leanTier.length > 0) {
-    console.log(`\n  ????????????????  [OK] LEAN  (${leanTier.length})  ????????????????????????`);
+    console.log(`\n  ── A) RAW SIGNAL LEAN (${leanTier.length}) ─────────────────────────────────────`);
     leanTier.forEach(printProp);
   }
   if (monTier.length > 0) {
-    console.log(`\n  ????????????????  ? MONITOR  (${monTier.length})  ??????????????????????`);
+    console.log(`\n  ── B) MONITOR (${monTier.length}) ───────────────────────────────────────────────`);
     monTier.forEach(printProp);
   }
 
-  console.log(`\n  Props: FanDuel + BetMGM  |  ? = line gap alert  |  Min 2 signals`);
+  console.log(`\n  RAW SIGNAL SCAN — analysis input only. Final Card below is the recommendation.`);
+  console.log(`  Props: FanDuel + BetMGM  |  Min 2 signals  |  HOT BET only in Final Card`);
   console.log(`  NOTE: Always verify player status before placing prop bets\n`);
 }

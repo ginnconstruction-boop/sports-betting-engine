@@ -99,7 +99,15 @@ interface GuardDayState {
 }
 
 function todayStr(): string {
-  return new Date().toISOString().slice(0, 10);
+  // Use local timezone (default: America/Chicago) so the daily cap resets at
+  // local midnight rather than UTC midnight. Produces YYYY-MM-DD, same format
+  // as the existing guard_day.json key — no migration required.
+  return new Date().toLocaleDateString('en-US', {
+    timeZone: process.env.TZ ?? 'America/Chicago',
+    year:     'numeric',
+    month:    '2-digit',
+    day:      '2-digit',
+  }).replace(/(\d+)\/(\d+)\/(\d+)/, '$3-$1-$2');
 }
 
 function loadGuardDay(): GuardDayState {

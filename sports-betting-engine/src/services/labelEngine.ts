@@ -132,6 +132,57 @@ function classify(c: DecisionCandidate): Classification {
   }
 
   // ----------------------------------------------------------
+  // Priority 1b: MLB player prop quality gate (Steps 2, 4, 5)
+  //
+  // MLB props require non-market signal diversity to be actionable.
+  // Price structure alone (LINE_GAP / PRICE_EDGE / JUICE_GAP) is NOT
+  // sufficient evidence for a prop recommendation in baseball.
+  //
+  //   Pitcher prop + price-only  → PASS (MODEL_INCOMPLETE)
+  //     A pitcher prop with only book-comparison signals has no
+  //     pitcher-specific model basis. Scoring purely from market
+  //     structure is not meaningful for starting pitcher outcomes.
+  //
+  //   Any other MLB prop + price-only → BEST_PRICE_ONLY (max C)
+  //     Signal diversity is required. Even a wide line gap is not
+  //     a bet recommendation without outcome/context confirmation.
+  //
+  // This block fires ONLY when sport = MLB AND marketType = player_prop
+  // AND isPriceOnlyCandidate = true. All other sports are unaffected.
+  // ----------------------------------------------------------
+  if (c.sport === 'MLB' && c.marketType === 'player_prop' && c.isPriceOnlyCandidate) {
+    const m = (c.market ?? '').toLowerCase();
+    const isPitcherProp =
+      m.includes('pitcher') || m.includes('strikeout') || m.includes('outs_recorded');
+
+    if (isPitcherProp) {
+      // Step 4: pitcher prop with no model signals → PASS
+      return {
+        label:   'PASS',
+        reasons: [
+          'MODEL_INCOMPLETE: pitcher prop requires pitcher-specific intelligence',
+          'no outcome or context signals — price structure only',
+        ],
+      };
+    }
+
+    // Steps 2 + 5: batter/other MLB prop with no non-market signals → cap BEST_PRICE_ONLY
+    if ((c.impliedEdge ?? 0) > 0 && adjEdge > 0) {
+      return {
+        label:   'BEST_PRICE_ONLY',
+        reasons: [
+          'MLB prop: signal diversity required — price structure only',
+          `adjusted edge: ${pct(adjEdge)} — no outcome or context signals`,
+        ],
+      };
+    }
+    return {
+      label:   'PASS',
+      reasons: ['MLB prop: price-only with no positive edge'],
+    };
+  }
+
+  // ----------------------------------------------------------
   // Priority 2: BEST_PRICE_ONLY
   // Price-only signal + positive but fragile adjusted edge.
   // The candidate has the best accessible number but no
@@ -230,11 +281,12 @@ function classify(c: DecisionCandidate): Classification {
   };
 }
 
-function toGrade(label: FinalLabel, adjustedEdge: number): string {
+function toGrade(label: FinalLabel, adjustedEdge: number, sport?: string): string {
   switch (label) {
     case 'BET':             return adjustedEdge >= 0.10 ? 'A+' : 'A';
     case 'LEAN':            return adjustedEdge >= 0.07 ? 'B+' : 'B';
-    case 'BEST_PRICE_ONLY': return 'C+';
+    // Step 2: MLB props forced to BEST_PRICE_ONLY get grade C (not C+)
+    case 'BEST_PRICE_ONLY': return sport === 'MLB' ? 'C' : 'C+';
     case 'MONITOR':         return 'C';
     case 'PASS':            return 'D';
   }
@@ -271,7 +323,7 @@ export function labelCandidates(
     return {
       ...c,
       finalDecisionLabel: label,
-      finalGrade:         toGrade(label, c.adjustedEdge ?? 0),
+      finalGrade:         toGrade(label, c.adjustedEdge ?? 0, c.sport),
       labelReasons:       allReasons,
     };
   });

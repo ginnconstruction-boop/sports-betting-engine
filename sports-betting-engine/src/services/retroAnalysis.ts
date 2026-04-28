@@ -589,7 +589,8 @@ export async function autoGradePicks(): Promise<number> {
           (p.id ?? p.pickId ?? `${p.matchup}_${p.date}`) ===
           (pick.id ?? pick.pickId ?? `${pick.matchup}_${pick.date}`)
         );
-        if (pickIdx2 >= 0 && !picks[pickIdx2].gameResult) {
+        if (pickIdx2 >= 0 &&
+            (picks[pickIdx2].gameResult === 'PENDING' || !picks[pickIdx2].gameResult)) {
           picks[pickIdx2].gameResult  = 'MISSING_SCORE';
           picks[pickIdx2].autoGraded  = true;
           picks[pickIdx2].gradingNote = 'score unavailable from all 4 sources after game-end window';
