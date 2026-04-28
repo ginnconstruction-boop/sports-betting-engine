@@ -482,8 +482,11 @@ function applyATSSignal(
   c:   DecisionCandidate,
   ctx: OutcomeContext,
 ): DecisionCandidate {
-  // Props excluded — team ATS is not a valid player prop signal
-  if (c.marketType === 'player_prop') return c;
+  // Props excluded — team ATS is not a valid player prop signal.
+  // marketType is typed as 'game_line' | 'player_prop', so includes('prop')
+  // catches 'player_prop' explicitly and any future prop variants
+  // (e.g. 'batter_prop', 'pitcher_prop') that may appear at runtime.
+  if (c.marketType === 'player_prop' || c.marketType?.includes('prop')) return c;
 
   if (!c.team || !c.sportKey) return c;
 
