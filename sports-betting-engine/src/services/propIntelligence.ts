@@ -106,7 +106,11 @@ interface NBAProjectionContext {
   last5MinutesAvg?: number;
   last3MinutesAvg?: number;
   usageRate?: number | null;
+  seasonUsageRate?: number | null;
   weightedStatPerMinute: number;
+  seasonStatAverage?: number;
+  last10StatAverage?: number;
+  last5StatAverage?: number;
   seasonStatPerMinute?: number;
   last10StatPerMinute?: number;
   last5StatPerMinute?: number;
@@ -148,6 +152,14 @@ interface NBAProjectionResult {
   roleStabilityScore: number;
   supportedMarket: boolean;
 }
+
+const NBA_PROJECTION_BOOST_SIGNALS = new Set([
+  'FORM_SPIKE',
+  'USAGE_SPIKE',
+  'MINUTES_SPIKE',
+  'FAVORABLE_MATCHUP',
+  'TOUGH_MATCHUP',
+]);
 
 function clamp01(value: number): number {
   return Math.max(0, Math.min(1, value));
@@ -316,6 +328,33 @@ function deriveSignals(
   }
 
   if (
+    (ctx.last5StatAverage ?? 0) > 0 &&
+    (ctx.last10StatAverage ?? 0) > 0 &&
+    (ctx.last5StatAverage ?? 0) > 0 &&
+    (ctx.seasonStatAverage ?? 0) > 0 &&
+    (ctx.last10StatAverage ?? 0) > 0 &&
+    (ctx.last5StatAverage ?? 0) > (ctx.last10StatAverage ?? 0) * 1.20 &&
+    (ctx.last5StatAverage ?? 0) > (ctx.seasonStatAverage ?? 0) * 1.10
+  ) {
+    signals.push({
+      type: 'FORM_SPIKE',
+      detail: `Recent form spike ${(ctx.last5StatAverage ?? 0).toFixed(1)} vs L10 ${(ctx.last10StatAverage ?? 0).toFixed(1)} and season ${(ctx.seasonStatAverage ?? 0).toFixed(1)}`,
+      impact: 'positive',
+      magnitude:
+        (ctx.last5StatAverage ?? 0) > (ctx.last10StatAverage ?? 0) * 1.30 ||
+        (ctx.last5StatAverage ?? 0) > (ctx.seasonStatAverage ?? 0) * 1.20
+          ? 'high'
+          : 'medium',
+      side: 'over',
+      scoreContribution:
+        (ctx.last5StatAverage ?? 0) > (ctx.last10StatAverage ?? 0) * 1.30 ||
+        (ctx.last5StatAverage ?? 0) > (ctx.seasonStatAverage ?? 0) * 1.20
+          ? 10
+          : 6,
+    });
+  }
+
+  if (
     (ctx.last3MinutesAvg ?? 0) > 0 &&
     (ctx.last10MinutesAvg ?? 0) > 0 &&
     (ctx.last3MinutesAvg ?? 0) > (ctx.last10MinutesAvg ?? 0) * 1.20
@@ -331,17 +370,17 @@ function deriveSignals(
   }
 
   if (
-    (ctx.last5StatPerMinute ?? 0) > 0 &&
-    (ctx.seasonStatPerMinute ?? 0) > 0 &&
-    (ctx.last5StatPerMinute ?? 0) > (ctx.seasonStatPerMinute ?? 0) * 1.20
+    (ctx.usageRate ?? 0) > 0 &&
+    (ctx.seasonUsageRate ?? 0) > 0 &&
+    (ctx.usageRate ?? 0) > (ctx.seasonUsageRate ?? 0) * 1.15
   ) {
     signals.push({
       type: 'USAGE_SPIKE',
-      detail: `Recent stat rate ${(ctx.last5StatPerMinute ?? 0).toFixed(3)}/min vs season ${(ctx.seasonStatPerMinute ?? 0).toFixed(3)}/min`,
+      detail: `Usage spike ${((ctx.usageRate ?? 0) * 100).toFixed(1)}% vs season ${((ctx.seasonUsageRate ?? 0) * 100).toFixed(1)}%`,
       impact: 'positive',
-      magnitude: (ctx.last5StatPerMinute ?? 0) > (ctx.seasonStatPerMinute ?? 0) * 1.30 ? 'high' : 'medium',
+      magnitude: (ctx.usageRate ?? 0) > (ctx.seasonUsageRate ?? 0) * 1.25 ? 'high' : 'medium',
       side: 'over',
-      scoreContribution: (ctx.last5StatPerMinute ?? 0) > (ctx.seasonStatPerMinute ?? 0) * 1.30 ? 10 : 6,
+      scoreContribution: (ctx.usageRate ?? 0) > (ctx.seasonUsageRate ?? 0) * 1.25 ? 10 : 6,
     });
   }
 
@@ -412,6 +451,18 @@ function deriveSignals(
   return signals;
 }
 
+function getProjectionSignalBoost(signals: PropSignal[]): number {
+  let boost = 0;
+
+  for (const signal of signals) {
+    if (!NBA_PROJECTION_BOOST_SIGNALS.has(signal.type)) continue;
+    const step = signal.magnitude === 'high' ? 0.05 : 0.04;
+    boost += signal.impact === 'negative' ? -step : step;
+  }
+
+  return roundToThousandths(clampRange(boost, -0.15, 0.15));
+}
+
 function buildNBAProjection(ctx: NBAProjectionContext): NBAProjectionResult {
   const baseProjection = ctx.projectedMinutes * ctx.weightedStatPerMinute;
   const rawProjection =
@@ -422,17 +473,23 @@ function buildNBAProjection(ctx: NBAProjectionContext): NBAProjectionResult {
     ctx.restAdjustment *
     ctx.homeAwayAdjustment *
     (ctx.teammateShotMakingAdjustment ?? 1);
+  const preBoostProjectedStat = roundToTenths(rawProjection);
+  const preBoostCompleteness = computeCompleteness(ctx);
+  const projectionSignalBoost = getProjectionSignalBoost(
+    deriveSignals(ctx, preBoostProjectedStat, preBoostCompleteness)
+  );
+  const boostedProjection = rawProjection * (1 + projectionSignalBoost);
   const seasonBaseline =
     (ctx.seasonMinutesAvg ?? 0) > 0 && (ctx.seasonStatPerMinute ?? 0) > 0
       ? (ctx.seasonMinutesAvg ?? 0) * (ctx.seasonStatPerMinute ?? 0)
       : 0;
   const projectionCeiling = seasonBaseline > 0
     ? seasonBaseline * 1.35
-    : rawProjection;
+    : boostedProjection;
   const projectedStat = roundToTenths(
     seasonBaseline > 0
-      ? Math.min(rawProjection, projectionCeiling)
-      : rawProjection
+      ? Math.min(boostedProjection, projectionCeiling)
+      : boostedProjection
   );
   const sideProjectionEdge = roundToTenths(
     ctx.side === 'over'
@@ -1062,7 +1119,11 @@ export function generatePropPrediction(
       last5MinutesAvg: last5MinutesAvg || undefined,
       last3MinutesAvg: last3MinutesAvg || undefined,
       usageRate: rawUsage,
+      seasonUsageRate: undefined,
       weightedStatPerMinute: adjustedWeightedStatPerMinute,
+      seasonStatAverage: seasonStat || undefined,
+      last10StatAverage: last10Stat || undefined,
+      last5StatAverage: last5Stat || undefined,
       seasonStatPerMinute: seasonStatPerMinute || undefined,
       last10StatPerMinute: last10StatPerMinute || undefined,
       last5StatPerMinute: last5StatPerMinute || undefined,

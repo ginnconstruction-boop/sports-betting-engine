@@ -125,16 +125,16 @@ function computeEdgeConfidence(
   modelCompleteness: number,
   strongNonMarketSignalCount: number
 ): number {
-  const projectionComponent = clampUnit(sideProjectionEdge / 2.5);
-  const probabilityComponent = clampUnit((modelProbability - 0.50) / 0.10);
-  const contextComponent = clampUnit(strongNonMarketSignalCount / 3);
+  const projectionComponent = clampUnit(sideProjectionEdge / 2.0);
+  const probabilityComponent = clampUnit((modelProbability - 0.50) / 0.08);
+  const contextComponent = clampUnit(strongNonMarketSignalCount / 2);
   const completenessComponent = clampUnit(modelCompleteness);
 
   return roundToThousandths(
-    (projectionComponent * 0.35) +
+    (projectionComponent * 0.40) +
     (probabilityComponent * 0.30) +
     (contextComponent * 0.20) +
-    (completenessComponent * 0.15)
+    (completenessComponent * 0.10)
   );
 }
 
@@ -329,17 +329,19 @@ export async function scoreAllPropsWithIntelligence(
     const MARKET_STRUCTURE_SIGNALS = new Set([
       'PRICE_EDGE', 'LINE_GAP', 'JUICE_GAP', 'LINE_VS_CONSENSUS',
     ]);
-    const NON_CONTEXT_NBA_SIGNALS = new Set([
-      'NBA_PROJECTION_EDGE',
-      'PROJECTION_COMPLETE',
-      'ATS_NOTE',
+    const NBA_EDGE_CONTEXT_SIGNALS = new Set([
+      'FORM_SPIKE',
+      'USAGE_SPIKE',
+      'MINUTES_SPIKE',
+      'FAVORABLE_MATCHUP',
+      'TOUGH_MATCHUP',
     ]);
     const nonMarketIntelSignals = (prediction.signals ?? [])
       .filter(s => !MARKET_STRUCTURE_SIGNALS.has(s.type))
       .filter(s => s.magnitude === 'high' || s.magnitude === 'medium')
       .map(s => s.type);
     const strongNonMarketSignalCount = (sportKey === 'basketball_nba'
-      ? nonMarketIntelSignals.filter(type => !NON_CONTEXT_NBA_SIGNALS.has(type))
+      ? nonMarketIntelSignals.filter(type => NBA_EDGE_CONTEXT_SIGNALS.has(type))
       : nonMarketIntelSignals
     ).length;
 

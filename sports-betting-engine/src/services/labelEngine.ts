@@ -499,7 +499,7 @@ function classifyV2(c: DecisionCandidate): Classification {
     trueEdge >= 0.03 &&
     projectionEdge >= 1.0 &&
     completeness >= 0.65 &&
-    strongContextCount >= 1 &&
+    strongContextCount >= 2 &&
     (riskGrade === 'LOW' || riskGrade === 'MODERATE');
 
   if (betEligible) {
