@@ -213,17 +213,17 @@ export async function scoreAllPropsWithIntelligence(
 
     if (!prediction) return { ...scored, intelligenceScore: 0 };
 
-    // ── Promote non-market signals into signals[] ──────────────────
-    // The base signals[] from scoreAllProps contains only book-comparison
-    // types (PRICE_EDGE, LINE_GAP, JUICE_GAP, LINE_VS_CONSENSUS).
-    // Any intelligence signal from buildPropPredictions that goes beyond
-    // pure price comparison is promoted here so that
-    // signalDiversityEngine.detectPriceOnly() correctly identifies
-    // candidates that have real model backing.
+    // ── MLB-only: promote non-market signals into signals[] ───────────
+    // Scoped to baseball_mlb for this phase.  NBA/NHL signal write-back
+    // is a separate calibration task — do not expand scope here.
     //
-    // Only medium/high magnitude signals are promoted — low magnitude
-    // signals do not constitute independent evidence strong enough to
-    // escape the price-only classification on their own.
+    // For baseball_mlb: any prediction signal that is NOT pure book
+    // comparison (PRICE_EDGE / LINE_GAP / JUICE_GAP / LINE_VS_CONSENSUS)
+    // and has magnitude high/medium is pushed into signals[] so that
+    // signalDiversityEngine.detectPriceOnly() correctly identifies
+    // candidates that have real model backing beyond price structure.
+    //
+    // For all other sports: enrichedSignals === scored.signals (no-op).
     const MARKET_STRUCTURE_SIGNALS = new Set([
       'PRICE_EDGE', 'LINE_GAP', 'JUICE_GAP', 'LINE_VS_CONSENSUS',
     ]);
@@ -232,9 +232,10 @@ export async function scoreAllPropsWithIntelligence(
       .filter(s => s.magnitude === 'high' || s.magnitude === 'medium')
       .map(s => s.type);
 
-    const enrichedSignals = nonMarketIntelSignals.length > 0
-      ? [...new Set([...scored.signals, ...nonMarketIntelSignals])]
-      : scored.signals;
+    const enrichedSignals =
+      sportKey.includes('baseball') && nonMarketIntelSignals.length > 0
+        ? [...new Set([...scored.signals, ...nonMarketIntelSignals])]
+        : scored.signals;
 
     // Apply intelligence score adjustment
     const intelligenceScore = Math.min(Math.max(prediction.scoreAdjustment, -30), 30);
