@@ -627,9 +627,15 @@ export function printFinalCard(result: SlateResult): void {
       const projectionEdge = c.projectionEdge !== undefined
         ? `${c.projectionEdge >= 0 ? '+' : ''}${c.projectionEdge.toFixed(1)}`
         : 'n/a';
+      const edgeConfidence = c.edgeConfidence !== undefined
+        ? `${(c.edgeConfidence * 100).toFixed(0)}%`
+        : null;
       console.log(`  |  Projection: ${c.projectedStat}  |  Line: ${c.line}  |  Projection Edge: ${projectionEdge}`);
       console.log(`  |  Model Prob: ${modelProbability}  |  Implied Prob: ${impliedProbability}  |  True Edge: ${trueEdge}`);
       console.log(`  |  Model Completeness: ${Math.round((c.modelCompleteness ?? 0) * 100)}%  |  Minutes Confidence: ${Math.round((c.nbaMinutesConfidence ?? 0) * 100)}%`);
+      if (edgeConfidence !== null) {
+        console.log(`  |  Edge Confidence: ${edgeConfidence}`);
+      }
       console.log(`  |  Non-market Signals: ${c.strongNonMarketSignalCount ?? 0}  |  Final Label: ${lbl}`);
     }
     for (const reason of (c.labelReasons ?? []).slice(0, 2)) {

@@ -39,6 +39,7 @@ export interface ScoredProp {
   impliedProbability?: number;
   trueEdge?: number;
   modelCompleteness?: number;
+  edgeConfidence?: number;
   nbaMinutesStable?: boolean;
   nbaMinutesConfidence?: number;
   nbaRoleStabilityScore?: number;
@@ -102,12 +103,39 @@ function clampScore(score: number): number {
   return Math.round(Math.max(0, Math.min(100, score)));
 }
 
+function clampUnit(value: number): number {
+  return Math.max(0, Math.min(1, value));
+}
+
+function roundToThousandths(value: number): number {
+  return Math.round(value * 1000) / 1000;
+}
+
 function getSideProjectionEdge(
   side: 'Over' | 'Under',
   projectionEdge: number | undefined
 ): number {
   if (projectionEdge === undefined) return 0;
   return side === 'Over' ? projectionEdge : -projectionEdge;
+}
+
+function computeEdgeConfidence(
+  sideProjectionEdge: number,
+  modelProbability: number,
+  modelCompleteness: number,
+  strongNonMarketSignalCount: number
+): number {
+  const projectionComponent = clampUnit(sideProjectionEdge / 2.5);
+  const probabilityComponent = clampUnit((modelProbability - 0.50) / 0.10);
+  const contextComponent = clampUnit(strongNonMarketSignalCount / 3);
+  const completenessComponent = clampUnit(modelCompleteness);
+
+  return roundToThousandths(
+    (projectionComponent * 0.35) +
+    (probabilityComponent * 0.30) +
+    (contextComponent * 0.20) +
+    (completenessComponent * 0.15)
+  );
 }
 
 function scoreNBAProjection(
@@ -387,6 +415,12 @@ export async function scoreAllPropsWithIntelligence(
       : undefined;
     const modelCompleteness = prediction.modelCompleteness ?? 0;
     const sideProjectionEdge = projectionEdge ?? 0;
+    const edgeConfidence = computeEdgeConfidence(
+      sideProjectionEdge,
+      probability ?? 0,
+      modelCompleteness,
+      strongNonMarketSignalCount
+    );
     const nbaMinutesStable = prediction.nbaMinutesStable;
     const nbaMinutesConfidence = prediction.nbaMinutesConfidence ?? 0;
     const nbaRoleStabilityScore = prediction.nbaRoleStabilityScore ?? 0.5;
@@ -447,6 +481,11 @@ export async function scoreAllPropsWithIntelligence(
         finalScore = Math.min(finalScore, 20);
         finalTier = 'MONITOR';
       }
+
+      if (edgeConfidence < 0.68) {
+        finalScore = Math.min(finalScore, 69);
+        if (finalTier === 'BET') finalTier = 'LEAN';
+      }
     }
 
     return {
@@ -462,6 +501,7 @@ export async function scoreAllPropsWithIntelligence(
       impliedProbability,
       trueEdge,
       modelCompleteness,
+      edgeConfidence,
       nbaMinutesStable,
       nbaMinutesConfidence,
       nbaRoleStabilityScore,
@@ -746,9 +786,12 @@ export function printTopProps(props: ScoredProp[], sportKey = 'basketball_nba'):
       const trueEdge = p.trueEdge !== undefined
         ? `${p.trueEdge >= 0 ? '+' : ''}${(p.trueEdge * 100).toFixed(1)}%`
         : 'n/a';
+      const edgeConfidence = p.edgeConfidence !== undefined
+        ? `${(p.edgeConfidence * 100).toFixed(0)}%`
+        : 'n/a';
       console.log(`  |  [AI] Projection: ${p.projectedStat} | Line: ${p.line} | Projection Edge: ${projectionEdge}`);
       console.log(`  |  [AI] Model Prob: ${probability} | Implied Prob: ${impliedProbability} | True Edge: ${trueEdge}`);
-      console.log(`  |  [AI] Model completeness: ${((p.modelCompleteness ?? 0) * 100).toFixed(0)}% | Minutes confidence: ${((p.nbaMinutesConfidence ?? 0) * 100).toFixed(0)}% | Non-market signals: ${p.strongNonMarketSignalCount ?? 0}`);
+      console.log(`  |  [AI] Model completeness: ${((p.modelCompleteness ?? 0) * 100).toFixed(0)}% | Minutes confidence: ${((p.nbaMinutesConfidence ?? 0) * 100).toFixed(0)}% | Non-market signals: ${p.strongNonMarketSignalCount ?? 0} | Edge confidence: ${edgeConfidence}`);
     }
     const brProp = parseFloat(process.env.BANKROLL ?? '0');
     const kProp  = brProp > 0 ? `Kelly: 1.5% = $${Math.round(brProp * 0.015)}` : 'Kelly: 1-2% of bankroll';

@@ -73,6 +73,9 @@ export type FinalLabel = 'BET' | 'LEAN' | 'MONITOR' | 'PASS' | 'BEST_PRICE_ONLY'
 /** Minimum adjustedEdge to earn BET label (requires LOW risk). */
 const EDGE_BET_MIN = 0.07;
 
+/** Conservative NBA-only BET gate to prevent borderline projection edges from over-promoting. */
+const NBA_EDGE_CONFIDENCE_BET_MIN = 0.68;
+
 /** Minimum adjustedEdge to earn LEAN label (LOW or MODERATE risk). */
 const EDGE_LEAN_MIN = 0.05;
 
@@ -400,6 +403,7 @@ function classifyV2(c: DecisionCandidate): Classification {
   const projectionEdge = c.projectionEdge ?? 0;
   const trueEdge = c.trueEdge ?? -1;
   const completeness = c.modelCompleteness ?? 0;
+  const edgeConfidence = c.edgeConfidence ?? 0;
   const minutesConfidence = c.nbaMinutesConfidence ?? 0;
   const strongContextCount = c.strongNonMarketSignalCount ?? 0;
   const riskGrade = c.riskGrade ?? 'HIGH';
@@ -485,6 +489,7 @@ function classifyV2(c: DecisionCandidate): Classification {
     trueEdge >= 0.05 &&
     projectionEdge >= 1.5 &&
     completeness >= 0.75 &&
+    edgeConfidence >= NBA_EDGE_CONFIDENCE_BET_MIN &&
     minutesConfidence >= 0.70 &&
     strongContextCount >= 2 &&
     riskGrade === 'LOW';
@@ -502,7 +507,7 @@ function classifyV2(c: DecisionCandidate): Classification {
       label: 'BET',
       reasons: [
         `NBA prop: model ${(modelProbability * 100).toFixed(1)}% | proj edge ${projectionEdge.toFixed(1)} | true edge ${(trueEdge * 100).toFixed(1)}%`,
-        `completeness ${Math.round(completeness * 100)}% | minutes confidence ${Math.round(minutesConfidence * 100)}% | context ${strongContextCount}`,
+        `completeness ${Math.round(completeness * 100)}% | minutes confidence ${Math.round(minutesConfidence * 100)}% | context ${strongContextCount} | edge confidence ${Math.round(edgeConfidence * 100)}%`,
       ],
     };
   }
@@ -511,7 +516,9 @@ function classifyV2(c: DecisionCandidate): Classification {
       label: 'LEAN',
       reasons: [
         `NBA prop: model ${(modelProbability * 100).toFixed(1)}% | proj edge ${projectionEdge.toFixed(1)} | true edge ${(trueEdge * 100).toFixed(1)}%`,
-        'meets LEAN floor but misses one or more BET requirements',
+        edgeConfidence < NBA_EDGE_CONFIDENCE_BET_MIN
+          ? `meets LEAN floor but misses BET edge-confidence gate (${Math.round(edgeConfidence * 100)}% < ${Math.round(NBA_EDGE_CONFIDENCE_BET_MIN * 100)}%)`
+          : 'meets LEAN floor but misses one or more BET requirements',
       ],
     };
   }

@@ -74,6 +74,7 @@ export interface DecisionCandidate {
   impliedProbability?: number;
   trueEdge?: number;
   modelCompleteness?: number;
+  edgeConfidence?: number;
   nbaMinutesStable?: boolean;
   nbaMinutesConfidence?: number;
   nbaRoleStabilityScore?: number;
@@ -638,6 +639,7 @@ export function mapToDecisionCandidate(
       impliedProbability: prop.impliedProbability,
       trueEdge:         prop.trueEdge,
       modelCompleteness: prop.modelCompleteness,
+      edgeConfidence:   prop.edgeConfidence,
       nbaMinutesStable: prop.nbaMinutesStable,
       nbaMinutesConfidence: prop.nbaMinutesConfidence,
       nbaRoleStabilityScore: prop.nbaRoleStabilityScore,
@@ -692,6 +694,7 @@ export function mapToDecisionCandidate(
     impliedProbability: undefined,
     trueEdge:         undefined,
     modelCompleteness: undefined,
+    edgeConfidence:   undefined,
     nbaMinutesStable: undefined,
     nbaMinutesConfidence: undefined,
     nbaRoleStabilityScore: undefined,

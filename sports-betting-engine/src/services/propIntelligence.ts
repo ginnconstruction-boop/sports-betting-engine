@@ -318,30 +318,30 @@ function deriveSignals(
   if (
     (ctx.last3MinutesAvg ?? 0) > 0 &&
     (ctx.last10MinutesAvg ?? 0) > 0 &&
-    (ctx.last3MinutesAvg ?? 0) > (ctx.last10MinutesAvg ?? 0) * 1.15
+    (ctx.last3MinutesAvg ?? 0) > (ctx.last10MinutesAvg ?? 0) * 1.20
   ) {
     signals.push({
       type: 'MINUTES_SPIKE',
       detail: `Recent minutes spike ${(ctx.last3MinutesAvg ?? 0).toFixed(1)} vs ${(ctx.last10MinutesAvg ?? 0).toFixed(1)} L10 average`,
       impact: 'positive',
-      magnitude: (ctx.last3MinutesAvg ?? 0) > (ctx.last10MinutesAvg ?? 0) * 1.25 ? 'high' : 'medium',
+      magnitude: (ctx.last3MinutesAvg ?? 0) > (ctx.last10MinutesAvg ?? 0) * 1.30 ? 'high' : 'medium',
       side: 'over',
-      scoreContribution: (ctx.last3MinutesAvg ?? 0) > (ctx.last10MinutesAvg ?? 0) * 1.25 ? 10 : 6,
+      scoreContribution: (ctx.last3MinutesAvg ?? 0) > (ctx.last10MinutesAvg ?? 0) * 1.30 ? 10 : 6,
     });
   }
 
   if (
     (ctx.last5StatPerMinute ?? 0) > 0 &&
     (ctx.seasonStatPerMinute ?? 0) > 0 &&
-    (ctx.last5StatPerMinute ?? 0) > (ctx.seasonStatPerMinute ?? 0) * 1.15
+    (ctx.last5StatPerMinute ?? 0) > (ctx.seasonStatPerMinute ?? 0) * 1.20
   ) {
     signals.push({
       type: 'USAGE_SPIKE',
       detail: `Recent stat rate ${(ctx.last5StatPerMinute ?? 0).toFixed(3)}/min vs season ${(ctx.seasonStatPerMinute ?? 0).toFixed(3)}/min`,
       impact: 'positive',
-      magnitude: (ctx.last5StatPerMinute ?? 0) > (ctx.seasonStatPerMinute ?? 0) * 1.25 ? 'high' : 'medium',
+      magnitude: (ctx.last5StatPerMinute ?? 0) > (ctx.seasonStatPerMinute ?? 0) * 1.30 ? 'high' : 'medium',
       side: 'over',
-      scoreContribution: (ctx.last5StatPerMinute ?? 0) > (ctx.seasonStatPerMinute ?? 0) * 1.25 ? 10 : 6,
+      scoreContribution: (ctx.last5StatPerMinute ?? 0) > (ctx.seasonStatPerMinute ?? 0) * 1.30 ? 10 : 6,
     });
   }
 
@@ -367,7 +367,7 @@ function deriveSignals(
     });
   }
 
-  if ((ctx.opponentDefenseRank ?? 0) >= 20) {
+  if ((ctx.opponentDefenseRank ?? 0) >= 21) {
     signals.push({
       type: 'FAVORABLE_MATCHUP',
       detail: `Opponent defense rank ${ctx.opponentDefenseRank} indicates a favorable positional matchup`,
@@ -422,7 +422,18 @@ function buildNBAProjection(ctx: NBAProjectionContext): NBAProjectionResult {
     ctx.restAdjustment *
     ctx.homeAwayAdjustment *
     (ctx.teammateShotMakingAdjustment ?? 1);
-  const projectedStat = roundToTenths(rawProjection);
+  const seasonBaseline =
+    (ctx.seasonMinutesAvg ?? 0) > 0 && (ctx.seasonStatPerMinute ?? 0) > 0
+      ? (ctx.seasonMinutesAvg ?? 0) * (ctx.seasonStatPerMinute ?? 0)
+      : 0;
+  const projectionCeiling = seasonBaseline > 0
+    ? seasonBaseline * 1.35
+    : rawProjection;
+  const projectedStat = roundToTenths(
+    seasonBaseline > 0
+      ? Math.min(rawProjection, projectionCeiling)
+      : rawProjection
+  );
   const sideProjectionEdge = roundToTenths(
     ctx.side === 'over'
       ? projectedStat - ctx.line
@@ -954,7 +965,7 @@ export function generatePropPrediction(
     }
 
     const rawUsage = profile?.usageRate ?? null;
-    const usageAdjustment = clampRange(1 + (((rawUsage ?? 0.22) - 0.22) * 1.0), 0.90, 1.12);
+    const usageAdjustment = clampRange(1 + (((rawUsage ?? 0.22) - 0.22) * 1.0), 0.85, 1.20);
     const recentShotAttemptsPerMinute = recentFiveGames.length > 0
       ? avg(recentFiveGames.map(g => g.fieldGoalAttempts / Math.max(g.minutes, 1)))
       : 0;
@@ -971,7 +982,7 @@ export function generatePropPrediction(
     const matchupVsLeagueAvg = typeof playerMatchup?.vsLeagueAvg === 'number'
       ? playerMatchup.vsLeagueAvg
       : 0;
-    const paceAdjustment = clampRange(matchup?.impliedPaceMultiplier ?? 1, 0.94, 1.06);
+    const paceAdjustment = clampRange(matchup?.impliedPaceMultiplier ?? 1, 0.92, 1.10);
     const matchupAdjustment = clampRange(
       1 + (
         statKey === 'points' ? matchupVsLeagueAvg * 0.020 :
@@ -979,8 +990,8 @@ export function generatePropPrediction(
         statKey === 'assists' ? matchupVsLeagueAvg * 0.022 :
         matchupVsLeagueAvg * 0.020
       ),
-      0.92,
-      1.08
+      0.90,
+      1.15
     );
     const restAdjustment = clampRange(
       isBackToBack ? 0.96 : isCrossCountryTravel ? 0.97 : 1.01,
@@ -1013,10 +1024,10 @@ export function generatePropPrediction(
         : statKey === 'rebounds'
           ? roleAdjustment
           : statKey === 'assists'
-            ? clampRange((usageAdjustment * 0.55) + (shotVolumeAdjustment * 0.45), 0.90, 1.12)
-            : clampRange(shotVolumeAdjustment, 0.92, 1.08),
-      0.90,
-      1.12
+            ? clampRange((usageAdjustment * 0.55) + (shotVolumeAdjustment * 0.45), 0.85, 1.20)
+            : clampRange(shotVolumeAdjustment, 0.90, 1.12),
+      0.85,
+      1.20
     );
     const teammateShotMakingAdjustment = statKey === 'assists'
       ? clampRange(keyTeammateOut ? 0.97 : 1.01, 0.97, 1.03)
