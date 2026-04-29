@@ -99,6 +99,7 @@ function getStatFromProfile(profile: PlayerProfile, statType: string): {
 interface NBAProjectionContext {
   statKey: 'points' | 'rebounds' | 'assists' | 'threes';
   line: number;
+  side: 'over' | 'under';
   projectedMinutes: number;
   seasonMinutesAvg?: number;
   last10MinutesAvg?: number;
@@ -130,6 +131,9 @@ interface NBAProjectionContext {
   roleStabilityScore?: number;
   roleAdjustment?: number;
   atsConfidenceDelta?: number;
+  isStarter?: boolean;
+  prevWasBench?: boolean;
+  opponentDefenseRank?: number;
 }
 
 interface NBAProjectionResult {
@@ -311,6 +315,69 @@ function deriveSignals(
     });
   }
 
+  if (
+    (ctx.last3MinutesAvg ?? 0) > 0 &&
+    (ctx.last10MinutesAvg ?? 0) > 0 &&
+    (ctx.last3MinutesAvg ?? 0) > (ctx.last10MinutesAvg ?? 0) * 1.15
+  ) {
+    signals.push({
+      type: 'MINUTES_SPIKE',
+      detail: `Recent minutes spike ${(ctx.last3MinutesAvg ?? 0).toFixed(1)} vs ${(ctx.last10MinutesAvg ?? 0).toFixed(1)} L10 average`,
+      impact: 'positive',
+      magnitude: (ctx.last3MinutesAvg ?? 0) > (ctx.last10MinutesAvg ?? 0) * 1.25 ? 'high' : 'medium',
+      side: 'over',
+      scoreContribution: (ctx.last3MinutesAvg ?? 0) > (ctx.last10MinutesAvg ?? 0) * 1.25 ? 10 : 6,
+    });
+  }
+
+  if (
+    (ctx.last5StatPerMinute ?? 0) > 0 &&
+    (ctx.seasonStatPerMinute ?? 0) > 0 &&
+    (ctx.last5StatPerMinute ?? 0) > (ctx.seasonStatPerMinute ?? 0) * 1.15
+  ) {
+    signals.push({
+      type: 'USAGE_SPIKE',
+      detail: `Recent stat rate ${(ctx.last5StatPerMinute ?? 0).toFixed(3)}/min vs season ${(ctx.seasonStatPerMinute ?? 0).toFixed(3)}/min`,
+      impact: 'positive',
+      magnitude: (ctx.last5StatPerMinute ?? 0) > (ctx.seasonStatPerMinute ?? 0) * 1.25 ? 'high' : 'medium',
+      side: 'over',
+      scoreContribution: (ctx.last5StatPerMinute ?? 0) > (ctx.seasonStatPerMinute ?? 0) * 1.25 ? 10 : 6,
+    });
+  }
+
+  if (ctx.isStarter && ctx.prevWasBench) {
+    signals.push({
+      type: 'ROLE_CHANGE',
+      detail: 'Player role has shifted upward from bench-level minutes into starter-level deployment',
+      impact: 'positive',
+      magnitude: 'medium',
+      side: 'over',
+      scoreContribution: 7,
+    });
+  }
+
+  if ((ctx.opponentDefenseRank ?? 0) > 0 && (ctx.opponentDefenseRank ?? 0) <= 10) {
+    signals.push({
+      type: 'TOUGH_MATCHUP',
+      detail: `Opponent defense rank ${ctx.opponentDefenseRank} indicates a tough positional matchup`,
+      impact: 'negative',
+      magnitude: (ctx.opponentDefenseRank ?? 0) <= 5 ? 'high' : 'medium',
+      side: 'under',
+      scoreContribution: (ctx.opponentDefenseRank ?? 0) <= 5 ? -10 : -6,
+    });
+  }
+
+  if ((ctx.opponentDefenseRank ?? 0) >= 20) {
+    signals.push({
+      type: 'FAVORABLE_MATCHUP',
+      detail: `Opponent defense rank ${ctx.opponentDefenseRank} indicates a favorable positional matchup`,
+      impact: 'positive',
+      magnitude: (ctx.opponentDefenseRank ?? 0) >= 25 ? 'high' : 'medium',
+      side: 'over',
+      scoreContribution: (ctx.opponentDefenseRank ?? 0) >= 25 ? 10 : 6,
+    });
+  }
+
   if ((ctx.minutesStable ?? true) === false) {
     signals.push({
       type: 'MINUTES_VOLATILITY',
@@ -346,9 +413,9 @@ function deriveSignals(
 }
 
 function buildNBAProjection(ctx: NBAProjectionContext): NBAProjectionResult {
+  const baseProjection = ctx.projectedMinutes * ctx.weightedStatPerMinute;
   const rawProjection =
-    ctx.projectedMinutes *
-    ctx.weightedStatPerMinute *
+    baseProjection *
     ctx.teamPaceAdj *
     ctx.usageOrRoleAdjustment *
     ctx.matchupAdjustment *
@@ -356,13 +423,29 @@ function buildNBAProjection(ctx: NBAProjectionContext): NBAProjectionResult {
     ctx.homeAwayAdjustment *
     (ctx.teammateShotMakingAdjustment ?? 1);
   const projectedStat = roundToTenths(rawProjection);
+  const sideProjectionEdge = roundToTenths(
+    ctx.side === 'over'
+      ? projectedStat - ctx.line
+      : ctx.line - projectedStat
+  );
+  const projectionIsValid =
+    Number.isFinite(projectedStat) &&
+    projectedStat > 0 &&
+    !Number.isNaN(projectedStat);
   const stdDevBase = Math.max(2.5, projectedStat * 0.18);
   const adjustedStdDev = Math.max(
     ctx.statKey === 'threes' ? 1.4 : 0.75,
     (ctx.stdDevInput ?? stdDevBase) * (ctx.threeVarianceBoost ?? 1)
   );
   const probabilityOver = calcProbability(projectedStat, ctx.line, adjustedStdDev);
-  const modelCompleteness = computeCompleteness(ctx);
+  const validatedMinutesConfidence = roundToThousandths(ctx.minutesConfidence ?? 0.5);
+  const projectionInputFailed =
+    !projectionIsValid ||
+    validatedMinutesConfidence < 0.5 ||
+    Math.abs(sideProjectionEdge) < 0.5;
+  const modelCompleteness = projectionInputFailed
+    ? roundToThousandths(Math.min(computeCompleteness(ctx), 0.5))
+    : computeCompleteness(ctx);
   const impliedProbability = roundToThousandths(ctx.impliedProbability ?? 0.524);
 
   return {
@@ -376,8 +459,8 @@ function buildNBAProjection(ctx: NBAProjectionContext): NBAProjectionResult {
       projectedStat,
       modelCompleteness
     ),
-    minutesStable: ctx.minutesStable ?? true,
-    minutesConfidence: roundToThousandths(ctx.minutesConfidence ?? 0.5),
+    minutesStable: projectionInputFailed ? false : (ctx.minutesStable ?? true),
+    minutesConfidence: validatedMinutesConfidence,
     roleStabilityScore: roundToThousandths(ctx.roleStabilityScore ?? 0.5),
     supportedMarket: true,
   };
@@ -811,28 +894,31 @@ export function generatePropPrediction(
       ? avg(recentTenGames.map(g => g.minutes))
       : (profile?.l10MPG ?? last5MinutesAvg);
     const seasonMinutesAvg = profile?.seasonMPG ?? last5MinutesAvg;
-    const projectedMinutes = roundToTenths(weightedAverage([
-      { value: seasonMinutesAvg, weight: 0.20 },
-      { value: last10MinutesAvg, weight: 0.35 },
-      { value: last5MinutesAvg, weight: 0.30 },
-      { value: last3MinutesAvg, weight: 0.15 },
-    ])) || seasonMinutesAvg;
-    const minutesVolatility = recentFiveGames.length > 1
-      ? stdDev(recentFiveGames.map(g => g.minutes))
-      : 0;
+    let projectedMinutes =
+      (last3MinutesAvg ? last3MinutesAvg * 0.15 : 0) +
+      (last5MinutesAvg ? last5MinutesAvg * 0.30 : 0) +
+      (last10MinutesAvg ? last10MinutesAvg * 0.35 : 0) +
+      (seasonMinutesAvg ? seasonMinutesAvg * 0.20 : 0);
+    if (!projectedMinutes || projectedMinutes === 0) {
+      projectedMinutes = last10MinutesAvg || seasonMinutesAvg || 0;
+    }
+    projectedMinutes = roundToTenths(projectedMinutes);
+    const availableMinuteWindows = [last3MinutesAvg, last5MinutesAvg, last10MinutesAvg].filter(value => !!value);
+    const minutesStdDev = stdDev(availableMinuteWindows);
+    const minutesVolatility = minutesStdDev;
     const minutesTrendPct = profile?.minutesTrendPct ?? 0;
     const roleTrend = profile?.minutesTrend ?? 'stable';
-    const baseMinutesConfidence =
-      0.8 -
-      clampRange(minutesVolatility / 12, 0, 0.35) -
-      (roleTrend === 'falling' ? 0.18 : 0) -
-      (Math.abs(minutesTrendPct) >= 15 ? 0.10 : 0) +
-      (roleTrend === 'stable' ? 0.08 : 0) +
-      (roleTrend === 'rising' && Math.abs(minutesTrendPct) <= 12 ? 0.05 : 0);
+    const baseMinutesConfidence = projectedMinutes > 0 && availableMinuteWindows.length >= 2
+      ? clampRange(
+        1 - (minutesStdDev / Math.max(5, projectedMinutes)),
+        0,
+        1
+      )
+      : 0;
     const minutesConfidence = roundToThousandths(clampRange(
       statKey === 'threes' ? baseMinutesConfidence - 0.03 : baseMinutesConfidence,
-      0.1,
-      0.95
+      0,
+      1
     ));
     const minutesStable = minutesConfidence >= (statKey === 'threes' ? 0.74 : 0.70);
     const roleStabilityScore = roundToThousandths(clampRange(
@@ -859,11 +945,13 @@ export function generatePropPrediction(
     const seasonStatPerMinute = seasonMinutesAvg > 0 ? seasonStat / seasonMinutesAvg : 0;
     const last10StatPerMinute = last10MinutesAvg > 0 ? last10Stat / last10MinutesAvg : seasonStatPerMinute;
     const last5StatPerMinute = last5MinutesAvg > 0 ? last5Stat / last5MinutesAvg : last10StatPerMinute;
-    const weightedStatPerMinute = weightedAverage([
-      { value: seasonStatPerMinute, weight: 0.35 },
-      { value: last10StatPerMinute, weight: 0.40 },
-      { value: last5StatPerMinute, weight: 0.25 },
-    ]);
+    let weightedStatPerMinute =
+      (last5StatPerMinute ? last5StatPerMinute * 0.25 : 0) +
+      (last10StatPerMinute ? last10StatPerMinute * 0.40 : 0) +
+      (seasonStatPerMinute ? seasonStatPerMinute * 0.35 : 0);
+    if (!weightedStatPerMinute || weightedStatPerMinute === 0) {
+      weightedStatPerMinute = last10StatPerMinute || seasonStatPerMinute || 0;
+    }
 
     const rawUsage = profile?.usageRate ?? null;
     const usageAdjustment = clampRange(1 + (((rawUsage ?? 0.22) - 0.22) * 1.0), 0.90, 1.12);
@@ -879,6 +967,7 @@ export function generatePropPrediction(
     const shotVolumeAdjustment = clampRange(1 + (shotVolumePulse * 0.30), 0.90, 1.10);
     const playerMatchup = matchup?.matchups.get(playerName)?.find(m => normalizeNBAProjectionStatType(m.statType ?? '') === statKey)
       ?? matchup?.matchups.get(playerName)?.[0];
+    const opponentDefenseRank = playerMatchup?.rank;
     const matchupVsLeagueAvg = typeof playerMatchup?.vsLeagueAvg === 'number'
       ? playerMatchup.vsLeagueAvg
       : 0;
@@ -946,11 +1035,17 @@ export function generatePropPrediction(
     const adjustedWeightedStatPerMinute = statKey === 'threes'
       ? weightedThreeMadePerMinute * weightedThreeEfficiency
       : weightedStatPerMinute;
+    const isStarter = projectedMinutes >= 28 || last3MinutesAvg >= 28 || last5MinutesAvg >= 28;
+    const prevWasBench =
+      seasonMinutesAvg > 0 &&
+      seasonMinutesAvg < 24 &&
+      projectedMinutes >= seasonMinutesAvg + 4;
 
     nbaProjection = buildNBAProjection({
       statKey,
       line: postedLine,
-      projectedMinutes: projectedMinutes || seasonMinutesAvg || postedLine,
+      side,
+      projectedMinutes: projectedMinutes || last10MinutesAvg || seasonMinutesAvg || 0,
       seasonMinutesAvg: seasonMinutesAvg || undefined,
       last10MinutesAvg: last10MinutesAvg || undefined,
       last5MinutesAvg: last5MinutesAvg || undefined,
@@ -983,6 +1078,9 @@ export function generatePropPrediction(
       roleStabilityScore,
       roleAdjustment,
       atsConfidenceDelta,
+      isStarter,
+      prevWasBench,
+      opponentDefenseRank,
     });
 
     predictedValue = nbaProjection.projectedStat;
