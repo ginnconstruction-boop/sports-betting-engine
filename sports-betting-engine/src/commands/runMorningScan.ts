@@ -121,8 +121,9 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
 
   // -- Step 1: Fetch odds (required -- this one can fail loudly) --
   console.log('  [1/22] Fetching odds from The Odds API...');
-  const { results: rawBySport } = await getOddsForAllSports(
-    sportKeys, INITIAL_MARKETS, options.forceRefresh ?? false
+  const { results: rawBySport } = await withTimeout(
+    getOddsForAllSports(sportKeys, INITIAL_MARKETS, options.forceRefresh ?? false),
+    120_000, 'odds fetch'
   );
 
   const allSummaries: EventSummary[] = [];
@@ -173,15 +174,18 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
   }
 
   // -- Step 5: Weather -----------------------------------------
+  // Parallel batch — all outdoor games fetched concurrently, 20 s each.
   const weatherMap = new Map<string, any>();
-  for (const event of allSummaries) {
-    if (isOutdoorSport(event.sportKey)) {
-      await safeRun(`weather ${event.matchup}`, async () => {
-        const weather = await getGameWeather(event.sportKey, '', event.homeTeam, event.startTime);
-        if (weather) weatherMap.set(event.eventId, weather);
-      }, undefined);
-    }
-  }
+  await Promise.allSettled(
+    allSummaries
+      .filter(event => isOutdoorSport(event.sportKey))
+      .map(event =>
+        safeRun(`weather ${event.matchup}`, async () => {
+          const weather = await getGameWeather(event.sportKey, '', event.homeTeam, event.startTime);
+          if (weather) weatherMap.set(event.eventId, weather);
+        }, undefined, 20_000)
+      )
+  );
 
   console.log('\n  Pulling intelligence data...');
 
@@ -260,24 +264,27 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
   );
 
   // -- Step 13: Player impact ----------------------------------
+  // Parallel batch — one concurrent request per game, 20 s each.
   const playerImpacts = new Map<string, any>();
-  for (const event of allSummaries) {
-    await safeRun(`player impact ${event.matchup}`, async () => {
-      const injuries = injuryMap.get(event.eventId) ?? [];
-      const homeLast = event.homeTeam.split(' ').pop() ?? '';
-      const awayLast = event.awayTeam.split(' ').pop() ?? '';
-      const homeInj = injuries.filter((i: any) => (i.team ?? '').includes(homeLast));
-      const awayInj = injuries.filter((i: any) => (i.team ?? '').includes(awayLast));
-      if (homeInj.length > 0 || awayInj.length > 0) {
-        const impact = await buildGameImpactSummary(
-          event.sportKey, event.eventId, event.homeTeam, event.awayTeam,
-          homeInj.map((i: any) => ({ playerName: i.playerName ?? '', position: i.position ?? '', status: i.status ?? '' })),
-          awayInj.map((i: any) => ({ playerName: i.playerName ?? '', position: i.position ?? '', status: i.status ?? '' })),
-        );
-        playerImpacts.set(event.eventId, impact);
-      }
-    }, undefined);
-  }
+  await Promise.allSettled(
+    allSummaries.map(event =>
+      safeRun(`player impact ${event.matchup}`, async () => {
+        const injuries = injuryMap.get(event.eventId) ?? [];
+        const homeLast = event.homeTeam.split(' ').pop() ?? '';
+        const awayLast = event.awayTeam.split(' ').pop() ?? '';
+        const homeInj = injuries.filter((i: any) => (i.team ?? '').includes(homeLast));
+        const awayInj = injuries.filter((i: any) => (i.team ?? '').includes(awayLast));
+        if (homeInj.length > 0 || awayInj.length > 0) {
+          const impact = await buildGameImpactSummary(
+            event.sportKey, event.eventId, event.homeTeam, event.awayTeam,
+            homeInj.map((i: any) => ({ playerName: i.playerName ?? '', position: i.position ?? '', status: i.status ?? '' })),
+            awayInj.map((i: any) => ({ playerName: i.playerName ?? '', position: i.position ?? '', status: i.status ?? '' })),
+          );
+          playerImpacts.set(event.eventId, impact);
+        }
+      }, undefined, 20_000)
+    )
+  );
 
   // -- Step 14: Steam detection --------------------------------
   const steamMoves = safeRunSync('steam detection',
