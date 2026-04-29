@@ -119,18 +119,37 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
     console.log('  Run option 5 (MLB) at 11 AM and option 6 (NHL) at noon for best coverage.\n');
   }
 
-  // -- Step 1: Fetch odds (required -- this one can fail loudly) --
+  // -- Step 1: Fetch odds (required -- bail out clearly on failure) --
   console.log('  [1/22] Fetching odds from The Odds API...');
-  const { results: rawBySport } = await withTimeout(
-    getOddsForAllSports(sportKeys, INITIAL_MARKETS, options.forceRefresh ?? false),
-    120_000, 'odds fetch'
-  );
+  let rawBySport: Map<string, any[]>;
+  try {
+    const result = await withTimeout(
+      getOddsForAllSports(sportKeys, INITIAL_MARKETS, options.forceRefresh ?? false),
+      120_000, 'odds fetch'
+    );
+    rawBySport = result.results;
+  } catch (err: any) {
+    console.error(`\n  [FATAL] Odds fetch failed: ${err?.message ?? String(err)}`);
+    console.error('  Check ODDS_API_KEY in .env and network connectivity.\n');
+    return;
+  }
 
   const allSummaries: EventSummary[] = [];
   for (const [sportKey, events] of rawBySport) {
     const rows = normalizeEvents(events, sportKey);
     allSummaries.push(...aggregateAllEvents(rows));
   }
+
+  console.log(`  Events found: ${allSummaries.length} across ${rawBySport.size} sport(s)`);
+  if (allSummaries.length === 0) {
+    console.log('  No events found for today — scan complete.\n');
+    return;
+  }
+
+  // Prune to only sports that actually returned events.
+  // NFL/NCAAF/NCAAB etc. are enabled in config but may be offseason —
+  // no point running injury/intel loops for them.
+  const activeSportKeys = [...new Set(allSummaries.map(e => e.sportKey))];
 
   const priorSnapshot = loadLatestSnapshot('MORNING_SCAN');
   const priorSummaries = priorSnapshot?.eventSummaries ?? [];
@@ -154,24 +173,27 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
   );
 
   // -- Step 4: ESPN injuries -----------------------------------
-  console.log('  [4/22] Fetching injury reports...');
+  // Parallel across activeSportKeys only — skips offseason sports.
+  console.log(`  [4/22] Fetching injury reports (${activeSportKeys.length} active sport(s))...`);
   const injuryMap = new Map<string, any[]>();
-  for (const sportKey of sportKeys) {
-    await safeRun(`injuries ${sportKey}`, async () => {
-      const espnInj = await getESPNInjuries(sportKey);
-      const injuries = await getEnhancedInjuries(sportKey, espnInj);
-      for (const [team, list] of injuries) {
-        for (const event of allSummaries) {
-          const homeLast = event.homeTeam.split(' ').pop() ?? '';
-          const awayLast = event.awayTeam.split(' ').pop() ?? '';
-          if (team.includes(homeLast) || team.includes(awayLast)) {
-            const existing = injuryMap.get(event.eventId) ?? [];
-            injuryMap.set(event.eventId, [...existing, ...list]);
+  await Promise.allSettled(
+    activeSportKeys.map(sportKey =>
+      safeRun(`injuries ${sportKey}`, async () => {
+        const espnInj  = await getESPNInjuries(sportKey);
+        const injuries = await getEnhancedInjuries(sportKey, espnInj);
+        for (const [team, list] of injuries) {
+          for (const event of allSummaries) {
+            const homeLast = event.homeTeam.split(' ').pop() ?? '';
+            const awayLast = event.awayTeam.split(' ').pop() ?? '';
+            if (team.includes(homeLast) || team.includes(awayLast)) {
+              const existing = injuryMap.get(event.eventId) ?? [];
+              injuryMap.set(event.eventId, [...existing, ...list]);
+            }
           }
         }
-      }
-    }, undefined);
-  }
+      }, undefined)
+    )
+  );
 
   // -- Step 5: Weather -----------------------------------------
   // Parallel batch — all outdoor games fetched concurrently, 20 s each.
@@ -231,21 +253,20 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
   );
 
   // -- Step 10: Power ratings ----------------------------------
+  // Fully parallel across all events — no sequential batching needed.
   console.log('  [10/22] Computing power ratings...');
   const powerRatings = new Map<string, any>();
-  for (let i = 0; i < allSummaries.length; i += 4) {
-    await Promise.allSettled(allSummaries.slice(i, i + 4).map(async (event) => {
-      await safeRun(`power ratings ${event.matchup}`, async () => {
-        const { home, away } = await getGamePowerRatings(event.sportKey, event.homeTeam, event.awayTeam);
-        if (home && away) {
-          const postedSpread = event.aggregatedMarkets['spreads']?.sides.find(s =>
-            s.outcomeName.toLowerCase().includes(event.homeTeam.toLowerCase().split(' ').pop() ?? '')
-          )?.consensusLine ?? 0;
-          powerRatings.set(event.eventId, { home, away, comparison: compareToLine(home, away, postedSpread, event.sportKey) });
-        }
-      }, undefined);
-    }));
-  }
+  await Promise.allSettled(allSummaries.map(event =>
+    safeRun(`power ratings ${event.matchup}`, async () => {
+      const { home, away } = await getGamePowerRatings(event.sportKey, event.homeTeam, event.awayTeam);
+      if (home && away) {
+        const postedSpread = event.aggregatedMarkets['spreads']?.sides.find(s =>
+          s.outcomeName.toLowerCase().includes(event.homeTeam.toLowerCase().split(' ').pop() ?? '')
+        )?.consensusLine ?? 0;
+        powerRatings.set(event.eventId, { home, away, comparison: compareToLine(home, away, postedSpread, event.sportKey) });
+      }
+    }, undefined)
+  ));
 
   // -- Step 11: Public betting ---------------------------------
   const publicBetting = await safeRun('public betting',
@@ -338,13 +359,15 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
   // -- Step 18b: Officials tendencies (MLB umpires / NBA refs) --
   console.log('  [18b] Fetching officials tendencies...');
   const officialsMap = new Map<string, any[]>();
-  for (const sportKey of ['baseball_mlb', 'basketball_nba']) {
-    if (sportKeys.includes(sportKey)) {
-      const reports = await safeRun(`officials ${sportKey}`,
-        () => getOfficialsReports(sportKey), new Map(), 20000);
-      for (const [k, v] of reports) officialsMap.set(k, v);
-    }
-  }
+  await Promise.allSettled(
+    ['baseball_mlb', 'basketball_nba']
+      .filter(sk => activeSportKeys.includes(sk))
+      .map(async sportKey => {
+        const reports = await safeRun(`officials ${sportKey}`,
+          () => getOfficialsReports(sportKey), new Map(), 20_000);
+        for (const [k, v] of reports) officialsMap.set(k, v);
+      })
+  );
 
   // -- Step 18c: Travel fatigue --
   console.log('  [18c] Computing travel fatigue...');
