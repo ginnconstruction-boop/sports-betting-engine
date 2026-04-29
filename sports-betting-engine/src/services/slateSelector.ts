@@ -613,6 +613,25 @@ export function printFinalCard(result: SlateResult): void {
     if (c.bestBook || priceStr) {
       console.log(`  |  Book: ${(c.bestBook ?? 'n/a').padEnd(14)}  Price: ${priceStr}`);
     }
+    if (
+      c.sportKey === 'basketball_nba' &&
+      c.marketType === 'player_prop' &&
+      c.projectedStat !== undefined &&
+      c.line !== undefined
+    ) {
+      const modelProbability = c.probability !== undefined ? `${(c.probability * 100).toFixed(1)}%` : 'n/a';
+      const impliedProbability = c.impliedProbability !== undefined ? `${(c.impliedProbability * 100).toFixed(1)}%` : 'n/a';
+      const trueEdge = c.trueEdge !== undefined
+        ? `${c.trueEdge >= 0 ? '+' : ''}${(c.trueEdge * 100).toFixed(1)}%`
+        : 'n/a';
+      const projectionEdge = c.projectionEdge !== undefined
+        ? `${c.projectionEdge >= 0 ? '+' : ''}${c.projectionEdge.toFixed(1)}`
+        : 'n/a';
+      console.log(`  |  Projection: ${c.projectedStat}  |  Line: ${c.line}  |  Projection Edge: ${projectionEdge}`);
+      console.log(`  |  Model Prob: ${modelProbability}  |  Implied Prob: ${impliedProbability}  |  True Edge: ${trueEdge}`);
+      console.log(`  |  Model Completeness: ${Math.round((c.modelCompleteness ?? 0) * 100)}%  |  Minutes Confidence: ${Math.round((c.nbaMinutesConfidence ?? 0) * 100)}%`);
+      console.log(`  |  Non-market Signals: ${c.strongNonMarketSignalCount ?? 0}  |  Final Label: ${lbl}`);
+    }
     for (const reason of (c.labelReasons ?? []).slice(0, 2)) {
       console.log(`  |  → ${reason}`);
     }

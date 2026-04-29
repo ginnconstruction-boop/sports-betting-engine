@@ -47,7 +47,12 @@ export interface PropPrediction {
   projectedStat?: number;
   probabilityOver?: number;
   probabilityUnder?: number;
+  impliedProbability?: number;
   modelCompleteness?: number;
+  nbaMinutesStable?: boolean;
+  nbaMinutesConfidence?: number;
+  nbaRoleStabilityScore?: number;
+  supportedNBAProjection?: boolean;
 }
 
 export interface PropSignal {
@@ -92,51 +97,149 @@ function getStatFromProfile(profile: PlayerProfile, statType: string): {
 }
 
 interface NBAProjectionContext {
+  statKey: 'points' | 'rebounds' | 'assists' | 'threes';
   line: number;
-  minutes?: number;
-  recentMinutesAvg?: number;
+  projectedMinutes: number;
   seasonMinutesAvg?: number;
+  last10MinutesAvg?: number;
+  last5MinutesAvg?: number;
+  last3MinutesAvg?: number;
   usageRate?: number | null;
-  teamPaceAdj?: number;
-  statRate: number;
-  baseline: number;
+  weightedStatPerMinute: number;
+  seasonStatPerMinute?: number;
+  last10StatPerMinute?: number;
+  last5StatPerMinute?: number;
+  teamPaceAdj: number;
+  usageOrRoleAdjustment: number;
+  matchupAdjustment: number;
+  restAdjustment: number;
+  homeAwayAdjustment: number;
+  teammateShotMakingAdjustment?: number;
+  stdDevInput?: number;
+  impliedProbability?: number;
+  projectedFromRecentBaseline?: boolean;
+  threeVarianceBoost?: number;
   minutesTrendPct?: number;
+  minutesTrend?: 'rising' | 'falling' | 'stable';
   recentGamesCount?: number;
-  teamTotal?: number | null;
+  recentShotAttemptsPerMinute?: number;
+  seasonShotAttemptsPerMinute?: number;
+  minutesVolatility?: number;
+  minutesStable?: boolean;
+  minutesConfidence?: number;
+  roleStabilityScore?: number;
+  roleAdjustment?: number;
+  atsConfidenceDelta?: number;
 }
 
 interface NBAProjectionResult {
   projectedStat: number;
   probabilityOver: number;
   probabilityUnder: number;
+  impliedProbability: number;
   modelCompleteness: number;
   signals: PropSignal[];
+  minutesStable: boolean;
+  minutesConfidence: number;
+  roleStabilityScore: number;
+  supportedMarket: boolean;
 }
 
 function clamp01(value: number): number {
   return Math.max(0, Math.min(1, value));
 }
 
-function calcProbability(projectedStat: number, line: number, variance: number): number {
-  const safeVariance = Math.max(0.75, variance);
-  const z = (projectedStat - line) / safeVariance;
-  const logistic = 1 / (1 + Math.exp(-1.702 * z));
-  return Math.round(clamp01(logistic) * 1000) / 1000;
+function clampRange(value: number, min: number, max: number): number {
+  return Math.max(min, Math.min(max, value));
+}
+
+function avg(values: number[]): number {
+  if (values.length === 0) return 0;
+  return values.reduce((sum, value) => sum + value, 0) / values.length;
+}
+
+function weightedAverage(weightedValues: Array<{ value: number; weight: number }>): number {
+  const valid = weightedValues.filter(entry => Number.isFinite(entry.value) && entry.value > 0 && entry.weight > 0);
+  if (valid.length === 0) return 0;
+  const totalWeight = valid.reduce((sum, entry) => sum + entry.weight, 0);
+  if (totalWeight <= 0) return 0;
+  return valid.reduce((sum, entry) => sum + (entry.value * entry.weight), 0) / totalWeight;
+}
+
+function stdDev(values: number[]): number {
+  if (values.length <= 1) return 0;
+  const mean = avg(values);
+  const variance = avg(values.map(value => (value - mean) ** 2));
+  return Math.sqrt(variance);
+}
+
+function roundToTenths(value: number): number {
+  return Math.round(value * 10) / 10;
+}
+
+function roundToThousandths(value: number): number {
+  return Math.round(value * 1000) / 1000;
+}
+
+function normalizeNBAProjectionStatType(statType: string): 'points' | 'rebounds' | 'assists' | 'threes' | null {
+  const t = statType.toLowerCase();
+  if (t === 'player_points' || t === 'points' || t === 'pts') return 'points';
+  if (t === 'player_rebounds' || t === 'rebounds' || t === 'reb') return 'rebounds';
+  if (t === 'player_assists' || t === 'assists' || t === 'ast') return 'assists';
+  if (t === 'player_threes' || t === 'threes' || t === '3pm' || t === '3-pointers made') return 'threes';
+  return null;
+}
+
+function isSupportedNBAProjectionMarket(statType: string): boolean {
+  return normalizeNBAProjectionStatType(statType) !== null;
+}
+
+function getStatValue(game: PlayerProfile['recentGames'][number], statKey: 'points' | 'rebounds' | 'assists' | 'threes'): number {
+  if (statKey === 'points') return game.points;
+  if (statKey === 'rebounds') return game.rebounds;
+  if (statKey === 'assists') return game.assists;
+  return game.threes;
+}
+
+function erf(x: number): number {
+  const sign = x >= 0 ? 1 : -1;
+  const ax = Math.abs(x);
+  const a1 = 0.254829592;
+  const a2 = -0.284496736;
+  const a3 = 1.421413741;
+  const a4 = -1.453152027;
+  const a5 = 1.061405429;
+  const p = 0.3275911;
+  const t = 1 / (1 + p * ax);
+  const y = 1 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-ax * ax);
+  return sign * y;
+}
+
+function normalCDF(z: number): number {
+  return clamp01(0.5 * (1 + erf(z / Math.sqrt(2))));
+}
+
+function calcProbability(projectedStat: number, line: number, standardDeviation: number): number {
+  const safeStdDev = Math.max(0.75, standardDeviation);
+  const z = (line - projectedStat) / safeStdDev;
+  return roundToThousandths(1 - normalCDF(z));
 }
 
 function computeCompleteness(ctx: NBAProjectionContext): number {
   let completeness = 0;
 
-  if (ctx.baseline > 0) completeness += 0.25;
-  if ((ctx.recentMinutesAvg ?? 0) > 0) completeness += 0.20;
-  if ((ctx.seasonMinutesAvg ?? 0) > 0) completeness += 0.10;
-  if (ctx.statRate > 0) completeness += 0.20;
-  if (ctx.usageRate !== null && ctx.usageRate !== undefined) completeness += 0.10;
-  if (ctx.teamPaceAdj !== undefined) completeness += 0.05;
-  if ((ctx.recentGamesCount ?? 0) >= 5) completeness += 0.05;
-  if (ctx.teamTotal !== null && ctx.teamTotal !== undefined) completeness += 0.05;
+  if (ctx.projectedMinutes > 0) completeness += 0.25;
+  if (ctx.weightedStatPerMinute > 0) completeness += 0.20;
+  if ((ctx.seasonStatPerMinute ?? 0) > 0) completeness += 0.15;
+  if (ctx.usageRate !== null && ctx.usageRate !== undefined) completeness += 0.15;
+  if (ctx.matchupAdjustment !== 1) completeness += 0.10;
+  if ((ctx.teamPaceAdj ?? 1) !== 1) completeness += 0.05;
+  if ((ctx.restAdjustment ?? 1) !== 1 || (ctx.homeAwayAdjustment ?? 1) !== 1) completeness += 0.05;
+  if ((ctx.stdDevInput ?? 0) > 0) completeness += 0.05;
+  if (ctx.minutesStable === false) completeness -= 0.15;
+  if ((ctx.minutesConfidence ?? 0) < 0.7) completeness -= 0.05;
 
-  return Math.round(Math.min(completeness, 1) * 100) / 100;
+  return roundToThousandths(clampRange(completeness, 0, 1));
 }
 
 function deriveSignals(
@@ -145,7 +248,7 @@ function deriveSignals(
   modelCompleteness: number
 ): PropSignal[] {
   const signals: PropSignal[] = [];
-  const rawProjectionEdge = Math.round((projectedStat - ctx.line) * 10) / 10;
+  const rawProjectionEdge = roundToTenths(projectedStat - ctx.line);
   const projectionMagnitude = Math.abs(rawProjectionEdge);
   const projectionSide: 'over' | 'under' = rawProjectionEdge >= 0 ? 'over' : 'under';
 
@@ -173,12 +276,12 @@ function deriveSignals(
     });
   }
 
-  const minutesDelta = (ctx.minutes ?? ctx.recentMinutesAvg ?? 0) - (ctx.seasonMinutesAvg ?? 0);
+  const minutesDelta = ctx.projectedMinutes - (ctx.seasonMinutesAvg ?? 0);
   if (Math.abs(minutesDelta) >= 2) {
     const risingMinutes = minutesDelta > 0;
     signals.push({
       type: 'MINUTES_PROJECTION',
-      detail: `Projected minutes ${(ctx.minutes ?? ctx.recentMinutesAvg ?? 0).toFixed(1)} vs season ${(ctx.seasonMinutesAvg ?? 0).toFixed(1)} (${minutesDelta > 0 ? '+' : ''}${minutesDelta.toFixed(1)})`,
+      detail: `Projected minutes ${ctx.projectedMinutes.toFixed(1)} vs season ${(ctx.seasonMinutesAvg ?? 0).toFixed(1)} (${minutesDelta > 0 ? '+' : ''}${minutesDelta.toFixed(1)})`,
       impact: risingMinutes ? 'positive' : 'negative',
       magnitude: Math.abs(minutesDelta) >= 4 ? 'high' : 'medium',
       side: risingMinutes ? 'over' : 'under',
@@ -197,26 +300,86 @@ function deriveSignals(
     });
   }
 
+  if ((ctx.usageOrRoleAdjustment ?? 1) >= 1.05 || (ctx.recentShotAttemptsPerMinute ?? 0) > (ctx.seasonShotAttemptsPerMinute ?? 0)) {
+    signals.push({
+      type: 'USAGE_SHOT_VOLUME',
+      detail: `Usage/role adjustment ${(ctx.usageOrRoleAdjustment ?? 1).toFixed(2)}x with recent shot volume ${(ctx.recentShotAttemptsPerMinute ?? 0).toFixed(2)}/min`,
+      impact: 'positive',
+      magnitude: (ctx.usageOrRoleAdjustment ?? 1) >= 1.08 ? 'high' : 'medium',
+      side: 'over',
+      scoreContribution: (ctx.usageOrRoleAdjustment ?? 1) >= 1.08 ? 10 : 6,
+    });
+  }
+
+  if ((ctx.minutesStable ?? true) === false) {
+    signals.push({
+      type: 'MINUTES_VOLATILITY',
+      detail: `Minutes volatility ${(ctx.minutesVolatility ?? 0).toFixed(1)} with ${ctx.minutesTrend ?? 'unknown'} role trend`,
+      impact: 'negative',
+      magnitude: (ctx.minutesVolatility ?? 0) >= 5 ? 'high' : 'medium',
+      side: 'neutral',
+      scoreContribution: (ctx.minutesVolatility ?? 0) >= 5 ? -14 : -9,
+    });
+  } else if ((ctx.minutesConfidence ?? 0) >= 0.7) {
+    signals.push({
+      type: 'ROLE_STABILITY',
+      detail: `Stable role profile with ${Math.round((ctx.minutesConfidence ?? 0) * 100)}% minutes confidence`,
+      impact: 'positive',
+      magnitude: (ctx.roleStabilityScore ?? 0) >= 0.8 ? 'high' : 'medium',
+      side: 'neutral',
+      scoreContribution: (ctx.roleStabilityScore ?? 0) >= 0.8 ? 8 : 5,
+    });
+  }
+
+  if (Math.abs((ctx.atsConfidenceDelta ?? 0)) >= 0.005) {
+    signals.push({
+      type: 'ATS_NOTE',
+      detail: `ATS context note ${(ctx.atsConfidenceDelta ?? 0) > 0 ? '+' : ''}${((ctx.atsConfidenceDelta ?? 0) * 100).toFixed(1)}% confidence`,
+      impact: (ctx.atsConfidenceDelta ?? 0) > 0 ? 'positive' : 'negative',
+      magnitude: 'low',
+      side: 'neutral',
+      scoreContribution: 0,
+    });
+  }
+
   return signals;
 }
 
 function buildNBAProjection(ctx: NBAProjectionContext): NBAProjectionResult {
-  const minutes = ctx.minutes || ctx.recentMinutesAvg || 0;
-  const usage = ctx.usageRate || 0.22;
-  const pace = ctx.teamPaceAdj || 1;
-
-  const rawProjection = (minutes * usage * pace * ctx.statRate) || ctx.baseline;
-  const projectedStat = Math.round(rawProjection * 10) / 10;
-  const variance = Math.max(0.75, projectedStat * 0.15);
-  const probabilityOver = calcProbability(projectedStat, ctx.line, variance);
+  const rawProjection =
+    ctx.projectedMinutes *
+    ctx.weightedStatPerMinute *
+    ctx.teamPaceAdj *
+    ctx.usageOrRoleAdjustment *
+    ctx.matchupAdjustment *
+    ctx.restAdjustment *
+    ctx.homeAwayAdjustment *
+    (ctx.teammateShotMakingAdjustment ?? 1);
+  const projectedStat = roundToTenths(rawProjection);
+  const stdDevBase = Math.max(2.5, projectedStat * 0.18);
+  const adjustedStdDev = Math.max(
+    ctx.statKey === 'threes' ? 1.4 : 0.75,
+    (ctx.stdDevInput ?? stdDevBase) * (ctx.threeVarianceBoost ?? 1)
+  );
+  const probabilityOver = calcProbability(projectedStat, ctx.line, adjustedStdDev);
   const modelCompleteness = computeCompleteness(ctx);
+  const impliedProbability = roundToThousandths(ctx.impliedProbability ?? 0.524);
 
   return {
     projectedStat,
     probabilityOver,
-    probabilityUnder: Math.round((1 - probabilityOver) * 1000) / 1000,
+    probabilityUnder: roundToThousandths(1 - probabilityOver),
+    impliedProbability,
     modelCompleteness,
-    signals: deriveSignals(ctx, projectedStat, modelCompleteness),
+    signals: deriveSignals(
+      ctx,
+      projectedStat,
+      modelCompleteness
+    ),
+    minutesStable: ctx.minutesStable ?? true,
+    minutesConfidence: roundToThousandths(ctx.minutesConfidence ?? 0.5),
+    roleStabilityScore: roundToThousandths(ctx.roleStabilityScore ?? 0.5),
+    supportedMarket: true,
   };
 }
 
@@ -586,7 +749,12 @@ export function generatePropPrediction(
   }
 
   // -- Signal 17: ATS situation context ------------------
-  if (atsSituation && atsSituation.atsScoreBonus && Math.abs(atsSituation.atsScoreBonus) >= 5) {
+  if (
+    atsSituation &&
+    atsSituation.atsScoreBonus &&
+    Math.abs(atsSituation.atsScoreBonus) >= 5 &&
+    sportKey !== 'basketball_nba'
+  ) {
     const isPositive = atsSituation.atsScoreBonus > 0;
     signals.push({
       type: 'ATS_HISTORY',
@@ -627,45 +795,206 @@ export function generatePropPrediction(
   }
 
   // -- Final assessment --------------------------------------
-  if (sportKey === 'basketball_nba') {
-    const stats = profile ? getStatFromProfile(profile, statType) : null;
-    const baseline = stats
-      ? Math.round(((stats.season * 0.55) + (stats.l5 * 0.45)) * 10) / 10
+  if (sportKey === 'basketball_nba' && isSupportedNBAProjectionMarket(statType)) {
+    const statKey = normalizeNBAProjectionStatType(statType)!;
+    const recentGames = profile?.recentGames?.filter(g => !g.didNotPlay && g.minutes > 0) ?? [];
+    const recentThreeGames = recentGames.slice(0, 3);
+    const recentFiveGames = recentGames.slice(0, 5);
+    const recentTenGames = recentGames.slice(0, 10);
+    const last3MinutesAvg = recentThreeGames.length > 0
+      ? avg(recentThreeGames.map(g => g.minutes))
+      : (profile?.l5MPG ?? 0);
+    const last5MinutesAvg = recentFiveGames.length > 0
+      ? avg(recentFiveGames.map(g => g.minutes))
+      : (profile?.l5MPG ?? 0);
+    const last10MinutesAvg = recentTenGames.length > 0
+      ? avg(recentTenGames.map(g => g.minutes))
+      : (profile?.l10MPG ?? last5MinutesAvg);
+    const seasonMinutesAvg = profile?.seasonMPG ?? last5MinutesAvg;
+    const projectedMinutes = roundToTenths(weightedAverage([
+      { value: seasonMinutesAvg, weight: 0.20 },
+      { value: last10MinutesAvg, weight: 0.35 },
+      { value: last5MinutesAvg, weight: 0.30 },
+      { value: last3MinutesAvg, weight: 0.15 },
+    ])) || seasonMinutesAvg;
+    const minutesVolatility = recentFiveGames.length > 1
+      ? stdDev(recentFiveGames.map(g => g.minutes))
+      : 0;
+    const minutesTrendPct = profile?.minutesTrendPct ?? 0;
+    const roleTrend = profile?.minutesTrend ?? 'stable';
+    const baseMinutesConfidence =
+      0.8 -
+      clampRange(minutesVolatility / 12, 0, 0.35) -
+      (roleTrend === 'falling' ? 0.18 : 0) -
+      (Math.abs(minutesTrendPct) >= 15 ? 0.10 : 0) +
+      (roleTrend === 'stable' ? 0.08 : 0) +
+      (roleTrend === 'rising' && Math.abs(minutesTrendPct) <= 12 ? 0.05 : 0);
+    const minutesConfidence = roundToThousandths(clampRange(
+      statKey === 'threes' ? baseMinutesConfidence - 0.03 : baseMinutesConfidence,
+      0.1,
+      0.95
+    ));
+    const minutesStable = minutesConfidence >= (statKey === 'threes' ? 0.74 : 0.70);
+    const roleStabilityScore = roundToThousandths(clampRange(
+      0.55 +
+      (roleTrend === 'stable' ? 0.12 : roleTrend === 'rising' ? 0.06 : -0.12) +
+      (projectedMinutes >= 32 ? 0.10 : projectedMinutes >= 26 ? 0.05 : -0.08) -
+      clampRange((minutesVolatility - 3) * 0.06, 0, 0.22),
+      0.1,
+      0.95
+    ));
+
+    const seasonStat = profile
+      ? statKey === 'points' ? profile.seasonPPG
+      : statKey === 'rebounds' ? profile.seasonRPG
+      : statKey === 'assists' ? profile.seasonAPG
+      : profile.season3PG
       : postedLine;
-    const recentMinutesAvg = profile?.l5MPG ?? 0;
-    const seasonMinutesAvg = profile?.seasonMPG ?? recentMinutesAvg;
-    const blendedMinutes = recentMinutesAvg > 0
-      ? Math.round((((recentMinutesAvg * 0.65) + (seasonMinutesAvg * 0.35))) * 10) / 10
-      : seasonMinutesAvg;
+    const last10Stat = recentTenGames.length > 0
+      ? avg(recentTenGames.map(g => getStatValue(g, statKey)))
+      : seasonStat;
+    const last5Stat = recentFiveGames.length > 0
+      ? avg(recentFiveGames.map(g => getStatValue(g, statKey)))
+      : last10Stat;
+    const seasonStatPerMinute = seasonMinutesAvg > 0 ? seasonStat / seasonMinutesAvg : 0;
+    const last10StatPerMinute = last10MinutesAvg > 0 ? last10Stat / last10MinutesAvg : seasonStatPerMinute;
+    const last5StatPerMinute = last5MinutesAvg > 0 ? last5Stat / last5MinutesAvg : last10StatPerMinute;
+    const weightedStatPerMinute = weightedAverage([
+      { value: seasonStatPerMinute, weight: 0.35 },
+      { value: last10StatPerMinute, weight: 0.40 },
+      { value: last5StatPerMinute, weight: 0.25 },
+    ]);
+
     const rawUsage = profile?.usageRate ?? null;
-    const projectionUsage = rawUsage ?? 0.22;
-    const paceMultiplier = matchup?.impliedPaceMultiplier
-      ?? (teamTotal !== null
-        ? 1 + (((teamTotal - leagueAvgTeamTotal) / leagueAvgTeamTotal) * 0.15)
-        : 1);
-    const denominator = Math.max(
-      1,
-      (blendedMinutes || recentMinutesAvg || seasonMinutesAvg || 1) *
-      projectionUsage *
-      Math.max(0.85, paceMultiplier)
+    const usageAdjustment = clampRange(1 + (((rawUsage ?? 0.22) - 0.22) * 1.0), 0.90, 1.12);
+    const recentShotAttemptsPerMinute = recentFiveGames.length > 0
+      ? avg(recentFiveGames.map(g => g.fieldGoalAttempts / Math.max(g.minutes, 1)))
+      : 0;
+    const seasonShotAttemptsPerMinute = recentTenGames.length > 0
+      ? avg(recentTenGames.map(g => g.fieldGoalAttempts / Math.max(g.minutes, 1)))
+      : recentShotAttemptsPerMinute;
+    const shotVolumePulse = seasonShotAttemptsPerMinute > 0
+      ? (recentShotAttemptsPerMinute - seasonShotAttemptsPerMinute) / seasonShotAttemptsPerMinute
+      : 0;
+    const shotVolumeAdjustment = clampRange(1 + (shotVolumePulse * 0.30), 0.90, 1.10);
+    const playerMatchup = matchup?.matchups.get(playerName)?.find(m => normalizeNBAProjectionStatType(m.statType ?? '') === statKey)
+      ?? matchup?.matchups.get(playerName)?.[0];
+    const matchupVsLeagueAvg = typeof playerMatchup?.vsLeagueAvg === 'number'
+      ? playerMatchup.vsLeagueAvg
+      : 0;
+    const paceAdjustment = clampRange(matchup?.impliedPaceMultiplier ?? 1, 0.94, 1.06);
+    const matchupAdjustment = clampRange(
+      1 + (
+        statKey === 'points' ? matchupVsLeagueAvg * 0.020 :
+        statKey === 'rebounds' ? matchupVsLeagueAvg * 0.018 :
+        statKey === 'assists' ? matchupVsLeagueAvg * 0.022 :
+        matchupVsLeagueAvg * 0.020
+      ),
+      0.92,
+      1.08
     );
-    const statRate = baseline > 0 ? baseline / denominator : 0;
+    const restAdjustment = clampRange(
+      isBackToBack ? 0.96 : isCrossCountryTravel ? 0.97 : 1.01,
+      0.94,
+      1.03
+    );
+    const homeAwaySplit = profile
+      ? statKey === 'points' ? (isHome ? profile.homePPG : profile.awayPPG)
+      : statKey === 'rebounds' ? null
+      : statKey === 'assists' ? null
+      : null
+      : null;
+    const homeAwayBaseline = profile
+      ? statKey === 'points' ? profile.seasonPPG
+      : statKey === 'rebounds' ? profile.seasonRPG
+      : statKey === 'assists' ? profile.seasonAPG
+      : profile.season3PG
+      : null;
+    const homeAwayAdjustment = clampRange(
+      homeAwaySplit !== null && homeAwayBaseline && homeAwayBaseline > 0
+        ? 1 + (((homeAwaySplit - homeAwayBaseline) / homeAwayBaseline) * 0.25)
+        : 1,
+      0.97,
+      1.03
+    );
+    const roleAdjustment = clampRange(0.90 + (roleStabilityScore * 0.20), 0.90, 1.08);
+    const usageOrRoleAdjustment = clampRange(
+      statKey === 'points'
+        ? usageAdjustment * shotVolumeAdjustment
+        : statKey === 'rebounds'
+          ? roleAdjustment
+          : statKey === 'assists'
+            ? clampRange((usageAdjustment * 0.55) + (shotVolumeAdjustment * 0.45), 0.90, 1.12)
+            : clampRange(shotVolumeAdjustment, 0.92, 1.08),
+      0.90,
+      1.12
+    );
+    const teammateShotMakingAdjustment = statKey === 'assists'
+      ? clampRange(keyTeammateOut ? 0.97 : 1.01, 0.97, 1.03)
+      : 1;
+    const statResults = recentTenGames.map(g => getStatValue(g, statKey));
+    const measuredStdDev = statResults.length > 1 ? stdDev(statResults) : 0;
+    const varianceFloor = statKey === 'threes' ? Math.max(1.4, postedLine * 0.35) : Math.max(2.5, postedLine * 0.18);
+    const standardDeviation = Math.max(varianceFloor, measuredStdDev);
+    const atsConfidenceDelta = atsSituation?.atsScoreBonus
+      ? clampRange(atsSituation.atsScoreBonus / 1000, -0.01, 0.01)
+      : 0;
+    const weightedThreeMadePerMinute = weightedStatPerMinute;
+    const weightedThreeEfficiency = recentFiveGames.length > 0
+      ? clampRange(avg(recentFiveGames.map(g => g.fieldGoalAttempts > 0 ? g.threes / g.fieldGoalAttempts : 0.12)) / 0.12, 0.92, 1.08)
+      : 1;
+    const adjustedWeightedStatPerMinute = statKey === 'threes'
+      ? weightedThreeMadePerMinute * weightedThreeEfficiency
+      : weightedStatPerMinute;
 
     nbaProjection = buildNBAProjection({
+      statKey,
       line: postedLine,
-      minutes: blendedMinutes || recentMinutesAvg || seasonMinutesAvg || undefined,
-      recentMinutesAvg: recentMinutesAvg || undefined,
+      projectedMinutes: projectedMinutes || seasonMinutesAvg || postedLine,
       seasonMinutesAvg: seasonMinutesAvg || undefined,
+      last10MinutesAvg: last10MinutesAvg || undefined,
+      last5MinutesAvg: last5MinutesAvg || undefined,
+      last3MinutesAvg: last3MinutesAvg || undefined,
       usageRate: rawUsage,
-      teamPaceAdj: paceMultiplier,
-      statRate,
-      baseline,
-      minutesTrendPct: profile?.minutesTrendPct,
-      recentGamesCount: profile?.recentGames?.filter(g => !g.didNotPlay).length ?? 0,
-      teamTotal,
+      weightedStatPerMinute: adjustedWeightedStatPerMinute,
+      seasonStatPerMinute: seasonStatPerMinute || undefined,
+      last10StatPerMinute: last10StatPerMinute || undefined,
+      last5StatPerMinute: last5StatPerMinute || undefined,
+      teamPaceAdj: paceAdjustment,
+      usageOrRoleAdjustment,
+      matchupAdjustment,
+      restAdjustment,
+      homeAwayAdjustment,
+      teammateShotMakingAdjustment,
+      stdDevInput: standardDeviation,
+      impliedProbability: roundToThousandths(americanOdds >= 0
+        ? 100 / (americanOdds + 100)
+        : Math.abs(americanOdds) / (Math.abs(americanOdds) + 100)),
+      projectedFromRecentBaseline: recentGames.length >= 5,
+      threeVarianceBoost: statKey === 'threes' ? 1.15 : 1,
+      minutesTrendPct,
+      minutesTrend: roleTrend,
+      recentGamesCount: recentGames.length,
+      recentShotAttemptsPerMinute,
+      seasonShotAttemptsPerMinute,
+      minutesVolatility,
+      minutesStable,
+      minutesConfidence,
+      roleStabilityScore,
+      roleAdjustment,
+      atsConfidenceDelta,
     });
 
     predictedValue = nbaProjection.projectedStat;
+    if (atsConfidenceDelta !== 0) {
+      if (side === 'over') {
+        nbaProjection.probabilityOver = roundToThousandths(clampRange(nbaProjection.probabilityOver + atsConfidenceDelta, 0.01, 0.99));
+        nbaProjection.probabilityUnder = roundToThousandths(1 - nbaProjection.probabilityOver);
+      } else {
+        nbaProjection.probabilityUnder = roundToThousandths(clampRange(nbaProjection.probabilityUnder + atsConfidenceDelta, 0.01, 0.99));
+        nbaProjection.probabilityOver = roundToThousandths(1 - nbaProjection.probabilityUnder);
+      }
+    }
     for (const signal of nbaProjection.signals) {
       signals.push(signal);
       scoreAdjustment += signal.scoreContribution;
@@ -693,13 +1022,31 @@ export function generatePropPrediction(
     confidence = 'medium';
   }
 
-  // Should bet only if prediction aligns with posted side AND confidence is medium+
-  const shouldBet =
-    confidence !== 'low' &&
-    Math.abs(scoreAdjustment) >= 10 &&
-    (dominantSide === side) &&
-    Math.abs(predictedEdge) >= 1.5 &&
-    (nbaProjection ? nbaProjection.modelCompleteness >= 0.6 : true);
+  const sideAdjustedProjectionEdge = side === 'over'
+    ? predictedEdge
+    : -predictedEdge;
+  const modelProbability = nbaProjection
+    ? (side === 'over' ? nbaProjection.probabilityOver : nbaProjection.probabilityUnder)
+    : undefined;
+  const modelTrueEdge = nbaProjection
+    ? roundToThousandths((modelProbability ?? 0) - nbaProjection.impliedProbability)
+    : undefined;
+
+  const shouldBet = nbaProjection
+    ? (
+      confidence !== 'low' &&
+      sideAdjustedProjectionEdge >= 1.5 &&
+      (modelProbability ?? 0) >= 0.58 &&
+      (modelTrueEdge ?? 0) >= 0.05 &&
+      nbaProjection.modelCompleteness >= 0.75 &&
+      nbaProjection.minutesConfidence >= 0.70
+    )
+    : (
+      confidence !== 'low' &&
+      Math.abs(scoreAdjustment) >= 10 &&
+      (dominantSide === side) &&
+      Math.abs(predictedEdge) >= 1.5
+    );
 
   // Build summary
   const highSignals = signals.filter(s => s.magnitude === 'high');
@@ -730,7 +1077,12 @@ export function generatePropPrediction(
       projectedStat: nbaProjection.projectedStat,
       probabilityOver: nbaProjection.probabilityOver,
       probabilityUnder: nbaProjection.probabilityUnder,
+      impliedProbability: nbaProjection.impliedProbability,
       modelCompleteness: nbaProjection.modelCompleteness,
+      nbaMinutesStable: nbaProjection.minutesStable,
+      nbaMinutesConfidence: nbaProjection.minutesConfidence,
+      nbaRoleStabilityScore: nbaProjection.roleStabilityScore,
+      supportedNBAProjection: nbaProjection.supportedMarket,
     } : {}),
   };
 }

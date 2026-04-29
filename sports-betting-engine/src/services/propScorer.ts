@@ -36,8 +36,14 @@ export interface ScoredProp {
   projectedStat?: number;
   projectionEdge?: number;
   probability?: number;
+  impliedProbability?: number;
   trueEdge?: number;
   modelCompleteness?: number;
+  nbaMinutesStable?: boolean;
+  nbaMinutesConfidence?: number;
+  nbaRoleStabilityScore?: number;
+  strongNonMarketSignalCount?: number;
+  supportedNBAProjection?: boolean;
   // Best accessible book
   bestUserBook: string;
   bestUserPrice: number;
@@ -105,24 +111,40 @@ function getSideProjectionEdge(
 }
 
 function scoreNBAProjection(
+  modelProbability: number,
   sideProjectionEdge: number,
   trueEdge: number,
   modelCompleteness: number,
-  intelligenceScore: number
+  intelligenceScore: number,
+  minutesConfidence: number,
+  isThreeProp: boolean,
+  strongNonMarketSignalCount: number
 ): number {
+  const probabilityPoints = modelProbability > 0.5
+    ? Math.min((modelProbability - 0.5) * 180, 18)
+    : -10;
   const projectionPoints = sideProjectionEdge > 0
-    ? Math.min(sideProjectionEdge * 12, 36)
+    ? Math.min(sideProjectionEdge * 14, 24)
     : 0;
   const trueEdgePoints = trueEdge > 0
-    ? Math.min(trueEdge * 300, 36)
+    ? Math.min(trueEdge * 320, 24)
     : 0;
-  const completenessPoints = modelCompleteness > 0.5
-    ? Math.min((modelCompleteness - 0.5) * 40, 20)
+  const completenessPoints = modelCompleteness > 0.6
+    ? Math.min((modelCompleteness - 0.6) * 40, 12)
     : 0;
-  const intelligencePoints = Math.max(-8, Math.min(intelligenceScore / 2, 8));
+  const intelligencePoints = Math.max(-6, Math.min(intelligenceScore / 4, 6));
+  const minutesPoints = Math.max(-18, Math.min((minutesConfidence - 0.7) * 32, 10));
+  const contextPoints = strongNonMarketSignalCount >= 2
+    ? 8
+    : strongNonMarketSignalCount === 1
+      ? 3
+      : -10;
+  const threesPenalty = isThreeProp ? -4 : 0;
 
   return clampScore(
-    10 + projectionPoints + trueEdgePoints + completenessPoints + intelligencePoints
+    8 + probabilityPoints + projectionPoints + trueEdgePoints +
+    completenessPoints + intelligencePoints + minutesPoints +
+    contextPoints + threesPenalty
   );
 }
 
@@ -277,10 +299,19 @@ export async function scoreAllPropsWithIntelligence(
     const MARKET_STRUCTURE_SIGNALS = new Set([
       'PRICE_EDGE', 'LINE_GAP', 'JUICE_GAP', 'LINE_VS_CONSENSUS',
     ]);
+    const NON_CONTEXT_NBA_SIGNALS = new Set([
+      'NBA_PROJECTION_EDGE',
+      'PROJECTION_COMPLETE',
+      'ATS_NOTE',
+    ]);
     const nonMarketIntelSignals = (prediction.signals ?? [])
       .filter(s => !MARKET_STRUCTURE_SIGNALS.has(s.type))
       .filter(s => s.magnitude === 'high' || s.magnitude === 'medium')
       .map(s => s.type);
+    const strongNonMarketSignalCount = (sportKey === 'basketball_nba'
+      ? nonMarketIntelSignals.filter(type => !NON_CONTEXT_NBA_SIGNALS.has(type))
+      : nonMarketIntelSignals
+    ).length;
 
     const enrichedSignals =
       (sportKey === 'basketball_nba' || sportKey.includes('baseball')) && nonMarketIntelSignals.length > 0
@@ -337,8 +368,13 @@ export async function scoreAllPropsWithIntelligence(
     const weightedScore = applyLearnedWeights(adjustedScore, signalNames, learnedWeights);
 
     const projectedStat = prediction.projectedStat ?? prediction.predictedValue;
-    const projectionEdge = projectedStat !== undefined
+    const rawProjectionDelta = projectedStat !== undefined
       ? Math.round((projectedStat - scored.line) * 10) / 10
+      : undefined;
+    const projectionEdge = rawProjectionDelta !== undefined
+      ? (sportKey === 'basketball_nba'
+        ? getSideProjectionEdge(scored.side, rawProjectionDelta)
+        : rawProjectionDelta)
       : undefined;
     const impliedProbability = americanToImpliedProbability(scored.bestUserPrice);
     const probability = scored.side === 'Over'
@@ -348,26 +384,64 @@ export async function scoreAllPropsWithIntelligence(
       ? Math.round((probability - impliedProbability) * 1000) / 1000
       : undefined;
     const modelCompleteness = prediction.modelCompleteness ?? 0;
-    const sideProjectionEdge = getSideProjectionEdge(scored.side, projectionEdge);
+    const sideProjectionEdge = projectionEdge ?? 0;
+    const nbaMinutesStable = prediction.nbaMinutesStable;
+    const nbaMinutesConfidence = prediction.nbaMinutesConfidence ?? 0;
+    const nbaRoleStabilityScore = prediction.nbaRoleStabilityScore ?? 0.5;
+    const supportedNBAProjection = prediction.supportedNBAProjection ?? false;
+    const isThreeProp = scored.statType === 'player_threes';
 
     let finalScore = weightedScore;
     let finalTier = scored.tier;
 
     if (sportKey === 'basketball_nba') {
       finalScore = scoreNBAProjection(
+        probability ?? 0,
         sideProjectionEdge,
         trueEdge ?? 0,
         modelCompleteness,
-        intelligenceScore
+        intelligenceScore,
+        nbaMinutesConfidence,
+        isThreeProp,
+        strongNonMarketSignalCount
       );
       finalTier = getTier(finalScore, enrichedSignals.length);
 
-      if (modelCompleteness < 0.6) {
+      if (!supportedNBAProjection) {
+        finalScore = Math.min(finalScore, 15);
+        finalTier = 'MONITOR';
+      }
+
+      if (nbaMinutesStable === false || nbaMinutesConfidence < (isThreeProp ? 0.74 : 0.70)) {
+        finalScore = Math.min(finalScore, 15);
+        finalTier = 'MONITOR';
+      }
+
+      if ((probability ?? 0) < 0.55 || sideProjectionEdge < 1.0 || (trueEdge ?? 0) < 0.03) {
+        finalScore = Math.min(finalScore, 15);
+        finalTier = 'MONITOR';
+      } else if ((probability ?? 0) < 0.58 || sideProjectionEdge < 1.5 || (trueEdge ?? 0) < 0.05) {
         finalScore = Math.min(finalScore, 49);
         finalTier = 'MONITOR';
       }
 
-      if (sideProjectionEdge <= 0 || (trueEdge ?? 0) <= 0) {
+      if (modelCompleteness < 0.65) {
+        finalScore = Math.min(finalScore, 15);
+        finalTier = 'MONITOR';
+      } else if (modelCompleteness < 0.75) {
+        finalScore = Math.min(finalScore, 49);
+        finalTier = 'MONITOR';
+      }
+
+      if (strongNonMarketSignalCount < 1) {
+        finalScore = Math.min(finalScore, 15);
+        finalTier = 'MONITOR';
+      } else if (strongNonMarketSignalCount < 2) {
+        finalScore = Math.min(finalScore, 49);
+        finalTier = 'MONITOR';
+      }
+
+      if ((prediction.impliedProbability ?? impliedProbability) >= (probability ?? 0)) {
         finalScore = Math.min(finalScore, 20);
         finalTier = 'MONITOR';
       }
@@ -383,8 +457,14 @@ export async function scoreAllPropsWithIntelligence(
       projectedStat,
       projectionEdge,
       probability,
+      impliedProbability,
       trueEdge,
       modelCompleteness,
+      nbaMinutesStable,
+      nbaMinutesConfidence,
+      nbaRoleStabilityScore,
+      strongNonMarketSignalCount,
+      supportedNBAProjection,
       fullReasoning: cleanReasoning,
       // Write enriched signals back so signalDiversityEngine sees them.
       // signalCount is updated to match so downstream engines agree.
@@ -660,11 +740,13 @@ export function printTopProps(props: ScoredProp[], sportKey = 'basketball_nba'):
     ) {
       const projectionEdge = p.projectionEdge > 0 ? `+${p.projectionEdge}` : `${p.projectionEdge}`;
       const probability = p.probability !== undefined ? `${(p.probability * 100).toFixed(1)}%` : 'n/a';
+      const impliedProbability = p.impliedProbability !== undefined ? `${(p.impliedProbability * 100).toFixed(1)}%` : 'n/a';
       const trueEdge = p.trueEdge !== undefined
         ? `${p.trueEdge >= 0 ? '+' : ''}${(p.trueEdge * 100).toFixed(1)}%`
         : 'n/a';
-      console.log(`  |  [AI] Projection: ${p.projectedStat} | Edge: ${projectionEdge} | Prob: ${probability} | True Edge: ${trueEdge}`);
-      console.log(`  |  [AI] Model completeness: ${((p.modelCompleteness ?? 0) * 100).toFixed(0)}%`);
+      console.log(`  |  [AI] Projection: ${p.projectedStat} | Line: ${p.line} | Projection Edge: ${projectionEdge}`);
+      console.log(`  |  [AI] Model Prob: ${probability} | Implied Prob: ${impliedProbability} | True Edge: ${trueEdge}`);
+      console.log(`  |  [AI] Model completeness: ${((p.modelCompleteness ?? 0) * 100).toFixed(0)}% | Minutes confidence: ${((p.nbaMinutesConfidence ?? 0) * 100).toFixed(0)}% | Non-market signals: ${p.strongNonMarketSignalCount ?? 0}`);
     }
     const brProp = parseFloat(process.env.BANKROLL ?? '0');
     const kProp  = brProp > 0 ? `Kelly: 1.5% = $${Math.round(brProp * 0.015)}` : 'Kelly: 1-2% of bankroll';

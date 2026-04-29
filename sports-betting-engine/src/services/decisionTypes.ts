@@ -71,8 +71,14 @@ export interface DecisionCandidate {
   projectedStat?: number;
   projectionEdge?: number;
   probability?: number;
+  impliedProbability?: number;
   trueEdge?: number;
   modelCompleteness?: number;
+  nbaMinutesStable?: boolean;
+  nbaMinutesConfidence?: number;
+  nbaRoleStabilityScore?: number;
+  strongNonMarketSignalCount?: number;
+  supportedNBAProjection?: boolean;
 
   // ----------------------------------------------------------
   // Game / matchup (both types)
@@ -629,8 +635,14 @@ export function mapToDecisionCandidate(
       projectedStat:    prop.projectedStat,
       projectionEdge:   prop.projectionEdge,
       probability:      prop.probability,
+      impliedProbability: prop.impliedProbability,
       trueEdge:         prop.trueEdge,
       modelCompleteness: prop.modelCompleteness,
+      nbaMinutesStable: prop.nbaMinutesStable,
+      nbaMinutesConfidence: prop.nbaMinutesConfidence,
+      nbaRoleStabilityScore: prop.nbaRoleStabilityScore,
+      strongNonMarketSignalCount: prop.strongNonMarketSignalCount,
+      supportedNBAProjection: prop.supportedNBAProjection,
       // Game context
       matchup:          prop.matchup,
       side:             prop.side,
@@ -677,8 +689,14 @@ export function mapToDecisionCandidate(
     projectedStat:    undefined,
     projectionEdge:   undefined,
     probability:      undefined,
+    impliedProbability: undefined,
     trueEdge:         undefined,
     modelCompleteness: undefined,
+    nbaMinutesStable: undefined,
+    nbaMinutesConfidence: undefined,
+    nbaRoleStabilityScore: undefined,
+    strongNonMarketSignalCount: undefined,
+    supportedNBAProjection: undefined,
     // Game context
     matchup:          bet.matchup,
     side:             bet.side,

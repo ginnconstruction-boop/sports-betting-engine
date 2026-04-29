@@ -111,10 +111,11 @@ function isNBAPlayerProp(c: DecisionCandidate): boolean {
 }
 
 function hasPositiveProjectionEdge(c: DecisionCandidate): boolean {
-  if (c.projectionEdge === undefined) return false;
-  return c.side.toLowerCase() === 'over'
-    ? c.projectionEdge > 0
-    : c.projectionEdge < 0;
+  return (c.projectionEdge ?? 0) > 0;
+}
+
+function hasStrongNBAContext(c: DecisionCandidate): boolean {
+  return (c.strongNonMarketSignalCount ?? 0) >= 1;
 }
 
 function classify(c: DecisionCandidate): Classification {
@@ -122,6 +123,7 @@ function classify(c: DecisionCandidate): Classification {
   const riskGrade = c.riskGrade ?? 'HIGH';
   const isPriceOnly = c.riskFlags?.includes('price_only_signal') ?? false;
   const hasStale    = c.riskFlags?.includes('stale_line_risk') ?? false;
+  const trueEdge = c.trueEdge ?? -1;
 
   // ----------------------------------------------------------
   // Priority 1: PASS — missing data or failed qualification
@@ -159,6 +161,26 @@ function classify(c: DecisionCandidate): Classification {
       reasons: [
         'NBA prop: no directional projection edge versus posted line',
         `projection ${c.projectedStat ?? 'n/a'} vs line ${c.line ?? 'n/a'}`,
+      ],
+    };
+  }
+
+  if (isNBAPlayerProp(c) && c.nbaMinutesStable === false) {
+    return {
+      label: 'PASS',
+      reasons: [
+        `NBA prop: minutes not stable (${Math.round((c.nbaMinutesConfidence ?? 0) * 100)}% confidence)`,
+        'unstable role or volatile recent minutes',
+      ],
+    };
+  }
+
+  if (isNBAPlayerProp(c) && trueEdge < 0.03) {
+    return {
+      label: 'PASS',
+      reasons: [
+        `NBA prop: true edge ${(trueEdge * 100).toFixed(1)}% below 3.0% minimum`,
+        'insufficient projection edge after price conversion',
       ],
     };
   }
@@ -253,6 +275,45 @@ function classify(c: DecisionCandidate): Classification {
     };
   }
 
+  if (isNBAPlayerProp(c) && trueEdge < 0.05) {
+    return {
+      label: 'MONITOR',
+      reasons: [
+        `NBA prop: true edge ${(trueEdge * 100).toFixed(1)}% in 3-5% monitor band`,
+        'needs stronger projection separation to become actionable',
+      ],
+    };
+  }
+
+  if (isNBAPlayerProp(c) && !hasStrongNBAContext(c)) {
+    return {
+      label: 'MONITOR',
+      reasons: [
+        'NBA prop: no strong non-market signal support',
+        'LEAN/BET requires at least one strong contextual signal',
+      ],
+    };
+  }
+
+  if (isNBAPlayerProp(c) && trueEdge < 0.07) {
+    if (riskGrade === 'HIGH') {
+      return {
+        label: 'MONITOR',
+        reasons: [
+          `NBA prop: true edge ${(trueEdge * 100).toFixed(1)}% in 5-7% band but risk HIGH`,
+          'needs lower risk before reaching LEAN',
+        ],
+      };
+    }
+    return {
+      label: 'LEAN',
+      reasons: [
+        `NBA prop: true edge ${(trueEdge * 100).toFixed(1)}% in 5-7% lean band`,
+        'projection clears minimum actionable edge but not BET threshold',
+      ],
+    };
+  }
+
   // ----------------------------------------------------------
   // Priority 3: PASS — HIGH risk + insufficient adjusted edge
   // Not even worth monitoring: too risky and not enough edge
@@ -332,6 +393,137 @@ function classify(c: DecisionCandidate): Classification {
   };
 }
 
+function classifyV2(c: DecisionCandidate): Classification {
+  if (!isNBAPlayerProp(c)) return classify(c);
+
+  const modelProbability = c.probability ?? 0;
+  const projectionEdge = c.projectionEdge ?? 0;
+  const trueEdge = c.trueEdge ?? -1;
+  const completeness = c.modelCompleteness ?? 0;
+  const minutesConfidence = c.nbaMinutesConfidence ?? 0;
+  const strongContextCount = c.strongNonMarketSignalCount ?? 0;
+  const riskGrade = c.riskGrade ?? 'HIGH';
+  const isPriceOnly =
+    c.isPriceOnlyCandidate === true ||
+    (c.riskFlags?.includes('price_only_signal') ?? false);
+
+  if (!c.qualificationPassed) {
+    return {
+      label: 'PASS',
+      reasons: ['failed qualification', ...(c.rejectionReasons ?? []).slice(0, 2)],
+    };
+  }
+  if (c.adjustedWinProbability === undefined) {
+    return {
+      label: 'PASS',
+      reasons: ['probability enrichment not available'],
+    };
+  }
+  if ((c.supportedNBAProjection ?? true) === false) {
+    return {
+      label: 'PASS',
+      reasons: ['NBA prop market not supported by projection formula V1', c.market ?? 'unsupported market'],
+    };
+  }
+  if (projectionEdge <= 0) {
+    return {
+      label: 'PASS',
+      reasons: [
+        'NBA prop: no directional projection edge versus posted line',
+        `projection ${c.projectedStat ?? 'n/a'} vs line ${c.line ?? 'n/a'}`,
+      ],
+    };
+  }
+  if (c.nbaMinutesStable === false) {
+    return {
+      label: 'PASS',
+      reasons: [
+        `NBA prop: minutes not stable (${Math.round(minutesConfidence * 100)}% confidence)`,
+        'unstable role or volatile recent minutes',
+      ],
+    };
+  }
+  if (isPriceOnly) {
+    return {
+      label: 'PASS',
+      reasons: [
+        'NBA prop: price-only signal set is not actionable',
+        'projection must be confirmed by non-market context',
+      ],
+    };
+  }
+  if (riskGrade === 'HIGH') {
+    return {
+      label: 'PASS',
+      reasons: [
+        'NBA prop: HIGH risk blocked',
+        'projection advantage is not enough to overcome risk quality',
+      ],
+    };
+  }
+  if (completeness < 0.65 || minutesConfidence < 0.70) {
+    return {
+      label: 'PASS',
+      reasons: [
+        `NBA prop: model completeness ${Math.round(completeness * 100)}% or minutes confidence ${Math.round(minutesConfidence * 100)}% below floor`,
+        'supported projection exists but the model is not complete enough yet',
+      ],
+    };
+  }
+  if (modelProbability < 0.55 || projectionEdge < 1.0 || trueEdge < 0.03) {
+    return {
+      label: 'PASS',
+      reasons: [
+        `NBA prop: model ${(modelProbability * 100).toFixed(1)}% | proj edge ${projectionEdge.toFixed(1)} | true edge ${(trueEdge * 100).toFixed(1)}%`,
+        'minimum actionable projection thresholds not met',
+      ],
+    };
+  }
+
+  const betEligible =
+    modelProbability >= 0.58 &&
+    trueEdge >= 0.05 &&
+    projectionEdge >= 1.5 &&
+    completeness >= 0.75 &&
+    minutesConfidence >= 0.70 &&
+    strongContextCount >= 2 &&
+    riskGrade === 'LOW';
+
+  const leanEligible =
+    modelProbability >= 0.55 &&
+    trueEdge >= 0.03 &&
+    projectionEdge >= 1.0 &&
+    completeness >= 0.65 &&
+    strongContextCount >= 1 &&
+    (riskGrade === 'LOW' || riskGrade === 'MODERATE');
+
+  if (betEligible) {
+    return {
+      label: 'BET',
+      reasons: [
+        `NBA prop: model ${(modelProbability * 100).toFixed(1)}% | proj edge ${projectionEdge.toFixed(1)} | true edge ${(trueEdge * 100).toFixed(1)}%`,
+        `completeness ${Math.round(completeness * 100)}% | minutes confidence ${Math.round(minutesConfidence * 100)}% | context ${strongContextCount}`,
+      ],
+    };
+  }
+  if (leanEligible) {
+    return {
+      label: 'LEAN',
+      reasons: [
+        `NBA prop: model ${(modelProbability * 100).toFixed(1)}% | proj edge ${projectionEdge.toFixed(1)} | true edge ${(trueEdge * 100).toFixed(1)}%`,
+        'meets LEAN floor but misses one or more BET requirements',
+      ],
+    };
+  }
+  return {
+    label: 'MONITOR',
+    reasons: [
+      `NBA prop: projection edge ${projectionEdge.toFixed(1)} exists, but confidence/context is incomplete`,
+      `model ${(modelProbability * 100).toFixed(1)}% | completeness ${Math.round(completeness * 100)}% | context ${strongContextCount}`,
+    ],
+  };
+}
+
 function toGrade(label: FinalLabel, adjustedEdge: number, sport?: string): string {
   switch (label) {
     case 'BET':             return adjustedEdge >= 0.10 ? 'A+' : 'A';
@@ -358,7 +550,7 @@ export function labelCandidates(
   candidates: DecisionCandidate[]
 ): DecisionCandidate[] {
   return candidates.map(c => {
-    const { label, reasons } = classify(c);
+    const { label, reasons } = classifyV2(c);
 
     // Append a note when the sport intelligence layer flagged LOW quality.
     // This is contextual only — no threshold is changed here.
