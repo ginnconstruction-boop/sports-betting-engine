@@ -439,11 +439,24 @@ async function doLogin() {
     }
   } catch { document.getElementById('login-error').textContent = 'Connection error'; }
 }
-async function doLogout() {
-  try { await fetch('/api/logout',{method:'POST',headers:{'x-auth-token':authToken}}); } catch {}
-  authToken = ''; localStorage.removeItem('sbe_token');
+function clearAuthState(message = '') {
+  authToken = '';
+  localStorage.removeItem('sbe_token');
+  if (currentBtn) { currentBtn.classList.remove('running'); currentBtn = null; }
+  const dot = document.getElementById('streaming-dot');
+  if (dot) dot.style.display = 'none';
   document.getElementById('dashboard').style.display = 'none';
   document.getElementById('login-screen').style.display = 'flex';
+  if (message) document.getElementById('login-error').textContent = message;
+}
+function handleUnauthorized(message = 'Session expired. Please log in again.') {
+  clearAuthState(message);
+  showToast(message, 'yellow');
+}
+async function doLogout() {
+  const token = authToken;
+  clearAuthState();
+  try { if (token) await fetch('/api/logout',{method:'POST',headers:{'x-auth-token':token}}); } catch {}
 }
 function showDashboard() {
   document.getElementById('login-screen').style.display = 'none';
@@ -519,7 +532,13 @@ async function streamSSE(cmd, label, content, dot, btn) {
     });
     console.log('[DBG:fe] response headers received — status:', resp.status, 'content-type:', resp.headers.get('content-type'));
 
-    if (resp.status === 401) { doLogout(); resolve(); return; }
+    if (resp.status === 401) {
+      content.innerHTML = `<div style="padding:1.5rem;color:var(--yellow)">Session expired. Please log in again.</div>`;
+      dot.style.display = 'none';
+      if (btn) btn.classList.remove('running');
+      handleUnauthorized();
+      resolve(); return;
+    }
     if (resp.status === 409) {
       content.innerHTML = `<div style="padding:1.5rem;color:var(--yellow)">Scan '${cmd}' is already running. Wait for it to finish.</div>`;
       dot.style.display = 'none';
@@ -617,6 +636,7 @@ function colorize(text) {
 async function loadStats() {
   try {
     const r = await fetch('/api/picks',{headers:{'x-auth-token':authToken}});
+    if (r.status === 401) { handleUnauthorized(); return; }
     if (!r.ok) return;
     const picks = await r.json();
     allPicksCache = picks;
