@@ -57,6 +57,18 @@ import { applySignalWeighting, printWeightingSummary } from '../services/signalW
 import { printCreditStatus } from '../services/creditTracker';
 import { updateATSTracker } from '../services/atsTracker';
 
+type SavedDecisionMeta = {
+  finalDecisionLabel?: 'BET' | 'LEAN' | 'MONITOR' | 'PASS' | 'BEST_PRICE_ONLY';
+  recommendedLabel?: 'BET' | 'LEAN' | 'MONITOR' | 'PASS' | 'BEST_PRICE_ONLY';
+  finalGrade?: string;
+  riskGrade?: 'LOW' | 'MODERATE' | 'HIGH';
+  marketType?: string;
+  isPriceOnlyCandidate?: boolean;
+  savedAsRecommendation?: boolean;
+  forcedTierCap?: 'LEAN' | 'MONITOR';
+  isBestBet?: boolean;
+};
+
 // Wrap a promise with a timeout so no single step can hang forever
 function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
   return new Promise<T>((resolve, reject) => {
@@ -85,6 +97,18 @@ function safeRunSync<T>(label: string, fn: () => T, fallback: T): T {
 }
 
 export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
+  let gradingError = '';
+  let grading = {
+    checked: 0,
+    graded: 0,
+    pending: 0,
+    missing: 0,
+  };
+  try {
+    grading = await autoGradePicks();
+  } catch (err: any) {
+    gradingError = err?.message ?? String(err);
+  }
   console.log('\n  Morning scan started — loading intelligence data...');
   const sportKeys = getEnabledSports().map(s => s.key);
   console.log(`  Sports in scope: ${sportKeys.join(', ')}`);
@@ -93,9 +117,13 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
   // Auto-grade yesterday's picks, identify what went wrong,
   // adjust signal weights for today's scoring
   console.log('\n  [0/22] Grading yesterday\'s picks from ESPN scores...');
-  const newlyGraded = await safeRun('retro grading', () => autoGradePicks(), 0);
-  if (newlyGraded > 0) {
-    console.log(`  Auto-graded ${newlyGraded} pick(s) from yesterday.`);
+  if (gradingError) {
+    process.stderr.write(`  [skip] retro grading: ${gradingError}\n`);
+  }
+  console.log(`[GRADING] checked: ${grading.checked} | graded: ${grading.graded} | pending: ${grading.pending} | missing: ${grading.missing}`);
+  if (grading.graded > 0 || grading.missing > 0) {
+    const totalResolved = grading.graded + grading.missing;
+    console.log(`  Auto-processed ${totalResolved} completed pick(s) from yesterday.`);
     // Auto-write ESPN grades into P&L -- no manual entry needed
     safeRunSync('auto pnl update', () => rebuildPNL(), undefined);
     console.log('  P&L updated automatically from ESPN scores.');
@@ -440,6 +468,22 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
     })),
   };
 
+  const buildSlateResult = () => {
+    const decisionCandidates = mapAllToDecisionCandidates(topBets);
+    const todayEvents = allSummaries.map(e => ({ matchup: e.matchup, homeTeam: e.homeTeam, awayTeam: e.awayTeam }));
+    const validResult = validateDataIntegrity(decisionCandidates, todayEvents);
+    const qualResult = qualifyCandidates(validResult.valid);
+    const allCandidates = [...qualResult.qualified, ...qualResult.rejected];
+    const enriched = enrichWithProbability(allCandidates);
+    const withOutcome = applyOutcomeSignals(enriched, outcomeContext);
+    const withIntel = applySportIntelligence(withOutcome);
+    const withDiversity = applySignalDiversity(withIntel);
+    const withWeighting = applySignalWeighting(withDiversity);
+    const withRisk = applyRisk(withWeighting);
+    const labeled = labelCandidates(withRisk);
+    return selectSlate(labeled);
+  };
+
   // -- [DECISION LAYER] Qualification pass --
   // Runs AFTER existing print so output is never disrupted.
   // Operates on the same topBets array; does not change scores,
@@ -506,20 +550,7 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
   // Independent block — identifies best candidates and the single Best Bet
   // of the Slate.  Does NOT affect existing output, saves, or alerts.
   safeRunSync('slate selector', () => {
-    const decisionCandidates = mapAllToDecisionCandidates(topBets);
-    const todayEvents        = allSummaries.map(e => ({ matchup: e.matchup, homeTeam: e.homeTeam, awayTeam: e.awayTeam }));
-    const validResult        = validateDataIntegrity(decisionCandidates, todayEvents);
-    const qualResult         = qualifyCandidates(validResult.valid);
-    const allCandidates      = [...qualResult.qualified, ...qualResult.rejected];
-    const enriched           = enrichWithProbability(allCandidates);
-    const withOutcome        = applyOutcomeSignals(enriched, outcomeContext);
-    printOutcomeSummary(withOutcome);
-    const withIntel          = applySportIntelligence(withOutcome);
-    const withDiversity      = applySignalDiversity(withIntel);
-    const withWeighting      = applySignalWeighting(withDiversity);
-    const withRisk           = applyRisk(withWeighting);
-    const labeled            = labelCandidates(withRisk);
-    const slateResult        = selectSlate(labeled);
+    const slateResult = buildSlateResult();
     printSlateSummary(slateResult);
     printFinalCard(slateResult);
   }, undefined);
@@ -548,13 +579,41 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
   ), undefined);
 
   // -- Step 22: Save picks for CLV tracking --------------------
+  const savedDecisionMeta = safeRunSync('decision metadata', () => {
+    const slateResult = buildSlateResult();
+    return new Map(
+      slateResult.ranked.map(candidate => {
+        const key = `${candidate.matchup}__${candidate.betType ?? ''}__${candidate.side}`;
+        const recommendedLabel =
+          candidate.forcedTierCap === 'MONITOR' ? 'MONITOR'
+          : candidate.forcedTierCap === 'LEAN' && candidate.finalDecisionLabel === 'BET' ? 'LEAN'
+          : candidate.finalDecisionLabel;
+        const savedAsRecommendation =
+          recommendedLabel === 'BET' || recommendedLabel === 'LEAN';
+
+        return [key, {
+          finalDecisionLabel: candidate.finalDecisionLabel,
+          recommendedLabel,
+          finalGrade: candidate.finalGrade,
+          riskGrade: candidate.riskGrade,
+          marketType: candidate.marketType,
+          isPriceOnlyCandidate: candidate.isPriceOnlyCandidate,
+          savedAsRecommendation,
+          forcedTierCap: candidate.forcedTierCap,
+          isBestBet: candidate.isBestBet,
+        } satisfies SavedDecisionMeta];
+      })
+    );
+  }, new Map<string, SavedDecisionMeta>());
+
   safeRunSync('save picks', () => savePicksFromTopTen(topBets.map(b => ({
     sport:      b.sport,
-    sportKey:   (b as any).sportKey ?? '',
-    eventId:    (b as any).eventId  ?? '',
+    sportKey:   b.sportKey,
+    eventId:    b.eventId,
     matchup:    b.matchup,
     startTime:  b.startTime,
     betType:    b.betType,
+    marketType: 'game_line',
     side:       b.side,
     bestPrice:  b.bestUserPrice,
     bestLine:   b.bestUserLine ?? null,
@@ -562,6 +621,7 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
     grade:      b.grade,
     score:      b.score,
     kellyPct:   b.kellyPct,
+    ...(savedDecisionMeta.get(`${b.matchup}__${b.betType}__${b.side}`) ?? {}),
   }))), []);
 
   console.log(`  API requests used  : ${quota.requestsMade}`);

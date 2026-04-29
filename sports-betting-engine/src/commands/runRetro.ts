@@ -4,8 +4,8 @@ import { autoGradePicks, buildRetroReport, printRetroReport } from '../services/
 
 export async function runRetro() {
   console.log('\n  Auto-grading picks from ESPN scores...');
-  const graded = await autoGradePicks();
-  console.log(`  Graded ${graded} new pick(s).`);
+  const grading = await autoGradePicks();
+  console.log(`[GRADING] checked: ${grading.checked} | graded: ${grading.graded} | pending: ${grading.pending} | missing: ${grading.missing}`);
   const report = buildRetroReport();
   printRetroReport(report);
 }

@@ -37,10 +37,9 @@ export interface DecisionCandidate {
   sport: string;
 
   /**
-   * API sport key, e.g. "basketball_nba".
-   * Present on ScoredProp via the sportKey field (when available).
-   * NOT present on ScoredBet at runtime — left undefined for game-line candidates.
-   */
+ * API sport key, e.g. "basketball_nba".
+ * Present on ScoredBet and optionally on ScoredProp.
+ */
   sportKey?: string;
 
   /** Discriminator set by the mapper — never inferred downstream. */
@@ -67,6 +66,13 @@ export interface DecisionCandidate {
    * ScoredProp only.
    */
   line?: number;
+
+  /** Projection layer fields for NBA player props. */
+  projectedStat?: number;
+  projectionEdge?: number;
+  probability?: number;
+  trueEdge?: number;
+  modelCompleteness?: number;
 
   // ----------------------------------------------------------
   // Game / matchup (both types)
@@ -613,13 +619,18 @@ export function mapToDecisionCandidate(
       ...decisionDefaults,
       id,
       sport:            prop.sport,
-      sportKey:         undefined,    // not promoted to ScoredProp; future stages can set it
+      sportKey:         prop.sportKey,
       marketType:       'player_prop',
       // Prop-specific
       playerName:       prop.playerName,
       team:             prop.team,
       market:           prop.market,
       line:             prop.line,
+      projectedStat:    prop.projectedStat,
+      projectionEdge:   prop.projectionEdge,
+      probability:      prop.probability,
+      trueEdge:         prop.trueEdge,
+      modelCompleteness: prop.modelCompleteness,
       // Game context
       matchup:          prop.matchup,
       side:             prop.side,
@@ -648,21 +659,26 @@ export function mapToDecisionCandidate(
   // ---- Game line ----
   const bet = input;
 
-  // ScoredBet does not carry eventId at runtime (not included in the
-  // scoreAllBets push object).  Build a deterministic compound key instead.
+  // Use a deterministic compound key so later stages can match the
+  // saved top-bet records without depending on eventId alone.
   const id = `${bet.matchup}__${bet.betType}__${bet.side}`;
 
   return {
     ...decisionDefaults,
     id,
     sport:            bet.sport,
-    sportKey:         (bet as any).sportKey,  // not in interface; may be present at runtime
+    sportKey:         bet.sportKey,
     marketType:       'game_line',
     // Prop-specific fields absent for game lines
     playerName:       undefined,
     team:             undefined,
     market:           undefined,
     line:             undefined,
+    projectedStat:    undefined,
+    projectionEdge:   undefined,
+    probability:      undefined,
+    trueEdge:         undefined,
+    modelCompleteness: undefined,
     // Game context
     matchup:          bet.matchup,
     side:             bet.side,

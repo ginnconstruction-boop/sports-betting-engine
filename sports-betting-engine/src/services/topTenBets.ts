@@ -54,6 +54,8 @@ export interface ScoredBet {
   sharpScore: number;
   signalCount: number;
   sport: string;
+  sportKey: string;
+  eventId: string;
   matchup: string;
   startTime: string;
   hoursUntilGame: number;
@@ -313,6 +315,7 @@ function scoreBet(
 function buildReasoning(bet: {
   priceDiff: number; lineDiff: number | null; bestUserBook: string;
   altUserBook: string; altUserPrice: number | null;
+  altUserLine: number | null;
   userBookGap: number | null; userBookGapAlert: boolean;
   bookCount: number; sharpDetail: string; weatherAlert: string;
   injuryFlags: string[]; lineMovementDetail: string; priceMovementDetail: string;
@@ -479,6 +482,7 @@ export function scoreAllBets(
         side: typeof market.sides[0];
         score: number; priceScore: number; lineScore: number; sharpScore: number;
         priceDiff: number; bestUserBook: string; bestUserPrice: number;
+        consensusPrice: number;
         bestUserLine: number | null; altUserBook: string; altUserPrice: number | null; altUserLine: number | null;
         userBookGap: number | null; userBookGapAlert: boolean;
         steamForSide: any[]; clvProj: any; contextAdj: number; contextReasons: string[];
@@ -679,6 +683,7 @@ export function scoreAllBets(
           userBookGap, userBookGapAlert,
           marketBestPrice,
           marketBestBook: getBookmakerDisplayName(marketBest?.bookmakerKey ?? ''),
+          consensusPrice: side.consensusPrice ?? 0,
           signalCount, movement, recentMove,
           fadeFlag: fadeResult.flag, fadeDetail: fadeResult.detail,
           steamForSide, clvProj: clvProj ?? null,
@@ -836,12 +841,14 @@ export function scoreAllBets(
         rank: 0, tier, grade: scoreToGrade(best.score), score: best.score,
         priceScore: best.priceScore, lineScore: best.lineScore, sharpScore: best.sharpScore,
         signalCount: best.signalCount,
-        sport: event.sport, matchup: event.matchup, startTime: event.startTime,
+        sport: event.sport, sportKey: event.sportKey, eventId: event.eventId,
+        matchup: event.matchup, startTime: event.startTime,
         hoursUntilGame: Math.round(hours * 10) / 10,
         betType: marketLabel(marketKey), side: side.outcomeName,
         bestUserBook: best.bestUserBook, bestUserPrice: best.bestUserPrice,
         bestUserLine: best.bestUserLine,
         altUserBook: best.altUserBook, altUserPrice: best.altUserPrice,
+        altUserLine: best.altUserLine,
         userBookGap: best.userBookGap, userBookGapAlert: best.userBookGapAlert,
         consensusPrice: side.consensusPrice ?? 0, consensusLine: side.consensusLine,
         priceDiff: best.priceDiff, marketBestPrice: best.marketBestPrice,
@@ -861,7 +868,7 @@ export function scoreAllBets(
   // Filter out sub-minimum scores, then sort
   const candidates_sorted = candidates
     .filter(b => {
-      const sk = (b as any).sportKey ?? '';
+      const sk = b.sportKey ?? '';
       const isMLB2 = sk.includes('baseball') || sk.includes('mlb');
       const isNHL2 = sk.includes('hockey') || sk.includes('nhl');
       const min = isMLB2 ? ((BET_FILTERS as any).SCORE_MONITOR_MIN_MLB ?? 60)

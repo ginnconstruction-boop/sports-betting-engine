@@ -29,9 +29,15 @@ export interface ScoredProp {
   position?: string;
   statType?: string;
   eventId?: string;
+  sportKey?: string;
   market: string;
   side: 'Over' | 'Under';
   line: number;
+  projectedStat?: number;
+  projectionEdge?: number;
+  probability?: number;
+  trueEdge?: number;
+  modelCompleteness?: number;
   // Best accessible book
   bestUserBook: string;
   bestUserPrice: number;
@@ -77,6 +83,47 @@ function getTier(score: number, signals: number): 'BET' | 'LEAN' | 'MONITOR' {
 }
 function hoursUntil(iso: string): number {
   return (new Date(iso).getTime() - Date.now()) / 3600000;
+}
+
+function americanToImpliedProbability(american: number): number {
+  if (american >= 0) {
+    return Math.round((100 / (american + 100)) * 1000) / 1000;
+  }
+  return Math.round((Math.abs(american) / (Math.abs(american) + 100)) * 1000) / 1000;
+}
+
+function clampScore(score: number): number {
+  return Math.round(Math.max(0, Math.min(100, score)));
+}
+
+function getSideProjectionEdge(
+  side: 'Over' | 'Under',
+  projectionEdge: number | undefined
+): number {
+  if (projectionEdge === undefined) return 0;
+  return side === 'Over' ? projectionEdge : -projectionEdge;
+}
+
+function scoreNBAProjection(
+  sideProjectionEdge: number,
+  trueEdge: number,
+  modelCompleteness: number,
+  intelligenceScore: number
+): number {
+  const projectionPoints = sideProjectionEdge > 0
+    ? Math.min(sideProjectionEdge * 12, 36)
+    : 0;
+  const trueEdgePoints = trueEdge > 0
+    ? Math.min(trueEdge * 300, 36)
+    : 0;
+  const completenessPoints = modelCompleteness > 0.5
+    ? Math.min((modelCompleteness - 0.5) * 40, 20)
+    : 0;
+  const intelligencePoints = Math.max(-8, Math.min(intelligenceScore / 2, 8));
+
+  return clampScore(
+    10 + projectionPoints + trueEdgePoints + completenessPoints + intelligencePoints
+  );
 }
 
 // ------------------------------------
@@ -208,7 +255,10 @@ export async function scoreAllPropsWithIntelligence(
   const baseScored = scoreAllProps(props, windowHours, sportKey, contextMap);
 
   return baseScored.map(scored => {
-    const key = `${scored.playerName}__${scored.statType}__${scored.side}`;
+    const normalizedSide = sportKey === 'basketball_nba'
+      ? scored.side.toLowerCase()
+      : scored.side;
+    const key = `${scored.playerName}__${scored.statType}__${normalizedSide}`;
     const prediction = predictions.get(key);
 
     if (!prediction) return { ...scored, intelligenceScore: 0 };
@@ -233,7 +283,7 @@ export async function scoreAllPropsWithIntelligence(
       .map(s => s.type);
 
     const enrichedSignals =
-      sportKey.includes('baseball') && nonMarketIntelSignals.length > 0
+      (sportKey === 'basketball_nba' || sportKey.includes('baseball')) && nonMarketIntelSignals.length > 0
         ? [...new Set([...scored.signals, ...nonMarketIntelSignals])]
         : scored.signals;
 
@@ -286,11 +336,55 @@ export async function scoreAllPropsWithIntelligence(
     const signalNames = (prediction.signals ?? []).map((s: any) => s.type);
     const weightedScore = applyLearnedWeights(adjustedScore, signalNames, learnedWeights);
 
+    const projectedStat = prediction.projectedStat ?? prediction.predictedValue;
+    const projectionEdge = projectedStat !== undefined
+      ? Math.round((projectedStat - scored.line) * 10) / 10
+      : undefined;
+    const impliedProbability = americanToImpliedProbability(scored.bestUserPrice);
+    const probability = scored.side === 'Over'
+      ? prediction.probabilityOver
+      : prediction.probabilityUnder;
+    const trueEdge = probability !== undefined
+      ? Math.round((probability - impliedProbability) * 1000) / 1000
+      : undefined;
+    const modelCompleteness = prediction.modelCompleteness ?? 0;
+    const sideProjectionEdge = getSideProjectionEdge(scored.side, projectionEdge);
+
+    let finalScore = weightedScore;
+    let finalTier = scored.tier;
+
+    if (sportKey === 'basketball_nba') {
+      finalScore = scoreNBAProjection(
+        sideProjectionEdge,
+        trueEdge ?? 0,
+        modelCompleteness,
+        intelligenceScore
+      );
+      finalTier = getTier(finalScore, enrichedSignals.length);
+
+      if (modelCompleteness < 0.6) {
+        finalScore = Math.min(finalScore, 49);
+        finalTier = 'MONITOR';
+      }
+
+      if (sideProjectionEdge <= 0 || (trueEdge ?? 0) <= 0) {
+        finalScore = Math.min(finalScore, 20);
+        finalTier = 'MONITOR';
+      }
+    }
+
     return {
       ...scored,
-      score:        weightedScore,
+      score:        finalScore,
+      grade:        scoreToGrade(finalScore),
+      tier:         finalTier,
       prediction,
       intelligenceScore,
+      projectedStat,
+      projectionEdge,
+      probability,
+      trueEdge,
+      modelCompleteness,
       fullReasoning: cleanReasoning,
       // Write enriched signals back so signalDiversityEngine sees them.
       // signalCount is updated to match so downstream engines agree.
@@ -425,6 +519,7 @@ export function scoreAllProps(
       }
 
       scored.push({
+        intelligenceScore: 0,
         rank: 0,
         grade: scoreToGrade(score),
         score,
@@ -440,6 +535,7 @@ export function scoreAllProps(
         playerName: prop.playerName,
         team: prop.team ?? '',
         position: prop.position ?? '',
+        sportKey,
         market: prop.marketLabel,
         statType: prop.marketKey,
         eventId: prop.eventId ?? '',
@@ -557,6 +653,19 @@ export function printTopProps(props: ScoredProp[], sportKey = 'basketball_nba'):
     const posStr = (p as any).position ? ` -- ${(p as any).position}` : '';
     console.log(`  |  ${sportEmoji} ${p.playerName}${teamStr}${posStr}  --  ${p.market}`);
     console.log(`  |  [OK] Bet  : ${p.side.toUpperCase()} ${p.line}`);
+    if (
+      p.sportKey === 'basketball_nba' &&
+      p.projectedStat !== undefined &&
+      p.projectionEdge !== undefined
+    ) {
+      const projectionEdge = p.projectionEdge > 0 ? `+${p.projectionEdge}` : `${p.projectionEdge}`;
+      const probability = p.probability !== undefined ? `${(p.probability * 100).toFixed(1)}%` : 'n/a';
+      const trueEdge = p.trueEdge !== undefined
+        ? `${p.trueEdge >= 0 ? '+' : ''}${(p.trueEdge * 100).toFixed(1)}%`
+        : 'n/a';
+      console.log(`  |  [AI] Projection: ${p.projectedStat} | Edge: ${projectionEdge} | Prob: ${probability} | True Edge: ${trueEdge}`);
+      console.log(`  |  [AI] Model completeness: ${((p.modelCompleteness ?? 0) * 100).toFixed(0)}%`);
+    }
     const brProp = parseFloat(process.env.BANKROLL ?? '0');
     const kProp  = brProp > 0 ? `Kelly: 1.5% = $${Math.round(brProp * 0.015)}` : 'Kelly: 1-2% of bankroll';
     console.log(`  |  [$] ${kProp}`);

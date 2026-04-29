@@ -31,6 +31,9 @@ export interface PNLRecord {
   avgOdds: number;          // average price across all graded picks
   // Breakdown
   bySport: Record<string, SportRecord>;
+  byBetType: Record<string, SportRecord>;
+  byFinalDecisionLabel: Record<string, SportRecord>;
+  byRiskGrade: Record<string, SportRecord>;
   byMarket: Record<string, SportRecord>;
   byGrade: Record<string, SportRecord>;
   byBook: Record<string, SportRecord>;
@@ -233,7 +236,8 @@ export async function enterResults(): Promise<void> {
 // ------------------------------------
 
 export function rebuildPNL(): PNLRecord {
-  const picks = loadPicks();
+  const allPicks = loadPicks();
+  const picks = allPicks.filter(p => p.savedAsRecommendation === true);
   const graded = picks.filter(p =>
     p.gameResult !== 'PENDING' &&
     p.gameResult !== 'MISSING_SCORE' &&
@@ -252,6 +256,9 @@ export function rebuildPNL(): PNLRecord {
     roi: 0,
     avgOdds: 0,
     bySport: {},
+    byBetType: {},
+    byFinalDecisionLabel: {},
+    byRiskGrade: {},
     byMarket: {},
     byGrade: {},
     byBook: {},
@@ -277,6 +284,8 @@ export function rebuildPNL(): PNLRecord {
     const safeGrade = pick.grade ?? 'B';
     const safeSport = pick.sport ?? 'Unknown';
     const safeBetType = pick.betType ?? 'Unknown';
+    const safeDecisionLabel = pick.recommendedLabel ?? pick.finalDecisionLabel ?? 'Unknown';
+    const safeRiskGrade = pick.riskGrade ?? 'Unknown';
     const safeDate = pick.date ?? new Date().toISOString();
     const profit = calcProfit(result, safePrice);
     const month = safeDate.slice(0, 7); // YYYY-MM
@@ -290,16 +299,23 @@ export function rebuildPNL(): PNLRecord {
 
     // Breakdowns
     record.bySport[safeSport] = updateRecord(record.bySport[safeSport] ?? emptyRecord(), result, profit);
+    record.byBetType[safeBetType] = updateRecord(record.byBetType[safeBetType] ?? emptyRecord(), result, profit);
+    record.byFinalDecisionLabel[safeDecisionLabel] = updateRecord(record.byFinalDecisionLabel[safeDecisionLabel] ?? emptyRecord(), result, profit);
+    record.byRiskGrade[safeRiskGrade] = updateRecord(record.byRiskGrade[safeRiskGrade] ?? emptyRecord(), result, profit);
     record.byMarket[safeBetType] = updateRecord(record.byMarket[safeBetType] ?? emptyRecord(), result, profit);
     record.byGrade[safeGrade] = updateRecord(record.byGrade[safeGrade] ?? emptyRecord(), result, profit);
     record.byBook[safeBook] = updateRecord(record.byBook[safeBook] ?? emptyRecord(), result, profit);
     record.byMonth[month] = updateRecord(record.byMonth[month] ?? emptyRecord(), result, profit);
 
     // Streaks
-    if (result === currentStreakType) {
+    const streakType: 'W' | 'L' | 'P' =
+      result === 'WIN' ? 'W'
+      : result === 'LOSS' ? 'L'
+      : 'P';
+    if (streakType === currentStreakType) {
       currentStreakCount++;
     } else {
-      currentStreakType = result;
+      currentStreakType = streakType;
       currentStreakCount = 1;
     }
     if (result === 'WIN') { winStreak++; lossStreak = 0; maxWinStreak = Math.max(maxWinStreak, winStreak); }
@@ -336,9 +352,9 @@ export function printPNLReport(): void {
   console.log(`|  Last updated: ${record.lastUpdated.slice(0,16).replace('T',' ').padEnd(46)}|`);
   console.log('+==============================================================+');
 
-  console.log(`\n  Total picks logged  : ${record.totalPicks}`);
-  console.log(`  Graded picks        : ${record.gradedPicks}`);
-  console.log(`  Pending             : ${record.totalPicks - record.gradedPicks}`);
+  console.log(`\n  Official recommendations : ${record.totalPicks}`);
+  console.log(`  Graded official picks    : ${record.gradedPicks}`);
+  console.log(`  Pending official picks   : ${record.totalPicks - record.gradedPicks}`);
 
   if (record.gradedPicks === 0) {
     console.log('\n  No graded picks yet.');
@@ -364,9 +380,21 @@ export function printPNLReport(): void {
   }
 
   console.log('\n  --- By Bet Type ------------------------------------------');
-  for (const [market, data] of Object.entries(record.byMarket).sort((a,b) => b[1].profit - a[1].profit)) {
+  for (const [market, data] of Object.entries(record.byBetType).sort((a,b) => b[1].profit - a[1].profit)) {
     const icon = data.profit >= 0 ? '[G]' : '[R]';
     console.log(`  ${icon} ${market.padEnd(14)} ${data.wins}-${data.losses}-${data.pushes}  ${fmtPct(data.winPct).padStart(6)}  ${fmtMoney(data.profit).padStart(10)}  ROI: ${fmtPct(data.roi)}`);
+  }
+
+  console.log('\n  --- By Recommendation ------------------------------------');
+  for (const [label, data] of Object.entries(record.byFinalDecisionLabel).sort((a,b) => b[1].profit - a[1].profit)) {
+    const icon = data.profit >= 0 ? '[G]' : '[R]';
+    console.log(`  ${icon} ${label.padEnd(14)} ${data.wins}-${data.losses}-${data.pushes}  ${fmtPct(data.winPct).padStart(6)}  ${fmtMoney(data.profit).padStart(10)}  ROI: ${fmtPct(data.roi)}`);
+  }
+
+  console.log('\n  --- By Risk Grade ----------------------------------------');
+  for (const [risk, data] of Object.entries(record.byRiskGrade).sort((a,b) => b[1].profit - a[1].profit)) {
+    const icon = data.profit >= 0 ? '[G]' : '[R]';
+    console.log(`  ${icon} ${risk.padEnd(14)} ${data.wins}-${data.losses}-${data.pushes}  ${fmtPct(data.winPct).padStart(6)}  ${fmtMoney(data.profit).padStart(10)}  ROI: ${fmtPct(data.roi)}`);
   }
 
   console.log('\n  --- By Grade ---------------------------------------------');

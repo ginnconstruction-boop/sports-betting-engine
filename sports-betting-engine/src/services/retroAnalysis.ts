@@ -85,6 +85,13 @@ export interface RetroReport {
   insights: string[];
 }
 
+export interface AutoGradeSummary {
+  checked: number;
+  graded: number;
+  pending: number;
+  missing: number;
+}
+
 // ------------------------------------
 // HTTP helper
 // ------------------------------------
@@ -434,7 +441,7 @@ function isGradeReady(gameTime: string, sportKey: string): boolean {
 // Auto-grade picks from ESPN scores
 // ------------------------------------
 
-export async function autoGradePicks(): Promise<number> {
+export async function autoGradePicks(): Promise<AutoGradeSummary> {
   const picks = loadPicks();
   let existingRetro = loadRetroResults();
 
@@ -479,6 +486,7 @@ export async function autoGradePicks(): Promise<number> {
   const gradedIds = new Set(existingRetro.map(r => r.pickId));
 
   let newlyGraded = 0;
+  let missingScoreCount = 0;
   // Rolling 30-hour window instead of UTC midnight yesterday.
   // Prevents late US/Eastern and US/Pacific games (commenceTime = next UTC day)
   // from being skipped until two UTC days after they finish.
@@ -615,6 +623,7 @@ export async function autoGradePicks(): Promise<number> {
           gradingNote:  'score unavailable from all 4 sources after game-end window',
         });
         newlyGraded++;
+        missingScoreCount++;
         continue;
       }
 
@@ -667,7 +676,16 @@ export async function autoGradePicks(): Promise<number> {
     saveRetroResults(existingRetro);
   }
 
-  return newlyGraded;
+  return {
+    checked: toGrade.length,
+    graded: newlyGraded - missingScoreCount,
+    pending: picks.filter((p: any) =>
+      (p.gameResult ?? 'PENDING') === 'PENDING' &&
+      GRADEABLE_TYPES.has(p.betType ?? '') &&
+      Boolean(p.gameTime ?? p.startTime)
+    ).length,
+    missing: missingScoreCount,
+  };
 }
 
 // ------------------------------------

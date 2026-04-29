@@ -31,6 +31,7 @@ export interface PickRecord {
   matchup: string;
   gameTime: string;            // ISO game start time
   betType: string;             // Moneyline / Spread / Total
+  marketType?: string;         // game_line / player_prop / parlay
   side: string;                // team or Over/Under
   pickedPrice: number;         // price when you made the pick
   pickedLine: number | null;   // line when you made the pick
@@ -48,6 +49,14 @@ export interface PickRecord {
   gameResult: 'WIN' | 'LOSS' | 'PUSH' | 'PENDING' | 'MISSING_SCORE' | 'VOID';
   notes: string;
   kellyPct?: number;             // quarter-Kelly stake % at time of pick
+  finalDecisionLabel?: 'BET' | 'LEAN' | 'MONITOR' | 'PASS' | 'BEST_PRICE_ONLY';
+  recommendedLabel?: 'BET' | 'LEAN' | 'MONITOR' | 'PASS' | 'BEST_PRICE_ONLY';
+  finalGrade?: string;
+  riskGrade?: 'LOW' | 'MODERATE' | 'HIGH';
+  isPriceOnlyCandidate?: boolean;
+  savedAsRecommendation?: boolean;
+  forcedTierCap?: 'LEAN' | 'MONITOR';
+  isBestBet?: boolean;
 }
 
 export interface CLVSummary {
@@ -122,6 +131,15 @@ export function savePicksFromTopTen(
     grade: string;
     score: number;
     kellyPct?: number;
+    marketType?: string;
+    finalDecisionLabel?: 'BET' | 'LEAN' | 'MONITOR' | 'PASS' | 'BEST_PRICE_ONLY';
+    recommendedLabel?: 'BET' | 'LEAN' | 'MONITOR' | 'PASS' | 'BEST_PRICE_ONLY';
+    finalGrade?: string;
+    riskGrade?: 'LOW' | 'MODERATE' | 'HIGH';
+    isPriceOnlyCandidate?: boolean;
+    savedAsRecommendation?: boolean;
+    forcedTierCap?: 'LEAN' | 'MONITOR';
+    isBestBet?: boolean;
   }>
 ): PickRecord[] {
   const existing = loadPicks();
@@ -147,6 +165,7 @@ export function savePicksFromTopTen(
       matchup: bet.matchup,
       gameTime: bet.startTime,
       betType: bet.betType,
+      marketType: bet.marketType ?? 'game_line',
       side: bet.side,
       pickedPrice: bet.bestPrice,
       pickedLine: bet.bestLine,
@@ -162,6 +181,14 @@ export function savePicksFromTopTen(
       gameResult: 'PENDING',
       notes: '',
       kellyPct: bet.kellyPct,
+      finalDecisionLabel: bet.finalDecisionLabel,
+      recommendedLabel: bet.recommendedLabel,
+      finalGrade: bet.finalGrade,
+      riskGrade: bet.riskGrade,
+      isPriceOnlyCandidate: bet.isPriceOnlyCandidate,
+      savedAsRecommendation: bet.savedAsRecommendation,
+      forcedTierCap: bet.forcedTierCap,
+      isBestBet: bet.isBestBet,
     };
     newPicks.push(pick);
   }
@@ -217,6 +244,7 @@ export function savePropPicks(props: Array<{
       matchup: prop.matchup,
       gameTime: prop.gameTime,
       betType: 'Player Prop',
+      marketType: 'player_prop',
       side: sideKey,
       pickedPrice: prop.bestUserPrice,
       pickedLine: prop.line,
@@ -226,7 +254,9 @@ export function savePropPicks(props: Array<{
       closingPrice: null, closingLine: null,
       clvPrice: null, clvLine: null,
       closingFetched: false, closingFetchedAt: '',
-      gameResult: 'PENDING', notes: `${prop.market} ${prop.side}${prop.line !== null && prop.line !== undefined ? ' ' + prop.line : ''}`,
+      gameResult: 'PENDING',
+      notes: `${prop.market} ${prop.side}${prop.line !== null && prop.line !== undefined ? ' ' + prop.line : ''}`,
+      savedAsRecommendation: false,
     });
   }
 
@@ -283,6 +313,7 @@ export function saveParlayPicks(parlays: Array<{
       matchup,
       gameTime: parlay.gameTime ?? new Date().toISOString(),
       betType: parlay.parlayType === 'ALT_LINE' ? 'Alt Line Parlay' : 'SGP Parlay',
+      marketType: 'parlay',
       side: legDesc,
       pickedPrice: parlay.parlayPrice,
       pickedLine: null,
@@ -294,6 +325,7 @@ export function saveParlayPicks(parlays: Array<{
       closingFetched: false, closingFetchedAt: '',
       gameResult: 'PENDING',
       notes: `${parlay.parlayType} ${parlay.correlationType ?? ''} @ ${priceStr} (${parlay.hitRate ?? '?'}% hit rate)`,
+      savedAsRecommendation: false,
     });
   }
 

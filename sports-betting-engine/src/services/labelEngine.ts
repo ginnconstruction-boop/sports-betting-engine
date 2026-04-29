@@ -106,6 +106,17 @@ function pct(edge: number): string {
   return `${edge >= 0 ? '+' : ''}${(edge * 100).toFixed(1)}%`;
 }
 
+function isNBAPlayerProp(c: DecisionCandidate): boolean {
+  return c.sportKey === 'basketball_nba' && c.marketType === 'player_prop';
+}
+
+function hasPositiveProjectionEdge(c: DecisionCandidate): boolean {
+  if (c.projectionEdge === undefined) return false;
+  return c.side.toLowerCase() === 'over'
+    ? c.projectionEdge > 0
+    : c.projectionEdge < 0;
+}
+
 function classify(c: DecisionCandidate): Classification {
   const adjEdge   = c.adjustedEdge ?? 0;
   const riskGrade = c.riskGrade ?? 'HIGH';
@@ -128,6 +139,27 @@ function classify(c: DecisionCandidate): Classification {
     return {
       label:   'PASS',
       reasons: ['probability enrichment not available'],
+    };
+  }
+
+  // ----------------------------------------------------------
+  // Priority 1a: NBA prop projection gate
+  //
+  // NBA player props must have a directional projection edge that
+  // agrees with the side we would bet. If the projection does not
+  // clear the posted line in the chosen direction, the candidate
+  // is not actionable regardless of price structure.
+  //
+  // A second cap protects incomplete models from drifting into BET
+  // or LEAN. They may still surface as MONITOR, but never higher.
+  // ----------------------------------------------------------
+  if (isNBAPlayerProp(c) && !hasPositiveProjectionEdge(c)) {
+    return {
+      label: 'PASS',
+      reasons: [
+        'NBA prop: no directional projection edge versus posted line',
+        `projection ${c.projectedStat ?? 'n/a'} vs line ${c.line ?? 'n/a'}`,
+      ],
     };
   }
 
@@ -200,6 +232,25 @@ function classify(c: DecisionCandidate): Classification {
     ];
     if (hasStale) reasons.push('stale line detected — edge may close before placement');
     return { label: 'BEST_PRICE_ONLY', reasons };
+  }
+
+  if (isNBAPlayerProp(c) && (c.modelCompleteness ?? 0) < 0.6) {
+    if (adjEdge >= EDGE_MONITOR_MIN) {
+      return {
+        label: 'MONITOR',
+        reasons: [
+          `projection model incomplete (${Math.round((c.modelCompleteness ?? 0) * 100)}%)`,
+          `adjusted edge ${pct(adjEdge)} — capped at MONITOR until model completeness improves`,
+        ],
+      };
+    }
+    return {
+      label: 'PASS',
+      reasons: [
+        `projection model incomplete (${Math.round((c.modelCompleteness ?? 0) * 100)}%)`,
+        `adjusted edge ${pct(adjEdge)} below ${pct(EDGE_MONITOR_MIN)} monitoring floor`,
+      ],
+    };
   }
 
   // ----------------------------------------------------------

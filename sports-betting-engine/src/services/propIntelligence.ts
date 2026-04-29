@@ -43,6 +43,11 @@ export interface PropPrediction {
   shouldBet: boolean;
   // Kelly sizing (populated when americanOdds is provided)
   kelly?: KellyCriterion;
+  // Projection fields (NBA props only)
+  projectedStat?: number;
+  probabilityOver?: number;
+  probabilityUnder?: number;
+  modelCompleteness?: number;
 }
 
 export interface PropSignal {
@@ -86,6 +91,135 @@ function getStatFromProfile(profile: PlayerProfile, statType: string): {
   return { l5: profile.l5PPG, season: profile.seasonPPG, l10: profile.l10PPG };
 }
 
+interface NBAProjectionContext {
+  line: number;
+  minutes?: number;
+  recentMinutesAvg?: number;
+  seasonMinutesAvg?: number;
+  usageRate?: number | null;
+  teamPaceAdj?: number;
+  statRate: number;
+  baseline: number;
+  minutesTrendPct?: number;
+  recentGamesCount?: number;
+  teamTotal?: number | null;
+}
+
+interface NBAProjectionResult {
+  projectedStat: number;
+  probabilityOver: number;
+  probabilityUnder: number;
+  modelCompleteness: number;
+  signals: PropSignal[];
+}
+
+function clamp01(value: number): number {
+  return Math.max(0, Math.min(1, value));
+}
+
+function calcProbability(projectedStat: number, line: number, variance: number): number {
+  const safeVariance = Math.max(0.75, variance);
+  const z = (projectedStat - line) / safeVariance;
+  const logistic = 1 / (1 + Math.exp(-1.702 * z));
+  return Math.round(clamp01(logistic) * 1000) / 1000;
+}
+
+function computeCompleteness(ctx: NBAProjectionContext): number {
+  let completeness = 0;
+
+  if (ctx.baseline > 0) completeness += 0.25;
+  if ((ctx.recentMinutesAvg ?? 0) > 0) completeness += 0.20;
+  if ((ctx.seasonMinutesAvg ?? 0) > 0) completeness += 0.10;
+  if (ctx.statRate > 0) completeness += 0.20;
+  if (ctx.usageRate !== null && ctx.usageRate !== undefined) completeness += 0.10;
+  if (ctx.teamPaceAdj !== undefined) completeness += 0.05;
+  if ((ctx.recentGamesCount ?? 0) >= 5) completeness += 0.05;
+  if (ctx.teamTotal !== null && ctx.teamTotal !== undefined) completeness += 0.05;
+
+  return Math.round(Math.min(completeness, 1) * 100) / 100;
+}
+
+function deriveSignals(
+  ctx: NBAProjectionContext,
+  projectedStat: number,
+  modelCompleteness: number
+): PropSignal[] {
+  const signals: PropSignal[] = [];
+  const rawProjectionEdge = Math.round((projectedStat - ctx.line) * 10) / 10;
+  const projectionMagnitude = Math.abs(rawProjectionEdge);
+  const projectionSide: 'over' | 'under' = rawProjectionEdge >= 0 ? 'over' : 'under';
+
+  if (projectionMagnitude >= 1.0) {
+    signals.push({
+      type: 'NBA_PROJECTION_EDGE',
+      detail: `Projection ${projectedStat} vs line ${ctx.line} (${rawProjectionEdge > 0 ? '+' : ''}${rawProjectionEdge})`,
+      impact: 'positive',
+      magnitude: projectionMagnitude >= 2.5 ? 'high' : 'medium',
+      side: projectionSide,
+      scoreContribution: projectionMagnitude >= 2.5 ? 16 : 10,
+    });
+  }
+
+  const paceDelta = (ctx.teamPaceAdj ?? 1) - 1;
+  if (Math.abs(paceDelta) >= 0.05) {
+    const fasterGame = paceDelta > 0;
+    signals.push({
+      type: 'PACE_PROJECTION',
+      detail: `Pace adjustment ${(ctx.teamPaceAdj ?? 1).toFixed(2)}x (${fasterGame ? '+' : ''}${(paceDelta * 100).toFixed(0)}%)`,
+      impact: fasterGame ? 'positive' : 'negative',
+      magnitude: Math.abs(paceDelta) >= 0.08 ? 'high' : 'medium',
+      side: fasterGame ? 'over' : 'under',
+      scoreContribution: fasterGame ? 8 : -8,
+    });
+  }
+
+  const minutesDelta = (ctx.minutes ?? ctx.recentMinutesAvg ?? 0) - (ctx.seasonMinutesAvg ?? 0);
+  if (Math.abs(minutesDelta) >= 2) {
+    const risingMinutes = minutesDelta > 0;
+    signals.push({
+      type: 'MINUTES_PROJECTION',
+      detail: `Projected minutes ${(ctx.minutes ?? ctx.recentMinutesAvg ?? 0).toFixed(1)} vs season ${(ctx.seasonMinutesAvg ?? 0).toFixed(1)} (${minutesDelta > 0 ? '+' : ''}${minutesDelta.toFixed(1)})`,
+      impact: risingMinutes ? 'positive' : 'negative',
+      magnitude: Math.abs(minutesDelta) >= 4 ? 'high' : 'medium',
+      side: risingMinutes ? 'over' : 'under',
+      scoreContribution: risingMinutes ? 8 : -8,
+    });
+  }
+
+  if (modelCompleteness >= 0.75) {
+    signals.push({
+      type: 'PROJECTION_COMPLETE',
+      detail: `Projection completeness ${(modelCompleteness * 100).toFixed(0)}%`,
+      impact: 'positive',
+      magnitude: 'medium',
+      side: 'neutral',
+      scoreContribution: 4,
+    });
+  }
+
+  return signals;
+}
+
+function buildNBAProjection(ctx: NBAProjectionContext): NBAProjectionResult {
+  const minutes = ctx.minutes || ctx.recentMinutesAvg || 0;
+  const usage = ctx.usageRate || 0.22;
+  const pace = ctx.teamPaceAdj || 1;
+
+  const rawProjection = (minutes * usage * pace * ctx.statRate) || ctx.baseline;
+  const projectedStat = Math.round(rawProjection * 10) / 10;
+  const variance = Math.max(0.75, projectedStat * 0.15);
+  const probabilityOver = calcProbability(projectedStat, ctx.line, variance);
+  const modelCompleteness = computeCompleteness(ctx);
+
+  return {
+    projectedStat,
+    probabilityOver,
+    probabilityUnder: Math.round((1 - probabilityOver) * 1000) / 1000,
+    modelCompleteness,
+    signals: deriveSignals(ctx, projectedStat, modelCompleteness),
+  };
+}
+
 // ------------------------------------
 // Generate prediction for one prop
 // ------------------------------------
@@ -121,6 +255,7 @@ export function generatePropPrediction(
   const signals: PropSignal[] = [];
   let scoreAdjustment = 0;
   let predictedValue = postedLine; // default = line, no edge
+  let nbaProjection: NBAProjectionResult | undefined;
 
   // -- Signal 1: Recent form vs season average -----------------
   if (profile) {
@@ -492,6 +627,51 @@ export function generatePropPrediction(
   }
 
   // -- Final assessment --------------------------------------
+  if (sportKey === 'basketball_nba') {
+    const stats = profile ? getStatFromProfile(profile, statType) : null;
+    const baseline = stats
+      ? Math.round(((stats.season * 0.55) + (stats.l5 * 0.45)) * 10) / 10
+      : postedLine;
+    const recentMinutesAvg = profile?.l5MPG ?? 0;
+    const seasonMinutesAvg = profile?.seasonMPG ?? recentMinutesAvg;
+    const blendedMinutes = recentMinutesAvg > 0
+      ? Math.round((((recentMinutesAvg * 0.65) + (seasonMinutesAvg * 0.35))) * 10) / 10
+      : seasonMinutesAvg;
+    const rawUsage = profile?.usageRate ?? null;
+    const projectionUsage = rawUsage ?? 0.22;
+    const paceMultiplier = matchup?.impliedPaceMultiplier
+      ?? (teamTotal !== null
+        ? 1 + (((teamTotal - leagueAvgTeamTotal) / leagueAvgTeamTotal) * 0.15)
+        : 1);
+    const denominator = Math.max(
+      1,
+      (blendedMinutes || recentMinutesAvg || seasonMinutesAvg || 1) *
+      projectionUsage *
+      Math.max(0.85, paceMultiplier)
+    );
+    const statRate = baseline > 0 ? baseline / denominator : 0;
+
+    nbaProjection = buildNBAProjection({
+      line: postedLine,
+      minutes: blendedMinutes || recentMinutesAvg || seasonMinutesAvg || undefined,
+      recentMinutesAvg: recentMinutesAvg || undefined,
+      seasonMinutesAvg: seasonMinutesAvg || undefined,
+      usageRate: rawUsage,
+      teamPaceAdj: paceMultiplier,
+      statRate,
+      baseline,
+      minutesTrendPct: profile?.minutesTrendPct,
+      recentGamesCount: profile?.recentGames?.filter(g => !g.didNotPlay).length ?? 0,
+      teamTotal,
+    });
+
+    predictedValue = nbaProjection.projectedStat;
+    for (const signal of nbaProjection.signals) {
+      signals.push(signal);
+      scoreAdjustment += signal.scoreContribution;
+    }
+  }
+
   const predictedEdge = Math.round((predictedValue - postedLine) * 10) / 10;
 
   // Align predicted side with signals
@@ -502,17 +682,24 @@ export function generatePropPrediction(
   // Confidence based on signal alignment
   const alignedSignals = signals.filter(s => s.side === dominantSide).length;
   const totalSignals = signals.length;
-  const confidence: PropPrediction['confidence'] =
+  let confidence: PropPrediction['confidence'] =
     alignedSignals >= 3 && totalSignals >= 3 ? 'high'
     : alignedSignals >= 2 ? 'medium'
     : 'low';
+
+  if (nbaProjection && nbaProjection.modelCompleteness < 0.6) {
+    confidence = 'low';
+  } else if (nbaProjection && nbaProjection.modelCompleteness < 0.75 && confidence === 'high') {
+    confidence = 'medium';
+  }
 
   // Should bet only if prediction aligns with posted side AND confidence is medium+
   const shouldBet =
     confidence !== 'low' &&
     Math.abs(scoreAdjustment) >= 10 &&
     (dominantSide === side) &&
-    Math.abs(predictedEdge) >= 1.5;
+    Math.abs(predictedEdge) >= 1.5 &&
+    (nbaProjection ? nbaProjection.modelCompleteness >= 0.6 : true);
 
   // Build summary
   const highSignals = signals.filter(s => s.magnitude === 'high');
@@ -539,6 +726,12 @@ export function generatePropPrediction(
     summary,
     shouldBet,
     kelly,
+    ...(nbaProjection ? {
+      projectedStat: nbaProjection.projectedStat,
+      probabilityOver: nbaProjection.probabilityOver,
+      probabilityUnder: nbaProjection.probabilityUnder,
+      modelCompleteness: nbaProjection.modelCompleteness,
+    } : {}),
   };
 }
 

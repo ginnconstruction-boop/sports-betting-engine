@@ -27,6 +27,7 @@ import { getSportByKey }             from '../config/sports';
 import { EventSummary }              from '../types/odds';
 import { scorePitcherProp, printPitcherPropReport } from '../services/mlbPitcherIntelligence';
 import { loadSignalWeights } from '../services/retroAnalysis';
+import { savePropPicks } from '../services/closingLineTracker';
 // -- Decision layer --
 import { mapAllToDecisionCandidates } from '../services/decisionTypes';
 import { qualifyCandidates, printQualificationSummary } from '../services/qualificationEngine';
@@ -34,7 +35,7 @@ import { enrichWithProbability, printProbabilitySummary } from '../services/prob
 import { applyRisk, printRiskSummary } from '../services/riskEngine';
 import { applySportIntelligence, printIntelSummary } from '../services/sportIntelligenceEngine';
 import { labelCandidates, printLabelSummary } from '../services/labelEngine';
-import { selectSlate, printSlateSummary } from '../services/slateSelector';
+import { selectSlate, printFinalCard } from '../services/slateSelector';
 import { validateDataIntegrity, printValidationSummary } from '../services/dataIntegrityValidator';
 import { applySignalDiversity, printSignalDiversitySummary } from '../services/signalDiversityEngine';
 import { applyOutcomeSignals, printOutcomeSummary, OutcomeContext } from '../services/outcomeSignalEngine';
@@ -325,7 +326,7 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
       const withRisk           = applyRisk(withWeighting);
       const labeled            = labelCandidates(withRisk);
       const slateResult        = selectSlate(labeled);
-      printSlateSummary(slateResult);
+      printFinalCard(slateResult);
     }, undefined);
 
     // For MLB: run pitcher-specific analysis on top of standard scoring
