@@ -497,7 +497,7 @@ export function scoreAllProps(
 // Print prop Top 5
 // ------------------------------------
 
-export function printTopProps(props: ScoredProp[]): void {
+export function printTopProps(props: ScoredProp[], sportKey = 'basketball_nba'): void {
   // Show intelligence-enhanced output
   const time = new Date().toLocaleString('en-US', {
     timeZone: 'America/Chicago',
@@ -505,9 +505,14 @@ export function printTopProps(props: ScoredProp[]): void {
     hour: 'numeric', minute: '2-digit',
   });
 
+  const sportLabel = sportKey === 'baseball_mlb'         ? 'MLB'
+                   : sportKey === 'icehockey_nhl'        ? 'NHL'
+                   : sportKey === 'americanfootball_nfl' ? 'NFL'
+                   : 'NBA';
+
   console.log('\n');
   console.log('+==============================================================+');
-  console.log('|              NBA PLAYER PROPS -- TOP EDGES                   |');
+  console.log(`|              ${sportLabel} PLAYER PROPS -- TOP EDGES                   |`);
   console.log(`|  ${time.padEnd(60)}|`);
   console.log('|  FanDuel + BetMGM only  |  Min 2 signals required           |');
   console.log('+==============================================================+');
@@ -535,7 +540,7 @@ export function printTopProps(props: ScoredProp[]): void {
 
     console.log(`\n  +---------------------------------------------------------`);
     console.log(`  |  #${String(p.rank).padEnd(3)} ${tierIcon.padEnd(14)} ${p.matchup}`);
-    console.log(`  |  [CLK] ${hours.padEnd(14)} Grade: ${p.grade}  ${gradeBar}  (${p.score}/100)`);
+    console.log(`  |  [CLK] ${hours.padEnd(14)} Raw Score: ${p.grade}  ${gradeBar}  (${p.score}/100)`);
     // Show base signals + top intelligence signals
     const intelSigs = ((p as any).prediction?.signals ?? [])
       .filter((s: any) => s.magnitude === 'high' || s.magnitude === 'medium')

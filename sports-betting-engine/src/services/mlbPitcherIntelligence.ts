@@ -302,7 +302,8 @@ export function printPitcherPropReport(props: PitcherPropScore[]): void {
     const altStr   = p.altUserPrice
       ? `  Alt: ${p.altUserBook} ${p.altUserPrice > 0 ? '+' : ''}${p.altUserPrice}`
       : '';
-    const tierIcon = p.tier === 'BET' ? '[HOT] BET' : p.tier === 'LEAN' ? '[OK] LEAN' : 'WATCH';
+    // Pre-risk pitcher scan — [HOT] BET is reserved for Final Card only.
+    const tierIcon = p.tier === 'BET' ? '[SIG] BET' : p.tier === 'LEAN' ? '[OK] LEAN' : 'WATCH';
 
     console.log(`\n  +---------------------------------------------------------`);
     console.log(`  |  [${p.grade}] ${tierIcon}  Score: ${p.score}/100`);

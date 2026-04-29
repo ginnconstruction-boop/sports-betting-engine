@@ -234,7 +234,7 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
         }
       }
     }
-    printTopProps(topProps);
+    printTopProps(topProps, sportKey);
 
     // -- [DECISION LAYER] Outcome context (Phase C) --
     // Built once and shared across all decision-layer blocks below.
