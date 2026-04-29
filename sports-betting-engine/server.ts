@@ -147,10 +147,11 @@ app.get('/api/stream/:command', requireAuth, (req, res) => {
   const args = ALLOWED[command].split(' ');
   // For reset: inject --confirm so runReset.ts knows it was properly authorized
   if (command === 'reset') args.push('--confirm');
-  // Use pre-compiled JS when available (production / post-build).
-  // Falls back to ts-node transpile-only for local dev where dist/ may not exist.
+  // Default to the same ts-node CLI path used by npm scripts so dashboard runs
+  // the current source tree instead of any stale local dist/ artifact.
+  // Opt into dist execution explicitly for environments that intentionally ship it.
   const distEntry = path.join(__dirname, 'dist', 'index.js');
-  const usingDist = fs.existsSync(distEntry);
+  const usingDist = process.env.SBE_USE_DIST_CLI === 'true' && fs.existsSync(distEntry);
   const nodeArgs  = usingDist
     ? [distEntry, ...args]
     : ['--require', 'ts-node/register/transpile-only', 'src/index.ts', ...args];
