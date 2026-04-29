@@ -210,10 +210,12 @@ export async function scoreAllPropsWithIntelligence(
   // Enrich props with team/position using roster lookup (best effort)
   const enrichedProps = await Promise.all(props.map(async (prop) => {
     try {
-      const playerId = await findPlayerId(prop.playerName, prop.homeTeam, sportKey)
-        ?? await findPlayerId(prop.playerName, prop.awayTeam, sportKey);
+      const homePlayerId = await findPlayerId(prop.playerName, prop.homeTeam, sportKey);
+      const awayPlayerId = homePlayerId ? null : await findPlayerId(prop.playerName, prop.awayTeam, sportKey);
+      const playerId = homePlayerId ?? awayPlayerId;
+      const lookupTeam = homePlayerId ? prop.homeTeam : awayPlayerId ? prop.awayTeam : '';
       if (playerId) {
-        const profile = await getPlayerProfile(playerId, prop.playerName, prop.homeTeam, prop.position ?? '', sportKey);
+        const profile = await getPlayerProfile(playerId, prop.playerName, lookupTeam, prop.position ?? '', sportKey);
         if (profile) {
           prop.team = profile.team;
           prop.position = profile.position;

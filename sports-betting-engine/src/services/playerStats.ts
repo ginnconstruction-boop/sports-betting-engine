@@ -86,6 +86,74 @@ function avg(arr: number[]): number {
   return Math.round((arr.reduce((a, b) => a + b, 0) / arr.length) * 10) / 10;
 }
 
+function normalizeLookupName(name: string): string {
+  return (name ?? '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[.'’`-]/g, ' ')
+    .replace(/\b(jr|sr|ii|iii|iv|v)\b/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function nameTokens(name: string): string[] {
+  return normalizeLookupName(name).split(' ').filter(Boolean);
+}
+
+function playerNamesMatch(sourceName: string, targetName: string): boolean {
+  const source = normalizeLookupName(sourceName);
+  const target = normalizeLookupName(targetName);
+  if (!source || !target) return false;
+  if (source === target) return true;
+
+  const sourceTokens = nameTokens(source);
+  const targetTokens = nameTokens(target);
+  if (sourceTokens.length === 0 || targetTokens.length === 0) return false;
+
+  const sourceLast = sourceTokens[sourceTokens.length - 1];
+  const targetLast = targetTokens[targetTokens.length - 1];
+  const sourceFirst = sourceTokens[0];
+  const targetFirst = targetTokens[0];
+
+  if (sourceLast === targetLast && sourceFirst[0] === targetFirst[0]) return true;
+  return targetTokens.every(token => sourceTokens.includes(token));
+}
+
+function teamNamesMatch(
+  espnTeam: { displayName?: string; shortDisplayName?: string; abbreviation?: string } | null | undefined,
+  teamName: string
+): boolean {
+  const target = normalizeLookupName(teamName);
+  if (!target) return false;
+
+  const candidates = [
+    espnTeam?.displayName,
+    espnTeam?.shortDisplayName,
+    espnTeam?.abbreviation,
+  ].filter(Boolean) as string[];
+
+  return candidates.some(candidate => {
+    const normalized = normalizeLookupName(candidate);
+    return normalized === target || normalized.endsWith(target) || target.endsWith(normalized);
+  });
+}
+
+function flattenRosterAthletes(rosterData: any): any[] {
+  const athletes = rosterData?.athletes ?? [];
+  if (!Array.isArray(athletes)) return [];
+  if (athletes.every((entry: any) => entry?.fullName || entry?.displayName || entry?.id)) {
+    return athletes;
+  }
+
+  const flattened: any[] = [];
+  for (const group of athletes) {
+    const items = group?.items ?? (Array.isArray(group) ? group : []);
+    if (Array.isArray(items)) flattened.push(...items);
+  }
+  return flattened;
+}
+
 function trend(recent: number[], older: number[]): 'rising' | 'falling' | 'stable' {
   const recentAvg = avg(recent);
   const olderAvg = avg(older);
@@ -99,6 +167,100 @@ function trend(recent: number[], older: number[]): 'rising' | 'falling' | 'stabl
 // Cache profiles to avoid re-fetching within same run
 const profileCache = new Map<string, { profile: PlayerProfile; fetchedAt: number }>();
 const CACHE_TTL = 3600000; // 1 hour
+
+async function buildSeasonFallbackProfile(
+  playerId: string,
+  playerName: string,
+  team: string,
+  position: string,
+  sportKey: string
+): Promise<PlayerProfile | null> {
+  if (sportKey !== 'basketball_nba' && sportKey !== 'americanfootball_nfl') {
+    return null;
+  }
+
+  const league = sportKey === 'basketball_nba' ? 'nba' : 'nfl';
+  const sport = sportKey === 'basketball_nba' ? 'basketball' : 'football';
+
+  try {
+    const athleteUrl = `https://sports.core.api.espn.com/v2/sports/${sport}/leagues/${league}/athletes/${playerId}?lang=en&region=us`;
+    const coreStatsUrl = `https://sports.core.api.espn.com/v2/sports/${sport}/leagues/${league}/athletes/${playerId}/statistics?lang=en&region=us`;
+    const athleteData = await fetchJson(athleteUrl).catch(() => null);
+    const statsData = await fetchJson(coreStatsUrl);
+    const categories = statsData?.splits?.categories ?? [];
+    const statMap = new Map<string, number>();
+
+    for (const cat of (Array.isArray(categories) ? categories : [])) {
+      for (const stat of (cat?.stats ?? [])) {
+        const key = (stat?.name ?? '').toLowerCase();
+        const value = typeof stat?.value === 'number'
+          ? stat.value
+          : parseFloat(stat?.displayValue ?? stat?.value ?? '0') || 0;
+        if (key) statMap.set(key, value);
+      }
+    }
+
+    const seasonPPG = statMap.get('avgpoints') ?? 0;
+    const seasonRPG = statMap.get('avgrebounds') ?? (
+      (statMap.get('avgdefensiverebounds') ?? 0) + (statMap.get('avgoffensiverebounds') ?? 0)
+    );
+    const seasonAPG = statMap.get('avgassists') ?? 0;
+    const seasonMPG = statMap.get('avgminutes') ?? 0;
+    const season3PG = statMap.get('avgthreepointfieldgoalsmade') ?? 0;
+    const gamesPlayed = Math.round(statMap.get('gamesplayed') ?? 0);
+
+    const hasUsableSeasonBaseline =
+      seasonMPG > 0 && (
+        seasonPPG > 0 ||
+        seasonRPG > 0 ||
+        seasonAPG > 0 ||
+        season3PG > 0
+      );
+
+    if (!hasUsableSeasonBaseline) return null;
+
+    const resolvedPosition =
+      position ||
+      athleteData?.position?.abbreviation ||
+      athleteData?.position?.displayName ||
+      '';
+
+    const profile: PlayerProfile = {
+      playerId,
+      playerName,
+      team,
+      position: resolvedPosition,
+      seasonPPG,
+      seasonRPG,
+      seasonAPG,
+      seasonMPG,
+      season3PG,
+      l5PPG: seasonPPG,
+      l5RPG: seasonRPG,
+      l5APG: seasonAPG,
+      l5MPG: seasonMPG,
+      l5_3PG: season3PG,
+      l10PPG: seasonPPG,
+      l10MPG: seasonMPG,
+      minutesTrend: 'stable',
+      pointsTrend: 'stable',
+      formVsSeason: 0,
+      minutesTrendPct: 0,
+      homePPG: seasonPPG,
+      awayPPG: seasonPPG,
+      propStreaks: {},
+      usageRate: null,
+      h2hRecord: {},
+      recentGames: [],
+      gamesPlayed,
+      fetchedAt: new Date().toISOString(),
+    };
+
+    return profile;
+  } catch {
+    return null;
+  }
+}
 
 export async function getPlayerProfile(
   playerId: string,
@@ -212,7 +374,13 @@ export async function getPlayerProfile(
     }
 
     const playedGames = recentGames.filter(g => !g.didNotPlay);
-    if (playedGames.length === 0) return null;
+    if (playedGames.length === 0) {
+      const fallbackProfile = await buildSeasonFallbackProfile(playerId, playerName, team, position, sportKey);
+      if (fallbackProfile) {
+        profileCache.set(cacheKey, { profile: fallbackProfile, fetchedAt: Date.now() });
+      }
+      return fallbackProfile;
+    }
 
     const l5 = playedGames.slice(0, 5);
     const l10 = playedGames.slice(0, 10);
@@ -317,7 +485,11 @@ export async function getPlayerProfile(
     profileCache.set(cacheKey, { profile, fetchedAt: Date.now() });
     return profile;
   } catch {
-    return null;
+    const fallbackProfile = await buildSeasonFallbackProfile(playerId, playerName, team, position, sportKey);
+    if (fallbackProfile) {
+      profileCache.set(cacheKey, { profile: fallbackProfile, fetchedAt: Date.now() });
+    }
+    return fallbackProfile;
   }
 }
 
@@ -345,33 +517,34 @@ export async function findPlayerId(
   const sport  = sportKey === 'basketball_nba' ? 'basketball' : 'football';
 
   try {
-    const last = (s: string) => s.toLowerCase().split(' ').pop() ?? '';
-
     // Search by roster
     const teamsUrl = `https://site.api.espn.com/apis/site/v2/sports/${sport}/${league}/teams`;
     const teamsData = await fetchJson(teamsUrl);
     const teams = teamsData?.sports?.[0]?.leagues?.[0]?.teams ?? teamsData?.teams ?? [];
 
     const teamObj = (Array.isArray(teams) ? teams : []).find((t: any) =>
-      last(t?.team?.displayName ?? '') === last(teamName)
+      teamNamesMatch(t?.team, teamName)
     );
     if (!teamObj) return null;
 
     const teamId = teamObj?.team?.id;
     const rosterUrl = `https://site.api.espn.com/apis/site/v2/sports/${sport}/${league}/teams/${teamId}/roster`;
     const rosterData = await fetchJson(rosterUrl);
-    const athletes = rosterData?.athletes ?? [];
+    const athletes = flattenRosterAthletes(rosterData);
 
-    for (const group of (Array.isArray(athletes) ? athletes : [])) {
-      const items = group?.items ?? (Array.isArray(group) ? group : []);
-      for (const player of (Array.isArray(items) ? items : [])) {
-        const name = player?.fullName ?? player?.displayName ?? '';
-        if (last(name) === last(playerName) || name.toLowerCase().includes(last(playerName))) {
-          const id = player?.id ?? '';
-          if (id) {
-            playerIdCache.set(cacheKey, id);
-            return id;
-          }
+    for (const player of athletes) {
+      const candidateNames = [
+        player?.fullName,
+        player?.displayName,
+        player?.shortName,
+        [player?.firstName, player?.lastName].filter(Boolean).join(' '),
+      ].filter(Boolean) as string[];
+
+      if (candidateNames.some(name => playerNamesMatch(name, playerName))) {
+        const id = player?.id ?? '';
+        if (id) {
+          playerIdCache.set(cacheKey, id);
+          return id;
         }
       }
     }

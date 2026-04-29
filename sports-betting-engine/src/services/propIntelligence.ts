@@ -1083,6 +1083,25 @@ export function generatePropPrediction(
       opponentDefenseRank,
     });
 
+    if (
+      nbaProjection.projectedStat <= 0 ||
+      projectedMinutes <= 0 ||
+      nbaProjection.modelCompleteness <= 0
+    ) {
+      const missingFields = [
+        seasonMinutesAvg > 0 ? null : 'seasonMinutes',
+        last10MinutesAvg > 0 ? null : 'last10Minutes',
+        last5MinutesAvg > 0 ? null : 'last5Minutes',
+        last3MinutesAvg > 0 ? null : 'last3Minutes',
+        seasonStatPerMinute > 0 ? null : 'seasonStatPerMin',
+        last10StatPerMinute > 0 ? null : 'last10StatPerMin',
+        last5StatPerMinute > 0 ? null : 'last5StatPerMin',
+      ].filter(Boolean);
+      console.warn(
+        `[NBA_PROJECTION_DEBUG] ${playerName} -> projectedStat=${nbaProjection.projectedStat} | projectedMinutes=${projectedMinutes} | completeness=${nbaProjection.modelCompleteness} | missing=${missingFields.length > 0 ? missingFields.join(', ') : 'none'}`
+      );
+    }
+
     predictedValue = nbaProjection.projectedStat;
     if (atsConfidenceDelta !== 0) {
       if (side === 'over') {
@@ -1458,13 +1477,31 @@ export async function buildPropPredictions(
     for (const prop of gameProps.slice(0, 6)) {
       try {
         // Get player profile
-        const playerId = await findPlayerId(prop.playerName, prop.team, sportKey);
+        const preferredTeam = prop.team || '';
+        const preferredPlayerId = preferredTeam
+          ? await findPlayerId(prop.playerName, preferredTeam, sportKey)
+          : null;
+        const homePlayerId = preferredPlayerId ? null : await findPlayerId(prop.playerName, prop.homeTeam, sportKey);
+        const awayPlayerId = preferredPlayerId || homePlayerId
+          ? null
+          : await findPlayerId(prop.playerName, prop.awayTeam, sportKey);
+        const playerId = preferredPlayerId ?? homePlayerId ?? awayPlayerId;
         let profile: any = null;
+        const lookupTeam = preferredPlayerId
+          ? preferredTeam
+          : homePlayerId
+            ? prop.homeTeam
+            : awayPlayerId
+              ? prop.awayTeam
+              : preferredTeam;
         if (playerId) {
-          profile = await getPlayerProfile(playerId, prop.playerName, prop.team, prop.position, sportKey);
+          profile = await getPlayerProfile(playerId, prop.playerName, lookupTeam, prop.position, sportKey);
+        } else if (sportKey === 'basketball_nba') {
+          console.warn(`[NBA_PROFILE_MISS] ${prop.playerName} (${prop.homeTeam} vs ${prop.awayTeam}) -> playerId not found`);
         }
 
-        const isHome = prop.team === homeTeam;
+        const resolvedPlayerTeam = profile?.team || prop.team;
+        const isHome = resolvedPlayerTeam === homeTeam;
         const isB2B = gameIsBackToBack && (
           (isHome && ctx?.homeRest?.isBackToBack) ||
           (!isHome && ctx?.awayRest?.isBackToBack)
