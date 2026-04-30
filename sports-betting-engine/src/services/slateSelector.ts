@@ -658,6 +658,12 @@ export function printFinalCard(result: SlateResult): void {
       if (edgeConfidence !== null) {
         console.log(`  |  Edge Confidence: ${edgeConfidence}`);
       }
+      if ((c.calibrationSampleSize ?? 0) >= 20 && c.calibrationHistoricalWinRate !== undefined) {
+        console.log(
+          `  |  Historical Win %: ${c.calibrationHistoricalWinRate.toFixed(1)}%  |  Sample Size: ${c.calibrationSampleSize}` +
+          (c.calibrationRoi !== undefined ? `  |  ROI: ${c.calibrationRoi.toFixed(1)}%` : '')
+        );
+      }
       console.log(
         `  |  Non-market Signals: ${nonMarketSignalNames.length}  |  Context Signals: ${contextSignalNames.length}  |  Final Label: ${lbl}`
       );

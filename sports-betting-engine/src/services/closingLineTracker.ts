@@ -57,6 +57,17 @@ export interface PickRecord {
   savedAsRecommendation?: boolean;
   forcedTierCap?: 'LEAN' | 'MONITOR';
   isBestBet?: boolean;
+  playerName?: string;
+  propType?: string;
+  projectedStat?: number;
+  projectionEdge?: number;
+  modelProbability?: number;
+  trueEdge?: number;
+  edgeConfidence?: number;
+  minutesConfidence?: number;
+  modelCompleteness?: number;
+  nonMarketSignalCount?: number;
+  signalTypes?: string[];
 }
 
 export interface CLVSummary {
@@ -209,6 +220,7 @@ export function savePicksFromTopTen(
 export function savePropPicks(props: Array<{
   playerName: string;
   market: string;
+  propType?: string;
   side: string;
   line: number | null;
   bestUserPrice: number;
@@ -219,6 +231,19 @@ export function savePropPicks(props: Array<{
   score: number;
   grade: string;
   eventId?: string;
+  projectedStat?: number;
+  projectionEdge?: number;
+  modelProbability?: number;
+  trueEdge?: number;
+  edgeConfidence?: number;
+  minutesConfidence?: number;
+  modelCompleteness?: number;
+  riskGrade?: 'LOW' | 'MODERATE' | 'HIGH';
+  finalDecisionLabel?: 'BET' | 'LEAN' | 'MONITOR' | 'PASS' | 'BEST_PRICE_ONLY';
+  recommendedLabel?: 'BET' | 'LEAN' | 'MONITOR' | 'PASS' | 'BEST_PRICE_ONLY';
+  savedAsRecommendation?: boolean;
+  nonMarketSignalCount?: number;
+  signalTypes?: string[];
 }>): void {
   const existing = loadPicks();
   const today = new Date().toISOString().split('T')[0];
@@ -256,7 +281,21 @@ export function savePropPicks(props: Array<{
       closingFetched: false, closingFetchedAt: '',
       gameResult: 'PENDING',
       notes: `${prop.market} ${prop.side}${prop.line !== null && prop.line !== undefined ? ' ' + prop.line : ''}`,
-      savedAsRecommendation: false,
+      savedAsRecommendation: prop.savedAsRecommendation ?? false,
+      playerName: prop.playerName,
+      propType: prop.propType ?? prop.market,
+      projectedStat: prop.projectedStat,
+      projectionEdge: prop.projectionEdge,
+      modelProbability: prop.modelProbability,
+      trueEdge: prop.trueEdge,
+      edgeConfidence: prop.edgeConfidence,
+      minutesConfidence: prop.minutesConfidence,
+      modelCompleteness: prop.modelCompleteness,
+      riskGrade: prop.riskGrade,
+      finalDecisionLabel: prop.finalDecisionLabel,
+      recommendedLabel: prop.recommendedLabel,
+      nonMarketSignalCount: prop.nonMarketSignalCount,
+      signalTypes: prop.signalTypes,
     });
   }
 

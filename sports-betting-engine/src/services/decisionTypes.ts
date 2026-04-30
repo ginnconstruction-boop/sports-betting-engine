@@ -80,6 +80,9 @@ export interface DecisionCandidate {
   nbaRoleStabilityScore?: number;
   strongNonMarketSignalCount?: number;
   supportedNBAProjection?: boolean;
+  calibrationHistoricalWinRate?: number;
+  calibrationSampleSize?: number;
+  calibrationRoi?: number;
 
   // ----------------------------------------------------------
   // Game / matchup (both types)

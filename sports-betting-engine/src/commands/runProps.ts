@@ -41,6 +41,7 @@ import { applySignalDiversity, printSignalDiversitySummary } from '../services/s
 import { applyOutcomeSignals, printOutcomeSummary, OutcomeContext } from '../services/outcomeSignalEngine';
 import { applySignalWeighting, printWeightingSummary } from '../services/signalWeightingEngine';
 import { buildNBAContextForSlate } from '../services/nbaContextProvider';
+import { buildCalibrationReport, decorateCandidatesWithCalibration } from '../services/calibrationEngine';
 
 function safeSync<T>(fn: () => T, fallback: T): T {
   try { return fn(); } catch { return fallback; }
@@ -210,6 +211,8 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
       }
     }
 
+    let finalSlateRanked: ReturnType<typeof selectSlate>['ranked'] = [];
+
     for (const event of upcoming.slice(0, maxGames)) {
       try {
         const { event: eventWithProps } = await getEventMarkets(
@@ -351,7 +354,12 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
       const withWeighting      = applySignalWeighting(withDiversity);
       const withRisk           = applyRisk(withWeighting);
       const labeled            = labelCandidates(withRisk);
-      const slateResult        = selectSlate(labeled);
+      const calibrationReport  = sportKey === 'basketball_nba' ? buildCalibrationReport() : undefined;
+      const withCalibration    = sportKey === 'basketball_nba'
+        ? decorateCandidatesWithCalibration(labeled, calibrationReport)
+        : labeled;
+      const slateResult        = selectSlate(withCalibration);
+      finalSlateRanked         = slateResult.ranked;
       printFinalCard(slateResult);
     }, undefined);
 
@@ -395,9 +403,21 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
     }
     // Save all props to tracking log
     try {
+      const rankedByKey = new Map(
+        finalSlateRanked.map(candidate => [
+          `${candidate.playerName ?? ''}__${candidate.market ?? ''}__${candidate.side}__${candidate.line ?? 'null'}`,
+          candidate,
+        ])
+      );
+      const effectiveLabel = (candidate: typeof finalSlateRanked[number]) => {
+        if (candidate.forcedTierCap === 'MONITOR') return 'MONITOR' as const;
+        if (candidate.forcedTierCap === 'LEAN' && candidate.finalDecisionLabel === 'BET') return 'LEAN' as const;
+        return candidate.finalDecisionLabel;
+      };
       savePropPicks(topProps.map(p => ({
         playerName: p.playerName,
         market: p.market,
+        propType: p.statType ?? p.market,
         side: p.side,
         line: p.line,
         bestUserPrice: p.bestUserPrice,
@@ -408,6 +428,25 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
         score: p.score,
         grade: p.grade,
         eventId: (p as any).eventId ?? '',
+        projectedStat: p.projectedStat,
+        projectionEdge: p.projectionEdge,
+        modelProbability: p.probability,
+        trueEdge: p.trueEdge,
+        edgeConfidence: p.edgeConfidence,
+        minutesConfidence: p.nbaMinutesConfidence,
+        modelCompleteness: p.modelCompleteness,
+        riskGrade: rankedByKey.get(`${p.playerName}__${p.market}__${p.side}__${p.line ?? 'null'}`)?.riskGrade,
+        finalDecisionLabel: rankedByKey.get(`${p.playerName}__${p.market}__${p.side}__${p.line ?? 'null'}`)?.finalDecisionLabel,
+        recommendedLabel: rankedByKey.get(`${p.playerName}__${p.market}__${p.side}__${p.line ?? 'null'}`)
+          ? effectiveLabel(rankedByKey.get(`${p.playerName}__${p.market}__${p.side}__${p.line ?? 'null'}`)!)
+          : undefined,
+        savedAsRecommendation: (() => {
+          const candidate = rankedByKey.get(`${p.playerName}__${p.market}__${p.side}__${p.line ?? 'null'}`);
+          const label = candidate ? effectiveLabel(candidate) : undefined;
+          return label === 'BET' || label === 'LEAN';
+        })(),
+        nonMarketSignalCount: rankedByKey.get(`${p.playerName}__${p.market}__${p.side}__${p.line ?? 'null'}`)?.strongNonMarketSignalCount,
+        signalTypes: rankedByKey.get(`${p.playerName}__${p.market}__${p.side}__${p.line ?? 'null'}`)?.signals,
       })));
     } catch { }
 
