@@ -68,6 +68,24 @@
 
 import { DecisionCandidate } from './decisionTypes';
 
+const MARKET_STRUCTURE_SIGNALS = new Set([
+  'PRICE_EDGE', 'LINE_GAP', 'JUICE_GAP', 'LINE_VS_CONSENSUS',
+]);
+
+const NBA_CONTEXT_SIGNALS = new Set([
+  'MINUTES_SECURE',
+  'ROLE_STABLE',
+  'ROLE_CHANGE',
+  'FORM_CONFIRMED',
+  'MINUTES_SPIKE',
+  'USAGE_SPIKE',
+  'USAGE_PROXY_SPIKE',
+  'POINTS_MATCHUP_EDGE',
+  'ASSIST_MATCHUP_EDGE',
+  'REBOUND_MATCHUP_EDGE',
+  'THREE_MATCHUP_EDGE',
+]);
+
 // ============================================================
 // BET volume cap constants
 // ============================================================
@@ -619,6 +637,10 @@ export function printFinalCard(result: SlateResult): void {
       c.projectedStat !== undefined &&
       c.line !== undefined
     ) {
+      const nonMarketSignalNames = [...new Set(
+        (c.signals ?? []).filter(sig => !MARKET_STRUCTURE_SIGNALS.has(sig))
+      )];
+      const contextSignalNames = nonMarketSignalNames.filter(sig => NBA_CONTEXT_SIGNALS.has(sig));
       const modelProbability = c.probability !== undefined ? `${(c.probability * 100).toFixed(1)}%` : 'n/a';
       const impliedProbability = c.impliedProbability !== undefined ? `${(c.impliedProbability * 100).toFixed(1)}%` : 'n/a';
       const trueEdge = c.trueEdge !== undefined
@@ -636,7 +658,9 @@ export function printFinalCard(result: SlateResult): void {
       if (edgeConfidence !== null) {
         console.log(`  |  Edge Confidence: ${edgeConfidence}`);
       }
-      console.log(`  |  Non-market Signals: ${c.strongNonMarketSignalCount ?? 0}  |  Final Label: ${lbl}`);
+      console.log(
+        `  |  Non-market Signals: ${nonMarketSignalNames.length}  |  Context Signals: ${contextSignalNames.length}  |  Final Label: ${lbl}`
+      );
     }
     for (const reason of (c.labelReasons ?? []).slice(0, 2)) {
       console.log(`  |  → ${reason}`);

@@ -659,6 +659,24 @@ export function printOutcomeSummary(candidates: DecisionCandidate[]): void {
 
   const count = (sig: string): number =>
     nbaProps.filter(c => c.outcomeSignals!.includes(sig)).length;
+  const REAL_CONTEXT_SIGNALS = new Set([
+    'MINUTES_SECURE',
+    'MINUTES_RISK',
+    'INJURY_OPPORTUNITY_UP',
+    'INJURY_OPPORTUNITY_DOWN',
+    'RECENT_FORM_GOOD',
+    'RECENT_FORM_BAD',
+    'FAVORABLE_MATCHUP',
+    'TOUGH_MATCHUP',
+  ]);
+  const PROXY_ONLY_SIGNALS = new Set([
+    'ROLE_STABLE',
+    'ROLE_UNSTABLE',
+    'ROLE_NEUTRAL',
+    'USAGE_UP',
+    'USAGE_DOWN',
+    'USAGE_STABLE',
+  ]);
 
   const roleStable    = count('ROLE_STABLE');
   const roleUnstable  = count('ROLE_UNSTABLE');
@@ -686,22 +704,38 @@ export function printOutcomeSummary(candidates: DecisionCandidate[]): void {
   ]);
   const notable = nbaProps
     .filter(c =>
-      c.outcomeSignals!.some(s => !NOISE_SIGNALS.has(s))
+      c.outcomeSignals!.some(s => REAL_CONTEXT_SIGNALS.has(s)) ||
+      c.outcomeSignals!.some(s => !NOISE_SIGNALS.has(s) && !PROXY_ONLY_SIGNALS.has(s))
     )
     .slice(0, 3);
 
+  if (notable.length === 0) {
+    console.log('    -> NBA outcome summary is proxy-only in this slice; real lineup/injury/form/matchup confirmations did not trigger.');
+    return;
+  }
+
   for (const c of notable) {
     const mkt      = c.market?.replace('player_', '') ?? '?';
-    const sigList  = c.outcomeSignals!.filter(s => !NOISE_SIGNALS.has(s)).join(', ');
-    const scores   =
-      `role:${c.outcomeRoleScore ?? '?'}` +
-      ` usage:${c.usageTrendScore ?? '?'}` +
-      ` matchup:${c.matchupScore ?? '?'}` +
-      ` form:${c.recentFormScore ?? '?'}` +
-      ` mins:${c.minutesConfidenceScore ?? '?'}` +
-      ` inj:${c.injuryOpportunityScore ?? '?'}`;
+    const sigList = c.outcomeSignals!
+      .filter(s => !NOISE_SIGNALS.has(s))
+      .filter(s => REAL_CONTEXT_SIGNALS.has(s))
+      .join(', ');
+    const scores: string[] = [];
+    if (c.outcomeSignals!.includes('FAVORABLE_MATCHUP') || c.outcomeSignals!.includes('TOUGH_MATCHUP')) {
+      scores.push(`matchup:${c.matchupScore ?? '?'}`);
+    }
+    if (c.outcomeSignals!.includes('RECENT_FORM_GOOD') || c.outcomeSignals!.includes('RECENT_FORM_BAD')) {
+      scores.push(`form:${c.recentFormScore ?? '?'}`);
+    }
+    if (c.outcomeSignals!.includes('MINUTES_SECURE') || c.outcomeSignals!.includes('MINUTES_RISK')) {
+      scores.push(`mins:${c.minutesConfidenceScore ?? '?'}`);
+    }
+    if (c.outcomeSignals!.includes('INJURY_OPPORTUNITY_UP') || c.outcomeSignals!.includes('INJURY_OPPORTUNITY_DOWN')) {
+      scores.push(`inj:${c.injuryOpportunityScore ?? '?'}`);
+    }
     console.log(
-      `    → ${c.playerName ?? c.id} (${mkt} ${c.line})  ${scores}` +
+      `    -> ${c.playerName ?? c.id} (${mkt} ${c.line})` +
+      (scores.length ? `  ${scores.join(' ')}` : '') +
       (sigList ? `  [${sigList}]` : '')
     );
   }

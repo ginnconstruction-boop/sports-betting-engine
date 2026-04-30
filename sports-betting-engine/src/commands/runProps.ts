@@ -327,7 +327,6 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
       const allCandidates      = [...qualResult.qualified, ...qualResult.rejected];
       const enriched           = enrichWithProbability(allCandidates);
       const withOutcome        = applyOutcomeSignals(enriched, outcomeContext);
-      printOutcomeSummary(withOutcome);
       const withIntel          = applySportIntelligence(withOutcome);
       const withDiversity      = applySignalDiversity(withIntel);
       const withWeighting      = applySignalWeighting(withDiversity);
@@ -347,7 +346,6 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
       const allCandidates      = [...qualResult.qualified, ...qualResult.rejected];
       const enriched           = enrichWithProbability(allCandidates);
       const withOutcome        = applyOutcomeSignals(enriched, outcomeContext);
-      printOutcomeSummary(withOutcome);
       const withIntel          = applySportIntelligence(withOutcome);
       const withDiversity      = applySignalDiversity(withIntel);
       const withWeighting      = applySignalWeighting(withDiversity);
