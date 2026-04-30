@@ -111,6 +111,20 @@ function roundToThousandths(value: number): number {
   return Math.round(value * 1000) / 1000;
 }
 
+const MARKET_STRUCTURE_SIGNALS = new Set([
+  'PRICE_EDGE', 'LINE_GAP', 'JUICE_GAP', 'LINE_VS_CONSENSUS',
+]);
+
+const NBA_PREDICTIVE_CONTEXT_SIGNALS = new Set([
+  'MINUTES_SECURE',
+  'ROLE_STABLE',
+  'FORM_CONFIRMED',
+  'MINUTES_SPIKE',
+  'USAGE_SPIKE',
+  'FAVORABLE_MATCHUP',
+  'ASSIST_MATCHUP_EDGE',
+]);
+
 function getSideProjectionEdge(
   side: 'Over' | 'Under',
   projectionEdge: number | undefined
@@ -326,22 +340,12 @@ export async function scoreAllPropsWithIntelligence(
     // candidates that have real model backing beyond price structure.
     //
     // For all other sports: enrichedSignals === scored.signals (no-op).
-    const MARKET_STRUCTURE_SIGNALS = new Set([
-      'PRICE_EDGE', 'LINE_GAP', 'JUICE_GAP', 'LINE_VS_CONSENSUS',
-    ]);
-    const NBA_EDGE_CONTEXT_SIGNALS = new Set([
-      'FORM_SPIKE',
-      'USAGE_SPIKE',
-      'MINUTES_SPIKE',
-      'FAVORABLE_MATCHUP',
-      'TOUGH_MATCHUP',
-    ]);
     const nonMarketIntelSignals = (prediction.signals ?? [])
       .filter(s => !MARKET_STRUCTURE_SIGNALS.has(s.type))
       .filter(s => s.magnitude === 'high' || s.magnitude === 'medium')
       .map(s => s.type);
     const strongNonMarketSignalCount = (sportKey === 'basketball_nba'
-      ? nonMarketIntelSignals.filter(type => NBA_EDGE_CONTEXT_SIGNALS.has(type))
+      ? nonMarketIntelSignals.filter(type => NBA_PREDICTIVE_CONTEXT_SIGNALS.has(type))
       : nonMarketIntelSignals
     ).length;
 
@@ -791,9 +795,20 @@ export function printTopProps(props: ScoredProp[], sportKey = 'basketball_nba'):
       const edgeConfidence = p.edgeConfidence !== undefined
         ? `${(p.edgeConfidence * 100).toFixed(0)}%`
         : 'n/a';
+      const predictionSignals = ((p as any).prediction?.signals ?? []) as Array<{ type: string; magnitude: string }>;
+      const nonMarketSignalNames = [...new Set(
+        predictionSignals
+          .filter((s) => !MARKET_STRUCTURE_SIGNALS.has(s.type))
+          .filter((s) => s.magnitude === 'high' || s.magnitude === 'medium')
+          .map((s) => s.type)
+      )];
+      const contextSignalNames = nonMarketSignalNames
+        .filter((name) => NBA_PREDICTIVE_CONTEXT_SIGNALS.has(name));
       console.log(`  |  [AI] Projection: ${p.projectedStat} | Line: ${p.line} | Projection Edge: ${projectionEdge}`);
       console.log(`  |  [AI] Model Prob: ${probability} | Implied Prob: ${impliedProbability} | True Edge: ${trueEdge}`);
-      console.log(`  |  [AI] Model completeness: ${((p.modelCompleteness ?? 0) * 100).toFixed(0)}% | Minutes confidence: ${((p.nbaMinutesConfidence ?? 0) * 100).toFixed(0)}% | Non-market signals: ${p.strongNonMarketSignalCount ?? 0} | Edge confidence: ${edgeConfidence}`);
+      console.log(`  |  [AI] Model completeness: ${((p.modelCompleteness ?? 0) * 100).toFixed(0)}% | Minutes confidence: ${((p.nbaMinutesConfidence ?? 0) * 100).toFixed(0)}% | Edge confidence: ${edgeConfidence}`);
+      console.log(`  |  [AI] Non-market Signals: ${nonMarketSignalNames.length}${nonMarketSignalNames.length ? ` -> ${nonMarketSignalNames.join(', ')}` : ''}`);
+      console.log(`  |  [AI] Context Signals: ${contextSignalNames.length}${contextSignalNames.length ? ` -> ${contextSignalNames.join(', ')}` : ''}`);
     }
     const brProp = parseFloat(process.env.BANKROLL ?? '0');
     const kProp  = brProp > 0 ? `Kelly: 1.5% = $${Math.round(brProp * 0.015)}` : 'Kelly: 1-2% of bankroll';

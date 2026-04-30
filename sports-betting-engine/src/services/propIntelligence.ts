@@ -98,6 +98,7 @@ function getStatFromProfile(profile: PlayerProfile, statType: string): {
 
 interface NBAProjectionContext {
   statKey: 'points' | 'rebounds' | 'assists' | 'threes';
+  position?: string;
   line: number;
   side: 'over' | 'under';
   projectedMinutes: number;
@@ -105,6 +106,8 @@ interface NBAProjectionContext {
   last10MinutesAvg?: number;
   last5MinutesAvg?: number;
   last3MinutesAvg?: number;
+  hasObservedLast5Minutes?: boolean;
+  hasObservedLast10Minutes?: boolean;
   usageRate?: number | null;
   seasonUsageRate?: number | null;
   weightedStatPerMinute: number;
@@ -267,6 +270,7 @@ function deriveSignals(
   const rawProjectionEdge = roundToTenths(projectedStat - ctx.line);
   const projectionMagnitude = Math.abs(rawProjectionEdge);
   const projectionSide: 'over' | 'under' = rawProjectionEdge >= 0 ? 'over' : 'under';
+  const isOverCandidate = ctx.side === 'over';
 
   if (projectionMagnitude >= 1.0) {
     signals.push({
@@ -395,25 +399,111 @@ function deriveSignals(
     });
   }
 
-  if ((ctx.opponentDefenseRank ?? 0) > 0 && (ctx.opponentDefenseRank ?? 0) <= 10) {
+  if (
+    (ctx.minutesConfidence ?? 0) >= 0.80 &&
+    (ctx.projectedMinutes ?? 0) > 0 &&
+    ctx.hasObservedLast5Minutes === true &&
+    ctx.hasObservedLast10Minutes === true &&
+    (ctx.last5MinutesAvg ?? 0) > 0 &&
+    (ctx.last10MinutesAvg ?? 0) > 0
+  ) {
     signals.push({
-      type: 'TOUGH_MATCHUP',
-      detail: `Opponent defense rank ${ctx.opponentDefenseRank} indicates a tough positional matchup`,
-      impact: 'negative',
-      magnitude: (ctx.opponentDefenseRank ?? 0) <= 5 ? 'high' : 'medium',
-      side: 'under',
-      scoreContribution: (ctx.opponentDefenseRank ?? 0) <= 5 ? -10 : -6,
+      type: 'MINUTES_SECURE',
+      detail: `Minutes secure at ${(ctx.projectedMinutes ?? 0).toFixed(1)} with ${Math.round((ctx.minutesConfidence ?? 0) * 100)}% confidence`,
+      impact: 'positive',
+      magnitude: (ctx.minutesConfidence ?? 0) >= 0.88 ? 'high' : 'medium',
+      side: 'neutral',
+      scoreContribution: (ctx.minutesConfidence ?? 0) >= 0.88 ? 8 : 5,
     });
   }
 
-  if ((ctx.opponentDefenseRank ?? 0) >= 21) {
+  if (
+    (ctx.minutesConfidence ?? 0) >= 0.75 &&
+    (ctx.usageRate ?? 0) > 0 &&
+    (ctx.seasonUsageRate ?? 0) > 0 &&
+    Math.abs(((ctx.usageRate ?? 0) - (ctx.seasonUsageRate ?? 0)) / (ctx.seasonUsageRate ?? 1)) <= 0.15
+  ) {
+    signals.push({
+      type: 'ROLE_STABLE',
+      detail: `Role stable with usage ${((ctx.usageRate ?? 0) * 100).toFixed(1)}% vs season ${((ctx.seasonUsageRate ?? 0) * 100).toFixed(1)}%`,
+      impact: 'positive',
+      magnitude: (ctx.minutesConfidence ?? 0) >= 0.85 ? 'high' : 'medium',
+      side: 'neutral',
+      scoreContribution: (ctx.minutesConfidence ?? 0) >= 0.85 ? 8 : 5,
+    });
+  }
+
+  if (
+    (ctx.last5StatAverage ?? 0) > 0 &&
+    (ctx.last10StatAverage ?? 0) > 0 &&
+    (ctx.seasonStatAverage ?? 0) > 0
+  ) {
+    const overConfirmed =
+      (ctx.last5StatAverage ?? 0) > (ctx.seasonStatAverage ?? 0) * 1.10 &&
+      (ctx.last10StatAverage ?? 0) > (ctx.seasonStatAverage ?? 0) * 1.05;
+    const underConfirmed =
+      (ctx.last5StatAverage ?? 0) < (ctx.seasonStatAverage ?? 0) * 0.90 &&
+      (ctx.last10StatAverage ?? 0) < (ctx.seasonStatAverage ?? 0) * 0.95;
+
+    if (overConfirmed || underConfirmed) {
+      const confirmedSide: 'over' | 'under' = overConfirmed ? 'over' : 'under';
+      signals.push({
+        type: 'FORM_CONFIRMED',
+        detail: `Form confirmed: L5 ${(ctx.last5StatAverage ?? 0).toFixed(1)} | L10 ${(ctx.last10StatAverage ?? 0).toFixed(1)} | season ${(ctx.seasonStatAverage ?? 0).toFixed(1)}`,
+        impact: confirmedSide === ctx.side ? 'positive' : 'negative',
+        magnitude: 'medium',
+        side: confirmedSide,
+        scoreContribution: confirmedSide === ctx.side ? 7 : -7,
+      });
+    }
+  }
+
+  if ((ctx.opponentDefenseRank ?? 0) > 0 && (ctx.opponentDefenseRank ?? 0) <= 9) {
+    signals.push({
+      type: 'TOUGH_MATCHUP',
+      detail: `Opponent defense rank ${ctx.opponentDefenseRank} indicates a tough positional matchup`,
+      impact: isOverCandidate ? 'negative' : 'positive',
+      magnitude: (ctx.opponentDefenseRank ?? 0) <= 4 ? 'high' : 'medium',
+      side: 'under',
+      scoreContribution: isOverCandidate
+        ? ((ctx.opponentDefenseRank ?? 0) <= 4 ? -10 : -6)
+        : ((ctx.opponentDefenseRank ?? 0) <= 4 ? 10 : 6),
+    });
+  }
+
+  if ((ctx.opponentDefenseRank ?? 0) >= 22) {
     signals.push({
       type: 'FAVORABLE_MATCHUP',
       detail: `Opponent defense rank ${ctx.opponentDefenseRank} indicates a favorable positional matchup`,
-      impact: 'positive',
+      impact: isOverCandidate ? 'positive' : 'negative',
       magnitude: (ctx.opponentDefenseRank ?? 0) >= 25 ? 'high' : 'medium',
       side: 'over',
-      scoreContribution: (ctx.opponentDefenseRank ?? 0) >= 25 ? 10 : 6,
+      scoreContribution: isOverCandidate
+        ? ((ctx.opponentDefenseRank ?? 0) >= 25 ? 10 : 6)
+        : ((ctx.opponentDefenseRank ?? 0) >= 25 ? -10 : -6),
+    });
+  }
+
+  const normalizedPosition = (ctx.position ?? '').toUpperCase();
+  const isPrimaryBallHandler =
+    normalizedPosition.includes('PG') ||
+    normalizedPosition === 'G' ||
+    normalizedPosition.includes('POINT');
+  const hasAssistRate = ctx.statKey === 'assists' && (ctx.seasonStatPerMinute ?? 0) > 0;
+  if (
+    ctx.statKey === 'assists' &&
+    (ctx.opponentDefenseRank ?? 0) >= 22 &&
+    (isPrimaryBallHandler || hasAssistRate)
+  ) {
+    signals.push({
+      type: 'ASSIST_MATCHUP_EDGE',
+      detail: `Assist matchup edge with rank ${ctx.opponentDefenseRank} against a weak opponent assist defense`,
+      impact: isOverCandidate ? 'positive' : 'negative',
+      magnitude: (ctx.opponentDefenseRank ?? 0) >= 26 ? 'high' : 'medium',
+      side: 'over',
+      scoreContribution: isOverCandidate
+        ? ((ctx.opponentDefenseRank ?? 0) >= 26 ? 10 : 6)
+        : ((ctx.opponentDefenseRank ?? 0) >= 26 ? -10 : -6),
     });
   }
 
@@ -425,15 +515,6 @@ function deriveSignals(
       magnitude: (ctx.minutesVolatility ?? 0) >= 5 ? 'high' : 'medium',
       side: 'neutral',
       scoreContribution: (ctx.minutesVolatility ?? 0) >= 5 ? -14 : -9,
-    });
-  } else if ((ctx.minutesConfidence ?? 0) >= 0.7) {
-    signals.push({
-      type: 'ROLE_STABILITY',
-      detail: `Stable role profile with ${Math.round((ctx.minutesConfidence ?? 0) * 100)}% minutes confidence`,
-      impact: 'positive',
-      magnitude: (ctx.roleStabilityScore ?? 0) >= 0.8 ? 'high' : 'medium',
-      side: 'neutral',
-      scoreContribution: (ctx.roleStabilityScore ?? 0) >= 0.8 ? 8 : 5,
     });
   }
 
@@ -952,6 +1033,8 @@ export function generatePropPrediction(
     const recentThreeGames = recentGames.slice(0, 3);
     const recentFiveGames = recentGames.slice(0, 5);
     const recentTenGames = recentGames.slice(0, 10);
+    const hasObservedLast5Minutes = recentFiveGames.length >= 5;
+    const hasObservedLast10Minutes = recentTenGames.length >= 10;
     const last3MinutesAvg = recentThreeGames.length > 0
       ? avg(recentThreeGames.map(g => g.minutes))
       : (profile?.l5MPG ?? 0);
@@ -1111,6 +1194,7 @@ export function generatePropPrediction(
 
     nbaProjection = buildNBAProjection({
       statKey,
+      position,
       line: postedLine,
       side,
       projectedMinutes: projectedMinutes || last10MinutesAvg || seasonMinutesAvg || 0,
@@ -1118,6 +1202,8 @@ export function generatePropPrediction(
       last10MinutesAvg: last10MinutesAvg || undefined,
       last5MinutesAvg: last5MinutesAvg || undefined,
       last3MinutesAvg: last3MinutesAvg || undefined,
+      hasObservedLast5Minutes,
+      hasObservedLast10Minutes,
       usageRate: rawUsage,
       seasonUsageRate: undefined,
       weightedStatPerMinute: adjustedWeightedStatPerMinute,
