@@ -164,6 +164,16 @@ const NBA_PROJECTION_BOOST_SIGNALS = new Set([
   'TOUGH_MATCHUP',
 ]);
 
+const NBA_PREDICTIVE_CONTEXT_SIGNALS = new Set([
+  'MINUTES_SECURE',
+  'ROLE_STABLE',
+  'FORM_CONFIRMED',
+  'MINUTES_SPIKE',
+  'USAGE_SPIKE',
+  'FAVORABLE_MATCHUP',
+  'ASSIST_MATCHUP_EDGE',
+]);
+
 function clamp01(value: number): number {
   return Math.max(0, Math.min(1, value));
 }
@@ -198,6 +208,28 @@ function roundToTenths(value: number): number {
 
 function roundToThousandths(value: number): number {
   return Math.round(value * 1000) / 1000;
+}
+
+function deriveUsageProxyRate(
+  games: PlayerProfile['recentGames']
+): number | undefined {
+  const playedGames = games.filter(game => !game.didNotPlay && game.minutes > 0);
+  if (playedGames.length === 0) return undefined;
+
+  const actionLoadPerMinute = avg(playedGames.map(game =>
+    (
+      game.fieldGoalAttempts +
+      (game.freeThrowAttempts * 0.44) +
+      game.turnovers +
+      (game.assists * 0.33)
+    ) / Math.max(game.minutes, 1)
+  ));
+
+  if (!Number.isFinite(actionLoadPerMinute) || actionLoadPerMinute <= 0) {
+    return undefined;
+  }
+
+  return roundToThousandths(clampRange(actionLoadPerMinute / 2.5, 0.08, 0.45));
 }
 
 function normalizeNBAProjectionStatType(statType: string): 'points' | 'rebounds' | 'assists' | 'threes' | null {
@@ -1104,7 +1136,9 @@ export function generatePropPrediction(
       weightedStatPerMinute = last10StatPerMinute || seasonStatPerMinute || 0;
     }
 
-    const rawUsage = profile?.usageRate ?? null;
+    const recentUsageRate = deriveUsageProxyRate(recentFiveGames);
+    const seasonUsageRate = profile?.usageRate ?? deriveUsageProxyRate(recentTenGames) ?? null;
+    const rawUsage = profile?.usageRate ?? recentUsageRate ?? seasonUsageRate ?? null;
     const usageAdjustment = clampRange(1 + (((rawUsage ?? 0.22) - 0.22) * 1.0), 0.85, 1.20);
     const recentShotAttemptsPerMinute = recentFiveGames.length > 0
       ? avg(recentFiveGames.map(g => g.fieldGoalAttempts / Math.max(g.minutes, 1)))
@@ -1205,7 +1239,7 @@ export function generatePropPrediction(
       hasObservedLast5Minutes,
       hasObservedLast10Minutes,
       usageRate: rawUsage,
-      seasonUsageRate: undefined,
+      seasonUsageRate,
       weightedStatPerMinute: adjustedWeightedStatPerMinute,
       seasonStatAverage: seasonStat || undefined,
       last10StatAverage: last10Stat || undefined,
@@ -1240,6 +1274,23 @@ export function generatePropPrediction(
       prevWasBench,
       opponentDefenseRank,
     });
+
+    const nbaContextSignalNames = nbaProjection.signals
+      .filter(signal => NBA_PREDICTIVE_CONTEXT_SIGNALS.has(signal.type))
+      .map(signal => signal.type);
+    if (nbaContextSignalNames.length === 0) {
+      console.log({
+        player: playerName,
+        last5StatAverage: last5Stat || 0,
+        last10StatAverage: last10Stat || 0,
+        seasonStatAverage: seasonStat || 0,
+        usageRate: rawUsage,
+        seasonUsageRate,
+        opponentDefenseRank: opponentDefenseRank ?? null,
+        projectedMinutes,
+        minutesConfidence,
+      });
+    }
 
     if (
       nbaProjection.projectedStat <= 0 ||
