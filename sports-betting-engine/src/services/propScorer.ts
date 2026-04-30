@@ -121,6 +121,7 @@ const NBA_PREDICTIVE_CONTEXT_SIGNALS = new Set([
   'FORM_CONFIRMED',
   'MINUTES_SPIKE',
   'USAGE_SPIKE',
+  'USAGE_PROXY_SPIKE',
   'FAVORABLE_MATCHUP',
   'ASSIST_MATCHUP_EDGE',
 ]);
@@ -475,10 +476,15 @@ export async function scoreAllPropsWithIntelligence(
         finalTier = 'MONITOR';
       }
 
+      const hasStrongSingleContextEscape =
+        strongNonMarketSignalCount >= 1 &&
+        sideProjectionEdge >= 1.5 &&
+        (trueEdge ?? 0) >= 0.05;
+
       if (strongNonMarketSignalCount < 1) {
         finalScore = Math.min(finalScore, 15);
         finalTier = 'MONITOR';
-      } else if (strongNonMarketSignalCount < 2) {
+      } else if (strongNonMarketSignalCount < 2 && !hasStrongSingleContextEscape) {
         finalScore = Math.min(finalScore, 49);
         finalTier = 'MONITOR';
       }

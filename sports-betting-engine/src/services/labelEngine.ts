@@ -494,12 +494,16 @@ function classifyV2(c: DecisionCandidate): Classification {
     strongContextCount >= 2 &&
     riskGrade === 'LOW';
 
+  const leanContextEligible =
+    strongContextCount >= 2 ||
+    (strongContextCount >= 1 && projectionEdge >= 1.5 && trueEdge >= 0.05);
+
   const leanEligible =
     modelProbability >= 0.55 &&
     trueEdge >= 0.03 &&
     projectionEdge >= 1.0 &&
     completeness >= 0.65 &&
-    strongContextCount >= 2 &&
+    leanContextEligible &&
     (riskGrade === 'LOW' || riskGrade === 'MODERATE');
 
   if (betEligible) {

@@ -170,6 +170,7 @@ const NBA_PREDICTIVE_CONTEXT_SIGNALS = new Set([
   'FORM_CONFIRMED',
   'MINUTES_SPIKE',
   'USAGE_SPIKE',
+  'USAGE_PROXY_SPIKE',
   'FAVORABLE_MATCHUP',
   'ASSIST_MATCHUP_EDGE',
 ]);
@@ -369,7 +370,7 @@ function deriveSignals(
     (ctx.last5StatAverage ?? 0) > 0 &&
     (ctx.seasonStatAverage ?? 0) > 0 &&
     (ctx.last10StatAverage ?? 0) > 0 &&
-    (ctx.last5StatAverage ?? 0) > (ctx.last10StatAverage ?? 0) * 1.20 &&
+    (ctx.last5StatAverage ?? 0) > (ctx.last10StatAverage ?? 0) * 1.10 &&
     (ctx.last5StatAverage ?? 0) > (ctx.seasonStatAverage ?? 0) * 1.10
   ) {
     signals.push({
@@ -377,13 +378,13 @@ function deriveSignals(
       detail: `Recent form spike ${(ctx.last5StatAverage ?? 0).toFixed(1)} vs L10 ${(ctx.last10StatAverage ?? 0).toFixed(1)} and season ${(ctx.seasonStatAverage ?? 0).toFixed(1)}`,
       impact: 'positive',
       magnitude:
-        (ctx.last5StatAverage ?? 0) > (ctx.last10StatAverage ?? 0) * 1.30 ||
+        (ctx.last5StatAverage ?? 0) > (ctx.last10StatAverage ?? 0) * 1.20 ||
         (ctx.last5StatAverage ?? 0) > (ctx.seasonStatAverage ?? 0) * 1.20
           ? 'high'
           : 'medium',
       side: 'over',
       scoreContribution:
-        (ctx.last5StatAverage ?? 0) > (ctx.last10StatAverage ?? 0) * 1.30 ||
+        (ctx.last5StatAverage ?? 0) > (ctx.last10StatAverage ?? 0) * 1.20 ||
         (ctx.last5StatAverage ?? 0) > (ctx.seasonStatAverage ?? 0) * 1.20
           ? 10
           : 6,
@@ -393,30 +394,45 @@ function deriveSignals(
   if (
     (ctx.last3MinutesAvg ?? 0) > 0 &&
     (ctx.last10MinutesAvg ?? 0) > 0 &&
-    (ctx.last3MinutesAvg ?? 0) > (ctx.last10MinutesAvg ?? 0) * 1.20
+    (ctx.last3MinutesAvg ?? 0) > (ctx.last10MinutesAvg ?? 0) * 1.10
   ) {
     signals.push({
       type: 'MINUTES_SPIKE',
       detail: `Recent minutes spike ${(ctx.last3MinutesAvg ?? 0).toFixed(1)} vs ${(ctx.last10MinutesAvg ?? 0).toFixed(1)} L10 average`,
       impact: 'positive',
-      magnitude: (ctx.last3MinutesAvg ?? 0) > (ctx.last10MinutesAvg ?? 0) * 1.30 ? 'high' : 'medium',
+      magnitude: (ctx.last3MinutesAvg ?? 0) > (ctx.last10MinutesAvg ?? 0) * 1.20 ? 'high' : 'medium',
       side: 'over',
-      scoreContribution: (ctx.last3MinutesAvg ?? 0) > (ctx.last10MinutesAvg ?? 0) * 1.30 ? 10 : 6,
+      scoreContribution: (ctx.last3MinutesAvg ?? 0) > (ctx.last10MinutesAvg ?? 0) * 1.20 ? 10 : 6,
     });
   }
 
   if (
     (ctx.usageRate ?? 0) > 0 &&
     (ctx.seasonUsageRate ?? 0) > 0 &&
-    (ctx.usageRate ?? 0) > (ctx.seasonUsageRate ?? 0) * 1.15
+    (ctx.usageRate ?? 0) > (ctx.seasonUsageRate ?? 0) * 1.08
   ) {
     signals.push({
       type: 'USAGE_SPIKE',
       detail: `Usage spike ${((ctx.usageRate ?? 0) * 100).toFixed(1)}% vs season ${((ctx.seasonUsageRate ?? 0) * 100).toFixed(1)}%`,
       impact: 'positive',
-      magnitude: (ctx.usageRate ?? 0) > (ctx.seasonUsageRate ?? 0) * 1.25 ? 'high' : 'medium',
+      magnitude: (ctx.usageRate ?? 0) > (ctx.seasonUsageRate ?? 0) * 1.16 ? 'high' : 'medium',
       side: 'over',
-      scoreContribution: (ctx.usageRate ?? 0) > (ctx.seasonUsageRate ?? 0) * 1.25 ? 10 : 6,
+      scoreContribution: (ctx.usageRate ?? 0) > (ctx.seasonUsageRate ?? 0) * 1.16 ? 10 : 6,
+    });
+  }
+
+  if (
+    (ctx.last5StatPerMinute ?? 0) > 0 &&
+    (ctx.seasonStatPerMinute ?? 0) > 0 &&
+    (ctx.last5StatPerMinute ?? 0) > (ctx.seasonStatPerMinute ?? 0) * 1.08
+  ) {
+    signals.push({
+      type: 'USAGE_PROXY_SPIKE',
+      detail: `Usage proxy spike ${((ctx.last5StatPerMinute ?? 0) / Math.max(ctx.seasonStatPerMinute ?? 1, 0.0001)).toFixed(2)}x recent stat/min vs season`,
+      impact: 'positive',
+      magnitude: (ctx.last5StatPerMinute ?? 0) > (ctx.seasonStatPerMinute ?? 0) * 1.16 ? 'high' : 'medium',
+      side: 'over',
+      scoreContribution: (ctx.last5StatPerMinute ?? 0) > (ctx.seasonStatPerMinute ?? 0) * 1.16 ? 9 : 5,
     });
   }
 
@@ -490,7 +506,12 @@ function deriveSignals(
     }
   }
 
-  if ((ctx.opponentDefenseRank ?? 0) > 0 && (ctx.opponentDefenseRank ?? 0) <= 9) {
+  const hasRealOpponentRank =
+    Number.isFinite(ctx.opponentDefenseRank) &&
+    (ctx.opponentDefenseRank ?? 0) >= 1 &&
+    (ctx.opponentDefenseRank ?? 0) <= 30;
+
+  if (hasRealOpponentRank && (ctx.opponentDefenseRank ?? 0) <= 9) {
     signals.push({
       type: 'TOUGH_MATCHUP',
       detail: `Opponent defense rank ${ctx.opponentDefenseRank} indicates a tough positional matchup`,
@@ -503,7 +524,7 @@ function deriveSignals(
     });
   }
 
-  if ((ctx.opponentDefenseRank ?? 0) >= 22) {
+  if (hasRealOpponentRank && (ctx.opponentDefenseRank ?? 0) >= 22) {
     signals.push({
       type: 'FAVORABLE_MATCHUP',
       detail: `Opponent defense rank ${ctx.opponentDefenseRank} indicates a favorable positional matchup`,
@@ -524,6 +545,7 @@ function deriveSignals(
   const hasAssistRate = ctx.statKey === 'assists' && (ctx.seasonStatPerMinute ?? 0) > 0;
   if (
     ctx.statKey === 'assists' &&
+    hasRealOpponentRank &&
     (ctx.opponentDefenseRank ?? 0) >= 22 &&
     (isPrimaryBallHandler || hasAssistRate)
   ) {
