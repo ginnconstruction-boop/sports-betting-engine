@@ -220,6 +220,7 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
     <div class="stats-bar">
       <div class="stat-card" onclick="togglePicks()" style="cursor:pointer" title="Click to view all picks"><div class="stat-label">Total Picks &#x2197;</div><div class="stat-value" id="stat-total">--</div></div>
       <div class="stat-card"><div class="stat-label">Record</div><div class="stat-value" id="stat-record">--</div></div>
+      <div class="stat-card"><div class="stat-label">Official Pending</div><div class="stat-value yellow" id="stat-pending">--</div></div>
       <div class="stat-card"><div class="stat-label">Win Rate</div><div class="stat-value" id="stat-winpct">--</div></div>
       <div class="stat-card"><div class="stat-label">Profit</div><div class="stat-value" id="stat-profit">--</div></div>
     </div>
@@ -660,6 +661,9 @@ async function loadStats() {
     );
     const wins   = pnl?.wins ?? graded.filter(p => p.gameResult === 'WIN').length;
     const losses = pnl?.losses ?? graded.filter(p => p.gameResult === 'LOSS').length;
+    const totalPicks = pnl?.totalPicks ?? officialPicks.length;
+    const gradedPicks = pnl?.gradedPicks ?? graded.length;
+    const pendingPicks = Math.max(0, totalPicks - gradedPicks);
     const winPct = pnl?.winPct ?? ((wins + losses) > 0 ? Math.round(wins/(wins+losses)*100) : 0);
     let profit = pnl?.totalProfit ?? 0;
     if (!pnl) {
@@ -669,13 +673,14 @@ async function loadStats() {
         else if (p.gameResult==='LOSS') profit -= 100;
       });
     }
-    document.getElementById('stat-total').textContent = pnl?.totalPicks ?? officialPicks.length;
+    document.getElementById('stat-total').textContent = totalPicks;
     document.getElementById('stat-record').textContent = `${wins}-${losses}`;
+    document.getElementById('stat-pending').textContent = pendingPicks;
     const wp = document.getElementById('stat-winpct');
-    wp.textContent = (pnl?.gradedPicks ?? graded.length) ? winPct+'%' : '--';
+    wp.textContent = gradedPicks ? winPct+'%' : '--';
     wp.className = 'stat-value ' + (winPct>=55?'green':winPct>=45?'yellow':'red');
     const pr = document.getElementById('stat-profit');
-    pr.textContent = (pnl?.gradedPicks ?? graded.length) ? `${profit>=0?'+':''}$${Math.round(profit)}` : '--';
+    pr.textContent = gradedPicks ? `${profit>=0?'+':''}$${Math.round(profit)}` : '--';
     pr.className = 'stat-value ' + (profit>=0?'green':'red');
 
     // ── Per-sport breakdown ──
