@@ -2,7 +2,7 @@
 // src/commands/runMorningScan.ts
 // Morning scan -- full elite model
 // Every intelligence step is fully fault-tolerant
-// A failed ESPN/weather/news call never blocks the Top 10
+// A failed ESPN/weather/news fallback call never blocks the Top 10
 // ============================================================
 
 import * as dotenv from 'dotenv';
@@ -116,7 +116,7 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
   // -- Step 0: Retrospective analysis ------------------------
   // Auto-grade yesterday's picks, identify what went wrong,
   // adjust signal weights for today's scoring
-  console.log('\n  [0/22] Grading yesterday\'s picks from ESPN scores...');
+  console.log('\n  [0/22] Grading yesterday\'s picks from Odds API scores (ESPN fallback)...');
   if (gradingError) {
     process.stderr.write(`  [skip] retro grading: ${gradingError}\n`);
   }
@@ -124,9 +124,9 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
   if (grading.graded > 0 || grading.missing > 0) {
     const totalResolved = grading.graded + grading.missing;
     console.log(`  Auto-processed ${totalResolved} completed pick(s) from yesterday.`);
-    // Auto-write ESPN grades into P&L -- no manual entry needed
+    // Auto-write score-feed grades into P&L -- no manual entry needed
     safeRunSync('auto pnl update', () => rebuildPNL(), undefined);
-    console.log('  P&L updated automatically from ESPN scores.');
+    console.log('  P&L updated automatically from score feeds.');
   }
 
   // Update live ATS tracker — processes completed games from recent snapshots

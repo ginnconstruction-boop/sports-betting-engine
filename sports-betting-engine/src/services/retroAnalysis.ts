@@ -1,7 +1,7 @@
 // ============================================================
 // src/services/retroAnalysis.ts
 // Retrospective analysis -- runs automatically each morning
-// Checks yesterday's picks against ESPN scores
+// Checks yesterday's picks against Odds API scores with ESPN fallback
 // Identifies what signals were on wins vs losses
 // Adjusts signal weights based on actual results
 // ============================================================
@@ -111,7 +111,7 @@ function fetchJson(url: string): Promise<any> {
 }
 
 // ------------------------------------
-// ESPN score lookup
+// ESPN score fallback lookup
 // ------------------------------------
 
 const ESPN_LEAGUES: Record<string, { sport: string; league: string }> = {
@@ -192,7 +192,7 @@ function getScoreFromOddsApiCache(
   return { ...entry, final: true };
 }
 
-// Source 1: ESPN scoreboard API
+// Source 1: ESPN scoreboard API fallback
 async function getScoreFromESPN(
   sportKey: string, homeTeam: string, awayTeam: string, gameDate: string
 ): Promise<{ homeScore: number; awayScore: number; final: boolean } | null> {
@@ -237,7 +237,7 @@ async function getScoreFromESPN(
   } catch { return null; }
 }
 
-// Source 2: ESPN summary API (different endpoint, more reliable for older games)
+// Source 2: ESPN summary API fallback (different endpoint, more reliable for older games)
 async function getScoreFromESPNSummary(
   sportKey: string, homeTeam: string, awayTeam: string, gameDate: string
 ): Promise<{ homeScore: number; awayScore: number; final: boolean } | null> {
@@ -438,7 +438,7 @@ function isGradeReady(gameTime: string, sportKey: string): boolean {
 }
 
 // ------------------------------------
-// Auto-grade picks from ESPN scores
+// Auto-grade picks from Odds API scores with ESPN fallback
 // ------------------------------------
 
 export async function autoGradePicks(): Promise<AutoGradeSummary> {
@@ -948,7 +948,7 @@ export function printRetroReport(report: RetroReport): void {
 
   if (report.picksAnalyzed < 5) {
     console.log('\n  Not enough graded picks for meaningful analysis yet.');
-    console.log('  Results auto-populate each morning from ESPN scores.');
+    console.log('  Results auto-populate each morning from Odds API scores (with ESPN fallback).');
     console.log('  You can also enter results manually via GO.bat option 12.\n');
     return;
   }
