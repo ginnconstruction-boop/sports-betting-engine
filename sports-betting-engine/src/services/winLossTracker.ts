@@ -110,6 +110,17 @@ function emptyRecord(): SportRecord {
   return { picks: 0, wins: 0, losses: 0, pushes: 0, profit: 0, roi: 0, winPct: 0 };
 }
 
+function isLegacyOfficialPick(pick: PickRecord): boolean {
+  if (pick.savedAsRecommendation === true) return true;
+  if (pick.savedAsRecommendation === false) return false;
+
+  const gradeableLegacyTypes = new Set([
+    'Moneyline', 'h2h', 'Spread', 'spreads', 'Total', 'totals',
+  ]);
+
+  return gradeableLegacyTypes.has(pick.betType ?? '');
+}
+
 function updateRecord(rec: SportRecord, result: 'WIN' | 'LOSS' | 'PUSH', profit: number): SportRecord {
   const updated = { ...rec };
   updated.picks++;
@@ -237,7 +248,7 @@ export async function enterResults(): Promise<void> {
 
 export function rebuildPNL(): PNLRecord {
   const allPicks = loadPicks();
-  const picks = allPicks.filter(p => p.savedAsRecommendation === true);
+  const picks = allPicks.filter(isLegacyOfficialPick);
   const graded = picks.filter(p =>
     p.gameResult !== 'PENDING' &&
     p.gameResult !== 'MISSING_SCORE' &&

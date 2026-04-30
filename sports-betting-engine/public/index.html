@@ -401,11 +401,18 @@ let currentBtn = null;
 let currentES = null;
 let fullOutputText = '';
 let allPicksCache = [];
+let officialPicksCache = [];
 let currentFilter = 'all';
 let currentPage = 1;
 const PAGE_SIZE = 25;
 let picksSortCol = 'date';
 let picksSortDir = -1;
+
+function isOfficialPick(p) {
+  if (p.savedAsRecommendation === true) return true;
+  if (p.savedAsRecommendation === false) return false;
+  return ['Moneyline','h2h','Spread','spreads','Total','totals'].includes(p.betType);
+}
 
 // ── Init ──
 window.onload = function() {
@@ -635,33 +642,44 @@ function colorize(text) {
 // ── Stats ──
 async function loadStats() {
   try {
-    const r = await fetch('/api/picks',{headers:{'x-auth-token':authToken}});
-    if (r.status === 401) { handleUnauthorized(); return; }
-    if (!r.ok) return;
-    const picks = await r.json();
+    const [picksResp, pnlResp] = await Promise.all([
+      fetch('/api/picks',{headers:{'x-auth-token':authToken}}),
+      fetch('/api/pnl',{headers:{'x-auth-token':authToken}})
+    ]);
+    if (picksResp.status === 401 || pnlResp.status === 401) { handleUnauthorized(); return; }
+    if (!picksResp.ok) return;
+    const picks = await picksResp.json();
+    const pnl = pnlResp.ok ? await pnlResp.json() : null;
     allPicksCache = picks;
-    if (!picks.length) return;
-    const graded = picks.filter(p => p.gameResult !== 'PENDING');
-    const wins   = graded.filter(p => p.gameResult === 'WIN').length;
-    const losses = graded.filter(p => p.gameResult === 'LOSS').length;
-    const winPct = (wins + losses) > 0 ? Math.round(wins/(wins+losses)*100) : 0;
-    let profit = 0;
-    graded.forEach(p => {
-      const price = (typeof p.pickedPrice==='number'&&isFinite(p.pickedPrice)) ? p.pickedPrice : -110;
-      if (p.gameResult==='WIN') profit += price>0 ? price : (100/Math.abs(price))*100;
-      else if (p.gameResult==='LOSS') profit -= 100;
-    });
-    document.getElementById('stat-total').textContent = picks.length;
+    const officialPicks = picks.filter(isOfficialPick);
+    officialPicksCache = officialPicks;
+    const graded = officialPicks.filter(p =>
+      p.gameResult !== 'PENDING' &&
+      p.gameResult !== 'MISSING_SCORE' &&
+      p.gameResult !== 'VOID'
+    );
+    const wins   = pnl?.wins ?? graded.filter(p => p.gameResult === 'WIN').length;
+    const losses = pnl?.losses ?? graded.filter(p => p.gameResult === 'LOSS').length;
+    const winPct = pnl?.winPct ?? ((wins + losses) > 0 ? Math.round(wins/(wins+losses)*100) : 0);
+    let profit = pnl?.totalProfit ?? 0;
+    if (!pnl) {
+      graded.forEach(p => {
+        const price = (typeof p.pickedPrice==='number'&&isFinite(p.pickedPrice)) ? p.pickedPrice : -110;
+        if (p.gameResult==='WIN') profit += price>0 ? price : (100/Math.abs(price))*100;
+        else if (p.gameResult==='LOSS') profit -= 100;
+      });
+    }
+    document.getElementById('stat-total').textContent = pnl?.totalPicks ?? officialPicks.length;
     document.getElementById('stat-record').textContent = `${wins}-${losses}`;
     const wp = document.getElementById('stat-winpct');
-    wp.textContent = graded.length ? winPct+'%' : '--';
+    wp.textContent = (pnl?.gradedPicks ?? graded.length) ? winPct+'%' : '--';
     wp.className = 'stat-value ' + (winPct>=55?'green':winPct>=45?'yellow':'red');
     const pr = document.getElementById('stat-profit');
-    pr.textContent = graded.length ? `${profit>=0?'+':''}$${Math.round(profit)}` : '--';
+    pr.textContent = (pnl?.gradedPicks ?? graded.length) ? `${profit>=0?'+':''}$${Math.round(profit)}` : '--';
     pr.className = 'stat-value ' + (profit>=0?'green':'red');
 
     // ── Per-sport breakdown ──
-    renderSportStats(picks);
+    renderSportStats(officialPicks);
   } catch {}
 }
 
@@ -736,7 +754,7 @@ function filterBySport(key) {
     }
   }
   // Re-render sport cards to update active state
-  if (allPicksCache) renderSportStats(allPicksCache);
+  if (officialPicksCache) renderSportStats(officialPicksCache);
   // Open picks panel filtered to this sport
   if (activeSportFilter) {
     setFilter(currentFilter);

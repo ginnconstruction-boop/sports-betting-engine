@@ -270,10 +270,18 @@ app.get('/api/picks', requireAuth, (req, res) => {
 // ── P&L record ──
 app.get('/api/pnl', requireAuth, (req, res) => {
   try {
-    const f = path.join(SNAPSHOT_DIR, 'pnl_record.json');
-    if (!fs.existsSync(f)) return res.json(null);
-    res.json(JSON.parse(fs.readFileSync(f, 'utf-8')));
-  } catch { res.json(null); }
+    const { rebuildPNL } = require('./src/services/winLossTracker');
+    const record = rebuildPNL();
+    res.json(record);
+  } catch {
+    try {
+      const f = path.join(SNAPSHOT_DIR, 'pnl_record.json');
+      if (!fs.existsSync(f)) return res.json(null);
+      res.json(JSON.parse(fs.readFileSync(f, 'utf-8')));
+    } catch {
+      res.json(null);
+    }
+  }
 });
 
 // ── Scan history ──
@@ -304,6 +312,11 @@ app.post('/api/results/enter', requireAuth, (req, res) => {
     picks[idx].gameResult = result;
     picks[idx].profit = Math.round(profit * 100) / 100;
     fs.writeFileSync(f, JSON.stringify(picks, null, 2));
+
+    try {
+      const { rebuildPNL } = require('./src/services/winLossTracker');
+      rebuildPNL();
+    } catch { /* non-fatal */ }
 
     res.json({ ok: true, pickId, result, profit });
   } catch (err: any) {
