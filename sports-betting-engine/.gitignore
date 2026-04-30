@@ -3,6 +3,10 @@ node_modules/
 .env
 dist/
 *.js.map
+snapshots/
+output/
+.claude/
+CODEX_CLAUDE_HANDOFF_PROMPT.md
 
 # Render
 .render-buildpacks.json
