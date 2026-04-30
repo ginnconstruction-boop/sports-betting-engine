@@ -231,6 +231,7 @@ function scoreProp(
 // ------------------------------------
 
 import { buildPropPredictions } from './propIntelligence';
+import { NBAContextSnapshot } from './nbaContextProvider';
 import { findPlayerId, getPlayerProfile } from './playerStats';
 import { applyLearnedWeights } from './retroAnalysis';
 
@@ -247,6 +248,7 @@ export async function scoreAllPropsWithIntelligence(
     steamMoves?: any[];
     atsSituations?: Map<string, any>;
     weatherMap?: Map<string, any>;
+    nbaContextSnapshot?: NBAContextSnapshot;
   },
   learnedWeights: Record<string, number> = {}
 ): Promise<ScoredProp[]> {

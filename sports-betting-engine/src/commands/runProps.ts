@@ -40,6 +40,7 @@ import { validateDataIntegrity, printValidationSummary } from '../services/dataI
 import { applySignalDiversity, printSignalDiversitySummary } from '../services/signalDiversityEngine';
 import { applyOutcomeSignals, printOutcomeSummary, OutcomeContext } from '../services/outcomeSignalEngine';
 import { applySignalWeighting, printWeightingSummary } from '../services/signalWeightingEngine';
+import { buildNBAContextForSlate } from '../services/nbaContextProvider';
 
 function safeSync<T>(fn: () => T, fallback: T): T {
   try { return fn(); } catch { return fallback; }
@@ -183,6 +184,32 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
     console.log(`\n  Found ${upcoming.length} ${sportLabel2} game(s). Fetching props for each...`);
     console.log(`  This will use ~${maxGames * 2} API credits.`);
 
+    const nbaContextSnapshot = sportKey === 'basketball_nba'
+      ? await safeRun(
+        () => buildNBAContextForSlate(
+          upcoming.slice(0, maxGames).map(event => ({
+            eventId: event.eventId,
+            homeTeam: event.homeTeam,
+            awayTeam: event.awayTeam,
+          }))
+        ),
+        null
+      )
+      : null;
+
+    if (sportKey === 'basketball_nba') {
+      if (nbaContextSnapshot) {
+        console.log(
+          `  [NBA_CTX] players: ${nbaContextSnapshot.meta.players} | teams: ${nbaContextSnapshot.meta.teams} | usage: ${nbaContextSnapshot.meta.usage} | matchup: ${nbaContextSnapshot.meta.matchup} | fallback: ${nbaContextSnapshot.meta.fallback}`
+        );
+        if (nbaContextSnapshot.meta.fallback > 0) {
+          console.warn('  [NBA_CTX] partial NBA context fallback active -- continuing with existing profile/matchup inputs');
+        }
+      } else {
+        console.warn('  [NBA_CTX] unavailable -- continuing with existing fallback context');
+      }
+    }
+
     for (const event of upcoming.slice(0, maxGames)) {
       try {
         const { event: eventWithProps } = await getEventMarkets(
@@ -217,6 +244,7 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
         powerRatings,
         steamMoves,
         atsSituations,
+        nbaContextSnapshot: nbaContextSnapshot ?? undefined,
       },
       learnedWeights
     )).slice(0, PROP_CONFIG.TOP_N);

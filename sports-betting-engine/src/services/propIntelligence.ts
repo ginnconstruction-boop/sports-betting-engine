@@ -8,6 +8,13 @@
 import { PlayerProfile, findPlayerId, getPlayerProfile } from './playerStats';
 import { buildMatchupPackage, GameMatchupPackage } from './propMatchups';
 import {
+  NBAContextSnapshot,
+  NBAPlayerContext,
+  NBATeamContext,
+  resolveNBAPlayerContext,
+  resolveNBATeamContext,
+} from './nbaContextProvider';
+import {
   assessBlowoutRisk,
   getMarketEfficiencyForProp,
   assessPublicStarBias,
@@ -110,6 +117,9 @@ interface NBAProjectionContext {
   hasObservedLast10Minutes?: boolean;
   usageRate?: number | null;
   seasonUsageRate?: number | null;
+  assistRate?: number | null;
+  reboundRate?: number | null;
+  touches?: number | null;
   weightedStatPerMinute: number;
   seasonStatAverage?: number;
   last10StatAverage?: number;
@@ -141,6 +151,11 @@ interface NBAProjectionContext {
   isStarter?: boolean;
   prevWasBench?: boolean;
   opponentDefenseRank?: number;
+  opponentAssistAllowedRank?: number;
+  opponentReboundAllowedRank?: number;
+  opponentThreeAllowedRank?: number;
+  teamPace?: number | null;
+  opponentPace?: number | null;
 }
 
 interface NBAProjectionResult {
@@ -154,6 +169,12 @@ interface NBAProjectionResult {
   minutesConfidence: number;
   roleStabilityScore: number;
   supportedMarket: boolean;
+}
+
+interface NBAPropExternalContext {
+  playerContext?: NBAPlayerContext | null;
+  playerTeamContext?: NBATeamContext | null;
+  opponentTeamContext?: NBATeamContext | null;
 }
 
 const NBA_PROJECTION_BOOST_SIGNALS = new Set([
@@ -506,34 +527,42 @@ function deriveSignals(
     }
   }
 
+  const effectiveOpponentRank =
+    ctx.statKey === 'assists'
+      ? ctx.opponentAssistAllowedRank ?? ctx.opponentDefenseRank
+      : ctx.statKey === 'rebounds'
+        ? ctx.opponentReboundAllowedRank ?? ctx.opponentDefenseRank
+        : ctx.statKey === 'threes'
+          ? ctx.opponentThreeAllowedRank ?? ctx.opponentDefenseRank
+          : ctx.opponentDefenseRank;
   const hasRealOpponentRank =
-    Number.isFinite(ctx.opponentDefenseRank) &&
-    (ctx.opponentDefenseRank ?? 0) >= 1 &&
-    (ctx.opponentDefenseRank ?? 0) <= 30;
+    Number.isFinite(effectiveOpponentRank) &&
+    (effectiveOpponentRank ?? 0) >= 1 &&
+    (effectiveOpponentRank ?? 0) <= 30;
 
-  if (hasRealOpponentRank && (ctx.opponentDefenseRank ?? 0) <= 9) {
+  if (hasRealOpponentRank && (effectiveOpponentRank ?? 0) <= 9) {
     signals.push({
       type: 'TOUGH_MATCHUP',
-      detail: `Opponent defense rank ${ctx.opponentDefenseRank} indicates a tough positional matchup`,
+      detail: `Opponent matchup rank ${effectiveOpponentRank} indicates a tough positional matchup`,
       impact: isOverCandidate ? 'negative' : 'positive',
-      magnitude: (ctx.opponentDefenseRank ?? 0) <= 4 ? 'high' : 'medium',
+      magnitude: (effectiveOpponentRank ?? 0) <= 4 ? 'high' : 'medium',
       side: 'under',
       scoreContribution: isOverCandidate
-        ? ((ctx.opponentDefenseRank ?? 0) <= 4 ? -10 : -6)
-        : ((ctx.opponentDefenseRank ?? 0) <= 4 ? 10 : 6),
+        ? ((effectiveOpponentRank ?? 0) <= 4 ? -10 : -6)
+        : ((effectiveOpponentRank ?? 0) <= 4 ? 10 : 6),
     });
   }
 
-  if (hasRealOpponentRank && (ctx.opponentDefenseRank ?? 0) >= 22) {
+  if (hasRealOpponentRank && (effectiveOpponentRank ?? 0) >= 22) {
     signals.push({
       type: 'FAVORABLE_MATCHUP',
-      detail: `Opponent defense rank ${ctx.opponentDefenseRank} indicates a favorable positional matchup`,
+      detail: `Opponent matchup rank ${effectiveOpponentRank} indicates a favorable positional matchup`,
       impact: isOverCandidate ? 'positive' : 'negative',
-      magnitude: (ctx.opponentDefenseRank ?? 0) >= 25 ? 'high' : 'medium',
+      magnitude: (effectiveOpponentRank ?? 0) >= 25 ? 'high' : 'medium',
       side: 'over',
       scoreContribution: isOverCandidate
-        ? ((ctx.opponentDefenseRank ?? 0) >= 25 ? 10 : 6)
-        : ((ctx.opponentDefenseRank ?? 0) >= 25 ? -10 : -6),
+        ? ((effectiveOpponentRank ?? 0) >= 25 ? 10 : 6)
+        : ((effectiveOpponentRank ?? 0) >= 25 ? -10 : -6),
     });
   }
 
@@ -542,22 +571,30 @@ function deriveSignals(
     normalizedPosition.includes('PG') ||
     normalizedPosition === 'G' ||
     normalizedPosition.includes('POINT');
-  const hasAssistRate = ctx.statKey === 'assists' && (ctx.seasonStatPerMinute ?? 0) > 0;
+  const effectiveAssistRank = ctx.opponentAssistAllowedRank ?? effectiveOpponentRank;
+  const hasRealAssistRank =
+    Number.isFinite(effectiveAssistRank) &&
+    (effectiveAssistRank ?? 0) >= 1 &&
+    (effectiveAssistRank ?? 0) <= 30;
+  const hasAssistRate = ctx.statKey === 'assists' && (
+    (ctx.assistRate ?? 0) > 0 ||
+    (ctx.seasonStatPerMinute ?? 0) > 0
+  );
   if (
     ctx.statKey === 'assists' &&
-    hasRealOpponentRank &&
-    (ctx.opponentDefenseRank ?? 0) >= 22 &&
+    hasRealAssistRank &&
+    (effectiveAssistRank ?? 0) >= 22 &&
     (isPrimaryBallHandler || hasAssistRate)
   ) {
     signals.push({
       type: 'ASSIST_MATCHUP_EDGE',
-      detail: `Assist matchup edge with rank ${ctx.opponentDefenseRank} against a weak opponent assist defense`,
+      detail: `Assist matchup edge with rank ${effectiveAssistRank} against a weak opponent assist defense`,
       impact: isOverCandidate ? 'positive' : 'negative',
-      magnitude: (ctx.opponentDefenseRank ?? 0) >= 26 ? 'high' : 'medium',
+      magnitude: (effectiveAssistRank ?? 0) >= 26 ? 'high' : 'medium',
       side: 'over',
       scoreContribution: isOverCandidate
-        ? ((ctx.opponentDefenseRank ?? 0) >= 26 ? 10 : 6)
-        : ((ctx.opponentDefenseRank ?? 0) >= 26 ? -10 : -6),
+        ? ((effectiveAssistRank ?? 0) >= 26 ? 10 : 6)
+        : ((effectiveAssistRank ?? 0) >= 26 ? -10 : -6),
     });
   }
 
@@ -699,7 +736,8 @@ export function generatePropPrediction(
   awayTeam: string = '',                  // for blowout risk
   hasSharpSteam: boolean = false,         // signal 16
   atsSituation: any = null,              // signal 17
-  playerTeamBetPct: number | null = null // signal 18
+  playerTeamBetPct: number | null = null, // signal 18
+  nbaContext?: NBAPropExternalContext
 ): PropPrediction {
   const signals: PropSignal[] = [];
   let scoreAdjustment = 0;
@@ -1159,8 +1197,17 @@ export function generatePropPrediction(
     }
 
     const recentUsageRate = deriveUsageProxyRate(recentFiveGames);
-    const seasonUsageRate = profile?.usageRate ?? deriveUsageProxyRate(recentTenGames) ?? null;
-    const rawUsage = profile?.usageRate ?? recentUsageRate ?? seasonUsageRate ?? null;
+    const seasonUsageRate =
+      nbaContext?.playerContext?.seasonUsageRate ??
+      profile?.usageRate ??
+      deriveUsageProxyRate(recentTenGames) ??
+      null;
+    const rawUsage =
+      nbaContext?.playerContext?.usageRate ??
+      profile?.usageRate ??
+      recentUsageRate ??
+      seasonUsageRate ??
+      null;
     const usageAdjustment = clampRange(1 + (((rawUsage ?? 0.22) - 0.22) * 1.0), 0.85, 1.20);
     const recentShotAttemptsPerMinute = recentFiveGames.length > 0
       ? avg(recentFiveGames.map(g => g.fieldGoalAttempts / Math.max(g.minutes, 1)))
@@ -1174,7 +1221,15 @@ export function generatePropPrediction(
     const shotVolumeAdjustment = clampRange(1 + (shotVolumePulse * 0.30), 0.90, 1.10);
     const playerMatchup = matchup?.matchups.get(playerName)?.find(m => normalizeNBAProjectionStatType(m.statType ?? '') === statKey)
       ?? matchup?.matchups.get(playerName)?.[0];
-    const opponentDefenseRank = playerMatchup?.rank;
+    const providerDefenseRank =
+      statKey === 'assists'
+        ? nbaContext?.opponentTeamContext?.opponentAssistAllowedRank ?? nbaContext?.opponentTeamContext?.opponentDefenseRank
+        : statKey === 'rebounds'
+          ? nbaContext?.opponentTeamContext?.opponentReboundAllowedRank ?? nbaContext?.opponentTeamContext?.opponentDefenseRank
+          : statKey === 'threes'
+            ? nbaContext?.opponentTeamContext?.opponentThreeAllowedRank ?? nbaContext?.opponentTeamContext?.opponentDefenseRank
+            : nbaContext?.opponentTeamContext?.opponentDefenseRank;
+    const opponentDefenseRank = providerDefenseRank ?? playerMatchup?.rank;
     const matchupVsLeagueAvg = typeof playerMatchup?.vsLeagueAvg === 'number'
       ? playerMatchup.vsLeagueAvg
       : 0;
@@ -1262,6 +1317,9 @@ export function generatePropPrediction(
       hasObservedLast10Minutes,
       usageRate: rawUsage,
       seasonUsageRate,
+      assistRate: nbaContext?.playerContext?.assistRate ?? null,
+      reboundRate: nbaContext?.playerContext?.reboundRate ?? null,
+      touches: nbaContext?.playerContext?.touches ?? null,
       weightedStatPerMinute: adjustedWeightedStatPerMinute,
       seasonStatAverage: seasonStat || undefined,
       last10StatAverage: last10Stat || undefined,
@@ -1295,12 +1353,18 @@ export function generatePropPrediction(
       isStarter,
       prevWasBench,
       opponentDefenseRank,
+      opponentAssistAllowedRank: nbaContext?.opponentTeamContext?.opponentAssistAllowedRank ?? null,
+      opponentReboundAllowedRank: nbaContext?.opponentTeamContext?.opponentReboundAllowedRank ?? null,
+      opponentThreeAllowedRank: nbaContext?.opponentTeamContext?.opponentThreeAllowedRank ?? null,
+      teamPace: nbaContext?.playerTeamContext?.teamPace ?? null,
+      opponentPace: nbaContext?.opponentTeamContext?.teamPace ?? null,
     });
 
     const nbaContextSignalNames = nbaProjection.signals
       .filter(signal => NBA_PREDICTIVE_CONTEXT_SIGNALS.has(signal.type))
       .map(signal => signal.type);
-    if (nbaContextSignalNames.length === 0) {
+    const debugNBAContext = ['1', 'true', 'yes'].includes(String(process.env.DEBUG_NBA_CONTEXT ?? '').toLowerCase());
+    if (debugNBAContext && nbaContextSignalNames.length === 0) {
       console.log({
         player: playerName,
         last5StatAverage: last5Stat || 0,
@@ -1309,6 +1373,14 @@ export function generatePropPrediction(
         usageRate: rawUsage,
         seasonUsageRate,
         opponentDefenseRank: opponentDefenseRank ?? null,
+        assistRate: nbaContext?.playerContext?.assistRate ?? null,
+        reboundRate: nbaContext?.playerContext?.reboundRate ?? null,
+        touches: nbaContext?.playerContext?.touches ?? null,
+        teamPace: nbaContext?.playerTeamContext?.teamPace ?? null,
+        opponentPace: nbaContext?.opponentTeamContext?.teamPace ?? null,
+        opponentAssistAllowedRank: nbaContext?.opponentTeamContext?.opponentAssistAllowedRank ?? null,
+        opponentReboundAllowedRank: nbaContext?.opponentTeamContext?.opponentReboundAllowedRank ?? null,
+        opponentThreeAllowedRank: nbaContext?.opponentTeamContext?.opponentThreeAllowedRank ?? null,
         projectedMinutes,
         minutesConfidence,
       });
@@ -1662,6 +1734,7 @@ export async function buildPropPredictions(
     steamMoves?: any[];
     atsSituations?: Map<string, any>;
     weatherMap?: Map<string, any>;
+    nbaContextSnapshot?: NBAContextSnapshot;
   }
 ): Promise<Map<string, PropPrediction>> {
   const results = new Map<string, PropPrediction>();
@@ -1732,6 +1805,22 @@ export async function buildPropPredictions(
         }
 
         const resolvedPlayerTeam = profile?.team || prop.team;
+        const nbaPlayerContext = sportKey === 'basketball_nba'
+          ? resolveNBAPlayerContext(
+            extraIntel?.nbaContextSnapshot,
+            prop.playerName,
+            resolvedPlayerTeam || preferredTeam,
+            prop.homeTeam,
+            prop.awayTeam
+          )
+          : null;
+        const playerTeamContext = sportKey === 'basketball_nba'
+          ? resolveNBATeamContext(extraIntel?.nbaContextSnapshot, resolvedPlayerTeam || preferredTeam || prop.homeTeam)
+          : null;
+        const opponentTeamName = resolvedPlayerTeam === homeTeam ? awayTeam : homeTeam;
+        const opponentTeamContext = sportKey === 'basketball_nba'
+          ? resolveNBATeamContext(extraIntel?.nbaContextSnapshot, opponentTeamName)
+          : null;
         const isHome = resolvedPlayerTeam === homeTeam;
         const isB2B = gameIsBackToBack && (
           (isHome && ctx?.homeRest?.isBackToBack) ||
@@ -1775,7 +1864,12 @@ export async function buildPropPredictions(
           awayTeam,
           hasSharpSteam,
           gameATS,
-          isHome ? homeBetPct : awayBetPct
+          isHome ? homeBetPct : awayBetPct,
+          {
+            playerContext: nbaPlayerContext,
+            playerTeamContext,
+            opponentTeamContext,
+          }
         );
 
         const key = `${prop.playerName}__${prop.statType}__${prop.side}`;
