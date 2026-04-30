@@ -90,6 +90,7 @@ export interface AutoGradeSummary {
   graded: number;
   pending: number;
   missing: number;
+  void: number;
 }
 
 // ------------------------------------
@@ -317,6 +318,261 @@ async function getGameScore(
   return null;
 }
 
+type SupportedNBAPropType =
+  | 'player_points'
+  | 'player_rebounds'
+  | 'player_assists'
+  | 'player_threes';
+
+interface NBABoxScorePlayerStat {
+  playerName: string;
+  normalizedName: string;
+  didNotPlay: boolean;
+  active: boolean;
+  reason: string;
+  minutes: number;
+  points: number;
+  rebounds: number;
+  assists: number;
+  threes: number;
+}
+
+interface NBABoxScoreGame {
+  final: boolean;
+  eventId: string;
+  source: 'ESPN_NBA_SUMMARY';
+  players: NBABoxScorePlayerStat[];
+}
+
+const nbaBoxScoreCache = new Map<string, NBABoxScoreGame | null>();
+
+function normalizeSportKey(raw: any): string {
+  const s = raw?.sport ?? raw?.sportKey ?? raw ?? '';
+  if (s === 'NBA') return 'basketball_nba';
+  if (s === 'NFL') return 'americanfootball_nfl';
+  if (s === 'MLB') return 'baseball_mlb';
+  if (s === 'NHL') return 'icehockey_nhl';
+  if (s === 'NCAAB') return 'basketball_ncaab';
+  if (s === 'NCAAF') return 'americanfootball_ncaaf';
+  if (s === 'NCAA Baseball' || s === 'ncaa baseball') return 'baseball_ncaa';
+  return s;
+}
+
+function normalizePlayerName(name: string): string {
+  return (name ?? '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[.'’`-]/g, ' ')
+    .replace(/\b(jr|sr|ii|iii|iv|v)\b/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function playerNamesMatch(searchName: string, candidateName: string): boolean {
+  const search = normalizePlayerName(searchName);
+  const candidate = normalizePlayerName(candidateName);
+  if (!search || !candidate) return false;
+  if (search === candidate) return true;
+
+  const searchTokens = search.split(' ').filter(Boolean);
+  const candidateTokens = candidate.split(' ').filter(Boolean);
+  if (searchTokens.length === 0 || candidateTokens.length === 0) return false;
+
+  const searchLast = searchTokens[searchTokens.length - 1];
+  const candidateLast = candidateTokens[candidateTokens.length - 1];
+  if (searchLast !== candidateLast) return false;
+
+  return searchTokens[0]?.[0] === candidateTokens[0]?.[0];
+}
+
+function scoreboardDatesForGame(gameTime: string): string[] {
+  const seed = new Date(gameTime);
+  if (Number.isNaN(seed.getTime())) return [];
+
+  const variants = [0, -1, 1].map(offset => {
+    const copy = new Date(seed);
+    copy.setUTCDate(copy.getUTCDate() + offset);
+    return copy.toISOString().split('T')[0].replace(/-/g, '');
+  });
+
+  return [...new Set(variants)];
+}
+
+function parseMadeShots(raw: string): number {
+  const match = String(raw ?? '').match(/^(\d+)/);
+  return match ? parseFloat(match[1]) || 0 : 0;
+}
+
+export function inferSupportedNBAPropType(
+  pick: Partial<{ propType: string; notes: string; side: string }>
+): SupportedNBAPropType | null {
+  const raw = `${pick.propType ?? ''} ${pick.notes ?? ''} ${pick.side ?? ''}`.toLowerCase();
+  const normalized = raw.replace(/[^a-z0-9+]/g, ' ');
+
+  if (
+    normalized.includes('points rebounds assists') ||
+    normalized.includes('pts+reb+ast') ||
+    normalized.includes('points rebounds') ||
+    normalized.includes('points assists') ||
+    normalized.includes('rebounds assists') ||
+    normalized.includes('steals') ||
+    normalized.includes('blocks') ||
+    normalized.includes('turnovers')
+  ) {
+    return null;
+  }
+
+  if (normalized.includes('player_threes') || normalized.includes('threes') || normalized.includes('3pt') || normalized.includes('three pointers')) {
+    return 'player_threes';
+  }
+  if (normalized.includes('player_rebounds') || normalized.includes('rebounds')) {
+    return 'player_rebounds';
+  }
+  if (normalized.includes('player_assists') || normalized.includes('assists')) {
+    return 'player_assists';
+  }
+  if (normalized.includes('player_points') || normalized.includes('points')) {
+    return 'player_points';
+  }
+
+  return null;
+}
+
+function inferPropDirection(raw: string): 'OVER' | 'UNDER' | null {
+  const text = (raw ?? '').toUpperCase();
+  if (text.includes(' OVER ')) return 'OVER';
+  if (text.includes(' UNDER ')) return 'UNDER';
+  return null;
+}
+
+function extractPlayerNameFromSide(side: string): string | null {
+  const text = side ?? '';
+  const patterns = [
+    /\s+(Points|Rebounds|Assists|Threes)\s+(Over|Under)\b/i,
+    /\s+(3PT|Three Pointers|Three-Pointers)\s+(Over|Under)\b/i,
+  ];
+
+  for (const pattern of patterns) {
+    const match = text.match(pattern);
+    if (match && match.index !== undefined) {
+      const playerName = text.slice(0, match.index).trim();
+      if (playerName) return playerName;
+    }
+  }
+
+  return null;
+}
+
+export function evaluateNBAPropResult(
+  side: 'OVER' | 'UNDER',
+  line: number,
+  actualStat: number
+): 'WIN' | 'LOSS' | 'PUSH' {
+  if (side === 'OVER') {
+    if (actualStat > line) return 'WIN';
+    if (actualStat < line) return 'LOSS';
+    return 'PUSH';
+  }
+
+  if (actualStat < line) return 'WIN';
+  if (actualStat > line) return 'LOSS';
+  return 'PUSH';
+}
+
+function readNBAStat(player: NBABoxScorePlayerStat, propType: SupportedNBAPropType): number {
+  switch (propType) {
+    case 'player_points': return player.points;
+    case 'player_rebounds': return player.rebounds;
+    case 'player_assists': return player.assists;
+    case 'player_threes': return player.threes;
+  }
+}
+
+async function fetchNBABoxScoreForGame(matchup: string, gameTime: string): Promise<NBABoxScoreGame | null> {
+  const cacheKey = `${matchup}__${gameTime}`;
+  if (nbaBoxScoreCache.has(cacheKey)) return nbaBoxScoreCache.get(cacheKey) ?? null;
+
+  const [awayTeam, homeTeam] = (matchup ?? '').split(' @ ').map(part => part?.trim());
+  if (!awayTeam || !homeTeam) {
+    nbaBoxScoreCache.set(cacheKey, null);
+    return null;
+  }
+
+  try {
+    for (const date of scoreboardDatesForGame(gameTime)) {
+      const scoreboardUrl = `https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?dates=${date}`;
+      const scoreboardData = await fetchJson(scoreboardUrl);
+      const events = Array.isArray(scoreboardData?.events) ? scoreboardData.events : [];
+      const event = events.find((candidate: any) => {
+        const competitors = candidate?.competitions?.[0]?.competitors ?? [];
+        const teamNames = competitors.flatMap((c: any) => [
+          c?.team?.displayName ?? '',
+          c?.team?.shortDisplayName ?? '',
+          c?.team?.abbreviation ?? '',
+        ]).filter(Boolean);
+        if (teamNames.length < 2) return false;
+        for (let i = 0; i < teamNames.length - 1; i++) {
+          for (let j = i + 1; j < teamNames.length; j++) {
+            if (teamsMatch(homeTeam, awayTeam, teamNames[i], teamNames[j])) return true;
+          }
+        }
+        return false;
+      });
+
+      if (!event?.id) continue;
+
+      const summaryUrl = `https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=${event.id}`;
+      const summaryData = await fetchJson(summaryUrl);
+      const completed = summaryData?.header?.competitions?.[0]?.status?.type?.completed === true;
+      const players: NBABoxScorePlayerStat[] = [];
+
+      for (const teamBlock of summaryData?.boxscore?.players ?? []) {
+        for (const statGroup of teamBlock?.statistics ?? []) {
+          const keys = Array.isArray(statGroup?.keys) ? statGroup.keys : [];
+          const athletes = Array.isArray(statGroup?.athletes) ? statGroup.athletes : [];
+          const minutesIdx = keys.indexOf('minutes');
+          const pointsIdx = keys.indexOf('points');
+          const reboundsIdx = keys.indexOf('rebounds');
+          const assistsIdx = keys.indexOf('assists');
+          const threesIdx = keys.indexOf('threePointFieldGoalsMade-threePointFieldGoalsAttempted');
+
+          for (const athleteRow of athletes) {
+            const stats = Array.isArray(athleteRow?.stats) ? athleteRow.stats : [];
+            players.push({
+              playerName: athleteRow?.athlete?.displayName ?? '',
+              normalizedName: normalizePlayerName(athleteRow?.athlete?.displayName ?? ''),
+              didNotPlay: athleteRow?.didNotPlay === true,
+              active: athleteRow?.active === true,
+              reason: athleteRow?.reason ?? '',
+              minutes: minutesIdx >= 0 ? parseFloat(stats[minutesIdx] ?? '0') || 0 : 0,
+              points: pointsIdx >= 0 ? parseFloat(stats[pointsIdx] ?? '0') || 0 : 0,
+              rebounds: reboundsIdx >= 0 ? parseFloat(stats[reboundsIdx] ?? '0') || 0 : 0,
+              assists: assistsIdx >= 0 ? parseFloat(stats[assistsIdx] ?? '0') || 0 : 0,
+              threes: threesIdx >= 0 ? parseMadeShots(stats[threesIdx] ?? '0-0') : 0,
+            });
+          }
+        }
+      }
+
+      const boxScoreGame: NBABoxScoreGame = {
+        final: completed,
+        eventId: String(event.id),
+        source: 'ESPN_NBA_SUMMARY',
+        players,
+      };
+      nbaBoxScoreCache.set(cacheKey, boxScoreGame);
+      return boxScoreGame;
+    }
+  } catch {
+    nbaBoxScoreCache.set(cacheKey, null);
+    return null;
+  }
+
+  nbaBoxScoreCache.set(cacheKey, null);
+  return null;
+}
+
 // ------------------------------------
 // Determine if a pick won based on score
 // ------------------------------------
@@ -437,6 +693,180 @@ function isGradeReady(gameTime: string, sportKey: string): boolean {
   return Date.now() > expectedEndMs;
 }
 
+function buildRetroPickId(pick: any): string {
+  return pick.id ?? pick.pickId ?? `${pick.matchup}_${pick.date}`;
+}
+
+function markPickGrade(
+  picks: any[],
+  targetPick: any,
+  updates: Record<string, any>
+): void {
+  const targetId = buildRetroPickId(targetPick);
+  const pickIdx = picks.findIndex((p: any) => buildRetroPickId(p) === targetId);
+  if (pickIdx < 0) return;
+
+  picks[pickIdx] = {
+    ...picks[pickIdx],
+    ...updates,
+  };
+}
+
+async function gradePendingNBAPropPicks(
+  picks: any[],
+  existingRetro: RetroResult[],
+  gradedIds: Set<string>,
+  cutoffIso: string,
+): Promise<{ checked: number; graded: number; pending: number; missing: number; void: number }> {
+  const toGrade = picks.filter((pick: any) => {
+    const gameTime = pick.gameTime ?? pick.startTime;
+    if (!gameTime) return false;
+    if (buildRetroPickId(pick) && gradedIds.has(buildRetroPickId(pick))) return false;
+    if (normalizeSportKey(pick) !== 'basketball_nba') return false;
+    if (pick.marketType !== 'player_prop') return false;
+    if (pick.savedAsRecommendation !== true) return false;
+    if ((pick.gameResult ?? 'PENDING') !== 'PENDING') return false;
+    if (inferSupportedNBAPropType(pick) === null) return false;
+    if (inferPropDirection(`${pick.side ?? ''} ${pick.notes ?? ''}`) === null) return false;
+    if ((pick.playerName ?? extractPlayerNameFromSide(pick.side ?? '')) === null) return false;
+    if (typeof pick.pickedLine !== 'number') return false;
+    if (gameTime >= cutoffIso) return false;
+    if (!isGradeReady(gameTime, 'basketball_nba')) return false;
+    return true;
+  });
+
+  let graded = 0;
+  let missing = 0;
+  let voidCount = 0;
+
+  for (const pick of toGrade) {
+    const propType = inferSupportedNBAPropType(pick);
+    const side = inferPropDirection(`${pick.side ?? ''} ${pick.notes ?? ''}`);
+    const playerName = pick.playerName ?? extractPlayerNameFromSide(pick.side ?? '');
+    const line = typeof pick.pickedLine === 'number' ? pick.pickedLine : null;
+
+    if (!propType || !side || !playerName || line === null) {
+      continue;
+    }
+
+    const boxScore = await fetchNBABoxScoreForGame(pick.matchup ?? '', pick.gameTime ?? pick.startTime ?? pick.date);
+    if (!boxScore || boxScore.final !== true) {
+      continue;
+    }
+
+    const player = boxScore.players.find(candidate => playerNamesMatch(playerName, candidate.playerName));
+    if (!player) {
+      markPickGrade(picks, pick, {
+        gameResult: 'MISSING_SCORE',
+        actualStat: null,
+        gradedAt: new Date().toISOString(),
+        gradingSource: boxScore.source,
+        gradingNotes: `player box score row not found for ${playerName}`,
+        autoGraded: true,
+      });
+      existingRetro.push({
+        pickId: buildRetroPickId(pick),
+        date: pick.date ?? (pick.gameTime ?? '').split('T')[0],
+        matchup: pick.matchup,
+        sport: pick.sport,
+        betType: pick.betType,
+        side: pick.side,
+        line,
+        grade: pick.grade,
+        score: pick.score,
+        signals: pick.signalTypes ?? pick.signals ?? [],
+        gameResult: 'MISSING_SCORE',
+        actualScore: null,
+        margin: null,
+        clvActual: null,
+        missedSignals: [],
+        autoGraded: true,
+        gradingNote: `player box score row not found for ${playerName}`,
+      });
+      gradedIds.add(buildRetroPickId(pick));
+      missing++;
+      continue;
+    }
+
+    if (player.didNotPlay || (!player.active && player.minutes === 0)) {
+      markPickGrade(picks, pick, {
+        gameResult: 'VOID',
+        actualStat: null,
+        gradedAt: new Date().toISOString(),
+        gradingSource: boxScore.source,
+        gradingNotes: player.reason ? `DNP/Inactive: ${player.reason}` : 'DNP/Inactive',
+        autoGraded: true,
+      });
+      existingRetro.push({
+        pickId: buildRetroPickId(pick),
+        date: pick.date ?? (pick.gameTime ?? '').split('T')[0],
+        matchup: pick.matchup,
+        sport: pick.sport,
+        betType: pick.betType,
+        side: pick.side,
+        line,
+        grade: pick.grade,
+        score: pick.score,
+        signals: pick.signalTypes ?? pick.signals ?? [],
+        gameResult: 'VOID',
+        actualScore: null,
+        margin: null,
+        clvActual: null,
+        missedSignals: [],
+        autoGraded: true,
+        gradingNote: player.reason ? `DNP/Inactive: ${player.reason}` : 'DNP/Inactive',
+      });
+      gradedIds.add(buildRetroPickId(pick));
+      voidCount++;
+      continue;
+    }
+
+    const actualStat = readNBAStat(player, propType);
+    const result = evaluateNBAPropResult(side, line, actualStat);
+    markPickGrade(picks, pick, {
+      gameResult: result,
+      actualStat,
+      gradedAt: new Date().toISOString(),
+      gradingSource: boxScore.source,
+      gradingNotes: `${propType} ${side} graded from ESPN NBA summary`,
+      autoGraded: true,
+    });
+    existingRetro.push({
+      pickId: buildRetroPickId(pick),
+      date: pick.date ?? pick.gameTime?.split('T')[0],
+      matchup: pick.matchup,
+      sport: pick.sport,
+      betType: pick.betType,
+      side: pick.side,
+      line,
+      grade: pick.grade,
+      score: pick.score,
+      signals: pick.signalTypes ?? pick.signals ?? [],
+      gameResult: result,
+      actualScore: String(actualStat),
+      margin: null,
+      clvActual: null,
+      missedSignals: result === 'LOSS' ? ['NBA_PROP_RESULT_AGAINST_PICK'] : [],
+      autoGraded: true,
+    });
+    gradedIds.add(buildRetroPickId(pick));
+    graded++;
+  }
+
+  const pending = picks.filter((pick: any) => {
+    const gameTime = pick.gameTime ?? pick.startTime;
+    return (
+      normalizeSportKey(pick) === 'basketball_nba' &&
+      pick.marketType === 'player_prop' &&
+      pick.savedAsRecommendation === true &&
+      (pick.gameResult ?? 'PENDING') === 'PENDING' &&
+      Boolean(gameTime)
+    );
+  }).length;
+
+  return { checked: toGrade.length, graded, pending, missing, void: voidCount };
+}
+
 // ------------------------------------
 // Auto-grade picks from Odds API scores with ESPN fallback
 // ------------------------------------
@@ -444,6 +874,16 @@ function isGradeReady(gameTime: string, sportKey: string): boolean {
 export async function autoGradePicks(): Promise<AutoGradeSummary> {
   const picks = loadPicks();
   let existingRetro = loadRetroResults();
+  const supportedOfficialNBAPropIds = new Set(
+    picks
+      .filter((pick: any) =>
+        normalizeSportKey(pick) === 'basketball_nba' &&
+        pick.marketType === 'player_prop' &&
+        pick.savedAsRecommendation === true &&
+        inferSupportedNBAPropType(pick) !== null
+      )
+      .map((pick: any) => buildRetroPickId(pick))
+  );
 
   // ── One-time cleanup: remove entries that were incorrectly stored as PUSH ──
   // evaluatePick only handles: Moneyline/h2h, Spread/spreads, Total/totals.
@@ -457,7 +897,10 @@ export async function autoGradePicks(): Promise<AutoGradeSummary> {
   const badIds = new Set(
     existingRetro
       .filter(r =>
-        r.autoGraded && r.gameResult === 'PUSH' && (
+        r.autoGraded &&
+        r.gameResult === 'PUSH' &&
+        !supportedOfficialNBAPropIds.has(r.pickId) &&
+        (
           !GRADEABLE_TYPES.has(r.betType) ||
           ((r.betType === 'Total' || r.betType === 'spreads' || r.betType === 'Spread') &&
            r.line === null)
@@ -472,9 +915,18 @@ export async function autoGradePicks(): Promise<AutoGradeSummary> {
     // are excluded from stats by design.
     let changed = false;
     for (let i = 0; i < picks.length; i++) {
-      const id = picks[i].id ?? picks[i].pickId ?? `${picks[i].matchup}_${picks[i].date}`;
+      const id = buildRetroPickId(picks[i]);
       if (badIds.has(id) && picks[i].gameResult !== 'MISSING_SCORE') {
-        picks[i] = { ...picks[i], gameResult: 'PENDING', autoGraded: false };
+        picks[i] = {
+          ...picks[i],
+          gameResult: 'PENDING',
+          autoGraded: false,
+          actualScore: null,
+          actualStat: null,
+          gradedAt: '',
+          gradingSource: '',
+          gradingNotes: '',
+        };
         changed = true;
       }
     }
@@ -487,6 +939,7 @@ export async function autoGradePicks(): Promise<AutoGradeSummary> {
 
   let newlyGraded = 0;
   let missingScoreCount = 0;
+  let voidCount = 0;
   // Rolling 30-hour window instead of UTC midnight yesterday.
   // Prevents late US/Eastern and US/Pacific games (commenceTime = next UTC day)
   // from being skipped until two UTC days after they finish.
@@ -496,7 +949,8 @@ export async function autoGradePicks(): Promise<AutoGradeSummary> {
     // gameTime is the correct field name (startTime was old name)
     const gameTime = p.gameTime ?? p.startTime;
     if (!gameTime) return false;
-    if (gradedIds.has(p.id ?? p.pickId ?? `${p.matchup}_${p.date}`)) return false;
+    if (gradedIds.has(buildRetroPickId(p))) return false;
+    if (!GRADEABLE_TYPES.has(p.betType ?? '')) return false;
 
     // Only attempt to grade picks that are genuinely unresolved
     const status = p.gameResult ?? 'PENDING';
@@ -507,17 +961,7 @@ export async function autoGradePicks(): Promise<AutoGradeSummary> {
 
     // Time-based gate: only grade if the game should be definitively over.
     // If isGradeReady() returns false the game may still be live — never attempt.
-    const normKey = (() => {
-      const s = p.sport ?? p.sportKey ?? '';
-      if (s === 'NBA')                                    return 'basketball_nba';
-      if (s === 'NFL')                                    return 'americanfootball_nfl';
-      if (s === 'MLB')                                    return 'baseball_mlb';
-      if (s === 'NHL')                                    return 'icehockey_nhl';
-      if (s === 'NCAAB')                                  return 'basketball_ncaab';
-      if (s === 'NCAAF')                                  return 'americanfootball_ncaaf';
-      if (s === 'NCAA Baseball' || s === 'ncaa baseball') return 'baseball_ncaa';
-      return s;
-    })();
+    const normKey = normalizeSportKey(p);
     if (!isGradeReady(gameTime, normKey)) return false;
 
     return true;
@@ -528,18 +972,7 @@ export async function autoGradePicks(): Promise<AutoGradeSummary> {
   // grading.  Cost: 2 credits per unique sport key (far cheaper than ESPN
   // scraping and more reliable for sports with bad ESPN mappings).
   if (toGrade.length > 0) {
-    const normSportKey = (p: any): string => {
-      const s = p.sport ?? p.sportKey ?? 'basketball_nba';
-      if (s === 'NBA')                                    return 'basketball_nba';
-      if (s === 'NFL')                                    return 'americanfootball_nfl';
-      if (s === 'MLB')                                    return 'baseball_mlb';
-      if (s === 'NHL')                                    return 'icehockey_nhl';
-      if (s === 'NCAAB')                                  return 'basketball_ncaab';
-      if (s === 'NCAAF')                                  return 'americanfootball_ncaaf';
-      if (s === 'NCAA Baseball' || s === 'ncaa baseball') return 'baseball_ncaa';
-      return s;
-    };
-    const sportKeys = [...new Set(toGrade.map(normSportKey))];
+    const sportKeys = [...new Set(toGrade.map(normalizeSportKey))];
     // Guard the Odds API score prefetch (2 credits per sport key).
     // If the daily or per-run cap is exhausted, skip the prefetch — ESPN
     // fallback sources still run and grading continues without penalty.
@@ -569,17 +1002,7 @@ export async function autoGradePicks(): Promise<AutoGradeSummary> {
       const [away, home] = (pick.matchup ?? '').split(' @ ');
       if (!away || !home) continue;
 
-      const normKey = (() => {
-        const s = pick.sport ?? pick.sportKey ?? 'basketball_nba';
-        if (s === 'NBA')                                    return 'basketball_nba';
-        if (s === 'NFL')                                    return 'americanfootball_nfl';
-        if (s === 'MLB')                                    return 'baseball_mlb';
-        if (s === 'NHL')                                    return 'icehockey_nhl';
-        if (s === 'NCAAB')                                  return 'basketball_ncaab';
-        if (s === 'NCAAF')                                  return 'americanfootball_ncaaf';
-        if (s === 'NCAA Baseball' || s === 'ncaa baseball') return 'baseball_ncaa';
-        return s;
-      })();
+      const normKey = normalizeSportKey(pick);
 
       const score = await getGameScore(
         normKey,
@@ -593,18 +1016,18 @@ export async function autoGradePicks(): Promise<AutoGradeSummary> {
         // should be over. Mark as MISSING_SCORE so it's excluded from W/L stats
         // rather than counting as a loss or sitting as PENDING indefinitely.
         // We NEVER silently grade a missing-score pick as a loss.
-        const pickIdx2 = picks.findIndex((p: any) =>
-          (p.id ?? p.pickId ?? `${p.matchup}_${p.date}`) ===
-          (pick.id ?? pick.pickId ?? `${pick.matchup}_${pick.date}`)
-        );
+        const pickIdx2 = picks.findIndex((p: any) => buildRetroPickId(p) === buildRetroPickId(pick));
         if (pickIdx2 >= 0 &&
             (picks[pickIdx2].gameResult === 'PENDING' || !picks[pickIdx2].gameResult)) {
           picks[pickIdx2].gameResult  = 'MISSING_SCORE';
+          picks[pickIdx2].actualStat  = null;
           picks[pickIdx2].autoGraded  = true;
-          picks[pickIdx2].gradingNote = 'score unavailable from all 4 sources after game-end window';
+          picks[pickIdx2].gradedAt = new Date().toISOString();
+          picks[pickIdx2].gradingSource = 'ODDS_API_OR_ESPN_SCOREBOARD';
+          picks[pickIdx2].gradingNotes = 'score unavailable from all 4 sources after game-end window';
         }
         existingRetro.push({
-          pickId:       pick.id ?? pick.pickId ?? `${pick.matchup}_${pick.date}`,
+          pickId:       buildRetroPickId(pick),
           date:         pick.date ?? (pick.startTime ?? '').split('T')[0],
           matchup:      pick.matchup,
           sport:        pick.sport,
@@ -622,7 +1045,6 @@ export async function autoGradePicks(): Promise<AutoGradeSummary> {
           autoGraded:   true,
           gradingNote:  'score unavailable from all 4 sources after game-end window',
         });
-        newlyGraded++;
         missingScoreCount++;
         continue;
       }
@@ -635,21 +1057,22 @@ export async function autoGradePicks(): Promise<AutoGradeSummary> {
       );
 
       // Update picks log
-      const pickIdx = picks.findIndex((p: any) =>
-        (p.id ?? p.pickId ?? `${p.matchup}_${p.date}`) ===
-        (pick.id ?? pick.pickId ?? `${pick.matchup}_${pick.date}`)
-      );
+      const pickIdx = picks.findIndex((p: any) => buildRetroPickId(p) === buildRetroPickId(pick));
       if (pickIdx >= 0) {
         picks[pickIdx].gameResult = result;
         picks[pickIdx].actualScore = `${score.homeScore}-${score.awayScore}`;
+        picks[pickIdx].actualStat = null;
         picks[pickIdx].autoGraded = true;
+        picks[pickIdx].gradedAt = new Date().toISOString();
+        picks[pickIdx].gradingSource = 'ODDS_API_OR_ESPN_SCOREBOARD';
+        picks[pickIdx].gradingNotes = 'graded from final game score';
       }
 
       // Build retro result with missed signal analysis
       const missedSignals = analyzeMissedSignals(pick, result);
 
       existingRetro.push({
-        pickId: pick.id ?? pick.pickId ?? `${pick.matchup}_${pick.date}`,
+        pickId: buildRetroPickId(pick),
         date: pick.date ?? pick.startTime?.split('T')[0],
         matchup: pick.matchup,
         sport: pick.sport,
@@ -671,20 +1094,39 @@ export async function autoGradePicks(): Promise<AutoGradeSummary> {
     } catch { /* individual grading errors are non-fatal */ }
   }
 
-  if (newlyGraded > 0) {
+  const nbaPropSummary = await gradePendingNBAPropPicks(
+    picks,
+    existingRetro,
+    gradedIds,
+    cutoff,
+  );
+  newlyGraded += nbaPropSummary.graded;
+  missingScoreCount += nbaPropSummary.missing;
+  voidCount += nbaPropSummary.void;
+
+  if (newlyGraded > 0 || missingScoreCount > 0 || voidCount > 0) {
     savePicks(picks);
     saveRetroResults(existingRetro);
   }
 
   return {
-    checked: toGrade.length,
-    graded: newlyGraded - missingScoreCount,
+    checked: toGrade.length + nbaPropSummary.checked,
+    graded: newlyGraded,
     pending: picks.filter((p: any) =>
       (p.gameResult ?? 'PENDING') === 'PENDING' &&
-      GRADEABLE_TYPES.has(p.betType ?? '') &&
+      (
+        GRADEABLE_TYPES.has(p.betType ?? '') ||
+        (
+          normalizeSportKey(p) === 'basketball_nba' &&
+          p.marketType === 'player_prop' &&
+          p.savedAsRecommendation === true &&
+          inferSupportedNBAPropType(p) !== null
+        )
+      ) &&
       Boolean(p.gameTime ?? p.startTime)
     ).length,
     missing: missingScoreCount,
+    void: voidCount,
   };
 }
 

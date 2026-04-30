@@ -48,6 +48,12 @@ export interface PickRecord {
   // Optional: game result tracking (manual entry)
   gameResult: 'WIN' | 'LOSS' | 'PUSH' | 'PENDING' | 'MISSING_SCORE' | 'VOID';
   notes: string;
+  actualScore?: string | null;
+  actualStat?: number | null;
+  gradedAt?: string;
+  gradingSource?: string;
+  gradingNotes?: string;
+  autoGraded?: boolean;
   kellyPct?: number;             // quarter-Kelly stake % at time of pick
   finalDecisionLabel?: 'BET' | 'LEAN' | 'MONITOR' | 'PASS' | 'BEST_PRICE_ONLY';
   recommendedLabel?: 'BET' | 'LEAN' | 'MONITOR' | 'PASS' | 'BEST_PRICE_ONLY';

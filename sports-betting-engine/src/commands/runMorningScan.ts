@@ -103,6 +103,7 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
     graded: 0,
     pending: 0,
     missing: 0,
+    void: 0,
   };
   try {
     grading = await autoGradePicks();
@@ -116,13 +117,13 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
   // -- Step 0: Retrospective analysis ------------------------
   // Auto-grade yesterday's picks, identify what went wrong,
   // adjust signal weights for today's scoring
-  console.log('\n  [0/22] Grading yesterday\'s picks from Odds API scores (ESPN fallback)...');
+  console.log('\n  [0/22] Grading yesterday\'s picks from score feeds (Odds API/ESPN)...');
   if (gradingError) {
     process.stderr.write(`  [skip] retro grading: ${gradingError}\n`);
   }
-  console.log(`[GRADING] checked: ${grading.checked} | graded: ${grading.graded} | pending: ${grading.pending} | missing: ${grading.missing}`);
-  if (grading.graded > 0 || grading.missing > 0) {
-    const totalResolved = grading.graded + grading.missing;
+  console.log(`[GRADING] checked: ${grading.checked} | graded: ${grading.graded} | pending: ${grading.pending} | missing: ${grading.missing} | void: ${grading.void}`);
+  if (grading.graded > 0 || grading.missing > 0 || grading.void > 0) {
+    const totalResolved = grading.graded + grading.missing + grading.void;
     console.log(`  Auto-processed ${totalResolved} completed pick(s) from yesterday.`);
     // Auto-write score-feed grades into P&L -- no manual entry needed
     safeRunSync('auto pnl update', () => rebuildPNL(), undefined);
