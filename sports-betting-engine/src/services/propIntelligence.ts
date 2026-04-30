@@ -71,6 +71,20 @@ export interface PropSignal {
   scoreContribution: number;   // points added to final score
 }
 
+export interface NBAPropCoverageSummary {
+  eligible: number;
+  attached: number;
+  missingPlayer: number;
+  unsupportedMarket: number;
+  missingLine: number;
+  missingContext: number;
+}
+
+export interface BuildPropPredictionsResult {
+  predictions: Map<string, PropPrediction>;
+  coverage?: NBAPropCoverageSummary;
+}
+
 // ------------------------------------
 // Map prop stat types to player profile fields
 // ------------------------------------
@@ -265,7 +279,7 @@ function deriveUsageProxyRate(
   return roundToThousandths(clampRange(actionLoadPerMinute / 2.5, 0.08, 0.45));
 }
 
-function normalizeNBAProjectionStatType(statType: string): 'points' | 'rebounds' | 'assists' | 'threes' | null {
+export function normalizeNBAProjectionStatType(statType: string): 'points' | 'rebounds' | 'assists' | 'threes' | null {
   const t = statType.toLowerCase();
   if (t === 'player_points' || t === 'points' || t === 'pts') return 'points';
   if (t === 'player_rebounds' || t === 'rebounds' || t === 'reb') return 'rebounds';
@@ -274,7 +288,7 @@ function normalizeNBAProjectionStatType(statType: string): 'points' | 'rebounds'
   return null;
 }
 
-function isSupportedNBAProjectionMarket(statType: string): boolean {
+export function isSupportedNBAProjectionMarket(statType: string): boolean {
   return normalizeNBAProjectionStatType(statType) !== null;
 }
 
@@ -426,30 +440,30 @@ function deriveSignals(
   if (
     (ctx.last3MinutesAvg ?? 0) > 0 &&
     (ctx.last10MinutesAvg ?? 0) > 0 &&
-    (ctx.last3MinutesAvg ?? 0) > (ctx.last10MinutesAvg ?? 0) * 1.10
+    (ctx.last3MinutesAvg ?? 0) > (ctx.last10MinutesAvg ?? 0) * 1.05
   ) {
     signals.push({
       type: 'MINUTES_SPIKE',
       detail: `Recent minutes spike ${(ctx.last3MinutesAvg ?? 0).toFixed(1)} vs ${(ctx.last10MinutesAvg ?? 0).toFixed(1)} L10 average`,
       impact: 'positive',
-      magnitude: (ctx.last3MinutesAvg ?? 0) > (ctx.last10MinutesAvg ?? 0) * 1.20 ? 'high' : 'medium',
+      magnitude: (ctx.last3MinutesAvg ?? 0) > (ctx.last10MinutesAvg ?? 0) * 1.15 ? 'high' : 'medium',
       side: 'over',
-      scoreContribution: (ctx.last3MinutesAvg ?? 0) > (ctx.last10MinutesAvg ?? 0) * 1.20 ? 10 : 6,
+      scoreContribution: (ctx.last3MinutesAvg ?? 0) > (ctx.last10MinutesAvg ?? 0) * 1.15 ? 10 : 6,
     });
   }
 
   if (
     (ctx.usageRate ?? 0) > 0 &&
     (ctx.seasonUsageRate ?? 0) > 0 &&
-    (ctx.usageRate ?? 0) > (ctx.seasonUsageRate ?? 0) * 1.08
+    (ctx.usageRate ?? 0) > (ctx.seasonUsageRate ?? 0) * 1.05
   ) {
     signals.push({
       type: 'USAGE_SPIKE',
       detail: `Usage spike ${((ctx.usageRate ?? 0) * 100).toFixed(1)}% vs season ${((ctx.seasonUsageRate ?? 0) * 100).toFixed(1)}%`,
       impact: 'positive',
-      magnitude: (ctx.usageRate ?? 0) > (ctx.seasonUsageRate ?? 0) * 1.16 ? 'high' : 'medium',
+      magnitude: (ctx.usageRate ?? 0) > (ctx.seasonUsageRate ?? 0) * 1.12 ? 'high' : 'medium',
       side: 'over',
-      scoreContribution: (ctx.usageRate ?? 0) > (ctx.seasonUsageRate ?? 0) * 1.16 ? 10 : 6,
+      scoreContribution: (ctx.usageRate ?? 0) > (ctx.seasonUsageRate ?? 0) * 1.12 ? 10 : 6,
     });
   }
 
@@ -519,8 +533,8 @@ function deriveSignals(
     (ctx.seasonStatAverage ?? 0) > 0
   ) {
     const overConfirmed =
-      (ctx.last5StatAverage ?? 0) > (ctx.seasonStatAverage ?? 0) * 1.10 &&
-      (ctx.last10StatAverage ?? 0) > (ctx.seasonStatAverage ?? 0) * 1.05;
+      (ctx.last5StatAverage ?? 0) > (ctx.seasonStatAverage ?? 0) * 1.05 &&
+      (ctx.last10StatAverage ?? 0) > (ctx.seasonStatAverage ?? 0) * 1.02;
     const underConfirmed =
       (ctx.last5StatAverage ?? 0) < (ctx.seasonStatAverage ?? 0) * 0.90 &&
       (ctx.last10StatAverage ?? 0) < (ctx.seasonStatAverage ?? 0) * 0.95;
@@ -556,7 +570,7 @@ function deriveSignals(
     (ctx.statKey === 'rebounds' && Number.isFinite(ctx.opponentReboundAllowedPositionRank) && (ctx.opponentReboundAllowedPositionRank ?? 0) >= 1 && (ctx.opponentReboundAllowedPositionRank ?? 0) <= 30) ||
     (ctx.statKey === 'threes' && Number.isFinite(ctx.opponentThreeAllowedPositionRank) && (ctx.opponentThreeAllowedPositionRank ?? 0) >= 1 && (ctx.opponentThreeAllowedPositionRank ?? 0) <= 30);
 
-  if (!hasSpecificPositionRank && hasRealOpponentRank && (effectiveOpponentRank ?? 0) <= 9) {
+  if (!hasSpecificPositionRank && hasRealOpponentRank && (effectiveOpponentRank ?? 0) <= 10) {
     signals.push({
       type: 'TOUGH_MATCHUP',
       detail: `Opponent matchup rank ${effectiveOpponentRank} indicates a tough positional matchup`,
@@ -569,7 +583,7 @@ function deriveSignals(
     });
   }
 
-  if (!hasSpecificPositionRank && hasRealOpponentRank && (effectiveOpponentRank ?? 0) >= 22) {
+  if (!hasSpecificPositionRank && hasRealOpponentRank && (effectiveOpponentRank ?? 0) >= 20) {
     signals.push({
       type: 'FAVORABLE_MATCHUP',
       detail: `Opponent matchup rank ${effectiveOpponentRank} indicates a favorable positional matchup`,
@@ -614,8 +628,8 @@ function deriveSignals(
   );
   if (ctx.statKey === 'points' && hasRealPointsPositionRank) {
     const rank = ctx.opponentPointsAllowedPositionRank ?? 0;
-    if (rank <= 9 || rank >= 22) {
-      const favorable = rank >= 22;
+    if (rank <= 10 || rank >= 20) {
+      const favorable = rank >= 20;
       signals.push({
         type: 'POINTS_MATCHUP_EDGE',
         detail: `Points matchup rank ${rank} vs ${normalizedPosition || 'player role'}`,
@@ -638,8 +652,8 @@ function deriveSignals(
     (isPrimaryBallHandler || hasAssistRate)
   ) {
     const rank = ctx.opponentAssistAllowedPositionRank ?? 0;
-    if (rank <= 9 || rank >= 22) {
-      const favorable = rank >= 22;
+    if (rank <= 10 || rank >= 20) {
+      const favorable = rank >= 20;
       signals.push({
         type: 'ASSIST_MATCHUP_EDGE',
         detail: `Assist matchup rank ${rank} vs ${normalizedPosition || 'ball-handler role'}`,
@@ -658,8 +672,8 @@ function deriveSignals(
   }
   if (ctx.statKey === 'rebounds' && hasRealReboundPositionRank) {
     const rank = ctx.opponentReboundAllowedPositionRank ?? 0;
-    if (rank <= 9 || rank >= 22) {
-      const favorable = rank >= 22;
+    if (rank <= 10 || rank >= 20) {
+      const favorable = rank >= 20;
       signals.push({
         type: 'REBOUND_MATCHUP_EDGE',
         detail: `Rebound matchup rank ${rank} vs ${normalizedPosition || 'frontcourt role'}`,
@@ -678,8 +692,8 @@ function deriveSignals(
   }
   if (ctx.statKey === 'threes' && hasRealThreePositionRank) {
     const rank = ctx.opponentThreeAllowedPositionRank ?? 0;
-    if (rank <= 9 || rank >= 22) {
-      const favorable = rank >= 22;
+    if (rank <= 10 || rank >= 20) {
+      const favorable = rank >= 20;
       signals.push({
         type: 'THREE_MATCHUP_EDGE',
         detail: `Three-point matchup rank ${rank} vs ${normalizedPosition || 'perimeter role'}`,
@@ -1848,8 +1862,18 @@ export async function buildPropPredictions(
     weatherMap?: Map<string, any>;
     nbaContextSnapshot?: NBAContextSnapshot;
   }
-): Promise<Map<string, PropPrediction>> {
+): Promise<BuildPropPredictionsResult> {
   const results = new Map<string, PropPrediction>();
+  const coverage: NBAPropCoverageSummary | undefined = sportKey === 'basketball_nba'
+    ? {
+        eligible: props.length,
+        attached: 0,
+        missingPlayer: 0,
+        unsupportedMarket: 0,
+        missingLine: 0,
+        missingContext: 0,
+      }
+    : undefined;
 
   // Group by game to build matchup packages once per game
   const gameGroups = new Map<string, typeof props>();
@@ -1889,8 +1913,11 @@ export async function buildPropPredictions(
     const homeBetPct = gamePubBetting?.homeBetPct ?? null;
     const awayBetPct = gamePubBetting?.awayBetPct ?? null;
 
-    // Process each player -- max 6 per game
-    for (const prop of gameProps.slice(0, 6)) {
+    const propsToProcess = sportKey === 'basketball_nba'
+      ? gameProps.filter(prop => isSupportedNBAProjectionMarket(prop.statType))
+      : gameProps.slice(0, 6);
+
+    for (const prop of propsToProcess) {
       try {
         // Get player profile
         const preferredTeam = prop.team || '';
@@ -1933,6 +1960,30 @@ export async function buildPropPredictions(
         const opponentTeamContext = sportKey === 'basketball_nba'
           ? resolveNBATeamContext(extraIntel?.nbaContextSnapshot, opponentTeamName)
           : null;
+
+        if (sportKey === 'basketball_nba') {
+          const hasPlayerIdentity = Boolean(playerId || nbaPlayerContext);
+          if (!hasPlayerIdentity) {
+            if (coverage) coverage.missingPlayer++;
+            continue;
+          }
+
+          const hasUsableRecentGames = (profile?.recentGames?.filter((g: any) => !g.didNotPlay && g.minutes > 0).length ?? 0) > 0;
+          const hasUsableSeasonBaseline =
+            (profile?.seasonMPG ?? 0) > 0 &&
+            (
+              (profile?.seasonPPG ?? 0) > 0 ||
+              (profile?.seasonRPG ?? 0) > 0 ||
+              (profile?.seasonAPG ?? 0) > 0 ||
+              (profile?.season3PG ?? 0) > 0
+            );
+
+          if (!profile || (!hasUsableRecentGames && !hasUsableSeasonBaseline)) {
+            if (coverage) coverage.missingContext++;
+            continue;
+          }
+        }
+
         const isHome = resolvedPlayerTeam === homeTeam;
         const isB2B = gameIsBackToBack && (
           (isHome && ctx?.homeRest?.isBackToBack) ||
@@ -1994,9 +2045,10 @@ export async function buildPropPredictions(
           : prediction;
 
         results.set(key, finalPrediction);
+        if (coverage) coverage.attached++;
       } catch { /* individual player errors are non-fatal */ }
     }
   }
 
-  return results;
+  return { predictions: results, coverage };
 }
