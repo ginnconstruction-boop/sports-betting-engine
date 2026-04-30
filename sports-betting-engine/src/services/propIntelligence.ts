@@ -154,6 +154,10 @@ interface NBAProjectionContext {
   opponentAssistAllowedRank?: number;
   opponentReboundAllowedRank?: number;
   opponentThreeAllowedRank?: number;
+  opponentPointsAllowedPositionRank?: number;
+  opponentAssistAllowedPositionRank?: number;
+  opponentReboundAllowedPositionRank?: number;
+  opponentThreeAllowedPositionRank?: number;
   teamPace?: number | null;
   opponentPace?: number | null;
 }
@@ -183,17 +187,24 @@ const NBA_PROJECTION_BOOST_SIGNALS = new Set([
   'MINUTES_SPIKE',
   'FAVORABLE_MATCHUP',
   'TOUGH_MATCHUP',
+  'POINTS_MATCHUP_EDGE',
+  'ASSIST_MATCHUP_EDGE',
+  'REBOUND_MATCHUP_EDGE',
+  'THREE_MATCHUP_EDGE',
 ]);
 
 const NBA_PREDICTIVE_CONTEXT_SIGNALS = new Set([
   'MINUTES_SECURE',
   'ROLE_STABLE',
+  'ROLE_CHANGE',
   'FORM_CONFIRMED',
   'MINUTES_SPIKE',
   'USAGE_SPIKE',
   'USAGE_PROXY_SPIKE',
-  'FAVORABLE_MATCHUP',
+  'POINTS_MATCHUP_EDGE',
   'ASSIST_MATCHUP_EDGE',
+  'REBOUND_MATCHUP_EDGE',
+  'THREE_MATCHUP_EDGE',
 ]);
 
 function clamp01(value: number): number {
@@ -539,8 +550,13 @@ function deriveSignals(
     Number.isFinite(effectiveOpponentRank) &&
     (effectiveOpponentRank ?? 0) >= 1 &&
     (effectiveOpponentRank ?? 0) <= 30;
+  const hasSpecificPositionRank =
+    (ctx.statKey === 'points' && Number.isFinite(ctx.opponentPointsAllowedPositionRank) && (ctx.opponentPointsAllowedPositionRank ?? 0) >= 1 && (ctx.opponentPointsAllowedPositionRank ?? 0) <= 30) ||
+    (ctx.statKey === 'assists' && Number.isFinite(ctx.opponentAssistAllowedPositionRank) && (ctx.opponentAssistAllowedPositionRank ?? 0) >= 1 && (ctx.opponentAssistAllowedPositionRank ?? 0) <= 30) ||
+    (ctx.statKey === 'rebounds' && Number.isFinite(ctx.opponentReboundAllowedPositionRank) && (ctx.opponentReboundAllowedPositionRank ?? 0) >= 1 && (ctx.opponentReboundAllowedPositionRank ?? 0) <= 30) ||
+    (ctx.statKey === 'threes' && Number.isFinite(ctx.opponentThreeAllowedPositionRank) && (ctx.opponentThreeAllowedPositionRank ?? 0) >= 1 && (ctx.opponentThreeAllowedPositionRank ?? 0) <= 30);
 
-  if (hasRealOpponentRank && (effectiveOpponentRank ?? 0) <= 9) {
+  if (!hasSpecificPositionRank && hasRealOpponentRank && (effectiveOpponentRank ?? 0) <= 9) {
     signals.push({
       type: 'TOUGH_MATCHUP',
       detail: `Opponent matchup rank ${effectiveOpponentRank} indicates a tough positional matchup`,
@@ -553,7 +569,7 @@ function deriveSignals(
     });
   }
 
-  if (hasRealOpponentRank && (effectiveOpponentRank ?? 0) >= 22) {
+  if (!hasSpecificPositionRank && hasRealOpponentRank && (effectiveOpponentRank ?? 0) >= 22) {
     signals.push({
       type: 'FAVORABLE_MATCHUP',
       detail: `Opponent matchup rank ${effectiveOpponentRank} indicates a favorable positional matchup`,
@@ -571,31 +587,114 @@ function deriveSignals(
     normalizedPosition.includes('PG') ||
     normalizedPosition === 'G' ||
     normalizedPosition.includes('POINT');
+  const hasRealPointsPositionRank =
+    Number.isFinite(ctx.opponentPointsAllowedPositionRank) &&
+    (ctx.opponentPointsAllowedPositionRank ?? 0) >= 1 &&
+    (ctx.opponentPointsAllowedPositionRank ?? 0) <= 30;
   const effectiveAssistRank = ctx.opponentAssistAllowedRank ?? effectiveOpponentRank;
   const hasRealAssistRank =
     Number.isFinite(effectiveAssistRank) &&
     (effectiveAssistRank ?? 0) >= 1 &&
     (effectiveAssistRank ?? 0) <= 30;
+  const hasRealAssistPositionRank =
+    Number.isFinite(ctx.opponentAssistAllowedPositionRank) &&
+    (ctx.opponentAssistAllowedPositionRank ?? 0) >= 1 &&
+    (ctx.opponentAssistAllowedPositionRank ?? 0) <= 30;
+  const hasRealReboundPositionRank =
+    Number.isFinite(ctx.opponentReboundAllowedPositionRank) &&
+    (ctx.opponentReboundAllowedPositionRank ?? 0) >= 1 &&
+    (ctx.opponentReboundAllowedPositionRank ?? 0) <= 30;
+  const hasRealThreePositionRank =
+    Number.isFinite(ctx.opponentThreeAllowedPositionRank) &&
+    (ctx.opponentThreeAllowedPositionRank ?? 0) >= 1 &&
+    (ctx.opponentThreeAllowedPositionRank ?? 0) <= 30;
   const hasAssistRate = ctx.statKey === 'assists' && (
     (ctx.assistRate ?? 0) > 0 ||
     (ctx.seasonStatPerMinute ?? 0) > 0
   );
+  if (ctx.statKey === 'points' && hasRealPointsPositionRank) {
+    const rank = ctx.opponentPointsAllowedPositionRank ?? 0;
+    if (rank <= 9 || rank >= 22) {
+      const favorable = rank >= 22;
+      signals.push({
+        type: 'POINTS_MATCHUP_EDGE',
+        detail: `Points matchup rank ${rank} vs ${normalizedPosition || 'player role'}`,
+        impact: favorable
+          ? (isOverCandidate ? 'positive' : 'negative')
+          : (isOverCandidate ? 'negative' : 'positive'),
+        magnitude: favorable
+          ? (rank >= 25 ? 'high' : 'medium')
+          : (rank <= 4 ? 'high' : 'medium'),
+        side: favorable ? 'over' : 'under',
+        scoreContribution: favorable
+          ? (isOverCandidate ? (rank >= 25 ? 10 : 6) : (rank >= 25 ? -10 : -6))
+          : (isOverCandidate ? (rank <= 4 ? -10 : -6) : (rank <= 4 ? 10 : 6)),
+      });
+    }
+  }
   if (
     ctx.statKey === 'assists' &&
-    hasRealAssistRank &&
-    (effectiveAssistRank ?? 0) >= 22 &&
+    hasRealAssistPositionRank &&
     (isPrimaryBallHandler || hasAssistRate)
   ) {
-    signals.push({
-      type: 'ASSIST_MATCHUP_EDGE',
-      detail: `Assist matchup edge with rank ${effectiveAssistRank} against a weak opponent assist defense`,
-      impact: isOverCandidate ? 'positive' : 'negative',
-      magnitude: (effectiveAssistRank ?? 0) >= 26 ? 'high' : 'medium',
-      side: 'over',
-      scoreContribution: isOverCandidate
-        ? ((effectiveAssistRank ?? 0) >= 26 ? 10 : 6)
-        : ((effectiveAssistRank ?? 0) >= 26 ? -10 : -6),
-    });
+    const rank = ctx.opponentAssistAllowedPositionRank ?? 0;
+    if (rank <= 9 || rank >= 22) {
+      const favorable = rank >= 22;
+      signals.push({
+        type: 'ASSIST_MATCHUP_EDGE',
+        detail: `Assist matchup rank ${rank} vs ${normalizedPosition || 'ball-handler role'}`,
+        impact: favorable
+          ? (isOverCandidate ? 'positive' : 'negative')
+          : (isOverCandidate ? 'negative' : 'positive'),
+        magnitude: favorable
+          ? (rank >= 26 ? 'high' : 'medium')
+          : (rank <= 4 ? 'high' : 'medium'),
+        side: favorable ? 'over' : 'under',
+        scoreContribution: favorable
+          ? (isOverCandidate ? (rank >= 26 ? 10 : 6) : (rank >= 26 ? -10 : -6))
+          : (isOverCandidate ? (rank <= 4 ? -10 : -6) : (rank <= 4 ? 10 : 6)),
+      });
+    }
+  }
+  if (ctx.statKey === 'rebounds' && hasRealReboundPositionRank) {
+    const rank = ctx.opponentReboundAllowedPositionRank ?? 0;
+    if (rank <= 9 || rank >= 22) {
+      const favorable = rank >= 22;
+      signals.push({
+        type: 'REBOUND_MATCHUP_EDGE',
+        detail: `Rebound matchup rank ${rank} vs ${normalizedPosition || 'frontcourt role'}`,
+        impact: favorable
+          ? (isOverCandidate ? 'positive' : 'negative')
+          : (isOverCandidate ? 'negative' : 'positive'),
+        magnitude: favorable
+          ? (rank >= 25 ? 'high' : 'medium')
+          : (rank <= 4 ? 'high' : 'medium'),
+        side: favorable ? 'over' : 'under',
+        scoreContribution: favorable
+          ? (isOverCandidate ? (rank >= 25 ? 10 : 6) : (rank >= 25 ? -10 : -6))
+          : (isOverCandidate ? (rank <= 4 ? -10 : -6) : (rank <= 4 ? 10 : 6)),
+      });
+    }
+  }
+  if (ctx.statKey === 'threes' && hasRealThreePositionRank) {
+    const rank = ctx.opponentThreeAllowedPositionRank ?? 0;
+    if (rank <= 9 || rank >= 22) {
+      const favorable = rank >= 22;
+      signals.push({
+        type: 'THREE_MATCHUP_EDGE',
+        detail: `Three-point matchup rank ${rank} vs ${normalizedPosition || 'perimeter role'}`,
+        impact: favorable
+          ? (isOverCandidate ? 'positive' : 'negative')
+          : (isOverCandidate ? 'negative' : 'positive'),
+        magnitude: favorable
+          ? (rank >= 25 ? 'high' : 'medium')
+          : (rank <= 4 ? 'high' : 'medium'),
+        side: favorable ? 'over' : 'under',
+        scoreContribution: favorable
+          ? (isOverCandidate ? (rank >= 25 ? 10 : 6) : (rank >= 25 ? -10 : -6))
+          : (isOverCandidate ? (rank <= 4 ? -10 : -6) : (rank <= 4 ? 10 : 6)),
+      });
+    }
   }
 
   if ((ctx.minutesStable ?? true) === false) {
@@ -1219,8 +1318,13 @@ export function generatePropPrediction(
       ? (recentShotAttemptsPerMinute - seasonShotAttemptsPerMinute) / seasonShotAttemptsPerMinute
       : 0;
     const shotVolumeAdjustment = clampRange(1 + (shotVolumePulse * 0.30), 0.90, 1.10);
-    const playerMatchup = matchup?.matchups.get(playerName)?.find(m => normalizeNBAProjectionStatType(m.statType ?? '') === statKey)
-      ?? matchup?.matchups.get(playerName)?.[0];
+    const playerMatchups = matchup?.matchups.get(playerName) ?? [];
+    const playerMatchup = playerMatchups.find(m => normalizeNBAProjectionStatType(m.statType ?? '') === statKey)
+      ?? playerMatchups[0];
+    const pointsPositionRank = playerMatchups.find(m => normalizeNBAProjectionStatType(m.statType ?? '') === 'points')?.rank;
+    const assistsPositionRank = playerMatchups.find(m => normalizeNBAProjectionStatType(m.statType ?? '') === 'assists')?.rank;
+    const reboundsPositionRank = playerMatchups.find(m => normalizeNBAProjectionStatType(m.statType ?? '') === 'rebounds')?.rank;
+    const threesPositionRank = playerMatchups.find(m => normalizeNBAProjectionStatType(m.statType ?? '') === 'threes')?.rank;
     const providerDefenseRank =
       statKey === 'assists'
         ? nbaContext?.opponentTeamContext?.opponentAssistAllowedRank ?? nbaContext?.opponentTeamContext?.opponentDefenseRank
@@ -1356,6 +1460,10 @@ export function generatePropPrediction(
       opponentAssistAllowedRank: nbaContext?.opponentTeamContext?.opponentAssistAllowedRank ?? null,
       opponentReboundAllowedRank: nbaContext?.opponentTeamContext?.opponentReboundAllowedRank ?? null,
       opponentThreeAllowedRank: nbaContext?.opponentTeamContext?.opponentThreeAllowedRank ?? null,
+      opponentPointsAllowedPositionRank: pointsPositionRank ?? null,
+      opponentAssistAllowedPositionRank: assistsPositionRank ?? null,
+      opponentReboundAllowedPositionRank: reboundsPositionRank ?? null,
+      opponentThreeAllowedPositionRank: threesPositionRank ?? null,
       teamPace: nbaContext?.playerTeamContext?.teamPace ?? null,
       opponentPace: nbaContext?.opponentTeamContext?.teamPace ?? null,
     });
@@ -1373,6 +1481,7 @@ export function generatePropPrediction(
         usageRate: rawUsage,
         seasonUsageRate,
         opponentDefenseRank: opponentDefenseRank ?? null,
+        opponentPointsAllowedPositionRank: pointsPositionRank ?? null,
         assistRate: nbaContext?.playerContext?.assistRate ?? null,
         reboundRate: nbaContext?.playerContext?.reboundRate ?? null,
         touches: nbaContext?.playerContext?.touches ?? null,
@@ -1381,6 +1490,9 @@ export function generatePropPrediction(
         opponentAssistAllowedRank: nbaContext?.opponentTeamContext?.opponentAssistAllowedRank ?? null,
         opponentReboundAllowedRank: nbaContext?.opponentTeamContext?.opponentReboundAllowedRank ?? null,
         opponentThreeAllowedRank: nbaContext?.opponentTeamContext?.opponentThreeAllowedRank ?? null,
+        opponentAssistAllowedPositionRank: assistsPositionRank ?? null,
+        opponentReboundAllowedPositionRank: reboundsPositionRank ?? null,
+        opponentThreeAllowedPositionRank: threesPositionRank ?? null,
         projectedMinutes,
         minutesConfidence,
       });
