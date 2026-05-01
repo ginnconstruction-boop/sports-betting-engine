@@ -69,7 +69,9 @@ export interface SignalPerformance {
 
 export interface RetroReport {
   dateAnalyzed: string;
+  /** Gradeable results included in the W/L analysis slice. */
   picksAnalyzed: number;
+  /** Auto-graded picks within the same analyzed slice. */
   autoGraded: number;
   /** Picks where score was unresolvable after the game-end window. Never counted as losses. */
   missingScoreCount: number;
@@ -1352,10 +1354,12 @@ export function buildRetroReport(): RetroReport {
     insights.push(`Only ${wl} graded picks -- need 30+ for statistically meaningful analysis`);
   }
 
+  const autoGradedAnalyzed = graded.filter(r => r.autoGraded).length;
+
   return {
     dateAnalyzed: new Date().toISOString(),
     picksAnalyzed: graded.length,
-    autoGraded: results.filter(r => r.autoGraded).length,
+    autoGraded: autoGradedAnalyzed,
     missingScoreCount,
     voidCount,
     overallRecord: { wins, losses, pushes, winRate },
@@ -1379,7 +1383,7 @@ export function printRetroReport(report: RetroReport): void {
   console.log('  RETROSPECTIVE ANALYSIS -- What We Got Right and Wrong');
   console.log('=================================================================');
   console.log(`  Picks analyzed  : ${report.picksAnalyzed}`);
-  console.log(`  Auto-graded     : ${report.autoGraded}`);
+  console.log(`  Auto-graded     : ${report.autoGraded} of ${report.picksAnalyzed}`);
   console.log(`  Overall record  : ${report.overallRecord.wins}-${report.overallRecord.losses}-${report.overallRecord.pushes}  (${report.overallRecord.winRate}% win rate)`);
   if ((report.missingScoreCount ?? 0) > 0) {
     console.log(`  Missing scores  : ${report.missingScoreCount}  (excluded from record — never counted as losses)`);
