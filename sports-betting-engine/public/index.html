@@ -227,7 +227,7 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
 
     <!-- PER-SPORT STATS -->
     <div class="sport-stats-bar" id="sport-stats-bar" style="display:none">
-      <div class="sport-stats-label">BY SPORT</div>
+      <div class="sport-stats-label">BY CATEGORY</div>
       <div class="sport-stats-cards" id="sport-stats-cards"></div>
     </div>
 
@@ -359,7 +359,13 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
             <option value="MLB">MLB</option>
             <option value="NHL">NHL</option>
             <option value="NCAAB">NCAAB</option>
+            <option value="NCAA Baseball">NCAA Baseball</option>
             <option value="NCAAF">NCAAF</option>
+            <option value="NBA Props">NBA Props</option>
+            <option value="MLB Props">MLB Props</option>
+            <option value="NHL Props">NHL Props</option>
+            <option value="NFL Props">NFL Props</option>
+            <option value="Parlays / SGP">Parlays / SGP</option>
           </select>
           <input class="picks-search" type="text" id="picks-search" placeholder="Search team/pick..." oninput="setFilter(currentFilter)"/>
         </div>
@@ -403,6 +409,7 @@ let currentES = null;
 let fullOutputText = '';
 let allPicksCache = [];
 let officialPicksCache = [];
+let dashboardSummaryCache = null;
 let currentFilter = 'all';
 let currentPage = 1;
 const PAGE_SIZE = 25;
@@ -652,6 +659,7 @@ async function loadStats() {
     const picks = await picksResp.json();
     const pnl = pnlResp.ok ? await pnlResp.json() : null;
     allPicksCache = picks;
+    dashboardSummaryCache = pnl?.dashboardSummary ?? null;
     const officialPicks = picks.filter(isOfficialPick);
     officialPicksCache = officialPicks;
     const graded = officialPicks.filter(p =>
@@ -659,13 +667,15 @@ async function loadStats() {
       p.gameResult !== 'MISSING_SCORE' &&
       p.gameResult !== 'VOID'
     );
-    const wins   = pnl?.wins ?? graded.filter(p => p.gameResult === 'WIN').length;
-    const losses = pnl?.losses ?? graded.filter(p => p.gameResult === 'LOSS').length;
-    const totalPicks = pnl?.totalPicks ?? officialPicks.length;
-    const gradedPicks = pnl?.gradedPicks ?? graded.length;
-    const pendingPicks = Math.max(0, totalPicks - gradedPicks);
-    const winPct = pnl?.winPct ?? ((wins + losses) > 0 ? Math.round(wins/(wins+losses)*100) : 0);
-    let profit = pnl?.totalProfit ?? 0;
+    const overall = pnl?.dashboardSummary?.overall ?? null;
+    const wins   = overall?.wins ?? pnl?.wins ?? graded.filter(p => p.gameResult === 'WIN').length;
+    const losses = overall?.losses ?? pnl?.losses ?? graded.filter(p => p.gameResult === 'LOSS').length;
+    const pushes = overall?.pushes ?? pnl?.pushes ?? graded.filter(p => p.gameResult === 'PUSH').length;
+    const totalPicks = overall?.total ?? pnl?.totalPicks ?? officialPicks.length;
+    const gradedPicks = overall?.graded ?? pnl?.gradedPicks ?? graded.length;
+    const pendingPicks = overall?.pending ?? Math.max(0, totalPicks - gradedPicks);
+    const winPct = overall?.winPct ?? pnl?.winPct ?? ((wins + losses) > 0 ? Math.round(wins/(wins+losses)*100) : null);
+    let profit = overall?.profit ?? pnl?.totalProfit ?? 0;
     if (!pnl) {
       graded.forEach(p => {
         const price = (typeof p.pickedPrice==='number'&&isFinite(p.pickedPrice)) ? p.pickedPrice : -110;
@@ -674,55 +684,59 @@ async function loadStats() {
       });
     }
     document.getElementById('stat-total').textContent = totalPicks;
-    document.getElementById('stat-record').textContent = `${wins}-${losses}`;
+    document.getElementById('stat-record').textContent = pushes > 0 ? `${wins}-${losses}-${pushes}` : `${wins}-${losses}`;
     document.getElementById('stat-pending').textContent = pendingPicks;
     const wp = document.getElementById('stat-winpct');
-    wp.textContent = gradedPicks ? winPct+'%' : '--';
-    wp.className = 'stat-value ' + (winPct>=55?'green':winPct>=45?'yellow':'red');
+    wp.textContent = winPct == null ? '--' : winPct+'%';
+    wp.className = 'stat-value ' + (winPct == null ? '' : winPct>=55?'green':winPct>=45?'yellow':'red');
     const pr = document.getElementById('stat-profit');
-    pr.textContent = gradedPicks ? `${profit>=0?'+':''}$${Math.round(profit)}` : '--';
+    pr.textContent = `${profit>=0?'+':''}$${Math.round(profit)}`;
     pr.className = 'stat-value ' + (profit>=0?'green':'red');
 
     // ── Per-sport breakdown ──
-    renderSportStats(officialPicks);
+    renderSportStats(officialPicks, dashboardSummaryCache);
   } catch {}
 }
 
-// Sport name display map
+// Dashboard category display map
 const SPORT_DISPLAY = {
   basketball_nba:'NBA', baseball_mlb:'MLB', icehockey_nhl:'NHL',
   basketball_ncaab:'NCAAB', americanfootball_nfl:'NFL',
   americanfootball_ncaaf:'NCAAF', baseball_ncaa:'NCAA Baseball',
+  'NBA':'NBA', 'MLB':'MLB', 'NHL':'NHL', 'NFL':'NFL',
+  'NCAAB':'NCAAB', 'NCAA Baseball':'NCAA Baseball', 'NCAAF':'NCAAF',
+  'NBA Props':'NBA Props', 'MLB Props':'MLB Props', 'NHL Props':'NHL Props', 'NFL Props':'NFL Props',
+  'Parlays / SGP':'Parlays / SGP',
 };
 function sportLabel(key) {
   return SPORT_DISPLAY[key] || (key||'').replace('_',' ').toUpperCase().replace('AMERICANFOOTBALL','FOOTBALL').replace('BASKETBALL','BBALL').replace('ICEHOCKEY','HOCKEY').replace('BASEBALL','BASE');
 }
 
+function pickCategoryKey(p) {
+  const betType = (p.betType || '').toLowerCase();
+  if (p.marketType === 'parlay' || betType.includes('parlay') || betType.includes('sgp')) return 'Parlays / SGP';
+  const base = sportLabel(p.sportKey || p.sport || 'other');
+  if (p.marketType === 'player_prop') {
+    if (base === 'NBA') return 'NBA Props';
+    if (base === 'MLB') return 'MLB Props';
+    if (base === 'NHL') return 'NHL Props';
+    if (base === 'NFL') return 'NFL Props';
+  }
+  return base;
+}
+
 let activeSportFilter = null;
 
-function renderSportStats(picks) {
-  // Build per-sport map from ALL picks (graded + pending)
-  const map = {};
-  for (const p of picks) {
-    const k = p.sportKey || p.sport || 'other';
-    if (!map[k]) map[k] = { wins:0, losses:0, pushes:0, pending:0, profit:0, total:0 };
-    map[k].total++;
-    const price = (typeof p.pickedPrice==='number'&&isFinite(p.pickedPrice)) ? p.pickedPrice : -110;
-    if (p.gameResult==='WIN')       { map[k].wins++;    map[k].profit += price>0 ? price : (100/Math.abs(price))*100; }
-    else if (p.gameResult==='LOSS') { map[k].losses++;  map[k].profit -= 100; }
-    else if (p.gameResult==='PUSH') { map[k].pushes++; }
-    else                            { map[k].pending++; }
-  }
+function renderSportStats(picks, dashboardSummary) {
+  const categories = dashboardSummary?.categories || [];
+  if (!categories.length) { document.getElementById('sport-stats-bar').style.display='none'; return; }
 
-  const sports = Object.entries(map).sort((a,b) => b[1].total - a[1].total);
-  if (!sports.length) { document.getElementById('sport-stats-bar').style.display='none'; return; }
-
-  const cards = sports.map(([key, d]) => {
-    const label = sportLabel(key);
-    const graded = d.wins + d.losses;
-    const pct = graded > 0 ? Math.round(d.wins/graded*100) : null;
+  const cards = categories.map((d) => {
+    const key = d.key;
+    const label = d.label || sportLabel(key);
+    const pct = d.winPct;
     const cls = pct===null ? '' : pct>=55?'green':pct>=45?'yellow':'red';
-    const profitStr = graded>0 ? `${d.profit>=0?'+':''}$${Math.round(d.profit)}` : '';
+    const profitStr = `${d.profit>=0?'+':''}$${Math.round(d.profit)}`;
     const profitCls = d.profit>=0?'up':'dn';
     const isActive = activeSportFilter === key;
     return `<div class="sport-card${isActive?' active':''}" onclick="filterBySport('${key}')" title="Click to filter picks by ${label}">
@@ -730,8 +744,8 @@ function renderSportStats(picks) {
       <div class="sport-card-record ${cls}">${d.wins}-${d.losses}${d.pushes>0?'-'+d.pushes:''}</div>
       <div class="sport-card-sub">
         <span>${pct!==null?pct+'%':'--'}</span>
-        ${profitStr?`<span class="${profitCls}">${profitStr}</span>`:''}
-        ${d.pending>0?`<span style="color:var(--muted)">${d.pending} live</span>`:''}
+        <span class="${profitCls}">${profitStr}</span>
+        <span style="color:var(--muted)">${d.pending} pending${d.liveOpen>0?` | ${d.liveOpen} live`:''}</span>
       </div>
     </div>`;
   }).join('');
@@ -759,7 +773,7 @@ function filterBySport(key) {
     }
   }
   // Re-render sport cards to update active state
-  if (officialPicksCache) renderSportStats(officialPicksCache);
+  if (officialPicksCache) renderSportStats(officialPicksCache, dashboardSummaryCache);
   // Open picks panel filtered to this sport
   if (activeSportFilter) {
     setFilter(currentFilter);
@@ -872,15 +886,9 @@ function getFilteredPicks() {
 
   // Sport filter: match by sportKey (from sport card click) OR sport display name (from dropdown)
   if (activeSportFilter) {
-    filtered = filtered.filter(p =>
-      (p.sportKey||'') === activeSportFilter ||
-      (p.sport||'').toUpperCase() === sportLabel(activeSportFilter)
-    );
+    filtered = filtered.filter(p => pickCategoryKey(p) === activeSportFilter);
   } else if (sportSel) {
-    filtered = filtered.filter(p =>
-      (p.sport||'').toUpperCase() === sportSel.toUpperCase() ||
-      (p.sportKey||'') === sportSel
-    );
+    filtered = filtered.filter(p => pickCategoryKey(p) === sportSel || sportLabel(p.sportKey||p.sport||'') === sportSel);
   }
 
   if (searchVal)

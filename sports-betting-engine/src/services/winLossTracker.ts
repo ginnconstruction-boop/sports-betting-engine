@@ -43,6 +43,7 @@ export interface PNLRecord {
   longestLossStreak: number;
   // Monthly
   byMonth: Record<string, SportRecord>;
+  dashboardSummary?: DashboardSummary;
   lastUpdated: string;
 }
 
@@ -54,6 +55,25 @@ export interface SportRecord {
   profit: number;
   roi: number;
   winPct: number;
+}
+
+export interface DashboardCategorySummary {
+  key: string;
+  label: string;
+  wins: number;
+  losses: number;
+  pushes: number;
+  graded: number;
+  total: number;
+  pending: number;
+  liveOpen: number;
+  profit: number;
+  winPct: number | null;
+}
+
+export interface DashboardSummary {
+  overall: DashboardCategorySummary;
+  categories: DashboardCategorySummary[];
 }
 
 // ------------------------------------
@@ -108,6 +128,147 @@ function fmtPct(n: number): string {
 
 function emptyRecord(): SportRecord {
   return { picks: 0, wins: 0, losses: 0, pushes: 0, profit: 0, roi: 0, winPct: 0 };
+}
+
+const SPORT_CATEGORY_MAP: Record<string, string> = {
+  basketball_nba: 'NBA',
+  baseball_mlb: 'MLB',
+  icehockey_nhl: 'NHL',
+  americanfootball_nfl: 'NFL',
+  basketball_ncaab: 'NCAAB',
+  baseball_ncaa: 'NCAA Baseball',
+  americanfootball_ncaaf: 'NCAAF',
+};
+
+const DASHBOARD_CATEGORY_ORDER = [
+  { key: 'NBA', label: 'NBA' },
+  { key: 'MLB', label: 'MLB' },
+  { key: 'NHL', label: 'NHL' },
+  { key: 'NFL', label: 'NFL' },
+  { key: 'NCAAB', label: 'NCAAB' },
+  { key: 'NCAA Baseball', label: 'NCAA Baseball' },
+  { key: 'NCAAF', label: 'NCAAF' },
+  { key: 'NBA Props', label: 'NBA Props' },
+  { key: 'MLB Props', label: 'MLB Props' },
+  { key: 'NHL Props', label: 'NHL Props' },
+  { key: 'NFL Props', label: 'NFL Props' },
+  { key: 'Parlays / SGP', label: 'Parlays / SGP' },
+] as const;
+
+function normalizeSportCategory(sportKey?: string, sport?: string): string {
+  if (sportKey && SPORT_CATEGORY_MAP[sportKey]) return SPORT_CATEGORY_MAP[sportKey];
+  const label = (sport ?? '').trim().toUpperCase();
+  if (label === 'NBA') return 'NBA';
+  if (label === 'MLB') return 'MLB';
+  if (label === 'NHL') return 'NHL';
+  if (label === 'NFL') return 'NFL';
+  if (label === 'NCAAB') return 'NCAAB';
+  if (label === 'NCAAF') return 'NCAAF';
+  if (label === 'NCAA BASEBALL') return 'NCAA Baseball';
+  return 'Other';
+}
+
+function getDashboardCategoryKey(pick: PickRecord): string {
+  const betType = (pick.betType ?? '').toLowerCase();
+
+  if (pick.marketType === 'parlay' || betType.includes('parlay') || betType.includes('sgp')) {
+    return 'Parlays / SGP';
+  }
+
+  const baseSport = normalizeSportCategory(pick.sportKey, pick.sport);
+  if (pick.marketType === 'player_prop') {
+    if (baseSport === 'NBA') return 'NBA Props';
+    if (baseSport === 'MLB') return 'MLB Props';
+    if (baseSport === 'NHL') return 'NHL Props';
+    if (baseSport === 'NFL') return 'NFL Props';
+  }
+
+  return baseSport;
+}
+
+function isUnresolvedResult(result?: PickRecord['gameResult']): boolean {
+  return !result || result === 'PENDING' || result === 'MISSING_SCORE';
+}
+
+function createEmptyDashboardCategory(key: string, label: string): DashboardCategorySummary {
+  return {
+    key,
+    label,
+    wins: 0,
+    losses: 0,
+    pushes: 0,
+    graded: 0,
+    total: 0,
+    pending: 0,
+    liveOpen: 0,
+    profit: 0,
+    winPct: null,
+  };
+}
+
+function finalizeDashboardCategory(category: DashboardCategorySummary): DashboardCategorySummary {
+  const gradedDecisions = category.wins + category.losses;
+  return {
+    ...category,
+    profit: Math.round(category.profit * 100) / 100,
+    winPct: gradedDecisions > 0 ? Math.round((category.wins / gradedDecisions) * 100) : null,
+  };
+}
+
+function buildDashboardSummary(picks: PickRecord[]): DashboardSummary {
+  const categories = new Map<string, DashboardCategorySummary>(
+    DASHBOARD_CATEGORY_ORDER.map(({ key, label }) => [key, createEmptyDashboardCategory(key, label)])
+  );
+  const overall = createEmptyDashboardCategory('Overall', 'Overall');
+  const now = Date.now();
+
+  for (const pick of picks) {
+    if (pick.gameResult === 'VOID') continue;
+
+    const categoryKey = getDashboardCategoryKey(pick);
+    if (!categories.has(categoryKey)) {
+      categories.set(categoryKey, createEmptyDashboardCategory(categoryKey, categoryKey));
+    }
+
+    const category = categories.get(categoryKey)!;
+    const targets = [overall, category];
+    const safePrice =
+      typeof pick.pickedPrice === 'number' && isFinite(pick.pickedPrice) && pick.pickedPrice !== 0
+        ? pick.pickedPrice
+        : -110;
+    const unresolved = isUnresolvedResult(pick.gameResult);
+    const isLiveOpen =
+      unresolved &&
+      typeof pick.gameTime === 'string' &&
+      pick.gameTime.length > 0 &&
+      Number.isFinite(Date.parse(pick.gameTime)) &&
+      Date.parse(pick.gameTime) <= now;
+
+    for (const target of targets) {
+      target.total++;
+
+      if (pick.gameResult === 'WIN') {
+        target.wins++;
+        target.graded++;
+        target.profit += calcProfit('WIN', safePrice);
+      } else if (pick.gameResult === 'LOSS') {
+        target.losses++;
+        target.graded++;
+        target.profit += calcProfit('LOSS', safePrice);
+      } else if (pick.gameResult === 'PUSH') {
+        target.pushes++;
+        target.graded++;
+      } else {
+        target.pending++;
+        if (isLiveOpen) target.liveOpen++;
+      }
+    }
+  }
+
+  return {
+    overall: finalizeDashboardCategory(overall),
+    categories: [...categories.values()].map(finalizeDashboardCategory),
+  };
 }
 
 function isLegacyOfficialPick(pick: PickRecord): boolean {
@@ -277,6 +438,7 @@ export function rebuildPNL(): PNLRecord {
     currentStreak: { type: '-', count: 0 },
     longestWinStreak: 0,
     longestLossStreak: 0,
+    dashboardSummary: buildDashboardSummary(picks),
     lastUpdated: new Date().toISOString(),
   };
 
