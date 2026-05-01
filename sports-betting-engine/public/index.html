@@ -962,6 +962,35 @@ async function loadPicksTable() {
     <th ${thClick('profit')}>P&amp;L${sortArrow('profit')}</th>
   </tr></thead>`;
 
+  function formatPickMain(p) {
+    if (p.marketType === 'player_prop') {
+      const sideText = String(p.side || '');
+      const overIdx = sideText.lastIndexOf(' Over ');
+      const underIdx = sideText.lastIndexOf(' Under ');
+      const splitIdx = overIdx >= 0 ? overIdx : underIdx;
+      if (splitIdx >= 0) return sideText.slice(0, splitIdx).trim();
+      if (p.playerName && p.propType) return `${p.playerName} ${p.propType}`.trim();
+    }
+    return p.side || '';
+  }
+
+  function formatPickDetail(p) {
+    if (p.marketType === 'player_prop') {
+      const sideText = String(p.side || '');
+      const overIdx = sideText.lastIndexOf(' Over ');
+      const underIdx = sideText.lastIndexOf(' Under ');
+      const splitIdx = overIdx >= 0 ? overIdx : underIdx;
+      if (splitIdx >= 0) return sideText.slice(splitIdx).trim();
+      if (typeof p.notes === 'string' && p.notes.trim()) {
+        return p.notes
+          .replace(/^player_/i, '')
+          .replace(/_/g, ' ')
+          .trim();
+      }
+    }
+    return '';
+  }
+
   function buildRows(picks) {
     return picks.map(p => {
       const date = (p.date||p.gameTime||'').slice(0,10);
@@ -975,12 +1004,17 @@ async function loadPicksTable() {
       const profitVal = typeof p.profit === 'number' ? p.profit : null;
       const profitStr = profitVal != null ? `${profitVal>=0?'+':''}$${Math.round(profitVal)}` : '--';
       const gradeColor = p.grade==='A+'||p.grade==='A' ? 'var(--green)' : p.grade==='B+' ? 'var(--yellow)' : 'var(--muted)';
+      const pickMain = formatPickMain(p);
+      const pickDetail = formatPickDetail(p);
       return `<tr>
         <td style="color:var(--muted)">${date}</td>
         <td>${p.sport||''}</td>
         <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${p.matchup||''}">${p.matchup||''}</td>
         <td>${p.betType||''}</td>
-        <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${p.side||''}">${p.side||''}</td>
+        <td style="max-width:220px;white-space:normal;line-height:1.2" title="${p.side||''}">
+          <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${pickMain}</div>
+          ${pickDetail ? `<div style="color:var(--muted);font-size:.68rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${pickDetail}</div>` : ''}
+        </td>
         <td>${book}</td>
         <td style="color:var(--green);font-weight:bold">${price}</td>
         <td><span style="color:${gradeColor};font-weight:bold">${p.grade||'?'}</span></td>
