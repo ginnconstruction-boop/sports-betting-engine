@@ -17,6 +17,15 @@ export interface MLBPlayerContext {
   lineupSpot?: number | null;
   starterConfirmed?: boolean;
   probableStarter?: boolean;
+  seasonGamesPlayed?: number | null;
+  seasonGamesStarted?: number | null;
+  seasonPlateAppearances?: number | null;
+  seasonHits?: number | null;
+  seasonTotalBases?: number | null;
+  seasonPitchingOuts?: number | null;
+  seasonPitcherStrikeouts?: number | null;
+  seasonPitcherHitsAllowed?: number | null;
+  seasonPitcherEarnedRuns?: number | null;
 }
 
 export interface MLBTeamContext {
@@ -94,6 +103,29 @@ function parseLineupSpot(value: string | undefined): number | null {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
+function parseNullableNumber(value: any): number | null {
+  if (value === null || value === undefined || value === '') return null;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function extractSeasonBaselines(player: any): Partial<MLBPlayerContext> {
+  const batting = player?.seasonStats?.batting ?? {};
+  const pitching = player?.seasonStats?.pitching ?? {};
+
+  return {
+    seasonGamesPlayed: parseNullableNumber(batting?.gamesPlayed ?? pitching?.gamesPlayed),
+    seasonGamesStarted: parseNullableNumber(pitching?.gamesStarted),
+    seasonPlateAppearances: parseNullableNumber(batting?.plateAppearances),
+    seasonHits: parseNullableNumber(batting?.hits),
+    seasonTotalBases: parseNullableNumber(batting?.totalBases),
+    seasonPitchingOuts: parseNullableNumber(pitching?.outs),
+    seasonPitcherStrikeouts: parseNullableNumber(pitching?.strikeOuts),
+    seasonPitcherHitsAllowed: parseNullableNumber(pitching?.hits),
+    seasonPitcherEarnedRuns: parseNullableNumber(pitching?.earnedRuns),
+  };
+}
+
 function addPlayerIfMissing(players: MLBPlayerContext[], next: MLBPlayerContext): void {
   const key = `${normalizeName(next.name)}__${normalizeName(next.team)}__${next.role}`;
   const existingIdx = players.findIndex(player =>
@@ -133,6 +165,7 @@ function extractGamePlayers(feed: any, homeTeam: string, awayTeam: string): MLBP
         lineupSpot: parseLineupSpot(player?.battingOrder),
         starterConfirmed: Boolean(player?.battingOrder) || Boolean(player?.stats?.batting) || Boolean(player?.stats?.pitching),
         probableStarter: role === 'pitcher' ? Boolean(player?.gameStatus?.isCurrentPitcher) || Boolean(player?.stats?.pitching) : false,
+        ...extractSeasonBaselines(player),
       });
     }
   }

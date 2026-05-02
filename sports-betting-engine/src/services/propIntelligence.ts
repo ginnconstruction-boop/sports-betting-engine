@@ -306,6 +306,112 @@ export function isSupportedMLBProjectionMarket(statType: string): boolean {
     t === 'batter_total_bases';
 }
 
+function hasRelevantMLBBaseline(playerContext: MLBContextSnapshot['players'][number] | null, statType: string): boolean {
+  if (!playerContext) return false;
+  const t = statType.toLowerCase();
+
+  if (t === 'pitcher_strikeouts') {
+    return playerContext.role === 'pitcher' &&
+      playerContext.seasonPitchingOuts !== null &&
+      playerContext.seasonPitchingOuts !== undefined &&
+      playerContext.seasonPitchingOuts > 0 &&
+      playerContext.seasonPitcherStrikeouts !== null &&
+      playerContext.seasonPitcherStrikeouts !== undefined;
+  }
+
+  if (t === 'pitcher_hits_allowed') {
+    return playerContext.role === 'pitcher' &&
+      playerContext.seasonPitchingOuts !== null &&
+      playerContext.seasonPitchingOuts !== undefined &&
+      playerContext.seasonPitchingOuts > 0 &&
+      playerContext.seasonPitcherHitsAllowed !== null &&
+      playerContext.seasonPitcherHitsAllowed !== undefined;
+  }
+
+  if (t === 'pitcher_earned_runs') {
+    return playerContext.role === 'pitcher' &&
+      playerContext.seasonPitchingOuts !== null &&
+      playerContext.seasonPitchingOuts !== undefined &&
+      playerContext.seasonPitchingOuts > 0 &&
+      playerContext.seasonPitcherEarnedRuns !== null &&
+      playerContext.seasonPitcherEarnedRuns !== undefined;
+  }
+
+  if (t === 'batter_hits') {
+    return playerContext.role === 'batter' &&
+      playerContext.seasonPlateAppearances !== null &&
+      playerContext.seasonPlateAppearances !== undefined &&
+      playerContext.seasonPlateAppearances > 0 &&
+      playerContext.seasonHits !== null &&
+      playerContext.seasonHits !== undefined;
+  }
+
+  if (t === 'batter_total_bases') {
+    return playerContext.role === 'batter' &&
+      playerContext.seasonPlateAppearances !== null &&
+      playerContext.seasonPlateAppearances !== undefined &&
+      playerContext.seasonPlateAppearances > 0 &&
+      playerContext.seasonTotalBases !== null &&
+      playerContext.seasonTotalBases !== undefined;
+  }
+
+  return false;
+}
+
+function buildMLBBaselineProfile(
+  playerContext: MLBContextSnapshot['players'][number] | null,
+  statType: string
+): PlayerProfile | null {
+  if (!playerContext || !hasRelevantMLBBaseline(playerContext, statType)) return null;
+
+  const t = statType.toLowerCase();
+  let baseline = 0;
+
+  if (t === 'pitcher_strikeouts') {
+    const games = Math.max(playerContext.seasonGamesStarted ?? playerContext.seasonGamesPlayed ?? 0, 1);
+    baseline = (playerContext.seasonPitcherStrikeouts ?? 0) / games;
+  } else if (t === 'pitcher_hits_allowed') {
+    const games = Math.max(playerContext.seasonGamesStarted ?? playerContext.seasonGamesPlayed ?? 0, 1);
+    baseline = (playerContext.seasonPitcherHitsAllowed ?? 0) / games;
+  } else if (t === 'pitcher_earned_runs') {
+    const games = Math.max(playerContext.seasonGamesStarted ?? playerContext.seasonGamesPlayed ?? 0, 1);
+    baseline = (playerContext.seasonPitcherEarnedRuns ?? 0) / games;
+  } else if (t === 'batter_hits') {
+    const games = Math.max(playerContext.seasonGamesPlayed ?? 0, 1);
+    baseline = (playerContext.seasonHits ?? 0) / games;
+  } else if (t === 'batter_total_bases') {
+    const games = Math.max(playerContext.seasonGamesPlayed ?? 0, 1);
+    baseline = (playerContext.seasonTotalBases ?? 0) / games;
+  }
+
+  const roundedBaseline = roundToTenths(baseline);
+
+  return {
+    playerId: String(playerContext.id ?? `${playerContext.team}-${playerContext.name}`),
+    name: playerContext.name,
+    team: playerContext.team,
+    position: playerContext.role === 'pitcher' ? 'P' : 'B',
+    l5PPG: roundedBaseline,
+    l10PPG: roundedBaseline,
+    seasonPPG: roundedBaseline,
+    l5RPG: roundedBaseline,
+    seasonRPG: roundedBaseline,
+    l5APG: roundedBaseline,
+    seasonAPG: roundedBaseline,
+    l5_3PG: roundedBaseline,
+    season3PG: roundedBaseline,
+    l5MPG: 0,
+    l10MPG: 0,
+    seasonMPG: 0,
+    minutesTrend: 'stable',
+    minutesTrendPct: 0,
+    homePPG: null,
+    awayPPG: null,
+    recentGames: [],
+    propStreaks: undefined,
+  } as unknown as PlayerProfile;
+}
+
 function getStatValue(game: PlayerProfile['recentGames'][number], statKey: 'points' | 'rebounds' | 'assists' | 'threes'): number {
   if (statKey === 'points') return game.points;
   if (statKey === 'rebounds') return game.rebounds;
@@ -870,6 +976,7 @@ export function generatePropPrediction(
   let scoreAdjustment = 0;
   let predictedValue = postedLine; // default = line, no edge
   let nbaProjection: NBAProjectionResult | undefined;
+  const allowMLBGenericFallbackSignals = !(sportKey === 'baseball_mlb' && !profile);
 
   // -- Signal 1: Recent form vs season average -----------------
   if (profile) {
@@ -1023,7 +1130,7 @@ export function generatePropPrediction(
   }
 
   // -- Signal 6c: Team total (implied team scoring) -----------
-  if (teamTotal !== null) {
+  if (teamTotal !== null && allowMLBGenericFallbackSignals) {
     const teamTotalVsAvg = teamTotal - leagueAvgTeamTotal;
     if (Math.abs(teamTotalVsAvg) >= 4) {
       const isHighScoring = teamTotalVsAvg > 0;
@@ -1099,39 +1206,43 @@ export function generatePropPrediction(
   }
 
   // -- Signal 11: Blowout risk -------------------------------
-  const blowout = assessBlowoutRisk(
-    sportKey ?? 'basketball_nba', team, homeTeam ?? team, awayTeam ?? team,
-    gameSpread, statType
-  );
-  if (blowout.isHighRisk && blowout.scorePenalty < 0) {
-    const isCountingStat = ['point', 'rebound', 'assist', 'rush', 'pass', 'reception']
-      .some(s => statType.toLowerCase().includes(s));
-    if (isCountingStat && side === 'over') {
-      signals.push({
-        type: 'BLOWOUT_RISK',
-        detail: blowout.detail,
-        impact: 'negative',
-        magnitude: blowout.blowoutProbability >= 0.5 ? 'high' : 'medium',
-        side: 'under',
-        scoreContribution: blowout.scorePenalty,
-      });
-      scoreAdjustment += blowout.scorePenalty;
+  if (allowMLBGenericFallbackSignals) {
+    const blowout = assessBlowoutRisk(
+      sportKey ?? 'basketball_nba', team, homeTeam ?? team, awayTeam ?? team,
+      gameSpread, statType
+    );
+    if (blowout.isHighRisk && blowout.scorePenalty < 0) {
+      const isCountingStat = ['point', 'rebound', 'assist', 'rush', 'pass', 'reception']
+        .some(s => statType.toLowerCase().includes(s));
+      if (isCountingStat && side === 'over') {
+        signals.push({
+          type: 'BLOWOUT_RISK',
+          detail: blowout.detail,
+          impact: 'negative',
+          magnitude: blowout.blowoutProbability >= 0.5 ? 'high' : 'medium',
+          side: 'under',
+          scoreContribution: blowout.scorePenalty,
+        });
+        scoreAdjustment += blowout.scorePenalty;
+      }
     }
   }
 
   // -- Signal 12: Market efficiency (prop type) ---------------
-  const marketEff = getMarketEfficiencyForProp(sportKey ?? 'basketball_nba', marketKey);
-  if (marketEff.volumeCategory === 'very_low' || marketEff.volumeCategory === 'low') {
-    signals.push({
-      type: 'MARKET_INEFFICIENCY',
-      detail: marketEff.detail,
-      impact: 'positive',
-      magnitude: marketEff.volumeCategory === 'very_low' ? 'high' : 'medium',
-      side: 'neutral',
-      scoreContribution: marketEff.volumeCategory === 'very_low' ? 12 : 6,
-    });
-    scoreAdjustment += signals[signals.length - 1].scoreContribution;
-    predictedValue = Math.round(predictedValue * marketEff.edgeMultiplier * 10) / 10;
+  if (allowMLBGenericFallbackSignals) {
+    const marketEff = getMarketEfficiencyForProp(sportKey ?? 'basketball_nba', marketKey);
+    if (marketEff.volumeCategory === 'very_low' || marketEff.volumeCategory === 'low') {
+      signals.push({
+        type: 'MARKET_INEFFICIENCY',
+        detail: marketEff.detail,
+        impact: 'positive',
+        magnitude: marketEff.volumeCategory === 'very_low' ? 'high' : 'medium',
+        side: 'neutral',
+        scoreContribution: marketEff.volumeCategory === 'very_low' ? 12 : 6,
+      });
+      scoreAdjustment += signals[signals.length - 1].scoreContribution;
+      predictedValue = Math.round(predictedValue * marketEff.edgeMultiplier * 10) / 10;
+    }
   }
 
   // -- Signal 13: Public star bias ----------------------------
@@ -2031,10 +2142,14 @@ export async function buildPropPredictions(
             continue;
           }
 
-          const hasUsableContext = Boolean(mlbPlayerTeamContext || mlbOpponentTeamContext);
-          if (!hasUsableContext) {
+          const hasRelevantBaseline = hasRelevantMLBBaseline(mlbPlayerContext, prop.statType);
+          if (!hasRelevantBaseline) {
             if (coverage) coverage.missingContext++;
             continue;
+          }
+
+          if (!profile) {
+            profile = buildMLBBaselineProfile(mlbPlayerContext, prop.statType);
           }
         }
 
