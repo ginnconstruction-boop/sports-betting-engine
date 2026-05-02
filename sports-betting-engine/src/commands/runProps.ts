@@ -41,6 +41,7 @@ import { applySignalDiversity, printSignalDiversitySummary } from '../services/s
 import { applyOutcomeSignals, printOutcomeSummary, OutcomeContext } from '../services/outcomeSignalEngine';
 import { applySignalWeighting, printWeightingSummary } from '../services/signalWeightingEngine';
 import { buildNBAContextForSlate } from '../services/nbaContextProvider';
+import { buildMLBContextForSlate } from '../services/mlbContextProvider';
 import { buildCalibrationReport, decorateCandidatesWithCalibration } from '../services/calibrationEngine';
 
 function safeSync<T>(fn: () => T, fallback: T): T {
@@ -197,6 +198,19 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
         null
       )
       : null;
+    const mlbContextSnapshot = sportKey === 'baseball_mlb'
+      ? await safeRun(
+        () => buildMLBContextForSlate(
+          upcoming.slice(0, maxGames).map(event => ({
+            eventId: event.eventId,
+            homeTeam: event.homeTeam,
+            awayTeam: event.awayTeam,
+            gameTime: event.startTime,
+          }))
+        ),
+        null
+      )
+      : null;
 
     if (sportKey === 'basketball_nba') {
       if (nbaContextSnapshot) {
@@ -208,6 +222,20 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
         }
       } else {
         console.warn('  [NBA_CTX] unavailable -- continuing with existing fallback context');
+      }
+    }
+    if (sportKey === 'baseball_mlb') {
+      if (mlbContextSnapshot) {
+        console.log(
+          `  [MLB_CTX] players: ${mlbContextSnapshot.meta.players} | pitchers: ${mlbContextSnapshot.meta.pitchers} | ` +
+          `teams: ${mlbContextSnapshot.meta.teams} | lineup: ${mlbContextSnapshot.meta.lineup} | ` +
+          `matchup: ${mlbContextSnapshot.meta.matchup} | fallback: ${mlbContextSnapshot.meta.fallback}`
+        );
+        if (mlbContextSnapshot.meta.fallback > 0) {
+          console.warn('  [MLB_CTX] partial MLB context fallback active -- continuing with real-data-only coverage gates');
+        }
+      } else {
+        console.warn('  [MLB_CTX] unavailable -- continuing without MLB context attachment');
       }
     }
 
@@ -248,6 +276,7 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
         steamMoves,
         atsSituations,
         nbaContextSnapshot: nbaContextSnapshot ?? undefined,
+        mlbContextSnapshot: mlbContextSnapshot ?? undefined,
       },
       learnedWeights
     )).slice(0, PROP_CONFIG.TOP_N);

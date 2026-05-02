@@ -15,6 +15,11 @@ import {
   resolveNBATeamContext,
 } from './nbaContextProvider';
 import {
+  MLBContextSnapshot,
+  resolveMLBPlayerContext,
+  resolveMLBTeamContext,
+} from './mlbContextProvider';
+import {
   assessBlowoutRisk,
   getMarketEfficiencyForProp,
   assessPublicStarBias,
@@ -71,7 +76,7 @@ export interface PropSignal {
   scoreContribution: number;   // points added to final score
 }
 
-export interface NBAPropCoverageSummary {
+export interface PropCoverageSummary {
   eligible: number;
   attached: number;
   missingPlayer: number;
@@ -82,7 +87,7 @@ export interface NBAPropCoverageSummary {
 
 export interface BuildPropPredictionsResult {
   predictions: Map<string, PropPrediction>;
-  coverage?: NBAPropCoverageSummary;
+  coverage?: PropCoverageSummary;
 }
 
 // ------------------------------------
@@ -290,6 +295,15 @@ export function normalizeNBAProjectionStatType(statType: string): 'points' | 're
 
 export function isSupportedNBAProjectionMarket(statType: string): boolean {
   return normalizeNBAProjectionStatType(statType) !== null;
+}
+
+export function isSupportedMLBProjectionMarket(statType: string): boolean {
+  const t = statType.toLowerCase();
+  return t === 'pitcher_strikeouts' ||
+    t === 'pitcher_hits_allowed' ||
+    t === 'pitcher_earned_runs' ||
+    t === 'batter_hits' ||
+    t === 'batter_total_bases';
 }
 
 function getStatValue(game: PlayerProfile['recentGames'][number], statKey: 'points' | 'rebounds' | 'assists' | 'threes'): number {
@@ -1861,10 +1875,11 @@ export async function buildPropPredictions(
     atsSituations?: Map<string, any>;
     weatherMap?: Map<string, any>;
     nbaContextSnapshot?: NBAContextSnapshot;
+    mlbContextSnapshot?: MLBContextSnapshot;
   }
 ): Promise<BuildPropPredictionsResult> {
   const results = new Map<string, PropPrediction>();
-  const coverage: NBAPropCoverageSummary | undefined = sportKey === 'basketball_nba'
+  const coverage: PropCoverageSummary | undefined = (sportKey === 'basketball_nba' || sportKey === 'baseball_mlb')
     ? {
         eligible: props.length,
         attached: 0,
@@ -1915,17 +1930,23 @@ export async function buildPropPredictions(
 
     const propsToProcess = sportKey === 'basketball_nba'
       ? gameProps.filter(prop => isSupportedNBAProjectionMarket(prop.statType))
-      : gameProps.slice(0, 6);
+      : sportKey === 'baseball_mlb'
+        ? gameProps.filter(prop => isSupportedMLBProjectionMarket(prop.statType))
+        : gameProps.slice(0, 6);
 
     for (const prop of propsToProcess) {
       try {
         // Get player profile
         const preferredTeam = prop.team || '';
-        const preferredPlayerId = preferredTeam
+        const shouldLookupPlayerProfile = sportKey !== 'baseball_mlb';
+        const preferredPlayerId = shouldLookupPlayerProfile && preferredTeam
           ? await findPlayerId(prop.playerName, preferredTeam, sportKey)
           : null;
-        const homePlayerId = preferredPlayerId ? null : await findPlayerId(prop.playerName, prop.homeTeam, sportKey);
+        const homePlayerId = preferredPlayerId || !shouldLookupPlayerProfile
+          ? null
+          : await findPlayerId(prop.playerName, prop.homeTeam, sportKey);
         const awayPlayerId = preferredPlayerId || homePlayerId
+          || !shouldLookupPlayerProfile
           ? null
           : await findPlayerId(prop.playerName, prop.awayTeam, sportKey);
         const playerId = preferredPlayerId ?? homePlayerId ?? awayPlayerId;
@@ -1960,6 +1981,26 @@ export async function buildPropPredictions(
         const opponentTeamContext = sportKey === 'basketball_nba'
           ? resolveNBATeamContext(extraIntel?.nbaContextSnapshot, opponentTeamName)
           : null;
+        const mlbPlayerContext = sportKey === 'baseball_mlb'
+          ? resolveMLBPlayerContext(
+            extraIntel?.mlbContextSnapshot,
+            prop.playerName,
+            resolvedPlayerTeam || preferredTeam || prop.homeTeam
+          )
+          : null;
+        const resolvedMLBPlayerTeam = mlbPlayerContext?.team || resolvedPlayerTeam || preferredTeam;
+        const mlbPlayerTeamContext = sportKey === 'baseball_mlb'
+          ? resolveMLBTeamContext(
+            extraIntel?.mlbContextSnapshot,
+            resolvedMLBPlayerTeam || prop.homeTeam
+          )
+          : null;
+        const mlbOpponentTeamName = resolvedMLBPlayerTeam
+          ? (resolvedMLBPlayerTeam === homeTeam ? awayTeam : homeTeam)
+          : prop.awayTeam;
+        const mlbOpponentTeamContext = sportKey === 'baseball_mlb'
+          ? resolveMLBTeamContext(extraIntel?.mlbContextSnapshot, mlbOpponentTeamName)
+          : null;
 
         if (sportKey === 'basketball_nba') {
           const hasPlayerIdentity = Boolean(playerId || nbaPlayerContext);
@@ -1983,8 +2024,24 @@ export async function buildPropPredictions(
             continue;
           }
         }
+        if (sportKey === 'baseball_mlb') {
+          const hasPlayerIdentity = Boolean(mlbPlayerContext);
+          if (!hasPlayerIdentity) {
+            if (coverage) coverage.missingPlayer++;
+            continue;
+          }
 
-        const isHome = resolvedPlayerTeam === homeTeam;
+          const hasUsableContext = Boolean(mlbPlayerTeamContext || mlbOpponentTeamContext);
+          if (!hasUsableContext) {
+            if (coverage) coverage.missingContext++;
+            continue;
+          }
+        }
+
+        const playerTeamForSide = sportKey === 'baseball_mlb'
+          ? (resolvedMLBPlayerTeam || resolvedPlayerTeam)
+          : resolvedPlayerTeam;
+        const isHome = playerTeamForSide === homeTeam;
         const isB2B = gameIsBackToBack && (
           (isHome && ctx?.homeRest?.isBackToBack) ||
           (!isHome && ctx?.awayRest?.isBackToBack)

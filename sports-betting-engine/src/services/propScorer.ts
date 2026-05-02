@@ -233,8 +233,9 @@ function scoreProp(
 // Score all props -- only use user-accessible books for recommendations
 // ------------------------------------
 
-import { buildPropPredictions } from './propIntelligence';
+import { buildPropPredictions, PropCoverageSummary } from './propIntelligence';
 import { NBAContextSnapshot } from './nbaContextProvider';
+import { MLBContextSnapshot } from './mlbContextProvider';
 import { findPlayerId, getPlayerProfile } from './playerStats';
 import { applyLearnedWeights } from './retroAnalysis';
 
@@ -252,6 +253,7 @@ export async function scoreAllPropsWithIntelligence(
     atsSituations?: Map<string, any>;
     weatherMap?: Map<string, any>;
     nbaContextSnapshot?: NBAContextSnapshot;
+    mlbContextSnapshot?: MLBContextSnapshot;
   },
   learnedWeights: Record<string, number> = {}
 ): Promise<ScoredProp[]> {
@@ -260,6 +262,13 @@ export async function scoreAllPropsWithIntelligence(
     'player_rebounds',
     'player_assists',
     'player_threes',
+  ]);
+  const supportedMLBProjectionMarkets = new Set([
+    'pitcher_strikeouts',
+    'pitcher_hits_allowed',
+    'pitcher_earned_runs',
+    'batter_hits',
+    'batter_total_bases',
   ]);
 
   // Enrich props with team/position using roster lookup (best effort)
@@ -283,7 +292,7 @@ export async function scoreAllPropsWithIntelligence(
   // Build predictions for all props -- one entry per side using correct AggregatedProp fields
   // AggregatedProp has overBestLine/underBestLine/overConsensusLine, not .line/.side
   const propInputs: any[] = [];
-  const coverageSummary = sportKey === 'basketball_nba'
+  const coverageSummary: PropCoverageSummary | null = (sportKey === 'basketball_nba' || sportKey === 'baseball_mlb')
     ? {
         eligible: 0,
         attached: 0,
@@ -295,22 +304,27 @@ export async function scoreAllPropsWithIntelligence(
     : null;
   for (const p of enrichedProps) {
     if (!p.playerName) continue;
-    const marketSupported = supportedNBAProjectionMarkets.has((p.marketKey ?? '').toLowerCase());
+    const normalizedMarketKey = (p.marketKey ?? '').toLowerCase();
+    const marketSupported = sportKey === 'basketball_nba'
+      ? supportedNBAProjectionMarkets.has(normalizedMarketKey)
+      : sportKey === 'baseball_mlb'
+        ? supportedMLBProjectionMarkets.has(normalizedMarketKey)
+        : true;
 
     // Over side
     if (p.overBestPrice !== null && p.overBestPrice !== undefined) {
       const overLine = p.overBestLine ?? p.overConsensusLine ?? null;
-      if (sportKey === 'basketball_nba') {
+      if (coverageSummary) {
         if (!marketSupported) {
-          coverageSummary!.unsupportedMarket++;
+          coverageSummary.unsupportedMarket++;
         } else if (overLine === null) {
-          coverageSummary!.missingLine++;
+          coverageSummary.missingLine++;
         } else {
-          coverageSummary!.eligible++;
+          coverageSummary.eligible++;
         }
       }
-      if (overLine === null || (sportKey === 'basketball_nba' && !marketSupported)) {
-        // Unsupported NBA markets stay unsupported; missing-line props cannot project.
+      if (overLine === null || !marketSupported) {
+        // Unsupported markets stay unsupported; missing-line props cannot project.
       } else {
       propInputs.push({
         playerName: p.playerName,
@@ -333,17 +347,17 @@ export async function scoreAllPropsWithIntelligence(
     // Under side
     if (p.underBestPrice !== null && p.underBestPrice !== undefined) {
       const underLine = p.underBestLine ?? p.overConsensusLine ?? null;
-      if (sportKey === 'basketball_nba') {
+      if (coverageSummary) {
         if (!marketSupported) {
-          coverageSummary!.unsupportedMarket++;
+          coverageSummary.unsupportedMarket++;
         } else if (underLine === null) {
-          coverageSummary!.missingLine++;
+          coverageSummary.missingLine++;
         } else {
-          coverageSummary!.eligible++;
+          coverageSummary.eligible++;
         }
       }
-      if (underLine === null || (sportKey === 'basketball_nba' && !marketSupported)) {
-        // Unsupported NBA markets stay unsupported; missing-line props cannot project.
+      if (underLine === null || !marketSupported) {
+        // Unsupported markets stay unsupported; missing-line props cannot project.
       } else {
       propInputs.push({
         playerName: p.playerName,
@@ -368,12 +382,13 @@ export async function scoreAllPropsWithIntelligence(
     .catch(() => ({ predictions: new Map(), coverage: undefined }));
   const predictions = predictionResult.predictions;
 
-  if (sportKey === 'basketball_nba' && coverageSummary) {
+  if (coverageSummary) {
     coverageSummary.attached = predictionResult.coverage?.attached ?? predictions.size;
     coverageSummary.missingPlayer = predictionResult.coverage?.missingPlayer ?? 0;
     coverageSummary.missingContext = predictionResult.coverage?.missingContext ?? 0;
+    const coverageLabel = sportKey === 'baseball_mlb' ? 'MLB_PRED' : 'NBA_PRED';
     console.log(
-      `  [NBA_PRED] eligible: ${coverageSummary.eligible} | attached: ${coverageSummary.attached} | ` +
+      `  [${coverageLabel}] eligible: ${coverageSummary.eligible} | attached: ${coverageSummary.attached} | ` +
       `missingPlayer: ${coverageSummary.missingPlayer} | unsupportedMarket: ${coverageSummary.unsupportedMarket} | ` +
       `missingLine: ${coverageSummary.missingLine} | missingContext: ${coverageSummary.missingContext}`
     );
