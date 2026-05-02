@@ -1,3 +1,281 @@
+function hasRealMLBNumber(value: number | null | undefined): value is number {
+  return Number.isFinite(value as number) && (value as number) > 0;
+}
+
+function normalizeMLBString(value: string | null | undefined): string {
+  return String(value ?? '').trim().toLowerCase();
+}
+
+function buildMLBContextSignal(
+  type: string,
+  detail: string,
+  side: 'over' | 'under' | 'neutral',
+  scoreContribution: number
+): PropSignal {
+  return {
+    type,
+    detail,
+    impact: 'positive',
+    magnitude: Math.abs(scoreContribution) >= 10 ? 'high' : 'medium',
+    side,
+    scoreContribution,
+  };
+}
+
+function getMLBOpponentPitcherContextFromSnapshot(
+  snapshot: MLBContextSnapshot | null | undefined,
+  opponentTeamContext: MLBTeamContext | null | undefined
+): MLBPlayerContext | null {
+  if (!snapshot || !opponentTeamContext?.probablePitcherId) return null;
+  return snapshot.players.find(player =>
+    player.role === 'pitcher' &&
+    player.id === opponentTeamContext.probablePitcherId &&
+    normalizeMLBString(player.team) === normalizeMLBString(opponentTeamContext.teamName)
+  ) ?? null;
+}
+
+function injectMLBPhase1BSignals(
+  prediction: PropPrediction,
+  prop: {
+    marketKey?: string;
+    playerName: string;
+    side: 'over' | 'under';
+  },
+  playerContext: MLBPlayerContext | null,
+  playerTeamContext: MLBTeamContext | null,
+  opponentTeamContext: MLBTeamContext | null,
+  opponentPitcherContext: MLBPlayerContext | null,
+  snapshot: MLBContextSnapshot | null | undefined
+): PropPrediction {
+  if (!playerContext || !snapshot) return prediction;
+
+  const signals: PropSignal[] = [];
+  let scoreAdjustment = 0;
+  const marketKey = (prop.marketKey ?? '').toLowerCase();
+
+  const addSignal = (signal: PropSignal): void => {
+    signals.push(signal);
+    scoreAdjustment += signal.scoreContribution;
+  };
+
+  if (marketKey === 'pitcher_strikeouts') {
+    const pitcherKRate = playerContext.pitcherKRate;
+    const opponentKRate = opponentTeamContext?.teamStrikeoutRate ?? null;
+    const opponentContactRate = opponentTeamContext?.teamContactRate ?? null;
+    const leagueAvgKRate = snapshot.league.avgPitcherKRate;
+    const leagueAvgOpponentKRate = snapshot.league.avgOpponentKRate;
+    const leagueAvgContactRate = snapshot.league.avgContactRate;
+
+    if (
+      hasRealMLBNumber(pitcherKRate) &&
+      hasRealMLBNumber(opponentKRate) &&
+      hasRealMLBNumber(leagueAvgKRate) &&
+      hasRealMLBNumber(leagueAvgOpponentKRate)
+    ) {
+      const overPositive =
+        pitcherKRate >= leagueAvgKRate * 1.08 &&
+        opponentKRate >= leagueAvgOpponentKRate * 1.05;
+      const underPositive =
+        pitcherKRate <= leagueAvgKRate * 0.92 ||
+        opponentKRate <= leagueAvgOpponentKRate * 0.95;
+
+      if (overPositive && prop.side === 'over') {
+        addSignal(buildMLBContextSignal(
+          'PITCHER_K_RATE_EDGE',
+          `Pitcher K rate ${(pitcherKRate * 100).toFixed(1)}% and opponent K rate ${(opponentKRate * 100).toFixed(1)}% both clear league baselines`,
+          'over',
+          12
+        ));
+      } else if (underPositive && prop.side === 'under') {
+        addSignal(buildMLBContextSignal(
+          'PITCHER_K_RATE_EDGE',
+          `Pitcher K rate ${(pitcherKRate * 100).toFixed(1)}% or opponent K rate ${(opponentKRate * 100).toFixed(1)}% trails league baseline`,
+          'under',
+          10
+        ));
+      }
+    }
+
+    if (
+      prop.side === 'over' &&
+      hasRealMLBNumber(opponentContactRate) &&
+      hasRealMLBNumber(leagueAvgContactRate) &&
+      opponentContactRate <= leagueAvgContactRate * 0.95
+    ) {
+      addSignal(buildMLBContextSignal(
+        'LOW_CONTACT_OPP',
+        `Opponent contact rate ${(opponentContactRate * 100).toFixed(1)}% is materially below league average`,
+        'over',
+        8
+      ));
+    }
+  }
+
+  if (
+    marketKey === 'pitcher_strikeouts' ||
+    marketKey === 'pitcher_hits_allowed' ||
+    marketKey === 'pitcher_earned_runs'
+  ) {
+    if (
+      hasRealMLBNumber(playerContext.projectedInnings) &&
+      hasRealMLBNumber(playerContext.recentAvgInnings) &&
+      hasRealMLBNumber(playerContext.seasonAvgInnings) &&
+      playerContext.recentAvgInnings >= playerContext.seasonAvgInnings * 0.95 &&
+      playerContext.projectedInnings >= 5.0
+    ) {
+      addSignal(buildMLBContextSignal(
+        'INNINGS_STABILITY',
+        `Projected innings ${playerContext.projectedInnings.toFixed(1)} with recent ${playerContext.recentAvgInnings.toFixed(1)} and season ${playerContext.seasonAvgInnings.toFixed(1)} remaining stable`,
+        'neutral',
+        6
+      ));
+    }
+
+    if (
+      marketKey === 'pitcher_strikeouts' &&
+      prop.side === 'over' &&
+      hasRealMLBNumber(playerContext.recentKPerStart) &&
+      hasRealMLBNumber(playerContext.seasonKPerStart) &&
+      playerContext.recentKPerStart >= playerContext.seasonKPerStart * 1.10
+    ) {
+      addSignal(buildMLBContextSignal(
+        'PITCHER_FORM',
+        `Recent K/start ${playerContext.recentKPerStart.toFixed(2)} is above season ${playerContext.seasonKPerStart.toFixed(2)}`,
+        'over',
+        9
+      ));
+    }
+
+    if (
+      (marketKey === 'pitcher_hits_allowed' || marketKey === 'pitcher_earned_runs') &&
+      prop.side === 'under' &&
+      (
+        (
+          hasRealMLBNumber(playerContext.recentHitsAllowedPerStart) &&
+          hasRealMLBNumber(playerContext.seasonHitsAllowedPerStart) &&
+          playerContext.recentHitsAllowedPerStart <= playerContext.seasonHitsAllowedPerStart * 0.90
+        ) ||
+        (
+          hasRealMLBNumber(playerContext.recentERPerStart) &&
+          hasRealMLBNumber(playerContext.seasonERPerStart) &&
+          playerContext.recentERPerStart <= playerContext.seasonERPerStart * 0.90
+        )
+      )
+    ) {
+      addSignal(buildMLBContextSignal(
+        'PITCHER_FORM',
+        `Recent prevention form is better than season baseline for ${playerContext.name}`,
+        'under',
+        9
+      ));
+    }
+  }
+
+  if (marketKey === 'batter_hits' || marketKey === 'batter_total_bases') {
+    const seasonBaseline = marketKey === 'batter_hits'
+      ? playerContext.seasonHitsPerGame
+      : playerContext.seasonTotalBasesPerGame;
+    const recentBaseline = marketKey === 'batter_hits'
+      ? playerContext.recentHitsPerGame
+      : playerContext.recentTotalBasesPerGame;
+
+    if (hasRealMLBNumber(seasonBaseline) && hasRealMLBNumber(recentBaseline)) {
+      if (prop.side === 'over' && recentBaseline >= seasonBaseline * 1.10) {
+        addSignal(buildMLBContextSignal(
+          'BATTER_FORM',
+          `Recent ${marketKey === 'batter_hits' ? 'hits/game' : 'TB/game'} ${recentBaseline.toFixed(2)} is above season ${seasonBaseline.toFixed(2)}`,
+          'over',
+          9
+        ));
+      } else if (prop.side === 'under' && recentBaseline <= seasonBaseline * 0.90) {
+        addSignal(buildMLBContextSignal(
+          'BATTER_FORM',
+          `Recent ${marketKey === 'batter_hits' ? 'hits/game' : 'TB/game'} ${recentBaseline.toFixed(2)} is below season ${seasonBaseline.toFixed(2)}`,
+          'under',
+          9
+        ));
+      }
+    }
+
+    const pitcherHand = opponentTeamContext?.probablePitcherHand ?? opponentPitcherContext?.throwsHand ?? null;
+    const splitBaseline = marketKey === 'batter_hits'
+      ? (pitcherHand === 'L' ? playerContext.splitVsLeftHitsPerGame : pitcherHand === 'R' ? playerContext.splitVsRightHitsPerGame : null)
+      : (pitcherHand === 'L' ? playerContext.splitVsLeftTotalBasesPerGame : pitcherHand === 'R' ? playerContext.splitVsRightTotalBasesPerGame : null);
+
+    if (
+      playerContext.batsHand &&
+      pitcherHand &&
+      hasRealMLBNumber(splitBaseline) &&
+      hasRealMLBNumber(seasonBaseline)
+    ) {
+      if (prop.side === 'over' && splitBaseline >= seasonBaseline * 1.08) {
+        addSignal(buildMLBContextSignal(
+          'PLATOON_EDGE',
+          `Split vs ${pitcherHand}HP (${splitBaseline.toFixed(2)}) is materially above season baseline ${seasonBaseline.toFixed(2)}`,
+          'over',
+          8
+        ));
+      } else if (prop.side === 'under' && splitBaseline <= seasonBaseline * 0.92) {
+        addSignal(buildMLBContextSignal(
+          'PLATOON_EDGE',
+          `Split vs ${pitcherHand}HP (${splitBaseline.toFixed(2)}) is materially below season baseline ${seasonBaseline.toFixed(2)}`,
+          'under',
+          8
+        ));
+      }
+    }
+
+    if (
+      prop.side === 'over' &&
+      opponentPitcherContext &&
+      (
+        (
+          hasRealMLBNumber(opponentPitcherContext.seasonHitsAllowedPerStart) &&
+          hasRealMLBNumber(snapshot.league.avgHitsAllowedPerStart) &&
+          opponentPitcherContext.seasonHitsAllowedPerStart >= snapshot.league.avgHitsAllowedPerStart * 1.10
+        ) ||
+        (
+          hasRealMLBNumber(opponentPitcherContext.seasonERPerStart) &&
+          hasRealMLBNumber(snapshot.league.avgERPerStart) &&
+          opponentPitcherContext.seasonERPerStart >= snapshot.league.avgERPerStart * 1.10
+        )
+      )
+    ) {
+      addSignal(buildMLBContextSignal(
+        'PITCHER_WEAKNESS',
+        `Opposing starter baseline run/hit prevention is worse than league average`,
+        'over',
+        10
+      ));
+    }
+
+    const parkRunFactor = playerTeamContext?.parkRunFactor ?? opponentTeamContext?.parkRunFactor ?? null;
+    const parkHitFactor = playerTeamContext?.parkHitFactor ?? opponentTeamContext?.parkHitFactor ?? null;
+    if (
+      (hasRealMLBNumber(parkRunFactor) || hasRealMLBNumber(parkHitFactor)) &&
+      (
+        (prop.side === 'over' && ((parkRunFactor ?? 0) >= 1.05 || (parkHitFactor ?? 0) >= 1.05)) ||
+        (prop.side === 'under' && ((parkRunFactor ?? 1) <= 0.95 || (parkHitFactor ?? 1) <= 0.95))
+      )
+    ) {
+      addSignal(buildMLBContextSignal(
+        'BALLPARK_FACTOR',
+        `Park factors run ${(parkRunFactor ?? 0).toFixed(2)} / hit ${(parkHitFactor ?? 0).toFixed(2)} align with ${prop.side}`,
+        prop.side,
+        8
+      ));
+    }
+  }
+
+  if (signals.length === 0) return prediction;
+
+  return {
+    ...prediction,
+    signals: [...prediction.signals, ...signals],
+    scoreAdjustment: prediction.scoreAdjustment + scoreAdjustment,
+  };
+}
+
 // ============================================================
 // src/services/propIntelligence.ts
 // Full prop prediction engine
@@ -16,6 +294,8 @@ import {
 } from './nbaContextProvider';
 import {
   MLBContextSnapshot,
+  MLBPlayerContext,
+  MLBTeamContext,
   resolveMLBPlayerContext,
   resolveMLBTeamContext,
 } from './mlbContextProvider';
@@ -2112,6 +2392,9 @@ export async function buildPropPredictions(
         const mlbOpponentTeamContext = sportKey === 'baseball_mlb'
           ? resolveMLBTeamContext(extraIntel?.mlbContextSnapshot, mlbOpponentTeamName)
           : null;
+        const mlbOpponentPitcherContext = sportKey === 'baseball_mlb'
+          ? getMLBOpponentPitcherContextFromSnapshot(extraIntel?.mlbContextSnapshot, mlbOpponentTeamContext)
+          : null;
 
         if (sportKey === 'basketball_nba') {
           const hasPlayerIdentity = Boolean(playerId || nbaPlayerContext);
@@ -2212,8 +2495,16 @@ export async function buildPropPredictions(
         // Inject MLB-specific signals AFTER the base prediction so that
         // NBA/NHL props are never touched.  injectMLBSignals returns the
         // original object unchanged when no MLB context data is present.
-        const finalPrediction = sportKey.includes('baseball')
-          ? injectMLBSignals(prediction, prop, homeTeam, awayTeam, ctx, matchupPkg)
+        const finalPrediction = sportKey === 'baseball_mlb'
+          ? injectMLBPhase1BSignals(
+            prediction,
+            prop,
+            mlbPlayerContext,
+            mlbPlayerTeamContext,
+            mlbOpponentTeamContext,
+            mlbOpponentPitcherContext,
+            extraIntel?.mlbContextSnapshot
+          )
           : prediction;
 
         results.set(key, finalPrediction);

@@ -129,6 +129,17 @@ const NBA_PREDICTIVE_CONTEXT_SIGNALS = new Set([
   'THREE_MATCHUP_EDGE',
 ]);
 
+const MLB_PREDICTIVE_CONTEXT_SIGNALS = new Set([
+  'PITCHER_K_RATE_EDGE',
+  'LOW_CONTACT_OPP',
+  'INNINGS_STABILITY',
+  'PITCHER_FORM',
+  'BATTER_FORM',
+  'PLATOON_EDGE',
+  'PITCHER_WEAKNESS',
+  'BALLPARK_FACTOR',
+]);
+
 function getSideProjectionEdge(
   side: 'Over' | 'Under',
   projectionEdge: number | undefined
@@ -398,7 +409,7 @@ export async function scoreAllPropsWithIntelligence(
   const baseScored = scoreAllProps(props, windowHours, sportKey, contextMap);
 
   return baseScored.map(scored => {
-    const normalizedSide = sportKey === 'basketball_nba'
+    const normalizedSide = (sportKey === 'basketball_nba' || sportKey === 'baseball_mlb')
       ? scored.side.toLowerCase()
       : scored.side;
     const key = `${scored.playerName}__${scored.statType}__${normalizedSide}`;
@@ -423,12 +434,19 @@ export async function scoreAllPropsWithIntelligence(
       .map(s => s.type);
     const strongNonMarketSignalCount = (sportKey === 'basketball_nba'
       ? nonMarketIntelSignals.filter(type => NBA_PREDICTIVE_CONTEXT_SIGNALS.has(type))
-      : nonMarketIntelSignals
+      : sportKey === 'baseball_mlb'
+        ? nonMarketIntelSignals.filter(type => MLB_PREDICTIVE_CONTEXT_SIGNALS.has(type))
+        : nonMarketIntelSignals
     ).length;
 
     const enrichedSignals =
-      (sportKey === 'basketball_nba' || sportKey.includes('baseball')) && nonMarketIntelSignals.length > 0
+      sportKey === 'basketball_nba' && nonMarketIntelSignals.length > 0
         ? [...new Set([...scored.signals, ...nonMarketIntelSignals])]
+        : sportKey === 'baseball_mlb' && nonMarketIntelSignals.length > 0
+          ? [...new Set([
+            ...scored.signals,
+            ...nonMarketIntelSignals.filter(type => MLB_PREDICTIVE_CONTEXT_SIGNALS.has(type)),
+          ])]
         : scored.signals;
 
     // Apply intelligence score adjustment
@@ -863,6 +881,18 @@ export function printTopProps(props: ScoredProp[], sportKey = 'basketball_nba'):
     const posStr = (p as any).position ? ` -- ${(p as any).position}` : '';
     console.log(`  |  ${sportEmoji} ${p.playerName}${teamStr}${posStr}  --  ${p.market}`);
     console.log(`  |  [OK] Bet  : ${p.side.toUpperCase()} ${p.line}`);
+    const predictionSignals = ((p as any).prediction?.signals ?? []) as Array<{ type: string; magnitude: string }>;
+    const nonMarketSignalNames = [...new Set(
+      predictionSignals
+        .filter((s) => !MARKET_STRUCTURE_SIGNALS.has(s.type))
+        .filter((s) => s.magnitude === 'high' || s.magnitude === 'medium')
+        .map((s) => s.type)
+    )];
+    const contextSignalNames = p.sportKey === 'basketball_nba'
+      ? nonMarketSignalNames.filter((name) => NBA_PREDICTIVE_CONTEXT_SIGNALS.has(name))
+      : p.sportKey === 'baseball_mlb'
+        ? nonMarketSignalNames.filter((name) => MLB_PREDICTIVE_CONTEXT_SIGNALS.has(name))
+        : [];
     if (
       p.sportKey === 'basketball_nba' &&
       p.projectedStat !== undefined &&
@@ -877,19 +907,12 @@ export function printTopProps(props: ScoredProp[], sportKey = 'basketball_nba'):
       const edgeConfidence = p.edgeConfidence !== undefined
         ? `${(p.edgeConfidence * 100).toFixed(0)}%`
         : 'n/a';
-      const predictionSignals = ((p as any).prediction?.signals ?? []) as Array<{ type: string; magnitude: string }>;
-      const nonMarketSignalNames = [...new Set(
-        predictionSignals
-          .filter((s) => !MARKET_STRUCTURE_SIGNALS.has(s.type))
-          .filter((s) => s.magnitude === 'high' || s.magnitude === 'medium')
-          .map((s) => s.type)
-      )];
-      const contextSignalNames = nonMarketSignalNames
-        .filter((name) => NBA_PREDICTIVE_CONTEXT_SIGNALS.has(name));
       console.log(`  |  [AI] Projection: ${p.projectedStat} | Line: ${p.line} | Projection Edge: ${projectionEdge}`);
       console.log(`  |  [AI] Model Prob: ${probability} | Implied Prob: ${impliedProbability} | True Edge: ${trueEdge}`);
       console.log(`  |  [AI] Model completeness: ${((p.modelCompleteness ?? 0) * 100).toFixed(0)}% | Minutes confidence: ${((p.nbaMinutesConfidence ?? 0) * 100).toFixed(0)}% | Edge confidence: ${edgeConfidence}`);
       console.log(`  |  [AI] Non-market Signals: ${nonMarketSignalNames.length}${nonMarketSignalNames.length ? ` -> ${nonMarketSignalNames.join(', ')}` : ''}`);
+      console.log(`  |  [AI] Context Signals: ${contextSignalNames.length}${contextSignalNames.length ? ` -> ${contextSignalNames.join(', ')}` : ''}`);
+    } else if (p.sportKey === 'baseball_mlb') {
       console.log(`  |  [AI] Context Signals: ${contextSignalNames.length}${contextSignalNames.length ? ` -> ${contextSignalNames.join(', ')}` : ''}`);
     }
     const brProp = parseFloat(process.env.BANKROLL ?? '0');

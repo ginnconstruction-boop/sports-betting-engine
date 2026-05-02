@@ -26,17 +26,50 @@ export interface MLBPlayerContext {
   seasonPitcherStrikeouts?: number | null;
   seasonPitcherHitsAllowed?: number | null;
   seasonPitcherEarnedRuns?: number | null;
+  seasonPitcherBattersFaced?: number | null;
+  seasonHitsPerGame?: number | null;
+  seasonTotalBasesPerGame?: number | null;
+  recentHitsPerGame?: number | null;
+  recentTotalBasesPerGame?: number | null;
+  splitVsLeftHitsPerGame?: number | null;
+  splitVsRightHitsPerGame?: number | null;
+  splitVsLeftTotalBasesPerGame?: number | null;
+  splitVsRightTotalBasesPerGame?: number | null;
+  seasonAvgInnings?: number | null;
+  recentAvgInnings?: number | null;
+  projectedInnings?: number | null;
+  seasonKPerStart?: number | null;
+  recentKPerStart?: number | null;
+  seasonHitsAllowedPerStart?: number | null;
+  recentHitsAllowedPerStart?: number | null;
+  seasonERPerStart?: number | null;
+  recentERPerStart?: number | null;
+  pitcherKRate?: number | null;
 }
 
 export interface MLBTeamContext {
+  teamId?: number | null;
   teamName: string;
   probablePitcher?: string | null;
+  probablePitcherId?: number | null;
+  probablePitcherHand?: 'L' | 'R' | null;
   lineupConfirmed: boolean;
+  teamStrikeoutRate?: number | null;
+  teamContactRate?: number | null;
+  parkRunFactor?: number | null;
+  parkHitFactor?: number | null;
 }
 
 export interface MLBContextSnapshot {
   players: MLBPlayerContext[];
   teams: MLBTeamContext[];
+  league: {
+    avgPitcherKRate: number | null;
+    avgOpponentKRate: number | null;
+    avgContactRate: number | null;
+    avgHitsAllowedPerStart: number | null;
+    avgERPerStart: number | null;
+  };
   meta: {
     players: number;
     pitchers: number;
@@ -48,10 +81,59 @@ export interface MLBContextSnapshot {
 }
 
 const CACHE_TTL_MS = 20 * 60 * 1000;
+const RECENT_GAMES_COUNT = 5;
+const RECENT_LOOKBACK_DAYS = 18;
+
+const MLB_PARK_FACTORS: Record<string, { run: number; hit: number }> = {
+  'Colorado Rockies': { run: 1.16, hit: 1.12 },
+  'Boston Red Sox': { run: 1.09, hit: 1.08 },
+  'Cincinnati Reds': { run: 1.08, hit: 1.06 },
+  'Arizona Diamondbacks': { run: 1.07, hit: 1.05 },
+  'Baltimore Orioles': { run: 1.06, hit: 1.05 },
+  'Philadelphia Phillies': { run: 1.05, hit: 1.04 },
+  'New York Yankees': { run: 1.04, hit: 1.03 },
+  'Chicago Cubs': { run: 1.03, hit: 1.03 },
+  'Toronto Blue Jays': { run: 1.02, hit: 1.02 },
+  'Atlanta Braves': { run: 0.97, hit: 0.98 },
+  'Los Angeles Dodgers': { run: 0.97, hit: 0.98 },
+  'New York Mets': { run: 0.96, hit: 0.97 },
+  'Seattle Mariners': { run: 0.94, hit: 0.95 },
+  'Athletics': { run: 0.94, hit: 0.95 },
+  'San Francisco Giants': { run: 0.93, hit: 0.94 },
+  'San Diego Padres': { run: 0.93, hit: 0.94 },
+  'Miami Marlins': { run: 0.92, hit: 0.93 },
+};
 
 type CacheEntry = {
   expiresAt: number;
   snapshot: MLBContextSnapshot;
+};
+
+type BatterRecentAccumulator = {
+  games: number;
+  hits: number;
+  totalBases: number;
+  vsLeftGames: number;
+  vsLeftHits: number;
+  vsLeftTotalBases: number;
+  vsRightGames: number;
+  vsRightHits: number;
+  vsRightTotalBases: number;
+};
+
+type PitcherRecentAccumulator = {
+  starts: number;
+  outs: number;
+  strikeouts: number;
+  hitsAllowed: number;
+  earnedRuns: number;
+};
+
+type TeamRecentAccumulator = {
+  games: number;
+  atBats: number;
+  plateAppearances: number;
+  strikeouts: number;
 };
 
 const contextCache = new Map<string, CacheEntry>();
@@ -109,20 +191,65 @@ function parseNullableNumber(value: any): number | null {
   return Number.isFinite(parsed) ? parsed : null;
 }
 
+function roundToThousandths(value: number): number {
+  return Math.round(value * 1000) / 1000;
+}
+
+function safeDivide(numerator: number | null | undefined, denominator: number | null | undefined): number | null {
+  if (!Number.isFinite(numerator as number) || !Number.isFinite(denominator as number) || !denominator) {
+    return null;
+  }
+  return roundToThousandths((numerator as number) / (denominator as number));
+}
+
+function avgOrNull(values: Array<number | null | undefined>): number | null {
+  const valid = values.filter((value): value is number => Number.isFinite(value as number));
+  if (valid.length === 0) return null;
+  return roundToThousandths(valid.reduce((sum, value) => sum + value, 0) / valid.length);
+}
+
+function toApiDate(date: Date): string {
+  return date.toISOString().slice(0, 10);
+}
+
+function subtractDays(dateStr: string, days: number): string {
+  const date = new Date(`${dateStr}T12:00:00Z`);
+  date.setUTCDate(date.getUTCDate() - days);
+  return toApiDate(date);
+}
+
 function extractSeasonBaselines(player: any): Partial<MLBPlayerContext> {
   const batting = player?.seasonStats?.batting ?? {};
   const pitching = player?.seasonStats?.pitching ?? {};
+  const seasonGamesPlayed = parseNullableNumber(batting?.gamesPlayed ?? pitching?.gamesPlayed);
+  const seasonGamesStarted = parseNullableNumber(pitching?.gamesStarted);
+  const seasonPlateAppearances = parseNullableNumber(batting?.plateAppearances);
+  const seasonHits = parseNullableNumber(batting?.hits);
+  const seasonTotalBases = parseNullableNumber(batting?.totalBases);
+  const seasonPitchingOuts = parseNullableNumber(pitching?.outs);
+  const seasonPitcherStrikeouts = parseNullableNumber(pitching?.strikeOuts);
+  const seasonPitcherHitsAllowed = parseNullableNumber(pitching?.hits);
+  const seasonPitcherEarnedRuns = parseNullableNumber(pitching?.earnedRuns);
+  const seasonPitcherBattersFaced = parseNullableNumber(pitching?.battersFaced);
 
   return {
-    seasonGamesPlayed: parseNullableNumber(batting?.gamesPlayed ?? pitching?.gamesPlayed),
-    seasonGamesStarted: parseNullableNumber(pitching?.gamesStarted),
-    seasonPlateAppearances: parseNullableNumber(batting?.plateAppearances),
-    seasonHits: parseNullableNumber(batting?.hits),
-    seasonTotalBases: parseNullableNumber(batting?.totalBases),
-    seasonPitchingOuts: parseNullableNumber(pitching?.outs),
-    seasonPitcherStrikeouts: parseNullableNumber(pitching?.strikeOuts),
-    seasonPitcherHitsAllowed: parseNullableNumber(pitching?.hits),
-    seasonPitcherEarnedRuns: parseNullableNumber(pitching?.earnedRuns),
+    seasonGamesPlayed,
+    seasonGamesStarted,
+    seasonPlateAppearances,
+    seasonHits,
+    seasonTotalBases,
+    seasonPitchingOuts,
+    seasonPitcherStrikeouts,
+    seasonPitcherHitsAllowed,
+    seasonPitcherEarnedRuns,
+    seasonPitcherBattersFaced,
+    seasonHitsPerGame: safeDivide(seasonHits, seasonGamesPlayed),
+    seasonTotalBasesPerGame: safeDivide(seasonTotalBases, seasonGamesPlayed),
+    seasonAvgInnings: safeDivide(seasonPitchingOuts, Math.max((seasonGamesStarted ?? 0), 1) * 3),
+    seasonKPerStart: safeDivide(seasonPitcherStrikeouts, seasonGamesStarted),
+    seasonHitsAllowedPerStart: safeDivide(seasonPitcherHitsAllowed, seasonGamesStarted),
+    seasonERPerStart: safeDivide(seasonPitcherEarnedRuns, seasonGamesStarted),
+    pitcherKRate: safeDivide(seasonPitcherStrikeouts, seasonPitcherBattersFaced),
   };
 }
 
@@ -141,22 +268,31 @@ function addPlayerIfMissing(players: MLBPlayerContext[], next: MLBPlayerContext)
   players.push(next);
 }
 
+function getPlayerById(teamNode: any, playerId: number | null | undefined): any | null {
+  if (!playerId) return null;
+  return teamNode?.players?.[`ID${playerId}`] ?? null;
+}
+
 function extractGamePlayers(feed: any, homeTeam: string, awayTeam: string): MLBPlayerContext[] {
   const players: MLBPlayerContext[] = [];
   const sides = [
-    { teamName: homeTeam, node: feed?.liveData?.boxscore?.teams?.home, probableStarter: true },
-    { teamName: awayTeam, node: feed?.liveData?.boxscore?.teams?.away, probableStarter: true },
+    { teamName: homeTeam, node: feed?.liveData?.boxscore?.teams?.home },
+    { teamName: awayTeam, node: feed?.liveData?.boxscore?.teams?.away },
   ];
 
   for (const side of sides) {
     const playerMap = side.node?.players ?? {};
+    const teamPitchers = Array.isArray(side.node?.pitchers) ? side.node.pitchers : [];
+    const probablePitcherId = teamPitchers.length > 0 ? teamPitchers[0] : null;
+
     for (const player of Object.values(playerMap) as any[]) {
       const name = player?.person?.fullName ?? '';
       if (!name) continue;
       const positionType = String(player?.position?.type ?? '').toLowerCase();
       const role: MLBPlayerContext['role'] = positionType.includes('pitcher') ? 'pitcher' : 'batter';
+      const playerId = player?.person?.id ?? null;
       addPlayerIfMissing(players, {
-        id: player?.person?.id ?? null,
+        id: playerId,
         name,
         team: side.teamName,
         role,
@@ -164,7 +300,7 @@ function extractGamePlayers(feed: any, homeTeam: string, awayTeam: string): MLBP
         throwsHand: player?.pitchHand?.code ?? null,
         lineupSpot: parseLineupSpot(player?.battingOrder),
         starterConfirmed: Boolean(player?.battingOrder) || Boolean(player?.stats?.batting) || Boolean(player?.stats?.pitching),
-        probableStarter: role === 'pitcher' ? Boolean(player?.gameStatus?.isCurrentPitcher) || Boolean(player?.stats?.pitching) : false,
+        probableStarter: role === 'pitcher' ? probablePitcherId === playerId : false,
         ...extractSeasonBaselines(player),
       });
     }
@@ -175,23 +311,36 @@ function extractGamePlayers(feed: any, homeTeam: string, awayTeam: string): MLBP
 
 function extractTeamContexts(feed: any, homeTeam: string, awayTeam: string): MLBTeamContext[] {
   const gameData = feed?.gameData ?? {};
-  const probablePitchers = gameData?.probablePitchers ?? {};
-  const homeLineup = feed?.liveData?.boxscore?.teams?.home?.players ?? {};
-  const awayLineup = feed?.liveData?.boxscore?.teams?.away?.players ?? {};
-
-  const homeLineupConfirmed = Object.values(homeLineup).some((player: any) => Boolean(player?.battingOrder));
-  const awayLineupConfirmed = Object.values(awayLineup).some((player: any) => Boolean(player?.battingOrder));
+  const homeNode = feed?.liveData?.boxscore?.teams?.home;
+  const awayNode = feed?.liveData?.boxscore?.teams?.away;
+  const homePitcherId = Array.isArray(homeNode?.pitchers) && homeNode.pitchers.length > 0 ? homeNode.pitchers[0] : null;
+  const awayPitcherId = Array.isArray(awayNode?.pitchers) && awayNode.pitchers.length > 0 ? awayNode.pitchers[0] : null;
+  const homePitcher = getPlayerById(homeNode, homePitcherId);
+  const awayPitcher = getPlayerById(awayNode, awayPitcherId);
+  const homeLineupConfirmed = Object.values(homeNode?.players ?? {}).some((player: any) => Boolean(player?.battingOrder));
+  const awayLineupConfirmed = Object.values(awayNode?.players ?? {}).some((player: any) => Boolean(player?.battingOrder));
+  const homeParkFactor = MLB_PARK_FACTORS[homeTeam] ?? null;
 
   return [
     {
+      teamId: parseNullableNumber(gameData?.teams?.home?.id),
       teamName: homeTeam,
-      probablePitcher: probablePitchers?.home?.fullName ?? null,
+      probablePitcher: homePitcher?.person?.fullName ?? gameData?.probablePitchers?.home?.fullName ?? null,
+      probablePitcherId: homePitcherId,
+      probablePitcherHand: homePitcher?.pitchHand?.code ?? null,
       lineupConfirmed: homeLineupConfirmed,
+      parkRunFactor: homeParkFactor?.run ?? null,
+      parkHitFactor: homeParkFactor?.hit ?? null,
     },
     {
+      teamId: parseNullableNumber(gameData?.teams?.away?.id),
       teamName: awayTeam,
-      probablePitcher: probablePitchers?.away?.fullName ?? null,
+      probablePitcher: awayPitcher?.person?.fullName ?? gameData?.probablePitchers?.away?.fullName ?? null,
+      probablePitcherId: awayPitcherId,
+      probablePitcherHand: awayPitcher?.pitchHand?.code ?? null,
       lineupConfirmed: awayLineupConfirmed,
+      parkRunFactor: homeParkFactor?.run ?? null,
+      parkHitFactor: homeParkFactor?.hit ?? null,
     },
   ];
 }
@@ -214,11 +363,266 @@ function findScheduleGame(scheduleData: any, homeTeam: string, awayTeam: string)
   return null;
 }
 
+function accumulateBatterRecent(
+  accumulators: Map<string, BatterRecentAccumulator>,
+  player: any,
+  teamName: string,
+  opposingStarterHand: 'L' | 'R' | null
+): void {
+  const stats = player?.stats?.batting;
+  if (!stats) return;
+  const plateAppearances = parseNullableNumber(stats.plateAppearances);
+  const atBats = parseNullableNumber(stats.atBats);
+  if ((plateAppearances ?? 0) <= 0 && (atBats ?? 0) <= 0) return;
+
+  const key = `${normalizeName(player?.person?.fullName ?? '')}__${normalizeName(teamName)}`;
+  if (!key.startsWith('__')) {
+    const existing = accumulators.get(key) ?? {
+      games: 0,
+      hits: 0,
+      totalBases: 0,
+      vsLeftGames: 0,
+      vsLeftHits: 0,
+      vsLeftTotalBases: 0,
+      vsRightGames: 0,
+      vsRightHits: 0,
+      vsRightTotalBases: 0,
+    };
+    existing.games += 1;
+    existing.hits += parseNullableNumber(stats.hits) ?? 0;
+    existing.totalBases += parseNullableNumber(stats.totalBases) ?? 0;
+    if (opposingStarterHand === 'L') {
+      existing.vsLeftGames += 1;
+      existing.vsLeftHits += parseNullableNumber(stats.hits) ?? 0;
+      existing.vsLeftTotalBases += parseNullableNumber(stats.totalBases) ?? 0;
+    } else if (opposingStarterHand === 'R') {
+      existing.vsRightGames += 1;
+      existing.vsRightHits += parseNullableNumber(stats.hits) ?? 0;
+      existing.vsRightTotalBases += parseNullableNumber(stats.totalBases) ?? 0;
+    }
+    accumulators.set(key, existing);
+  }
+}
+
+function accumulatePitcherRecent(
+  accumulators: Map<string, PitcherRecentAccumulator>,
+  player: any,
+  teamName: string
+): void {
+  const stats = player?.stats?.pitching;
+  if (!stats) return;
+  const starts = parseNullableNumber(stats.gamesStarted);
+  const outs = parseNullableNumber(stats.outs);
+  if ((starts ?? 0) < 1 || (outs ?? 0) <= 0) return;
+
+  const key = `${normalizeName(player?.person?.fullName ?? '')}__${normalizeName(teamName)}`;
+  if (!key.startsWith('__')) {
+    const existing = accumulators.get(key) ?? {
+      starts: 0,
+      outs: 0,
+      strikeouts: 0,
+      hitsAllowed: 0,
+      earnedRuns: 0,
+    };
+    existing.starts += 1;
+    existing.outs += outs ?? 0;
+    existing.strikeouts += parseNullableNumber(stats.strikeOuts) ?? 0;
+    existing.hitsAllowed += parseNullableNumber(stats.hits) ?? 0;
+    existing.earnedRuns += parseNullableNumber(stats.earnedRuns) ?? 0;
+    accumulators.set(key, existing);
+  }
+}
+
+function accumulateTeamRecent(
+  accumulators: Map<string, TeamRecentAccumulator>,
+  teamNode: any,
+  teamName: string
+): void {
+  const key = normalizeName(teamName);
+  if (!key) return;
+  const existing = accumulators.get(key) ?? {
+    games: 0,
+    atBats: 0,
+    plateAppearances: 0,
+    strikeouts: 0,
+  };
+
+  let seenBattingGame = false;
+  for (const player of Object.values(teamNode?.players ?? {}) as any[]) {
+    const batting = player?.stats?.batting;
+    if (!batting) continue;
+    const plateAppearances = parseNullableNumber(batting.plateAppearances);
+    const atBats = parseNullableNumber(batting.atBats);
+    if ((plateAppearances ?? 0) <= 0 && (atBats ?? 0) <= 0) continue;
+    seenBattingGame = true;
+    existing.atBats += atBats ?? 0;
+    existing.plateAppearances += plateAppearances ?? 0;
+    existing.strikeouts += parseNullableNumber(batting.strikeOuts) ?? 0;
+  }
+
+  if (seenBattingGame) {
+    existing.games += 1;
+    accumulators.set(key, existing);
+  }
+}
+
+function getStarterHand(teamNode: any): 'L' | 'R' | null {
+  const starterId = Array.isArray(teamNode?.pitchers) && teamNode.pitchers.length > 0
+    ? teamNode.pitchers[0]
+    : null;
+  const starter = getPlayerById(teamNode, starterId);
+  return starter?.pitchHand?.code ?? null;
+}
+
+async function buildRecentStats(
+  teams: MLBTeamContext[],
+  slateDate: string
+): Promise<{
+  batterRecent: Map<string, BatterRecentAccumulator>;
+  pitcherRecent: Map<string, PitcherRecentAccumulator>;
+  teamRecent: Map<string, TeamRecentAccumulator>;
+  fallback: number;
+}> {
+  const recentStart = subtractDays(slateDate, RECENT_LOOKBACK_DAYS);
+  const recentEnd = subtractDays(slateDate, 1);
+  const recentSchedules = new Map<string, any>();
+  let fallback = 0;
+
+  await Promise.all(teams
+    .filter(team => team.teamId)
+    .map(async (team) => {
+      try {
+        const url = `https://statsapi.mlb.com/api/v1/schedule?sportId=1&teamId=${team.teamId}&startDate=${recentStart}&endDate=${recentEnd}`;
+        recentSchedules.set(team.teamName, await fetchJson(url));
+      } catch {
+        fallback++;
+      }
+    }));
+
+  const gamePks = new Set<number>();
+  for (const team of teams) {
+    const schedule = recentSchedules.get(team.teamName);
+    const games = (Array.isArray(schedule?.dates) ? schedule.dates : [])
+      .flatMap((dateNode: any) => Array.isArray(dateNode?.games) ? dateNode.games : [])
+      .filter((game: any) => game?.status?.abstractGameState === 'Final')
+      .sort((a: any, b: any) => String(b.gameDate).localeCompare(String(a.gameDate)))
+      .slice(0, RECENT_GAMES_COUNT);
+    for (const game of games) {
+      if (game?.gamePk) gamePks.add(game.gamePk);
+    }
+  }
+
+  const feeds = new Map<number, any>();
+  await Promise.all(Array.from(gamePks).map(async (gamePk) => {
+    try {
+      feeds.set(gamePk, await fetchJson(`https://statsapi.mlb.com/api/v1.1/game/${gamePk}/feed/live`));
+    } catch {
+      fallback++;
+    }
+  }));
+
+  const batterRecent = new Map<string, BatterRecentAccumulator>();
+  const pitcherRecent = new Map<string, PitcherRecentAccumulator>();
+  const teamRecent = new Map<string, TeamRecentAccumulator>();
+
+  for (const feed of feeds.values()) {
+    const homeName = feed?.gameData?.teams?.home?.name ?? '';
+    const awayName = feed?.gameData?.teams?.away?.name ?? '';
+    const homeNode = feed?.liveData?.boxscore?.teams?.home;
+    const awayNode = feed?.liveData?.boxscore?.teams?.away;
+    if (!homeName || !awayName || !homeNode || !awayNode) continue;
+
+    const awayStarterHand = getStarterHand(awayNode);
+    const homeStarterHand = getStarterHand(homeNode);
+
+    for (const player of Object.values(homeNode.players ?? {}) as any[]) {
+      const roleType = String(player?.position?.type ?? '').toLowerCase();
+      if (roleType.includes('pitcher')) {
+        accumulatePitcherRecent(pitcherRecent, player, homeName);
+      } else {
+        accumulateBatterRecent(batterRecent, player, homeName, awayStarterHand);
+      }
+    }
+
+    for (const player of Object.values(awayNode.players ?? {}) as any[]) {
+      const roleType = String(player?.position?.type ?? '').toLowerCase();
+      if (roleType.includes('pitcher')) {
+        accumulatePitcherRecent(pitcherRecent, player, awayName);
+      } else {
+        accumulateBatterRecent(batterRecent, player, awayName, homeStarterHand);
+      }
+    }
+
+    accumulateTeamRecent(teamRecent, homeNode, homeName);
+    accumulateTeamRecent(teamRecent, awayNode, awayName);
+  }
+
+  return { batterRecent, pitcherRecent, teamRecent, fallback };
+}
+
+function mergeRecentStats(
+  players: MLBPlayerContext[],
+  teams: MLBTeamContext[],
+  batterRecent: Map<string, BatterRecentAccumulator>,
+  pitcherRecent: Map<string, PitcherRecentAccumulator>,
+  teamRecent: Map<string, TeamRecentAccumulator>
+): void {
+  for (const player of players) {
+    if (player.role === 'batter') {
+      const recent = batterRecent.get(`${normalizeName(player.name)}__${normalizeName(player.team)}`);
+      if (!recent || recent.games <= 0) continue;
+      player.recentHitsPerGame = safeDivide(recent.hits, recent.games);
+      player.recentTotalBasesPerGame = safeDivide(recent.totalBases, recent.games);
+      player.splitVsLeftHitsPerGame = safeDivide(recent.vsLeftHits, recent.vsLeftGames);
+      player.splitVsRightHitsPerGame = safeDivide(recent.vsRightHits, recent.vsRightGames);
+      player.splitVsLeftTotalBasesPerGame = safeDivide(recent.vsLeftTotalBases, recent.vsLeftGames);
+      player.splitVsRightTotalBasesPerGame = safeDivide(recent.vsRightTotalBases, recent.vsRightGames);
+      continue;
+    }
+
+    const recent = pitcherRecent.get(`${normalizeName(player.name)}__${normalizeName(player.team)}`);
+    if (!recent || recent.starts <= 0) continue;
+    player.recentAvgInnings = safeDivide(recent.outs, recent.starts * 3);
+    player.projectedInnings = avgOrNull([player.recentAvgInnings, player.seasonAvgInnings]);
+    player.recentKPerStart = safeDivide(recent.strikeouts, recent.starts);
+    player.recentHitsAllowedPerStart = safeDivide(recent.hitsAllowed, recent.starts);
+    player.recentERPerStart = safeDivide(recent.earnedRuns, recent.starts);
+  }
+
+  for (const team of teams) {
+    const recent = teamRecent.get(normalizeName(team.teamName));
+    if (!recent || recent.games <= 0) continue;
+    team.teamStrikeoutRate = safeDivide(recent.strikeouts, recent.plateAppearances);
+    const nonStrikeoutAtBats = recent.atBats - recent.strikeouts;
+    team.teamContactRate = safeDivide(nonStrikeoutAtBats, recent.atBats);
+  }
+}
+
+function computeLeagueAverages(
+  players: MLBPlayerContext[],
+  teams: MLBTeamContext[]
+): MLBContextSnapshot['league'] {
+  return {
+    avgPitcherKRate: avgOrNull(players.filter(player => player.role === 'pitcher').map(player => player.pitcherKRate)),
+    avgOpponentKRate: avgOrNull(teams.map(team => team.teamStrikeoutRate)),
+    avgContactRate: avgOrNull(teams.map(team => team.teamContactRate)),
+    avgHitsAllowedPerStart: avgOrNull(players.filter(player => player.role === 'pitcher').map(player => player.seasonHitsAllowedPerStart)),
+    avgERPerStart: avgOrNull(players.filter(player => player.role === 'pitcher').map(player => player.seasonERPerStart)),
+  };
+}
+
 export async function buildMLBContextForSlate(games: MLBContextGame[]): Promise<MLBContextSnapshot> {
   if (games.length === 0) {
     return {
       players: [],
       teams: [],
+      league: {
+        avgPitcherKRate: null,
+        avgOpponentKRate: null,
+        avgContactRate: null,
+        avgHitsAllowedPerStart: null,
+        avgERPerStart: null,
+      },
       meta: { players: 0, pitchers: 0, teams: 0, lineup: 0, matchup: 0, fallback: 0 },
     };
   }
@@ -277,9 +681,16 @@ export async function buildMLBContextForSlate(games: MLBContextGame[]): Promise<
     }
   }
 
+  const slateDate = uniqueDates.sort()[0] ?? toApiDate(new Date());
+  const recentStats = await buildRecentStats(teams, slateDate);
+  fallback += recentStats.fallback;
+
+  mergeRecentStats(players, teams, recentStats.batterRecent, recentStats.pitcherRecent, recentStats.teamRecent);
+
   const snapshot: MLBContextSnapshot = {
     players,
     teams,
+    league: computeLeagueAverages(players, teams),
     meta: {
       players: players.filter(player => player.role === 'batter').length,
       pitchers: players.filter(player => player.role === 'pitcher').length,
