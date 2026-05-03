@@ -594,6 +594,22 @@ export async function scoreAllPropsWithIntelligence(
       }
     }
 
+    const shouldSuppressNBAMismatch =
+      sportKey === 'basketball_nba' &&
+      projectedStat !== undefined &&
+      projectionEdge !== undefined &&
+      probability !== undefined &&
+      trueEdge !== undefined &&
+      (
+        sideProjectionEdge <= -1.0 ||
+        trueEdge <= -0.05 ||
+        probability + 0.05 < impliedProbability
+      );
+
+    if (shouldSuppressNBAMismatch) {
+      return null;
+    }
+
     return {
       ...scored,
       score:        finalScore,
@@ -619,7 +635,7 @@ export async function scoreAllPropsWithIntelligence(
       signals:      enrichedSignals,
       signalCount:  enrichedSignals.length,
     };
-  }).sort((a, b) => b.score - a.score);
+  }).filter((p): p is ScoredProp => p !== null).sort((a, b) => b.score - a.score);
 }
 
 export function scoreAllProps(
