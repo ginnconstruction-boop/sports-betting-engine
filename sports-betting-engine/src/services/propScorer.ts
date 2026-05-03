@@ -281,6 +281,7 @@ export async function scoreAllPropsWithIntelligence(
     'batter_hits',
     'batter_total_bases',
   ]);
+  const userBookKeys = getUserBookKeys();
 
   // Enrich props with team/position using roster lookup (best effort)
   const enrichedProps = await Promise.all(props.map(async (prop) => {
@@ -321,10 +322,18 @@ export async function scoreAllPropsWithIntelligence(
       : sportKey === 'baseball_mlb'
         ? supportedMLBProjectionMarkets.has(normalizedMarketKey)
         : true;
+    const overUserOffers = p.overOffers
+      .filter(o => userBookKeys.includes(o.bookmakerKey) && o.price !== null)
+      .sort((a, b) => b.price - a.price);
+    const underUserOffers = p.underOffers
+      .filter(o => userBookKeys.includes(o.bookmakerKey) && o.price !== null)
+      .sort((a, b) => b.price - a.price);
+    const bestOverUserOffer = overUserOffers[0] ?? null;
+    const bestUnderUserOffer = underUserOffers[0] ?? null;
 
     // Over side
-    if (p.overBestPrice !== null && p.overBestPrice !== undefined) {
-      const overLine = p.overBestLine ?? p.overConsensusLine ?? null;
+    if (bestOverUserOffer && bestOverUserOffer.price !== null && bestOverUserOffer.price !== undefined) {
+      const overLine = bestOverUserOffer.line ?? p.overConsensusLine ?? null;
       if (coverageSummary) {
         if (!marketSupported) {
           coverageSummary.unsupportedMarket++;
@@ -344,7 +353,7 @@ export async function scoreAllPropsWithIntelligence(
         statType: p.marketKey,
         marketKey: p.marketKey,
         postedLine: overLine,
-        postedPrice: p.overBestPrice ?? -110,
+        postedPrice: bestOverUserOffer.price ?? -110,
         side: 'over' as const,
         eventId: p.eventId,
         homeTeam: p.homeTeam,
@@ -356,8 +365,8 @@ export async function scoreAllPropsWithIntelligence(
     }
 
     // Under side
-    if (p.underBestPrice !== null && p.underBestPrice !== undefined) {
-      const underLine = p.underBestLine ?? p.overConsensusLine ?? null;
+    if (bestUnderUserOffer && bestUnderUserOffer.price !== null && bestUnderUserOffer.price !== undefined) {
+      const underLine = bestUnderUserOffer.line ?? p.overConsensusLine ?? null;
       if (coverageSummary) {
         if (!marketSupported) {
           coverageSummary.unsupportedMarket++;
@@ -377,7 +386,7 @@ export async function scoreAllPropsWithIntelligence(
         statType: p.marketKey,
         marketKey: p.marketKey,
         postedLine: underLine,
-        postedPrice: p.underBestPrice ?? -110,
+        postedPrice: bestUnderUserOffer.price ?? -110,
         side: 'under' as const,
         eventId: p.eventId,
         homeTeam: p.homeTeam,
