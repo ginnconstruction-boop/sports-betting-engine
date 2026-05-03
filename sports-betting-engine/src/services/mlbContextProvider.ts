@@ -56,6 +56,8 @@ export interface MLBTeamContext {
   probablePitcherId?: number | null;
   probablePitcherHand?: 'L' | 'R' | null;
   lineupConfirmed: boolean;
+  lineupConfidence: 'confirmed' | 'partial' | 'missing';
+  lineupMissingReason?: string | null;
   teamStrikeoutRate?: number | null;
   teamContactRate?: number | null;
   lineupStrikeoutRate?: number | null;
@@ -80,8 +82,18 @@ export interface MLBContextSnapshot {
     pitchers: number;
     teams: number;
     lineup: number;
+    lineupConfirmed: number;
+    lineupPartial: number;
+    lineupMissing: number;
+    pitcherHandResolved: number;
+    pitcherHandTotal: number;
     matchup: number;
     fallback: number;
+    lineupMissingDetails: Array<{
+      teamName: string;
+      opponentTeam: string;
+      reason: string;
+    }>;
   };
 }
 
@@ -342,13 +354,42 @@ function getLineupPlayers(teamNode: any): any[] {
 }
 
 function computeLineupRates(teamNode: any): {
+  confidence: 'confirmed' | 'partial' | 'missing';
+  reason: string | null;
   strikeoutRate: number | null;
   contactRate: number | null;
   batterCount: number;
 } {
+  const allPlayers = Object.values(teamNode?.players ?? {}) as any[];
+  const boxscorePlayers = allPlayers.filter((player: any) => Boolean(player?.person?.id));
   const lineupPlayers = getLineupPlayers(teamNode);
+  const uniqueSpots = new Set(
+    lineupPlayers
+      .map((player: any) => parseLineupSpot(player?.battingOrder))
+      .filter((spot): spot is number => Number.isFinite(spot as number))
+  );
+  const hasOrderedLineup = uniqueSpots.size > 0;
+  const confidence: 'confirmed' | 'partial' | 'missing' =
+    uniqueSpots.size >= 9
+      ? 'confirmed'
+      : uniqueSpots.size > 0
+        ? 'partial'
+        : 'missing';
+  const reason =
+    confidence !== 'missing'
+      ? null
+      : boxscorePlayers.length === 0
+        ? 'no liveData boxscore players found'
+        : 'no battingOrder/liveData boxscore players found';
+
   if (lineupPlayers.length === 0) {
-    return { strikeoutRate: null, contactRate: null, batterCount: 0 };
+    return {
+      confidence,
+      reason,
+      strikeoutRate: null,
+      contactRate: null,
+      batterCount: 0,
+    };
   }
 
   let totalPlateAppearances = 0;
@@ -364,6 +405,8 @@ function computeLineupRates(teamNode: any): {
 
   const nonStrikeoutAtBats = totalAtBats - totalStrikeouts;
   return {
+    confidence: hasOrderedLineup ? confidence : 'missing',
+    reason,
     strikeoutRate: safeDivide(totalStrikeouts, totalPlateAppearances),
     contactRate: safeDivide(nonStrikeoutAtBats, totalAtBats),
     batterCount: lineupPlayers.length,
@@ -416,8 +459,6 @@ function extractTeamContexts(feed: any, homeTeam: string, awayTeam: string): MLB
   const awayPitcher = getPlayerById(awayNode, awayPitcherId);
   const homeLineup = computeLineupRates(homeNode);
   const awayLineup = computeLineupRates(awayNode);
-  const homeLineupConfirmed = homeLineup.batterCount >= 7;
-  const awayLineupConfirmed = awayLineup.batterCount >= 7;
   const homeParkFactor = MLB_PARK_FACTORS[homeTeam] ?? null;
 
   return [
@@ -427,7 +468,9 @@ function extractTeamContexts(feed: any, homeTeam: string, awayTeam: string): MLB
       probablePitcher: homePitcher?.person?.fullName ?? gameData?.probablePitchers?.home?.fullName ?? null,
       probablePitcherId: homePitcherId,
       probablePitcherHand: parsePitchHandCode(homePitcher?.pitchHand?.code ?? gameData?.probablePitchers?.home?.pitchHand?.code),
-      lineupConfirmed: homeLineupConfirmed,
+      lineupConfirmed: homeLineup.confidence === 'confirmed',
+      lineupConfidence: homeLineup.confidence,
+      lineupMissingReason: homeLineup.reason,
       lineupStrikeoutRate: homeLineup.strikeoutRate,
       lineupContactRate: homeLineup.contactRate,
       lineupBatterCount: homeLineup.batterCount,
@@ -440,7 +483,9 @@ function extractTeamContexts(feed: any, homeTeam: string, awayTeam: string): MLB
       probablePitcher: awayPitcher?.person?.fullName ?? gameData?.probablePitchers?.away?.fullName ?? null,
       probablePitcherId: awayPitcherId,
       probablePitcherHand: parsePitchHandCode(awayPitcher?.pitchHand?.code ?? gameData?.probablePitchers?.away?.pitchHand?.code),
-      lineupConfirmed: awayLineupConfirmed,
+      lineupConfirmed: awayLineup.confidence === 'confirmed',
+      lineupConfidence: awayLineup.confidence,
+      lineupMissingReason: awayLineup.reason,
       lineupStrikeoutRate: awayLineup.strikeoutRate,
       lineupContactRate: awayLineup.contactRate,
       lineupBatterCount: awayLineup.batterCount,
@@ -840,6 +885,28 @@ function computeLeagueAverages(
   };
 }
 
+function buildLineupMissingDetails(games: MLBContextGame[], teams: MLBTeamContext[]): MLBContextSnapshot['meta']['lineupMissingDetails'] {
+  return teams
+    .filter(team => team.lineupConfidence === 'missing')
+    .map(team => {
+      const game = games.find(candidate =>
+        normalizeName(candidate.homeTeam) === normalizeName(team.teamName) ||
+        normalizeName(candidate.awayTeam) === normalizeName(team.teamName)
+      );
+      const opponentTeam =
+        game
+          ? normalizeName(game.homeTeam) === normalizeName(team.teamName)
+            ? game.awayTeam
+            : game.homeTeam
+          : 'Unknown opponent';
+      return {
+        teamName: team.teamName,
+        opponentTeam,
+        reason: team.lineupMissingReason ?? 'lineup data unavailable',
+      };
+    });
+}
+
 export async function buildMLBContextForSlate(games: MLBContextGame[]): Promise<MLBContextSnapshot> {
   if (games.length === 0) {
     return {
@@ -852,7 +919,20 @@ export async function buildMLBContextForSlate(games: MLBContextGame[]): Promise<
         avgHitsAllowedPerStart: null,
         avgERPerStart: null,
       },
-      meta: { players: 0, pitchers: 0, teams: 0, lineup: 0, matchup: 0, fallback: 0 },
+      meta: {
+        players: 0,
+        pitchers: 0,
+        teams: 0,
+        lineup: 0,
+        lineupConfirmed: 0,
+        lineupPartial: 0,
+        lineupMissing: 0,
+        pitcherHandResolved: 0,
+        pitcherHandTotal: 0,
+        matchup: 0,
+        fallback: 0,
+        lineupMissingDetails: [],
+      },
     };
   }
 
@@ -923,6 +1003,12 @@ export async function buildMLBContextForSlate(games: MLBContextGame[]): Promise<
   fallback += splitStats.fallback;
   mergeBatterSplitStats(players, splitStats);
 
+  const lineupConfirmedCount = teams.filter(team => team.lineupConfidence === 'confirmed').length;
+  const lineupPartialCount = teams.filter(team => team.lineupConfidence === 'partial').length;
+  const lineupMissingCount = teams.filter(team => team.lineupConfidence === 'missing').length;
+  const pitcherHandResolvedCount = teams.filter(team => Boolean(team.probablePitcherHand)).length;
+  const lineupMissingDetails = buildLineupMissingDetails(games, teams);
+
   const snapshot: MLBContextSnapshot = {
     players,
     teams,
@@ -931,9 +1017,15 @@ export async function buildMLBContextForSlate(games: MLBContextGame[]): Promise<
       players: players.filter(player => player.role === 'batter').length,
       pitchers: players.filter(player => player.role === 'pitcher').length,
       teams: teams.length,
-      lineup: teams.filter(team => team.lineupConfirmed).length,
+      lineup: lineupConfirmedCount,
+      lineupConfirmed: lineupConfirmedCount,
+      lineupPartial: lineupPartialCount,
+      lineupMissing: lineupMissingCount,
+      pitcherHandResolved: pitcherHandResolvedCount,
+      pitcherHandTotal: teams.length,
       matchup: matchedGames,
       fallback,
+      lineupMissingDetails,
     },
   };
 

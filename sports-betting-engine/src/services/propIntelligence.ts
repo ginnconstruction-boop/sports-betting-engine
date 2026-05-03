@@ -34,6 +34,10 @@ function getMLBOpponentPitcherContextFromSnapshot(
   ) ?? null;
 }
 
+function canUseMLBLineupRates(teamContext: MLBTeamContext | null | undefined): boolean {
+  return teamContext?.lineupConfidence === 'confirmed' || teamContext?.lineupConfidence === 'partial';
+}
+
 function injectMLBPhase1BSignals(
   prediction: PropPrediction,
   prop: {
@@ -60,9 +64,16 @@ function injectMLBPhase1BSignals(
 
   if (marketKey === 'pitcher_strikeouts') {
     const pitcherKRate = playerContext.pitcherKRate;
-    const opponentKRate = opponentTeamContext?.lineupStrikeoutRate ?? opponentTeamContext?.teamStrikeoutRate ?? null;
-    const opponentContactRate = opponentTeamContext?.lineupContactRate ?? opponentTeamContext?.teamContactRate ?? null;
-    const opponentRateSource = opponentTeamContext?.lineupStrikeoutRate ? `lineup (${opponentTeamContext.lineupBatterCount ?? 0} hitters)` : 'team';
+    const lineupRateAllowed = canUseMLBLineupRates(opponentTeamContext);
+    const opponentKRate = lineupRateAllowed
+      ? opponentTeamContext?.lineupStrikeoutRate ?? opponentTeamContext?.teamStrikeoutRate ?? null
+      : opponentTeamContext?.teamStrikeoutRate ?? null;
+    const opponentContactRate = lineupRateAllowed
+      ? opponentTeamContext?.lineupContactRate ?? opponentTeamContext?.teamContactRate ?? null
+      : opponentTeamContext?.teamContactRate ?? null;
+    const opponentRateSource = lineupRateAllowed && hasRealMLBNumber(opponentTeamContext?.lineupStrikeoutRate ?? null)
+      ? `lineup (${opponentTeamContext?.lineupBatterCount ?? 0} hitters)`
+      : 'team-average fallback';
     const leagueAvgKRate = snapshot.league.avgPitcherKRate;
     const leagueAvgOpponentKRate = snapshot.league.avgOpponentKRate;
     const leagueAvgContactRate = snapshot.league.avgContactRate;
@@ -102,14 +113,14 @@ function injectMLBPhase1BSignals(
       hasRealMLBNumber(opponentContactRate) &&
       hasRealMLBNumber(leagueAvgContactRate) &&
       opponentContactRate <= leagueAvgContactRate * 0.95
-    ) {
-      addSignal(buildMLBContextSignal(
-        'LOW_CONTACT_OPP',
-        `${opponentTeamContext?.lineupContactRate ? 'Lineup' : 'Opponent'} contact rate ${(opponentContactRate * 100).toFixed(1)}% is materially below league average`,
-        'over',
-        8
-      ));
-    }
+      ) {
+        addSignal(buildMLBContextSignal(
+          'LOW_CONTACT_OPP',
+          `${lineupRateAllowed && hasRealMLBNumber(opponentTeamContext?.lineupContactRate ?? null) ? 'Lineup-derived' : 'Team-average fallback'} contact rate ${(opponentContactRate * 100).toFixed(1)}% is materially below league average`,
+          'over',
+          8
+        ));
+      }
   }
 
   if (

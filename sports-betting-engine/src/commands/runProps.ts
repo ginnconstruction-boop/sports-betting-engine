@@ -54,6 +54,10 @@ function hoursUntil(t: string) {
   return (new Date(t).getTime() - Date.now()) / 3600000;
 }
 
+function isEnabledFlag(value: string | undefined): boolean {
+  return String(value ?? '').trim().toLowerCase() === 'true';
+}
+
 export async function runProps(options: { forceRun?: boolean; sportKey?: string } = {}) {
   if (!propsEnabled() && !options.forceRun) {
     console.log('\n  Player props are disabled. Set PROPS_ENABLED=true in .env\n');
@@ -231,8 +235,38 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
           `teams: ${mlbContextSnapshot.meta.teams} | lineup: ${mlbContextSnapshot.meta.lineup} | ` +
           `matchup: ${mlbContextSnapshot.meta.matchup} | fallback: ${mlbContextSnapshot.meta.fallback}`
         );
+        console.log(
+          `  [MLB_LINEUPS] confirmed: ${mlbContextSnapshot.meta.lineupConfirmed} | ` +
+          `partial: ${mlbContextSnapshot.meta.lineupPartial} | missing: ${mlbContextSnapshot.meta.lineupMissing} | ` +
+          `pitcherHand: ${mlbContextSnapshot.meta.pitcherHandResolved}/${mlbContextSnapshot.meta.pitcherHandTotal}`
+        );
         if (mlbContextSnapshot.meta.fallback > 0) {
           console.warn('  [MLB_CTX] partial MLB context fallback active -- continuing with real-data-only coverage gates');
+        }
+        const firstPitchHours = upcoming.length > 0
+          ? Math.min(...upcoming.map(event => hoursUntil(event.startTime)))
+          : null;
+        const mostlyMissingLineups =
+          mlbContextSnapshot.meta.lineupMissing > (mlbContextSnapshot.meta.lineupConfirmed + mlbContextSnapshot.meta.lineupPartial);
+        if (
+          firstPitchHours !== null &&
+          firstPitchHours > 3 &&
+          mostlyMissingLineups
+        ) {
+          console.warn('  [MLB_TIMING] Lineups not widely available yet -- rerun closer to first pitch for stronger context.');
+        } else if (
+          firstPitchHours !== null &&
+          firstPitchHours <= 1.5 &&
+          mlbContextSnapshot.meta.lineupMissing > 0
+        ) {
+          console.warn('  [MLB_TIMING] Warning: lineups still missing near first pitch -- using team-average fallback.');
+        }
+        if (isEnabledFlag(process.env.MLB_LINEUP_DEBUG)) {
+          for (const detail of mlbContextSnapshot.meta.lineupMissingDetails) {
+            console.warn(
+              `  [MLB_LINEUP_MISSING] ${detail.teamName} vs ${detail.opponentTeam} -- reason: ${detail.reason}`
+            );
+          }
         }
       } else {
         console.warn('  [MLB_CTX] unavailable -- continuing without MLB context attachment');
