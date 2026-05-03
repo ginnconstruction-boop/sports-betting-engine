@@ -489,7 +489,10 @@ async function runAutoGrade() {
     const rec = d.record;
     const adjCount = Object.keys(d.weightAdjustments||{}).length;
     const lines = [
-      `Graded ${d.graded} new pick(s). Total graded: ${d.totalGraded}.`,
+      `Graded ${d.graded} new pick(s) this run.`,
+      `Official: ${d.officialGraded ?? 0} graded | ${d.officialPending ?? 0} pending`,
+      `Tracked: ${d.trackedGraded ?? 0} graded | ${d.trackedPending ?? 0} pending`,
+      `Official retro total graded: ${d.totalGraded}.`,
       rec ? `Record: ${rec.wins}W-${rec.losses}L-${rec.pushes}P  (${rec.winRate}% win rate)` : '',
       adjCount > 0 ? `${adjCount} signal weight(s) updated.` : 'No weight changes.',
       ...(d.insights||[]),

@@ -7,7 +7,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as readline from 'readline';
-import { PickRecord } from './closingLineTracker';
+import { PickRecord, isOfficialRecommendationPick } from './closingLineTracker';
 
 const SNAPSHOT_DIR = process.env.SNAPSHOT_DIR ?? './snapshots';
 const PICKS_FILE = path.join(SNAPSHOT_DIR, 'picks_log.json');
@@ -44,6 +44,7 @@ export interface PNLRecord {
   // Monthly
   byMonth: Record<string, SportRecord>;
   dashboardSummary?: DashboardSummary;
+  trackedSummary?: PickSetSummary;
   lastUpdated: string;
 }
 
@@ -74,6 +75,18 @@ export interface DashboardCategorySummary {
 export interface DashboardSummary {
   overall: DashboardCategorySummary;
   categories: DashboardCategorySummary[];
+}
+
+export interface PickSetSummary {
+  totalPicks: number;
+  gradedPicks: number;
+  pendingPicks: number;
+  wins: number;
+  losses: number;
+  pushes: number;
+  winPct: number;
+  totalProfit: number;
+  roi: number;
 }
 
 // ------------------------------------
@@ -271,15 +284,44 @@ function buildDashboardSummary(picks: PickRecord[]): DashboardSummary {
   };
 }
 
-function isLegacyOfficialPick(pick: PickRecord): boolean {
-  if (pick.savedAsRecommendation === true) return true;
-  if (pick.savedAsRecommendation === false) return false;
+function buildPickSetSummary(picks: PickRecord[]): PickSetSummary {
+  const graded = picks.filter(p =>
+    p.gameResult !== 'PENDING' &&
+    p.gameResult !== 'MISSING_SCORE' &&
+    p.gameResult !== 'VOID'
+  );
 
-  const gradeableLegacyTypes = new Set([
-    'Moneyline', 'h2h', 'Spread', 'spreads', 'Total', 'totals',
-  ]);
+  let wins = 0;
+  let losses = 0;
+  let pushes = 0;
+  let totalProfit = 0;
 
-  return gradeableLegacyTypes.has(pick.betType ?? '');
+  for (const pick of graded) {
+    const result = pick.gameResult as 'WIN' | 'LOSS' | 'PUSH';
+    const safePrice = (typeof pick.pickedPrice === 'number' && isFinite(pick.pickedPrice) && pick.pickedPrice !== 0)
+      ? pick.pickedPrice
+      : -110;
+    if (result === 'WIN') wins++;
+    else if (result === 'LOSS') losses++;
+    else pushes++;
+    totalProfit = Math.round((totalProfit + calcProfit(result, safePrice)) * 100) / 100;
+  }
+
+  const pendingPicks = picks.filter(p => isUnresolvedResult(p.gameResult)).length;
+  const wl = wins + losses;
+  const totalWagered = graded.length * 100;
+
+  return {
+    totalPicks: picks.length,
+    gradedPicks: graded.length,
+    pendingPicks,
+    wins,
+    losses,
+    pushes,
+    winPct: wl > 0 ? Math.round((wins / wl) * 1000) / 10 : 0,
+    totalProfit,
+    roi: totalWagered > 0 ? Math.round((totalProfit / totalWagered) * 10000) / 100 : 0,
+  };
 }
 
 function updateRecord(rec: SportRecord, result: 'WIN' | 'LOSS' | 'PUSH', profit: number): SportRecord {
@@ -409,7 +451,8 @@ export async function enterResults(): Promise<void> {
 
 export function rebuildPNL(): PNLRecord {
   const allPicks = loadPicks();
-  const picks = allPicks.filter(isLegacyOfficialPick);
+  const picks = allPicks.filter(isOfficialRecommendationPick);
+  const trackedPicks = allPicks.filter(p => !isOfficialRecommendationPick(p));
   const graded = picks.filter(p =>
     p.gameResult !== 'PENDING' &&
     p.gameResult !== 'MISSING_SCORE' &&
@@ -439,6 +482,7 @@ export function rebuildPNL(): PNLRecord {
     longestWinStreak: 0,
     longestLossStreak: 0,
     dashboardSummary: buildDashboardSummary(picks),
+    trackedSummary: buildPickSetSummary(trackedPicks),
     lastUpdated: new Date().toISOString(),
   };
 
@@ -528,6 +572,12 @@ export function printPNLReport(): void {
   console.log(`\n  Official recommendations : ${record.totalPicks}`);
   console.log(`  Graded official picks    : ${record.gradedPicks}`);
   console.log(`  Pending official picks   : ${record.totalPicks - record.gradedPicks}`);
+  if ((record as any).trackedSummary) {
+    const tracked = (record as any).trackedSummary as PickSetSummary;
+    console.log(`  Tracked non-official     : ${tracked.totalPicks}`);
+    console.log(`  Tracked graded picks     : ${tracked.gradedPicks}`);
+    console.log(`  Tracked pending picks    : ${tracked.pendingPicks}`);
+  }
 
   if (record.gradedPicks === 0) {
     console.log('\n  No graded picks yet.');
@@ -600,4 +650,12 @@ export function printPNLReport(): void {
     console.log('     Consider cutting markets with worst ROI from your card.');
   }
   console.log('  ROI Benchmark: 5%+ = strong edge | 0-5% = marginal | <0% = losing\n');
+
+  const tracked = (record as any).trackedSummary as PickSetSummary | undefined;
+  if (tracked && tracked.totalPicks > 0) {
+    console.log('  --- Tracked Non-Official Record -------------------------');
+    console.log(`  Record    : ${tracked.wins}-${tracked.losses}-${tracked.pushes}  (${fmtPct(tracked.winPct)} win rate)`);
+    console.log(`  Profit    : ${fmtMoney(tracked.totalProfit)}  |  ROI: ${fmtPct(tracked.roi)}`);
+    console.log('  This bucket is graded separately and is not mixed into official recommendation stats.\n');
+  }
 }

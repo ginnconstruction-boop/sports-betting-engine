@@ -76,6 +76,22 @@ export interface PickRecord {
   signalTypes?: string[];
 }
 
+const LEGACY_OFFICIAL_BET_TYPES = new Set([
+  'Moneyline', 'h2h', 'Spread', 'spreads', 'Total', 'totals',
+]);
+
+export type PickRecordBucket = 'official' | 'tracked';
+
+export function isOfficialRecommendationPick(pick: Partial<PickRecord>): boolean {
+  if (pick.savedAsRecommendation === true) return true;
+  if (pick.savedAsRecommendation === false) return false;
+  return LEGACY_OFFICIAL_BET_TYPES.has(pick.betType ?? '');
+}
+
+export function getPickRecordBucket(pick: Partial<PickRecord>): PickRecordBucket {
+  return isOfficialRecommendationPick(pick) ? 'official' : 'tracked';
+}
+
 export interface CLVSummary {
   totalPicks: number;
   closingLineFetched: number;

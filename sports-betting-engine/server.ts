@@ -401,11 +401,19 @@ app.get('/api/signals', requireAuth, (req, res) => {
 app.post('/api/autograde', requireAuth, async (req, res) => {
   try {
     const { autoGradePicks, buildRetroReport } = require('./src/services/retroAnalysis');
-    const graded: number = await autoGradePicks();
+    const grading = await autoGradePicks();
     const report = buildRetroReport();
     res.json({
       ok: true,
-      graded,
+      graded: grading.graded,
+      checked: grading.checked,
+      pending: grading.pending,
+      missing: grading.missing,
+      void: grading.void,
+      officialGraded: grading.officialGraded,
+      trackedGraded: grading.trackedGraded,
+      officialPending: grading.officialPending,
+      trackedPending: grading.trackedPending,
       totalGraded: report.picksAnalyzed,
       record: report.overallRecord,
       weightAdjustments: report.weightAdjustments,

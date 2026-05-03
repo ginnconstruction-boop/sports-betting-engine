@@ -11,6 +11,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { getCompletedScores, CompletedScore } from '../api/oddsApiClient';
 import { CreditBudgetGuard } from './creditBudgetGuard';
+import { getPickRecordBucket, PickRecordBucket } from './closingLineTracker';
 
 const SNAPSHOT_DIR = process.env.SNAPSHOT_DIR ?? './snapshots';
 const PICKS_FILE   = path.join(SNAPSHOT_DIR, 'picks_log.json');
@@ -49,6 +50,7 @@ export interface RetroResult {
   clvActual: number | null;    // actual closing line value
   missedSignals: string[];     // signals that WOULD have helped if present
   autoGraded: boolean;
+  recordBucket?: PickRecordBucket;
   /** Set when grading was attempted but no score was available. */
   gradingNote?: string;
 }
@@ -93,6 +95,10 @@ export interface AutoGradeSummary {
   pending: number;
   missing: number;
   void: number;
+  officialGraded: number;
+  trackedGraded: number;
+  officialPending: number;
+  trackedPending: number;
 }
 
 // ------------------------------------
@@ -719,14 +725,23 @@ async function gradePendingNBAPropPicks(
   existingRetro: RetroResult[],
   gradedIds: Set<string>,
   cutoffIso: string,
-): Promise<{ checked: number; graded: number; pending: number; missing: number; void: number }> {
+): Promise<{
+  checked: number;
+  graded: number;
+  pending: number;
+  missing: number;
+  void: number;
+  officialGraded: number;
+  trackedGraded: number;
+  officialPending: number;
+  trackedPending: number;
+}> {
   const toGrade = picks.filter((pick: any) => {
     const gameTime = pick.gameTime ?? pick.startTime;
     if (!gameTime) return false;
     if (buildRetroPickId(pick) && gradedIds.has(buildRetroPickId(pick))) return false;
     if (normalizeSportKey(pick) !== 'basketball_nba') return false;
     if (pick.marketType !== 'player_prop') return false;
-    if (pick.savedAsRecommendation !== true) return false;
     if ((pick.gameResult ?? 'PENDING') !== 'PENDING') return false;
     if (inferSupportedNBAPropType(pick) === null) return false;
     if (inferPropDirection(`${pick.side ?? ''} ${pick.notes ?? ''}`) === null) return false;
@@ -740,12 +755,15 @@ async function gradePendingNBAPropPicks(
   let graded = 0;
   let missing = 0;
   let voidCount = 0;
+  let officialGraded = 0;
+  let trackedGraded = 0;
 
   for (const pick of toGrade) {
     const propType = inferSupportedNBAPropType(pick);
     const side = inferPropDirection(`${pick.side ?? ''} ${pick.notes ?? ''}`);
     const playerName = pick.playerName ?? extractPlayerNameFromSide(pick.side ?? '');
     const line = typeof pick.pickedLine === 'number' ? pick.pickedLine : null;
+    const recordBucket = getPickRecordBucket(pick);
 
     if (!propType || !side || !playerName || line === null) {
       continue;
@@ -783,6 +801,7 @@ async function gradePendingNBAPropPicks(
         clvActual: null,
         missedSignals: [],
         autoGraded: true,
+        recordBucket,
         gradingNote: `player box score row not found for ${playerName}`,
       });
       gradedIds.add(buildRetroPickId(pick));
@@ -816,6 +835,7 @@ async function gradePendingNBAPropPicks(
         clvActual: null,
         missedSignals: [],
         autoGraded: true,
+        recordBucket,
         gradingNote: player.reason ? `DNP/Inactive: ${player.reason}` : 'DNP/Inactive',
       });
       gradedIds.add(buildRetroPickId(pick));
@@ -850,23 +870,38 @@ async function gradePendingNBAPropPicks(
       clvActual: null,
       missedSignals: result === 'LOSS' ? ['NBA_PROP_RESULT_AGAINST_PICK'] : [],
       autoGraded: true,
+      recordBucket,
     });
     gradedIds.add(buildRetroPickId(pick));
     graded++;
+    if (recordBucket === 'official') officialGraded++;
+    else trackedGraded++;
   }
 
-  const pending = picks.filter((pick: any) => {
+  const pendingPicks = picks.filter((pick: any) => {
     const gameTime = pick.gameTime ?? pick.startTime;
     return (
       normalizeSportKey(pick) === 'basketball_nba' &&
       pick.marketType === 'player_prop' &&
-      pick.savedAsRecommendation === true &&
       (pick.gameResult ?? 'PENDING') === 'PENDING' &&
+      inferSupportedNBAPropType(pick) !== null &&
       Boolean(gameTime)
     );
-  }).length;
+  });
+  const officialPending = pendingPicks.filter(p => getPickRecordBucket(p) === 'official').length;
+  const trackedPending = pendingPicks.length - officialPending;
 
-  return { checked: toGrade.length, graded, pending, missing, void: voidCount };
+  return {
+    checked: toGrade.length,
+    graded,
+    pending: pendingPicks.length,
+    missing,
+    void: voidCount,
+    officialGraded,
+    trackedGraded,
+    officialPending,
+    trackedPending,
+  };
 }
 
 // ------------------------------------
@@ -876,12 +911,11 @@ async function gradePendingNBAPropPicks(
 export async function autoGradePicks(): Promise<AutoGradeSummary> {
   const picks = loadPicks();
   let existingRetro = loadRetroResults();
-  const supportedOfficialNBAPropIds = new Set(
+  const supportedNBAPropIds = new Set(
     picks
       .filter((pick: any) =>
         normalizeSportKey(pick) === 'basketball_nba' &&
         pick.marketType === 'player_prop' &&
-        pick.savedAsRecommendation === true &&
         inferSupportedNBAPropType(pick) !== null
       )
       .map((pick: any) => buildRetroPickId(pick))
@@ -901,7 +935,7 @@ export async function autoGradePicks(): Promise<AutoGradeSummary> {
       .filter(r =>
         r.autoGraded &&
         r.gameResult === 'PUSH' &&
-        !supportedOfficialNBAPropIds.has(r.pickId) &&
+        !supportedNBAPropIds.has(r.pickId) &&
         (
           !GRADEABLE_TYPES.has(r.betType) ||
           ((r.betType === 'Total' || r.betType === 'spreads' || r.betType === 'Spread') &&
@@ -942,6 +976,8 @@ export async function autoGradePicks(): Promise<AutoGradeSummary> {
   let newlyGraded = 0;
   let missingScoreCount = 0;
   let voidCount = 0;
+  let officialGraded = 0;
+  let trackedGraded = 0;
   // Rolling 30-hour window instead of UTC midnight yesterday.
   // Prevents late US/Eastern and US/Pacific games (commenceTime = next UTC day)
   // from being skipped until two UTC days after they finish.
@@ -1045,6 +1081,7 @@ export async function autoGradePicks(): Promise<AutoGradeSummary> {
           clvActual:    null,
           missedSignals:[],
           autoGraded:   true,
+          recordBucket: getPickRecordBucket(pick),
           gradingNote:  'score unavailable from all 4 sources after game-end window',
         });
         missingScoreCount++;
@@ -1090,9 +1127,12 @@ export async function autoGradePicks(): Promise<AutoGradeSummary> {
         clvActual: null,
         missedSignals,
         autoGraded: true,
+        recordBucket: getPickRecordBucket(pick),
       });
 
       newlyGraded++;
+      if (getPickRecordBucket(pick) === 'official') officialGraded++;
+      else trackedGraded++;
     } catch { /* individual grading errors are non-fatal */ }
   }
 
@@ -1105,30 +1145,39 @@ export async function autoGradePicks(): Promise<AutoGradeSummary> {
   newlyGraded += nbaPropSummary.graded;
   missingScoreCount += nbaPropSummary.missing;
   voidCount += nbaPropSummary.void;
+  officialGraded += nbaPropSummary.officialGraded;
+  trackedGraded += nbaPropSummary.trackedGraded;
 
   if (newlyGraded > 0 || missingScoreCount > 0 || voidCount > 0) {
     savePicks(picks);
     saveRetroResults(existingRetro);
   }
 
+  const pendingGradeablePicks = picks.filter((p: any) =>
+    (p.gameResult ?? 'PENDING') === 'PENDING' &&
+    (
+      GRADEABLE_TYPES.has(p.betType ?? '') ||
+      (
+        normalizeSportKey(p) === 'basketball_nba' &&
+        p.marketType === 'player_prop' &&
+        inferSupportedNBAPropType(p) !== null
+      )
+    ) &&
+    Boolean(p.gameTime ?? p.startTime)
+  );
+  const officialPending = pendingGradeablePicks.filter(p => getPickRecordBucket(p) === 'official').length;
+  const trackedPending = pendingGradeablePicks.length - officialPending;
+
   return {
     checked: toGrade.length + nbaPropSummary.checked,
     graded: newlyGraded,
-    pending: picks.filter((p: any) =>
-      (p.gameResult ?? 'PENDING') === 'PENDING' &&
-      (
-        GRADEABLE_TYPES.has(p.betType ?? '') ||
-        (
-          normalizeSportKey(p) === 'basketball_nba' &&
-          p.marketType === 'player_prop' &&
-          p.savedAsRecommendation === true &&
-          inferSupportedNBAPropType(p) !== null
-        )
-      ) &&
-      Boolean(p.gameTime ?? p.startTime)
-    ).length,
+    pending: pendingGradeablePicks.length,
     missing: missingScoreCount,
     void: voidCount,
+    officialGraded,
+    trackedGraded,
+    officialPending,
+    trackedPending,
   };
 }
 
@@ -1174,12 +1223,20 @@ const REPORT_GRADEABLE = new Set([
 
 export function buildRetroReport(): RetroReport {
   const results = loadRetroResults();
+  const pickBucketById = new Map(
+    loadPicks()
+      .map((pick: any) => [buildRetroPickId(pick), getPickRecordBucket(pick)] as const)
+      .filter(([pickId]) => Boolean(pickId))
+  );
+  const isOfficialRetro = (result: RetroResult) =>
+    (result.recordBucket ?? pickBucketById.get(result.pickId) ?? 'official') === 'official';
   // Only count bet types that evaluatePick can score.
   // Props, alt lines, unrecognised types, and Total/Spread with no line
   // were either never gradeable or were stored as PUSH incorrectly — exclude them.
   // MISSING_SCORE and VOID are excluded from W/L stats — never count as losses.
   // PENDING = game not yet attempted; also excluded.
   const graded = results.filter(r =>
+    isOfficialRetro(r) &&
     r.gameResult !== 'PENDING' &&
     r.gameResult !== 'MISSING_SCORE' &&
     r.gameResult !== 'VOID' &&
@@ -1190,8 +1247,8 @@ export function buildRetroReport(): RetroReport {
   );
 
   // Count non-gradeable for transparency in the report output
-  const missingScoreCount = results.filter(r => r.gameResult === 'MISSING_SCORE').length;
-  const voidCount         = results.filter(r => r.gameResult === 'VOID').length;
+  const missingScoreCount = results.filter(r => isOfficialRetro(r) && r.gameResult === 'MISSING_SCORE').length;
+  const voidCount         = results.filter(r => isOfficialRetro(r) && r.gameResult === 'VOID').length;
 
   const wins = graded.filter(r => r.gameResult === 'WIN').length;
   const losses = graded.filter(r => r.gameResult === 'LOSS').length;
