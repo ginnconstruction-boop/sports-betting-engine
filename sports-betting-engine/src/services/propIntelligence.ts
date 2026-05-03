@@ -60,8 +60,9 @@ function injectMLBPhase1BSignals(
 
   if (marketKey === 'pitcher_strikeouts') {
     const pitcherKRate = playerContext.pitcherKRate;
-    const opponentKRate = opponentTeamContext?.teamStrikeoutRate ?? null;
-    const opponentContactRate = opponentTeamContext?.teamContactRate ?? null;
+    const opponentKRate = opponentTeamContext?.lineupStrikeoutRate ?? opponentTeamContext?.teamStrikeoutRate ?? null;
+    const opponentContactRate = opponentTeamContext?.lineupContactRate ?? opponentTeamContext?.teamContactRate ?? null;
+    const opponentRateSource = opponentTeamContext?.lineupStrikeoutRate ? `lineup (${opponentTeamContext.lineupBatterCount ?? 0} hitters)` : 'team';
     const leagueAvgKRate = snapshot.league.avgPitcherKRate;
     const leagueAvgOpponentKRate = snapshot.league.avgOpponentKRate;
     const leagueAvgContactRate = snapshot.league.avgContactRate;
@@ -82,14 +83,14 @@ function injectMLBPhase1BSignals(
       if (overPositive && prop.side === 'over') {
         addSignal(buildMLBContextSignal(
           'PITCHER_K_RATE_EDGE',
-          `Pitcher K rate ${(pitcherKRate * 100).toFixed(1)}% and opponent K rate ${(opponentKRate * 100).toFixed(1)}% both clear league baselines`,
+          `Pitcher K rate ${(pitcherKRate * 100).toFixed(1)}% and ${opponentRateSource} K rate ${(opponentKRate * 100).toFixed(1)}% both clear league baselines`,
           'over',
           12
         ));
       } else if (underPositive && prop.side === 'under') {
         addSignal(buildMLBContextSignal(
           'PITCHER_K_RATE_EDGE',
-          `Pitcher K rate ${(pitcherKRate * 100).toFixed(1)}% or opponent K rate ${(opponentKRate * 100).toFixed(1)}% trails league baseline`,
+          `Pitcher K rate ${(pitcherKRate * 100).toFixed(1)}% or ${opponentRateSource} K rate ${(opponentKRate * 100).toFixed(1)}% trails league baseline`,
           'under',
           10
         ));
@@ -104,7 +105,7 @@ function injectMLBPhase1BSignals(
     ) {
       addSignal(buildMLBContextSignal(
         'LOW_CONTACT_OPP',
-        `Opponent contact rate ${(opponentContactRate * 100).toFixed(1)}% is materially below league average`,
+        `${opponentTeamContext?.lineupContactRate ? 'Lineup' : 'Opponent'} contact rate ${(opponentContactRate * 100).toFixed(1)}% is materially below league average`,
         'over',
         8
       ));
@@ -197,7 +198,7 @@ function injectMLBPhase1BSignals(
       }
     }
 
-    const pitcherHand = opponentTeamContext?.probablePitcherHand ?? opponentPitcherContext?.throwsHand ?? null;
+    const pitcherHand = opponentPitcherContext?.throwsHand ?? opponentTeamContext?.probablePitcherHand ?? null;
     const splitBaseline = marketKey === 'batter_hits'
       ? (pitcherHand === 'L' ? playerContext.splitVsLeftHitsPerGame : pitcherHand === 'R' ? playerContext.splitVsRightHitsPerGame : null)
       : (pitcherHand === 'L' ? playerContext.splitVsLeftTotalBasesPerGame : pitcherHand === 'R' ? playerContext.splitVsRightTotalBasesPerGame : null);
