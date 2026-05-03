@@ -324,7 +324,12 @@ export function savePropPicks(props: Array<{
   if (newPicks.length > 0) {
     ensureDir();
     fs.writeFileSync(PICKS_FILE, JSON.stringify([...existing, ...newPicks], null, 2));
-    console.log(`  [OK] Saved ${newPicks.length} prop pick(s) to tracking log.`);
+    const officialCount = newPicks.filter(p => p.savedAsRecommendation === true).length;
+    const trackedCount = newPicks.length - officialCount;
+    console.log(
+      `  [OK] Saved ${newPicks.length} prop pick(s) to tracking log ` +
+      `(${officialCount} official, ${trackedCount} tracked).`
+    );
   }
 }
 

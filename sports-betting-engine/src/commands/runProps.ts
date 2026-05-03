@@ -427,7 +427,7 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
     }, undefined);
 
     // For MLB: run pitcher-specific analysis on top of standard scoring
-    if (sportKey === 'baseball_mlb') {
+    if (sportKey === 'baseball_mlb' && isEnabledFlag(process.env.MLB_LEGACY_PITCHER_INTEL)) {
       try {
         const pitcherInputs = topProps
           .filter((p: any) => p.market?.toLowerCase().includes('strikeout') ||
@@ -477,7 +477,13 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
         if (candidate.forcedTierCap === 'LEAN' && candidate.finalDecisionLabel === 'BET') return 'LEAN' as const;
         return candidate.finalDecisionLabel;
       };
-      savePropPicks(topProps.map(p => ({
+      const savedProps = topProps.filter(p => {
+        const candidate = rankedByKey.get(`${p.playerName}__${p.market}__${p.side}__${p.line ?? 'null'}`);
+        if (!candidate) return false;
+        const label = effectiveLabel(candidate);
+        return label !== 'PASS';
+      });
+      savePropPicks(savedProps.map(p => ({
         playerName: p.playerName,
         market: p.market,
         propType: p.statType ?? p.market,
