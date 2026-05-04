@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { PickRecord } from './closingLineTracker';
+import { PickRecord, isOfficialRecommendationPick } from './closingLineTracker';
 import { DecisionCandidate } from './decisionTypes';
 
 const SNAPSHOT_DIR = process.env.SNAPSHOT_DIR ?? './snapshots';
@@ -22,6 +22,7 @@ export interface CalibrationReport {
   generatedAt: string;
   totalTrackedProps: number;
   gradedTrackedProps: number;
+  bySport: Record<string, CalibrationStats>;
   byPropType: Record<string, CalibrationStats>;
   bySignalType: Record<string, CalibrationStats>;
   bySignalCombo: Record<string, CalibrationStats>;
@@ -106,11 +107,31 @@ function stableSignalCombo(signalTypes?: string[]): string {
   return [...new Set(signalTypes.map(s => s.toUpperCase()))].sort().join(' + ');
 }
 
-function isTrackedNBAProp(pick: PickRecord): boolean {
+function isSupportedNBAPropType(propType?: string | null): boolean {
+  const normalized = String(propType ?? '').toLowerCase();
+  return normalized === 'player_points'
+    || normalized === 'player_rebounds'
+    || normalized === 'player_assists'
+    || normalized === 'player_threes';
+}
+
+function isSupportedMLBPropType(propType?: string | null): boolean {
+  const normalized = String(propType ?? '').toLowerCase();
+  return normalized === 'pitcher_strikeouts'
+    || normalized === 'pitcher_hits_allowed'
+    || normalized === 'pitcher_earned_runs'
+    || normalized === 'batter_hits'
+    || normalized === 'batter_total_bases';
+}
+
+function isCalibratedOfficialProp(pick: PickRecord): boolean {
   return (
-    pick.sportKey === 'basketball_nba' &&
+    isOfficialRecommendationPick(pick) &&
     pick.marketType === 'player_prop' &&
-    (pick.savedAsRecommendation === true || pick.recommendedLabel === 'BET' || pick.recommendedLabel === 'LEAN')
+    (
+      (pick.sportKey === 'basketball_nba' && isSupportedNBAPropType(pick.propType)) ||
+      (pick.sportKey === 'baseball_mlb' && isSupportedMLBPropType(pick.propType))
+    )
   );
 }
 
@@ -128,7 +149,7 @@ function upsert(
 }
 
 export function buildCalibrationReport(): CalibrationReport {
-  const trackedProps = loadPicks().filter(isTrackedNBAProp);
+  const trackedProps = loadPicks().filter(isCalibratedOfficialProp);
   const gradedProps = trackedProps.filter(
     (p): p is PickRecord & { gameResult: 'WIN' | 'LOSS' | 'PUSH' } => isGradedResult(p.gameResult)
   );
@@ -137,6 +158,7 @@ export function buildCalibrationReport(): CalibrationReport {
     generatedAt: new Date().toISOString(),
     totalTrackedProps: trackedProps.length,
     gradedTrackedProps: gradedProps.length,
+    bySport: {},
     byPropType: {},
     bySignalType: {},
     bySignalCombo: {},
@@ -147,21 +169,24 @@ export function buildCalibrationReport(): CalibrationReport {
   };
 
   for (const pick of gradedProps) {
+    const sportKey = String(pick.sportKey ?? 'unknown').toLowerCase();
     const propType = (pick.propType ?? 'unknown').toLowerCase();
     const edgeBucket = bucketEdgeConfidence(pick.edgeConfidence);
     const probabilityBucket = bucketProbability(pick.modelProbability);
     const projectionEdgeBucket = bucketProjectionEdge(pick.projectionEdge);
     const signalCombo = stableSignalCombo(pick.signalTypes);
-    const comboKey = `${propType} | edge:${edgeBucket} | prob:${probabilityBucket}`;
+    const propTypeKey = `${sportKey} | ${propType}`;
+    const comboKey = `${sportKey} | ${propType} | edge:${edgeBucket} | prob:${probabilityBucket}`;
     const price = typeof pick.pickedPrice === 'number' && Number.isFinite(pick.pickedPrice) && pick.pickedPrice !== 0
       ? pick.pickedPrice
       : -110;
 
-    upsert(report.byPropType, propType, pick.gameResult, price);
+    upsert(report.bySport, sportKey, pick.gameResult, price);
+    upsert(report.byPropType, propTypeKey, pick.gameResult, price);
     upsert(report.bySignalCombo, signalCombo, pick.gameResult, price);
     upsert(report.byEdgeConfidenceBucket, edgeBucket, pick.gameResult, price);
     upsert(report.byModelProbabilityBucket, probabilityBucket, pick.gameResult, price);
-    upsert(report.byProjectionEdgeBucket, projectionEdgeBucket, pick.gameResult, price);
+    upsert(report.byProjectionEdgeBucket, `${sportKey} | ${projectionEdgeBucket}`, pick.gameResult, price);
     upsert(report.byPropTypeAndEdgeProbabilityBucket, comboKey, pick.gameResult, price);
 
     for (const signalType of [...new Set((pick.signalTypes ?? []).map(s => s.toUpperCase()))]) {
@@ -177,13 +202,20 @@ export function getCalibrationDisplayForCandidate(
   candidate: DecisionCandidate,
   report?: CalibrationReport,
 ): CandidateCalibrationDisplay | null {
-  if (candidate.sportKey !== 'basketball_nba' || candidate.marketType !== 'player_prop') return null;
+  if (
+    candidate.marketType !== 'player_prop' ||
+    (candidate.sportKey !== 'basketball_nba' && candidate.sportKey !== 'baseball_mlb')
+  ) {
+    return null;
+  }
 
   const calibration = report ?? buildCalibrationReport();
+  const sportKey = String(candidate.sportKey ?? 'unknown').toLowerCase();
   const propType = (candidate.market ?? 'unknown').toLowerCase();
   const edgeBucket = bucketEdgeConfidence(candidate.edgeConfidence);
   const probabilityBucket = bucketProbability(candidate.probability);
-  const comboKey = `${propType} | edge:${edgeBucket} | prob:${probabilityBucket}`;
+  const propTypeKey = `${sportKey} | ${propType}`;
+  const comboKey = `${sportKey} | ${propType} | edge:${edgeBucket} | prob:${probabilityBucket}`;
   const bestMatch = calibration.byPropTypeAndEdgeProbabilityBucket[comboKey];
 
   if (bestMatch && bestMatch.sampleSize >= MIN_DISPLAY_SAMPLE_SIZE) {
@@ -195,13 +227,13 @@ export function getCalibrationDisplayForCandidate(
     };
   }
 
-  const propTypeOnly = calibration.byPropType[propType];
+  const propTypeOnly = calibration.byPropType[propTypeKey];
   if (propTypeOnly && propTypeOnly.sampleSize >= MIN_DISPLAY_SAMPLE_SIZE) {
     return {
       historicalWinRate: propTypeOnly.winRate,
       sampleSize: propTypeOnly.sampleSize,
       roi: propTypeOnly.roi,
-      sourceKey: propType,
+      sourceKey: propTypeKey,
     };
   }
 

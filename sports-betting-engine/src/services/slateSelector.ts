@@ -667,6 +667,16 @@ export function printFinalCard(result: SlateResult): void {
       console.log(
         `  |  Non-market Signals: ${nonMarketSignalNames.length}  |  Context Signals: ${contextSignalNames.length}  |  Final Label: ${lbl}`
       );
+    } else if (
+      c.marketType === 'player_prop' &&
+      (c.sportKey === 'baseball_mlb' || c.sportKey === 'icehockey_nhl' || c.sportKey === 'americanfootball_nfl')
+    ) {
+      if ((c.calibrationSampleSize ?? 0) >= 20 && c.calibrationHistoricalWinRate !== undefined) {
+        console.log(
+          `  |  Historical Win %: ${c.calibrationHistoricalWinRate.toFixed(1)}%  |  Sample Size: ${c.calibrationSampleSize}` +
+          (c.calibrationRoi !== undefined ? `  |  ROI: ${c.calibrationRoi.toFixed(1)}%` : '')
+        );
+      }
     }
     for (const reason of (c.labelReasons ?? []).slice(0, 2)) {
       console.log(`  |  → ${reason}`);

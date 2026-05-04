@@ -417,8 +417,10 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
       const withWeighting      = applySignalWeighting(withDiversity);
       const withRisk           = applyRisk(withWeighting);
       const labeled            = labelCandidates(withRisk);
-      const calibrationReport  = sportKey === 'basketball_nba' ? buildCalibrationReport() : undefined;
-      const withCalibration    = sportKey === 'basketball_nba'
+      const calibrationReport  = (sportKey === 'basketball_nba' || sportKey === 'baseball_mlb')
+        ? buildCalibrationReport()
+        : undefined;
+      const withCalibration    = (sportKey === 'basketball_nba' || sportKey === 'baseball_mlb')
         ? decorateCandidatesWithCalibration(labeled, calibrationReport)
         : labeled;
       const slateResult        = selectSlate(withCalibration);
