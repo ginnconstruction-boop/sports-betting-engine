@@ -124,13 +124,20 @@ function isSupportedMLBPropType(propType?: string | null): boolean {
     || normalized === 'batter_total_bases';
 }
 
+function isSupportedNHLPropType(propType?: string | null): boolean {
+  const normalized = String(propType ?? '').toLowerCase();
+  return normalized === 'player_shots_on_goal'
+    || normalized === 'goalie_saves';
+}
+
 function isCalibratedOfficialProp(pick: PickRecord): boolean {
   return (
     isOfficialRecommendationPick(pick) &&
     pick.marketType === 'player_prop' &&
     (
       (pick.sportKey === 'basketball_nba' && isSupportedNBAPropType(pick.propType)) ||
-      (pick.sportKey === 'baseball_mlb' && isSupportedMLBPropType(pick.propType))
+      (pick.sportKey === 'baseball_mlb' && isSupportedMLBPropType(pick.propType)) ||
+      (pick.sportKey === 'icehockey_nhl' && isSupportedNHLPropType(pick.propType))
     )
   );
 }
@@ -204,7 +211,11 @@ export function getCalibrationDisplayForCandidate(
 ): CandidateCalibrationDisplay | null {
   if (
     candidate.marketType !== 'player_prop' ||
-    (candidate.sportKey !== 'basketball_nba' && candidate.sportKey !== 'baseball_mlb')
+    (
+      candidate.sportKey !== 'basketball_nba' &&
+      candidate.sportKey !== 'baseball_mlb' &&
+      candidate.sportKey !== 'icehockey_nhl'
+    )
   ) {
     return null;
   }
