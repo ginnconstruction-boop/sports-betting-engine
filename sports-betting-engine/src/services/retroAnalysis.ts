@@ -332,6 +332,13 @@ type SupportedNBAPropType =
   | 'player_assists'
   | 'player_threes';
 
+type SupportedMLBPropType =
+  | 'pitcher_strikeouts'
+  | 'pitcher_hits_allowed'
+  | 'pitcher_earned_runs'
+  | 'batter_hits'
+  | 'batter_total_bases';
+
 interface NBABoxScorePlayerStat {
   playerName: string;
   normalizedName: string;
@@ -353,6 +360,30 @@ interface NBABoxScoreGame {
 }
 
 const nbaBoxScoreCache = new Map<string, NBABoxScoreGame | null>();
+
+interface MLBBoxScorePlayerStat {
+  playerName: string;
+  normalizedName: string;
+  battingOrder: string;
+  atBats: number;
+  plateAppearances: number;
+  hits: number;
+  totalBases: number;
+  pitchingOuts: number;
+  battersFaced: number;
+  strikeouts: number;
+  hitsAllowed: number;
+  earnedRuns: number;
+}
+
+interface MLBBoxScoreGame {
+  final: boolean;
+  eventId: string;
+  source: 'MLB_STATSAPI_LIVE_FEED';
+  players: MLBBoxScorePlayerStat[];
+}
+
+const mlbBoxScoreCache = new Map<string, MLBBoxScoreGame | null>();
 
 function normalizeSportKey(raw: any): string {
   const s = raw?.sport ?? raw?.sportKey ?? raw ?? '';
@@ -412,6 +443,34 @@ function parseMadeShots(raw: string): number {
   return match ? parseFloat(match[1]) || 0 : 0;
 }
 
+function parseNullableNumber(raw: any): number | null {
+  if (raw === null || raw === undefined || raw === '') return null;
+  const parsed = Number(raw);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function computeMLBTotalBases(stats: any): number {
+  const hits = parseNullableNumber(stats?.hits) ?? 0;
+  const doubles = parseNullableNumber(stats?.doubles) ?? 0;
+  const triples = parseNullableNumber(stats?.triples) ?? 0;
+  const homeRuns = parseNullableNumber(stats?.homeRuns) ?? 0;
+  const derivedSingles = Math.max(0, hits - doubles - triples - homeRuns);
+  const provided = parseNullableNumber(stats?.totalBases);
+  if (provided !== null) return provided;
+  return derivedSingles + (doubles * 2) + (triples * 3) + (homeRuns * 4);
+}
+
+function mlbScheduleDatesForGame(gameTime: string): string[] {
+  const seed = new Date(gameTime);
+  if (Number.isNaN(seed.getTime())) return [];
+
+  return [...new Set([0, -1, 1].map(offset => {
+    const copy = new Date(seed);
+    copy.setUTCDate(copy.getUTCDate() + offset);
+    return copy.toISOString().split('T')[0];
+  }))];
+}
+
 export function inferSupportedNBAPropType(
   pick: Partial<{ propType: string; notes: string; side: string }>
 ): SupportedNBAPropType | null {
@@ -447,6 +506,43 @@ export function inferSupportedNBAPropType(
   return null;
 }
 
+export function inferSupportedMLBPropType(
+  pick: Partial<{ propType: string; notes: string; side: string }>
+): SupportedMLBPropType | null {
+  const raw = `${pick.propType ?? ''} ${pick.notes ?? ''} ${pick.side ?? ''}`.toLowerCase();
+  const normalized = raw.replace(/[^a-z0-9+]/g, ' ');
+
+  if (
+    normalized.includes('batter_home_runs') ||
+    normalized.includes('home runs') ||
+    normalized.includes('batter_rbis') ||
+    normalized.includes('rbis') ||
+    normalized.includes('rbi') ||
+    normalized.includes('batter_strikeouts') ||
+    normalized.includes('batter strikeouts')
+  ) {
+    return null;
+  }
+
+  if (normalized.includes('pitcher_strikeouts') || normalized.includes('pitcher strikeouts') || normalized.includes('pitcher strikeout')) {
+    return 'pitcher_strikeouts';
+  }
+  if (normalized.includes('pitcher_hits_allowed') || normalized.includes('pitcher hits allowed')) {
+    return 'pitcher_hits_allowed';
+  }
+  if (normalized.includes('pitcher_earned_runs') || normalized.includes('pitcher earned runs')) {
+    return 'pitcher_earned_runs';
+  }
+  if (normalized.includes('batter_total_bases') || normalized.includes('total bases')) {
+    return 'batter_total_bases';
+  }
+  if (normalized.includes('batter_hits') || normalized.includes(' batter hits') || normalized.includes(' hits over') || normalized.includes(' hits under')) {
+    return 'batter_hits';
+  }
+
+  return null;
+}
+
 function inferPropDirection(raw: string): 'OVER' | 'UNDER' | null {
   const text = (raw ?? '').toUpperCase();
   if (text.includes(' OVER ')) return 'OVER';
@@ -459,6 +555,24 @@ function extractPlayerNameFromSide(side: string): string | null {
   const patterns = [
     /\s+(Points|Rebounds|Assists|Threes)\s+(Over|Under)\b/i,
     /\s+(3PT|Three Pointers|Three-Pointers)\s+(Over|Under)\b/i,
+  ];
+
+  for (const pattern of patterns) {
+    const match = text.match(pattern);
+    if (match && match.index !== undefined) {
+      const playerName = text.slice(0, match.index).trim();
+      if (playerName) return playerName;
+    }
+  }
+
+  return null;
+}
+
+function extractMLBPlayerNameFromSide(side: string): string | null {
+  const text = side ?? '';
+  const patterns = [
+    /\s+(pitcher strikeouts|pitcher hits allowed|pitcher earned runs|batter hits|batter total bases)\s+(over|under)\b/i,
+    /\s+(strikeouts|hits allowed|earned runs|hits|total bases)\s+(over|under)\b/i,
   ];
 
   for (const pattern of patterns) {
@@ -488,12 +602,30 @@ export function evaluateNBAPropResult(
   return 'PUSH';
 }
 
+export function evaluateMLBPropResult(
+  side: 'OVER' | 'UNDER',
+  line: number,
+  actualStat: number
+): 'WIN' | 'LOSS' | 'PUSH' {
+  return evaluateNBAPropResult(side, line, actualStat);
+}
+
 function readNBAStat(player: NBABoxScorePlayerStat, propType: SupportedNBAPropType): number {
   switch (propType) {
     case 'player_points': return player.points;
     case 'player_rebounds': return player.rebounds;
     case 'player_assists': return player.assists;
     case 'player_threes': return player.threes;
+  }
+}
+
+function readMLBStat(player: MLBBoxScorePlayerStat, propType: SupportedMLBPropType): number {
+  switch (propType) {
+    case 'pitcher_strikeouts': return player.strikeouts;
+    case 'pitcher_hits_allowed': return player.hitsAllowed;
+    case 'pitcher_earned_runs': return player.earnedRuns;
+    case 'batter_hits': return player.hits;
+    case 'batter_total_bases': return player.totalBases;
   }
 }
 
@@ -578,6 +710,79 @@ async function fetchNBABoxScoreForGame(matchup: string, gameTime: string): Promi
   }
 
   nbaBoxScoreCache.set(cacheKey, null);
+  return null;
+}
+
+async function fetchMLBBoxScoreForGame(matchup: string, gameTime: string): Promise<MLBBoxScoreGame | null> {
+  const cacheKey = `${matchup}__${gameTime}`;
+  if (mlbBoxScoreCache.has(cacheKey)) return mlbBoxScoreCache.get(cacheKey) ?? null;
+
+  const [awayTeam, homeTeam] = (matchup ?? '').split(' @ ').map(part => part?.trim());
+  if (!awayTeam || !homeTeam) {
+    mlbBoxScoreCache.set(cacheKey, null);
+    return null;
+  }
+
+  try {
+    for (const date of mlbScheduleDatesForGame(gameTime)) {
+      const scheduleUrl = `https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${date}`;
+      const scheduleData = await fetchJson(scheduleUrl);
+      const games = (Array.isArray(scheduleData?.dates) ? scheduleData.dates : [])
+        .flatMap((dateNode: any) => Array.isArray(dateNode?.games) ? dateNode.games : []);
+      const game = games.find((candidate: any) => {
+        const candidateHome = candidate?.teams?.home?.team?.name ?? '';
+        const candidateAway = candidate?.teams?.away?.team?.name ?? '';
+        return (
+          normalizePlayerName(candidateHome) === normalizePlayerName(homeTeam) &&
+          normalizePlayerName(candidateAway) === normalizePlayerName(awayTeam)
+        );
+      });
+
+      if (!game?.gamePk) continue;
+
+      const feedUrl = `https://statsapi.mlb.com/api/v1.1/game/${game.gamePk}/feed/live`;
+      const feed = await fetchJson(feedUrl);
+      const final =
+        feed?.gameData?.status?.abstractGameState === 'Final' ||
+        feed?.gameData?.status?.detailedState === 'Final';
+      const players: MLBBoxScorePlayerStat[] = [];
+
+      for (const teamBlock of [feed?.liveData?.boxscore?.teams?.home, feed?.liveData?.boxscore?.teams?.away]) {
+        for (const player of Object.values(teamBlock?.players ?? {}) as any[]) {
+          const batting = player?.stats?.batting ?? {};
+          const pitching = player?.stats?.pitching ?? {};
+          players.push({
+            playerName: player?.person?.fullName ?? '',
+            normalizedName: normalizePlayerName(player?.person?.fullName ?? ''),
+            battingOrder: String(player?.battingOrder ?? ''),
+            atBats: parseNullableNumber(batting?.atBats) ?? 0,
+            plateAppearances: parseNullableNumber(batting?.plateAppearances) ?? 0,
+            hits: parseNullableNumber(batting?.hits) ?? 0,
+            totalBases: computeMLBTotalBases(batting),
+            pitchingOuts: parseNullableNumber(pitching?.outs) ?? 0,
+            battersFaced: parseNullableNumber(pitching?.battersFaced) ?? 0,
+            strikeouts: parseNullableNumber(pitching?.strikeOuts) ?? 0,
+            hitsAllowed: parseNullableNumber(pitching?.hits) ?? 0,
+            earnedRuns: parseNullableNumber(pitching?.earnedRuns) ?? 0,
+          });
+        }
+      }
+
+      const boxScoreGame: MLBBoxScoreGame = {
+        final,
+        eventId: String(game.gamePk),
+        source: 'MLB_STATSAPI_LIVE_FEED',
+        players,
+      };
+      mlbBoxScoreCache.set(cacheKey, boxScoreGame);
+      return boxScoreGame;
+    }
+  } catch {
+    mlbBoxScoreCache.set(cacheKey, null);
+    return null;
+  }
+
+  mlbBoxScoreCache.set(cacheKey, null);
   return null;
 }
 
@@ -904,6 +1109,205 @@ async function gradePendingNBAPropPicks(
   };
 }
 
+async function gradePendingMLBPropPicks(
+  picks: any[],
+  existingRetro: RetroResult[],
+  gradedIds: Set<string>,
+  cutoffIso: string,
+): Promise<{
+  checked: number;
+  graded: number;
+  pending: number;
+  missing: number;
+  void: number;
+  officialGraded: number;
+  trackedGraded: number;
+  officialPending: number;
+  trackedPending: number;
+}> {
+  const toGrade = picks.filter((pick: any) => {
+    const gameTime = pick.gameTime ?? pick.startTime;
+    if (!gameTime) return false;
+    if (buildRetroPickId(pick) && gradedIds.has(buildRetroPickId(pick))) return false;
+    if (normalizeSportKey(pick) !== 'baseball_mlb') return false;
+    if (pick.marketType !== 'player_prop') return false;
+    if ((pick.gameResult ?? 'PENDING') !== 'PENDING') return false;
+    if (inferSupportedMLBPropType(pick) === null) return false;
+    if (inferPropDirection(`${pick.side ?? ''} ${pick.notes ?? ''}`) === null) return false;
+    if ((pick.playerName ?? extractMLBPlayerNameFromSide(pick.side ?? '')) === null) return false;
+    if (typeof pick.pickedLine !== 'number') return false;
+    if (gameTime >= cutoffIso) return false;
+    if (!isGradeReady(gameTime, 'baseball_mlb')) return false;
+    return true;
+  });
+
+  let graded = 0;
+  let missing = 0;
+  let voidCount = 0;
+  let officialGraded = 0;
+  let trackedGraded = 0;
+
+  for (const pick of toGrade) {
+    const propType = inferSupportedMLBPropType(pick);
+    const side = inferPropDirection(`${pick.side ?? ''} ${pick.notes ?? ''}`);
+    const playerName = pick.playerName ?? extractMLBPlayerNameFromSide(pick.side ?? '');
+    const line = typeof pick.pickedLine === 'number' ? pick.pickedLine : null;
+    const recordBucket = getPickRecordBucket(pick);
+
+    if (!propType || !side || !playerName || line === null) continue;
+
+    const boxScore = await fetchMLBBoxScoreForGame(pick.matchup ?? '', pick.gameTime ?? pick.startTime ?? pick.date);
+    if (!boxScore || boxScore.final !== true) continue;
+
+    const player = boxScore.players.find(candidate => playerNamesMatch(playerName, candidate.playerName));
+    if (!player) {
+      markPickGrade(picks, pick, {
+        gameResult: 'MISSING_SCORE',
+        actualStat: null,
+        gradedAt: new Date().toISOString(),
+        gradingSource: boxScore.source,
+        gradingNotes: `player box score row not found for ${playerName}`,
+        autoGraded: true,
+      });
+      existingRetro.push({
+        pickId: buildRetroPickId(pick),
+        date: pick.date ?? (pick.gameTime ?? '').split('T')[0],
+        matchup: pick.matchup,
+        sport: pick.sport,
+        betType: pick.betType,
+        side: pick.side,
+        line,
+        grade: pick.grade,
+        score: pick.score,
+        signals: pick.signalTypes ?? pick.signals ?? [],
+        gameResult: 'MISSING_SCORE',
+        actualScore: null,
+        margin: null,
+        clvActual: null,
+        missedSignals: [],
+        autoGraded: true,
+        recordBucket,
+        gradingNote: `player box score row not found for ${playerName}`,
+      });
+      gradedIds.add(buildRetroPickId(pick));
+      missing++;
+      continue;
+    }
+
+    const isPitcherProp =
+      propType === 'pitcher_strikeouts' ||
+      propType === 'pitcher_hits_allowed' ||
+      propType === 'pitcher_earned_runs';
+    const hasBattingAction =
+      player.plateAppearances > 0 ||
+      player.atBats > 0 ||
+      player.hits > 0 ||
+      player.totalBases > 0;
+    const hasPitchingAction =
+      player.pitchingOuts > 0 ||
+      player.battersFaced > 0 ||
+      player.strikeouts > 0 ||
+      player.hitsAllowed > 0 ||
+      player.earnedRuns > 0;
+
+    if ((isPitcherProp && !hasPitchingAction) || (!isPitcherProp && !hasBattingAction)) {
+      const gradingNote = isPitcherProp
+        ? 'No pitching action recorded'
+        : 'No batting action recorded';
+      markPickGrade(picks, pick, {
+        gameResult: 'VOID',
+        actualStat: null,
+        gradedAt: new Date().toISOString(),
+        gradingSource: boxScore.source,
+        gradingNotes: gradingNote,
+        autoGraded: true,
+      });
+      existingRetro.push({
+        pickId: buildRetroPickId(pick),
+        date: pick.date ?? (pick.gameTime ?? '').split('T')[0],
+        matchup: pick.matchup,
+        sport: pick.sport,
+        betType: pick.betType,
+        side: pick.side,
+        line,
+        grade: pick.grade,
+        score: pick.score,
+        signals: pick.signalTypes ?? pick.signals ?? [],
+        gameResult: 'VOID',
+        actualScore: null,
+        margin: null,
+        clvActual: null,
+        missedSignals: [],
+        autoGraded: true,
+        recordBucket,
+        gradingNote,
+      });
+      gradedIds.add(buildRetroPickId(pick));
+      voidCount++;
+      continue;
+    }
+
+    const actualStat = readMLBStat(player, propType);
+    const result = evaluateMLBPropResult(side, line, actualStat);
+    markPickGrade(picks, pick, {
+      gameResult: result,
+      actualStat,
+      gradedAt: new Date().toISOString(),
+      gradingSource: boxScore.source,
+      gradingNotes: `${propType} ${side} graded from MLB Stats API live feed`,
+      autoGraded: true,
+    });
+    existingRetro.push({
+      pickId: buildRetroPickId(pick),
+      date: pick.date ?? pick.gameTime?.split('T')[0],
+      matchup: pick.matchup,
+      sport: pick.sport,
+      betType: pick.betType,
+      side: pick.side,
+      line,
+      grade: pick.grade,
+      score: pick.score,
+      signals: pick.signalTypes ?? pick.signals ?? [],
+      gameResult: result,
+      actualScore: String(actualStat),
+      margin: null,
+      clvActual: null,
+      missedSignals: result === 'LOSS' ? ['MLB_PROP_RESULT_AGAINST_PICK'] : [],
+      autoGraded: true,
+      recordBucket,
+    });
+    gradedIds.add(buildRetroPickId(pick));
+    graded++;
+    if (recordBucket === 'official') officialGraded++;
+    else trackedGraded++;
+  }
+
+  const pendingPicks = picks.filter((pick: any) => {
+    const gameTime = pick.gameTime ?? pick.startTime;
+    return (
+      normalizeSportKey(pick) === 'baseball_mlb' &&
+      pick.marketType === 'player_prop' &&
+      (pick.gameResult ?? 'PENDING') === 'PENDING' &&
+      inferSupportedMLBPropType(pick) !== null &&
+      Boolean(gameTime)
+    );
+  });
+  const officialPending = pendingPicks.filter(p => getPickRecordBucket(p) === 'official').length;
+  const trackedPending = pendingPicks.length - officialPending;
+
+  return {
+    checked: toGrade.length,
+    graded,
+    pending: pendingPicks.length,
+    missing,
+    void: voidCount,
+    officialGraded,
+    trackedGraded,
+    officialPending,
+    trackedPending,
+  };
+}
+
 // ------------------------------------
 // Auto-grade picks from Odds API scores with ESPN fallback
 // ------------------------------------
@@ -911,6 +1315,23 @@ async function gradePendingNBAPropPicks(
 export async function autoGradePicks(): Promise<AutoGradeSummary> {
   const picks = loadPicks();
   let existingRetro = loadRetroResults();
+  const supportedPropIds = new Set(
+    picks
+      .filter((pick: any) =>
+        pick.marketType === 'player_prop' &&
+        (
+          (
+            normalizeSportKey(pick) === 'basketball_nba' &&
+            inferSupportedNBAPropType(pick) !== null
+          ) ||
+          (
+            normalizeSportKey(pick) === 'baseball_mlb' &&
+            inferSupportedMLBPropType(pick) !== null
+          )
+        )
+      )
+      .map((pick: any) => buildRetroPickId(pick))
+  );
   const supportedNBAPropIds = new Set(
     picks
       .filter((pick: any) =>
@@ -935,7 +1356,7 @@ export async function autoGradePicks(): Promise<AutoGradeSummary> {
       .filter(r =>
         r.autoGraded &&
         r.gameResult === 'PUSH' &&
-        !supportedNBAPropIds.has(r.pickId) &&
+        !supportedPropIds.has(r.pickId) &&
         (
           !GRADEABLE_TYPES.has(r.betType) ||
           ((r.betType === 'Total' || r.betType === 'spreads' || r.betType === 'Spread') &&
@@ -1148,6 +1569,18 @@ export async function autoGradePicks(): Promise<AutoGradeSummary> {
   officialGraded += nbaPropSummary.officialGraded;
   trackedGraded += nbaPropSummary.trackedGraded;
 
+  const mlbPropSummary = await gradePendingMLBPropPicks(
+    picks,
+    existingRetro,
+    gradedIds,
+    cutoff,
+  );
+  newlyGraded += mlbPropSummary.graded;
+  missingScoreCount += mlbPropSummary.missing;
+  voidCount += mlbPropSummary.void;
+  officialGraded += mlbPropSummary.officialGraded;
+  trackedGraded += mlbPropSummary.trackedGraded;
+
   if (newlyGraded > 0 || missingScoreCount > 0 || voidCount > 0) {
     savePicks(picks);
     saveRetroResults(existingRetro);
@@ -1161,6 +1594,11 @@ export async function autoGradePicks(): Promise<AutoGradeSummary> {
         normalizeSportKey(p) === 'basketball_nba' &&
         p.marketType === 'player_prop' &&
         inferSupportedNBAPropType(p) !== null
+      ) ||
+      (
+        normalizeSportKey(p) === 'baseball_mlb' &&
+        p.marketType === 'player_prop' &&
+        inferSupportedMLBPropType(p) !== null
       )
     ) &&
     Boolean(p.gameTime ?? p.startTime)
@@ -1169,7 +1607,7 @@ export async function autoGradePicks(): Promise<AutoGradeSummary> {
   const trackedPending = pendingGradeablePicks.length - officialPending;
 
   return {
-    checked: toGrade.length + nbaPropSummary.checked,
+    checked: toGrade.length + nbaPropSummary.checked + mlbPropSummary.checked,
     graded: newlyGraded,
     pending: pendingGradeablePicks.length,
     missing: missingScoreCount,
