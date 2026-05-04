@@ -38,6 +38,175 @@ function canUseMLBLineupRates(teamContext: MLBTeamContext | null | undefined): b
   return teamContext?.lineupConfidence === 'confirmed' || teamContext?.lineupConfidence === 'partial';
 }
 
+function hasRealNHLNumber(value: number | null | undefined): value is number {
+  return Number.isFinite(value as number) && (value as number) > 0;
+}
+
+function buildNHLContextSignal(
+  type: string,
+  detail: string,
+  side: 'over' | 'under' | 'neutral',
+  scoreContribution: number
+): PropSignal {
+  return {
+    type,
+    detail,
+    impact: 'positive',
+    magnitude: Math.abs(scoreContribution) >= 10 ? 'high' : 'medium',
+    side,
+    scoreContribution,
+  };
+}
+
+function injectNHLPhase1Signals(
+  prediction: PropPrediction,
+  prop: {
+    marketKey?: string;
+    playerName: string;
+    side: 'over' | 'under';
+  },
+  playerContext: NHLPlayerContext | null,
+  snapshot: NHLContextSnapshot | null | undefined
+): PropPrediction {
+  if (!playerContext || !snapshot) return prediction;
+
+  const signals: PropSignal[] = [];
+  let scoreAdjustment = 0;
+  const marketKey = (prop.marketKey ?? '').toLowerCase();
+
+  const addSignal = (signal: PropSignal): void => {
+    signals.push(signal);
+    scoreAdjustment += signal.scoreContribution;
+  };
+
+  if (marketKey === 'player_shots_on_goal') {
+    const seasonShotsPerGame = playerContext.seasonShotsPerGame;
+    const recentShotsPerGame = playerContext.recentShotsPerGame;
+    const avgToiMinutes = playerContext.avgToiMinutes;
+    const recentAvgToiMinutes = playerContext.recentAvgToiMinutes;
+
+    if (hasRealNHLNumber(seasonShotsPerGame)) {
+      const overPositive = seasonShotsPerGame >= prediction.postedLine + 0.25;
+      const underPositive = seasonShotsPerGame <= prediction.postedLine - 0.25;
+      if (overPositive && prop.side === 'over') {
+        addSignal(buildNHLContextSignal(
+          'SHOT_VOLUME_BASELINE',
+          `Season shots/game ${seasonShotsPerGame.toFixed(2)} clears the posted line ${prediction.postedLine}`,
+          'over',
+          10
+        ));
+      } else if (underPositive && prop.side === 'under') {
+        addSignal(buildNHLContextSignal(
+          'SHOT_VOLUME_BASELINE',
+          `Season shots/game ${seasonShotsPerGame.toFixed(2)} trails the posted line ${prediction.postedLine}`,
+          'under',
+          8
+        ));
+      }
+    }
+
+    if (
+      hasRealNHLNumber(seasonShotsPerGame) &&
+      hasRealNHLNumber(recentShotsPerGame)
+    ) {
+      if (recentShotsPerGame >= seasonShotsPerGame * 1.10 && prop.side === 'over') {
+        addSignal(buildNHLContextSignal(
+          'SHOT_VOLUME_FORM',
+          `Recent shots/game ${recentShotsPerGame.toFixed(2)} is above season ${seasonShotsPerGame.toFixed(2)}`,
+          'over',
+          10
+        ));
+      } else if (recentShotsPerGame <= seasonShotsPerGame * 0.90 && prop.side === 'under') {
+        addSignal(buildNHLContextSignal(
+          'SHOT_VOLUME_FORM',
+          `Recent shots/game ${recentShotsPerGame.toFixed(2)} is below season ${seasonShotsPerGame.toFixed(2)}`,
+          'under',
+          8
+        ));
+      }
+    }
+
+    if (
+      hasRealNHLNumber(avgToiMinutes) &&
+      hasRealNHLNumber(recentAvgToiMinutes) &&
+      avgToiMinutes >= 15.5 &&
+      recentAvgToiMinutes >= avgToiMinutes * 0.95 &&
+      hasRealNHLNumber(seasonShotsPerGame)
+    ) {
+      const stableOver = seasonShotsPerGame >= prediction.postedLine && prop.side === 'over';
+      const stableUnder = seasonShotsPerGame <= prediction.postedLine && prop.side === 'under';
+      if (stableOver || stableUnder) {
+        addSignal(buildNHLContextSignal(
+          'ICE_TIME_STABILITY',
+          `TOI stable at ${recentAvgToiMinutes.toFixed(1)}m recent vs ${avgToiMinutes.toFixed(1)}m season`,
+          stableOver ? 'over' : 'under',
+          stableOver ? 8 : 6
+        ));
+      }
+    }
+  }
+
+  if (marketKey === 'goalie_saves') {
+    const seasonSavesPerGame = playerContext.seasonSavesPerGame;
+    const recentSavesPerGame = playerContext.recentSavesPerGame;
+    const avgToiMinutes = playerContext.avgToiMinutes;
+    const recentAvgToiMinutes = playerContext.recentAvgToiMinutes;
+    const starterToiMinutes = avgToiMinutes ?? recentAvgToiMinutes;
+
+    if (hasRealNHLNumber(seasonSavesPerGame)) {
+      const overPositive = seasonSavesPerGame >= prediction.postedLine + 1.0;
+      const underPositive = seasonSavesPerGame <= prediction.postedLine - 1.0;
+      if (overPositive && prop.side === 'over') {
+        addSignal(buildNHLContextSignal(
+          'GOALIE_SAVE_BASELINE',
+          `Season saves/game ${seasonSavesPerGame.toFixed(1)} clears the posted line ${prediction.postedLine}`,
+          'over',
+          10
+        ));
+      } else if (underPositive && prop.side === 'under') {
+        addSignal(buildNHLContextSignal(
+          'GOALIE_SAVE_BASELINE',
+          `Season saves/game ${seasonSavesPerGame.toFixed(1)} trails the posted line ${prediction.postedLine}`,
+          'under',
+          8
+        ));
+      }
+    }
+
+    if (
+      hasRealNHLNumber(seasonSavesPerGame) &&
+      hasRealNHLNumber(recentSavesPerGame) &&
+      hasRealNHLNumber(starterToiMinutes) &&
+      hasRealNHLNumber(recentAvgToiMinutes) &&
+      recentAvgToiMinutes >= 55
+    ) {
+      if (recentSavesPerGame >= seasonSavesPerGame * 1.08 && prop.side === 'over') {
+        addSignal(buildNHLContextSignal(
+          'GOALIE_WORKLOAD_STABILITY',
+          `Recent saves/game ${recentSavesPerGame.toFixed(1)} is above season ${seasonSavesPerGame.toFixed(1)} with starter TOI intact`,
+          'over',
+          10
+        ));
+      } else if (recentSavesPerGame <= seasonSavesPerGame * 0.92 && prop.side === 'under') {
+        addSignal(buildNHLContextSignal(
+          'GOALIE_WORKLOAD_STABILITY',
+          `Recent saves/game ${recentSavesPerGame.toFixed(1)} is below season ${seasonSavesPerGame.toFixed(1)} with starter TOI intact`,
+          'under',
+          8
+        ));
+      }
+    }
+  }
+
+  if (signals.length === 0) return prediction;
+
+  return {
+    ...prediction,
+    signals: [...prediction.signals, ...signals],
+    scoreAdjustment: prediction.scoreAdjustment + scoreAdjustment,
+  };
+}
+
 function injectMLBPhase1BSignals(
   prediction: PropPrediction,
   prop: {
@@ -311,6 +480,11 @@ import {
   resolveMLBPlayerContext,
   resolveMLBTeamContext,
 } from './mlbContextProvider';
+import {
+  NHLContextSnapshot,
+  NHLPlayerContext,
+  resolveNHLPlayerContext,
+} from './nhlContextProvider';
 import {
   assessBlowoutRisk,
   getMarketEfficiencyForProp,
@@ -598,6 +772,11 @@ export function isSupportedMLBProjectionMarket(statType: string): boolean {
     t === 'batter_total_bases';
 }
 
+export function isSupportedNHLProjectionMarket(statType: string): boolean {
+  const t = statType.toLowerCase();
+  return t === 'player_shots_on_goal' || t === 'goalie_saves';
+}
+
 function hasRelevantMLBBaseline(playerContext: MLBContextSnapshot['players'][number] | null, statType: string): boolean {
   if (!playerContext) return false;
   const t = statType.toLowerCase();
@@ -645,6 +824,31 @@ function hasRelevantMLBBaseline(playerContext: MLBContextSnapshot['players'][num
       playerContext.seasonPlateAppearances > 0 &&
       playerContext.seasonTotalBases !== null &&
       playerContext.seasonTotalBases !== undefined;
+  }
+
+  return false;
+}
+
+function hasRelevantNHLBaseline(playerContext: NHLContextSnapshot['players'][number] | null, statType: string): boolean {
+  if (!playerContext) return false;
+  const t = statType.toLowerCase();
+
+  if (t === 'player_shots_on_goal') {
+    return playerContext.role === 'skater' &&
+      playerContext.seasonGamesPlayed !== null &&
+      playerContext.seasonGamesPlayed !== undefined &&
+      playerContext.seasonGamesPlayed > 0 &&
+      playerContext.seasonShots !== null &&
+      playerContext.seasonShots !== undefined;
+  }
+
+  if (t === 'goalie_saves') {
+    return playerContext.role === 'goalie' &&
+      playerContext.seasonGamesPlayed !== null &&
+      playerContext.seasonGamesPlayed !== undefined &&
+      playerContext.seasonGamesPlayed > 0 &&
+      playerContext.seasonSaves !== null &&
+      playerContext.seasonSaves !== undefined;
   }
 
   return false;
@@ -702,6 +906,57 @@ function buildMLBBaselineProfile(
     recentGames: [],
     propStreaks: undefined,
   } as unknown as PlayerProfile;
+}
+
+function buildNHLBaselineProfile(
+  playerContext: NHLContextSnapshot['players'][number] | null,
+  statType: string
+): PlayerProfile | null {
+  if (!playerContext || !hasRelevantNHLBaseline(playerContext, statType)) return null;
+
+  const t = statType.toLowerCase();
+  const seasonBaseline = t === 'goalie_saves'
+    ? (playerContext.seasonSavesPerGame ?? 0)
+    : (playerContext.seasonShotsPerGame ?? 0);
+  const recentBaseline = t === 'goalie_saves'
+    ? (playerContext.recentSavesPerGame ?? seasonBaseline)
+    : (playerContext.recentShotsPerGame ?? seasonBaseline);
+  const seasonMinutes = playerContext.avgToiMinutes ?? 0;
+  const recentMinutes = playerContext.recentAvgToiMinutes ?? seasonMinutes;
+  const minutesTrendPct = seasonMinutes > 0
+    ? roundToThousandths(((recentMinutes - seasonMinutes) / seasonMinutes) * 100)
+    : 0;
+
+  return {
+    playerId: String(playerContext.id ?? `${playerContext.team}-${playerContext.name}`),
+    playerName: playerContext.name,
+    team: playerContext.team,
+    position: playerContext.position ?? (playerContext.role === 'goalie' ? 'G' : 'F'),
+    seasonPPG: roundToTenths(seasonBaseline),
+    seasonRPG: roundToTenths(seasonBaseline),
+    seasonAPG: roundToTenths(seasonBaseline),
+    seasonMPG: roundToTenths(seasonMinutes),
+    season3PG: roundToTenths(seasonBaseline),
+    l5PPG: roundToTenths(recentBaseline),
+    l5RPG: roundToTenths(recentBaseline),
+    l5APG: roundToTenths(recentBaseline),
+    l5MPG: roundToTenths(recentMinutes),
+    l5_3PG: roundToTenths(recentBaseline),
+    l10PPG: roundToTenths(seasonBaseline),
+    l10MPG: roundToTenths(seasonMinutes),
+    minutesTrend: minutesTrendPct >= 5 ? 'rising' : minutesTrendPct <= -5 ? 'falling' : 'stable',
+    pointsTrend: 'stable',
+    formVsSeason: roundToTenths(recentBaseline - seasonBaseline),
+    minutesTrendPct,
+    homePPG: null,
+    awayPPG: null,
+    propStreaks: {},
+    usageRate: null,
+    h2hRecord: {},
+    recentGames: [],
+    gamesPlayed: playerContext.seasonGamesPlayed ?? 0,
+    fetchedAt: new Date().toISOString(),
+  };
 }
 
 function getStatValue(game: PlayerProfile['recentGames'][number], statKey: 'points' | 'rebounds' | 'assists' | 'threes'): number {
@@ -1269,6 +1524,7 @@ export function generatePropPrediction(
   let predictedValue = postedLine; // default = line, no edge
   let nbaProjection: NBAProjectionResult | undefined;
   const allowMLBGenericFallbackSignals = !(sportKey === 'baseball_mlb' && !profile);
+  const allowNHLGenericMetaSignals = sportKey !== 'icehockey_nhl';
 
   // -- Signal 1: Recent form vs season average -----------------
   if (profile) {
@@ -1372,7 +1628,7 @@ export function generatePropPrediction(
     }
 
     // -- Signal 5: Pace / game total ------------------------
-    if (matchup.gameTotalVsLeagueAvg !== null && Math.abs(matchup.gameTotalVsLeagueAvg) >= 5) {
+    if (allowNHLGenericMetaSignals && matchup.gameTotalVsLeagueAvg !== null && Math.abs(matchup.gameTotalVsLeagueAvg) >= 5) {
       const isHighPace = matchup.gameTotalVsLeagueAvg > 0;
       const gameTotalStr = matchup.gameTotal ? `Game total: ${matchup.gameTotal}` : '';
       signals.push({
@@ -1422,7 +1678,7 @@ export function generatePropPrediction(
   }
 
   // -- Signal 6c: Team total (implied team scoring) -----------
-  if (teamTotal !== null && allowMLBGenericFallbackSignals) {
+  if (teamTotal !== null && allowMLBGenericFallbackSignals && allowNHLGenericMetaSignals) {
     const teamTotalVsAvg = teamTotal - leagueAvgTeamTotal;
     if (Math.abs(teamTotalVsAvg) >= 4) {
       const isHighScoring = teamTotalVsAvg > 0;
@@ -1468,7 +1724,7 @@ export function generatePropPrediction(
   }
 
   // -- Signal 9: Power rating alignment ---------------------
-  if (powerComparison && powerComparison.recommendation) {
+  if (allowNHLGenericMetaSignals && powerComparison && powerComparison.recommendation) {
     const teamFavored = powerComparison.recommendation === (statType.includes('point') ? 'home' : 'none');
     if (powerComparison.confidence === 'high') {
       signals.push({
@@ -1498,7 +1754,7 @@ export function generatePropPrediction(
   }
 
   // -- Signal 11: Blowout risk -------------------------------
-  if (allowMLBGenericFallbackSignals) {
+  if (allowMLBGenericFallbackSignals && allowNHLGenericMetaSignals) {
     const blowout = assessBlowoutRisk(
       sportKey ?? 'basketball_nba', team, homeTeam ?? team, awayTeam ?? team,
       gameSpread, statType
@@ -1521,7 +1777,7 @@ export function generatePropPrediction(
   }
 
   // -- Signal 12: Market efficiency (prop type) ---------------
-  if (allowMLBGenericFallbackSignals) {
+  if (allowMLBGenericFallbackSignals && allowNHLGenericMetaSignals) {
     const marketEff = getMarketEfficiencyForProp(sportKey ?? 'basketball_nba', marketKey);
     if (marketEff.volumeCategory === 'very_low' || marketEff.volumeCategory === 'low') {
       signals.push({
@@ -1538,20 +1794,22 @@ export function generatePropPrediction(
   }
 
   // -- Signal 13: Public star bias ----------------------------
-  const starBias = assessPublicStarBias(
-    playerName, sportKey ?? 'basketball_nba',
-    profile?.seasonPPG ?? null, statType, side
-  );
-  if (starBias.scoreAdjustment !== 0) {
-    signals.push({
-      type: 'STAR_BIAS',
-      detail: starBias.detail,
-      impact: starBias.shouldFadeOver ? 'negative' : 'positive',
-      magnitude: starBias.isStarPlayer ? 'high' : 'medium',
-      side: starBias.shouldFadeOver ? 'under' : 'over',
-      scoreContribution: starBias.scoreAdjustment,
-    });
-    scoreAdjustment += starBias.scoreAdjustment;
+  if (allowNHLGenericMetaSignals) {
+    const starBias = assessPublicStarBias(
+      playerName, sportKey ?? 'basketball_nba',
+      profile?.seasonPPG ?? null, statType, side
+    );
+    if (starBias.scoreAdjustment !== 0) {
+      signals.push({
+        type: 'STAR_BIAS',
+        detail: starBias.detail,
+        impact: starBias.shouldFadeOver ? 'negative' : 'positive',
+        magnitude: starBias.isStarPlayer ? 'high' : 'medium',
+        side: starBias.shouldFadeOver ? 'under' : 'over',
+        scoreContribution: starBias.scoreAdjustment,
+      });
+      scoreAdjustment += starBias.scoreAdjustment;
+    }
   }
 
   // -- Signal 14: Foul trouble risk (NBA) ---------------------
@@ -1574,19 +1832,21 @@ export function generatePropPrediction(
   }
 
   // -- Signal 15: Overtime risk --------------------------------
-  const otRisk = assessOvertimeRisk(
-    sportKey ?? 'basketball_nba', gameSpread, gameTotal ?? null, statType, side
-  );
-  if (otRisk.isHighOTRisk && otRisk.scoreAdjustment !== 0) {
-    signals.push({
-      type: 'OVERTIME_RISK',
-      detail: otRisk.detail,
-      impact: otRisk.scoreAdjustment < 0 ? 'negative' : 'positive',
-      magnitude: otRisk.otProbability >= 0.20 ? 'high' : 'medium',
-      side: otRisk.affectedSide === 'none' ? 'neutral' : otRisk.affectedSide,
-      scoreContribution: otRisk.scoreAdjustment,
-    });
-    scoreAdjustment += otRisk.scoreAdjustment;
+  if (allowNHLGenericMetaSignals) {
+    const otRisk = assessOvertimeRisk(
+      sportKey ?? 'basketball_nba', gameSpread, gameTotal ?? null, statType, side
+    );
+    if (otRisk.isHighOTRisk && otRisk.scoreAdjustment !== 0) {
+      signals.push({
+        type: 'OVERTIME_RISK',
+        detail: otRisk.detail,
+        impact: otRisk.scoreAdjustment < 0 ? 'negative' : 'positive',
+        magnitude: otRisk.otProbability >= 0.20 ? 'high' : 'medium',
+        side: otRisk.affectedSide === 'none' ? 'neutral' : otRisk.affectedSide,
+        scoreContribution: otRisk.scoreAdjustment,
+      });
+      scoreAdjustment += otRisk.scoreAdjustment;
+    }
   }
 
   // -- Signal 16: Sharp steam on this game --------------
@@ -2279,10 +2539,11 @@ export async function buildPropPredictions(
     weatherMap?: Map<string, any>;
     nbaContextSnapshot?: NBAContextSnapshot;
     mlbContextSnapshot?: MLBContextSnapshot;
+    nhlContextSnapshot?: NHLContextSnapshot;
   }
 ): Promise<BuildPropPredictionsResult> {
   const results = new Map<string, PropPrediction>();
-  const coverage: PropCoverageSummary | undefined = (sportKey === 'basketball_nba' || sportKey === 'baseball_mlb')
+  const coverage: PropCoverageSummary | undefined = (sportKey === 'basketball_nba' || sportKey === 'baseball_mlb' || sportKey === 'icehockey_nhl')
     ? {
         eligible: props.length,
         attached: 0,
@@ -2335,13 +2596,15 @@ export async function buildPropPredictions(
       ? gameProps.filter(prop => isSupportedNBAProjectionMarket(prop.statType))
       : sportKey === 'baseball_mlb'
         ? gameProps.filter(prop => isSupportedMLBProjectionMarket(prop.statType))
+        : sportKey === 'icehockey_nhl'
+          ? gameProps.filter(prop => isSupportedNHLProjectionMarket(prop.statType))
         : gameProps.slice(0, 6);
 
     for (const prop of propsToProcess) {
       try {
         // Get player profile
         const preferredTeam = prop.team || '';
-        const shouldLookupPlayerProfile = sportKey !== 'baseball_mlb';
+        const shouldLookupPlayerProfile = sportKey !== 'baseball_mlb' && sportKey !== 'icehockey_nhl';
         const preferredPlayerId = shouldLookupPlayerProfile && preferredTeam
           ? await findPlayerId(prop.playerName, preferredTeam, sportKey)
           : null;
@@ -2407,6 +2670,13 @@ export async function buildPropPredictions(
         const mlbOpponentPitcherContext = sportKey === 'baseball_mlb'
           ? getMLBOpponentPitcherContextFromSnapshot(extraIntel?.mlbContextSnapshot, mlbOpponentTeamContext)
           : null;
+        const nhlPlayerContext = sportKey === 'icehockey_nhl'
+          ? resolveNHLPlayerContext(
+            extraIntel?.nhlContextSnapshot,
+            prop.playerName,
+            resolvedPlayerTeam || preferredTeam || prop.homeTeam
+          )
+          : null;
 
         if (sportKey === 'basketball_nba') {
           const hasPlayerIdentity = Boolean(playerId || nbaPlayerContext);
@@ -2445,6 +2715,23 @@ export async function buildPropPredictions(
 
           if (!profile) {
             profile = buildMLBBaselineProfile(mlbPlayerContext, prop.statType);
+          }
+        }
+        if (sportKey === 'icehockey_nhl') {
+          const hasPlayerIdentity = Boolean(nhlPlayerContext);
+          if (!hasPlayerIdentity) {
+            if (coverage) coverage.missingPlayer++;
+            continue;
+          }
+
+          const hasRelevantBaseline = hasRelevantNHLBaseline(nhlPlayerContext, prop.statType);
+          if (!hasRelevantBaseline) {
+            if (coverage) coverage.missingContext++;
+            continue;
+          }
+
+          if (!profile) {
+            profile = buildNHLBaselineProfile(nhlPlayerContext, prop.statType);
           }
         }
 
@@ -2517,6 +2804,13 @@ export async function buildPropPredictions(
             mlbOpponentPitcherContext,
             extraIntel?.mlbContextSnapshot
           )
+          : sportKey === 'icehockey_nhl'
+            ? injectNHLPhase1Signals(
+              prediction,
+              prop,
+              nhlPlayerContext,
+              extraIntel?.nhlContextSnapshot
+            )
           : prediction;
 
         results.set(key, finalPrediction);

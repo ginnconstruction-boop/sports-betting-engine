@@ -6,8 +6,8 @@
 // Supported sports and intelligence depth:
 //   basketball_nba        -- full: player profiles, matchups, all 18 signals
 //   americanfootball_nfl  -- full: player profiles, matchups, all 18 signals
-//   baseball_mlb          -- market scoring only (line/juice gaps, no game logs)
-//   icehockey_nhl         -- market scoring only (line/juice gaps, no game logs)
+//   baseball_mlb          -- context-backed V1: pitcher/hitter baseline + matchup signals
+//   icehockey_nhl         -- context-backed V1: shots on goal / goalie saves only
 // ============================================================
 
 export const PROP_CONFIG = {

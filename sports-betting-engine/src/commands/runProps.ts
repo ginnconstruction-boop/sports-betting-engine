@@ -42,6 +42,7 @@ import { applyOutcomeSignals, printOutcomeSummary, OutcomeContext } from '../ser
 import { applySignalWeighting, printWeightingSummary } from '../services/signalWeightingEngine';
 import { buildNBAContextForSlate } from '../services/nbaContextProvider';
 import { buildMLBContextForSlate } from '../services/mlbContextProvider';
+import { buildNHLContextForSlate } from '../services/nhlContextProvider';
 import { buildCalibrationReport, decorateCandidatesWithCalibration } from '../services/calibrationEngine';
 
 function safeSync<T>(fn: () => T, fallback: T): T {
@@ -215,6 +216,7 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
         null
       )
       : null;
+    let nhlContextSnapshot = null as Awaited<ReturnType<typeof buildNHLContextForSlate>> | null;
 
     if (sportKey === 'basketball_nba') {
       if (nbaContextSnapshot) {
@@ -300,6 +302,39 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
     const aggregated = aggregateProps(allRawProps);
     console.log(`\n  Aggregated ${aggregated.length} player prop markets`);
 
+    if (sportKey === 'icehockey_nhl') {
+      nhlContextSnapshot = await safeRun(
+        () => buildNHLContextForSlate(
+          upcoming.slice(0, maxGames).map(event => ({
+            eventId: event.eventId,
+            homeTeam: event.homeTeam,
+            awayTeam: event.awayTeam,
+            gameTime: event.startTime,
+          })),
+          aggregated.map(prop => ({
+            playerName: prop.playerName,
+            marketKey: prop.marketKey,
+            team: prop.team,
+            homeTeam: prop.homeTeam,
+            awayTeam: prop.awayTeam,
+          }))
+        ),
+        null
+      );
+      if (nhlContextSnapshot) {
+        console.log(
+          `  [NHL_CTX] players: ${nhlContextSnapshot.meta.players} | goalies: ${nhlContextSnapshot.meta.goalies} | ` +
+          `teams: ${nhlContextSnapshot.meta.teams} | recent: ${nhlContextSnapshot.meta.recent} | ` +
+          `matchup: ${nhlContextSnapshot.meta.matchup} | fallback: ${nhlContextSnapshot.meta.fallback}`
+        );
+        if (nhlContextSnapshot.meta.fallback > 0) {
+          console.warn('  [NHL_CTX] partial NHL context fallback active -- continuing with real-data-only coverage gates');
+        }
+      } else {
+        console.warn('  [NHL_CTX] unavailable -- continuing without NHL context attachment');
+      }
+    }
+
     const topProps = (await scoreAllPropsWithIntelligence(
       aggregated, windowHours, contextMap, sportKey,
       {
@@ -311,6 +346,7 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
         atsSituations,
         nbaContextSnapshot: nbaContextSnapshot ?? undefined,
         mlbContextSnapshot: mlbContextSnapshot ?? undefined,
+        nhlContextSnapshot: nhlContextSnapshot ?? undefined,
       },
       learnedWeights
     )).slice(0, PROP_CONFIG.TOP_N);

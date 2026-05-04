@@ -140,6 +140,14 @@ const MLB_PREDICTIVE_CONTEXT_SIGNALS = new Set([
   'BALLPARK_FACTOR',
 ]);
 
+const NHL_PREDICTIVE_CONTEXT_SIGNALS = new Set([
+  'SHOT_VOLUME_BASELINE',
+  'SHOT_VOLUME_FORM',
+  'ICE_TIME_STABILITY',
+  'GOALIE_SAVE_BASELINE',
+  'GOALIE_WORKLOAD_STABILITY',
+]);
+
 function getSideProjectionEdge(
   side: 'Over' | 'Under',
   projectionEdge: number | undefined
@@ -247,6 +255,7 @@ function scoreProp(
 import { buildPropPredictions, PropCoverageSummary } from './propIntelligence';
 import { NBAContextSnapshot } from './nbaContextProvider';
 import { MLBContextSnapshot } from './mlbContextProvider';
+import { NHLContextSnapshot } from './nhlContextProvider';
 import { findPlayerId, getPlayerProfile } from './playerStats';
 import { applyLearnedWeights } from './retroAnalysis';
 
@@ -265,6 +274,7 @@ export async function scoreAllPropsWithIntelligence(
     weatherMap?: Map<string, any>;
     nbaContextSnapshot?: NBAContextSnapshot;
     mlbContextSnapshot?: MLBContextSnapshot;
+    nhlContextSnapshot?: NHLContextSnapshot;
   },
   learnedWeights: Record<string, number> = {}
 ): Promise<ScoredProp[]> {
@@ -280,6 +290,10 @@ export async function scoreAllPropsWithIntelligence(
     'pitcher_earned_runs',
     'batter_hits',
     'batter_total_bases',
+  ]);
+  const supportedNHLProjectionMarkets = new Set([
+    'player_shots_on_goal',
+    'goalie_saves',
   ]);
   const userBookKeys = getUserBookKeys();
 
@@ -304,7 +318,7 @@ export async function scoreAllPropsWithIntelligence(
   // Build predictions for all props -- one entry per side using correct AggregatedProp fields
   // AggregatedProp has overBestLine/underBestLine/overConsensusLine, not .line/.side
   const propInputs: any[] = [];
-  const coverageSummary: PropCoverageSummary | null = (sportKey === 'basketball_nba' || sportKey === 'baseball_mlb')
+  const coverageSummary: PropCoverageSummary | null = (sportKey === 'basketball_nba' || sportKey === 'baseball_mlb' || sportKey === 'icehockey_nhl')
     ? {
         eligible: 0,
         attached: 0,
@@ -321,6 +335,8 @@ export async function scoreAllPropsWithIntelligence(
       ? supportedNBAProjectionMarkets.has(normalizedMarketKey)
       : sportKey === 'baseball_mlb'
         ? supportedMLBProjectionMarkets.has(normalizedMarketKey)
+        : sportKey === 'icehockey_nhl'
+          ? supportedNHLProjectionMarkets.has(normalizedMarketKey)
         : true;
     const overUserOffers = p.overOffers
       .filter(o => userBookKeys.includes(o.bookmakerKey) && o.price !== null)
@@ -406,7 +422,11 @@ export async function scoreAllPropsWithIntelligence(
     coverageSummary.attached = predictionResult.coverage?.attached ?? predictions.size;
     coverageSummary.missingPlayer = predictionResult.coverage?.missingPlayer ?? 0;
     coverageSummary.missingContext = predictionResult.coverage?.missingContext ?? 0;
-    const coverageLabel = sportKey === 'baseball_mlb' ? 'MLB_PRED' : 'NBA_PRED';
+    const coverageLabel = sportKey === 'baseball_mlb'
+      ? 'MLB_PRED'
+      : sportKey === 'icehockey_nhl'
+        ? 'NHL_PRED'
+        : 'NBA_PRED';
     console.log(
       `  [${coverageLabel}] eligible: ${coverageSummary.eligible} | attached: ${coverageSummary.attached} | ` +
       `missingPlayer: ${coverageSummary.missingPlayer} | unsupportedMarket: ${coverageSummary.unsupportedMarket} | ` +
@@ -418,7 +438,7 @@ export async function scoreAllPropsWithIntelligence(
   const baseScored = scoreAllProps(props, windowHours, sportKey, contextMap);
 
   return baseScored.map(scored => {
-    const normalizedSide = (sportKey === 'basketball_nba' || sportKey === 'baseball_mlb')
+    const normalizedSide = (sportKey === 'basketball_nba' || sportKey === 'baseball_mlb' || sportKey === 'icehockey_nhl')
       ? scored.side.toLowerCase()
       : scored.side;
     const key = `${scored.playerName}__${scored.statType}__${normalizedSide}`;
@@ -426,17 +446,17 @@ export async function scoreAllPropsWithIntelligence(
 
     if (!prediction) return { ...scored, intelligenceScore: 0 };
 
-    // ── MLB-only: promote non-market signals into signals[] ───────────
-    // Scoped to baseball_mlb for this phase.  NBA/NHL signal write-back
-    // is a separate calibration task — do not expand scope here.
+    // Promote supported sport-specific non-market signals into signals[]
+    // so downstream diversity logic can distinguish real context from
+    // pure price structure without loosening thresholds.
     //
-    // For baseball_mlb: any prediction signal that is NOT pure book
+    // For baseball_mlb / icehockey_nhl: any prediction signal that is NOT pure book
     // comparison (PRICE_EDGE / LINE_GAP / JUICE_GAP / LINE_VS_CONSENSUS)
     // and has magnitude high/medium is pushed into signals[] so that
     // signalDiversityEngine.detectPriceOnly() correctly identifies
     // candidates that have real model backing beyond price structure.
     //
-    // For all other sports: enrichedSignals === scored.signals (no-op).
+    // For unsupported sports: enrichedSignals === scored.signals (no-op).
     const nonMarketIntelSignals = (prediction.signals ?? [])
       .filter(s => !MARKET_STRUCTURE_SIGNALS.has(s.type))
       .filter(s => s.magnitude === 'high' || s.magnitude === 'medium')
@@ -445,6 +465,8 @@ export async function scoreAllPropsWithIntelligence(
       ? nonMarketIntelSignals.filter(type => NBA_PREDICTIVE_CONTEXT_SIGNALS.has(type))
       : sportKey === 'baseball_mlb'
         ? nonMarketIntelSignals.filter(type => MLB_PREDICTIVE_CONTEXT_SIGNALS.has(type))
+        : sportKey === 'icehockey_nhl'
+          ? nonMarketIntelSignals.filter(type => NHL_PREDICTIVE_CONTEXT_SIGNALS.has(type))
         : nonMarketIntelSignals
     ).length;
 
@@ -455,6 +477,11 @@ export async function scoreAllPropsWithIntelligence(
           ? [...new Set([
             ...scored.signals,
             ...nonMarketIntelSignals.filter(type => MLB_PREDICTIVE_CONTEXT_SIGNALS.has(type)),
+          ])]
+        : sportKey === 'icehockey_nhl' && nonMarketIntelSignals.length > 0
+          ? [...new Set([
+            ...scored.signals,
+            ...nonMarketIntelSignals.filter(type => NHL_PREDICTIVE_CONTEXT_SIGNALS.has(type)),
           ])]
         : scored.signals;
 
@@ -917,6 +944,8 @@ export function printTopProps(props: ScoredProp[], sportKey = 'basketball_nba'):
       ? nonMarketSignalNames.filter((name) => NBA_PREDICTIVE_CONTEXT_SIGNALS.has(name))
       : p.sportKey === 'baseball_mlb'
         ? nonMarketSignalNames.filter((name) => MLB_PREDICTIVE_CONTEXT_SIGNALS.has(name))
+        : p.sportKey === 'icehockey_nhl'
+          ? nonMarketSignalNames.filter((name) => NHL_PREDICTIVE_CONTEXT_SIGNALS.has(name))
         : [];
     if (
       p.sportKey === 'basketball_nba' &&
@@ -938,6 +967,8 @@ export function printTopProps(props: ScoredProp[], sportKey = 'basketball_nba'):
       console.log(`  |  [AI] Non-market Signals: ${nonMarketSignalNames.length}${nonMarketSignalNames.length ? ` -> ${nonMarketSignalNames.join(', ')}` : ''}`);
       console.log(`  |  [AI] Context Signals: ${contextSignalNames.length}${contextSignalNames.length ? ` -> ${contextSignalNames.join(', ')}` : ''}`);
     } else if (p.sportKey === 'baseball_mlb') {
+      console.log(`  |  [AI] Context Signals: ${contextSignalNames.length}${contextSignalNames.length ? ` -> ${contextSignalNames.join(', ')}` : ''}`);
+    } else if (p.sportKey === 'icehockey_nhl') {
       console.log(`  |  [AI] Context Signals: ${contextSignalNames.length}${contextSignalNames.length ? ` -> ${contextSignalNames.join(', ')}` : ''}`);
     }
     const brProp = parseFloat(process.env.BANKROLL ?? '0');

@@ -112,7 +112,7 @@ export function validateSetup(): ValidationResult {
     'Player Props',
     true,
     propsOn
-      ? 'Enabled -- NBA/NFL have full intelligence; MLB/NHL have market scoring only'
+      ? 'Enabled -- NBA/NFL full intelligence; MLB/NHL have sport-specific V1 context layers'
       : 'Disabled -- set PROPS_ENABLED=true in propConfig.ts to enable'
   ));
 
