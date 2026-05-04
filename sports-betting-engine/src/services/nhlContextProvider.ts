@@ -42,12 +42,20 @@ export interface NHLPlayerContext {
   recentSavesPerGame?: number | null;
   recentShotsAgainstPerGame?: number | null;
   recentAvgToiMinutes?: number | null;
+  recentStarts?: number | null;
+  lastGameStarted?: boolean | null;
+  starterStatus?: 'confirmed' | 'likely' | 'unknown' | null;
+  starterSource?: 'boxscore' | 'recent_usage' | null;
 }
 
 export interface NHLTeamContext {
   teamId?: number | null;
   teamName: string;
   teamAbbrev: string;
+  shotsForPerGame?: number | null;
+  shotsAgainstPerGame?: number | null;
+  starterGoalieName?: string | null;
+  starterStatus?: 'confirmed' | 'likely' | 'unknown' | null;
 }
 
 export interface NHLContextSnapshot {
@@ -66,6 +74,10 @@ export interface NHLContextSnapshot {
     recent: number;
     matchup: number;
     fallback: number;
+    starterConfirmed: number;
+    starterLikely: number;
+    starterMissing: number;
+    opponent: number;
   };
 }
 
@@ -105,6 +117,11 @@ type RosterEntry = {
 type CacheEntry = {
   expiresAt: number;
   snapshot: NHLContextSnapshot;
+};
+
+type ConfirmedStarterInfo = {
+  playerId: number;
+  status: 'confirmed';
 };
 
 const CACHE_TTL_MS = 20 * 60 * 1000;
@@ -178,6 +195,10 @@ function avgOrNull(values: Array<number | null | undefined>): number | null {
   return roundToThousandths(valid.reduce((sum, value) => sum + value, 0) / valid.length);
 }
 
+function sumNumbers(values: Array<number | null | undefined>): number {
+  return values.reduce((sum, value) => sum + (Number.isFinite(value as number) ? Number(value) : 0), 0);
+}
+
 function parseToiMinutes(value: any): number | null {
   const raw = parseNullableNumber(value);
   if (raw !== null && raw > 200) {
@@ -204,6 +225,16 @@ function buildCacheKey(games: NHLContextGame[], targets: NHLContextTarget[]): st
 
 function toApiDate(date: Date): string {
   return date.toISOString().slice(0, 10);
+}
+
+function scheduleDateVariants(rawDate: string): string[] {
+  const seed = new Date(`${rawDate}T00:00:00Z`);
+  if (Number.isNaN(seed.getTime())) return [rawDate];
+  return [...new Set([0, -1, 1].map(offset => {
+    const copy = new Date(seed);
+    copy.setUTCDate(copy.getUTCDate() + offset);
+    return copy.toISOString().slice(0, 10);
+  }))];
 }
 
 function fullTeamName(teamNode: any): string {
@@ -248,6 +279,35 @@ function buildTeamRosterMap(roster: any): Map<number, TeamRosterEntry> {
   append(roster?.defensemen ?? [], 'skater');
   append(roster?.goalies ?? [], 'goalie');
   return result;
+}
+
+function computeTeamShotsForPerGame(stats: any): number | null {
+  const skaters = Array.isArray(stats?.skaters) ? stats.skaters : [];
+  const teamGamesPlayed = Math.max(
+    0,
+    ...skaters
+      .map((skater: any) => parseNullableNumber(skater?.gamesPlayed) ?? 0)
+  );
+  const totalShots = sumNumbers(
+    skaters.map((skater: any) => parseNullableNumber(skater?.shots))
+  );
+  return teamGamesPlayed > 0 ? roundToThousandths(totalShots / teamGamesPlayed) : null;
+}
+
+function computeTeamShotsAgainstPerGame(stats: any): number | null {
+  const goalies = Array.isArray(stats?.goalies) ? stats.goalies : [];
+  const totalShotsAgainst = sumNumbers(
+    goalies.map((goalie: any) => parseNullableNumber(goalie?.shotsAgainst))
+  );
+  const totalGamesStarted = sumNumbers(
+    goalies.map((goalie: any) => parseNullableNumber(goalie?.gamesStarted))
+  );
+  const fallbackGamesPlayed = Math.max(
+    0,
+    ...goalies.map((goalie: any) => parseNullableNumber(goalie?.gamesPlayed) ?? 0)
+  );
+  const denominator = totalGamesStarted > 0 ? totalGamesStarted : fallbackGamesPlayed;
+  return denominator > 0 ? roundToThousandths(totalShotsAgainst / denominator) : null;
 }
 
 function buildRosterEntriesForTeam(team: TeamSeed, roster: any, stats: any): RosterEntry[] {
@@ -332,7 +392,11 @@ function resolveRosterEntry(
   return matches.length === 1 ? matches[0] : null;
 }
 
-function buildPlayerContext(entry: RosterEntry, landing: any): NHLPlayerContext {
+function buildPlayerContext(
+  entry: RosterEntry,
+  landing: any,
+  confirmedStarter: ConfirmedStarterInfo | null
+): NHLPlayerContext {
   const recentGames = Array.isArray(landing?.last5Games)
     ? landing.last5Games.filter((game: any) => Number(game?.gameTypeId) === entry.contextGameType)
     : [];
@@ -347,6 +411,34 @@ function buildPlayerContext(entry: RosterEntry, landing: any): NHLPlayerContext 
   }).filter((value): value is number => value !== null);
   const recentShotsAgainst = recentGames.map((game: any) => parseNullableNumber(game?.shotsAgainst)).filter((value): value is number => value !== null);
   const recentToi = recentGames.map((game: any) => parseToiMinutes(game?.toi)).filter((value): value is number => value !== null);
+  const recentStarts = recentGames.filter((game: any) => Number(game?.gamesStarted) === 1).length;
+  const lastGameStarted = recentGames.length > 0 ? Number(recentGames[0]?.gamesStarted) === 1 : null;
+  const recentStarterToi = recentGames
+    .filter((game: any) => Number(game?.gamesStarted) === 1)
+    .map((game: any) => parseToiMinutes(game?.toi))
+    .filter((value): value is number => value !== null);
+  const starterStatus: NHLPlayerContext['starterStatus'] = entry.role !== 'goalie'
+    ? null
+    : confirmedStarter?.status === 'confirmed'
+      ? 'confirmed'
+      : (
+        lastGameStarted === true &&
+        avgOrNull(recentStarterToi) !== null &&
+        (avgOrNull(recentStarterToi) ?? 0) >= 55
+      ) || (
+        recentStarts >= 2 &&
+        avgOrNull(recentStarterToi) !== null &&
+        (avgOrNull(recentStarterToi) ?? 0) >= 50
+      )
+        ? 'likely'
+        : 'unknown';
+  const starterSource: NHLPlayerContext['starterSource'] = entry.role !== 'goalie'
+    ? null
+    : confirmedStarter?.status === 'confirmed'
+      ? 'boxscore'
+      : starterStatus === 'likely'
+        ? 'recent_usage'
+        : null;
 
   return {
     id: entry.playerId,
@@ -375,6 +467,10 @@ function buildPlayerContext(entry: RosterEntry, landing: any): NHLPlayerContext 
     recentSavesPerGame: avgOrNull(recentSaves),
     recentShotsAgainstPerGame: avgOrNull(recentShotsAgainst),
     recentAvgToiMinutes: avgOrNull(recentToi),
+    recentStarts,
+    lastGameStarted,
+    starterStatus,
+    starterSource,
   };
 }
 
@@ -398,8 +494,10 @@ export async function buildNHLContextForSlate(
   if (cached && cached.expiresAt > Date.now()) return cached.snapshot;
 
   const uniqueDates = [...new Set(games.map(game => (game.gameTime ?? '').slice(0, 10)).filter(Boolean))];
-  const datesToFetch = uniqueDates.length > 0 ? uniqueDates : [toApiDate(new Date())];
+  const seedDates = uniqueDates.length > 0 ? uniqueDates : [toApiDate(new Date())];
+  const datesToFetch = [...new Set(seedDates.flatMap(scheduleDateVariants))];
   const matchedGames: any[] = [];
+  const matchedGameIds = new Set<number>();
   let fallback = 0;
 
   for (const date of datesToFetch) {
@@ -408,14 +506,18 @@ export async function buildNHLContextForSlate(
       const scheduleGames = Array.isArray(schedule?.gameWeek)
         ? schedule.gameWeek.flatMap((week: any) => week?.games ?? [])
         : [];
-      for (const inputGame of games.filter(game => (game.gameTime ?? '').slice(0, 10) === date || !game.gameTime)) {
+      for (const inputGame of games) {
         const normalizedHome = normalizeName(inputGame.homeTeam);
         const normalizedAway = normalizeName(inputGame.awayTeam);
         const match = scheduleGames.find((candidate: any) =>
           normalizeName(fullTeamName(candidate?.homeTeam)) === normalizedHome &&
           normalizeName(fullTeamName(candidate?.awayTeam)) === normalizedAway
         );
-        if (match) matchedGames.push(match);
+        const matchId = parseNullableNumber(match?.id);
+        if (match && matchId && !matchedGameIds.has(matchId)) {
+          matchedGameIds.add(matchId);
+          matchedGames.push(match);
+        }
       }
     } catch {
       fallback++;
@@ -423,6 +525,7 @@ export async function buildNHLContextForSlate(
   }
 
   const teamsByKey = new Map<string, TeamSeed>();
+  const confirmedStartersByPlayerId = new Map<number, ConfirmedStarterInfo>();
   for (const game of matchedGames) {
     const homeTeam: TeamSeed = {
       teamId: parseNullableNumber(game?.homeTeam?.id),
@@ -436,9 +539,28 @@ export async function buildNHLContextForSlate(
     };
     teamsByKey.set(homeTeam.teamAbbrev, homeTeam);
     teamsByKey.set(awayTeam.teamAbbrev, awayTeam);
+
+    try {
+      const boxscore = await fetchJson(`https://api-web.nhle.com/v1/gamecenter/${game.id}/boxscore`);
+      for (const goalie of boxscore?.playerByGameStats?.homeTeam?.goalies ?? []) {
+        if (goalie?.starter === true) {
+          const playerId = parseNullableNumber(goalie?.playerId);
+          if (playerId) confirmedStartersByPlayerId.set(playerId, { playerId, status: 'confirmed' });
+        }
+      }
+      for (const goalie of boxscore?.playerByGameStats?.awayTeam?.goalies ?? []) {
+        if (goalie?.starter === true) {
+          const playerId = parseNullableNumber(goalie?.playerId);
+          if (playerId) confirmedStartersByPlayerId.set(playerId, { playerId, status: 'confirmed' });
+        }
+      }
+    } catch {
+      fallback++;
+    }
   }
 
   const rosterEntries: RosterEntry[] = [];
+  const teamContextsByAbbrev = new Map<string, NHLTeamContext>();
   for (const team of teamsByKey.values()) {
     try {
       const [roster, stats] = await Promise.all([
@@ -448,6 +570,15 @@ export async function buildNHLContextForSlate(
       for (const entry of buildRosterEntriesForTeam(team, roster, stats)) {
         addRosterEntry(rosterEntries, entry);
       }
+      teamContextsByAbbrev.set(team.teamAbbrev, {
+        teamId: team.teamId,
+        teamName: team.teamName,
+        teamAbbrev: team.teamAbbrev,
+        shotsForPerGame: computeTeamShotsForPerGame(stats),
+        shotsAgainstPerGame: computeTeamShotsAgainstPerGame(stats),
+        starterGoalieName: null,
+        starterStatus: 'unknown',
+      });
     } catch {
       fallback++;
     }
@@ -473,7 +604,7 @@ export async function buildNHLContextForSlate(
     const settled = await Promise.allSettled(
       batch.map(async (entry) => {
         const landing = await fetchJson(`https://api-web.nhle.com/v1/player/${entry.playerId}/landing`);
-        return buildPlayerContext(entry, landing);
+        return buildPlayerContext(entry, landing, confirmedStartersByPlayerId.get(entry.playerId) ?? null);
       })
     );
     for (const result of settled) {
@@ -485,20 +616,38 @@ export async function buildNHLContextForSlate(
     }
   }
 
+  for (const teamContext of teamContextsByAbbrev.values()) {
+    const goalies = players.filter(player =>
+      player.role === 'goalie' &&
+      player.teamAbbrev === teamContext.teamAbbrev
+    );
+    const confirmed = goalies.find(player => player.starterStatus === 'confirmed');
+    const likely = goalies
+      .filter(player => player.starterStatus === 'likely')
+      .sort((a, b) => (b.recentAvgToiMinutes ?? 0) - (a.recentAvgToiMinutes ?? 0))[0];
+    const chosen = confirmed ?? likely ?? null;
+    teamContext.starterGoalieName = chosen?.name ?? null;
+    teamContext.starterStatus = chosen?.starterStatus ?? 'unknown';
+  }
+
   const snapshot: NHLContextSnapshot = {
     players,
-    teams: [...teamsByKey.values()],
+    teams: [...teamContextsByAbbrev.values()],
     league: computeLeagueAverages(players),
     meta: {
       players: players.filter(player => player.role === 'skater').length,
       goalies: players.filter(player => player.role === 'goalie').length,
-      teams: teamsByKey.size,
+      teams: teamContextsByAbbrev.size,
       recent: players.filter(player =>
         (player.role === 'skater' && player.recentShotsPerGame !== null) ||
         (player.role === 'goalie' && player.recentSavesPerGame !== null)
       ).length,
       matchup: matchedGames.length,
       fallback,
+      starterConfirmed: players.filter(player => player.role === 'goalie' && player.starterStatus === 'confirmed').length,
+      starterLikely: players.filter(player => player.role === 'goalie' && player.starterStatus === 'likely').length,
+      starterMissing: players.filter(player => player.role === 'goalie' && player.starterStatus !== 'confirmed' && player.starterStatus !== 'likely').length,
+      opponent: [...teamContextsByAbbrev.values()].filter(team => team.shotsAgainstPerGame !== null).length,
     },
   };
 

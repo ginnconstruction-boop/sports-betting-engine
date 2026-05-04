@@ -58,12 +58,29 @@ function buildNHLContextSignal(
   };
 }
 
+function getNHLOpponentTeamContext(
+  snapshot: NHLContextSnapshot | null | undefined,
+  playerContext: NHLPlayerContext | null,
+  homeTeam: string,
+  awayTeam: string
+): NHLTeamContext | null {
+  if (!snapshot || !playerContext) return null;
+  const playerTeam = normalizeMLBString(playerContext.team);
+  const normalizedHome = normalizeMLBString(homeTeam);
+  const normalizedAway = normalizeMLBString(awayTeam);
+  const opponentName = playerTeam === normalizedHome ? awayTeam : playerTeam === normalizedAway ? homeTeam : null;
+  if (!opponentName) return null;
+  return resolveNHLTeamContext(snapshot, opponentName);
+}
+
 function injectNHLPhase1Signals(
   prediction: PropPrediction,
   prop: {
     marketKey?: string;
     playerName: string;
     side: 'over' | 'under';
+    homeTeam: string;
+    awayTeam: string;
   },
   playerContext: NHLPlayerContext | null,
   snapshot: NHLContextSnapshot | null | undefined
@@ -73,6 +90,7 @@ function injectNHLPhase1Signals(
   const signals: PropSignal[] = [];
   let scoreAdjustment = 0;
   const marketKey = (prop.marketKey ?? '').toLowerCase();
+  const opponentTeamContext = getNHLOpponentTeamContext(snapshot, playerContext, prop.homeTeam, prop.awayTeam);
 
   const addSignal = (signal: PropSignal): void => {
     signals.push(signal);
@@ -144,6 +162,34 @@ function injectNHLPhase1Signals(
         ));
       }
     }
+
+    if (
+      opponentTeamContext &&
+      hasRealNHLNumber(opponentTeamContext.shotsAgainstPerGame) &&
+      hasRealNHLNumber(snapshot.league.avgShotsPerGame)
+    ) {
+      if (
+        opponentTeamContext.shotsAgainstPerGame >= snapshot.league.avgShotsPerGame * 1.05 &&
+        prop.side === 'over'
+      ) {
+        addSignal(buildNHLContextSignal(
+          'OPP_SHOT_ALLOWANCE',
+          `Opponent allows ${opponentTeamContext.shotsAgainstPerGame.toFixed(1)} shots/game vs league ${snapshot.league.avgShotsPerGame.toFixed(1)}`,
+          'over',
+          8
+        ));
+      } else if (
+        opponentTeamContext.shotsAgainstPerGame <= snapshot.league.avgShotsPerGame * 0.95 &&
+        prop.side === 'under'
+      ) {
+        addSignal(buildNHLContextSignal(
+          'OPP_SHOT_ALLOWANCE',
+          `Opponent allows only ${opponentTeamContext.shotsAgainstPerGame.toFixed(1)} shots/game vs league ${snapshot.league.avgShotsPerGame.toFixed(1)}`,
+          'under',
+          8
+        ));
+      }
+    }
   }
 
   if (marketKey === 'goalie_saves') {
@@ -152,6 +198,7 @@ function injectNHLPhase1Signals(
     const avgToiMinutes = playerContext.avgToiMinutes;
     const recentAvgToiMinutes = playerContext.recentAvgToiMinutes;
     const starterToiMinutes = avgToiMinutes ?? recentAvgToiMinutes;
+    const starterStatus = playerContext.starterStatus;
 
     if (hasRealNHLNumber(seasonSavesPerGame)) {
       const overPositive = seasonSavesPerGame >= prediction.postedLine + 1.0;
@@ -173,6 +220,17 @@ function injectNHLPhase1Signals(
       }
     }
 
+    if (starterStatus === 'confirmed' || starterStatus === 'likely') {
+      addSignal(buildNHLContextSignal(
+        'GOALIE_STARTER_CONFIDENCE',
+        starterStatus === 'confirmed'
+          ? `${playerContext.name} is confirmed as the starting goalie`
+          : `${playerContext.name} projects as the likely starter from recent usage`,
+        'neutral',
+        starterStatus === 'confirmed' ? 10 : 6
+      ));
+    }
+
     if (
       hasRealNHLNumber(seasonSavesPerGame) &&
       hasRealNHLNumber(recentSavesPerGame) &&
@@ -191,6 +249,34 @@ function injectNHLPhase1Signals(
         addSignal(buildNHLContextSignal(
           'GOALIE_WORKLOAD_STABILITY',
           `Recent saves/game ${recentSavesPerGame.toFixed(1)} is below season ${seasonSavesPerGame.toFixed(1)} with starter TOI intact`,
+          'under',
+          8
+        ));
+      }
+    }
+
+    if (
+      opponentTeamContext &&
+      hasRealNHLNumber(opponentTeamContext.shotsForPerGame) &&
+      hasRealNHLNumber(snapshot.league.avgShotsPerGame)
+    ) {
+      if (
+        opponentTeamContext.shotsForPerGame >= snapshot.league.avgShotsPerGame * 1.05 &&
+        prop.side === 'over'
+      ) {
+        addSignal(buildNHLContextSignal(
+          'OPP_SHOT_VOLUME',
+          `Opponent generates ${opponentTeamContext.shotsForPerGame.toFixed(1)} shots/game vs league ${snapshot.league.avgShotsPerGame.toFixed(1)}`,
+          'over',
+          8
+        ));
+      } else if (
+        opponentTeamContext.shotsForPerGame <= snapshot.league.avgShotsPerGame * 0.95 &&
+        prop.side === 'under'
+      ) {
+        addSignal(buildNHLContextSignal(
+          'OPP_SHOT_VOLUME',
+          `Opponent generates only ${opponentTeamContext.shotsForPerGame.toFixed(1)} shots/game vs league ${snapshot.league.avgShotsPerGame.toFixed(1)}`,
           'under',
           8
         ));
@@ -483,7 +569,9 @@ import {
 import {
   NHLContextSnapshot,
   NHLPlayerContext,
+  NHLTeamContext,
   resolveNHLPlayerContext,
+  resolveNHLTeamContext,
 } from './nhlContextProvider';
 import {
   assessBlowoutRisk,
@@ -844,6 +932,7 @@ function hasRelevantNHLBaseline(playerContext: NHLContextSnapshot['players'][num
 
   if (t === 'goalie_saves') {
     return playerContext.role === 'goalie' &&
+      playerContext.starterStatus !== 'unknown' &&
       playerContext.seasonGamesPlayed !== null &&
       playerContext.seasonGamesPlayed !== undefined &&
       playerContext.seasonGamesPlayed > 0 &&

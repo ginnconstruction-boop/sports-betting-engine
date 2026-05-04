@@ -325,7 +325,8 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
         console.log(
           `  [NHL_CTX] players: ${nhlContextSnapshot.meta.players} | goalies: ${nhlContextSnapshot.meta.goalies} | ` +
           `teams: ${nhlContextSnapshot.meta.teams} | recent: ${nhlContextSnapshot.meta.recent} | ` +
-          `matchup: ${nhlContextSnapshot.meta.matchup} | fallback: ${nhlContextSnapshot.meta.fallback}`
+          `starter: ${nhlContextSnapshot.meta.starterConfirmed}/${nhlContextSnapshot.meta.starterLikely}/${nhlContextSnapshot.meta.starterMissing} | ` +
+          `opponent: ${nhlContextSnapshot.meta.opponent} | matchup: ${nhlContextSnapshot.meta.matchup} | fallback: ${nhlContextSnapshot.meta.fallback}`
         );
         if (nhlContextSnapshot.meta.fallback > 0) {
           console.warn('  [NHL_CTX] partial NHL context fallback active -- continuing with real-data-only coverage gates');

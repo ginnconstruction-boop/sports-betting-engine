@@ -339,6 +339,10 @@ type SupportedMLBPropType =
   | 'batter_hits'
   | 'batter_total_bases';
 
+type SupportedNHLPropType =
+  | 'player_shots_on_goal'
+  | 'goalie_saves';
+
 interface NBABoxScorePlayerStat {
   playerName: string;
   normalizedName: string;
@@ -384,6 +388,28 @@ interface MLBBoxScoreGame {
 }
 
 const mlbBoxScoreCache = new Map<string, MLBBoxScoreGame | null>();
+
+interface NHLBoxScorePlayerStat {
+  playerName: string;
+  normalizedName: string;
+  role: 'skater' | 'goalie';
+  position: string;
+  shotsOnGoal: number;
+  shotsAgainst: number;
+  saves: number;
+  goalsAgainst: number;
+  toi: string;
+  starter: boolean;
+}
+
+interface NHLBoxScoreGame {
+  final: boolean;
+  eventId: string;
+  source: 'NHL_GAMECENTER_BOXSCORE';
+  players: NHLBoxScorePlayerStat[];
+}
+
+const nhlBoxScoreCache = new Map<string, NHLBoxScoreGame | null>();
 
 function normalizeSportKey(raw: any): string {
   const s = raw?.sport ?? raw?.sportKey ?? raw ?? '';
@@ -471,6 +497,17 @@ function mlbScheduleDatesForGame(gameTime: string): string[] {
   }))];
 }
 
+function nhlScheduleDatesForGame(gameTime: string): string[] {
+  const seed = new Date(gameTime);
+  if (Number.isNaN(seed.getTime())) return [];
+
+  return [...new Set([0, -1, 1].map(offset => {
+    const copy = new Date(seed);
+    copy.setUTCDate(copy.getUTCDate() + offset);
+    return copy.toISOString().split('T')[0];
+  }))];
+}
+
 export function inferSupportedNBAPropType(
   pick: Partial<{ propType: string; notes: string; side: string }>
 ): SupportedNBAPropType | null {
@@ -543,6 +580,34 @@ export function inferSupportedMLBPropType(
   return null;
 }
 
+export function inferSupportedNHLPropType(
+  pick: Partial<{ propType: string; notes: string; side: string }>
+): SupportedNHLPropType | null {
+  const raw = `${pick.propType ?? ''} ${pick.notes ?? ''} ${pick.side ?? ''}`.toLowerCase();
+  const normalized = raw.replace(/[^a-z0-9+]/g, ' ');
+
+  if (
+    normalized.includes('player_points') ||
+    normalized.includes('player goals') ||
+    normalized.includes('player_goals') ||
+    normalized.includes('player_assists') ||
+    normalized.includes('assists') ||
+    normalized.includes('player points') ||
+    normalized.includes('player assists')
+  ) {
+    return null;
+  }
+
+  if (normalized.includes('player_shots_on_goal') || normalized.includes('shots on goal') || normalized.includes('sog')) {
+    return 'player_shots_on_goal';
+  }
+  if (normalized.includes('goalie_saves') || normalized.includes('goalie saves') || normalized.includes('saves')) {
+    return 'goalie_saves';
+  }
+
+  return null;
+}
+
 function inferPropDirection(raw: string): 'OVER' | 'UNDER' | null {
   const text = (raw ?? '').toUpperCase();
   if (text.includes(' OVER ')) return 'OVER';
@@ -586,6 +651,24 @@ function extractMLBPlayerNameFromSide(side: string): string | null {
   return null;
 }
 
+function extractNHLPlayerNameFromSide(side: string): string | null {
+  const text = side ?? '';
+  const patterns = [
+    /\s+(player shots on goal|goalie saves)\s+(over|under)\b/i,
+    /\s+(shots on goal|saves)\s+(over|under)\b/i,
+  ];
+
+  for (const pattern of patterns) {
+    const match = text.match(pattern);
+    if (match && match.index !== undefined) {
+      const playerName = text.slice(0, match.index).trim();
+      if (playerName) return playerName;
+    }
+  }
+
+  return null;
+}
+
 export function evaluateNBAPropResult(
   side: 'OVER' | 'UNDER',
   line: number,
@@ -610,6 +693,14 @@ export function evaluateMLBPropResult(
   return evaluateNBAPropResult(side, line, actualStat);
 }
 
+export function evaluateNHLPropResult(
+  side: 'OVER' | 'UNDER',
+  line: number,
+  actualStat: number
+): 'WIN' | 'LOSS' | 'PUSH' {
+  return evaluateNBAPropResult(side, line, actualStat);
+}
+
 function readNBAStat(player: NBABoxScorePlayerStat, propType: SupportedNBAPropType): number {
   switch (propType) {
     case 'player_points': return player.points;
@@ -626,6 +717,13 @@ function readMLBStat(player: MLBBoxScorePlayerStat, propType: SupportedMLBPropTy
     case 'pitcher_earned_runs': return player.earnedRuns;
     case 'batter_hits': return player.hits;
     case 'batter_total_bases': return player.totalBases;
+  }
+}
+
+function readNHLStat(player: NHLBoxScorePlayerStat, propType: SupportedNHLPropType): number {
+  switch (propType) {
+    case 'player_shots_on_goal': return player.shotsOnGoal;
+    case 'goalie_saves': return player.saves;
   }
 }
 
@@ -783,6 +881,100 @@ async function fetchMLBBoxScoreForGame(matchup: string, gameTime: string): Promi
   }
 
   mlbBoxScoreCache.set(cacheKey, null);
+  return null;
+}
+
+async function fetchNHLBoxScoreForGame(matchup: string, gameTime: string): Promise<NHLBoxScoreGame | null> {
+  const cacheKey = `${matchup}__${gameTime}`;
+  if (nhlBoxScoreCache.has(cacheKey)) return nhlBoxScoreCache.get(cacheKey) ?? null;
+
+  const [awayTeam, homeTeam] = (matchup ?? '').split(' @ ').map(part => part?.trim());
+  if (!awayTeam || !homeTeam) {
+    nhlBoxScoreCache.set(cacheKey, null);
+    return null;
+  }
+
+  try {
+    const targetStartMs = new Date(gameTime).getTime();
+    const candidateGames: any[] = [];
+    for (const date of nhlScheduleDatesForGame(gameTime)) {
+      const scheduleUrl = `https://api-web.nhle.com/v1/schedule/${date}`;
+      const scheduleData = await fetchJson(scheduleUrl);
+      const games = (Array.isArray(scheduleData?.gameWeek) ? scheduleData.gameWeek : [])
+        .flatMap((weekNode: any) => Array.isArray(weekNode?.games) ? weekNode.games : []);
+      const matchingGames = games.filter((candidate: any) => {
+        const candidateHome = `${candidate?.homeTeam?.placeName?.default ?? ''} ${candidate?.homeTeam?.commonName?.default ?? ''}`.trim();
+        const candidateAway = `${candidate?.awayTeam?.placeName?.default ?? ''} ${candidate?.awayTeam?.commonName?.default ?? ''}`.trim();
+        return (
+          normalizePlayerName(candidateHome) === normalizePlayerName(homeTeam) &&
+          normalizePlayerName(candidateAway) === normalizePlayerName(awayTeam)
+        );
+      });
+      candidateGames.push(...matchingGames);
+    }
+
+    const uniqueGames = [...new Map(candidateGames.map((game: any) => [String(game?.id ?? ''), game])).values()];
+    const game = uniqueGames.sort((a: any, b: any) => {
+      const aDelta = Math.abs(new Date(a?.startTimeUTC ?? 0).getTime() - targetStartMs);
+      const bDelta = Math.abs(new Date(b?.startTimeUTC ?? 0).getTime() - targetStartMs);
+      return aDelta - bDelta;
+    })[0];
+
+    if (!game?.id) {
+      nhlBoxScoreCache.set(cacheKey, null);
+      return null;
+    }
+
+    const boxscoreUrl = `https://api-web.nhle.com/v1/gamecenter/${game.id}/boxscore`;
+    const boxscore = await fetchJson(boxscoreUrl);
+    const final = boxscore?.gameState === 'OFF';
+    const players: NHLBoxScorePlayerStat[] = [];
+
+    for (const teamBlock of [boxscore?.playerByGameStats?.homeTeam, boxscore?.playerByGameStats?.awayTeam]) {
+      for (const skater of [...(teamBlock?.forwards ?? []), ...(teamBlock?.defense ?? []), ...(teamBlock?.defensemen ?? [])]) {
+        players.push({
+          playerName: skater?.name?.default ?? '',
+          normalizedName: normalizePlayerName(skater?.name?.default ?? ''),
+          role: 'skater',
+          position: String(skater?.position ?? '').trim() || 'F',
+          shotsOnGoal: parseNullableNumber(skater?.sog) ?? 0,
+          shotsAgainst: 0,
+          saves: 0,
+          goalsAgainst: 0,
+          toi: String(skater?.toi ?? ''),
+          starter: false,
+        });
+      }
+      for (const goalie of teamBlock?.goalies ?? []) {
+        players.push({
+          playerName: goalie?.name?.default ?? '',
+          normalizedName: normalizePlayerName(goalie?.name?.default ?? ''),
+          role: 'goalie',
+          position: 'G',
+          shotsOnGoal: 0,
+          shotsAgainst: parseNullableNumber(goalie?.shotsAgainst) ?? 0,
+          saves: parseNullableNumber(goalie?.saves) ?? 0,
+          goalsAgainst: parseNullableNumber(goalie?.goalsAgainst) ?? 0,
+          toi: String(goalie?.toi ?? ''),
+          starter: goalie?.starter === true,
+        });
+      }
+    }
+
+    const boxScoreGame: NHLBoxScoreGame = {
+      final,
+      eventId: String(game.id),
+      source: 'NHL_GAMECENTER_BOXSCORE',
+      players,
+    };
+    nhlBoxScoreCache.set(cacheKey, boxScoreGame);
+    return boxScoreGame;
+  } catch {
+    nhlBoxScoreCache.set(cacheKey, null);
+    return null;
+  }
+
+  nhlBoxScoreCache.set(cacheKey, null);
   return null;
 }
 
@@ -1308,6 +1500,192 @@ async function gradePendingMLBPropPicks(
   };
 }
 
+async function gradePendingNHLPropPicks(
+  picks: any[],
+  existingRetro: RetroResult[],
+  gradedIds: Set<string>,
+  cutoffIso: string,
+): Promise<{
+  checked: number;
+  graded: number;
+  pending: number;
+  missing: number;
+  void: number;
+  officialGraded: number;
+  trackedGraded: number;
+  officialPending: number;
+  trackedPending: number;
+}> {
+  const toGrade = picks.filter((pick: any) => {
+    const gameTime = pick.gameTime ?? pick.startTime;
+    if (!gameTime) return false;
+    if (buildRetroPickId(pick) && gradedIds.has(buildRetroPickId(pick))) return false;
+    if (normalizeSportKey(pick) !== 'icehockey_nhl') return false;
+    if (pick.marketType !== 'player_prop') return false;
+    if ((pick.gameResult ?? 'PENDING') !== 'PENDING') return false;
+    if (inferSupportedNHLPropType(pick) === null) return false;
+    if (inferPropDirection(`${pick.side ?? ''} ${pick.notes ?? ''}`) === null) return false;
+    if ((pick.playerName ?? extractNHLPlayerNameFromSide(pick.side ?? '')) === null) return false;
+    if (typeof pick.pickedLine !== 'number') return false;
+    if (gameTime >= cutoffIso) return false;
+    if (!isGradeReady(gameTime, 'icehockey_nhl')) return false;
+    return true;
+  });
+
+  let graded = 0;
+  let missing = 0;
+  let voidCount = 0;
+  let officialGraded = 0;
+  let trackedGraded = 0;
+
+  for (const pick of toGrade) {
+    const propType = inferSupportedNHLPropType(pick);
+    const side = inferPropDirection(`${pick.side ?? ''} ${pick.notes ?? ''}`);
+    const playerName = pick.playerName ?? extractNHLPlayerNameFromSide(pick.side ?? '');
+    const line = typeof pick.pickedLine === 'number' ? pick.pickedLine : null;
+    const recordBucket = getPickRecordBucket(pick);
+
+    if (!propType || !side || !playerName || line === null) continue;
+
+    const boxScore = await fetchNHLBoxScoreForGame(pick.matchup ?? '', pick.gameTime ?? pick.startTime ?? pick.date);
+    if (!boxScore || boxScore.final !== true) continue;
+
+    const player = boxScore.players.find(candidate => playerNamesMatch(playerName, candidate.playerName));
+    if (!player) {
+      markPickGrade(picks, pick, {
+        gameResult: 'MISSING_SCORE',
+        actualStat: null,
+        gradedAt: new Date().toISOString(),
+        gradingSource: boxScore.source,
+        gradingNotes: `player box score row not found for ${playerName}`,
+        autoGraded: true,
+      });
+      existingRetro.push({
+        pickId: buildRetroPickId(pick),
+        date: pick.date ?? (pick.gameTime ?? '').split('T')[0],
+        matchup: pick.matchup,
+        sport: pick.sport,
+        betType: pick.betType,
+        side: pick.side,
+        line,
+        grade: pick.grade,
+        score: pick.score,
+        signals: pick.signalTypes ?? pick.signals ?? [],
+        gameResult: 'MISSING_SCORE',
+        actualScore: null,
+        margin: null,
+        clvActual: null,
+        missedSignals: [],
+        autoGraded: true,
+        recordBucket,
+        gradingNote: `player box score row not found for ${playerName}`,
+      });
+      gradedIds.add(buildRetroPickId(pick));
+      missing++;
+      continue;
+    }
+
+    const noAction = propType === 'goalie_saves'
+      ? player.role !== 'goalie' || (!player.starter && player.saves === 0 && player.shotsAgainst === 0)
+      : player.role !== 'skater';
+    if (noAction) {
+      const gradingNote = propType === 'goalie_saves'
+        ? 'No goalie start or save chance recorded'
+        : 'No skater box score row recorded';
+      markPickGrade(picks, pick, {
+        gameResult: 'VOID',
+        actualStat: null,
+        gradedAt: new Date().toISOString(),
+        gradingSource: boxScore.source,
+        gradingNotes: gradingNote,
+        autoGraded: true,
+      });
+      existingRetro.push({
+        pickId: buildRetroPickId(pick),
+        date: pick.date ?? (pick.gameTime ?? '').split('T')[0],
+        matchup: pick.matchup,
+        sport: pick.sport,
+        betType: pick.betType,
+        side: pick.side,
+        line,
+        grade: pick.grade,
+        score: pick.score,
+        signals: pick.signalTypes ?? pick.signals ?? [],
+        gameResult: 'VOID',
+        actualScore: null,
+        margin: null,
+        clvActual: null,
+        missedSignals: [],
+        autoGraded: true,
+        recordBucket,
+        gradingNote: gradingNote,
+      });
+      gradedIds.add(buildRetroPickId(pick));
+      voidCount++;
+      continue;
+    }
+
+    const actualStat = readNHLStat(player, propType);
+    const result = evaluateNHLPropResult(side, line, actualStat);
+    markPickGrade(picks, pick, {
+      gameResult: result,
+      actualStat,
+      gradedAt: new Date().toISOString(),
+      gradingSource: boxScore.source,
+      gradingNotes: `${propType} ${side} graded from NHL GameCenter boxscore`,
+      autoGraded: true,
+    });
+    existingRetro.push({
+      pickId: buildRetroPickId(pick),
+      date: pick.date ?? pick.gameTime?.split('T')[0],
+      matchup: pick.matchup,
+      sport: pick.sport,
+      betType: pick.betType,
+      side: pick.side,
+      line,
+      grade: pick.grade,
+      score: pick.score,
+      signals: pick.signalTypes ?? pick.signals ?? [],
+      gameResult: result,
+      actualScore: String(actualStat),
+      margin: null,
+      clvActual: null,
+      missedSignals: result === 'LOSS' ? ['NHL_PROP_RESULT_AGAINST_PICK'] : [],
+      autoGraded: true,
+      recordBucket,
+    });
+    gradedIds.add(buildRetroPickId(pick));
+    graded++;
+    if (recordBucket === 'official') officialGraded++;
+    else trackedGraded++;
+  }
+
+  const pendingPicks = picks.filter((pick: any) => {
+    const gameTime = pick.gameTime ?? pick.startTime;
+    return (
+      normalizeSportKey(pick) === 'icehockey_nhl' &&
+      pick.marketType === 'player_prop' &&
+      (pick.gameResult ?? 'PENDING') === 'PENDING' &&
+      inferSupportedNHLPropType(pick) !== null &&
+      Boolean(gameTime)
+    );
+  });
+  const officialPending = pendingPicks.filter(p => getPickRecordBucket(p) === 'official').length;
+  const trackedPending = pendingPicks.length - officialPending;
+
+  return {
+    checked: toGrade.length,
+    graded,
+    pending: pendingPicks.length,
+    missing,
+    void: voidCount,
+    officialGraded,
+    trackedGraded,
+    officialPending,
+    trackedPending,
+  };
+}
+
 // ------------------------------------
 // Auto-grade picks from Odds API scores with ESPN fallback
 // ------------------------------------
@@ -1327,6 +1705,10 @@ export async function autoGradePicks(): Promise<AutoGradeSummary> {
           (
             normalizeSportKey(pick) === 'baseball_mlb' &&
             inferSupportedMLBPropType(pick) !== null
+          ) ||
+          (
+            normalizeSportKey(pick) === 'icehockey_nhl' &&
+            inferSupportedNHLPropType(pick) !== null
           )
         )
       )
@@ -1338,6 +1720,15 @@ export async function autoGradePicks(): Promise<AutoGradeSummary> {
         normalizeSportKey(pick) === 'basketball_nba' &&
         pick.marketType === 'player_prop' &&
         inferSupportedNBAPropType(pick) !== null
+      )
+      .map((pick: any) => buildRetroPickId(pick))
+  );
+  const supportedNHLPropIds = new Set(
+    picks
+      .filter((pick: any) =>
+        normalizeSportKey(pick) === 'icehockey_nhl' &&
+        pick.marketType === 'player_prop' &&
+        inferSupportedNHLPropType(pick) !== null
       )
       .map((pick: any) => buildRetroPickId(pick))
   );
@@ -1581,6 +1972,18 @@ export async function autoGradePicks(): Promise<AutoGradeSummary> {
   officialGraded += mlbPropSummary.officialGraded;
   trackedGraded += mlbPropSummary.trackedGraded;
 
+  const nhlPropSummary = await gradePendingNHLPropPicks(
+    picks,
+    existingRetro,
+    gradedIds,
+    cutoff,
+  );
+  newlyGraded += nhlPropSummary.graded;
+  missingScoreCount += nhlPropSummary.missing;
+  voidCount += nhlPropSummary.void;
+  officialGraded += nhlPropSummary.officialGraded;
+  trackedGraded += nhlPropSummary.trackedGraded;
+
   if (newlyGraded > 0 || missingScoreCount > 0 || voidCount > 0) {
     savePicks(picks);
     saveRetroResults(existingRetro);
@@ -1599,6 +2002,11 @@ export async function autoGradePicks(): Promise<AutoGradeSummary> {
         normalizeSportKey(p) === 'baseball_mlb' &&
         p.marketType === 'player_prop' &&
         inferSupportedMLBPropType(p) !== null
+      ) ||
+      (
+        normalizeSportKey(p) === 'icehockey_nhl' &&
+        p.marketType === 'player_prop' &&
+        inferSupportedNHLPropType(p) !== null
       )
     ) &&
     Boolean(p.gameTime ?? p.startTime)
@@ -1607,7 +2015,7 @@ export async function autoGradePicks(): Promise<AutoGradeSummary> {
   const trackedPending = pendingGradeablePicks.length - officialPending;
 
   return {
-    checked: toGrade.length + nbaPropSummary.checked + mlbPropSummary.checked,
+    checked: toGrade.length + nbaPropSummary.checked + mlbPropSummary.checked + nhlPropSummary.checked,
     graded: newlyGraded,
     pending: pendingGradeablePicks.length,
     missing: missingScoreCount,
