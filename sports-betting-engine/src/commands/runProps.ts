@@ -43,7 +43,7 @@ import { applySignalWeighting, printWeightingSummary } from '../services/signalW
 import { buildNBAContextForSlate } from '../services/nbaContextProvider';
 import { buildMLBContextForSlate } from '../services/mlbContextProvider';
 import { buildNHLContextForSlate } from '../services/nhlContextProvider';
-import { buildCalibrationReport, decorateCandidatesWithCalibration } from '../services/calibrationEngine';
+import { buildCalibrationReport, decorateCandidatesWithCalibration, getCalibrationProgressForSport } from '../services/calibrationEngine';
 
 function safeSync<T>(fn: () => T, fallback: T): T {
   try { return fn(); } catch { return fallback; }
@@ -328,8 +328,17 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
           `starter: ${nhlContextSnapshot.meta.starterConfirmed}/${nhlContextSnapshot.meta.starterLikely}/${nhlContextSnapshot.meta.starterMissing} | ` +
           `opponent: ${nhlContextSnapshot.meta.opponent} | matchup: ${nhlContextSnapshot.meta.matchup} | fallback: ${nhlContextSnapshot.meta.fallback}`
         );
+        console.log(
+          `  [NHL_STARTERS] source: boxscore ${nhlContextSnapshot.meta.starterBoxscore} | ` +
+          `recent_usage ${nhlContextSnapshot.meta.starterRecentUsage} | unknown ${nhlContextSnapshot.meta.starterMissing}`
+        );
         if (nhlContextSnapshot.meta.fallback > 0) {
           console.warn('  [NHL_CTX] partial NHL context fallback active -- continuing with real-data-only coverage gates');
+        }
+        if (nhlContextSnapshot.meta.starterConfirmed === 0 && nhlContextSnapshot.meta.starterLikely > 0) {
+          console.warn('  [NHL_STARTERS] No official starter confirmations posted yet -- using conservative recent-usage inference.');
+        } else if (nhlContextSnapshot.meta.starterConfirmed === 0 && nhlContextSnapshot.meta.starterLikely === 0) {
+          console.warn('  [NHL_STARTERS] Starter goalie status is still unknown for this slate -- goalie-save context may stay limited.');
         }
       } else {
         console.warn('  [NHL_CTX] unavailable -- continuing without NHL context attachment');
@@ -457,6 +466,13 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
       const calibrationReport  = (sportKey === 'basketball_nba' || sportKey === 'baseball_mlb' || sportKey === 'icehockey_nhl')
         ? buildCalibrationReport()
         : undefined;
+      if (sportKey === 'icehockey_nhl' && calibrationReport) {
+        const progress = getCalibrationProgressForSport(sportKey, calibrationReport);
+        console.log(
+          `  [NHL_CAL] official graded sample: ${progress.graded}/${progress.displayThreshold} | ` +
+          `tracked official: ${progress.tracked}`
+        );
+      }
       const withCalibration    = (sportKey === 'basketball_nba' || sportKey === 'baseball_mlb' || sportKey === 'icehockey_nhl')
         ? decorateCandidatesWithCalibration(labeled, calibrationReport)
         : labeled;

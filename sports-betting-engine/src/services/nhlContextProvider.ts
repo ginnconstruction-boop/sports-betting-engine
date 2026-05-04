@@ -77,6 +77,8 @@ export interface NHLContextSnapshot {
     starterConfirmed: number;
     starterLikely: number;
     starterMissing: number;
+    starterBoxscore: number;
+    starterRecentUsage: number;
     opponent: number;
   };
 }
@@ -647,6 +649,8 @@ export async function buildNHLContextForSlate(
       starterConfirmed: players.filter(player => player.role === 'goalie' && player.starterStatus === 'confirmed').length,
       starterLikely: players.filter(player => player.role === 'goalie' && player.starterStatus === 'likely').length,
       starterMissing: players.filter(player => player.role === 'goalie' && player.starterStatus !== 'confirmed' && player.starterStatus !== 'likely').length,
+      starterBoxscore: players.filter(player => player.role === 'goalie' && player.starterSource === 'boxscore').length,
+      starterRecentUsage: players.filter(player => player.role === 'goalie' && player.starterSource === 'recent_usage').length,
       opponent: [...teamContextsByAbbrev.values()].filter(team => team.shotsAgainstPerGame !== null).length,
     },
   };

@@ -22,6 +22,8 @@ export interface CalibrationReport {
   generatedAt: string;
   totalTrackedProps: number;
   gradedTrackedProps: number;
+  trackedBySport: Record<string, number>;
+  gradedBySport: Record<string, number>;
   bySport: Record<string, CalibrationStats>;
   byPropType: Record<string, CalibrationStats>;
   bySignalType: Record<string, CalibrationStats>;
@@ -37,6 +39,12 @@ export interface CandidateCalibrationDisplay {
   sampleSize: number;
   roi: number;
   sourceKey: string;
+}
+
+export interface SportCalibrationProgress {
+  tracked: number;
+  graded: number;
+  displayThreshold: number;
 }
 
 function loadPicks(): PickRecord[] {
@@ -165,6 +173,8 @@ export function buildCalibrationReport(): CalibrationReport {
     generatedAt: new Date().toISOString(),
     totalTrackedProps: trackedProps.length,
     gradedTrackedProps: gradedProps.length,
+    trackedBySport: {},
+    gradedBySport: {},
     bySport: {},
     byPropType: {},
     bySignalType: {},
@@ -174,6 +184,11 @@ export function buildCalibrationReport(): CalibrationReport {
     byProjectionEdgeBucket: {},
     byPropTypeAndEdgeProbabilityBucket: {},
   };
+
+  for (const pick of trackedProps) {
+    const sportKey = String(pick.sportKey ?? 'unknown').toLowerCase();
+    report.trackedBySport[sportKey] = (report.trackedBySport[sportKey] ?? 0) + 1;
+  }
 
   for (const pick of gradedProps) {
     const sportKey = String(pick.sportKey ?? 'unknown').toLowerCase();
@@ -188,6 +203,7 @@ export function buildCalibrationReport(): CalibrationReport {
       ? pick.pickedPrice
       : -110;
 
+    report.gradedBySport[sportKey] = (report.gradedBySport[sportKey] ?? 0) + 1;
     upsert(report.bySport, sportKey, pick.gameResult, price);
     upsert(report.byPropType, propTypeKey, pick.gameResult, price);
     upsert(report.bySignalCombo, signalCombo, pick.gameResult, price);
@@ -203,6 +219,19 @@ export function buildCalibrationReport(): CalibrationReport {
 
   saveCalibrationReport(report);
   return report;
+}
+
+export function getCalibrationProgressForSport(
+  sportKey: string,
+  report?: CalibrationReport,
+): SportCalibrationProgress {
+  const calibration = report ?? buildCalibrationReport();
+  const normalizedSportKey = String(sportKey ?? 'unknown').toLowerCase();
+  return {
+    tracked: calibration.trackedBySport[normalizedSportKey] ?? 0,
+    graded: calibration.gradedBySport[normalizedSportKey] ?? 0,
+    displayThreshold: MIN_DISPLAY_SAMPLE_SIZE,
+  };
 }
 
 export function getCalibrationDisplayForCandidate(
