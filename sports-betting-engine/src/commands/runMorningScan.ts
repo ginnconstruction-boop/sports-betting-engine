@@ -617,23 +617,36 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
     );
   }, new Map<string, SavedDecisionMeta>());
 
-  const savedPicks = safeRunSync('save picks', () => savePicksFromTopTen(topBets.map(b => ({
-    sport:      b.sport,
-    sportKey:   b.sportKey,
-    eventId:    b.eventId,
-    matchup:    b.matchup,
-    startTime:  b.startTime,
-    betType:    b.betType,
-    marketType: 'game_line',
-    side:       b.side,
-    bestPrice:  b.bestUserPrice,
-    bestLine:   b.bestUserLine ?? null,
-    bestBook:   b.bestUserBook,
-    grade:      b.grade,
-    score:      b.score,
-    kellyPct:   b.kellyPct,
-    ...(savedDecisionMeta.get(`${b.matchup}__${b.betType}__${b.side}`) ?? {}),
-  }))), []);
+  const savedPicks = safeRunSync('save picks', () => {
+    const finalCardBets = topBets
+      .map(b => {
+        const decision = savedDecisionMeta.get(`${b.matchup}__${b.betType}__${b.side}`);
+        if (!decision) return null;
+        const label = decision.recommendedLabel ?? decision.finalDecisionLabel;
+        if (label !== 'BET' && label !== 'LEAN' && label !== 'MONITOR') return null;
+
+        return {
+          sport:      b.sport,
+          sportKey:   b.sportKey,
+          eventId:    b.eventId,
+          matchup:    b.matchup,
+          startTime:  b.startTime,
+          betType:    b.betType,
+          marketType: 'game_line',
+          side:       b.side,
+          bestPrice:  b.bestUserPrice,
+          bestLine:   b.bestUserLine ?? null,
+          bestBook:   b.bestUserBook,
+          grade:      b.grade,
+          score:      b.score,
+          kellyPct:   b.kellyPct,
+          ...decision,
+        };
+      })
+      .filter((bet): bet is NonNullable<typeof bet> => bet !== null);
+
+    return savePicksFromTopTen(finalCardBets);
+  }, []);
 
   if (savedPicks.length > 0) {
     safeRunSync('pnl rebuild after save', () => rebuildPNL(), undefined);

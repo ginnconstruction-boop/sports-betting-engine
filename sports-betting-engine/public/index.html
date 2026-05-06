@@ -872,18 +872,31 @@ function setFilter(filter) {
   loadPicksTable();
 }
 
+function localDateKey(value) {
+  if (!value) return '';
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return String(value).slice(0, 10);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 function getFilteredPicks() {
-  const todayStr = new Date().toISOString().slice(0,10);
-  const yesterdayStr = new Date(Date.now()-86400000).toISOString().slice(0,10);
+  const now = new Date();
+  const todayStr = localDateKey(now);
+  const yesterday = new Date(now);
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yesterdayStr = localDateKey(yesterday);
   const sportSel = document.getElementById('sport-filter')?.value || '';
   const searchVal = (document.getElementById('picks-search')?.value || '').toLowerCase().trim();
 
   let filtered = allPicksCache;
 
   if (currentFilter === 'today')
-    filtered = filtered.filter(p => (p.date||p.gameTime||'').slice(0,10) === todayStr);
+    filtered = filtered.filter(p => localDateKey(p.date || p.gameTime || '') === todayStr);
   else if (currentFilter === 'yesterday')
-    filtered = filtered.filter(p => (p.date||p.gameTime||'').slice(0,10) === yesterdayStr);
+    filtered = filtered.filter(p => localDateKey(p.date || p.gameTime || '') === yesterdayStr);
   else if (currentFilter === 'pending')
     filtered = filtered.filter(p => !p.gameResult || p.gameResult === 'PENDING');
 

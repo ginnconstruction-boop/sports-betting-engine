@@ -414,22 +414,33 @@ export async function runSportScan(
         ]));
       }, new Map<string, any>());
 
-      savePicksFromTopTen(gameLineBets.map(b => ({
-        sport: b.sport,
-        sportKey: sportKey,
-        eventId: (b as any).eventId ?? '',
-        matchup: b.matchup,
-        startTime: b.startTime,
-        betType: b.betType,
-        side: b.side,
-        bestPrice: b.bestUserPrice,
-        bestLine: b.bestUserLine ?? null,
-        bestBook: b.bestUserBook,
-        grade: b.grade,
-        score: b.score,
-        kellyPct: b.kellyPct,
-        ...(decisionMeta.get(`${b.matchup}__${b.betType}__${b.side}`) ?? {}),
-      })));
+      const finalCardBets = gameLineBets
+        .map(b => {
+          const decision = decisionMeta.get(`${b.matchup}__${b.betType}__${b.side}`);
+          if (!decision) return null;
+          const label = decision.recommendedLabel ?? decision.finalDecisionLabel;
+          if (label !== 'BET' && label !== 'LEAN' && label !== 'MONITOR') return null;
+
+          return {
+            sport: b.sport,
+            sportKey: sportKey,
+            eventId: (b as any).eventId ?? '',
+            matchup: b.matchup,
+            startTime: b.startTime,
+            betType: b.betType,
+            side: b.side,
+            bestPrice: b.bestUserPrice,
+            bestLine: b.bestUserLine ?? null,
+            bestBook: b.bestUserBook,
+            grade: b.grade,
+            score: b.score,
+            kellyPct: b.kellyPct,
+            ...decision,
+          };
+        })
+        .filter((bet): bet is NonNullable<typeof bet> => bet !== null);
+
+      savePicksFromTopTen(finalCardBets);
     } catch { }
   }
 

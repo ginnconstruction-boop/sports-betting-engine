@@ -185,6 +185,14 @@ export function savePicksFromTopTen(
   const newPicks: PickRecord[] = [];
 
   for (const bet of bets) {
+    const label = bet.recommendedLabel ?? bet.finalDecisionLabel;
+    if (
+      label !== undefined &&
+      label !== 'BET' &&
+      label !== 'LEAN' &&
+      label !== 'MONITOR'
+    ) continue;
+
     const key = `${bet.matchup}_${bet.betType}_${bet.side}`;
     // Don't duplicate picks from same day
     const alreadyToday = existing.some(p =>
@@ -236,7 +244,12 @@ export function savePicksFromTopTen(
 
   if (newPicks.length > 0) {
     savePicks([...existing, ...newPicks]);
-    console.log(`  ? Saved ${newPicks.length} new picks to CLV tracker`);
+    const officialCount = newPicks.filter(p => p.savedAsRecommendation === true).length;
+    const trackedCount = newPicks.length - officialCount;
+    console.log(
+      `  ? Saved ${newPicks.length} new picks to CLV tracker ` +
+      `(${officialCount} official, ${trackedCount} tracked)`
+    );
   }
 
   return newPicks;
