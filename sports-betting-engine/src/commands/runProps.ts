@@ -59,6 +59,29 @@ function isEnabledFlag(value: string | undefined): boolean {
   return String(value ?? '').trim().toLowerCase() === 'true';
 }
 
+function dedupeEventSummaries(events: EventSummary[]): EventSummary[] {
+  const seen = new Set<string>();
+  const deduped: EventSummary[] = [];
+
+  for (const event of events) {
+    const key = event.eventId || `${event.sportKey}__${event.homeTeam}__${event.awayTeam}__${event.startTime}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    deduped.push(event);
+  }
+
+  return deduped;
+}
+
+function chicagoDateKey(value: string | Date): string {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/Chicago',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(new Date(value));
+}
+
 export async function runProps(options: { forceRun?: boolean; sportKey?: string } = {}) {
   if (!propsEnabled() && !options.forceRun) {
     console.log('\n  Player props are disabled. Set PROPS_ENABLED=true in .env\n');
@@ -92,7 +115,18 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
       allSummaries.push(...aggregateAllEvents(normalizeEvents(events, key)));
     }
 
-    const allToday = allSummaries.filter(e => hoursUntil(e.startTime) <= windowHours);
+    const dedupedSummaries = dedupeEventSummaries(allSummaries);
+    const duplicateCount = allSummaries.length - dedupedSummaries.length;
+    if (duplicateCount > 0) {
+      console.log(`  [DEDUPED] removed ${duplicateCount} duplicate game summary row(s) before prop fetch.`);
+    }
+
+    const nowChicago = chicagoDateKey(new Date());
+    const allToday = dedupedSummaries.filter(e => {
+      if (hoursUntil(e.startTime) > windowHours) return false;
+      if (process.env.WINDOW_HOURS_OVERRIDE) return true;
+      return chicagoDateKey(e.startTime) === nowChicago;
+    });
     const inProgress = allToday.filter(e => hoursUntil(e.startTime) <= 0);
     const upcoming = allToday.filter(e => hoursUntil(e.startTime) > 0);
     if (inProgress.length > 0) {
@@ -361,6 +395,33 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
       learnedWeights
     )).slice(0, PROP_CONFIG.TOP_N);
 
+    // -- [DECISION LAYER] Outcome context (Phase C) --
+    // Built once and shared across all decision-layer blocks below.
+    // lineupMap uses the buildLineupMap result already computed above.
+    const outcomeContext: OutcomeContext = {
+      injuryMap,
+      lineupMap,
+      contextMap,
+      powerRatings,
+      gameSummaries: allSummaries.map(e => ({
+        eventId: e.eventId, homeTeam: e.homeTeam, awayTeam: e.awayTeam, matchup: e.matchup,
+      })),
+    };
+
+    const rawDisplaySignalsByPropKey = safeSync(() => {
+      const decisionCandidates = mapAllToDecisionCandidates(topProps);
+      const enriched = enrichWithProbability(decisionCandidates);
+      const withOutcome = applyOutcomeSignals(enriched, outcomeContext);
+      return new Map(
+        withOutcome
+          .filter(c => c.marketType === 'player_prop')
+          .map(c => [
+            `${c.playerName ?? ''}__${c.market ?? ''}__${c.side ?? ''}__${c.line ?? 'null'}`,
+            [...new Set(c.signals ?? [])],
+          ])
+      );
+    }, new Map<string, string[]>());
+
     // -- Step 5: Print ------------------------------------------
     // Save prop line snapshot for movement tracking
     savePropLineSnapshot(topProps as any[]);
@@ -375,20 +436,7 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
         }
       }
     }
-    printTopProps(topProps, sportKey);
-
-    // -- [DECISION LAYER] Outcome context (Phase C) --
-    // Built once and shared across all decision-layer blocks below.
-    // lineupMap uses the buildLineupMap result already computed above.
-    const outcomeContext: OutcomeContext = {
-      injuryMap,
-      lineupMap,
-      contextMap,
-      powerRatings,
-      gameSummaries: allSummaries.map(e => ({
-        eventId: e.eventId, homeTeam: e.homeTeam, awayTeam: e.awayTeam, matchup: e.matchup,
-      })),
-    };
+    printTopProps(topProps, sportKey, rawDisplaySignalsByPropKey);
 
     // -- [DECISION LAYER] Qualification pass --
     // Appended after existing prop output; does not affect scores,

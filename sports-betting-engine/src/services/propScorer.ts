@@ -876,7 +876,11 @@ export function scoreAllProps(
 // Print prop Top 5
 // ------------------------------------
 
-export function printTopProps(props: ScoredProp[], sportKey = 'basketball_nba'): void {
+export function printTopProps(
+  props: ScoredProp[],
+  sportKey = 'basketball_nba',
+  resolvedSignalsByPropKey?: Map<string, string[]>
+): void {
   // Show intelligence-enhanced output
   const time = new Date().toLocaleString('en-US', {
     timeZone: 'America/Chicago',
@@ -920,12 +924,9 @@ export function printTopProps(props: ScoredProp[], sportKey = 'basketball_nba'):
     console.log(`\n  +---------------------------------------------------------`);
     console.log(`  |  #${String(p.rank).padEnd(3)} ${tierIcon.padEnd(14)} ${p.matchup}`);
     console.log(`  |  [CLK] ${hours.padEnd(14)} Raw Score: ${p.grade}  ${gradeBar}  (${p.score}/100)`);
-    // Show base signals + top intelligence signals
-    const intelSigs = ((p as any).prediction?.signals ?? [])
-      .filter((s: any) => s.magnitude === 'high' || s.magnitude === 'medium')
-      .slice(0, 3)
-      .map((s: any) => s.type);
-    const allSigNames = [...new Set([...p.signals, ...intelSigs])];
+    const propKey = `${p.playerName}__${p.market}__${p.side}__${p.line ?? 'null'}`;
+    const displaySignals = resolvedSignalsByPropKey?.get(propKey) ?? p.signals;
+    const allSigNames = [...new Set(displaySignals)];
     console.log(`  |  ${allSigNames.length} signals: ${allSigNames.slice(0,5).join(', ')}`);
     console.log(`  +---------------------------------------------------------`);
     const sportEmoji = p.sport === 'NFL' ? '[NFL]'
@@ -936,12 +937,8 @@ export function printTopProps(props: ScoredProp[], sportKey = 'basketball_nba'):
     const posStr = (p as any).position ? ` -- ${(p as any).position}` : '';
     console.log(`  |  ${sportEmoji} ${p.playerName}${teamStr}${posStr}  --  ${p.market}`);
     console.log(`  |  [OK] Bet  : ${p.side.toUpperCase()} ${p.line}`);
-    const predictionSignals = ((p as any).prediction?.signals ?? []) as Array<{ type: string; magnitude: string }>;
     const nonMarketSignalNames = [...new Set(
-      predictionSignals
-        .filter((s) => !MARKET_STRUCTURE_SIGNALS.has(s.type))
-        .filter((s) => s.magnitude === 'high' || s.magnitude === 'medium')
-        .map((s) => s.type)
+      displaySignals.filter((name) => !MARKET_STRUCTURE_SIGNALS.has(name))
     )];
     const contextSignalNames = p.sportKey === 'basketball_nba'
       ? nonMarketSignalNames.filter((name) => NBA_PREDICTIVE_CONTEXT_SIGNALS.has(name))
