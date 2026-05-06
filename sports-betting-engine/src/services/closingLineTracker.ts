@@ -165,6 +165,10 @@ export function savePicksFromTopTen(
     score: number;
     kellyPct?: number;
     marketType?: string;
+    modelProbability?: number;
+    edgeConfidence?: number;
+    trueEdge?: number;
+    signalTypes?: string[];
     finalDecisionLabel?: 'BET' | 'LEAN' | 'MONITOR' | 'PASS' | 'BEST_PRICE_ONLY';
     recommendedLabel?: 'BET' | 'LEAN' | 'MONITOR' | 'PASS' | 'BEST_PRICE_ONLY';
     finalGrade?: string;
@@ -214,6 +218,10 @@ export function savePicksFromTopTen(
       gameResult: 'PENDING',
       notes: '',
       kellyPct: bet.kellyPct,
+      modelProbability: bet.modelProbability,
+      edgeConfidence: bet.edgeConfidence,
+      trueEdge: bet.trueEdge,
+      signalTypes: bet.signalTypes,
       finalDecisionLabel: bet.finalDecisionLabel,
       recommendedLabel: bet.recommendedLabel,
       finalGrade: bet.finalGrade,

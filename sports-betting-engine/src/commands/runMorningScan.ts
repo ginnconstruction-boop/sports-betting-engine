@@ -56,6 +56,7 @@ import { applyOutcomeSignals, printOutcomeSummary, OutcomeContext } from '../ser
 import { applySignalWeighting, printWeightingSummary } from '../services/signalWeightingEngine';
 import { printCreditStatus } from '../services/creditTracker';
 import { updateATSTracker } from '../services/atsTracker';
+import { applyNCAACalibrationWeighting } from '../services/calibrationEngine';
 
 type SavedDecisionMeta = {
   finalDecisionLabel?: 'BET' | 'LEAN' | 'MONITOR' | 'PASS' | 'BEST_PRICE_ONLY';
@@ -63,6 +64,9 @@ type SavedDecisionMeta = {
   finalGrade?: string;
   riskGrade?: 'LOW' | 'MODERATE' | 'HIGH';
   marketType?: string;
+  modelProbability?: number;
+  edgeConfidence?: number;
+  signalTypes?: string[];
   isPriceOnlyCandidate?: boolean;
   savedAsRecommendation?: boolean;
   forcedTierCap?: 'LEAN' | 'MONITOR';
@@ -481,7 +485,8 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
     const withDiversity = applySignalDiversity(withIntel);
     const withWeighting = applySignalWeighting(withDiversity);
     const withRisk = applyRisk(withWeighting);
-    const labeled = labelCandidates(withRisk);
+    const withCalibration = applyNCAACalibrationWeighting(withRisk);
+    const labeled = labelCandidates(withCalibration);
     return selectSlate(labeled);
   };
 
@@ -522,7 +527,8 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
     const withWeighting      = applySignalWeighting(withDiversity);
     printWeightingSummary(withWeighting);
     const withRisk           = applyRisk(withWeighting);
-    printRiskSummary(withRisk);
+    const withCalibration    = applyNCAACalibrationWeighting(withRisk);
+    printRiskSummary(withCalibration);
   }, undefined);
 
   // -- [DECISION LAYER] Label engine --
@@ -543,7 +549,8 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
     const withDiversity      = applySignalDiversity(withIntel);
     const withWeighting      = applySignalWeighting(withDiversity);
     const withRisk           = applyRisk(withWeighting);
-    const labeled            = labelCandidates(withRisk);
+    const withCalibration    = applyNCAACalibrationWeighting(withRisk);
+    const labeled            = labelCandidates(withCalibration);
     printLabelSummary(labeled);
   }, undefined);
 
@@ -598,6 +605,9 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
           finalGrade: candidate.finalGrade,
           riskGrade: candidate.riskGrade,
           marketType: candidate.marketType,
+          modelProbability: candidate.winProbability,
+          edgeConfidence: candidate.marketReliabilityScore,
+          signalTypes: candidate.signals,
           isPriceOnlyCandidate: candidate.isPriceOnlyCandidate,
           savedAsRecommendation,
           forcedTierCap: candidate.forcedTierCap,

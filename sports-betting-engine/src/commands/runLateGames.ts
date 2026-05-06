@@ -30,6 +30,7 @@ import { validateDataIntegrity, printValidationSummary } from '../services/dataI
 import { applySignalDiversity, printSignalDiversitySummary } from '../services/signalDiversityEngine';
 import { applyOutcomeSignals, printOutcomeSummary, OutcomeContext } from '../services/outcomeSignalEngine';
 import { applySignalWeighting, printWeightingSummary } from '../services/signalWeightingEngine';
+import { applyNCAACalibrationWeighting } from '../services/calibrationEngine';
 
 function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
   return new Promise<T>((resolve, reject) => {
@@ -170,15 +171,20 @@ export async function runLateGames(options: { forceRefresh?: boolean } = {}) {
       const withWeighting      = applySignalWeighting(withDiversity);
       printWeightingSummary(withWeighting);
       const withRisk           = applyRisk(withWeighting);
-      printRiskSummary(withRisk);
-      const labeled            = labelCandidates(withRisk);
+      const withCalibration    = applyNCAACalibrationWeighting(withRisk);
+      printRiskSummary(withCalibration);
+      const labeled            = labelCandidates(withCalibration);
       printLabelSummary(labeled);
       const slateResult        = selectSlate(labeled);
       printSlateSummary(slateResult);
     }, undefined);
   }
 
-  const quota = await safeRun(() => getSessionQuota(), { requestsMade: 0, remainingRequests: null });
+  const quota = safeSync(() => getSessionQuota(), {
+    requestsMade: 0,
+    remainingRequests: null,
+    usedRequests: null,
+  });
   console.log(`\n  API requests used  : ${quota.requestsMade}`);
   console.log(`  Credits remaining  : ${quota.remainingRequests ?? 'unknown'}\n`);
 }

@@ -20,6 +20,7 @@ import { applyOutcomeSignals, printOutcomeSummary, OutcomeContext } from '../ser
 import { applyKeyNumbers, printKeyNumberSummary } from '../services/keyNumberEngine';
 import { CreditBudgetGuard } from '../services/creditBudgetGuard';
 import { EventFetchCache } from '../services/eventFetchCache';
+import { applyNCAACalibrationWeighting } from '../services/calibrationEngine';
 
 export async function runLiveCheck(options: { sportKeys?: string[]; forceRefresh?: boolean } = {}) {
   const requestedKeys = options.sportKeys ?? getEnabledSports().map(s => s.key);
@@ -96,8 +97,9 @@ export async function runLiveCheck(options: { sportKeys?: string[]; forceRefresh
     const withKeyNumbers     = applyKeyNumbers(withDiversity);
     printKeyNumberSummary(withKeyNumbers);
     const withRisk           = applyRisk(withKeyNumbers);
-    printRiskSummary(withRisk);
-    const labeled            = labelCandidates(withRisk);
+    const withCalibration    = applyNCAACalibrationWeighting(withRisk);
+    printRiskSummary(withCalibration);
+    const labeled            = labelCandidates(withCalibration);
     printLabelSummary(labeled);
     const slateResult        = selectSlate(labeled);
     printSlateSummary(slateResult);

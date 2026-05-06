@@ -632,6 +632,18 @@ export function printFinalCard(result: SlateResult): void {
       console.log(`  |  Book: ${(c.bestBook ?? 'n/a').padEnd(14)}  Price: ${priceStr}`);
     }
     if (
+      c.marketType === 'game_line' &&
+      c.calibrationMultiplier !== undefined &&
+      c.preCalibrationAdjustedEdge !== undefined
+    ) {
+      const preCalStr = `${c.preCalibrationAdjustedEdge >= 0 ? '+' : ''}${(c.preCalibrationAdjustedEdge * 100).toFixed(1)}%`;
+      const deltaPct = c.calibrationMultiplier * 100;
+      console.log(
+        `  |  Calibration: ${deltaPct >= 0 ? '+' : ''}${deltaPct.toFixed(1)}%  |  ` +
+        `Pre-Cal Edge: ${preCalStr}  |  Final Label: ${lbl}`
+      );
+    }
+    if (
       c.sportKey === 'basketball_nba' &&
       c.marketType === 'player_prop' &&
       c.projectedStat !== undefined &&

@@ -83,6 +83,9 @@ export interface DecisionCandidate {
   calibrationHistoricalWinRate?: number;
   calibrationSampleSize?: number;
   calibrationRoi?: number;
+  preCalibrationAdjustedEdge?: number;
+  calibrationMultiplier?: number;
+  calibrationReasons?: string[];
 
   // ----------------------------------------------------------
   // Game / matchup (both types)

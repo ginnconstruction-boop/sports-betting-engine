@@ -121,6 +121,15 @@ function hasStrongNBAContext(c: DecisionCandidate): boolean {
   return (c.strongNonMarketSignalCount ?? 0) >= 1;
 }
 
+function isNCAAGameLine(c: DecisionCandidate): boolean {
+  const sportKey = String(c.sportKey ?? '').toLowerCase();
+  return c.marketType === 'game_line' && (
+    sportKey === 'baseball_ncaa' ||
+    sportKey === 'basketball_ncaab' ||
+    sportKey === 'americanfootball_ncaaf'
+  );
+}
+
 function classify(c: DecisionCandidate): Classification {
   const adjEdge   = c.adjustedEdge ?? 0;
   const riskGrade = c.riskGrade ?? 'HIGH';
@@ -339,8 +348,15 @@ function classify(c: DecisionCandidate): Classification {
   // explicit structural check independent of the risk-engine flags.
   // ----------------------------------------------------------
   if (riskGrade === 'LOW' && adjEdge >= EDGE_BET_MIN) {
-    // Explicit block — price-only signal cannot earn BET label
-    if (c.isPriceOnlyCandidate) {
+    if (
+      isNCAAGameLine(c) &&
+      c.preCalibrationAdjustedEdge !== undefined &&
+      c.preCalibrationAdjustedEdge < EDGE_BET_MIN
+    ) {
+      // Guardrail: calibration may improve an NCAA edge, but it must not
+      // directly promote a pre-calibration non-BET into BET.
+    } else if (c.isPriceOnlyCandidate) {
+      // Explicit block — price-only signal cannot earn BET label
       // Fall through to LEAN / MONITOR / BEST_PRICE_ONLY below
     } else {
       const reasons: string[] = [

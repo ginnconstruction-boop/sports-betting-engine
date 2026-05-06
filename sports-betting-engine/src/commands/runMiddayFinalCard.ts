@@ -38,6 +38,7 @@ import { applySignalDiversity, printSignalDiversitySummary } from '../services/s
 import { applyOutcomeSignals, printOutcomeSummary, OutcomeContext } from '../services/outcomeSignalEngine';
 import { applySignalWeighting, printWeightingSummary } from '../services/signalWeightingEngine';
 import { printCreditStatus } from '../services/creditTracker';
+import { applyNCAACalibrationWeighting } from '../services/calibrationEngine';
 
 function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
   return new Promise<T>((resolve, reject) => {
@@ -248,8 +249,9 @@ export async function runMiddayFinalCard(options: { forceRefresh?: boolean } = {
     const withWeighting      = applySignalWeighting(withDiversity);
     printWeightingSummary(withWeighting);
     const withRisk           = applyRisk(withWeighting);
-    printRiskSummary(withRisk);
-    const labeled            = labelCandidates(withRisk);
+    const withCalibration    = applyNCAACalibrationWeighting(withRisk);
+    printRiskSummary(withCalibration);
+    const labeled            = labelCandidates(withCalibration);
     printLabelSummary(labeled);
     const slateResult        = selectSlate(labeled);
     printSlateSummary(slateResult);
@@ -257,12 +259,46 @@ export async function runMiddayFinalCard(options: { forceRefresh?: boolean } = {
 
   // Save picks to log
   try {
+    const decisionMeta = safeSync(() => {
+      const decisionCandidates = mapAllToDecisionCandidates(topBets);
+      const todayEvents        = allSummaries.map(e => ({ matchup: e.matchup, homeTeam: e.homeTeam, awayTeam: e.awayTeam }));
+      const validResult        = validateDataIntegrity(decisionCandidates, todayEvents);
+      const qualResult         = qualifyCandidates(validResult.valid);
+      const allCandidates      = [...qualResult.qualified, ...qualResult.rejected];
+      const enriched           = enrichWithProbability(allCandidates);
+      const withOutcome        = applyOutcomeSignals(enriched, outcomeContext);
+      const withIntel          = applySportIntelligence(withOutcome);
+      const withDiversity      = applySignalDiversity(withIntel);
+      const withWeighting      = applySignalWeighting(withDiversity);
+      const withRisk           = applyRisk(withWeighting);
+      const withCalibration    = applyNCAACalibrationWeighting(withRisk);
+      const labeled            = labelCandidates(withCalibration);
+      return new Map(labeled.map(candidate => [
+        `${candidate.matchup}__${candidate.betType ?? ''}__${candidate.side}`,
+        {
+          modelProbability: candidate.winProbability,
+          edgeConfidence: candidate.marketReliabilityScore,
+          signalTypes: candidate.signals,
+          finalDecisionLabel: candidate.finalDecisionLabel,
+          recommendedLabel: candidate.finalDecisionLabel,
+          finalGrade: candidate.finalGrade,
+          riskGrade: candidate.riskGrade,
+          marketType: candidate.marketType,
+          isPriceOnlyCandidate: candidate.isPriceOnlyCandidate,
+          savedAsRecommendation: candidate.finalDecisionLabel === 'BET' || candidate.finalDecisionLabel === 'LEAN',
+          forcedTierCap: candidate.forcedTierCap,
+          isBestBet: candidate.isBestBet,
+        },
+      ]));
+    }, new Map<string, any>());
+
     savePicksFromTopTen(topBets.map(b => ({
       sport: b.sport, sportKey: (b as any).sportKey ?? '',
       eventId: (b as any).eventId ?? '', matchup: b.matchup,
       startTime: b.startTime, betType: b.betType, side: b.side,
       bestPrice: b.bestUserPrice, bestLine: b.bestUserLine ?? null,
       bestBook: b.bestUserBook, grade: b.grade, score: b.score, kellyPct: b.kellyPct,
+      ...(decisionMeta.get(`${b.matchup}__${b.betType}__${b.side}`) ?? {}),
     })));
   } catch { }
 

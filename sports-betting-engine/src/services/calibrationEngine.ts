@@ -47,6 +47,19 @@ export interface SportCalibrationProgress {
   displayThreshold: number;
 }
 
+export interface NCAACalibrationStatsReport {
+  totalTracked: number;
+  totalGraded: number;
+  bySignalCombo: Record<string, CalibrationStats>;
+  byEdgeConfidenceBucket: Record<string, CalibrationStats>;
+  byModelProbabilityBucket: Record<string, CalibrationStats>;
+}
+
+export interface NCAACalibrationAdjustment {
+  multiplier: number;
+  reasons: string[];
+}
+
 function loadPicks(): PickRecord[] {
   if (!fs.existsSync(PICKS_FILE)) return [];
   try {
@@ -113,6 +126,38 @@ function bucketProjectionEdge(value?: number): string {
 function stableSignalCombo(signalTypes?: string[]): string {
   if (!signalTypes || signalTypes.length === 0) return 'none';
   return [...new Set(signalTypes.map(s => s.toUpperCase()))].sort().join(' + ');
+}
+
+function normalizeHistoricalSportKey(pick: Partial<PickRecord>): string {
+  const normalizedSportKey = String(pick.sportKey ?? '').toLowerCase();
+  if (normalizedSportKey) return normalizedSportKey;
+
+  const normalizedSport = String(pick.sport ?? '').toLowerCase();
+  if (normalizedSport === 'ncaa baseball') return 'baseball_ncaa';
+  if (normalizedSport === 'ncaab') return 'basketball_ncaab';
+  if (normalizedSport === 'ncaaf') return 'americanfootball_ncaaf';
+  return normalizedSportKey;
+}
+
+function isNCAAGameSportKey(sportKey: string): boolean {
+  return sportKey === 'baseball_ncaa'
+    || sportKey === 'basketball_ncaab'
+    || sportKey === 'americanfootball_ncaaf';
+}
+
+function isOfficialNCAAGamePick(pick: PickRecord): boolean {
+  return isOfficialRecommendationPick(pick)
+    && (pick.marketType ?? 'game_line') === 'game_line'
+    && isNCAAGameSportKey(normalizeHistoricalSportKey(pick));
+}
+
+function deriveHistoricalGameModelProbability(pick: PickRecord): number | null {
+  if (typeof pick.modelProbability === 'number' && Number.isFinite(pick.modelProbability)) {
+    return pick.modelProbability;
+  }
+  if (typeof pick.score !== 'number' || !Number.isFinite(pick.score)) return null;
+  const clampedScore = Math.max(0, Math.min(100, pick.score));
+  return Math.round((0.50 + (clampedScore / 100) * 0.15) * 1000) / 1000;
 }
 
 function isSupportedNBAPropType(propType?: string | null): boolean {
@@ -232,6 +277,119 @@ export function getCalibrationProgressForSport(
     graded: calibration.gradedBySport[normalizedSportKey] ?? 0,
     displayThreshold: MIN_DISPLAY_SAMPLE_SIZE,
   };
+}
+
+export function buildNCAACalibrationStatsReport(): NCAACalibrationStatsReport {
+  const tracked = loadPicks().filter(isOfficialNCAAGamePick);
+  const graded = tracked.filter(
+    (pick): pick is PickRecord & { gameResult: 'WIN' | 'LOSS' | 'PUSH' } => isGradedResult(pick.gameResult)
+  );
+
+  const report: NCAACalibrationStatsReport = {
+    totalTracked: tracked.length,
+    totalGraded: graded.length,
+    bySignalCombo: {},
+    byEdgeConfidenceBucket: {},
+    byModelProbabilityBucket: {},
+  };
+
+  for (const pick of graded) {
+    const price = typeof pick.pickedPrice === 'number' && Number.isFinite(pick.pickedPrice) && pick.pickedPrice !== 0
+      ? pick.pickedPrice
+      : -110;
+    upsert(report.bySignalCombo, stableSignalCombo(pick.signalTypes), pick.gameResult, price);
+    upsert(report.byEdgeConfidenceBucket, bucketEdgeConfidence(pick.edgeConfidence), pick.gameResult, price);
+    upsert(
+      report.byModelProbabilityBucket,
+      bucketProbability(deriveHistoricalGameModelProbability(pick) ?? undefined),
+      pick.gameResult,
+      price,
+    );
+  }
+
+  return report;
+}
+
+export function getNCAACalibrationAdjustment(
+  candidate: DecisionCandidate,
+  report?: NCAACalibrationStatsReport,
+): NCAACalibrationAdjustment | null {
+  const sportKey = String(candidate.sportKey ?? '').toLowerCase();
+  if (candidate.marketType !== 'game_line' || !isNCAAGameSportKey(sportKey)) {
+    return null;
+  }
+
+  const calibration = report ?? buildNCAACalibrationStatsReport();
+  let multiplier = 0;
+  const reasons: string[] = [];
+
+  const signalComboKey = stableSignalCombo(candidate.signals);
+  const signalComboStats = calibration.bySignalCombo[signalComboKey];
+  if (signalComboStats && signalComboStats.sampleSize >= 10) {
+    if (signalComboStats.winRate < 55) {
+      multiplier -= 0.05;
+      reasons.push(`combo ${signalComboStats.winRate.toFixed(1)}% over ${signalComboStats.sampleSize}`);
+    } else if (signalComboStats.winRate > 60) {
+      multiplier += 0.03;
+      reasons.push(`combo ${signalComboStats.winRate.toFixed(1)}% over ${signalComboStats.sampleSize}`);
+    }
+  }
+
+  const edgeBucketKey = bucketEdgeConfidence(candidate.edgeConfidence);
+  const edgeBucketStats = calibration.byEdgeConfidenceBucket[edgeBucketKey];
+  if (edgeBucketStats && edgeBucketStats.sampleSize >= 10) {
+    if (edgeBucketStats.winRate < 55) {
+      multiplier -= 0.05;
+      reasons.push(`edgeConf ${edgeBucketKey} -> ${edgeBucketStats.winRate.toFixed(1)}% over ${edgeBucketStats.sampleSize}`);
+    } else if (edgeBucketStats.winRate > 60) {
+      multiplier += 0.03;
+      reasons.push(`edgeConf ${edgeBucketKey} -> ${edgeBucketStats.winRate.toFixed(1)}% over ${edgeBucketStats.sampleSize}`);
+    }
+  }
+
+  const probabilityBucketKey = bucketProbability(candidate.winProbability);
+  const probabilityBucketStats = calibration.byModelProbabilityBucket[probabilityBucketKey];
+  if (probabilityBucketStats && probabilityBucketStats.sampleSize >= 10) {
+    if (probabilityBucketStats.winRate < 55) {
+      multiplier -= 0.05;
+      reasons.push(`modelProb ${probabilityBucketKey} -> ${probabilityBucketStats.winRate.toFixed(1)}% over ${probabilityBucketStats.sampleSize}`);
+    } else if (probabilityBucketStats.winRate > 60) {
+      multiplier += 0.03;
+      reasons.push(`modelProb ${probabilityBucketKey} -> ${probabilityBucketStats.winRate.toFixed(1)}% over ${probabilityBucketStats.sampleSize}`);
+    }
+  }
+
+  const clampedMultiplier = Math.max(-0.05, Math.min(0.05, multiplier));
+  if (clampedMultiplier === 0 || reasons.length === 0) return null;
+
+  return {
+    multiplier: Math.round(clampedMultiplier * 1000) / 1000,
+    reasons,
+  };
+}
+
+export function applyNCAACalibrationWeighting(
+  candidates: DecisionCandidate[],
+  report?: NCAACalibrationStatsReport,
+): DecisionCandidate[] {
+  const calibration = report ?? buildNCAACalibrationStatsReport();
+  return candidates.map(candidate => {
+    const adjustment = getNCAACalibrationAdjustment(candidate, calibration);
+    if (!adjustment || candidate.adjustedEdge === undefined) return candidate;
+
+    const preCalibrationAdjustedEdge = candidate.adjustedEdge;
+    const calibratedAdjustedEdge = Math.round(
+      preCalibrationAdjustedEdge * (1 + adjustment.multiplier) * 1000
+    ) / 1000;
+
+    return {
+      ...candidate,
+      preCalibrationAdjustedEdge,
+      adjustedEdge: calibratedAdjustedEdge,
+      calibrationMultiplier: adjustment.multiplier,
+      calibrationReasons: adjustment.reasons,
+    };
+  });
 }
 
 export function getCalibrationDisplayForCandidate(

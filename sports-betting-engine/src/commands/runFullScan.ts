@@ -22,6 +22,7 @@ import { applyOutcomeSignals, printOutcomeSummary, OutcomeContext } from '../ser
 import { CreditBudgetGuard } from '../services/creditBudgetGuard';
 import { EventFetchCache } from '../services/eventFetchCache';
 import { applyKeyNumbers, printKeyNumberSummary } from '../services/keyNumberEngine';
+import { applyNCAACalibrationWeighting } from '../services/calibrationEngine';
 
 export async function runFullScan(options: { forceRefresh?: boolean } = {}) {
   const allSportKeys = getEnabledSports().map(s => s.key);
@@ -120,7 +121,8 @@ export async function runFullScan(options: { forceRefresh?: boolean } = {}) {
     const withKeyNumbers     = applyKeyNumbers(withDiversity);
     printKeyNumberSummary(withKeyNumbers);
     const withRisk           = applyRisk(withKeyNumbers);
-    printRiskSummary(withRisk);
+    const withCalibration    = applyNCAACalibrationWeighting(withRisk);
+    printRiskSummary(withCalibration);
   } catch (e) { console.warn(`  [DECISION LAYER] risk engine error: ${e instanceof Error ? e.message : String(e)}`); }
 
   // -- [DECISION LAYER] Label engine --
@@ -139,7 +141,8 @@ export async function runFullScan(options: { forceRefresh?: boolean } = {}) {
     const withDiversity      = applySignalDiversity(withIntel);
     const withKeyNumbers     = applyKeyNumbers(withDiversity);
     const withRisk           = applyRisk(withKeyNumbers);
-    const labeled            = labelCandidates(withRisk);
+    const withCalibration    = applyNCAACalibrationWeighting(withRisk);
+    const labeled            = labelCandidates(withCalibration);
     printLabelSummary(labeled);
   } catch (e) { console.warn(`  [DECISION LAYER] label engine error: ${e instanceof Error ? e.message : String(e)}`); }
 
@@ -159,7 +162,8 @@ export async function runFullScan(options: { forceRefresh?: boolean } = {}) {
     const withDiversity      = applySignalDiversity(withIntel);
     const withKeyNumbers     = applyKeyNumbers(withDiversity);
     const withRisk           = applyRisk(withKeyNumbers);
-    const labeled            = labelCandidates(withRisk);
+    const withCalibration    = applyNCAACalibrationWeighting(withRisk);
+    const labeled            = labelCandidates(withCalibration);
     const slateResult        = selectSlate(labeled);
     printSlateSummary(slateResult);
     printFinalCard(slateResult);
