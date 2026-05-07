@@ -24,6 +24,7 @@ import { detectSteamMoves }                 from '../services/steamDetector';
 import { getATSSituation }                  from '../services/atsDatabase';
 import { findCorrelatedParlays, printSGPReport, SGPLeg } from '../services/sgpCorrelation';
 import { saveParlayPicks }                  from '../services/closingLineTracker';
+import { getBookmakerDisplayName, getUserBookKeys } from '../config/bookmakers';
 
 
 function hoursUntil(t: string): number {
@@ -45,8 +46,12 @@ const SGP_MARKETS_NBA = [
 ];
 const SGP_MARKETS_NFL = [
   'player_pass_yds', 'player_rush_yds', 'player_reception_yds',
-  'player_receptions', 'player_anytime_td', 'player_pass_tds',
+  'player_receptions', 'player_pass_tds',
 ];
+
+function normalizeName(value: string): string {
+  return value.toLowerCase().trim();
+}
 
 export async function runSGP(sportKey: string = 'basketball_nba') {
   const sportLabel = sportKey.includes('nfl') ? 'NFL' : 'NBA';
@@ -109,8 +114,11 @@ export async function runSGP(sportKey: string = 'basketball_nba') {
     const lineupMap = await (async () => {
       try {
         return await buildLineupMap(upcoming.map(e => ({
-          eventId: e.eventId, homeTeam: e.homeTeam, awayTeam: e.awayTeam,
-          sport: sportKey, startTime: e.startTime,
+          eventId: e.eventId,
+          sportKey,
+          homeTeam: e.homeTeam,
+          awayTeam: e.awayTeam,
+          gameTime: e.startTime,
         })));
       } catch { return new Map(); }
     })();
@@ -118,7 +126,7 @@ export async function runSGP(sportKey: string = 'basketball_nba') {
     const publicBetting = await (async () => {
       try {
         return await buildPublicBettingMap(upcoming.map(e => ({
-          eventId: e.eventId, homeTeam: e.homeTeam, awayTeam: e.awayTeam, sport: sportKey,
+          eventId: e.eventId, homeTeam: e.homeTeam, awayTeam: e.awayTeam, sportKey,
         })));
       } catch { return new Map(); }
     })();
@@ -133,9 +141,12 @@ export async function runSGP(sportKey: string = 'basketball_nba') {
       } catch { }
     }
 
-    // Step 3: Fetch ALL prop markets for EVERY game
+    const userBookKeys = getUserBookKeys();
+
+    // Step 3: Fetch ALL numeric prop markets for EVERY game
     // Group raw props by eventId for SGP analysis
     const propsByEvent = new Map<string, any[]>();
+    const anytimeTdByEvent = new Map<string, any[]>();
 
     for (const event of upcoming) {
       const rows: any[] = [];
@@ -154,9 +165,39 @@ export async function runSGP(sportKey: string = 'basketball_nba') {
         propsByEvent.set(event.eventId, rows);
         console.log(`  [+] ${event.awayTeam} vs ${event.homeTeam} -- ${rows.length} prop lines`);
       }
+
+      if (sportKey.includes('nfl')) {
+        const tdOffers: any[] = [];
+        try {
+          const { event: ev } = await getEventMarkets(
+            sportKey, event.eventId, ['player_anytime_td'] as any[], undefined, 'american'
+          );
+          if (ev) {
+            for (const bk of (ev as any).bookmakers ?? []) {
+              if (!userBookKeys.includes(bk.key)) continue;
+              for (const mkt of (bk.markets ?? [])) {
+                if (mkt.key !== 'player_anytime_td') continue;
+                for (const outcome of (mkt.outcomes ?? [])) {
+                  if (typeof outcome.price !== 'number') continue;
+                  tdOffers.push({
+                    playerName: outcome.name ?? '',
+                    price: outcome.price,
+                    book: bk.key,
+                    bookTitle: getBookmakerDisplayName(bk.key),
+                  });
+                }
+              }
+            }
+          }
+        } catch { /* market not available */ }
+
+        if (tdOffers.length > 0) {
+          anytimeTdByEvent.set(event.eventId, tdOffers);
+        }
+      }
     }
 
-    if (propsByEvent.size === 0) {
+    if (propsByEvent.size === 0 && anytimeTdByEvent.size === 0) {
       console.log('\n  No prop lines available yet. Try again closer to game time.\n');
       return;
     }
@@ -185,14 +226,17 @@ export async function runSGP(sportKey: string = 'basketball_nba') {
 
       // Build SGP legs from scored props -- use intelligence score to rank
       const legs: SGPLeg[] = [];
+      const playerTeamMap = new Map<string, string>();
 
       for (const prop of scoredProps) {
         if (!prop.playerName || !prop.line) continue;
         const sideNorm = (prop.side ?? '').toLowerCase();
+        const team = (prop as any).team ?? '';
+        if (team) playerTeamMap.set(normalizeName(prop.playerName), team);
 
         legs.push({
           playerName: prop.playerName,
-          team: (prop as any).team ?? '',
+          team,
           market: (prop as any).statType ?? prop.market ?? '',
           line: prop.line,
           side: sideNorm as 'over' | 'under',
@@ -200,6 +244,52 @@ export async function runSGP(sportKey: string = 'basketball_nba') {
           sport: sportKey,
           eventId: (prop as any).eventId ?? eventId,
         });
+      }
+
+      if (sportKey.includes('nfl')) {
+        const tdOffers = anytimeTdByEvent.get(eventId) ?? [];
+        const bestOfferByPlayer = new Map<string, { playerName: string; price: number }>();
+
+        for (const offer of tdOffers) {
+          const key = normalizeName(offer.playerName);
+          const existing = bestOfferByPlayer.get(key);
+          if (!existing || offer.price > existing.price) {
+            bestOfferByPlayer.set(key, { playerName: offer.playerName, price: offer.price });
+          }
+        }
+
+        for (const [key, offer] of bestOfferByPlayer) {
+          legs.push({
+            playerName: offer.playerName,
+            team: playerTeamMap.get(key) ?? `unknown:${key}`,
+            market: 'player_anytime_td',
+            line: 0.5,
+            side: 'over',
+            price: offer.price,
+            sport: sportKey,
+            eventId,
+          });
+        }
+
+        const totalMarket = event.aggregatedMarkets['totals'];
+        for (const side of totalMarket?.sides ?? []) {
+          const outcomeName = side.outcomeName.toLowerCase();
+          const line = side.bestLine ?? side.consensusLine;
+          const price = side.bestPrice ?? side.consensusPrice;
+          if (line === null || price === null) continue;
+          if (!outcomeName.includes('over') && !outcomeName.includes('under')) continue;
+
+          legs.push({
+            playerName: `${event.awayTeam} @ ${event.homeTeam} Total`,
+            team: `${event.homeTeam}/${event.awayTeam}`,
+            market: 'totals',
+            line,
+            side: outcomeName.includes('under') ? 'under' : 'over',
+            price,
+            sport: sportKey,
+            eventId,
+          });
+        }
       }
 
       if (legs.length < 2) continue;

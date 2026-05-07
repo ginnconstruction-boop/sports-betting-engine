@@ -1,8 +1,8 @@
 // ============================================================
 // src/commands/runSportScan.ts
-// Single sport scan -- game lines + props in ONE unified Top 10
-// Best plays across all markets: ML, spread, total, props
-// Props only for NBA and NFL
+// Single sport scan -- unified Top 10
+// Best plays across supported markets: ML, spread, total, props
+// NFL single-sport scan is game-lines only by design.
 // ============================================================
 
 import * as dotenv from 'dotenv';
@@ -240,9 +240,11 @@ export async function runSportScan(
     calibrationModel, lineupMap, learnedWeights,
   });
 
-  // -- Fetch and score props (NBA + NFL only) ---------------
+  // -- Fetch and score props (sport-specific; NFL single-sport scan excludes props) --
   let propBets: ScoredProp[] = [];
-  const propsAllowed = PROP_CONFIG.ENABLED_SPORTS.includes(sportKey);
+  const propsAllowed =
+    sportKey !== 'americanfootball_nfl' &&
+    PROP_CONFIG.ENABLED_SPORTS.includes(sportKey);
 
   if (propsAllowed) {
     propBets = await safeRun(async () => {
@@ -446,9 +448,15 @@ export async function runSportScan(
 
   // Print unified header
   console.log('\n');
+  const unifiedTitle = propsAllowed
+    ? `${sport.name} -- TOP PLAYS (Game Lines + Props)`
+    : `${sport.name} -- TOP PLAYS (Game Lines Only)`;
+  const unifiedSubtitle = propsAllowed
+    ? 'Best plays across ALL markets: ML, spread, total, props'
+    : 'Best plays across moneyline, spread, and total only';
   console.log('+==============================================================+');
-  console.log(`|  ${sport.name} -- TOP PLAYS (Game Lines + Props)              `);
-  console.log(`|  Best plays across ALL markets: ML, Spread, Total, Props     `);
+  console.log(`|  ${unifiedTitle}              `);
+  console.log(`|  ${unifiedSubtitle}     `);
   console.log('+==============================================================+');
 
   // Print game lines section

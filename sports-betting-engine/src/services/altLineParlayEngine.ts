@@ -41,6 +41,7 @@ export interface AltLine {
   sport:            string;
   eventId:          string;
   matchup:          string;
+  isBinary?:        boolean;
 }
 
 export interface AltLineParlay {
@@ -66,6 +67,9 @@ const MARKET_LABELS: Record<string, string> = {
   player_threes: '3PM', player_blocks: 'Blk', player_steals: 'Stl',
   player_pass_yds: 'Pass Yds', player_rush_yds: 'Rush Yds',
   player_reception_yds: 'Rec Yds', player_receptions: 'Rec',
+  player_pass_tds: 'Pass TDs', player_pass_completions: 'Completions',
+  player_rush_attempts: 'Rush Att', player_anytime_td: 'Anytime TD',
+  totals: 'Game Total', team_totals: 'Team Total',
 };
 
 // Step-down options per market
@@ -77,9 +81,14 @@ const ALT_STEPS: Record<string, number[]> = {
   player_blocks:        [0.5, 1.0],
   player_steals:        [0.5, 1.0],
   player_pass_yds:      [15, 25, 35],
+  player_pass_tds:      [0.5, 1.0],
+  player_pass_completions: [2.5, 4.5, 6.5],
   player_rush_yds:      [10, 20, 30],
+  player_rush_attempts: [2.5, 4.5, 6.5],
   player_reception_yds: [10, 20, 30],
   player_receptions:    [1.5, 2.5],
+  totals:               [3.5, 5.5, 7.5],
+  team_totals:          [2.5, 3.5, 5.5],
 };
 
 // Hit rate gain per unit of line reduction
@@ -91,9 +100,14 @@ const HIT_RATE_PER_UNIT: Record<string, number> = {
   player_blocks:        0.080,
   player_steals:        0.085,
   player_pass_yds:      0.008,
+  player_pass_tds:      0.090,
+  player_pass_completions: 0.020,
   player_rush_yds:      0.012,
+  player_rush_attempts: 0.025,
   player_reception_yds: 0.010,
   player_receptions:    0.050,
+  totals:               0.018,
+  team_totals:          0.022,
 };
 
 // Juice cost per unit of line reduction (in american odds points)
@@ -105,9 +119,14 @@ const JUICE_PER_UNIT: Record<string, number> = {
   player_blocks:        45,
   player_steals:        45,
   player_pass_yds:      3,
+  player_pass_tds:      40,
+  player_pass_completions: 12,
   player_rush_yds:      4,
+  player_rush_attempts: 10,
   player_reception_yds: 4,
   player_receptions:    25,
+  totals:               10,
+  team_totals:          12,
 };
 
 // ------------------------------------
@@ -136,7 +155,10 @@ function impliedProb(american: number): number {
 // ------------------------------------
 
 function resolveMarketKey(prop: any): string {
-  const raw = (prop.market ?? prop.statType ?? '').toLowerCase().trim();
+  const direct = (prop.marketKey ?? prop.market ?? prop.statType ?? '').toLowerCase().trim();
+  if (ALT_STEPS[direct]) return direct;
+
+  const raw = direct;
   const map: Record<string, string> = {
     'points': 'player_points', 'pts': 'player_points',
     'rebounds': 'player_rebounds', 'reb': 'player_rebounds',
@@ -145,14 +167,18 @@ function resolveMarketKey(prop: any): string {
     'blocks': 'player_blocks', 'blk': 'player_blocks',
     'steals': 'player_steals', 'stl': 'player_steals',
     'pass yds': 'player_pass_yds', 'passing yards': 'player_pass_yds',
+    'pass tds': 'player_pass_tds', 'passing touchdowns': 'player_pass_tds',
+    'pass completions': 'player_pass_completions', 'completions': 'player_pass_completions',
     'rush yds': 'player_rush_yds', 'rushing yards': 'player_rush_yds',
+    'rush attempts': 'player_rush_attempts', 'rushing attempts': 'player_rush_attempts',
     'rec yds': 'player_reception_yds', 'receiving yards': 'player_reception_yds',
     'receptions': 'player_receptions', 'rec': 'player_receptions',
+    'game total': 'totals', 'total points': 'totals',
+    'team total': 'team_totals', 'anytime td': 'player_anytime_td',
   };
   for (const [key, val] of Object.entries(map)) {
     if (raw.includes(key)) return val;
   }
-  if (ALT_STEPS[raw]) return raw;
   return '';
 }
 
@@ -323,7 +349,8 @@ function getCombinations<T>(arr: T[], size: number): T[][] {
 
 function buildParlay(legs: AltLine[]): AltLineParlay | null {
   // No duplicate players
-  if (new Set(legs.map(l => l.playerName)).size < legs.length) return null;
+  const uniqueLegKeys = new Set(legs.map(l => `${l.playerName}__${l.market}`));
+  if (uniqueLegKeys.size < legs.length) return null;
 
   // Correlation: same-team legs are positively correlated
   const teams = legs.map(l => l.team).filter(Boolean);
@@ -446,6 +473,11 @@ export function printAltLineParlayReport(parlays: AltLineParlay[]): void {
       const std  = leg.standardPrice > 0 ? `+${leg.standardPrice}` : `${leg.standardPrice}`;
       const alt  = leg.altPrice > 0 ? `+${leg.altPrice}` : `${leg.altPrice}`;
       const pred = leg.predictedValue ? `  model: ${leg.predictedValue}` : '';
+      if (leg.market === 'player_anytime_td' || leg.isBinary) {
+        console.log(`  Leg: ${leg.playerName} -- ${leg.marketLabel} YES  [${alt}]`);
+        console.log(`       Hit rate: ${leg.estimatedHitRate}%  |  Standard price [${std}]${pred}`);
+        continue;
+      }
       console.log(`  Leg: ${leg.playerName} -- ${leg.marketLabel} OVER ${leg.altLine}  [${alt}]`);
       console.log(`       Hit rate: ${leg.estimatedHitRate}%  |  Standard was ${leg.standardLine} [${std}]  (-${leg.lineReduction} pts)${pred}`);
     }

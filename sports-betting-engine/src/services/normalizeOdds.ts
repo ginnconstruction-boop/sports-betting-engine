@@ -56,6 +56,10 @@ function normalizeOutcome(
   }
 
   const sportConfig = getSportByKey(event.sport_key);
+  const outcomeName =
+    market.key === 'team_totals' && outcome.description
+      ? `${normalizeTeamName(outcome.description)} ${normalizeTeamName(outcome.name)}`
+      : normalizeTeamName(outcome.name);
 
   return {
     sport: sportConfig?.name ?? event.sport_title ?? event.sport_key,
@@ -67,7 +71,7 @@ function normalizeOutcome(
     bookmakerKey: bookmaker.key,
     bookmakerTitle: getBookmakerDisplayName(bookmaker.key),
     marketKey: market.key,
-    outcomeName: normalizeTeamName(outcome.name),
+    outcomeName,
     line,
     price,
     lastUpdate: market.last_update ?? bookmaker.last_update ?? '',
