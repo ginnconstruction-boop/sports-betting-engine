@@ -344,6 +344,7 @@ type SupportedMLBPropType =
 
 type SupportedNHLPropType =
   | 'player_shots_on_goal'
+  | 'player_total_saves'
   | 'goalie_saves';
 
 interface NBABoxScorePlayerStat {

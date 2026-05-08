@@ -82,10 +82,18 @@ const MARKET_LABELS: Record<string, string> = {
   player_turnovers:                 'Turnovers',
   player_points_rebounds:           'Pts+Rebounds',
   player_points_assists:            'Pts+Assists',
+  player_goals:                     'Goals',
+  player_shots_on_goal:             'Shots on Goal',
+  goalie_saves:                     'Goalie Saves',
 };
 
 function marketLabel(key: string): string {
   return MARKET_LABELS[key] ?? key.replace('player_', '').replace(/_/g, ' ');
+}
+
+function normalizePropMarketKey(key: string): string {
+  if (key === 'player_total_saves') return 'goalie_saves';
+  return key;
 }
 
 // ------------------------------------
@@ -111,6 +119,7 @@ export function normalizePropsFromEvent(
         if (!['Over', 'Under'].includes(side)) continue;
         if (typeof outcome.point !== 'number') continue;
         if (typeof outcome.price !== 'number') continue;
+        const normalizedMarketKey = normalizePropMarketKey(market.key);
 
         rows.push({
           eventId: event.id,
@@ -119,8 +128,8 @@ export function normalizePropsFromEvent(
           awayTeam: event.away_team,
           gameTime: event.commence_time,
           sportKey: event.sport_key,
-          marketKey: market.key,
-          marketLabel: marketLabel(market.key),
+          marketKey: normalizedMarketKey,
+          marketLabel: marketLabel(normalizedMarketKey),
           playerName: playerName.trim(),
           side,
           bookmakerKey: bookmaker.key,

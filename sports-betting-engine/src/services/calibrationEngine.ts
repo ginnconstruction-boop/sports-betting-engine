@@ -180,6 +180,7 @@ function isSupportedMLBPropType(propType?: string | null): boolean {
 function isSupportedNHLPropType(propType?: string | null): boolean {
   const normalized = String(propType ?? '').toLowerCase();
   return normalized === 'player_shots_on_goal'
+    || normalized === 'player_total_saves'
     || normalized === 'goalie_saves';
 }
 

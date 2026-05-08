@@ -297,6 +297,7 @@ export async function scoreAllPropsWithIntelligence(
   const supportedNHLProjectionMarkets = new Set([
     'player_shots_on_goal',
     'goalie_saves',
+    'player_total_saves',
   ]);
   const userBookKeys = getUserBookKeys();
 

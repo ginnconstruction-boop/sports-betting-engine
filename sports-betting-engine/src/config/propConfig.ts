@@ -62,7 +62,7 @@ export const PROP_CONFIG = {
     'player_goals',
     'player_assists',
     'player_shots_on_goal',
-    'goalie_saves',
+    'player_total_saves',
   ] as string[],
 
   // First scorer market keys

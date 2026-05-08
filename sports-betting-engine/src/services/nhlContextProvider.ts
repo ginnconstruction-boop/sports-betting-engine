@@ -588,7 +588,7 @@ export async function buildNHLContextForSlate(
 
   const supportedTargets = targets.filter(target => {
     const market = target.marketKey.toLowerCase();
-    return market === 'player_shots_on_goal' || market === 'goalie_saves';
+    return market === 'player_shots_on_goal' || market === 'goalie_saves' || market === 'player_total_saves';
   });
 
   const resolvedTargets: RosterEntry[] = [];
