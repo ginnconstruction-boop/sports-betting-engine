@@ -12,6 +12,7 @@ export interface ESPNInjury {
   status: string;       // 'Out', 'Doubtful', 'Questionable', 'Probable'
   position: string;
   detail: string;
+  source?: string;
 }
 
 export interface ESPNGameInfo {

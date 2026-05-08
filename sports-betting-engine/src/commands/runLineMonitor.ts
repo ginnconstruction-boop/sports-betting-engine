@@ -36,12 +36,13 @@ async function runOneCheck(): Promise<void> {
   }
 
   const prior = loadLatestSnapshot();
-  if (!prior || prior.length === 0) {
+  const priorEvents = prior?.eventSummaries ?? [];
+  if (priorEvents.length === 0) {
     console.log('  [MONITOR] No prior snapshot to compare -- run morning scan first.');
     return;
   }
 
-  const priorMap = new Map(prior.map((e: any) => [e.eventId, e]));
+  const priorMap = new Map(priorEvents.map(e => [e.eventId, e]));
   const alerts: any[] = [];
   const threshold = parseInt(process.env.LINE_MONITOR_THRESHOLD_CENTS ?? '15');
 

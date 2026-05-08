@@ -287,17 +287,34 @@ export function savePropPicks(props: Array<{
   savedAsRecommendation?: boolean;
   nonMarketSignalCount?: number;
   signalTypes?: string[];
-}>): void {
+}>): {
+  attemptedCount: number;
+  savedCount: number;
+  officialCount: number;
+  trackedCount: number;
+  duplicateCount: number;
+} {
   const existing = loadPicks();
   const today = new Date().toISOString().split('T')[0];
   const newPicks: PickRecord[] = [];
+  let attemptedCount = 0;
+  let duplicateCount = 0;
 
   for (const prop of props) {
     if (!prop.bestUserPrice) continue;
+    attemptedCount++;
     // Allow null line (e.g. first-scorer props) -- use market+side as dedup key
     const lineStr = prop.line !== null && prop.line !== undefined ? String(prop.line) : 'null';
     const sideKey = `${prop.playerName} ${prop.market} ${prop.side} ${lineStr}`;
-    if (existing.some(p => p.date.startsWith(today) && p.side === sideKey)) continue;
+    const dedupeKey = `${prop.sport}__${prop.matchup}__${sideKey}`;
+    const alreadyToday = existing.some(p =>
+      p.date.startsWith(today) &&
+      `${p.sport}__${p.matchup}__${p.side}` === dedupeKey
+    );
+    if (alreadyToday) {
+      duplicateCount++;
+      continue;
+    }
 
     newPicks.push({
       pickId: generatePickId(),
@@ -342,16 +359,32 @@ export function savePropPicks(props: Array<{
     });
   }
 
+  const officialCount = newPicks.filter(p => p.savedAsRecommendation === true).length;
+  const trackedCount = newPicks.length - officialCount;
+
   if (newPicks.length > 0) {
     ensureDir();
     fs.writeFileSync(PICKS_FILE, JSON.stringify([...existing, ...newPicks], null, 2));
-    const officialCount = newPicks.filter(p => p.savedAsRecommendation === true).length;
-    const trackedCount = newPicks.length - officialCount;
     console.log(
-      `  [OK] Saved ${newPicks.length} prop pick(s) to tracking log ` +
-      `(${officialCount} official, ${trackedCount} tracked).`
+      `  [OK] Saved ${newPicks.length} new prop pick(s) to tracking log ` +
+      `(${officialCount} official, ${trackedCount} tracked` +
+      (duplicateCount > 0 ? `, ${duplicateCount} duplicate${duplicateCount === 1 ? '' : 's'} skipped` : '') +
+      ').'
+    );
+  } else if (duplicateCount > 0) {
+    console.log(
+      `  [OK] No new prop picks saved to tracking log ` +
+      `(${duplicateCount} duplicate${duplicateCount === 1 ? '' : 's'} skipped).`
     );
   }
+
+  return {
+    attemptedCount,
+    savedCount: newPicks.length,
+    officialCount,
+    trackedCount,
+    duplicateCount,
+  };
 }
 
 // ------------------------------------

@@ -166,15 +166,26 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
     );
 
     // Lineup confirmation
-    const lineupMap = await safeRun(() => buildLineupMap(upcoming.map(e => ({ eventId: e.eventId, homeTeam: e.homeTeam, awayTeam: e.awayTeam, sport: sportKey, startTime: e.startTime }))), new Map());
+    const lineupMap = await safeRun(
+      () => buildLineupMap(upcoming.map(e => ({
+        eventId: e.eventId,
+        sportKey,
+        homeTeam: e.homeTeam,
+        awayTeam: e.awayTeam,
+        gameTime: e.startTime,
+      }))),
+      new Map()
+    );
 
     // Public betting
     const publicBetting = await safeRun(
       async () => {
         const map = new Map<string, any>();
         const pb = await buildPublicBettingMap(upcoming.map(e => ({
-          eventId: e.eventId, homeTeam: e.homeTeam, awayTeam: e.awayTeam,
-          sport: sportKey,
+          eventId: e.eventId,
+          sportKey,
+          homeTeam: e.homeTeam,
+          awayTeam: e.awayTeam,
         })));
         return pb;
       },
@@ -569,6 +580,12 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
     }
     // Save all props to tracking log
     try {
+      const sourcePropByKey = new Map(
+        topProps.map(prop => [
+          `${prop.playerName}__${prop.market}__${prop.side}__${prop.line ?? 'null'}`,
+          prop,
+        ])
+      );
       const rankedByKey = new Map(
         finalSlateRanked.map(candidate => [
           `${candidate.playerName ?? ''}__${candidate.market ?? ''}__${candidate.side}__${candidate.line ?? 'null'}`,
@@ -580,46 +597,44 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
         if (candidate.forcedTierCap === 'LEAN' && candidate.finalDecisionLabel === 'BET') return 'LEAN' as const;
         return candidate.finalDecisionLabel;
       };
-      const savedProps = topProps.filter(p => {
-        const candidate = rankedByKey.get(`${p.playerName}__${p.market}__${p.side}__${p.line ?? 'null'}`);
-        if (!candidate) return false;
-        const label = effectiveLabel(candidate);
-        return label !== 'PASS';
+      const actionableCandidates = finalSlateRanked.filter(candidate => {
+        if (candidate.marketType !== 'player_prop') return false;
+        return effectiveLabel(candidate) !== 'PASS';
       });
-      savePropPicks(savedProps.map(p => ({
-        playerName: p.playerName,
-        market: p.market,
-        propType: p.statType ?? p.market,
-        side: p.side,
-        line: p.line,
-        bestUserPrice: p.bestUserPrice,
-        bestUserBook: p.bestUserBook,
-        matchup: p.matchup,
-        gameTime: p.gameTime,
-        sport: p.sport,
-        score: p.score,
-        grade: p.grade,
-        eventId: (p as any).eventId ?? '',
-        projectedStat: p.projectedStat,
-        projectionEdge: p.projectionEdge,
-        modelProbability: p.probability,
-        trueEdge: p.trueEdge,
-        edgeConfidence: p.edgeConfidence,
-        minutesConfidence: p.nbaMinutesConfidence,
-        modelCompleteness: p.modelCompleteness,
-        riskGrade: rankedByKey.get(`${p.playerName}__${p.market}__${p.side}__${p.line ?? 'null'}`)?.riskGrade,
-        finalDecisionLabel: rankedByKey.get(`${p.playerName}__${p.market}__${p.side}__${p.line ?? 'null'}`)?.finalDecisionLabel,
-        recommendedLabel: rankedByKey.get(`${p.playerName}__${p.market}__${p.side}__${p.line ?? 'null'}`)
-          ? effectiveLabel(rankedByKey.get(`${p.playerName}__${p.market}__${p.side}__${p.line ?? 'null'}`)!)
-          : undefined,
-        savedAsRecommendation: (() => {
-          const candidate = rankedByKey.get(`${p.playerName}__${p.market}__${p.side}__${p.line ?? 'null'}`);
-          const label = candidate ? effectiveLabel(candidate) : undefined;
-          return label === 'BET' || label === 'LEAN';
-        })(),
-        nonMarketSignalCount: rankedByKey.get(`${p.playerName}__${p.market}__${p.side}__${p.line ?? 'null'}`)?.strongNonMarketSignalCount,
-        signalTypes: rankedByKey.get(`${p.playerName}__${p.market}__${p.side}__${p.line ?? 'null'}`)?.signals,
-      })));
+      savePropPicks(actionableCandidates.flatMap(candidate => {
+        const key = `${candidate.playerName ?? ''}__${candidate.market ?? ''}__${candidate.side ?? ''}__${candidate.line ?? 'null'}`;
+        const source = sourcePropByKey.get(key);
+        if (!source) return [];
+        const label = effectiveLabel(candidate);
+        return [{
+          playerName: source.playerName,
+          market: source.market,
+          propType: source.statType ?? source.market,
+          side: source.side,
+          line: source.line,
+          bestUserPrice: candidate.bestPrice ?? source.bestUserPrice,
+          bestUserBook: candidate.bestBook ?? source.bestUserBook,
+          matchup: source.matchup,
+          gameTime: source.gameTime,
+          sport: source.sport,
+          score: candidate.score ?? source.score,
+          grade: candidate.finalGrade ?? source.grade,
+          eventId: (source as any).eventId ?? '',
+          projectedStat: candidate.projectedStat ?? source.projectedStat,
+          projectionEdge: candidate.projectionEdge ?? source.projectionEdge,
+          modelProbability: candidate.probability ?? source.probability,
+          trueEdge: candidate.trueEdge ?? source.trueEdge,
+          edgeConfidence: candidate.edgeConfidence ?? source.edgeConfidence,
+          minutesConfidence: candidate.nbaMinutesConfidence ?? source.nbaMinutesConfidence,
+          modelCompleteness: candidate.modelCompleteness ?? source.modelCompleteness,
+          riskGrade: candidate.riskGrade,
+          finalDecisionLabel: candidate.finalDecisionLabel,
+          recommendedLabel: label,
+          savedAsRecommendation: label === 'BET' || label === 'LEAN',
+          nonMarketSignalCount: candidate.strongNonMarketSignalCount,
+          signalTypes: candidate.signals,
+        }];
+      }));
     } catch { }
 
 

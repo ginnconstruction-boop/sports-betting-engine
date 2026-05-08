@@ -66,8 +66,11 @@ export async function runFirstScorer(
     // Build lineup map for confirmation signal
     const lineupMap = await safeRun(
       () => buildLineupMap(upcoming.map(e => ({
-        eventId: e.eventId, homeTeam: e.homeTeam, awayTeam: e.awayTeam,
-        sport: sportKey, startTime: e.startTime,
+        eventId: e.eventId,
+        sportKey,
+        homeTeam: e.homeTeam,
+        awayTeam: e.awayTeam,
+        gameTime: e.startTime,
       }))),
       new Map()
     );
