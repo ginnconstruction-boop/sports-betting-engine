@@ -46,6 +46,7 @@ function fetchJson(url: string): Promise<any> {
 const ESPN_LEAGUES: Record<string, { sport: string; league: string }> = {
   basketball_nba: { sport: 'basketball', league: 'nba' },
   baseball_mlb:   { sport: 'baseball',   league: 'mlb' },
+  baseball_ncaa:  { sport: 'baseball',   league: 'college-baseball' },
   icehockey_nhl:  { sport: 'hockey',     league: 'nhl' },
 };
 

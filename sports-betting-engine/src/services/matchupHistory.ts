@@ -8,6 +8,7 @@
 import https from 'https';
 import * as fs from 'fs';
 import * as path from 'path';
+import { findEspnTeamId, parseEspnScoreValue } from './espnLookup';
 
 const SNAPSHOT_DIR = process.env.SNAPSHOT_DIR ?? './snapshots';
 const H2H_FILE = path.join(SNAPSHOT_DIR, 'h2h_records.json');
@@ -36,6 +37,7 @@ function fetchJson(url: string): Promise<any> {
 const ESPN_LEAGUES: Record<string, { sport: string; league: string }> = {
   basketball_nba: { sport: 'basketball', league: 'nba' },
   baseball_mlb: { sport: 'baseball', league: 'mlb' },
+  baseball_ncaa: { sport: 'baseball', league: 'college-baseball' },
   americanfootball_nfl: { sport: 'football', league: 'nfl' },
   americanfootball_ncaaf: { sport: 'football', league: 'college-football' },
   basketball_ncaab: { sport: 'basketball', league: 'mens-college-basketball' },
@@ -99,33 +101,12 @@ function h2hKey(team1: string, team2: string, sportKey: string): string {
 // Team ID cache
 // ------------------------------------
 
-const teamIdCache = new Map<string, string>();
-
 async function getTeamId(sportKey: string, teamName: string): Promise<string | null> {
-  const cacheKey = `${sportKey}:${teamName}`;
-  if (teamIdCache.has(cacheKey)) return teamIdCache.get(cacheKey)!;
-
   const league = ESPN_LEAGUES[sportKey];
   if (!league) return null;
 
   try {
-    const url = `https://site.api.espn.com/apis/site/v2/sports/${league.sport}/${league.league}/teams`;
-    const data = await fetchJson(url);
-    const teams: any[] = data?.sports?.[0]?.leagues?.[0]?.teams ?? data?.teams ?? [];
-    const teamLast = teamName.split(' ').pop()?.toLowerCase() ?? '';
-    const teamNorm = teamName.toLowerCase();
-
-    for (const t of teams) {
-      const team = t?.team ?? t;
-      const displayName: string = (team?.displayName ?? '').toLowerCase();
-      const shortName: string = (team?.shortDisplayName ?? '').toLowerCase();
-      const id: string = team?.id ?? '';
-      if (!id) continue;
-      if (displayName === teamNorm || displayName.includes(teamLast) || shortName.includes(teamLast)) {
-        teamIdCache.set(cacheKey, id);
-        return id;
-      }
-    }
+    return await findEspnTeamId(league.sport, league.league, teamName);
   } catch { /* ignore */ }
   return null;
 }
@@ -183,10 +164,10 @@ async function fetchH2HRecord(
         );
         if (!thisTeam) continue;
 
-        const score1 = parseFloat(thisTeam?.score ?? '0');
-        const score2 = parseFloat(vsTeam2?.score ?? '0');
+        const score1 = parseEspnScoreValue(thisTeam?.score);
+        const score2 = parseEspnScoreValue(vsTeam2?.score);
 
-        if (score1 === 0 && score2 === 0) continue;
+        if (isNaN(score1) || isNaN(score2) || (score1 === 0 && score2 === 0)) continue;
 
         totalGames++;
         if (score1 > score2) team1Wins++;

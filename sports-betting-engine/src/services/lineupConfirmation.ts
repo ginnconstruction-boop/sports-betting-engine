@@ -103,6 +103,7 @@ function fuzzyMatch(a: string, b: string): boolean {
 const ESPN_LEAGUES: Record<string, { sport: string; league: string }> = {
   basketball_nba:          { sport: 'basketball',   league: 'nba' },
   baseball_mlb:            { sport: 'baseball',     league: 'mlb' },
+  baseball_ncaa:           { sport: 'baseball',     league: 'college-baseball' },
   americanfootball_nfl:    { sport: 'football',     league: 'nfl' },
   americanfootball_ncaaf:  { sport: 'football',     league: 'college-football' },
   basketball_ncaab:        { sport: 'basketball',   league: 'mens-college-basketball' },
@@ -135,6 +136,7 @@ async function getESPNLineup(
       basketball_nba: ['PG', 'SG', 'SF', 'PF', 'C'],
       americanfootball_nfl: ['QB', 'RB', 'WR', 'TE'],
       baseball_mlb: ['SP', 'RP', 'C', '1B', '2B', '3B', 'SS', 'OF', 'DH'],
+      baseball_ncaa: ['SP', 'RP', 'C', '1B', '2B', '3B', 'SS', 'OF', 'DH'],
       icehockey_nhl: ['C', 'LW', 'RW', 'D', 'G'],
     };
 
@@ -231,6 +233,9 @@ const BEAT_REPORTER_RSS: Record<string, string[]> = {
   ],
   baseball_mlb: [
     'https://www.espn.com/espn/rss/mlb/news',
+  ],
+  baseball_ncaa: [
+    'https://www.espn.com/espn/rss/news',
   ],
   americanfootball_nfl: [
     'https://www.espn.com/espn/rss/nfl/news',

@@ -6,6 +6,7 @@
 // ============================================================
 
 import https from 'https';
+import { findEspnTeamId, parseEspnScoreValue } from './espnLookup';
 
 // ------------------------------------
 // HTTP helper
@@ -30,6 +31,7 @@ function fetchJson(url: string): Promise<any> {
 const ESPN_LEAGUES: Record<string, { sport: string; league: string }> = {
   basketball_nba: { sport: 'basketball', league: 'nba' },
   baseball_mlb: { sport: 'baseball', league: 'mlb' },
+  baseball_ncaa: { sport: 'baseball', league: 'college-baseball' },
   americanfootball_nfl: { sport: 'football', league: 'nfl' },
   americanfootball_ncaaf: { sport: 'football', league: 'college-football' },
   basketball_ncaab: { sport: 'basketball', league: 'mens-college-basketball' },
@@ -109,7 +111,6 @@ export interface MotivationReport {
 // ------------------------------------
 
 const standingsCache = new Map<string, { data: any; fetchedAt: number }>();
-const teamIdCache = new Map<string, string>();
 const scheduleCache = new Map<string, { data: any[]; fetchedAt: number }>();
 
 async function getStandings(sportKey: string): Promise<any | null> {
@@ -130,30 +131,11 @@ async function getStandings(sportKey: string): Promise<any | null> {
 }
 
 async function getTeamId(sportKey: string, teamName: string): Promise<string | null> {
-  const cacheKey = `${sportKey}:${teamName}`;
-  if (teamIdCache.has(cacheKey)) return teamIdCache.get(cacheKey)!;
-
   const league = ESPN_LEAGUES[sportKey];
   if (!league) return null;
 
   try {
-    const url = `https://site.api.espn.com/apis/site/v2/sports/${league.sport}/${league.league}/teams`;
-    const data = await fetchJson(url);
-    const teams: any[] = data?.sports?.[0]?.leagues?.[0]?.teams ?? data?.teams ?? [];
-    const teamLast = teamName.split(' ').pop()?.toLowerCase() ?? '';
-    const teamNorm = teamName.toLowerCase();
-
-    for (const t of teams) {
-      const team = t?.team ?? t;
-      const displayName: string = (team?.displayName ?? '').toLowerCase();
-      const shortName: string = (team?.shortDisplayName ?? '').toLowerCase();
-      const id: string = team?.id ?? '';
-      if (!id) continue;
-      if (displayName === teamNorm || displayName.includes(teamLast) || shortName.includes(teamLast)) {
-        teamIdCache.set(cacheKey, id);
-        return id;
-      }
-    }
+    return await findEspnTeamId(league.sport, league.league, teamName);
   } catch { /* ignore */ }
   return null;
 }
@@ -295,12 +277,12 @@ async function checkScheduleFactors(
         const awayComp = lastVsAway?.competitions?.[0]?.competitors?.find((c: any) => c?.homeAway === 'away');
 
         if (homeComp && awayComp) {
-          const homeScore = parseFloat(homeComp?.score ?? '0');
-          const awayScore = parseFloat(awayComp?.score ?? '0');
+          const homeScore = parseEspnScoreValue(homeComp?.score);
+          const awayScore = parseEspnScoreValue(awayComp?.score);
           const gameDate = new Date(lastVsAway?.date ?? '');
           const daysSince = Math.floor((Date.now() - gameDate.getTime()) / (1000 * 60 * 60 * 24));
 
-          if (daysSince <= 30 && daysSince > 0) {
+          if (!isNaN(homeScore) && !isNaN(awayScore) && daysSince <= 30 && daysSince > 0) {
             // Check if home team lost
             const homeTeamInComp = homeComp?.team?.displayName ?? '';
             const homeTeamNorm = homeTeam.toLowerCase();

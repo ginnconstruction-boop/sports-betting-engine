@@ -513,7 +513,11 @@ export async function scoreAllPropsWithIntelligence(
 
     // Line 1: prediction summary (most important)
     if (prediction.predictedValue !== undefined && Math.abs(prediction.predictedEdge ?? 0) >= 1) {
-      const edgeStr = (prediction.predictedEdge ?? 0) > 0 ? `+${prediction.predictedEdge}` : String(prediction.predictedEdge);
+      const displayProjectionEdge = getSideProjectionEdge(
+        prediction.side === 'over' ? 'Over' : 'Under',
+        prediction.predictedEdge
+      );
+      const edgeStr = displayProjectionEdge > 0 ? `+${displayProjectionEdge}` : String(displayProjectionEdge);
       intelReasons.push(`[AI] Model: ${prediction.predictedValue} predicted vs ${prediction.postedLine} line (edge ${edgeStr}) -- ${prediction.confidence.toUpperCase()} confidence`);
     }
 
@@ -543,9 +547,7 @@ export async function scoreAllPropsWithIntelligence(
       ? Math.round((projectedStat - scored.line) * 10) / 10
       : undefined;
     const projectionEdge = rawProjectionDelta !== undefined
-      ? (sportKey === 'basketball_nba'
-        ? getSideProjectionEdge(scored.side, rawProjectionDelta)
-        : rawProjectionDelta)
+      ? getSideProjectionEdge(scored.side, rawProjectionDelta)
       : undefined;
     const impliedProbability = americanToImpliedProbability(scored.bestUserPrice);
     const probability = scored.side === 'Over'
@@ -634,6 +636,12 @@ export async function scoreAllPropsWithIntelligence(
       }
     }
 
+    const shouldSuppressProjectionMismatch =
+      projectedStat !== undefined &&
+      projectionEdge !== undefined &&
+      sportKey !== 'basketball_nba' &&
+      projectionEdge <= -0.75;
+
     const shouldSuppressNBAMismatch =
       sportKey === 'basketball_nba' &&
       projectedStat !== undefined &&
@@ -646,7 +654,7 @@ export async function scoreAllPropsWithIntelligence(
         probability + 0.05 < impliedProbability
       );
 
-    if (shouldSuppressNBAMismatch) {
+    if (shouldSuppressProjectionMismatch || shouldSuppressNBAMismatch) {
       return null;
     }
 
@@ -967,6 +975,9 @@ export function printTopProps(
       console.log(`  |  [AI] Model completeness: ${((p.modelCompleteness ?? 0) * 100).toFixed(0)}% | Minutes confidence: ${((p.nbaMinutesConfidence ?? 0) * 100).toFixed(0)}% | Edge confidence: ${edgeConfidence}`);
       console.log(`  |  [AI] Non-market Signals: ${nonMarketSignalNames.length}${nonMarketSignalNames.length ? ` -> ${nonMarketSignalNames.join(', ')}` : ''}`);
       console.log(`  |  [AI] Context Signals: ${contextSignalNames.length}${contextSignalNames.length ? ` -> ${contextSignalNames.join(', ')}` : ''}`);
+    } else if (p.sportKey === 'basketball_nba' && p.supportedNBAProjection === false) {
+      console.log(`  |  [AI] Projection model not supported for this NBA market yet`);
+      console.log(`  |  [AI] Decision engine will not promote unsupported NBA prop markets to official action`);
     } else if (p.sportKey === 'baseball_mlb') {
       console.log(`  |  [AI] Context Signals: ${contextSignalNames.length}${contextSignalNames.length ? ` -> ${contextSignalNames.join(', ')}` : ''}`);
     } else if (p.sportKey === 'icehockey_nhl') {

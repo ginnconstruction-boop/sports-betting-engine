@@ -33,11 +33,79 @@ export interface LineComparison {
 const HOME_ADVANTAGE: Record<string, number> = {
   basketball_nba:         2.5,
   baseball_mlb:           0.3,
+  baseball_ncaa:          0.3,
   americanfootball_nfl:   2.5,
   americanfootball_ncaaf: 3.0,
   basketball_ncaab:       3.5,
   icehockey_nhl:          0.15,
 };
+
+function parseScoreValue(score: unknown): number {
+  if (typeof score === 'number') return score;
+  if (typeof score === 'string') {
+    const parsed = parseFloat(score);
+    return isNaN(parsed) ? NaN : parsed;
+  }
+  if (score && typeof score === 'object') {
+    const value = (score as { value?: unknown; displayValue?: unknown }).value
+      ?? (score as { value?: unknown; displayValue?: unknown }).displayValue;
+    return parseScoreValue(value);
+  }
+  return NaN;
+}
+
+function normalizeTeamName(name: string): string {
+  return name.toLowerCase().replace(/\s+/g, ' ').trim();
+}
+
+function teamMatches(candidateName: string, targetName: string): boolean {
+  const candidate = normalizeTeamName(candidateName);
+  const target = normalizeTeamName(targetName);
+  const candidateLast = candidate.split(' ').pop() ?? '';
+  const targetLast = target.split(' ').pop() ?? '';
+
+  return candidate === target
+    || candidate.includes(target)
+    || target.includes(candidate)
+    || (candidateLast.length >= 4 && candidateLast === targetLast);
+}
+
+async function findTeamId(
+  sport: string,
+  league: string,
+  teamName: string
+): Promise<string | null> {
+  const teamsUrl = `https://site.api.espn.com/apis/site/v2/sports/${sport}/${league}/teams`;
+  const teamsData = await fetchJson(teamsUrl);
+  const teams = Array.isArray(teamsData?.sports?.[0]?.leagues?.[0]?.teams)
+    ? teamsData.sports[0].leagues[0].teams
+    : Array.isArray(teamsData?.teams)
+      ? teamsData.teams
+      : [];
+
+  const directMatch = (teams ?? []).find((t: any) => {
+    const name = t?.team?.displayName ?? t?.team?.name ?? '';
+    return teamMatches(name, teamName);
+  });
+
+  if (directMatch?.team?.id) return directMatch.team.id;
+
+  // NCAA baseball's team directory is often partial, so use today's scoreboard
+  // as a fallback to resolve IDs for active teams on the current slate.
+  const scoreboardUrl = `https://site.api.espn.com/apis/site/v2/sports/${sport}/${league}/scoreboard`;
+  const scoreboardData = await fetchJson(scoreboardUrl);
+  const events = Array.isArray(scoreboardData?.events) ? scoreboardData.events : [];
+
+  for (const event of events) {
+    const competitors = event?.competitions?.[0]?.competitors ?? [];
+    const match = competitors.find((c: any) =>
+      teamMatches(c?.team?.displayName ?? c?.team?.name ?? '', teamName)
+    );
+    if (match?.team?.id) return match.team.id;
+  }
+
+  return null;
+}
 
 function fetchJson(url: string): Promise<any> {
   return new Promise((resolve, reject) => {
@@ -56,6 +124,7 @@ function fetchJson(url: string): Promise<any> {
 const ESPN_LEAGUES: Record<string, { sport: string; league: string }> = {
   basketball_nba:          { sport: 'basketball',   league: 'nba' },
   baseball_mlb:            { sport: 'baseball',     league: 'mlb' },
+  baseball_ncaa:           { sport: 'baseball',     league: 'college-baseball' },
   americanfootball_nfl:    { sport: 'football',     league: 'nfl' },
   americanfootball_ncaaf:  { sport: 'football',     league: 'college-football' },
   basketball_ncaab:        { sport: 'basketball',   league: 'mens-college-basketball' },
@@ -80,19 +149,7 @@ export async function getTeamPowerRating(
   if (!league) return null;
 
   try {
-    // Get team list to find ID
-    const teamsUrl = `https://site.api.espn.com/apis/site/v2/sports/${league.sport}/${league.league}/teams`;
-    const teamsData = await fetchJson(teamsUrl);
-    const teams = Array.isArray(teamsData?.sports?.[0]?.leagues?.[0]?.teams) ? teamsData.sports[0].leagues[0].teams : Array.isArray(teamsData?.teams) ? teamsData.teams : [];
-
-    const teamObj = (teams ?? []).find((t: any) => {
-      const name = t?.team?.displayName ?? t?.team?.name ?? '';
-      const last = teamName.toLowerCase().split(' ').pop() ?? '';
-      return name.toLowerCase().includes(last);
-    });
-
-    if (!teamObj) return null;
-    const teamId = teamObj?.team?.id;
+    const teamId = await findTeamId(league.sport, league.league, teamName);
     if (!teamId) return null;
 
     // Get team stats
@@ -117,18 +174,16 @@ export async function getTeamPowerRating(
       const comp = game?.competitions?.[0];
       const competitors = comp?.competitors ?? [];
       const us = (competitors ?? []).find((c: any) => {
-        const last = teamName.toLowerCase().split(' ').pop() ?? '';
-        return (c?.team?.displayName ?? '').toLowerCase().includes(last);
+        return teamMatches(c?.team?.displayName ?? c?.team?.name ?? '', teamName);
       });
       const them = (competitors ?? []).find((c: any) => {
-        const last = teamName.toLowerCase().split(' ').pop() ?? '';
-        return !(c?.team?.displayName ?? '').toLowerCase().includes(last);
+        return !teamMatches(c?.team?.displayName ?? c?.team?.name ?? '', teamName);
       });
 
       if (!us || !them) continue;
 
-      const ourScore = parseFloat(us?.score ?? '0');
-      const theirScore = parseFloat(them?.score ?? '0');
+      const ourScore = parseScoreValue(us?.score);
+      const theirScore = parseScoreValue(them?.score);
 
       if (isNaN(ourScore) || isNaN(theirScore)) continue;
 

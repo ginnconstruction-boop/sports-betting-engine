@@ -604,6 +604,15 @@ export function printFinalCard(result: SlateResult): void {
     console.log('\n  No actionable candidates survived the full decision pipeline.');
     console.log(`  All ${ranked.length} candidate(s) received PASS label.`);
     if (noBestBetReason) console.log(`  Reason: ${noBestBetReason}`);
+    const passExamples = ranked
+      .filter(c => effectiveLabel(c) === 'PASS')
+      .slice(0, 2);
+    for (const candidate of passExamples) {
+      const name = candidate.playerName
+        ? `${candidate.playerName} ${candidate.market ?? ''} ${candidate.side}`.trim()
+        : `${candidate.matchup} ${candidate.side}`;
+      console.log(`  ${name}: ${(candidate.labelReasons ?? []).slice(0, 2).join(' | ')}`);
+    }
     console.log('  Review the raw signal scan output for context.\n');
     return;
   }

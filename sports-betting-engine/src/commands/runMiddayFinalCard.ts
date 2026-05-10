@@ -32,7 +32,7 @@ import { enrichWithProbability, printProbabilitySummary } from '../services/prob
 import { applyRisk, printRiskSummary } from '../services/riskEngine';
 import { applySportIntelligence, printIntelSummary } from '../services/sportIntelligenceEngine';
 import { labelCandidates, printLabelSummary } from '../services/labelEngine';
-import { selectSlate, printSlateSummary } from '../services/slateSelector';
+import { selectSlate, printSlateSummary, printFinalCard } from '../services/slateSelector';
 import { validateDataIntegrity, printValidationSummary } from '../services/dataIntegrityValidator';
 import { applySignalDiversity, printSignalDiversitySummary } from '../services/signalDiversityEngine';
 import { applyOutcomeSignals, printOutcomeSummary, OutcomeContext } from '../services/outcomeSignalEngine';
@@ -255,6 +255,7 @@ export async function runMiddayFinalCard(options: { forceRefresh?: boolean } = {
     printLabelSummary(labeled);
     const slateResult        = selectSlate(labeled);
     printSlateSummary(slateResult);
+    printFinalCard(slateResult);
   }, undefined);
 
   // Save picks to log

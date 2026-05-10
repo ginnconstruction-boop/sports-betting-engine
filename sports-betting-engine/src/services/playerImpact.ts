@@ -82,6 +82,17 @@ const POSITION_IMPACT: Record<string, Record<string, { scoring: number; spread: 
     'OF':  { scoring: 1.5, spread: 0.5 },
     'DH':  { scoring: 1.5, spread: 0.5 },
   },
+  baseball_ncaa: {
+    'SP':  { scoring: 5,  spread: 2.5 },
+    'RP':  { scoring: 1,  spread: 0.5 },
+    'C':   { scoring: 1,  spread: 0.5 },
+    '1B':  { scoring: 1.5, spread: 0.5 },
+    '2B':  { scoring: 1,  spread: 0.5 },
+    '3B':  { scoring: 1.5, spread: 0.5 },
+    'SS':  { scoring: 1.5, spread: 0.5 },
+    'OF':  { scoring: 1.5, spread: 0.5 },
+    'DH':  { scoring: 1.5, spread: 0.5 },
+  },
   icehockey_nhl: {
     'G':  { scoring: 6, spread: 3 },    // Goalie is critical
     'D':  { scoring: 3, spread: 1.5 },
@@ -140,6 +151,7 @@ export async function getPositionTier(
       basketball_nba: { PG: 20, SG: 18, SF: 17, PF: 16, C: 15 },
       americanfootball_nfl: { QB: 25, RB: 12, WR: 10, TE: 8, OL: 5, DL: 5, LB: 5, CB: 5, S: 5 },
       baseball_mlb: { SP: 15, RP: 5, C: 8, '1B': 8, '2B': 7, '3B': 8, SS: 8, OF: 8, DH: 8 },
+      baseball_ncaa: { SP: 15, RP: 5, C: 8, '1B': 8, '2B': 7, '3B': 8, SS: 8, OF: 8, DH: 8 },
       icehockey_nhl: { G: 0, D: 20, LW: 25, RW: 25, C: 30, F: 22 },
     };
 
@@ -161,6 +173,7 @@ async function getPlayerSeasonStats(
   const ESPN_LEAGUES: Record<string, { sport: string; league: string }> = {
     basketball_nba: { sport: 'basketball', league: 'nba' },
     baseball_mlb:   { sport: 'baseball',   league: 'mlb' },
+    baseball_ncaa:  { sport: 'baseball',   league: 'college-baseball' },
     americanfootball_nfl: { sport: 'football', league: 'nfl' },
     icehockey_nhl:  { sport: 'hockey',     league: 'nhl' },
   };

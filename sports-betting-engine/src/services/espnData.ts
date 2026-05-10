@@ -29,6 +29,7 @@ export interface ESPNGameInfo {
 // ESPN sport slug map
 const ESPN_SPORT_MAP: Record<string, { sport: string; league: string }> = {
   baseball_mlb:            { sport: 'baseball',       league: 'mlb' },
+  baseball_ncaa:           { sport: 'baseball',       league: 'college-baseball' },
   basketball_nba:          { sport: 'basketball',     league: 'nba' },
   americanfootball_nfl:    { sport: 'football',       league: 'nfl' },
   americanfootball_ncaaf:  { sport: 'football',       league: 'college-football' },

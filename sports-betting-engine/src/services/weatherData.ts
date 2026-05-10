@@ -1,7 +1,7 @@
 // ============================================================
 // src/services/weatherData.ts
 // Free weather data from open-meteo.com -- no API key needed
-// Only relevant for outdoor sports: MLB, NFL, NCAAF
+// Only relevant for outdoor sports: MLB, NCAA Baseball, NFL, NCAAF
 // ============================================================
 
 import https from 'https';
@@ -16,7 +16,7 @@ export interface GameWeather {
   impactDetail: string;
 }
 
-const OUTDOOR_SPORTS = ['baseball_mlb', 'americanfootball_nfl', 'americanfootball_ncaaf'];
+const OUTDOOR_SPORTS = ['baseball_mlb', 'baseball_ncaa', 'americanfootball_nfl', 'americanfootball_ncaaf'];
 
 // Known stadium coordinates for major venues
 // Supplemented by city-level lookup as fallback

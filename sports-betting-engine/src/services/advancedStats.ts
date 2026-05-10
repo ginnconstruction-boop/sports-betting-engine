@@ -6,6 +6,7 @@
 // ============================================================
 
 import https from 'https';
+import { espnTeamMatches, findEspnTeamId, parseEspnScoreValue } from './espnLookup';
 
 export interface AdvancedTeamStats {
   teamName: string;
@@ -48,6 +49,7 @@ function fetchJson(url: string): Promise<any> {
 const ESPN_LEAGUES: Record<string, { sport: string; league: string }> = {
   basketball_nba:          { sport: 'basketball',   league: 'nba' },
   baseball_mlb:            { sport: 'baseball',     league: 'mlb' },
+  baseball_ncaa:           { sport: 'baseball',     league: 'college-baseball' },
   americanfootball_nfl:    { sport: 'football',     league: 'nfl' },
   americanfootball_ncaaf:  { sport: 'football',     league: 'college-football' },
   basketball_ncaab:        { sport: 'basketball',   league: 'mens-college-basketball' },
@@ -56,7 +58,8 @@ const ESPN_LEAGUES: Record<string, { sport: string; league: string }> = {
 
 function fuzzyMatch(a: string, b: string): boolean {
   const last = (s: string) => s.toLowerCase().split(' ').pop() ?? '';
-  return last(a) === last(b) ||
+  return espnTeamMatches(a, b) ||
+    last(a) === last(b) ||
     a.toLowerCase().includes(last(b)) ||
     b.toLowerCase().includes(last(a));
 }
@@ -84,14 +87,8 @@ export async function getAdvancedTeamStats(
   if (!league) return null;
 
   try {
-    // Get team ID
-    const teamsUrl = `https://site.api.espn.com/apis/site/v2/sports/${league.sport}/${league.league}/teams`;
-    const teamsData = await fetchJson(teamsUrl);
-    const teams = Array.isArray(teamsData?.sports?.[0]?.leagues?.[0]?.teams) ? teamsData.sports[0].leagues[0].teams : Array.isArray(teamsData?.teams) ? teamsData.teams : [];
-
-    const teamObj = (teams ?? []).find((t: any) => fuzzyMatch(t?.team?.displayName ?? '', teamName));
-    if (!teamObj) return null;
-    const teamId = teamObj?.team?.id;
+    const teamId = await findEspnTeamId(league.sport, league.league, teamName);
+    if (!teamId) return null;
 
     // Get stats
     const statsUrl = `https://site.api.espn.com/apis/site/v2/sports/${league.sport}/${league.league}/teams/${teamId}/statistics`;
@@ -122,8 +119,8 @@ export async function getAdvancedTeamStats(
       const us = (comp?.competitors ?? []).find((c: any) => fuzzyMatch(c?.team?.displayName ?? '', teamName));
       const them = (comp?.competitors ?? []).find((c: any) => !fuzzyMatch(c?.team?.displayName ?? '', teamName));
       if (!us || !them) continue;
-      const ourScore = parseFloat(us?.score ?? '0');
-      const theirScore = parseFloat(them?.score ?? '0');
+      const ourScore = parseEspnScoreValue(us?.score);
+      const theirScore = parseEspnScoreValue(them?.score);
       if (isNaN(ourScore) || isNaN(theirScore)) continue;
       totalFor += ourScore;
       totalAgainst += theirScore;
@@ -150,7 +147,7 @@ export async function getAdvancedTeamStats(
       offEff = getStat('scoring', 'points') ?? ppg;
       defEff = getStat('defensive', 'points') ?? papg;
       pace = getStat('general', 'plays');
-    } else if (sportKey === 'baseball_mlb') {
+    } else if (sportKey === 'baseball_mlb' || sportKey === 'baseball_ncaa') {
       offEff = getStat('batting', 'runs') ?? ppg;
       defEff = getStat('pitching', 'era');
       pace = null;

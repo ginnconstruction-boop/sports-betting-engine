@@ -6,6 +6,7 @@
 // ============================================================
 
 import https from 'https';
+import { espnTeamMatches, findEspnTeamId, parseEspnScoreValue } from './espnLookup';
 
 // ------------------------------------
 // Types
@@ -138,6 +139,7 @@ function fetchText(url: string, timeout = 8000): Promise<string> {
 const ESPN_LEAGUES: Record<string, { sport: string; league: string }> = {
   basketball_nba:          { sport: 'basketball',   league: 'nba' },
   baseball_mlb:            { sport: 'baseball',     league: 'mlb' },
+  baseball_ncaa:           { sport: 'baseball',     league: 'college-baseball' },
   americanfootball_nfl:    { sport: 'football',     league: 'nfl' },
   americanfootball_ncaaf:  { sport: 'football',     league: 'college-football' },
   basketball_ncaab:        { sport: 'basketball',   league: 'mens-college-basketball' },
@@ -151,10 +153,59 @@ const ESPN_LEAGUES: Record<string, { sport: string; league: string }> = {
 function fuzzyMatch(a: string, b: string): boolean {
   const na = a.toLowerCase().replace(/[^a-z]/g, '');
   const nb = b.toLowerCase().replace(/[^a-z]/g, '');
-  // Check last word (city names differ, team names usually match)
-  const lastA = a.toLowerCase().split(' ').pop() ?? '';
-  const lastB = b.toLowerCase().split(' ').pop() ?? '';
-  return na.includes(nb) || nb.includes(na) || lastA === lastB;
+  return espnTeamMatches(a, b) || na.includes(nb) || nb.includes(na);
+}
+
+const LOCATION_TIMEZONES: Array<{ name: string; offset: number }> = [
+  { name: 'Boston', offset: 0 },
+  { name: 'New York', offset: 0 },
+  { name: 'Brooklyn', offset: 0 },
+  { name: 'Toronto', offset: 0 },
+  { name: 'Miami', offset: 0 },
+  { name: 'Philadelphia', offset: 0 },
+  { name: 'Washington', offset: 0 },
+  { name: 'Charlotte', offset: 0 },
+  { name: 'Atlanta', offset: 0 },
+  { name: 'Orlando', offset: 0 },
+  { name: 'Cleveland', offset: 0 },
+  { name: 'Detroit', offset: 0 },
+  { name: 'Indianapolis', offset: 0 },
+  { name: 'Pittsburgh', offset: 0 },
+  { name: 'Buffalo', offset: 0 },
+  { name: 'Montréal', offset: 0 },
+  { name: 'Montreal', offset: 0 },
+  { name: 'Raleigh', offset: 0 },
+  { name: 'Chicago', offset: -1 },
+  { name: 'Minnesota', offset: -1 },
+  { name: 'Memphis', offset: -1 },
+  { name: 'New Orleans', offset: -1 },
+  { name: 'Oklahoma City', offset: -1 },
+  { name: 'San Antonio', offset: -1 },
+  { name: 'Dallas', offset: -1 },
+  { name: 'Houston', offset: -1 },
+  { name: 'Kansas City', offset: -1 },
+  { name: 'Milwaukee', offset: -1 },
+  { name: 'Nashville', offset: -1 },
+  { name: 'Denver', offset: -2 },
+  { name: 'Salt Lake City', offset: -2 },
+  { name: 'Phoenix', offset: -2 },
+  { name: 'Calgary', offset: -2 },
+  { name: 'Edmonton', offset: -2 },
+  { name: 'Los Angeles', offset: -3 },
+  { name: 'San Francisco', offset: -3 },
+  { name: 'Sacramento', offset: -3 },
+  { name: 'Portland', offset: -3 },
+  { name: 'Seattle', offset: -3 },
+  { name: 'Anaheim', offset: -3 },
+  { name: 'San Diego', offset: -3 },
+  { name: 'Las Vegas', offset: -3 },
+  { name: 'Vancouver', offset: -3 },
+];
+
+function getTimezoneOffset(label: string): number | null {
+  const normalized = label.toLowerCase();
+  const match = LOCATION_TIMEZONES.find(({ name }) => normalized.includes(name.toLowerCase()));
+  return match ? match.offset : null;
 }
 
 // ------------------------------------
@@ -169,19 +220,7 @@ export async function getTeamForm(
   if (!league) return null;
 
   try {
-    const url = `https://site.api.espn.com/apis/site/v2/sports/${league.sport}/${league.league}/teams`;
-    const data = await fetchJson(url);
-    const teams = data?.sports?.[0]?.leagues?.[0]?.teams ?? data?.teams ?? [];
-
-    // Find team
-    const teamObj = (teams ?? []).find((t: any) => {
-      const name = t?.team?.displayName ?? t?.team?.name ?? '';
-      return fuzzyMatch(name, teamName);
-    });
-
-    if (!teamObj) return null;
-
-    const teamId = teamObj?.team?.id;
+    const teamId = await findEspnTeamId(league.sport, league.league, teamName);
     if (!teamId) return null;
 
     // Get team record and schedule
@@ -214,8 +253,9 @@ export async function getTeamForm(
 
       if (!us) continue;
 
-      const ourScore = parseInt(us?.score ?? '0');
-      const theirScore = parseInt(them?.score ?? '0');
+      const ourScore = parseEspnScoreValue(us?.score);
+      const theirScore = parseEspnScoreValue(them?.score);
+      if (isNaN(ourScore) || isNaN(theirScore)) continue;
       pointsFor += ourScore;
       pointsAgainst += theirScore;
 
@@ -263,22 +303,15 @@ export async function getTeamForm(
 export async function getRestData(
   sportKey: string,
   teamName: string,
-  gameDate: string
+  gameDate: string,
+  currentVenueTeam: string = teamName
 ): Promise<RestData | null> {
   const league = ESPN_LEAGUES[sportKey];
   if (!league) return null;
 
   try {
-    const url = `https://site.api.espn.com/apis/site/v2/sports/${league.sport}/${league.league}/teams`;
-    const data = await fetchJson(url);
-    const teams = data?.sports?.[0]?.leagues?.[0]?.teams ?? data?.teams ?? [];
-
-    const teamObj = (teams ?? []).find((t: any) =>
-      fuzzyMatch(t?.team?.displayName ?? '', teamName)
-    );
-    if (!teamObj) return null;
-
-    const teamId = teamObj?.team?.id;
+    const teamId = await findEspnTeamId(league.sport, league.league, teamName);
+    if (!teamId) return null;
     const schedUrl = `https://site.api.espn.com/apis/site/v2/sports/${league.sport}/${league.league}/teams/${teamId}/schedule`;
     const schedData = await fetchJson(schedUrl);
     const events = Array.isArray(schedData?.events) ? schedData.events : [];
@@ -298,16 +331,17 @@ export async function getRestData(
     const daysRest = Math.floor((gameDateMs - lastGameDate.getTime()) / (1000 * 60 * 60 * 24));
     const isBackToBack = daysRest <= 1;
 
-    // Check if cross-country travel (crude: compare venue timezones)
+    // Only surface travel fatigue when the turnaround is short and the
+    // team is actually crossing multiple timezone bands into this venue.
     const lastVenue = lastGame?.competitions?.[0]?.venue;
     const lastCity = lastVenue?.address?.city ?? '';
-
-    // Simple west/east detection for cross-country flag
-    const westCities = ['Los Angeles','San Francisco','Portland','Seattle','Phoenix','Denver','Sacramento','Las Vegas'];
-    const eastCities = ['New York','Boston','Philadelphia','Miami','Toronto','Atlanta','Washington','Charlotte','Orlando'];
-    const lastIsWest = westCities.some(c => lastCity.includes(c));
-    const lastIsEast = eastCities.some(c => lastCity.includes(c));
-    const crossCountry = (lastIsWest || lastIsEast) && lastIsWest !== lastIsEast;
+    const lastVenueTz = getTimezoneOffset(lastCity);
+    const currentVenueTz = getTimezoneOffset(currentVenueTeam);
+    const timezoneDelta =
+      lastVenueTz !== null && currentVenueTz !== null
+        ? Math.abs(lastVenueTz - currentVenueTz)
+        : 0;
+    const crossCountry = daysRest <= 1 && timezoneDelta >= 2;
 
     const comp = lastGame?.competitions?.[0];
     const us = comp?.competitors?.find((c: any) => fuzzyMatch(c?.team?.displayName ?? '', teamName));
@@ -710,8 +744,8 @@ export async function buildContextPackage(
   ] = await Promise.allSettled([
     getTeamForm(sportKey, homeTeam),
     getTeamForm(sportKey, awayTeam),
-    getRestData(sportKey, homeTeam, gameTime),
-    getRestData(sportKey, awayTeam, gameTime),
+    getRestData(sportKey, homeTeam, gameTime, homeTeam),
+    getRestData(sportKey, awayTeam, gameTime, homeTeam),
     getLineupInfo(sportKey, homeTeam),
     getLineupInfo(sportKey, awayTeam),
     getRelevantNews(sportKey, homeTeam, awayTeam),

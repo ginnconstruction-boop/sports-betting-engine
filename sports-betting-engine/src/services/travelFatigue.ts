@@ -6,6 +6,7 @@
 // ============================================================
 
 import https from 'https';
+import { findEspnTeamId } from './espnLookup';
 
 // ------------------------------------
 // HTTP helper
@@ -30,6 +31,7 @@ function fetchJson(url: string): Promise<any> {
 const ESPN_LEAGUES: Record<string, { sport: string; league: string }> = {
   basketball_nba: { sport: 'basketball', league: 'nba' },
   baseball_mlb: { sport: 'baseball', league: 'mlb' },
+  baseball_ncaa: { sport: 'baseball', league: 'college-baseball' },
   americanfootball_nfl: { sport: 'football', league: 'nfl' },
   americanfootball_ncaaf: { sport: 'football', league: 'college-football' },
   basketball_ncaab: { sport: 'basketball', league: 'mens-college-basketball' },
@@ -89,42 +91,12 @@ export interface TravelFatigueReport {
 // In-memory caches
 // ------------------------------------
 
-const teamIdCache = new Map<string, string>(); // sportKey:teamName -> teamId
-
 async function getTeamId(sportKey: string, teamName: string): Promise<string | null> {
-  const cacheKey = `${sportKey}:${teamName}`;
-  if (teamIdCache.has(cacheKey)) return teamIdCache.get(cacheKey)!;
-
   const league = ESPN_LEAGUES[sportKey];
   if (!league) return null;
 
   try {
-    const url = `https://site.api.espn.com/apis/site/v2/sports/${league.sport}/${league.league}/teams`;
-    const data = await fetchJson(url);
-    const teams: any[] = data?.sports?.[0]?.leagues?.[0]?.teams ?? data?.teams ?? [];
-
-    const teamLast = teamName.split(' ').pop()?.toLowerCase() ?? '';
-    const teamNorm = teamName.toLowerCase();
-
-    for (const t of teams) {
-      const team = t?.team ?? t;
-      const displayName: string = (team?.displayName ?? '').toLowerCase();
-      const shortName: string = (team?.shortDisplayName ?? '').toLowerCase();
-      const name: string = (team?.name ?? '').toLowerCase();
-      const id: string = team?.id ?? '';
-
-      if (!id) continue;
-
-      if (
-        displayName === teamNorm ||
-        displayName.includes(teamLast) ||
-        shortName.includes(teamLast) ||
-        name === teamLast
-      ) {
-        teamIdCache.set(cacheKey, id);
-        return id;
-      }
-    }
+    return await findEspnTeamId(league.sport, league.league, teamName);
   } catch { /* ignore */ }
 
   return null;
@@ -248,8 +220,10 @@ async function computeTeamFatigue(
     if (isRoadB2B) score += 20;
     if (consecutiveRoadGames >= 3) score += 10;
     if (daysRest === 0) score += 10;
-    if (timezoneDelta >= 3) score += 15;
-    else if (timezoneDelta >= 2) score += 8;
+    if (daysRest <= 1) {
+      if (timezoneDelta >= 3) score += 15;
+      else if (timezoneDelta >= 2) score += 8;
+    }
 
     score = Math.min(score, 100);
 
@@ -314,8 +288,8 @@ export async function buildTravelFatigueMap(
       if (awayFatigue.isRoadB2B) parts.push(`${event.awayTeam} road B2B`);
       if (homeFatigue.consecutiveRoadGames >= 3) parts.push(`${event.homeTeam} on ${homeFatigue.consecutiveRoadGames}-game road trip`);
       if (awayFatigue.consecutiveRoadGames >= 3) parts.push(`${event.awayTeam} on ${awayFatigue.consecutiveRoadGames}-game road trip`);
-      if (homeFatigue.timezoneDelta >= 2) parts.push(`${event.homeTeam} traveled ${homeFatigue.timezoneDelta}TZ`);
-      if (awayFatigue.timezoneDelta >= 2) parts.push(`${event.awayTeam} traveled ${awayFatigue.timezoneDelta}TZ`);
+      if (homeFatigue.daysRest <= 1 && homeFatigue.timezoneDelta >= 2) parts.push(`${event.homeTeam} traveled ${homeFatigue.timezoneDelta}TZ`);
+      if (awayFatigue.daysRest <= 1 && awayFatigue.timezoneDelta >= 2) parts.push(`${event.awayTeam} traveled ${awayFatigue.timezoneDelta}TZ`);
 
       let detail = parts.length > 0 ? parts.join(' | ') : 'No significant fatigue factors';
       if (fatigueEdge !== 'neutral') {

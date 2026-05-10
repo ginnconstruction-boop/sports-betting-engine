@@ -702,6 +702,8 @@ export function scoreAllBets(
       sideCandidates.sort((a, b) => b.score - a.score);
       const best = sideCandidates[0];
       const { side } = best;
+      const isTotalMarket = marketKey === 'totals';
+      const isSideMarket = marketKey === 'h2h' || marketKey === 'spreads';
 
       const fullReasoning = buildReasoning({
         priceDiff: best.priceDiff,
@@ -752,11 +754,11 @@ export function scoreAllBets(
       }
 
       // Tier 2/3: Public betting data
-      if (isConfirmedRLM && pubBet?.rlmDetail) {
+      if (!isTotalMarket && isConfirmedRLM && pubBet?.rlmDetail) {
         fullReasoning.push(`? CONFIRMED RLM: ${pubBet.rlmDetail} -- verified sharp vs public split`);
-      } else if (pubBet && (pubBet.homeBetPct ?? 0) >= 65) {
+      } else if (!isTotalMarket && pubBet && (pubBet.homeBetPct ?? 0) >= 65) {
         fullReasoning.push(`[~] PUBLIC: ${pubBet.homeBetPct}% of bets on ${event.homeTeam} -- public side`);
-      } else if (pubBet && (pubBet.awayBetPct ?? 0) >= 65) {
+      } else if (!isTotalMarket && pubBet && (pubBet.awayBetPct ?? 0) >= 65) {
         fullReasoning.push(`[~] PUBLIC: ${pubBet.awayBetPct}% of bets on ${event.awayTeam} -- public side`);
       }
 
@@ -771,7 +773,7 @@ export function scoreAllBets(
       }
 
       // Tier 2/3: ATS records
-      for (const sig of (atsSituation?.atsSignals ?? []).slice(0,2)) {
+      for (const sig of (!isTotalMarket ? (atsSituation?.atsSignals ?? []).slice(0,2) : [])) {
         fullReasoning.push(`[CLP] ATS: ${sig}`);
       }
 
@@ -781,7 +783,7 @@ export function scoreAllBets(
       }
 
       // Tier 1: Situational angles
-      for (const angle of situationalList.slice(0, 3)) {
+      for (const angle of (isSideMarket ? situationalList.slice(0, 3) : [])) {
         fullReasoning.push(`? ANGLE [${angle.name}]: ${angle.detail} (${angle.historicalEdge})`);
       }
 
@@ -791,7 +793,7 @@ export function scoreAllBets(
       }
 
       // Tier 1: Power ratings
-      if (powerComparison?.confidence !== 'low' && powerComparison?.detail) {
+      if (!isTotalMarket && powerComparison?.confidence !== 'low' && powerComparison?.detail) {
         fullReasoning.push(`? POWER: ${powerComparison.detail}`);
       }
 
@@ -806,13 +808,13 @@ export function scoreAllBets(
           if (r.ouEdge >= 4) fullReasoning.push(`[REF] ${r.detail}`);
         }
       }
-      if (fatigueReport && fatigueReport.fatigueEdge !== 'neutral') {
+      if (!isTotalMarket && fatigueReport && fatigueReport.fatigueEdge !== 'neutral') {
         fullReasoning.push(`[TRAVEL] ${fatigueReport.detail}`);
       }
-      if (motivationReport && Math.abs(motivationReport.netBonus) >= 5) {
+      if (!isTotalMarket && motivationReport && Math.abs(motivationReport.netBonus) >= 5) {
         fullReasoning.push(`[MOTIV] ${motivationReport.summary}`);
       }
-      if (h2hReport && h2hReport.scoreBonus >= 6) {
+      if (!isTotalMarket && h2hReport && h2hReport.scoreBonus >= 6) {
         fullReasoning.push(`[H2H] ${h2hReport.detail}`);
       }
       const pinnacleEdge = pinnacleEdgesForEvent.find(
