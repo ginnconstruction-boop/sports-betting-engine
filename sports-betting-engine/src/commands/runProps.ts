@@ -59,6 +59,12 @@ function isEnabledFlag(value: string | undefined): boolean {
   return String(value ?? '').trim().toLowerCase() === 'true';
 }
 
+function formatLimitedList(items: string[], limit = 6): string {
+  if (items.length <= limit) return items.join('; ');
+  const visible = items.slice(0, limit).join('; ');
+  return `${visible}; +${items.length - limit} more`;
+}
+
 function dedupeEventSummaries(events: EventSummary[]): EventSummary[] {
   const seen = new Set<string>();
   const deduped: EventSummary[] = [];
@@ -287,6 +293,13 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
           `partial: ${mlbContextSnapshot.meta.lineupPartial} | missing: ${mlbContextSnapshot.meta.lineupMissing} | ` +
           `pitcherHand: ${mlbContextSnapshot.meta.pitcherHandResolved}/${mlbContextSnapshot.meta.pitcherHandTotal}`
         );
+        if (mlbContextSnapshot.meta.lineupMissingDetails.length > 0) {
+          const missingTeams = mlbContextSnapshot.meta.lineupMissingDetails.map(detail =>
+            `${detail.teamName} vs ${detail.opponentTeam} (${detail.reason})`
+          );
+          console.warn(`  [MLB_LINEUPS] missing team lineups: ${formatLimitedList(missingTeams)}`);
+          console.warn('  [MLB_LINEUPS] hitter props on those teams are using team-average fallback context until lineups post.');
+        }
         if (mlbContextSnapshot.meta.fallback > 0) {
           console.warn('  [MLB_CTX] partial MLB context fallback active -- continuing with real-data-only coverage gates');
         }
