@@ -406,6 +406,8 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
 let authToken = localStorage.getItem('sbe_token') || '';
 let currentBtn = null;
 let currentES = null;
+let currentStreamAbort = null;
+let currentStreamId = 0;
 let fullOutputText = '';
 let allPicksCache = [];
 let officialPicksCache = [];
@@ -457,6 +459,7 @@ async function doLogin() {
 function clearAuthState(message = '') {
   authToken = '';
   localStorage.removeItem('sbe_token');
+  if (currentStreamAbort) { currentStreamAbort.abort(); currentStreamAbort = null; }
   if (currentBtn) { currentBtn.classList.remove('running'); currentBtn = null; }
   const dot = document.getElementById('streaming-dot');
   if (dot) dot.style.display = 'none';
@@ -515,6 +518,7 @@ function runMonitor() {
 // ── Run command with SSE streaming ──
 function runCmd(cmd, label) {
   console.log('[DBG:fe] runCmd fired for:', cmd);
+  if (currentStreamAbort) { currentStreamAbort.abort(); currentStreamAbort = null; }
   if (currentES) { currentES.close(); currentES = null; }
   if (currentBtn) { currentBtn.classList.remove('running'); currentBtn = null; }
 
@@ -539,16 +543,31 @@ function runCmd(cmd, label) {
   if (btn) { btn.classList.add('running'); currentBtn = btn; }
 
   setTimeout(() => panel.scrollIntoView({behavior:'smooth',block:'start'}), 100);
-  streamSSE(cmd, label, content, dot, btn);
+  const streamId = ++currentStreamId;
+  streamSSE(cmd, label, content, dot, btn, streamId);
 }
 
-async function streamSSE(cmd, label, content, dot, btn) {
+async function streamSSE(cmd, label, content, dot, btn, streamId) {
   return new Promise(async (resolve) => {
+    const abortController = new AbortController();
+    currentStreamAbort = abortController;
     console.log('[DBG:fe] fetch starting for:', `/api/stream/${cmd}`);
-    const resp = await fetch(`/api/stream/${cmd}?label=${encodeURIComponent(label)}`, {
-      headers: { 'x-auth-token': authToken }
-    });
+    let resp;
+    try {
+      resp = await fetch(`/api/stream/${cmd}?label=${encodeURIComponent(label)}`, {
+        headers: { 'x-auth-token': authToken },
+        signal: abortController.signal,
+      });
+    } catch (err) {
+      if (abortController.signal.aborted) return resolve();
+      content.innerHTML = `<div style="padding:1.5rem;color:var(--red)">Stream failed to start.</div>`;
+      if (dot) dot.style.display = 'none';
+      if (btn) btn.classList.remove('running');
+      return resolve();
+    }
     console.log('[DBG:fe] response headers received — status:', resp.status, 'content-type:', resp.headers.get('content-type'));
+
+    if (streamId !== currentStreamId) return resolve();
 
     if (resp.status === 401) {
       content.innerHTML = `<div style="padding:1.5rem;color:var(--yellow)">Session expired. Please log in again.</div>`;
@@ -576,8 +595,16 @@ async function streamSSE(cmd, label, content, dot, btn) {
     };
 
     while (true) {
-      const { done, value } = await reader.read();
+      let payload;
+      try {
+        payload = await reader.read();
+      } catch (err) {
+        if (abortController.signal.aborted) break;
+        throw err;
+      }
+      const { done, value } = payload;
       if (done) { console.log('[DBG:fe] reader done (stream closed)'); break; }
+      if (streamId !== currentStreamId || abortController.signal.aborted) break;
       if (firstChunk) {
         console.log('[DBG:fe] FIRST CHUNK received from server (', value?.length, 'bytes)');
         firstChunk = false;
@@ -598,6 +625,7 @@ async function streamSSE(cmd, label, content, dot, btn) {
         try { parsed = JSON.parse(dataMatch[1]); } catch { continue; }
 
         const evType = evMatch ? evMatch[1] : 'line';
+        if (streamId !== currentStreamId || abortController.signal.aborted) continue;
         console.log('[DBG:fe] SSE event type:', evType, '| data length:', typeof parsed === 'string' ? parsed.length : '-');
         if (evType === 'line') {
           fullOutputText += parsed;
@@ -616,14 +644,18 @@ async function streamSSE(cmd, label, content, dot, btn) {
       }
     }
 
-    dot.style.display = 'none';
-    if (btn) btn.classList.remove('running');
+    if (currentStreamAbort === abortController) currentStreamAbort = null;
+    if (streamId === currentStreamId) {
+      dot.style.display = 'none';
+      if (btn) btn.classList.remove('running');
+    }
     resolve();
   });
 }
 
 function closeOutput() {
   document.getElementById('output-panel').style.display = 'none';
+  if (currentStreamAbort) { currentStreamAbort.abort(); currentStreamAbort = null; }
   if (currentES) { currentES.close(); currentES = null; }
   const pdfBtn = document.getElementById('pdf-btn');
   if (pdfBtn) pdfBtn.style.display = 'none';
@@ -1370,6 +1402,7 @@ function executeReset() {
   document.getElementById('reset-confirm-wrap').style.display = 'none';
   document.getElementById('reset-trigger-btn').disabled = false;
   document.getElementById('reset-trigger-btn').style.opacity = '1';
+  if (currentStreamAbort) { currentStreamAbort.abort(); currentStreamAbort = null; }
   // Stream the reset with ?confirm=RESET appended — server requires this token
   const panel   = document.getElementById('output-panel');
   const content = document.getElementById('output-content');
@@ -1391,12 +1424,27 @@ function executeReset() {
   setTimeout(() => panel.scrollIntoView({behavior:'smooth',block:'start'}), 100);
   // Pass confirm=RESET as query param — required by server guard
   const label = 'Reset Tracking Data';
-  streamSSEWithUrl(`/api/stream/reset?confirm=RESET&label=${encodeURIComponent(label)}`, label, content, dot, resetBtn);
+  const streamId = ++currentStreamId;
+  streamSSEWithUrl(`/api/stream/reset?confirm=RESET&label=${encodeURIComponent(label)}`, label, content, dot, resetBtn, streamId);
 }
 
-async function streamSSEWithUrl(url, label, content, dot, btn) {
+async function streamSSEWithUrl(url, label, content, dot, btn, streamId) {
   return new Promise(async (resolve) => {
-    const resp = await fetch(url, { headers: { 'x-auth-token': authToken } });
+    const abortController = new AbortController();
+    currentStreamAbort = abortController;
+    let resp;
+    try {
+      resp = await fetch(url, {
+        headers: { 'x-auth-token': authToken },
+        signal: abortController.signal,
+      });
+    } catch (err) {
+      if (abortController.signal.aborted) return resolve(null);
+      if (dot) dot.style.display = 'none';
+      if (btn) { btn.classList.remove('running'); }
+      return resolve(null);
+    }
+    if (streamId !== currentStreamId) return resolve(null);
     if (!resp.ok) {
       const err = await resp.json().catch(() => ({ error: resp.statusText }));
       content.innerHTML = `<div style="padding:1.5rem;color:var(--red)">Reset blocked: ${err.error || resp.statusText}</div>`;
@@ -1410,24 +1458,34 @@ async function streamSSEWithUrl(url, label, content, dot, btn) {
     let buffer = '';
     let firstChunk = true;
     while (true) {
-      const { value, done } = await reader.read();
+      let payload;
+      try {
+        payload = await reader.read();
+      } catch (err) {
+        if (abortController.signal.aborted) break;
+        throw err;
+      }
+      const { value, done } = payload;
       if (done) break;
+      if (streamId !== currentStreamId || abortController.signal.aborted) break;
       buffer += decoder.decode(value, { stream: true });
       const lines = buffer.split('\n');
       buffer = lines.pop() ?? '';
       for (const line of lines) {
         if (line.startsWith('event: done')) {
-          if (dot) dot.style.display = 'none';
-          if (btn) btn.classList.remove('running');
-          const pdfBtn2 = document.getElementById('pdf-btn');
-          if (pdfBtn2) pdfBtn2.style.display = 'inline';
-          showToast('Reset complete — backup saved', 'green');
+          if (streamId === currentStreamId) {
+            if (dot) dot.style.display = 'none';
+            if (btn) btn.classList.remove('running');
+            const pdfBtn2 = document.getElementById('pdf-btn');
+            if (pdfBtn2) pdfBtn2.style.display = 'inline';
+            showToast('Reset complete — backup saved', 'green');
+          }
           return resolve(null);
         }
         if (line.startsWith('data: ')) {
           try {
             const text = JSON.parse(line.slice(6));
-            if (text && typeof text === 'string' && !text.startsWith('[stream]')) {
+            if (streamId === currentStreamId && text && typeof text === 'string' && !text.startsWith('[stream]')) {
               if (firstChunk) { content.innerHTML = ''; firstChunk = false; }
               fullOutputText += text;
               content.innerHTML = colorize(fullOutputText);
@@ -1437,8 +1495,11 @@ async function streamSSEWithUrl(url, label, content, dot, btn) {
         }
       }
     }
-    if (dot) dot.style.display = 'none';
-    if (btn) btn.classList.remove('running');
+    if (currentStreamAbort === abortController) currentStreamAbort = null;
+    if (streamId === currentStreamId) {
+      if (dot) dot.style.display = 'none';
+      if (btn) btn.classList.remove('running');
+    }
     resolve(null);
   });
 }
