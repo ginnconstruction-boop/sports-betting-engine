@@ -250,7 +250,8 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
       eventId: e.eventId, matchup: e.matchup, sportKey: e.sportKey,
       homeTeam: e.homeTeam, awayTeam: e.awayTeam, gameTime: e.startTime,
     }))),
-    new Map()
+    new Map(),
+    90_000
   );
 
   // -- Step 7: Situational angles ------------------------------

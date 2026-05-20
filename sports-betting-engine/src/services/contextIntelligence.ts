@@ -710,10 +710,11 @@ function deriveSignals(pkg: Partial<ContextPackage>): ContextSignal[] {
 // Wrapper that guarantees never throws -- ESPN data is always supplemental
 export async function buildContextPackageSafe(
   eventId: string, matchup: string, sportKey: string,
-  homeTeam: string, awayTeam: string, gameTime: string
+  homeTeam: string, awayTeam: string, gameTime: string,
+  resolvers: ContextResolvers = defaultResolvers
 ): Promise<ContextPackage> {
   try {
-    return await buildContextPackage(eventId, matchup, sportKey, homeTeam, awayTeam, gameTime);
+    return await buildContextPackage(eventId, matchup, sportKey, homeTeam, awayTeam, gameTime, resolvers);
   } catch {
     return {
       eventId, matchup, sport: sportKey, homeTeam, awayTeam,
@@ -725,13 +726,30 @@ export async function buildContextPackageSafe(
   }
 }
 
+type ContextResolvers = {
+  getTeamForm: (sportKey: string, teamName: string) => Promise<TeamForm | null>;
+  getRestData: (sportKey: string, teamName: string, gameDate: string, currentVenueTeam?: string) => Promise<RestData | null>;
+  getLineupInfo: (sportKey: string, teamName: string) => Promise<LineupInfo | null>;
+  getRelevantNews: (sportKey: string, homeTeam: string, awayTeam: string) => Promise<NewsItem[]>;
+  getRefereeData: (sportKey: string, eventId?: string) => Promise<RefereeData | null>;
+};
+
+const defaultResolvers: ContextResolvers = {
+  getTeamForm,
+  getRestData,
+  getLineupInfo,
+  getRelevantNews,
+  getRefereeData,
+};
+
 export async function buildContextPackage(
   eventId: string,
   matchup: string,
   sportKey: string,
   homeTeam: string,
   awayTeam: string,
-  gameTime: string
+  gameTime: string,
+  resolvers: ContextResolvers = defaultResolvers
 ): Promise<ContextPackage> {
   const fetchedAt = new Date().toISOString();
 
@@ -742,14 +760,14 @@ export async function buildContextPackage(
     homeLineup, awayLineup,
     news, referee,
   ] = await Promise.allSettled([
-    getTeamForm(sportKey, homeTeam),
-    getTeamForm(sportKey, awayTeam),
-    getRestData(sportKey, homeTeam, gameTime, homeTeam),
-    getRestData(sportKey, awayTeam, gameTime, homeTeam),
-    getLineupInfo(sportKey, homeTeam),
-    getLineupInfo(sportKey, awayTeam),
-    getRelevantNews(sportKey, homeTeam, awayTeam),
-    getRefereeData(sportKey, eventId),
+    resolvers.getTeamForm(sportKey, homeTeam),
+    resolvers.getTeamForm(sportKey, awayTeam),
+    resolvers.getRestData(sportKey, homeTeam, gameTime, homeTeam),
+    resolvers.getRestData(sportKey, awayTeam, gameTime, homeTeam),
+    resolvers.getLineupInfo(sportKey, homeTeam),
+    resolvers.getLineupInfo(sportKey, awayTeam),
+    resolvers.getRelevantNews(sportKey, homeTeam, awayTeam),
+    resolvers.getRefereeData(sportKey, eventId),
   ]);
 
   const pkg: Partial<ContextPackage> = {
@@ -800,15 +818,45 @@ export async function buildAllContextPackages(
   }>
 ): Promise<Map<string, ContextPackage>> {
   const result = new Map<string, ContextPackage>();
+  const formCache = new Map<string, Promise<TeamForm | null>>();
+  const restCache = new Map<string, Promise<RestData | null>>();
+  const lineupCache = new Map<string, Promise<LineupInfo | null>>();
+  const newsCache = new Map<string, Promise<NewsItem[]>>();
+  const refereeCache = new Map<string, Promise<RefereeData | null>>();
 
-  // Process in batches of 3 to avoid overwhelming ESPN
-  const batchSize = 3;
+  const withCache = <T>(cache: Map<string, Promise<T>>, key: string, factory: () => Promise<T>): Promise<T> => {
+    const existing = cache.get(key);
+    if (existing) return existing;
+    const promise = factory();
+    cache.set(key, promise);
+    return promise;
+  };
+
+  const resolvers: ContextResolvers = {
+    getTeamForm: (sportKey, teamName) =>
+      withCache(formCache, `${sportKey}__${teamName}`, () => getTeamForm(sportKey, teamName)),
+    getRestData: (sportKey, teamName, gameDate, currentVenueTeam = teamName) =>
+      withCache(restCache, `${sportKey}__${teamName}__${gameDate}__${currentVenueTeam}`, () =>
+        getRestData(sportKey, teamName, gameDate, currentVenueTeam)
+      ),
+    getLineupInfo: (sportKey, teamName) =>
+      withCache(lineupCache, `${sportKey}__${teamName}`, () => getLineupInfo(sportKey, teamName)),
+    getRelevantNews: (sportKey, homeTeam, awayTeam) =>
+      withCache(newsCache, `${sportKey}__${homeTeam}__${awayTeam}`, () => getRelevantNews(sportKey, homeTeam, awayTeam)),
+    getRefereeData: (sportKey, eventId) =>
+      withCache(refereeCache, `${sportKey}__${eventId ?? ''}`, () => getRefereeData(sportKey, eventId)),
+  };
+
+  // Process in moderate parallel batches. Three-at-a-time is too slow for
+  // large multi-sport morning slates and causes the whole context phase to
+  // hit the global timeout before it finishes.
+  const batchSize = events.length >= 100 ? 12 : events.length >= 50 ? 8 : 6;
   for (let i = 0; i < events.length; i += batchSize) {
     const batch = events.slice(i, i + batchSize);
     const packages = await Promise.allSettled(
       batch.map(e => buildContextPackageSafe(
         e.eventId, e.matchup, e.sportKey,
-        e.homeTeam, e.awayTeam, e.gameTime
+        e.homeTeam, e.awayTeam, e.gameTime, resolvers
       ))
     );
 
