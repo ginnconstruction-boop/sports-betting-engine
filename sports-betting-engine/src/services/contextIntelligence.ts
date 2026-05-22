@@ -156,6 +156,115 @@ function fuzzyMatch(a: string, b: string): boolean {
   return espnTeamMatches(a, b) || na.includes(nb) || nb.includes(na);
 }
 
+function normalizeNewsText(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/&amp;/g, '&')
+    .replace(/[^a-z0-9&\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function escapeRegex(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function getTeamNewsAliases(teamName: string): string[] {
+  const normalized = normalizeNewsText(teamName);
+  if (!normalized) return [];
+
+  const parts = normalized.split(' ').filter(Boolean);
+  const aliases = new Set<string>([normalized]);
+  const lastWord = parts[parts.length - 1];
+
+  if (lastWord && lastWord.length >= 4) aliases.add(lastWord);
+  if (parts.length >= 2) {
+    const locationAlias = parts.slice(0, -1).join(' ').trim();
+    if (locationAlias.length >= 5) aliases.add(locationAlias);
+  }
+
+  return [...aliases];
+}
+
+function headlineMentionsTeam(headline: string, teamName: string): boolean {
+  const normalizedHeadline = normalizeNewsText(headline);
+  return getTeamNewsAliases(teamName).some(alias => {
+    const regex = new RegExp(`(^|\\s)${escapeRegex(alias)}(\\s|$)`, 'i');
+    return regex.test(normalizedHeadline);
+  });
+}
+
+function categoriesMentionTeam(categories: any[], teamName: string): boolean {
+  return (categories ?? []).some((category: any) => {
+    const categoryTeam =
+      category?.teamDisplayName ??
+      category?.team?.displayName ??
+      category?.team?.shortDisplayName ??
+      category?.description ??
+      '';
+    return categoryTeam ? espnTeamMatches(String(categoryTeam), teamName) : false;
+  });
+}
+
+function classifyNewsHeadline(headline: string): {
+  type: NewsItem['type'];
+  relevance: NewsItem['relevance'];
+} {
+  const hl = headline.toLowerCase();
+
+  if (hl.includes('injur') || hl.includes('out') || hl.includes('ruled out') ||
+      hl.includes('questionable') || hl.includes('doubtful') || hl.includes('scratch')) {
+    return { type: 'injury', relevance: 'high' };
+  }
+  if (hl.includes('lineup') || hl.includes('starting') || hl.includes('scratch') ||
+      hl.includes('rest') || hl.includes('load manag') || hl.includes('activated') ||
+      hl.includes('returns') || hl.includes('returning')) {
+    return { type: 'lineup', relevance: 'high' };
+  }
+  if (hl.includes('trade') || hl.includes('waiv') || hl.includes('sign')) {
+    return { type: 'trade', relevance: 'medium' };
+  }
+  if (hl.includes('suspend') || hl.includes('ejected') || hl.includes('ban')) {
+    return { type: 'suspension', relevance: 'high' };
+  }
+  return { type: 'general', relevance: 'low' };
+}
+
+function headlineLooksSportRelevant(sportKey: string, headline: string): boolean {
+  const normalized = normalizeNewsText(headline);
+
+  const hasAny = (terms: string[]) => terms.some(term => normalized.includes(term));
+
+  const crossSportTerms = [
+    'football', 'quarterback', 'touchdown', 'touchdowns', 'offensive player',
+    'running back', 'wide receiver', 'defensive back', 'spring game',
+    'basketball', 'hoops', 'tipoff', 'tip off', 'free throw',
+    'hockey', 'goalie', 'power play', 'puck',
+  ];
+
+  if (sportKey.startsWith('baseball_')) {
+    if (hasAny(crossSportTerms)) return false;
+    return hasAny([
+      'baseball', 'lineup', 'injured list', 'il', 'pitcher', 'pitching',
+      'starter', 'starting', 'bullpen', 'innings', 'inning', 'homer',
+      'home run', 'slugger', 'bat', 'bats', 'regional', 'series',
+      'diamond', 'walk off', 'walkoff',
+    ]);
+  }
+
+  if (sportKey.startsWith('basketball_')) {
+    return !hasAny(['football', 'quarterback', 'touchdown', 'baseball', 'pitcher', 'hockey', 'goalie']) &&
+      hasAny(['basketball', 'lineup', 'starting', 'points', 'rebounds', 'assists', 'playoff', 'rotation']);
+  }
+
+  if (sportKey === 'icehockey_nhl') {
+    return !hasAny(['football', 'quarterback', 'touchdown', 'baseball', 'pitcher', 'basketball']) &&
+      hasAny(['hockey', 'goalie', 'lineup', 'starting', 'shots', 'power play', 'puck', 'nhl']);
+  }
+
+  return true;
+}
+
 const LOCATION_TIMEZONES: Array<{ name: string; offset: number }> = [
   { name: 'Boston', offset: 0 },
   { name: 'New York', offset: 0 },
@@ -423,6 +532,7 @@ export async function getRelevantNews(
   if (!league) return [];
 
   const news: NewsItem[] = [];
+  const seenHeadlines = new Set<string>();
 
   try {
     // ESPN news feed
@@ -433,37 +543,31 @@ export async function getRelevantNews(
     for (const article of articles.slice(0, 20)) {
       const headline = article?.headline ?? '';
       const published = article?.published ?? '';
+      const categories = Array.isArray(article?.categories) ? article.categories : [];
 
-      // Check if relevant to our teams
-      const mentionsHome = fuzzyMatch(headline, homeTeam) ||
-        (article?.categories ?? []).some((c: any) => fuzzyMatch(c?.teamDisplayName ?? '', homeTeam));
-      const mentionsAway = fuzzyMatch(headline, awayTeam) ||
-        (article?.categories ?? []).some((c: any) => fuzzyMatch(c?.teamDisplayName ?? '', awayTeam));
+      const headlineMentionsHome = headlineMentionsTeam(headline, homeTeam);
+      const headlineMentionsAway = headlineMentionsTeam(headline, awayTeam);
+      const categoryMentionsHome = categoriesMentionTeam(categories, homeTeam);
+      const categoryMentionsAway = categoriesMentionTeam(categories, awayTeam);
+
+      // Only trust direct headline team mentions by default.
+      // Category-only matches are allowed only for high-signal roster news.
+      const { type, relevance } = classifyNewsHeadline(headline);
+      const categoryOnlyHome = !headlineMentionsHome && categoryMentionsHome;
+      const categoryOnlyAway = !headlineMentionsAway && categoryMentionsAway;
+      const allowCategoryOnly = relevance === 'high';
+      const mentionsHome = headlineMentionsHome || (allowCategoryOnly && categoryOnlyHome);
+      const mentionsAway = headlineMentionsAway || (allowCategoryOnly && categoryOnlyAway);
 
       if (!mentionsHome && !mentionsAway) continue;
-
-      // Classify news type
-      let type: NewsItem['type'] = 'general';
-      let relevance: NewsItem['relevance'] = 'low';
-      const hl = headline.toLowerCase();
-
-      if (hl.includes('injur') || hl.includes('out') || hl.includes('ruled out') ||
-          hl.includes('questionable') || hl.includes('doubtful') || hl.includes('scratch')) {
-        type = 'injury'; relevance = 'high';
-      } else if (hl.includes('lineup') || hl.includes('starting') || hl.includes('scratch') ||
-                 hl.includes('rest') || hl.includes('load manag')) {
-        type = 'lineup'; relevance = 'high';
-      } else if (hl.includes('trade') || hl.includes('waiv') || hl.includes('sign')) {
-        type = 'trade'; relevance = 'medium';
-      } else if (hl.includes('suspend') || hl.includes('ejected') || hl.includes('ban')) {
-        type = 'suspension'; relevance = 'high';
-      } else {
-        relevance = 'low';
-      }
 
       const teams: string[] = [];
       if (mentionsHome) teams.push(homeTeam);
       if (mentionsAway) teams.push(awayTeam);
+
+      const dedupeKey = `${headline.trim().toLowerCase()}__${teams.join('__')}`;
+      if (seenHeadlines.has(dedupeKey)) continue;
+      seenHeadlines.add(dedupeKey);
 
       news.push({ headline, source: 'ESPN', publishedAt: published, relevance, type, teams });
     }
@@ -483,31 +587,29 @@ export async function getRelevantNews(
 
         if (!titleMatch) continue;
         const headline = titleMatch[1].replace(/<!\[CDATA\[|\]\]>/g, '').trim();
-        const hl = headline.toLowerCase();
-
-        const mentionsH = hl.includes(homeTeam.toLowerCase().split(' ').pop() ?? '');
-        const mentionsA = hl.includes(awayTeam.toLowerCase().split(' ').pop() ?? '');
+        const mentionsH = headlineMentionsTeam(headline, homeTeam);
+        const mentionsA = headlineMentionsTeam(headline, awayTeam);
         if (!mentionsH && !mentionsA) continue;
+        if (!headlineLooksSportRelevant(sportKey, headline)) continue;
 
-        let type: NewsItem['type'] = 'general';
-        let relevance: NewsItem['relevance'] = 'low';
+        const { type, relevance } = classifyNewsHeadline(headline);
+        if (relevance !== 'high') continue;
 
-        if (hl.includes('injur') || hl.includes('out') || hl.includes('ruled out')) {
-          type = 'injury'; relevance = 'high';
-        } else if (hl.includes('lineup') || hl.includes('starting') || hl.includes('scratch')) {
-          type = 'lineup'; relevance = 'high';
-        }
+        const teams: string[] = [];
+        if (mentionsH) teams.push(homeTeam);
+        if (mentionsA) teams.push(awayTeam);
+        const dedupeKey = `${headline.trim().toLowerCase()}__${teams.join('__')}`;
+        if (seenHeadlines.has(dedupeKey)) continue;
+        seenHeadlines.add(dedupeKey);
 
-        if (relevance === 'high') {
-          news.push({
-            headline,
-            source: sourceMatch?.[1] ?? 'Google News',
-            publishedAt: pubMatch?.[1] ?? '',
-            relevance,
-            type,
-            teams: [mentionsH ? homeTeam : awayTeam],
-          });
-        }
+        news.push({
+          headline,
+          source: sourceMatch?.[1] ?? 'Google News',
+          publishedAt: pubMatch?.[1] ?? '',
+          relevance,
+          type,
+          teams,
+        });
       }
     } catch { /* Google News is supplemental */ }
 

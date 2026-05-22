@@ -53,6 +53,15 @@ function safeSync<T>(fn: () => T, fallback: T): T {
   try { return fn(); } catch { return fallback; }
 }
 
+function getEffectiveFinalLabel(candidate: {
+  finalDecisionLabel?: 'BET' | 'LEAN' | 'MONITOR' | 'PASS' | 'BEST_PRICE_ONLY';
+  forcedTierCap?: 'LEAN' | 'MONITOR';
+}): 'BET' | 'LEAN' | 'MONITOR' | 'PASS' | 'BEST_PRICE_ONLY' | undefined {
+  if (candidate.forcedTierCap === 'MONITOR') return 'MONITOR';
+  if (candidate.forcedTierCap === 'LEAN' && candidate.finalDecisionLabel === 'BET') return 'LEAN';
+  return candidate.finalDecisionLabel;
+}
+
 export async function runMiddayFinalCard(options: { forceRefresh?: boolean } = {}) {
   // [DBG] stderr is synchronous/unbuffered on Linux — arrives at the server
   // even if the process crashes before stdout is flushed.
@@ -227,7 +236,7 @@ export async function runMiddayFinalCard(options: { forceRefresh?: boolean } = {
   };
 
   // ── Decision layer ──────────────────────────────────────────
-  safeSync(() => {
+  const pipelineResult = safeSync(() => {
     const decisionCandidates = mapAllToDecisionCandidates(topBets);
     // Phase A — Step 1: Data integrity validation (before qualification)
     const todayEvents    = allSummaries.map(e => ({ matchup: e.matchup, homeTeam: e.homeTeam, awayTeam: e.awayTeam }));
@@ -256,42 +265,33 @@ export async function runMiddayFinalCard(options: { forceRefresh?: boolean } = {
     const slateResult        = selectSlate(labeled);
     printSlateSummary(slateResult);
     printFinalCard(slateResult);
-  }, undefined);
+    return { slateResult };
+  }, undefined as { slateResult: ReturnType<typeof selectSlate> } | undefined);
 
   // Save picks to log
   try {
-    const decisionMeta = safeSync(() => {
-      const decisionCandidates = mapAllToDecisionCandidates(topBets);
-      const todayEvents        = allSummaries.map(e => ({ matchup: e.matchup, homeTeam: e.homeTeam, awayTeam: e.awayTeam }));
-      const validResult        = validateDataIntegrity(decisionCandidates, todayEvents);
-      const qualResult         = qualifyCandidates(validResult.valid);
-      const allCandidates      = [...qualResult.qualified, ...qualResult.rejected];
-      const enriched           = enrichWithProbability(allCandidates);
-      const withOutcome        = applyOutcomeSignals(enriched, outcomeContext);
-      const withIntel          = applySportIntelligence(withOutcome);
-      const withDiversity      = applySignalDiversity(withIntel);
-      const withWeighting      = applySignalWeighting(withDiversity);
-      const withRisk           = applyRisk(withWeighting);
-      const withCalibration    = applyNCAACalibrationWeighting(withRisk);
-      const labeled            = labelCandidates(withCalibration);
-      return new Map(labeled.map(candidate => [
+    if (!pipelineResult?.slateResult) throw new Error('midday decision pipeline unavailable');
+
+    const decisionMeta = new Map(pipelineResult.slateResult.ranked.map(candidate => {
+      const recommendedLabel = getEffectiveFinalLabel(candidate);
+      return [
         `${candidate.matchup}__${candidate.betType ?? ''}__${candidate.side}`,
         {
           modelProbability: candidate.winProbability,
           edgeConfidence: candidate.marketReliabilityScore,
           signalTypes: candidate.signals,
           finalDecisionLabel: candidate.finalDecisionLabel,
-          recommendedLabel: candidate.finalDecisionLabel,
+          recommendedLabel,
           finalGrade: candidate.finalGrade,
           riskGrade: candidate.riskGrade,
           marketType: candidate.marketType,
           isPriceOnlyCandidate: candidate.isPriceOnlyCandidate,
-          savedAsRecommendation: candidate.finalDecisionLabel === 'BET' || candidate.finalDecisionLabel === 'LEAN',
+          savedAsRecommendation: recommendedLabel === 'BET' || recommendedLabel === 'LEAN',
           forcedTierCap: candidate.forcedTierCap,
           isBestBet: candidate.isBestBet,
         },
-      ]));
-    }, new Map<string, any>());
+      ] as const;
+    }));
 
     const finalCardBets = topBets
       .map(b => {
