@@ -59,6 +59,7 @@
 // ============================================================
 
 import { DecisionCandidate } from './decisionTypes';
+import { applyFootballGuardrails } from './footballGuardrail';
 
 // ============================================================
 // Types
@@ -576,7 +577,7 @@ function toGrade(label: FinalLabel, adjustedEdge: number, sport?: string): strin
 export function labelCandidates(
   candidates: DecisionCandidate[]
 ): DecisionCandidate[] {
-  return candidates.map(c => {
+  const labeled = candidates.map(c => {
     const { label, reasons } = classifyV2(c);
 
     // Append a note when the sport intelligence layer flagged LOW quality.
@@ -597,6 +598,7 @@ export function labelCandidates(
       labelReasons:       allReasons,
     };
   });
+  return applyFootballGuardrails(labeled);
 }
 
 // ============================================================

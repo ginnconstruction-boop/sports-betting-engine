@@ -18,7 +18,7 @@ import { getESPNInjuries } from '../services/espnData';
 import { getEnhancedInjuries } from '../services/directInjuryScraper';
 import { getGameWeather, isOutdoorSport } from '../services/weatherData';
 import { buildAllContextPackages } from '../services/contextIntelligence';
-import { savePicksFromTopTen } from '../services/closingLineTracker';
+import { savePicksFromTopTen, shouldSaveAsOfficialRecommendation } from '../services/closingLineTracker';
 import { checkSituationalAngles } from '../services/situationalAngles';
 import { scoreAllMarketEfficiency } from '../services/marketEfficiency';
 import { getAllCLVProjections } from '../services/clvProjection';
@@ -597,8 +597,12 @@ export async function runMorningScan(options: { forceRefresh?: boolean } = {}) {
           candidate.forcedTierCap === 'MONITOR' ? 'MONITOR'
           : candidate.forcedTierCap === 'LEAN' && candidate.finalDecisionLabel === 'BET' ? 'LEAN'
           : candidate.finalDecisionLabel;
-        const savedAsRecommendation =
-          recommendedLabel === 'BET' || recommendedLabel === 'LEAN';
+        const savedAsRecommendation = shouldSaveAsOfficialRecommendation({
+          recommendedLabel,
+          finalDecisionLabel: candidate.finalDecisionLabel,
+          marketType: candidate.marketType,
+          betType: candidate.betType,
+        });
 
         return [key, {
           finalDecisionLabel: candidate.finalDecisionLabel,

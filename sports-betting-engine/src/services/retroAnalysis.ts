@@ -134,30 +134,40 @@ const ESPN_LEAGUES: Record<string, { sport: string; league: string }> = {
 };
 
 // Multi-word team name matching -- tries last word, full name, abbreviations
+function normalizeTeamName(value: string): string {
+  return String(value ?? '')
+    .toLowerCase()
+    .replace(/\bst\.?\b/g, 'state')
+    .replace(/[^a-z0-9 ]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function singleTeamMatches(search: string, candidate: string): boolean {
+  const left = normalizeTeamName(search);
+  const right = normalizeTeamName(candidate);
+  if (!left || !right) return false;
+  if (left === right) return true;
+  if (Math.min(left.length, right.length) >= 5 && (left.includes(right) || right.includes(left))) return true;
+
+  const leftTokens = left.split(' ').filter(Boolean);
+  const rightTokens = right.split(' ').filter(Boolean);
+  const shared = leftTokens.filter(token => token.length >= 4 && rightTokens.includes(token));
+  if (shared.length >= 2) return true;
+  if (shared.length === 1 && shared[0] === leftTokens[0] && shared[0] === rightTokens[0]) return true;
+
+  const abbrev = (tokens: string[]) => tokens.map(token => token[0]).join('');
+  const leftAbbrev = abbrev(leftTokens);
+  const rightAbbrev = abbrev(rightTokens);
+  return leftAbbrev.length >= 2 && leftAbbrev === rightAbbrev;
+}
+
 function teamsMatch(searchHome: string, searchAway: string, nameA: string, nameB: string): boolean {
-  const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9 ]/g, '').trim();
-  const words = (s: string) => norm(s).split(' ');
-  const last = (s: string) => words(s).pop() ?? '';
-  const abbrev = (s: string) => words(s).map(w => w[0]).join('');
-
-  const h = norm(searchHome);
-  const a = norm(searchAway);
-  const n1 = norm(nameA);
-  const n2 = norm(nameB);
-
-  // Try matching both teams to both names in either order
-  const matchPair = (t1: string, t2: string, n1: string, n2: string): boolean => {
-    const checks = [
-      () => (n1.includes(last(t1)) || last(n1) === last(t1) || abbrev(t1) === abbrev(n1)) &&
-            (n2.includes(last(t2)) || last(n2) === last(t2) || abbrev(t2) === abbrev(n2)),
-      () => n1.includes(t1) || t1.includes(n1),
-      () => n2.includes(t2) || t2.includes(n2),
-    ];
-    return checks.some(c => { try { return c(); } catch { return false; } });
-  };
-
-  return matchPair(h, a, n1, n2) || matchPair(h, a, n2, n1) ||
-         matchPair(a, h, n1, n2) || matchPair(a, h, n2, n1);
+  return (
+    singleTeamMatches(searchHome, nameA) && singleTeamMatches(searchAway, nameB)
+  ) || (
+    singleTeamMatches(searchHome, nameB) && singleTeamMatches(searchAway, nameA)
+  );
 }
 
 // Source 0: Odds API scores — exact eventId match, most reliable
@@ -194,17 +204,17 @@ async function prefetchOddsApiScores(sportKeys: string[]): Promise<void> {
 function getScoreFromOddsApiCache(
   sportKey: string,
   eventId: string | undefined
-): { homeScore: number; awayScore: number; final: boolean } | null {
+): { homeScore: number; awayScore: number; final: boolean; source: string } | null {
   if (!eventId) return null;
   const entry = oddsApiScoreCache.get(`${sportKey}:${eventId}`);
   if (!entry) return null;
-  return { ...entry, final: true };
+  return { ...entry, final: true, source: 'ODDS_API_SCORES' };
 }
 
 // Source 1: ESPN scoreboard API fallback
 async function getScoreFromESPN(
   sportKey: string, homeTeam: string, awayTeam: string, gameDate: string
-): Promise<{ homeScore: number; awayScore: number; final: boolean } | null> {
+): Promise<{ homeScore: number; awayScore: number; final: boolean; source: string } | null> {
   const league = ESPN_LEAGUES[sportKey];
   if (!league) return null;
   try {
@@ -240,7 +250,7 @@ async function getScoreFromESPN(
       const homeScore = parseFloat(home?.score ?? '0');
       const awayScore = parseFloat(away?.score ?? '0');
       if (homeScore === 0 && awayScore === 0) continue;
-      return { homeScore, awayScore, final: true };
+      return { homeScore, awayScore, final: true, source: 'ESPN_SCOREBOARD' };
     }
     return null;
   } catch { return null; }
@@ -249,7 +259,7 @@ async function getScoreFromESPN(
 // Source 2: ESPN summary API fallback (different endpoint, more reliable for older games)
 async function getScoreFromESPNSummary(
   sportKey: string, homeTeam: string, awayTeam: string, gameDate: string
-): Promise<{ homeScore: number; awayScore: number; final: boolean } | null> {
+): Promise<{ homeScore: number; awayScore: number; final: boolean; source: string } | null> {
   const league = ESPN_LEAGUES[sportKey];
   if (!league) return null;
   try {
@@ -288,30 +298,102 @@ async function getScoreFromESPNSummary(
       const homeScore = parseFloat(home?.score ?? '0');
       const awayScore = parseFloat(away?.score ?? '0');
       if (homeScore === 0 && awayScore === 0) continue;
-      return { homeScore, awayScore, final: true };
+      return { homeScore, awayScore, final: true, source: 'ESPN_SUMMARY' };
     }
     return null;
   } catch { return null; }
 }
 
+export function scoreFromMLBScheduleData(
+  data: any,
+  homeTeam: string,
+  awayTeam: string,
+  gameTime?: string,
+): { homeScore: number; awayScore: number; final: boolean; source: string } | null {
+  const games = (Array.isArray(data?.dates) ? data.dates : [])
+    .flatMap((date: any) => Array.isArray(date?.games) ? date.games : []);
+
+  const matches: Array<{
+    homeScore: number;
+    awayScore: number;
+    final: boolean;
+    source: string;
+    scheduledAt: number;
+  }> = [];
+
+  for (const game of games) {
+    const apiHome = String(game?.teams?.home?.team?.name ?? '');
+    const apiAway = String(game?.teams?.away?.team?.name ?? '');
+    const detailed = String(game?.status?.detailedState ?? '').toLowerCase();
+    const abstract = String(game?.status?.abstractGameState ?? '').toLowerCase();
+    if (abstract !== 'final' && detailed !== 'final' && detailed !== 'game over' && detailed !== 'completed early') {
+      continue;
+    }
+
+    const apiHomeScore = Number(game?.teams?.home?.score);
+    const apiAwayScore = Number(game?.teams?.away?.score);
+    if (!Number.isFinite(apiHomeScore) || !Number.isFinite(apiAwayScore)) continue;
+
+    const scheduledAt = new Date(game?.gameDate ?? '').getTime();
+
+    if (singleTeamMatches(homeTeam, apiHome) && singleTeamMatches(awayTeam, apiAway)) {
+      matches.push({ homeScore: apiHomeScore, awayScore: apiAwayScore, final: true, source: 'MLB_STATSAPI_SCHEDULE', scheduledAt });
+    }
+    if (singleTeamMatches(homeTeam, apiAway) && singleTeamMatches(awayTeam, apiHome)) {
+      matches.push({ homeScore: apiAwayScore, awayScore: apiHomeScore, final: true, source: 'MLB_STATSAPI_SCHEDULE', scheduledAt });
+    }
+  }
+
+  if (matches.length === 0) return null;
+  const targetTime = new Date(gameTime ?? '').getTime();
+  if (Number.isFinite(targetTime)) {
+    matches.sort((a, b) => Math.abs(a.scheduledAt - targetTime) - Math.abs(b.scheduledAt - targetTime));
+  }
+  const best = matches[0];
+  return { homeScore: best.homeScore, awayScore: best.awayScore, final: true, source: best.source };
+}
+
+async function getScoreFromMLBStatsApi(
+  homeTeam: string,
+  awayTeam: string,
+  gameDate: string,
+): Promise<{ homeScore: number; awayScore: number; final: boolean; source: string } | null> {
+  const combined = { dates: [] as any[] };
+  for (const date of scoreboardDatesForGame(gameDate)) {
+    try {
+      const formatted = `${date.slice(0, 4)}-${date.slice(4, 6)}-${date.slice(6, 8)}`;
+      const url = `https://statsapi.mlb.com/api/v1/schedule?sportId=1&date=${formatted}&hydrate=linescore`;
+      const response = await fetchJson(url);
+      if (Array.isArray(response?.dates)) combined.dates.push(...response.dates);
+    } catch { /* try adjacent date */ }
+  }
+  return scoreFromMLBScheduleData(combined, homeTeam, awayTeam, gameDate);
+}
+
 // Master score lookup -- tries multiple sources, returns first hit.
 // Priority:
 //   1. Odds API cache (exact eventId match — most reliable, 0 extra credits)
-//   2. ESPN scoreboard API
-//   3. ESPN summary endpoint (handles late night / next-day results)
-//   4. ESPN reversed home/away
+//   2. MLB official Stats API schedule (MLB only)
+//   3. ESPN scoreboard API
+//   4. ESPN summary endpoint (handles late night / next-day results)
+//   5. ESPN reversed home/away
 async function getGameScore(
   sportKey: string,
   homeTeam: string,
   awayTeam: string,
   gameDate: string,
   eventId?: string,
-): Promise<{ homeScore: number; awayScore: number; final: boolean } | null> {
+): Promise<{ homeScore: number; awayScore: number; final: boolean; source: string } | null> {
   // Source 0: Odds API cache — zero cost, exact eventId match
   const oddsApi = getScoreFromOddsApiCache(sportKey, eventId);
   if (oddsApi) return oddsApi;
 
-  // Source 1: ESPN scoreboard (primary)
+  if (sportKey === 'baseball_mlb') {
+    const mlb = await getScoreFromMLBStatsApi(homeTeam, awayTeam, gameDate);
+    if (mlb) return mlb;
+  }
+
+  // ESPN scoreboard fallback
   const espn1 = await getScoreFromESPN(sportKey, homeTeam, awayTeam, gameDate);
   if (espn1) return espn1;
 
@@ -321,7 +403,7 @@ async function getGameScore(
 
   // Source 3: ESPN reversed home/away (sometimes matchup string is stored away @ home)
   const espn3 = await getScoreFromESPN(sportKey, awayTeam, homeTeam, gameDate);
-  if (espn3) return { homeScore: espn3.awayScore, awayScore: espn3.homeScore, final: true };
+  if (espn3) return { homeScore: espn3.awayScore, awayScore: espn3.homeScore, final: true, source: 'ESPN_SCOREBOARD_REVERSED' };
 
   return null;
 }
@@ -2066,7 +2148,7 @@ export async function autoGradePicks(): Promise<AutoGradeSummary> {
           picks[pickIdx2].autoGraded  = true;
           picks[pickIdx2].gradedAt = new Date().toISOString();
           picks[pickIdx2].gradingSource = 'ODDS_API_OR_ESPN_SCOREBOARD';
-          picks[pickIdx2].gradingNotes = 'score unavailable from all 4 sources after game-end window';
+          picks[pickIdx2].gradingNotes = 'score unavailable from all configured sources after game-end window';
         }
         existingRetro.push({
           pickId:       buildRetroPickId(pick),
@@ -2086,7 +2168,7 @@ export async function autoGradePicks(): Promise<AutoGradeSummary> {
           missedSignals:[],
           autoGraded:   true,
           recordBucket: getPickRecordBucket(pick),
-          gradingNote:  'score unavailable from all 4 sources after game-end window',
+          gradingNote:  'score unavailable from all configured sources after game-end window',
         });
         missingScoreCount++;
         continue;
@@ -2108,7 +2190,7 @@ export async function autoGradePicks(): Promise<AutoGradeSummary> {
         picks[pickIdx].actualStat = null;
         picks[pickIdx].autoGraded = true;
         picks[pickIdx].gradedAt = new Date().toISOString();
-        picks[pickIdx].gradingSource = 'ODDS_API_OR_ESPN_SCOREBOARD';
+        picks[pickIdx].gradingSource = score.source ?? 'ODDS_API_OR_ESPN_SCOREBOARD';
         picks[pickIdx].gradingNotes = 'graded from final game score';
       }
 

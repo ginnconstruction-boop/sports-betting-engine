@@ -82,6 +82,28 @@ const LEGACY_OFFICIAL_BET_TYPES = new Set([
 
 export type PickRecordBucket = 'official' | 'tracked';
 
+export interface OfficialRecommendationPolicyInput {
+  finalDecisionLabel?: PickRecord['finalDecisionLabel'];
+  recommendedLabel?: PickRecord['recommendedLabel'];
+  marketType?: string;
+  betType?: string;
+}
+
+/**
+ * Conservative restart policy: only final BET game-line sides are official.
+ * LEAN/MONITOR candidates, totals, props, and parlays are still saved to the
+ * tracked bucket so they can build an evidence base without affecting P&L.
+ */
+export function shouldSaveAsOfficialRecommendation(
+  pick: OfficialRecommendationPolicyInput,
+): boolean {
+  const label = pick.recommendedLabel ?? pick.finalDecisionLabel;
+  if (label !== 'BET') return false;
+  if ((pick.marketType ?? 'game_line') !== 'game_line') return false;
+  const betType = String(pick.betType ?? '').toLowerCase();
+  return betType === 'moneyline' || betType === 'h2h' || betType === 'spread' || betType === 'spreads';
+}
+
 export function isOfficialRecommendationPick(pick: Partial<PickRecord>): boolean {
   if (pick.savedAsRecommendation === true) return true;
   if (pick.savedAsRecommendation === false) return false;

@@ -298,11 +298,12 @@ export function buildNCAACalibrationStatsReport(): NCAACalibrationStatsReport {
     const price = typeof pick.pickedPrice === 'number' && Number.isFinite(pick.pickedPrice) && pick.pickedPrice !== 0
       ? pick.pickedPrice
       : -110;
-    upsert(report.bySignalCombo, stableSignalCombo(pick.signalTypes), pick.gameResult, price);
-    upsert(report.byEdgeConfidenceBucket, bucketEdgeConfidence(pick.edgeConfidence), pick.gameResult, price);
+    const sportKey = normalizeHistoricalSportKey(pick);
+    upsert(report.bySignalCombo, `${sportKey} | ${stableSignalCombo(pick.signalTypes)}`, pick.gameResult, price);
+    upsert(report.byEdgeConfidenceBucket, `${sportKey} | ${bucketEdgeConfidence(pick.edgeConfidence)}`, pick.gameResult, price);
     upsert(
       report.byModelProbabilityBucket,
-      bucketProbability(deriveHistoricalGameModelProbability(pick) ?? undefined),
+      `${sportKey} | ${bucketProbability(deriveHistoricalGameModelProbability(pick) ?? undefined)}`,
       pick.gameResult,
       price,
     );
@@ -324,7 +325,7 @@ export function getNCAACalibrationAdjustment(
   let multiplier = 0;
   const reasons: string[] = [];
 
-  const signalComboKey = stableSignalCombo(candidate.signals);
+  const signalComboKey = `${sportKey} | ${stableSignalCombo(candidate.signals)}`;
   const signalComboStats = calibration.bySignalCombo[signalComboKey];
   if (signalComboStats && signalComboStats.sampleSize >= 10) {
     if (signalComboStats.winRate < 55) {
@@ -336,7 +337,7 @@ export function getNCAACalibrationAdjustment(
     }
   }
 
-  const edgeBucketKey = bucketEdgeConfidence(candidate.edgeConfidence);
+  const edgeBucketKey = `${sportKey} | ${bucketEdgeConfidence(candidate.edgeConfidence)}`;
   const edgeBucketStats = calibration.byEdgeConfidenceBucket[edgeBucketKey];
   if (edgeBucketStats && edgeBucketStats.sampleSize >= 10) {
     if (edgeBucketStats.winRate < 55) {
@@ -348,7 +349,7 @@ export function getNCAACalibrationAdjustment(
     }
   }
 
-  const probabilityBucketKey = bucketProbability(candidate.winProbability);
+  const probabilityBucketKey = `${sportKey} | ${bucketProbability(candidate.winProbability)}`;
   const probabilityBucketStats = calibration.byModelProbabilityBucket[probabilityBucketKey];
   if (probabilityBucketStats && probabilityBucketStats.sampleSize >= 10) {
     if (probabilityBucketStats.winRate < 55) {

@@ -86,6 +86,10 @@ export interface DecisionCandidate {
   preCalibrationAdjustedEdge?: number;
   calibrationMultiplier?: number;
   calibrationReasons?: string[];
+  /** Football observation-mode audit fields. */
+  footballHistorySampleSize?: number;
+  footballMarketSampleSize?: number;
+  footballGuardrailActive?: boolean;
 
   // ----------------------------------------------------------
   // Game / matchup (both types)

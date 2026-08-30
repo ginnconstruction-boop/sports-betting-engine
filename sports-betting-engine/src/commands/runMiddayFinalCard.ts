@@ -8,7 +8,7 @@ import { saveSnapshot, loadLatestSnapshot } from '../services/snapshotStore';
 import { getTopBets, printTopTen } from '../services/topTenBets';
 import { loadSignalWeights } from '../services/retroAnalysis';
 import { buildAdvancedStatsMap } from '../services/advancedStats';
-import { savePicksFromTopTen } from '../services/closingLineTracker';
+import { savePicksFromTopTen, shouldSaveAsOfficialRecommendation } from '../services/closingLineTracker';
 import { analyzeSharpIntelligence } from '../services/sharpIntelligence';
 import { getESPNInjuries } from '../services/espnData';
 import { getGameWeather, isOutdoorSport } from '../services/weatherData';
@@ -286,7 +286,12 @@ export async function runMiddayFinalCard(options: { forceRefresh?: boolean } = {
           riskGrade: candidate.riskGrade,
           marketType: candidate.marketType,
           isPriceOnlyCandidate: candidate.isPriceOnlyCandidate,
-          savedAsRecommendation: recommendedLabel === 'BET' || recommendedLabel === 'LEAN',
+          savedAsRecommendation: shouldSaveAsOfficialRecommendation({
+            recommendedLabel,
+            finalDecisionLabel: candidate.finalDecisionLabel,
+            marketType: candidate.marketType,
+            betType: candidate.betType,
+          }),
           forcedTierCap: candidate.forcedTierCap,
           isBestBet: candidate.isBestBet,
         },

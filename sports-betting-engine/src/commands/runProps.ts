@@ -27,7 +27,7 @@ import { getSportByKey }             from '../config/sports';
 import { EventSummary }              from '../types/odds';
 import { scorePitcherProp, printPitcherPropReport } from '../services/mlbPitcherIntelligence';
 import { loadSignalWeights } from '../services/retroAnalysis';
-import { savePropPicks } from '../services/closingLineTracker';
+import { savePropPicks, shouldSaveAsOfficialRecommendation } from '../services/closingLineTracker';
 // -- Decision layer --
 import { mapAllToDecisionCandidates } from '../services/decisionTypes';
 import { qualifyCandidates, printQualificationSummary } from '../services/qualificationEngine';
@@ -643,7 +643,12 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
           riskGrade: candidate.riskGrade,
           finalDecisionLabel: candidate.finalDecisionLabel,
           recommendedLabel: label,
-          savedAsRecommendation: label === 'BET' || label === 'LEAN',
+          savedAsRecommendation: shouldSaveAsOfficialRecommendation({
+            recommendedLabel: label,
+            finalDecisionLabel: candidate.finalDecisionLabel,
+            marketType: 'player_prop',
+            betType: 'Player Prop',
+          }),
           nonMarketSignalCount: candidate.strongNonMarketSignalCount,
           signalTypes: candidate.signals,
         }];

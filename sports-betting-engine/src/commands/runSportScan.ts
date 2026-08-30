@@ -37,7 +37,7 @@ import { getOddsBySport } from '../api/oddsApiClient';
 import { normalizePropsFromEvent, aggregateProps } from '../services/propNormalizer';
 import { scoreAllPropsWithIntelligence, printTopProps, ScoredProp } from '../services/propScorer';
 import { detectPropCorrelation } from '../services/propEdgeFactors';
-import { savePicksFromTopTen, savePropPicks, saveParlayPicks } from '../services/closingLineTracker';
+import { savePicksFromTopTen, savePropPicks, saveParlayPicks, shouldSaveAsOfficialRecommendation } from '../services/closingLineTracker';
 import { findCorrelatedParlays, printSGPReport, SGPLeg } from '../services/sgpCorrelation';
 import { mapAllToDecisionCandidates } from '../services/decisionTypes';
 import { qualifyCandidates, printQualificationSummary } from '../services/qualificationEngine';
@@ -411,7 +411,12 @@ export async function runSportScan(
             recommendedLabel: candidate.finalDecisionLabel,
             marketType: candidate.marketType,
             riskGrade: candidate.riskGrade,
-            savedAsRecommendation: candidate.finalDecisionLabel === 'BET' || candidate.finalDecisionLabel === 'LEAN',
+            savedAsRecommendation: shouldSaveAsOfficialRecommendation({
+              finalDecisionLabel: candidate.finalDecisionLabel,
+              recommendedLabel: candidate.finalDecisionLabel,
+              marketType: candidate.marketType,
+              betType: candidate.betType,
+            }),
           },
         ]));
       }, new Map<string, any>());
