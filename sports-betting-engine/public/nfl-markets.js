@@ -170,6 +170,15 @@ function renderNflForecast(panel,data) {
   nflText(panel,`${f.player.name} · ${f.player.team} · ${f.version} · inputs ${nflDisplayTime(f.asOf)}. ${data.books?`Configured books: ${data.books.join(', ')}`:`Original selected sportsbook: ${pick.quote.book}`}.`);
   nflText(panel,`Projected stat: ${nflFixed(f.point?.projection)}. Expected attempts/targets: ${nflFixed(f.point?.workload)}. Production per opportunity: ${nflFixed(f.point?.efficiency,2)}. ${f.usableGames} usable same-team games; ${f.currentSeasonGames} this season; ${f.excludedGames} rows excluded.`);
   nflText(panel,`Earlier-game diagnostic: ${f.evaluation.games} rolling forecasts; average absolute error ${nflFixed(f.evaluation.mae)} versus simple-average error ${nflFixed(f.evaluation.baselineMae)}. Smaller error is better. ${f.evaluation.note}`);
+  if(f.workloadContext) {
+    const w=f.workloadContext;
+    nflText(panel,`Verified recent workload context: ${w.verifiedGames}/${w.requestedGames} listed games; share of team attempts/targets ${nflPct(w.pooledOpportunityShare)}; team attempts/targets per game ${nflFixed(w.meanTeamOpportunities)}.`);
+    nflText(panel,w.note);
+    const context=document.createElement('details'),heading=document.createElement('summary');heading.textContent='Show verified workload games and missing sources';context.append(heading);
+    for(const r of w.rows)nflText(context,`${nflDisplayTime(r.date)} · ${r.opportunity}/${r.teamOpportunity} attempts/targets (${nflPct(r.share)}) · ESPN game ${r.eventId}; retrieved ${nflDisplayTime(r.fetchedAt)}.`);
+    for(const r of w.unavailable)nflText(context,`${r.eventId}: ${r.reason}`);
+    panel.append(context);
+  }
   if(pick){
     nflText(panel,`Stored experimental win estimate: ${nflPct(pick.modelProbability)}; push estimate: ${nflPct(pick.modelPushProbability)}; estimated profit per unit risk: ${nflFixed(pick.estimatedEV,3)}. These estimates are uncalibrated, not demonstrated win rates or returns.`);
     nflText(panel,`Tracking ID ${pick.id}; issued ${nflDisplayTime(pick.savedAt)}; result ${pick.result}. No real bet was placed.`);
@@ -217,8 +226,29 @@ async function loadNflPaper(grade) {
         button.onclick=()=>{const card=document.getElementById('nfl-research-results');renderNflForecast(card,{status:'already_tracked',pick:p,forecast:p.forecast,assessments:[]});card.scrollIntoView({behavior:'smooth',block:'start'});};
         row.firstChild.append(document.createElement('br'),button);
       }
+      if(p.gradingAudit?.length){
+        const replay=document.createElement('button');replay.textContent='Verify saved grading';
+        replay.onclick=async()=>{
+          replay.disabled=true;
+          try {
+            const audit=await nflFetch(`/api/nfl/paper/${encodeURIComponent(p.id)}/replay`);
+            status.textContent=`${audit.audits.map(a=>`${nflDisplayTime(a.checkedAt)}: ${a.savedResult} — ${a.status.replace(/_/g,' ')}`).join('; ')}. ${audit.note}`;
+          }catch(e){status.textContent=e.message;}finally{replay.disabled=false;}
+        };
+        row.firstChild.append(document.createElement('br'),replay);
+      }
       table.append(row);
     }panel.append(table);
     if(data.picks.length>100)nflText(panel,'Showing latest 100 selections. Summary includes the full paper ledger.');
   }catch(e){status.textContent=e.message;}finally{nflPaperBusy=false;}
+}
+async function exportNflPaper() {
+  const status=document.getElementById('nfl-paper-status');
+  try {
+    const data=await nflFetch('/api/nfl/paper/export');
+    const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob);
+    const link=document.createElement('a');link.href=url;link.download=`nfl-paper-record-${data.exportedAt.slice(0,10)}.json`;
+    document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+    status.textContent=`Exported ${data.picks.length} NFL paper picks and ${Object.keys(data.evidence).length} grading source snapshots. ${data.missingEvidence.length} source snapshots missing/corrupt; ${data.omittedEvidence?.length??0} omitted by the 25 MiB source limit (use a server-disk backup for those). Original records unchanged; keep this file private.`;
+  }catch(e){status.textContent=e.message;}
 }

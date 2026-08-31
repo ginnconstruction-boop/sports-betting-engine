@@ -338,6 +338,14 @@ app.get('/api/nfl/paper', requireAuth, (_req, res) => {
   try { const picks = nflPaper.read(); res.json({ picks, report: nflPaperReport(picks), metrics: footballPaperMetrics(picks) }); }
   catch (err) { nflError(res, err); }
 });
+app.get('/api/nfl/paper/export', requireAuth, (_req, res) => {
+  try { res.setHeader('Cache-Control', 'no-store'); res.json(nflPaper.exportRecord()); }
+  catch (err) { nflError(res, err); }
+});
+app.get('/api/nfl/paper/:id/replay', requireAuth, (req, res) => {
+  try { res.setHeader('Cache-Control', 'no-store'); res.json(nflPaper.replay(req.params.id)); }
+  catch (err) { nflError(res, err); }
+});
 app.post('/api/nfl/paper', requireAuth, async (req, res) => {
   try { const { event, quote } = nflSelection(req.body); res.json(await nflPaper.save(event, quote, req.body.rules)); }
   catch (err) { nflError(res, err); }
@@ -612,7 +620,7 @@ app.post('/api/ats/backfill', requireAuth, async (req, res) => {
 });
 
 // ── Health ──
-app.get('/api/health', (_, res) => res.json({ ok: true, release: 'football-foundation-2', ts: new Date().toISOString() }));
+app.get('/api/health', (_, res) => res.json({ ok: true, release: 'football-research-3', ts: new Date().toISOString() }));
 
 // ── SPA fallback ──
 app.get('*', (_, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));

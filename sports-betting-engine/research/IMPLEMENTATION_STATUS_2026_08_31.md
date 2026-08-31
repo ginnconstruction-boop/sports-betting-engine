@@ -3,6 +3,12 @@
 August 31, 2026. Release marker: football-foundation-2.
 Website: https://sports-betting-engine-1.onrender.com/
 
+Follow-up: [football-research-3](NFL_RESEARCH_RELEASE_2026_08_31.md) adds descriptive
+team-opportunity shares, a separately frozen shadow stat comparison, archived
+settlement sources, replay/export and plain-language website guidance. The table
+below describes the original foundation release; use the follow-up for current
+tracking/context status. Availability and model validation remain unresolved.
+
 The owner authorized the 13-item competitor checklist in staged groups. The first
 correctness gate passed (71 tests); subsequent safety/tracking work passed 83
 tests. This is a partial implementation of the full roadmap, not completion of
@@ -91,5 +97,20 @@ unbounded historical-odds run, real wager or background odds polling occurred.
   anonymous recheck 401; four legacy specialty actions 403.
 - Browser verified the 13-item checklist, NFL/college entry points, paused
   specialty controls, paper audit table and new stat-correction action.
-- No paid odds requests were made for this release's checks so far.
-- Deployment verification will be appended after publishing.
+- No paid odds requests were made for this release's checks.
+- Deployed commit `e07bc17c30aa73b4adc095b1c6831cc9771950a4`; Render
+  deployment `dep-daanq4v10e5c73c1gjr0` live August 31 at **8:10:32 AM Central**.
+  Public health returned release `football-foundation-2`; HTML and JavaScript
+  return 200 with the new checklist/baseline/recheck code. Anonymous protected
+  NFL/college/paper/recheck endpoints return 401.
+- Authenticated live checks: login 200, paper 200 with zero records/metrics,
+  NFL 15 games, college 96 games, empty recheck 200, invalid forecast 400,
+  all four paused specialty actions 403. Temporary verification session logged
+  out. No valid production forecast or test pick was issued.
+- Before/after deployment and API checks, exact SHA-256 values match:
+  official empty ledger `4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945`;
+  NFL paper file remains absent (zero records);
+  legacy ATS (58 keys) `a88d1eb14b104a7be04baf9efe8274b98239d9fab8b3b123c2b650662c89f8a3`;
+  329-pick reset backup `c252ce69b46dadfac7c7894c50c3892a3f97bcaeceefd7f3ddb67a2eb6703bbd`.
+- Isolated local QA server stopped and its tab closed. The browser skill was
+  used to verify actual checklist/control visibility and the paper-table layout.

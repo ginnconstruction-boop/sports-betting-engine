@@ -1,5 +1,7 @@
 import { UpcomingEvent } from '../api/oddsApiClient';
 import { MarketBoardError, MarketQuote } from './nflMarketBoard';
+import { parseWorkloadEvidence, summarizeWorkloadEvidence, WorkloadEvidence } from './nflWorkloadContext';
+import type { NflForecastInput } from './nflForecast';
 
 export const NFL_RESEARCH_VERSION = 'nfl-observed-baseline-v1';
 export const NFL_CORE_STATS: Record<string, { field: string; category: string }> = {
@@ -170,7 +172,7 @@ export class NflResearch {
     if (Number(matches[0].season?.type) !== 2) throw new MarketBoardError('Paper testing is limited to regular-season NFL games.', 422);
     return matches[0].id;
   }
-  async forecastInputs(event: UpcomingEvent, name: string, market: string) {
+  async forecastInputs(event: UpcomingEvent, name: string, market: string): Promise<NflForecastInput> {
     if (!NFL_CORE_STATS[market]) throw new MarketBoardError('Unsupported NFL forecast market.');
     const asOf = new Date(this.now()).toISOString();
     const player = await this.player(event, name);
@@ -191,7 +193,28 @@ export class NflResearch {
       const data = await this.cached(source);
       depth = { rows: parseNflDepth(data, player, season), source, sourceTimestamp: data.timestamp ?? null };
     } catch { /* An unavailable depth chart blocks issuance downstream. */ }
-    return { player, observations, asOf, depth, sources };
+    const workloadContext = await this.workloadContext(player, observations, market, cutoff);
+    return { player, observations, asOf, depth, sources, workloadContext };
+  }
+  async workloadContext(player: NflPlayer, observations: NflObservation[], market: string, cutoff: number) {
+    // Explicitly bounded to five recent listed appearances. No paid odds calls.
+    const rows = [...observations].filter(r => r.teamId === player.teamId && Date.parse(r.date) < cutoff)
+      .sort((a,b) => Date.parse(b.date) - Date.parse(a.date)).slice(0,5);
+    const verified: WorkloadEvidence[] = [], unavailable: Array<{eventId: string; reason: string}> = [];
+    // Two-at-a-time limits load on the best-effort public feed.
+    for (let i = 0; i < rows.length; i += 2) {
+      await Promise.all(rows.slice(i, i + 2).map(async row => {
+        const source = `${ESPN_NFL}/summary?event=${row.eventId}`;
+        try {
+          const data = await this.summary(row.eventId);
+          const fetchedAt = new Date(this.cache.get(source).at).toISOString();
+          verified.push(parseWorkloadEvidence(data, row, player, market, cutoff, fetchedAt, source));
+        } catch { unavailable.push({ eventId: row.eventId, reason: 'Source missing, conflicting or unverified; no value assumed.' }); }
+      }));
+    }
+    verified.sort((a,b) => Date.parse(b.date) - Date.parse(a.date));
+    unavailable.sort((a,b) => a.eventId.localeCompare(b.eventId));
+    return { ...summarizeWorkloadEvidence(verified, rows.length), unavailable };
   }
   async summary(id: string) {
     if (!/^\d+$/.test(id)) throw new Error('Invalid ESPN event ID');

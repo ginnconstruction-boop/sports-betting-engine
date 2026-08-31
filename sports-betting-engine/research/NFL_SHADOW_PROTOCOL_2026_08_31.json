@@ -1,0 +1,20 @@
+{
+  "protocol": "nfl-opportunity-share-shadow-v1",
+  "declaredDate": "2026-08-31",
+  "purpose": "New fixed descriptive stat-forecast cohort, separate from the earlier Maye/Mahomes/Kelce/Smith-Njigba audit. Not a betting backtest or live-policy replay.",
+  "cohort": [
+    {"name":"Lamar Jackson","id":"3916387","teamId":"33","market":"player_pass_yds"},
+    {"name":"Lamar Jackson","id":"3916387","teamId":"33","market":"player_rush_yds"},
+    {"name":"Derrick Henry","id":"3043078","teamId":"33","market":"player_rush_yds"},
+    {"name":"Ja'Marr Chase","id":"4362628","teamId":"4","market":"player_reception_yds"},
+    {"name":"Ja'Marr Chase","id":"4362628","teamId":"4","market":"player_receptions"},
+    {"name":"Amon-Ra St. Brown","id":"4374302","teamId":"8","market":"player_reception_yds"},
+    {"name":"Amon-Ra St. Brown","id":"4374302","teamId":"8","market":"player_receptions"}
+  ],
+  "seasons": [2024,2025],
+  "evaluationStart": "2025-08-01T00:00:00Z",
+  "evaluationEnd": "2026-02-01T00:00:00Z",
+  "maxSourceRequests": 180,
+  "specification": "2024 warm-up; 2025 regular-season prequential evaluation with strictly earlier completed appearances only. Fixed trailing maximum 20, minimum 8. Compare trailing stat mean, existing 60/40 workload times 40/60 efficiency model, and SHADOW 60/40 pooled opportunity-share times 60/40 team-volume times the same efficiency. No coefficient search. All three compared on the identical complete-source training/target cohort; separately report every excluded target and source failure. Target actual comes from game log; target-game team opportunity is never an input to its prediction. Player/category ID, opponent, final status, opportunity totals and observed stats must reconcile for training rows.",
+  "restrictions": "Current injury/roster data must not enter historical predictors. Retrieved box scores are revised, not pregame archives. Cohort is illustrative, not league-representative. Source gaps are exclusions, not zero values. Multiple props from one game are correlated. Do not aggregate yards and receptions into one MAE. No odds purchase, win/loss, EV, ROI, calibration claim or automatic model promotion. Report all results even if the candidate loses. Future 2026 paper evaluation remains necessary."
+}

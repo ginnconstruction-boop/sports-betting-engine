@@ -6,7 +6,21 @@ Current website: [Sports Betting Engine](https://sports-betting-engine-1.onrende
 
 **Release target: usable NFL research and paper testing, not validated betting recommendations.** No real bets are placed. A functioning dashboard and passing software tests do not establish a profitable model.
 
-## Latest safety/tracking update — football-foundation-2
+## Latest research/tracking update — football-research-3
+
+See the [tested changes and ordered next steps](research/NFL_RESEARCH_RELEASE_2026_08_31.md).
+The new release adds plain-language website guidance, verified recent team
+attempt/target-share context, archived grading sources, read-only result replay
+and paper-record export. A separate fixed-cohort shadow test produced 77 stat
+forecasts over 33 games; results were mixed and no new formula was promoted.
+96 tests pass. Production deployment status is recorded in that release report.
+
+Automatic recommendations remain blocked by missing verified game-specific
+availability; this source is not yet connected. No additional subscription was
+purchased. NFL manual paper tracking remains usable, college remains quote-only,
+and the original records/backups are not restored or reset.
+
+## Previous safety/tracking update — football-foundation-2
 
 The requested 13-item roadmap is **partially implemented, not complete**. See the
 [item-by-item implementation status](research/IMPLEMENTATION_STATUS_2026_08_31.md).
@@ -21,13 +35,16 @@ the API/CLI/UI. Rich workload/opponent inputs, actual weather venues/roofs,
 unseen holdout/ablation testing, guaranteed closing capture and college model
 validation remain open. No tracking reset or old-record restoration occurred.
 
-Local gate: 83 tests, server-inclusive TypeScript build and JS syntax pass;
-dependency audit reports zero vulnerabilities. Deployment verification is
-recorded in the release status report.
+Release `e07bc17` live August 31 at 8:10:32 AM Central. 83 tests,
+server-inclusive TypeScript build and JS syntax pass; dependency audit reports
+zero vulnerabilities. Live login/API/health/schedules/paused commands verified.
+Official ledger, absent paper file, legacy ATS and 329-pick backup fingerprints
+are unchanged. No paid odds calls were needed. Full verification is in the
+release status report.
 
 | # | Item | Status / remaining work |
 |---|---|---|
-| 1 | Website, login, deployment | College-board release `dec0648` live August 31, 2026, 7:28 AM Central. Live health, new menu/assets, authenticated 96-game college discovery and 38 UMass–Rutgers spread/total quotes verified. Login configuration unchanged. |
+| 1 | Website, login, deployment | Foundation release `e07bc17` live August 31, 2026, 8:10 AM Central. Live health/new assets, login, 15 NFL and 96 college games, empty paper audit and paused-model API guards verified. Credentials unchanged. |
 | 2 | Find all required accounts | Active Render + GitHub + Odds API are the required stack. ESPN public feeds need no account. Old suspended Render web/database/cron services are not dependencies; leave them paused. |
 | 3 | Football-only production | NFL primary; college spreads/totals only. Dedicated **College football — spreads & totals** button opens upcoming-game discovery and quotes, separate from the existing game-day scan. Other sports paused. Earlier records remain in the untouched reset backup. |
 | 4 | NFL market coverage | 16 on-demand quote categories, next 14 days, freshness and credit controls. Availability varies; not every sportsbook special, future or live market is supported. |

@@ -5,6 +5,7 @@ import { UpcomingEvent } from '../api/oddsApiClient';
 import { MarketBoardError, MarketQuote } from './nflMarketBoard';
 import { ESPN_NFL, NFL_CORE_STATS, NFL_RESEARCH_VERSION, NflPlayer, NflResearch, nflName, nflNumber, nflSeason } from './nflResearch';
 import type { NflForecast } from './nflForecast';
+import { NflEvidenceArchive } from './nflEvidence';
 
 export const PAPER_RULES = 'regulation-periods_full-game-includes-ot_v1';
 export type PaperResult = 'PENDING' | 'REVIEW' | 'WIN' | 'LOSS' | 'PUSH';
@@ -15,7 +16,7 @@ export interface NflPaperPick {
   latestPregame?: { price: number; updatedAt: string; observedAt: string };
   closeWindow?: { price: number; line: number | null; bookKey: string; updatedAt: string; observedAt: string; method: 'observed_last_5_minutes_not_verified_final_close' };
   settlementScope?: { bookKey: string; ruleVersion: string; sportsbookRulesVerified: false };
-  gradingAudit?: Array<{ result: PaperResult; actual?: number; note: string; checkedAt: string; source: string; sourceHash: string }>;
+  gradingAudit?: Array<{ result: PaperResult; actual?: number; note: string; checkedAt: string; source: string; sourceHash: string; evidenceHash?: string }>;
   lastResultCheck?: { at: string; status: 'graded' | 'unavailable' | 'review' };
   origin?: 'manual' | 'model';
   forecast?: NflForecast;
@@ -122,7 +123,42 @@ export function nflPaperReport(picks: NflPaperPick[]) {
 
 export class NflPaperLedger {
   private grading: Promise<any> | null = null;
-  constructor(private file: string, private research: Pick<NflResearch, 'matchEvent' | 'player' | 'summary'>, private now = () => Date.now()) {}
+  private settlementArchive: NflEvidenceArchive;
+  constructor(private file: string, private research: Pick<NflResearch, 'matchEvent' | 'player' | 'summary'>, private now = () => Date.now()) {
+    this.settlementArchive = new NflEvidenceArchive(path.join(path.dirname(file), 'nfl_settlement_evidence'));
+  }
+  exportRecord() {
+    const picks = this.read();
+    const evidence: Record<string, unknown> = {}, missingEvidence: string[] = [], omittedEvidence: string[] = [];
+    let sourceBytes = 0;
+    for (const hash of new Set(picks.flatMap(p => (p.gradingAudit ?? []).map(a => a.evidenceHash).filter(Boolean)))) {
+      try {
+        const payload=this.settlementArchive.read(hash), bytes=Buffer.byteLength(JSON.stringify(payload));
+        if(sourceBytes + bytes > 25 * 1024 * 1024) { omittedEvidence.push(hash); continue; }
+        evidence[hash]=payload;sourceBytes+=bytes;
+      }
+      catch { missingEvidence.push(hash); }
+    }
+    return { schema: 1, exportedAt: new Date(this.now()).toISOString(), picks, evidence, missingEvidence, omittedEvidence,
+      note: 'NFL paper-only export. Includes original forecasts/quotes and up to 25 MiB of settlement source snapshots; omitted hashes are listed and require a server-disk backup. Does not include the separate official ledger or old reset backups. Missing/legacy evidence cannot be reconstructed by this export.' };
+  }
+  replay(id: string) {
+    const pick = this.read().find(p => p.id === id);
+    if (!pick) throw new MarketBoardError('Paper pick not found.', 404);
+    const audits = (pick.gradingAudit ?? []).map(a => {
+      if (!a.evidenceHash) return { checkedAt: a.checkedAt, status: 'legacy_evidence_unavailable', savedResult: a.result };
+      try {
+        const evidence = this.settlementArchive.read(a.evidenceHash);
+        const bytesHash = createHash('sha256').update(JSON.stringify(evidence.data)).digest('hex');
+        if (evidence.kind !== 'nfl_settlement_source_v1' || evidence.espnEventId !== pick.espnEventId
+          || evidence.source !== a.source || bytesHash !== a.sourceHash) throw new Error('Mismatched source evidence.');
+        const replay = gradeNflPaper(pick, evidence.data);
+        return { checkedAt: a.checkedAt, status: replay.result === a.result && replay.actual === a.actual ? 'matched' : 'mismatch',
+          savedResult: a.result, savedActual: a.actual, replay, evidenceHash: a.evidenceHash };
+      } catch { return { checkedAt: a.checkedAt, status: 'evidence_unavailable_or_corrupt', savedResult: a.result }; }
+    });
+    return { id, audits, note: 'Read-only replay using archived box scores and the current paper grader. No provider requests and no record changes. It verifies reproducibility, not sportsbook-specific settlement.' };
+  }
   read(): NflPaperPick[] {
     if (!fs.existsSync(this.file)) return [];
     const data = JSON.parse(fs.readFileSync(this.file, 'utf8'));
@@ -228,6 +264,10 @@ export class NflPaperLedger {
     for (const id of games) {
       try {
         const data = await this.research.summary(id);
+        // Persist the actual grading source BEFORE changing any result. A hash
+        // alone cannot reproduce a result after the public source changes.
+        const evidence = this.settlementArchive.record({ kind: 'nfl_settlement_source_v1', espnEventId: id,
+          source: `${ESPN_NFL}/summary?event=${id}`, data });
         for (const p of eligible.filter(p => p.espnEventId === id)) {
           const grade = gradeNflPaper(p, data), checkedAt = new Date(this.now()).toISOString();
           const source = `${ESPN_NFL}/summary?event=${id}`;
@@ -243,7 +283,7 @@ export class NflPaperLedger {
           const unchanged = p.result === grade.result && p.actual === grade.actual && previous.at(-1)?.sourceHash === sourceHash;
           updates.set(p.id, { ...grade, gradedAt: checkedAt, source,
             lastResultCheck: { at: checkedAt, status: 'graded' },
-            gradingAudit: unchanged ? previous : [...previous, { ...grade, checkedAt, source, sourceHash }] });
+            gradingAudit: unchanged && previous.at(-1)?.evidenceHash ? previous : [...previous, { ...grade, checkedAt, source, sourceHash, evidenceHash: evidence.hash }] });
         }
       } catch {
         for (const p of eligible.filter(p => p.espnEventId === id)) {

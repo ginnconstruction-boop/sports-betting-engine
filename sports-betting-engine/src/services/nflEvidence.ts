@@ -35,6 +35,14 @@ export class NflEvidenceArchive {
     }
     return { hash, file: path.basename(file) };
   }
+  read(hash: string): any {
+    if (!/^[a-f0-9]{64}$/.test(hash)) throw new Error('Invalid evidence fingerprint.');
+    const bytes = fs.readFileSync(path.join(this.dir, hash + '.json'), 'utf8');
+    if (createHash('sha256').update(bytes).digest('hex') !== hash) throw new Error('Evidence integrity check failed.');
+    const data = JSON.parse(bytes);
+    if (data.schema !== 1) throw new Error('Unsupported evidence schema.');
+    return data.payload;
+  }
 }
 export function nflInputCoverage(input: NflForecastInput) {
   return { playerIdentity: 'Exact ESPN player/team IDs; snapshot membership, not full transaction history.',

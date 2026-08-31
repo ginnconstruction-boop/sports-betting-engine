@@ -254,6 +254,18 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
     </section>
     <div class="focus-note">Stats below are lifetime history, not an NFL track record. Football models remain in observation mode while results accumulate. Quotes and research are not automatic betting instructions.</div>
     <p class="focus-note">Readiness update: automatic NFL paper recommendations are on hold until verified game-specific availability is connected. Forecast diagnostics, quoted odds and manual paper tracking remain available. Open the 13-item checklist below for completed repairs and remaining blockers.</p>
+    <section class="nfl-forecast-guide" aria-labelledby="football-next-heading">
+      <h2 id="football-next-heading">Where we stand — and what to do next</h2>
+      <p><strong>Ready now:</strong> NFL odds research and manual practice-pick tracking. College spreads/totals are quote-only.</p>
+      <p><strong>Not ready:</strong> proven betting recommendations. Automatic NFL model picks remain blocked by missing verified game-day availability.</p>
+      <ol>
+        <li>Research one NFL game using <strong>Forecast + track</strong> below. A blocked forecast is a data check, not a recommended bet.</li>
+        <li>For your own practice selection, acknowledge the rules and choose <strong>Save paper</strong>. This is not a model recommendation.</li>
+        <li>After the game, choose <strong>Grade completed paper picks</strong>, then review wins, losses and unresolved results separately.</li>
+        <li>Use <strong>Verify saved grading</strong> to replay a result from its archived source, or <strong>Export NFL paper record</strong> for a copy.</li>
+      </ol>
+      <p>Development priorities: verified availability → stronger inputs and independent tests → prospective paper results → college and specialty recommendations. No additional subscription has been purchased.</p>
+    </section>
     <!-- STATS -->
     <div class="stats-bar">
       <div class="stat-card" onclick="togglePicks()" style="cursor:pointer" title="Click to view all picks"><div class="stat-label">Total Picks &#x2197;</div><div class="stat-value" id="stat-total">--</div></div>
@@ -295,11 +307,11 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
         <li>Legacy probability: invented score-to-win estimates and football stake suggestions removed.</li>
         <li>Weather: UTC-hour parser and unknown/roof safeguards tested. Verified venue/roof feed and forecast archive still pending.</li>
         <li>Identity/availability: exact ESPN IDs and immutable attempt evidence; cross-provider IDs, transactions and verified active reports still pending.</li>
-        <li>Workload: attempts/targets baseline retained. Snap/route/share/teammate adjustments need data and validation.</li>
+        <li>Workload: verified recent team attempt/target shares added as descriptive context. The live forecast is unchanged; snap/route/teammate inputs and validated adjustments remain pending.</li>
         <li>Opponent strength: generic football proxy disabled. Football-specific opponent-adjusted model still pending.</li>
         <li>Market baseline: exact-line, two-sided no-vig comparison excludes target book; needs 3 other matched books. Descriptive only.</li>
-        <li>Validation: paper Brier/log loss, calibration bins, drawdown and game-cluster uncertainty available. Frozen holdout and feature-removal study not completed.</li>
-        <li>Tracking: original picks preserved, stat-correction audit added, final-five-minute observations/missed counts. Automated final closing capture and sportsbook settlement still pending.</li>
+        <li>Validation: separate fixed-cohort shadow stat test added; no live-model promotion. Frozen holdout and feature-removal study not completed for betting probabilities; prospective validation remains pending.</li>
+        <li>Tracking: original picks, archived grading sources, read-only replay, export, corrections and final-five-minute observations. Automated final closing capture and sportsbook settlement still pending.</li>
         <li>College: separate spreads/totals quote board. Data supplier access and independent model validation still pending.</li>
         <li>Specialty models: disabled pending distribution/dependence validation. Quotes and supported manual paper grading remain available.</li>
         <li>Cleanup: unsupported football score bonuses and implied professional-money influence removed; historical records retained.</li>
@@ -335,6 +347,7 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
       <button class="scan-btn" onclick="loadNflPaper(false)">Refresh paper record (no odds credits)</button>
       <button class="scan-btn" onclick="loadNflPaper(true)">Grade completed paper picks (no odds credits)</button>
       <button class="scan-btn" onclick="loadNflPaper('recheck')">Check stat corrections — last 14 days (no odds credits)</button>
+      <button class="scan-btn" onclick="exportNflPaper()">Export NFL paper record (no odds credits)</button>
       <p class="focus-note">Availability gate: current roster status is not a verified game-day active report. Until that source is connected, forecast diagnostics can run but automatic model picks remain blocked. Manual paper tracking is still available. Refreshing quotes in the final five minutes can capture an exact-line pregame observation; it is not guaranteed to be the final closing price. No background odds purchases are enabled.</p>
       <div id="nfl-paper-status" class="focus-note" role="status" aria-live="polite"></div>
       <div id="nfl-paper-results" class="market-table-wrap"></div>
@@ -1627,7 +1640,7 @@ function showToast(msg, color='green') {
   _toastTimer = setTimeout(() => { el.className = color; }, 5000);
 }
 </script>
-<script src="/nfl-markets.js?v=football-foundation-2"></script>
+<script src="/nfl-markets.js?v=football-research-3"></script>
 <script src="/college-markets.js?v=college-board-1"></script>
 <div id="toast"></div>
 </body>

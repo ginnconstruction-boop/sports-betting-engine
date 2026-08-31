@@ -10,3 +10,6 @@ CODEX_CLAUDE_HANDOFF_PROMPT.md
 
 # Render
 .render-buildpacks.json
+
+# Frozen public research source payloads stay local; commit protocol/report only.
+research/nfl-share-shadow-2026-08-31/sources/

@@ -8,6 +8,7 @@ export const NFL_FORECAST_VERSION = 'nfl-workload-residual-v2-availability';
 export const NFL_FORECAST_POLICY = Object.freeze({ minTraining: 8, maxTraining: 20, recentGames: 5,
   minErrors: 8, maxAgeDays: 400, minEstimatedEV: 0.05, minConditionalProbability: 0.55 });
 export interface NflForecastInput {
+  workloadContext?: Awaited<ReturnType<import('./nflResearch').NflResearch['workloadContext']>>;
   availability?: GameAvailability;
   player: NflPlayer; observations: NflObservation[]; asOf: string;
   depth: { rows: Array<{ formation: string; position: string; listedOrder: number }>; sourceTimestamp: string | null; source: string };
@@ -120,7 +121,8 @@ export function buildNflForecast(input: NflForecastInput, event: UpcomingEvent, 
   return { version: NFL_FORECAST_VERSION, mode: 'experimental_paper' as const, market, player: input.player,
     asOf: input.asOf, dataHash, sources: input.sources, depth: input.depth, observations: rows,
     usableGames: rows.length, excludedGames: excluded, currentSeasonGames: currentGames,
-    point, evaluation, errors, reasons, warnings, availability: input.availability ?? null, coverage: nflInputCoverage(input) };
+    point, evaluation, errors, reasons, warnings, availability: input.availability ?? null, coverage: nflInputCoverage(input),
+    workloadContext: input.workloadContext ?? null };
 }
 export type NflForecast = ReturnType<typeof buildNflForecast>;
 
