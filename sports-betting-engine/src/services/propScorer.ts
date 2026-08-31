@@ -281,6 +281,10 @@ export async function scoreAllPropsWithIntelligence(
   },
   learnedWeights: Record<string, number> = {}
 ): Promise<ScoredProp[]> {
+  if (sportKey === 'americanfootball_nfl') {
+    console.log('  NFL generic prop scoring is disabled: use NFL Market Board history research. No validated NFL prop model is deployed.');
+    return [];
+  }
   const supportedNBAProjectionMarkets = new Set([
     'player_points',
     'player_rebounds',
@@ -692,6 +696,7 @@ export function scoreAllProps(
   sportKey: string = 'basketball_nba',
   contextMap?: Map<string, any>
 ): ScoredProp[] {
+  if (sportKey === 'americanfootball_nfl') return [];
   const userBookKeys = getUserBookKeys();
   const scored: ScoredProp[] = [];
 

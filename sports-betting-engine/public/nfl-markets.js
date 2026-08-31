@@ -2,12 +2,17 @@
 let nflQuotes = [];
 let nflGroups = [];
 let nflBoardBusy = false;
+let nflLoadedSelection = null;
+let nflActionBusy = false;
+const nflCore = new Set(['player_pass_yds','player_rush_yds','player_reception_yds','player_receptions']);
 function nflDisplayTime(value) {
   return new Date(value).toLocaleString('en-US', {timeZone:'America/Chicago',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
 }
 function nflStatus(message) { document.getElementById('nfl-market-status').textContent = message; }
 function nflClearQuotes() {
   nflQuotes = [];
+  nflLoadedSelection = null;
+  document.getElementById('nfl-research-results').replaceChildren();
   document.getElementById('nfl-market-results').replaceChildren();
   document.getElementById('nfl-quote-count').textContent = '';
 }
@@ -71,10 +76,11 @@ async function loadNflQuotes() {
   try {
     const data = await nflFetch('/api/nfl/markets', { method:'POST', body:JSON.stringify({eventId:game.value,group:group.value}) });
     nflQuotes = data.quotes;
+    nflLoadedSelection = {eventId:game.value,group:group.value};
     const stamp = nflDisplayTime(data.fetchedAt);
     const context = `${data.event.awayTeam} @ ${data.event.homeTeam} • ${data.label} • ${data.cached?'Cached':'Fetched'} ${stamp} • Credits remaining at fetch: ${data.remainingCredits ?? 'unknown'}.`;
     const missing = data.missingMarkets.length ? ` No quotes returned for: ${data.missingMarkets.map(m=>m.replace(/_/g,' ')).join(', ')}.` : '';
-    nflStatus(context + (data.quotes.length ? ' Quotes only — not model recommendations.' : ' No prices posted in the feed for this category. This is not a "no edge" conclusion.') + missing);
+    nflStatus(context + (data.quotes.length ? ' Quotes only — not model recommendations.' : ' No prices posted in the feed for this category. This is not a "no edge" conclusion.') + missing + (data.paperWarning ? ` ${data.paperWarning}` : ''));
     renderNflQuotes();
   } catch (e) { nflStatus(e.message); }
   finally { nflBoardBusy = false; button.disabled = false; game.disabled = false; group.disabled = false; }
@@ -85,7 +91,7 @@ function renderNflQuotes() {
   document.getElementById('nfl-quote-count').textContent = `${rows.length} matching quotes (${nflQuotes.length} total). Showing up to 250; filter to narrow. Lines and periods are kept separate. Yellow timestamps need a fresh sportsbook check.`;
   const table = document.createElement('table'); table.className = 'market-table';
   const header = document.createElement('thead'); const hr = document.createElement('tr');
-  for (const label of ['Market / period','Player / team','Selection','Line','Odds','Sportsbook','Updated']) {
+  for (const label of ['Market / period','Player / team','Selection','Line','Odds','Sportsbook','Updated','Research / paper']) {
     const th = document.createElement('th'); th.textContent = label; hr.append(th);
   }
   header.append(hr); table.append(header);
@@ -96,8 +102,66 @@ function renderNflQuotes() {
     const stale = !Number.isFinite(age) || age > 15*60_000 || age < -60_000;
     const values = [q.market.replace(/_/g,' '),q.participant || '—',q.side,q.line ?? '—',q.price > 0 ? `+${q.price}` : q.price,q.book,q.updatedAt ? nflDisplayTime(q.updatedAt) : 'Unknown'];
     values.forEach((value,i) => { const td=document.createElement('td'); td.textContent=String(value); if(i===6&&stale)td.className='market-stale'; tr.append(td); });
+    const actions = document.createElement('td');
+    if (nflCore.has(q.market)) {
+      const b = document.createElement('button'); b.textContent='History'; b.onclick=()=>nflQuoteAction(q,'research'); actions.append(b);
+    }
+    if(nflCore.has(q.market)||/^(h2h|spreads|totals)(_(q[1-4]|h[12]))?$/.test(q.market)) {
+      const b=document.createElement('button'); b.textContent='Save paper'; b.disabled=stale; b.onclick=()=>nflQuoteAction(q,'paper'); actions.append(b);
+    }
+    if(!actions.children.length)actions.textContent='Quote only';
+    tr.append(actions);
     body.append(tr);
   }
   table.append(body); document.getElementById('nfl-market-results').replaceChildren(table);
 }
 document.getElementById('nfl-event').addEventListener('change', () => { nflClearQuotes(); nflStatus('Game changed. Load posted odds to view this matchup.'); });
+
+function nflText(parent, text) { const p=document.createElement('p'); p.textContent=text; parent.append(p); }
+function nflFixed(value, digits=1) { return value==null?'unavailable':Number(value).toFixed(digits); }
+async function nflQuoteAction(q, action) {
+  if(nflActionBusy||!nflLoadedSelection)return;
+  if(action==='paper'&&!document.getElementById('nfl-paper-rules').checked){nflStatus('Please read and acknowledge the paper rules below the quotes first.');return;}
+  const selection={...nflLoadedSelection,quoteId:q.quoteId};
+  const panel=document.getElementById('nfl-research-results');
+  nflActionBusy=true; panel.replaceChildren(); nflText(panel,action==='paper'?'Verifying game/player identity and saving paper pick...':'Loading NFL roster and regular-season observations...');
+  try {
+    const data=await nflFetch(`/api/nfl/${action}`,{method:'POST',body:JSON.stringify({...selection,rules:'regulation-periods_full-game-includes-ot_v1'})});
+    if(!nflLoadedSelection||selection.eventId!==nflLoadedSelection.eventId||selection.group!==nflLoadedSelection.group)return;
+    panel.replaceChildren();
+    if(action==='paper') {
+      nflText(panel,`${data.duplicate?'Already tracked; no duplicate saved.':'Paper pick saved. No real bet placed.'} ${q.participant||q.side} — ${q.market.replace(/_/g,' ')} ${q.side} ${q.line??''} at ${q.book}.`);
+      await loadNflPaper(false);
+    } else {
+      nflText(panel,`${data.player.name} · ${data.player.team} · ${data.player.position} · roster status ${data.player.rosterStatus}. Roster fetched ${nflDisplayTime(data.player.fetchedAt)}.`);
+      nflText(panel,`${data.market.replace(/_/g,' ')} — historical comparison at line ${data.line}; not a projection.`);
+      nflText(panel,data.depth.rows.length?`Provisional depth chart: ${data.depth.rows.map(d=>`${d.position.toUpperCase()} listed #${d.listedOrder} in ${d.formation}`).join('; ')}. Not confirmed game-day starters.`:'Depth-chart position unavailable; no starting role assumed.');
+      for(const s of data.seasons) nflText(panel,`${s.season} regular season: ${s.games} numeric game rows; mean ${nflFixed(s.mean)}, median ${nflFixed(s.median)}. At this line: ${s.over} over / ${s.under} under / ${s.pushes} push. ${s.otherTeamGames} rows for other teams. Last game: ${s.latestGame?nflDisplayTime(s.latestGame):'none'}.`);
+      for(const s of data.seasons) nflText(panel,`${s.season} usage context: ${nflFixed(s.meanOpportunities)} ${data.opportunityLabel} per recorded game (${s.opportunityGames} rows). No snap-share or role adjustment.`);
+      for(const w of data.warnings)nflText(panel,w);
+      for(const s of data.seasons){const a=document.createElement('a');a.href=s.source;a.textContent=`ESPN ${s.season} source`;a.target='_blank';a.rel='noopener';panel.append(a,document.createTextNode(' · '));}
+    }
+  } catch(e){ panel.replaceChildren(); nflText(panel,e.message); }
+  finally{nflActionBusy=false;}
+}
+let nflPaperBusy=false;
+async function loadNflPaper(grade) {
+  if(nflPaperBusy)return;
+  nflPaperBusy=true;
+  const status=document.getElementById('nfl-paper-status'),panel=document.getElementById('nfl-paper-results');
+  status.textContent=grade?'Checking up to ten completed NFL games...':'Loading separate NFL paper record...';
+  try {
+    const data=await nflFetch(grade?'/api/nfl/paper/grade':'/api/nfl/paper',grade?{method:'POST'}:{});
+    panel.replaceChildren();
+    status.textContent=`${data.picks.length} paper selections. ${grade?`${data.checked} checked; ${data.remainingGames} additional games awaiting another grading run. `:''}${data.report.note}`;
+    for(const b of data.report.buckets)nflText(panel,`${b.season} · ${b.market.replace(/_/g,' ')}: ${b.wins}W–${b.losses}L–${b.pushes}P · ${b.pending} pending · ${b.review} review · ${b.uniqueEvents} distinct games · ${nflFixed(b.profitUnits,2)} units · settled ROI ${b.roi==null?'unavailable':nflFixed(b.roi*100)+'%'}`);
+    const table=document.createElement('table');table.className='market-table';
+    const header=document.createElement('tr');for(const title of ['Game','Selection','Saved price / book','Result','Latest same-line pregame price','Notes']){const th=document.createElement('th');th.textContent=title;header.append(th);}table.append(header);
+    for(const p of [...data.picks].reverse().slice(0,100)){
+      const row=document.createElement('tr');
+      const values=[`${p.event.awayTeam} @ ${p.event.homeTeam} · ${nflDisplayTime(p.event.commenceTime)}`,`${p.quote.market} ${p.quote.participant} ${p.quote.side} ${p.quote.line??''}`,`${p.quote.price>0?'+':''}${p.quote.price} / ${p.quote.book}`,p.result,p.latestPregame?`${p.latestPregame.price} at ${nflDisplayTime(p.latestPregame.updatedAt)} (not a verified closing line)`:'Not captured',p.note];
+      for(const value of values){const td=document.createElement('td');td.textContent=value;row.append(td);}table.append(row);
+    }panel.append(table);
+    if(data.picks.length>100)nflText(panel,'Showing latest 100 selections. Summary includes the full paper ledger.');
+  }catch(e){status.textContent=e.message;}finally{nflPaperBusy=false;}
+}

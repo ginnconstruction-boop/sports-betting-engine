@@ -2631,6 +2631,7 @@ export async function buildPropPredictions(
     nhlContextSnapshot?: NHLContextSnapshot;
   }
 ): Promise<BuildPropPredictionsResult> {
+  if (sportKey === 'americanfootball_nfl') return { predictions: new Map() };
   const results = new Map<string, PropPrediction>();
   const coverage: PropCoverageSummary | undefined = (sportKey === 'basketball_nba' || sportKey === 'baseball_mlb' || sportKey === 'icehockey_nhl')
     ? {

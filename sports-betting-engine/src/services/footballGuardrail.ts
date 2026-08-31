@@ -14,6 +14,8 @@ interface FootballHistoryPick {
   betType?: string;
   pickedPrice?: number;
   gameResult?: string;
+  gameTime?: string;
+  propType?: string;
 }
 
 interface SampleStats {
@@ -83,16 +85,18 @@ function isFootball(c: DecisionCandidate): boolean {
 }
 
 /**
- * Football starts in observation mode each season because the engine has no
- * graded NFL/NCAAF history yet. BETs are capped at LEAN until 20 comparable
- * results exist. Totals and player props stay MONITOR-only until their own
- * 20-pick bucket has positive ROI.
+ * Football remains in observation mode pending explicit model validation.
+ * A small positive historical bucket never automatically promotes a model.
+ * The 20-result count is diagnostic, not a production approval threshold.
  */
 export function applyFootballGuardrails(
   candidates: DecisionCandidate[],
   historyOverride?: FootballHistoryPick[],
 ): DecisionCandidate[] {
   const history = historyOverride ?? loadHistory();
+  const today = new Date();
+  const season = today.getUTCFullYear() - (today.getUTCMonth() < 7 ? 1 : 0);
+  const marketKey = (value: string) => ({ spreads: 'spread', totals: 'total', h2h: 'moneyline' }[String(value ?? '').toLowerCase()] ?? String(value ?? '').toLowerCase());
 
   return candidates.map(candidate => {
     if (!isFootball(candidate) || !candidate.finalDecisionLabel) return candidate;
@@ -101,17 +105,20 @@ export function applyFootballGuardrails(
     const marketType = candidate.marketType;
     const sportMarketHistory = history.filter(p =>
       normalizeSportKey(p) === sportKey && normalizeMarketType(p) === marketType && isGraded(p.gameResult)
+      && p.marketType !== 'parlay' && Number.isFinite(p.pickedPrice) && Math.abs(p.pickedPrice) >= 100
+      && Number.isFinite(Date.parse(p.gameTime ?? '')) && Date.parse(p.gameTime) < Date.now()
+      && (new Date(p.gameTime).getUTCFullYear() - (new Date(p.gameTime).getUTCMonth() < 7 ? 1 : 0)) === season
+      && marketKey(p.betType) === marketKey(candidate.betType)
+      && (marketType !== 'player_prop' || (!!candidate.market && p.propType === candidate.market))
     );
     const overallStats = calculateStats(sportMarketHistory);
 
-    const isTotal = marketType === 'game_line' && String(candidate.betType ?? '').toLowerCase() === 'total';
+    const isTotal = marketType === 'game_line' && marketKey(candidate.betType) === 'total';
     const fragileHistory = sportMarketHistory.filter(p =>
-      marketType === 'player_prop' || String(p.betType ?? '').toLowerCase() === 'total'
+      marketType === 'player_prop' || marketKey(p.betType) === 'total'
     );
     const marketStats = calculateStats(fragileHistory);
-    const lacksGeneralSample = overallStats.sampleSize < FOOTBALL_MIN_GRADED_SAMPLES;
-    const lacksFragileEvidence = (isTotal || marketType === 'player_prop') &&
-      (marketStats.sampleSize < FOOTBALL_MIN_GRADED_SAMPLES || marketStats.roi <= 0);
+    const lacksFragileEvidence = isTotal || marketType === 'player_prop';
 
     let label = candidate.finalDecisionLabel;
     const reasons = [...(candidate.labelReasons ?? [])];
@@ -120,13 +127,13 @@ export function applyFootballGuardrails(
       label = 'MONITOR';
       reasons.unshift(
         `football guardrail: ${marketStats.sampleSize}/${FOOTBALL_MIN_GRADED_SAMPLES} graded ${isTotal ? 'total' : 'prop'} samples, ROI ${marketStats.roi.toFixed(1)}%`,
-        'observation only until this market has a positive evidence base',
+        'research only: model validation required; sample count or positive ROI does not unlock betting',
       );
-    } else if (lacksGeneralSample && label === 'BET') {
+    } else if (label === 'BET') {
       label = 'LEAN';
       reasons.unshift(
         `early-season football guardrail: ${overallStats.sampleSize}/${FOOTBALL_MIN_GRADED_SAMPLES} graded ${marketType.replace('_', ' ')} samples`,
-        'BET capped at LEAN while the football model builds a track record',
+        'BET capped at LEAN pending explicit football model validation',
       );
     }
 
@@ -142,4 +149,3 @@ export function applyFootballGuardrails(
     };
   });
 }
-

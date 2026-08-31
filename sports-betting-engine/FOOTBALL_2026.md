@@ -17,7 +17,21 @@ Market keys come from the [provider market list](https://the-odds-api.com/sports
 
 Each request shows a credit upper bound for one US region; only one category request runs at a time. Identical concurrent calls are coalesced and successful responses are cached for five minutes. No periodic odds polling. The board shows exact market, participant, side, line, book and source timestamp; different lines/periods are never combined. Old/unknown timestamps are flagged.
 
-Quotes are **not** validated model picks and are not written to the official pick log. Quarter/half/specialty quotes are not auto-graded. Existing game-day research commands still have their own time windows. SGP/alternate research uses estimates, not guaranteed sportsbook combination prices or calibrated hit probabilities.
+Quotes are **not** validated model picks and are not written to the official pick log. Explicit paper saves support passing yards, rushing yards, receiving yards, receptions and standard two-way game/quarter/half moneyline, spread and total markets. Other markets remain quote-only. SGP/alternate research uses estimates, not guaranteed sportsbook combination prices or calibrated hit probabilities.
+
+## NFL history and paper testing
+
+The generic NFL prop scorer was found to use basketball-shaped player statistics. It is now blocked at all generic scoring/prediction entry points. The `nflprops` command directs users to the board without spending odds credits. No validated NFL prop forecasting model is currently deployed.
+
+The board's **History** action resolves the player uniquely across the two current-season team rosters, then reads named NFL statistics from ESPN. It shows current and previous regular seasons separately, with means, medians, over/under/push counts, attempts/targets, team-change counts, roster injury flags and provisional depth-chart listed order. No initial-only guesses, preseason/playoff mixing, future observations, NBA-stat fallback or zero-filling. Missing rows may omit zero-opportunity games: these are descriptive observations, not unbiased projections or calibrated hit probabilities. Roster/depth status is not game-day starter confirmation. ESPN public feeds are best-effort; schema changes/outages must remain visible, not silently filled.
+
+**Save paper** requires a fresh server-owned quote, unique ESPN event mapping and acknowledgment of research settlement rules. It records the exact event, player ID where applicable, market, side, line, price, book, source timestamp, season, version and rules in `/var/data/snapshots/nfl_paper_picks.json`, separate from `picks_log.json`. Duplicate event/market/player/side/line selections across books do not multiply the record. Atomic writes and re-reads protect concurrent saves. No wagers are placed.
+
+**Grade completed paper picks** checks up to ten games per click after kickoff plus four hours. It requires matching NFL event/team/season/kickoff identity and final status. Missing stats/players/periods go to REVIEW, never presumed zero/loss/DNP. Source outages can be retried. Full-game and player results include overtime; quarter/half paper results use regulation only. Two-way ties push. Sportsbook DNP, early-injury, overtime and tie rules may differ: this is not sportsbook settlement. Settled results are not automatically changed on later stat corrections; those need review.
+
+Reports split exact market, season and research version, using fixed one-unit paper risk. Pending/review picks are excluded from returns; pushes are excluded from win rate but included in settled-stake ROI. Manual selections are biased and correlated, not an automatic model backtest. Optional later odds loads record same-book/same-line pregame price observations; these are **not verified closing lines or true CLV**. No automatic probability calibration is claimed.
+
+Football BET labels remain capped pending explicit model validation; 20 positive records do not unlock betting. Totals/props remain MONITOR-only. Historical sample diagnostics exclude undated, other-season, parlay and mismatched-market records.
 
 ## Safeguards and access
 
@@ -30,3 +44,5 @@ Quotes are **not** validated model picks and are not written to the official pic
 ## Verification
 
 Run `npm test`, `npm run build`, and `node --check public/nfl-markets.js`. Tests cover scope restrictions, NCAA market filtering, market identities, request validation, missing data, caching, concurrency and kickoff guards. Local browser QA uses a separate snapshot directory and a loopback-only server, not the production pick log.
+
+See [CATCH_UP_CHECKLIST.md](CATCH_UP_CHECKLIST.md) for current status, remaining validation work and the weekly runbook.

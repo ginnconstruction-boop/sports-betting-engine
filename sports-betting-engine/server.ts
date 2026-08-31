@@ -15,6 +15,8 @@ import { randomBytes } from 'crypto';
 import { isPausedCommand } from './src/config/productionFocus';
 import { NFL_MARKET_GROUPS, NFL_BOARD_WINDOW_DAYS } from './src/config/nflMarkets';
 import { NflMarketBoard, MarketBoardError } from './src/services/nflMarketBoard';
+import { NflResearch } from './src/services/nflResearch';
+import { NflPaperLedger, nflPaperReport } from './src/services/nflPaper';
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -266,6 +268,8 @@ app.post('/api/run/:command', requireAuth, async (req, res) => {
 
 // NFL quote board: event discovery is free; paid odds calls are explicit POSTs.
 const nflMarketBoard = new NflMarketBoard();
+const nflResearch = new NflResearch();
+const nflPaper = new NflPaperLedger(path.join(SNAPSHOT_DIR, 'nfl_paper_picks.json'), nflResearch);
 app.get('/api/nfl/events', requireAuth, async (_req, res) => {
   try {
     res.json({ events: await nflMarketBoard.events(), windowDays: NFL_BOARD_WINDOW_DAYS,
@@ -278,11 +282,39 @@ app.post('/api/nfl/markets', requireAuth, async (req, res) => {
   const { eventId, group } = req.body ?? {};
   if (typeof eventId !== 'string' || typeof group !== 'string') return res.status(400).json({ error: 'Select an NFL game and market category.' });
   try {
-    res.json(await nflMarketBoard.quotes(eventId, group));
+    const data = await nflMarketBoard.quotes(eventId, group);
+    let paperWarning: string | undefined;
+    try { nflPaper.observe(eventId, data.quotes); } catch { paperWarning = 'Paper ledger unavailable; pregame observation was not saved.'; }
+    res.json({ ...data, paperWarning });
   } catch (err) {
     if (err instanceof MarketBoardError) return res.status(err.status).json({ error: err.message });
     res.status(502).json({ error: 'NFL odds feed unavailable or this request is not supported. No recommendation generated. Try another category later.' });
   }
+});
+
+function nflError(res: express.Response, err: unknown) {
+  if (err instanceof MarketBoardError) return res.status(err.status).json({ error: err.message });
+  return res.status(502).json({ error: 'NFL data or paper storage unavailable. No data was assumed; retry later.' });
+}
+function nflSelection(body: any) {
+  if (typeof body?.eventId !== 'string' || typeof body?.group !== 'string' || typeof body?.quoteId !== 'string')
+    throw new MarketBoardError('Select an exact quote from the NFL board.');
+  return nflMarketBoard.selection(body.eventId, body.group, body.quoteId);
+}
+app.post('/api/nfl/research', requireAuth, async (req, res) => {
+  try { const { event, quote } = nflSelection(req.body); res.json(await nflResearch.analyze(event, quote)); }
+  catch (err) { nflError(res, err); }
+});
+app.get('/api/nfl/paper', requireAuth, (_req, res) => {
+  try { const picks = nflPaper.read(); res.json({ picks, report: nflPaperReport(picks) }); }
+  catch (err) { nflError(res, err); }
+});
+app.post('/api/nfl/paper', requireAuth, async (req, res) => {
+  try { const { event, quote } = nflSelection(req.body); res.json(await nflPaper.save(event, quote, req.body.rules)); }
+  catch (err) { nflError(res, err); }
+});
+app.post('/api/nfl/paper/grade', requireAuth, async (_req, res) => {
+  try { res.json(await nflPaper.grade()); } catch (err) { nflError(res, err); }
 });
 
 // ── Picks log ──

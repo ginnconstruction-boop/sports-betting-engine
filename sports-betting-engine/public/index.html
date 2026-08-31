@@ -264,14 +264,14 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
     <div class="section-label">NFL first • college football second</div>
     <div class="btn-grid">
       <button class="scan-btn prime" onclick="runCmd('nfl','NFL Game Lines')"><span class="num">NFL</span>NFL Game Lines</button>
-      <button class="scan-btn prop" onclick="runCmd('nflprops','NFL Core Prop Research')"><span class="num">NFL</span>Core Prop Research</button>
+      <button class="scan-btn prop" onclick="document.getElementById('nfl-market-board').open=true;document.getElementById('nfl-market-board').scrollIntoView({behavior:'smooth'})"><span class="num">NFL</span>Core Prop History &amp; Paper Tests</button>
       <button class="scan-btn" onclick="runCmd('ncaaf','College Spreads & Totals')"><span class="num">CFB</span>Spreads &amp; Totals</button>
     </div>
     <div class="focus-note">Model scans focus on game-day candidates. For early-week and specialty prices, use the market board below.</div>
 
     <details class="market-board" id="nfl-market-board">
       <summary>NFL Market Board — player props, quarters, halves &amp; more</summary>
-      <p class="focus-note">Select a game in the next 14 days and one category. Schedule discovery is free; loading odds uses API credits and is cached for five minutes. No automatic refresh. Availability varies by book and kickoff date. These are posted quotes, not model picks; period and specialty markets are not auto-graded. Futures, live betting and proprietary sportsbook specials are not included.</p>
+      <p class="focus-note">Select a game in the next 14 days and one category. Schedule discovery is free; loading odds uses API credits and is cached for five minutes. No automatic refresh. History shows NFL observations, not projections. Paper tests support four core props and standard game/quarter/half lines; specialty markets remain quote-only. Futures and live betting are not included.</p>
       <button class="scan-btn" id="nfl-events-btn" onclick="loadNflEvents()">Load / refresh NFL games (free)</button>
       <div class="market-controls">
         <label for="nfl-event">NFL game<select id="nfl-event"><option value="">Load games first</option></select></label>
@@ -284,6 +284,13 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
       <input class="market-search" id="nfl-market-search" type="search" placeholder="Search current quotes" oninput="renderNflQuotes()"/>
       <div id="nfl-quote-count" class="focus-note"></div>
       <div id="nfl-market-results" class="market-table-wrap"></div>
+      <div id="nfl-research-results" class="focus-note" role="status" aria-live="polite"></div>
+      <label class="focus-note"><input type="checkbox" id="nfl-paper-rules"/> Paper rules: full game and player stats include overtime; quarters/halves exclude overtime; two-way ties push. These are research results, not sportsbook settlement. No real bet is placed.</label>
+      <p class="focus-note">Missing player/period data requires review, never an assumed zero or loss. Roster status is not confirmed game-day availability. No validated NFL prop forecast is deployed.</p>
+      <button class="scan-btn" onclick="loadNflPaper(false)">Refresh paper record (no odds credits)</button>
+      <button class="scan-btn" onclick="loadNflPaper(true)">Grade completed paper picks (no odds credits)</button>
+      <div id="nfl-paper-status" class="focus-note" role="status" aria-live="polite"></div>
+      <div id="nfl-paper-results" class="market-table-wrap"></div>
     </details>
 
     <!-- PROPS -->

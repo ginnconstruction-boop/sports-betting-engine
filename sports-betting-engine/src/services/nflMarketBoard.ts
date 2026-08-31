@@ -2,8 +2,10 @@ import { getUpcomingEvents, getEventMarkets, UpcomingEvent } from '../api/oddsAp
 import { RawEvent, QuotaUsage } from '../types/odds';
 import { NFL } from '../config/productionFocus';
 import { NFL_MARKET_GROUPS, NFL_BOARD_WINDOW_DAYS, isNflMarketGroup } from '../config/nflMarkets';
+import { randomUUID } from 'crypto';
 
 export interface MarketQuote {
+  quoteId?: string;
   market: string; participant: string; side: string; line: number | null;
   price: number; book: string; bookKey: string; updatedAt: string | null; stale: boolean;
 }
@@ -87,6 +89,16 @@ export class NflMarketBoard {
     return request;
   }
 
+  selection(eventId: string, group: string, quoteId: string): { event: UpcomingEvent; quote: MarketQuote } {
+    const entry = this.cache.get(`${eventId}:${group}`);
+    if (!entry || this.deps.now() - entry.at >= 5 * 60_000)
+      throw new MarketBoardError('Quote session expired. Load posted odds again.', 409);
+    const quote = entry.data.quotes.find((q: MarketQuote) => q.quoteId === quoteId);
+    if (!quote) throw new MarketBoardError('Select a quote from the loaded board.');
+    if (Date.parse(entry.data.event.commenceTime) <= this.deps.now()) throw new MarketBoardError('Pregame actions are closed.', 409);
+    return { event: { ...entry.data.event }, quote: { ...quote } };
+  }
+
   private async fetch(event: UpcomingEvent, group: keyof typeof NFL_MARKET_GROUPS) {
     const spec = NFL_MARKET_GROUPS[group];
     const result = await this.deps.odds(event.id, [...spec.markets]);
@@ -95,14 +107,16 @@ export class NflMarketBoard {
       || result.event.home_team !== event.homeTeam || result.event.away_team !== event.awayTeam
       || !Number.isFinite(Date.parse(result.event.commence_time))) throw new MarketBoardError('Provider returned a mismatched event.', 502);
     if (Date.parse(result.event.commence_time) <= this.deps.now()) throw new MarketBoardError('The game has started. Pregame market request discarded.', 409);
-    const quotes = flattenNflQuotes(result.event, spec.markets, this.deps.now());
+    const quotes = flattenNflQuotes(result.event, spec.markets, this.deps.now()).map(q => ({ ...q, quoteId: randomUUID() }));
+    // Preserve the provider's latest kickoff instead of the older discovery timestamp.
+    event = { ...event, commenceTime: result.event.commence_time };
     const returned = new Set(quotes.map(q => q.market));
     const data = {
       event, group, label: spec.label, fetchedAt: new Date(this.deps.now()).toISOString(),
       quotes, missingMarkets: spec.markets.filter(m => !returned.has(m)),
       remainingCredits: result.quota.remainingRequests, cached: false,
       status: quotes.length ? 'quotes_available' : 'not_posted',
-      note: 'Bookmaker quotes only — not model picks, guaranteed availability, or validated edges. Quarter/half markets are not auto-graded. Check settlement rules and final price at your sportsbook.',
+      note: 'Bookmaker quotes only, not validated edges. Supported paper results use explicit research rules; verify sportsbook settlement separately.',
     };
     this.cache.set(`${event.id}:${group}`, { at: this.deps.now(), data });
     return data;

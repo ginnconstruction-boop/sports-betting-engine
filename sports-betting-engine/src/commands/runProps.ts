@@ -95,6 +95,13 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
   }
 
   const sportKey = options.sportKey ?? 'americanfootball_nfl';
+  if (sportKey === 'americanfootball_nfl') {
+    console.log('\n  NFL core props: use the dashboard NFL Market Board, then History beside a posted quote.');
+    console.log('  Passing/rushing/receiving yards and receptions use separate NFL game logs.');
+    console.log('  Prior-season observations are not forecasts. Generic basketball-based scoring is disabled.');
+    console.log('  Paper-test exact quotes from the board; no odds credits used by this command.\n');
+    return;
+  }
   const sportLabel2 = sportKey === 'baseball_mlb' ? 'MLB'
     : sportKey === 'icehockey_nhl' ? 'NHL'
     : sportKey === 'americanfootball_nfl' ? 'NFL' : 'NBA';

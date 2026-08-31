@@ -50,13 +50,13 @@ test('football BET is capped at LEAN until 20 graded comparable picks', () => {
   assert.equal(result.footballHistorySampleSize, 0);
 });
 
-test('football totals require 20 samples and positive ROI', () => {
+test('football totals stay research-only even after 20 positive results', () => {
   const positiveHistory = Array.from({ length: FOOTBALL_MIN_GRADED_SAMPLES }, () => ({
     sport: 'NCAAF', sportKey: 'americanfootball_ncaaf', marketType: 'game_line',
     betType: 'Total', pickedPrice: -110, gameResult: 'WIN',
   }));
   const [positive] = applyFootballGuardrails([candidate({ betType: 'Total' })], positiveHistory);
-  assert.equal(positive.finalDecisionLabel, 'BET');
+  assert.equal(positive.finalDecisionLabel, 'MONITOR');
 
   const negativeHistory = positiveHistory.map(p => ({ ...p, gameResult: 'LOSS' }));
   const [negative] = applyFootballGuardrails([candidate({ betType: 'Total' })], negativeHistory);
