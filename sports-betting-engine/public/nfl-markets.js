@@ -5,6 +5,11 @@ let nflBoardBusy = false;
 let nflLoadedSelection = null;
 let nflActionBusy = false;
 const nflCore = new Set(['player_pass_yds','player_rush_yds','player_reception_yds','player_receptions']);
+function openNflForecast() {
+  const board=document.getElementById('nfl-market-board');
+  board.open=true;
+  board.scrollIntoView({behavior:'smooth',block:'start'});
+}
 function nflDisplayTime(value) {
   return new Date(value).toLocaleString('en-US', {timeZone:'America/Chicago',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
 }
@@ -13,6 +18,7 @@ function nflClearQuotes() {
   nflQuotes = [];
   nflLoadedSelection = null;
   document.getElementById('nfl-research-results').replaceChildren();
+  document.getElementById('nfl-research-results').classList.remove('nfl-forecast-card');
   document.getElementById('nfl-market-results').replaceChildren();
   document.getElementById('nfl-quote-count').textContent = '';
 }
@@ -87,12 +93,14 @@ async function loadNflQuotes() {
 }
 function renderNflQuotes() {
   const query = document.getElementById('nfl-market-search').value.toLowerCase().trim();
-  const rows = nflQuotes.filter(q => `${q.market.replace(/_/g,' ')} ${q.participant} ${q.side} ${q.book}`.toLowerCase().includes(query));
-  document.getElementById('nfl-quote-count').textContent = `${rows.length} matching quotes (${nflQuotes.length} total). Showing up to 250; filter to narrow. Lines and periods are kept separate. Yellow timestamps need a fresh sportsbook check.`;
+  const rows = nflQuotes.filter(q => `${q.market.replace(/_/g,' ')} ${q.participant} ${q.side} ${q.book}`.toLowerCase().includes(query))
+    .sort((a,b)=>Number(nflCore.has(b.market))-Number(nflCore.has(a.market)));
+  const forecastRows=rows.filter(q=>nflCore.has(q.market)).length;
+  document.getElementById('nfl-quote-count').textContent = `${rows.length} matching quotes (${nflQuotes.length} total). ${forecastRows?`${forecastRows} core-prop quotes with forecast controls, shown first.`:'No supported core-prop quotes match this view. Choose Passing props or Rushing & receiving props, or clear the search filter; availability varies.'} Showing up to 250; filter to narrow. Lines and periods are kept separate. Yellow timestamps need a fresh sportsbook check.`;
   const table = document.createElement('table'); table.className = 'market-table';
   const header = document.createElement('thead'); const hr = document.createElement('tr');
-  for (const label of ['Market / period','Player / team','Selection','Line','Odds','Sportsbook','Updated','Research / paper']) {
-    const th = document.createElement('th'); th.textContent = label; hr.append(th);
+  for (const label of ['Forecast / paper','Market / period','Player / team','Selection','Line','Odds','Sportsbook','Updated']) {
+    const th = document.createElement('th'); th.textContent = label; if(label==='Forecast / paper')th.className='nfl-actions'; hr.append(th);
   }
   header.append(hr); table.append(header);
   const body = document.createElement('tbody');
@@ -102,16 +110,16 @@ function renderNflQuotes() {
     const stale = !Number.isFinite(age) || age > 15*60_000 || age < -60_000;
     const values = [q.market.replace(/_/g,' '),q.participant || '—',q.side,q.line ?? '—',q.price > 0 ? `+${q.price}` : q.price,q.book,q.updatedAt ? nflDisplayTime(q.updatedAt) : 'Unknown'];
     values.forEach((value,i) => { const td=document.createElement('td'); td.textContent=String(value); if(i===6&&stale)td.className='market-stale'; tr.append(td); });
-    const actions = document.createElement('td');
+    const actions = document.createElement('td'); actions.className='nfl-actions';
     if (nflCore.has(q.market)) {
+      const f = document.createElement('button'); f.textContent='Forecast + track'; f.className='nfl-forecast-action'; f.disabled=stale; f.onclick=()=>nflQuoteAction(q,'forecast'); actions.append(f);
       const b = document.createElement('button'); b.textContent='History'; b.onclick=()=>nflQuoteAction(q,'research'); actions.append(b);
-      const f = document.createElement('button'); f.textContent='Forecast + track'; f.disabled=stale; f.onclick=()=>nflQuoteAction(q,'forecast'); actions.append(f);
     }
     if(nflCore.has(q.market)||/^(h2h|spreads|totals)(_(q[1-4]|h[12]))?$/.test(q.market)) {
       const b=document.createElement('button'); b.textContent='Save paper'; b.disabled=stale; b.onclick=()=>nflQuoteAction(q,'paper'); actions.append(b);
     }
     if(!actions.children.length)actions.textContent='Quote only';
-    tr.append(actions);
+    tr.prepend(actions);
     body.append(tr);
   }
   table.append(body); document.getElementById('nfl-market-results').replaceChildren(table);
@@ -122,7 +130,7 @@ function nflText(parent, text) { const p=document.createElement('p'); p.textCont
 function nflFixed(value, digits=1) { return value==null?'unavailable':Number(value).toFixed(digits); }
 async function nflQuoteAction(q, action) {
   if(nflActionBusy||!nflLoadedSelection)return;
-  if((action==='paper'||action==='forecast')&&!document.getElementById('nfl-paper-rules').checked){nflStatus('Please read and acknowledge the paper rules below the quotes first.');return;}
+  if((action==='paper'||action==='forecast')&&!document.getElementById('nfl-paper-rules').checked){nflStatus('Please check the paper-rules box above the quotes first.');document.getElementById('nfl-paper-rules').focus();return;}
   const selection={...nflLoadedSelection,quoteId:q.quoteId};
   const panel=document.getElementById('nfl-research-results');
   panel.classList.remove('nfl-forecast-card');

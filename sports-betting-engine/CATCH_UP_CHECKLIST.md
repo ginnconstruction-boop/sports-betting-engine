@@ -8,7 +8,7 @@ Current website: [Sports Betting Engine](https://sports-betting-engine-1.onrende
 
 | # | Item | Status / remaining work |
 |---|---|---|
-| 1 | Website, login, deployment | Existing website and saved login working; persistent storage verified on prior release `fedb4da`. Workload-forecast release passed local checks; production verification follows publication. |
+| 1 | Website, login, deployment | Workload-forecast release `ee5eee9` live August 30, 2026, around 9:18 PM Central. Health, new assets and authenticated login verified; saved login unchanged. Persistent storage verified. |
 | 2 | Find all required accounts | Active Render + GitHub + Odds API are the required stack. ESPN public feeds need no account. Old suspended Render web/database/cron services are not dependencies; leave them paused. |
 | 3 | Football-only production | NFL primary; college spreads/totals only. Other sports paused. Earlier records are recoverable in a reset backup; see the history note below. |
 | 4 | NFL market coverage | 16 on-demand quote categories, next 14 days, freshness and credit controls. Availability varies; not every sportsbook special, future or live market is supported. |
@@ -22,11 +22,11 @@ Current website: [Sports Betting Engine](https://sports-betting-engine-1.onrende
 ## Weekly runbook
 
 1. Open the current site and confirm login and health. No old Render service needs unpausing.
-2. Open **Core Prop History & Paper Tests**, then **Load / refresh NFL games**. This uses no odds credits.
+2. Open the main-menu **NFL Forecast + track** button, then **Load / refresh NFL games**. This uses no odds credits. The old menu label was Core Prop History & Paper Tests.
 3. Choose one game/category and inspect its credit ceiling before **Load posted odds**. No background polling is configured.
 4. Use **History** beside a supported core prop. Read the season, sample size, attempts/targets, roster injury flags and provisional depth chart. Do not treat last year's mean as a current forecast.
 5. Verify current availability, role and the exact line/price/rules at the sportsbook. A clean roster injury list is not proof of health.
-6. Acknowledge paper rules, then **Forecast + track** for one of the four core props. It evaluates loaded quotes at configured books and automatically saves an eligible experimental pick; a failed gate explains why no pick is issued. **Save paper** is a separate manual selection. Stale/expired quotes need reloading. Only paper records are created.
+6. Check the paper-rules box above the quotes, then the green **Forecast + track** button on the left of a supported core-prop row. It evaluates loaded quotes at configured books and automatically saves an eligible experimental pick; a failed gate explains why no pick is issued. **Save paper** is a separate manual selection. Stale/expired quotes need reloading. Only paper records are created.
 7. If desired, explicitly refresh the same category before kickoff to observe the same book/line's later price. Five-minute cache applies. No guaranteed closing line is captured.
 8. After the game ends (and at least four hours after kickoff), click **Grade completed paper picks**. Repeat if more than ten games await checking. REVIEW needs inspection or a later retry, not an assumed loss.
 9. Review **Refresh paper record**, separating model/manual, markets/seasons/versions and noting distinct games. **View original forecast** reopens the locked evidence, including after kickoff. Do not optimize against a handful of correlated picks.
@@ -34,13 +34,14 @@ Current website: [Sports Betting Engine](https://sports-betting-engine-1.onrende
 
 ## Verification evidence for this release
 
-- All 47 automated tests and the TypeScript build passed; production dependency audit reported zero vulnerabilities. Tests exercise market scope, identities, stale quotes, kickoff boundaries, NFL-specific statistics, missing data, rolling no-lookahead forecasts, persistence before issuance, concurrent duplicate protection, regulation periods vs overtime, report denominators and retries.
+- All 50 automated tests and the TypeScript build passed; production dependency audit reported zero vulnerabilities on the model release. Tests exercise market scope, identities, stale quotes, kickoff boundaries, NFL-specific statistics, missing data, rolling no-lookahead forecasts, persistence before issuance, concurrent duplicate protection, regulation periods vs overtime, report denominators and retries. Three UI regression tests additionally check the visible forecast entry point, first-column actions and paper-rules focus.
 - First fixed-cohort historical stat audit: 96 correlated forecasts across six evaluable player/market pairs; workload beat baseline on three pairs and lost on three. Two additional pairs lacked usable source data. This is not a betting backtest, win rate or ROI. Full method and all results: [NFL_FORECAST_V1.md](NFL_FORECAST_V1.md).
 - Local browser QA issued one automatically logged model paper recommendation, returned the same original on repeat, reopened its original evidence and left the separate official log at zero. Synthetic final-game tests verified grading and model/manual report separation. No QA selections are copied to production.
 - Live read-only source checks matched a current NFL player to his current roster and upcoming ESPN event, separated 2026 zero completed regular-season games from 2025 history, and surfaced a current injury flag.
 - Historical ESPN game 401772798 (Chargers at Chiefs, December 14, 2025) returned Patrick Mahomes passing yards 189, Q1 total 10 and second-half regulation total 6; the paper evaluator matched all three.
 - Local browser QA uses isolated temporary storage; its test selections must never be copied into production.
 - Production verified: healthy HTTP 200, authenticated login, 15 upcoming NFL games, zero paper test records, exact player/depth/history data, and HTTP 400 for an invalid paper selection. Anonymous paper access returns HTTP 401.
+- Workload-release production verification: HTTP 200 health/assets/login, HTTP 401 anonymous forecast access and HTTP 400 invalid authenticated forecast request. Read-only live forecast inputs returned 30 same-team games and 22 rolling tests. Official and paper logs each remained at zero; storage is `/var/data/snapshots`. No production forecast was issued for QA. Local QA server stopped and isolated test tab closed.
 
 ## Intentional fresh start — confirmed by owner
 

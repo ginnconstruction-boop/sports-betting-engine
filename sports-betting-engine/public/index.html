@@ -55,6 +55,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-mono);min-hei
 .market-table button{background:var(--bg3);border:1px solid var(--border);color:var(--blue);font:inherit;padding:.45rem .55rem;border-radius:4px;margin:.15rem;cursor:pointer}
 .market-table button:hover,.market-table button:focus-visible{border-color:var(--blue)}
 .market-table button:disabled{opacity:.45;cursor:not-allowed}
+.market-table .nfl-actions{position:sticky;left:0;background:var(--bg2);z-index:1;white-space:normal;min-width:160px;max-width:190px;border-right:1px solid var(--border)}
+.market-table th.nfl-actions{z-index:2;background:var(--bg3)}
+.market-table .nfl-forecast-action{display:block;color:var(--bg);background:var(--green);font-weight:bold;white-space:nowrap}
+.nfl-forecast-guide{border-left:3px solid var(--green);padding:.8rem 1rem;margin:1rem 0;background:var(--bg3);font-size:.85rem;line-height:1.7}
+.nfl-forecast-guide ol{padding-left:1.3rem}
+.nfl-paper-rules{display:block;padding:.75rem 0;color:var(--text);font-size:.85rem;line-height:1.6}
 .nfl-forecast-card{background:var(--bg3);border:1px solid var(--blue);border-radius:8px;padding:1.1rem;color:var(--text);font-size:.875rem;line-height:1.65;scroll-margin-top:6rem}
 .nfl-forecast-card p{margin:.7rem 0;overflow-wrap:anywhere}
 .nfl-forecast-card p:first-child{color:var(--yellow);font-size:1rem;font-weight:bold}
@@ -272,13 +278,22 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
     <div class="section-label">NFL first • college football second</div>
     <div class="btn-grid">
       <button class="scan-btn prime" onclick="runCmd('nfl','NFL Game Lines')"><span class="num">NFL</span>NFL Game Lines</button>
-      <button class="scan-btn prop" onclick="document.getElementById('nfl-market-board').open=true;document.getElementById('nfl-market-board').scrollIntoView({behavior:'smooth'})"><span class="num">NFL</span>Core Prop History &amp; Paper Tests</button>
+      <button class="scan-btn prime" id="nfl-forecast-open" aria-controls="nfl-market-board" onclick="openNflForecast()"><span class="num">NFL</span>Forecast + track</button>
       <button class="scan-btn" onclick="runCmd('ncaaf','College Spreads & Totals')"><span class="num">CFB</span>Spreads &amp; Totals</button>
     </div>
     <div class="focus-note">Model scans focus on game-day candidates. For early-week and specialty prices, use the market board below.</div>
 
     <details class="market-board" id="nfl-market-board">
-      <summary>NFL Market Board — player props, quarters, halves &amp; more</summary>
+      <summary>NFL Forecast + track &amp; Market Board</summary>
+      <div class="nfl-forecast-guide">
+        <strong>Forecast + track — start here</strong>
+        <ol>
+          <li>Load NFL games, then choose a game and <strong>Passing props</strong> or <strong>Rushing &amp; receiving props</strong>.</li>
+          <li>Click <strong>Load posted odds</strong> and check the paper-rules box below.</li>
+          <li>Click the green <strong>Forecast + track</strong> button on the left of a supported quote.</li>
+        </ol>
+        <p>Forecasts support passing yards, rushing yards, receiving yards and receptions only. Other markets do not have forecast buttons. This is paper testing, not a real bet.</p>
+      </div>
       <p class="focus-note">Select a game in the next 14 days and one category. Schedule discovery is free; loading odds uses API credits and is cached for five minutes. History is descriptive. Forecast + track evaluates both sides for one core player market and automatically logs an eligible experimental paper recommendation. No extra odds request, real wager or validated edge is implied. Specialty markets remain quote-only.</p>
       <button class="scan-btn" id="nfl-events-btn" onclick="loadNflEvents()">Load / refresh NFL games (free)</button>
       <div class="market-controls">
@@ -291,9 +306,9 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
       <label class="focus-note" for="nfl-market-search">Filter by player, team, market or sportsbook</label>
       <input class="market-search" id="nfl-market-search" type="search" placeholder="Search current quotes" oninput="renderNflQuotes()"/>
       <div id="nfl-quote-count" class="focus-note"></div>
+      <label class="nfl-paper-rules"><input type="checkbox" id="nfl-paper-rules"/> Paper rules: full game and player stats include overtime; quarters/halves exclude overtime; two-way ties push. These are research results, not sportsbook settlement. No real bet is placed.</label>
       <div id="nfl-market-results" class="market-table-wrap"></div>
       <div id="nfl-research-results" class="focus-note" role="status" aria-live="polite"></div>
-      <label class="focus-note"><input type="checkbox" id="nfl-paper-rules"/> Paper rules: full game and player stats include overtime; quarters/halves exclude overtime; two-way ties push. These are research results, not sportsbook settlement. No real bet is placed.</label>
       <p class="focus-note">Acknowledge the rules before Forecast + track. It considers fresh loaded quotes at your configured books and locks at most one model pick per player/market/game/version. Failed data or model checks return no recommendation. Missing results require review, never an assumed zero or loss. Forecasts are experimental and paper-only; roster status is not confirmed game-day availability.</p>
       <button class="scan-btn" onclick="loadNflPaper(false)">Refresh paper record (no odds credits)</button>
       <button class="scan-btn" onclick="loadNflPaper(true)">Grade completed paper picks (no odds credits)</button>
@@ -1570,7 +1585,7 @@ function showToast(msg, color='green') {
   _toastTimer = setTimeout(() => { el.className = color; }, 5000);
 }
 </script>
-<script src="/nfl-markets.js"></script>
+<script src="/nfl-markets.js?v=forecast-visible-1"></script>
 <div id="toast"></div>
 </body>
 </html>
