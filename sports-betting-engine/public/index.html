@@ -61,6 +61,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-mono);min-hei
 .nfl-forecast-guide{border-left:3px solid var(--green);padding:.8rem 1rem;margin:1rem 0;background:var(--bg3);font-size:.85rem;line-height:1.7}
 .nfl-forecast-guide ol{padding-left:1.3rem}
 .nfl-paper-rules{display:block;padding:.75rem 0;color:var(--text);font-size:.85rem;line-height:1.6}
+#college-market-board{scroll-margin-top:6rem}
+#college-market-board .market-controls{grid-template-columns:1fr}
 .nfl-forecast-card{background:var(--bg3);border:1px solid var(--blue);border-radius:8px;padding:1.1rem;color:var(--text);font-size:.875rem;line-height:1.65;scroll-margin-top:6rem}
 .nfl-forecast-card p{margin:.7rem 0;overflow-wrap:anywhere}
 .nfl-forecast-card p:first-child{color:var(--yellow);font-size:1rem;font-weight:bold}
@@ -279,7 +281,7 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
     <div class="btn-grid">
       <button class="scan-btn prime" onclick="runCmd('nfl','NFL Game Lines')"><span class="num">NFL</span>NFL Game Lines</button>
       <button class="scan-btn prime" id="nfl-forecast-open" aria-controls="nfl-market-board" onclick="openNflForecast()"><span class="num">NFL</span>Forecast + track</button>
-      <button class="scan-btn" onclick="runCmd('ncaaf','College Spreads & Totals')"><span class="num">CFB</span>Spreads &amp; Totals</button>
+      <button class="scan-btn prime" id="college-open" aria-controls="college-market-board" onclick="openCollegeBoard()"><span class="num">CFB</span>College football — spreads &amp; totals</button>
     </div>
     <div class="focus-note">Model scans focus on game-day candidates. For early-week and specialty prices, use the market board below.</div>
 
@@ -314,6 +316,23 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
       <button class="scan-btn" onclick="loadNflPaper(true)">Grade completed paper picks (no odds credits)</button>
       <div id="nfl-paper-status" class="focus-note" role="status" aria-live="polite"></div>
       <div id="nfl-paper-results" class="market-table-wrap"></div>
+    </details>
+
+    <details class="market-board" id="college-market-board">
+      <summary>College football — upcoming games, spreads &amp; totals</summary>
+      <p class="focus-note">Start here: load college games, choose a matchup, then load its spreads and over/under totals. This board includes upcoming games in the next 14 days, not just today's games. Only games listed by the provider appear.</p>
+      <button class="scan-btn" id="college-events-btn" onclick="loadCollegeEvents()">Load / refresh college games (free)</button>
+      <div class="market-controls"><label for="college-event">College football game<select id="college-event" onchange="clearCollegeSelection()"><option value="">Load college games first</option></select></label></div>
+      <p class="focus-note">Up to 2 odds credits for one game / US region. Repeats are cached for five minutes. No polling or automatic purchases.</p>
+      <button class="scan-btn prop" id="college-quotes-btn" onclick="loadCollegeQuotes()" disabled>Load college spreads &amp; totals</button>
+      <div id="college-status" class="market-status" role="status" aria-live="polite"></div>
+      <label class="focus-note" for="college-search">Filter college quotes by team, market or sportsbook</label>
+      <input class="market-search" id="college-search" type="search" placeholder="Search college quotes" oninput="renderCollegeQuotes()"/>
+      <div id="college-count" class="focus-note"></div>
+      <div id="college-results" class="market-table-wrap"></div>
+      <p class="focus-note">These are sportsbook prices, not validated recommendations. Loading this board does not save a pick or update win/loss. College player props, moneylines and other sports remain out of scope. Yellow timestamps need a fresh sportsbook check.</p>
+      <button class="scan-btn" onclick="runCmd('ncaaf','College game-day scan')">Run college game-day scan</button>
+      <p class="focus-note">The separate scan uses the existing model and game-day filters; it may return no qualifying plays even when upcoming games have odds. College model validation is still pending.</p>
     </details>
 
     <!-- PROPS -->
@@ -1586,6 +1605,7 @@ function showToast(msg, color='green') {
 }
 </script>
 <script src="/nfl-markets.js?v=forecast-visible-1"></script>
+<script src="/college-markets.js?v=college-board-1"></script>
 <div id="toast"></div>
 </body>
 </html>

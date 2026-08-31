@@ -18,6 +18,7 @@ import { NflMarketBoard, MarketBoardError } from './src/services/nflMarketBoard'
 import { NflResearch } from './src/services/nflResearch';
 import { NflPaperLedger, nflPaperReport } from './src/services/nflPaper';
 import { NflRecommendations } from './src/services/nflRecommendations';
+import { CollegeMarketBoard, COLLEGE_WINDOW_DAYS } from './src/services/collegeMarketBoard';
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -264,6 +265,22 @@ app.post('/api/run/:command', requireAuth, async (req, res) => {
     res.json({ ok: true, output });
   } catch (err: any) {
     res.json({ ok: false, output: (err.stdout || '') + (err.stderr || '') || err.message });
+  }
+});
+
+// College is quote-only: neither route creates picks or touches the NFL ledger.
+const collegeMarketBoard = new CollegeMarketBoard();
+app.get('/api/college/events', requireAuth, async (_req, res) => {
+  try { res.json({ events: await collegeMarketBoard.events(), windowDays: COLLEGE_WINDOW_DAYS, maxCredits: 2 }); }
+  catch { res.status(502).json({ error: 'College football schedule unavailable. Please try again later.' }); }
+});
+app.post('/api/college/markets', requireAuth, async (req, res) => {
+  if (typeof req.body?.eventId !== 'string' || Object.keys(req.body).some(k => k !== 'eventId'))
+    return res.status(400).json({ error: 'Select a college football game. Only spreads and totals are supported.' });
+  try { res.json(await collegeMarketBoard.quotes(req.body.eventId)); }
+  catch (err) {
+    if (err instanceof MarketBoardError) return res.status(err.status).json({ error: err.message });
+    res.status(502).json({ error: 'College odds feed unavailable. No prices were assumed and no pick was created.' });
   }
 });
 
