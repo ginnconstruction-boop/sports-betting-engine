@@ -170,6 +170,29 @@ export class NflResearch {
     if (Number(matches[0].season?.type) !== 2) throw new MarketBoardError('Paper testing is limited to regular-season NFL games.', 422);
     return matches[0].id;
   }
+  async forecastInputs(event: UpcomingEvent, name: string, market: string) {
+    if (!NFL_CORE_STATS[market]) throw new MarketBoardError('Unsupported NFL forecast market.');
+    const asOf = new Date(this.now()).toISOString();
+    const player = await this.player(event, name);
+    const season = nflSeason(event.commenceTime), observations: NflObservation[] = [], sources = [];
+    const cutoff = Math.min(Date.parse(asOf), Date.parse(event.commenceTime));
+    for (const year of [season - 2, season - 1, season]) {
+      const url = `https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/${player.id}/gamelog?season=${year}`;
+      const payload = await this.cached(url);
+      // Explicit season identity is required, including genuinely empty current seasons.
+      if (String(payload?.filters?.find((f: any) => f.name === 'season')?.value) !== String(year))
+        throw new MarketBoardError(`NFL ${year} game-log season could not be verified; forecast unavailable.`, 422);
+      observations.push(...parseNflLogs(payload, year, market, cutoff));
+      sources.push({ url, season: year, fetchedAt: new Date(this.cache.get(url).at).toISOString() });
+    }
+    const source = `${ESPN_NFL}/teams/${player.teamId}/depthcharts`;
+    let depth = { rows: [], source, sourceTimestamp: null as string | null };
+    try {
+      const data = await this.cached(source);
+      depth = { rows: parseNflDepth(data, player, season), source, sourceTimestamp: data.timestamp ?? null };
+    } catch { /* An unavailable depth chart blocks issuance downstream. */ }
+    return { player, observations, asOf, depth, sources };
+  }
   async summary(id: string) {
     if (!/^\d+$/.test(id)) throw new Error('Invalid ESPN event ID');
     return this.cached(`${ESPN_NFL}/summary?event=${id}`, 60_000);

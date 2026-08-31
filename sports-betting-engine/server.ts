@@ -17,6 +17,7 @@ import { NFL_MARKET_GROUPS, NFL_BOARD_WINDOW_DAYS } from './src/config/nflMarket
 import { NflMarketBoard, MarketBoardError } from './src/services/nflMarketBoard';
 import { NflResearch } from './src/services/nflResearch';
 import { NflPaperLedger, nflPaperReport } from './src/services/nflPaper';
+import { NflRecommendations } from './src/services/nflRecommendations';
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -270,6 +271,7 @@ app.post('/api/run/:command', requireAuth, async (req, res) => {
 const nflMarketBoard = new NflMarketBoard();
 const nflResearch = new NflResearch();
 const nflPaper = new NflPaperLedger(path.join(SNAPSHOT_DIR, 'nfl_paper_picks.json'), nflResearch);
+const nflRecommendations = new NflRecommendations(nflMarketBoard, nflResearch, nflPaper);
 app.get('/api/nfl/events', requireAuth, async (_req, res) => {
   try {
     res.json({ events: await nflMarketBoard.events(), windowDays: NFL_BOARD_WINDOW_DAYS,
@@ -304,6 +306,12 @@ function nflSelection(body: any) {
 app.post('/api/nfl/research', requireAuth, async (req, res) => {
   try { const { event, quote } = nflSelection(req.body); res.json(await nflResearch.analyze(event, quote)); }
   catch (err) { nflError(res, err); }
+});
+app.post('/api/nfl/forecast', requireAuth, async (req, res) => {
+  try {
+    nflSelection(req.body);
+    res.json(await nflRecommendations.run(req.body.eventId, req.body.group, req.body.quoteId, req.body.rules));
+  } catch (err) { nflError(res, err); }
 });
 app.get('/api/nfl/paper', requireAuth, (_req, res) => {
   try { const picks = nflPaper.read(); res.json({ picks, report: nflPaperReport(picks) }); }

@@ -99,6 +99,14 @@ export class NflMarketBoard {
     return { event: { ...entry.data.event }, quote: { ...quote } };
   }
 
+  playerQuotes(eventId: string, group: string, quoteId: string) {
+    const { event, quote } = this.selection(eventId, group, quoteId);
+    const quotes: MarketQuote[] = this.cache.get(`${eventId}:${group}`).data.quotes
+      .filter((q: MarketQuote) => q.market === quote.market && q.participant === quote.participant)
+      .map((q: MarketQuote) => ({ ...q }));
+    return { event, quote, quotes };
+  }
+
   private async fetch(event: UpcomingEvent, group: keyof typeof NFL_MARKET_GROUPS) {
     const spec = NFL_MARKET_GROUPS[group];
     const result = await this.deps.odds(event.id, [...spec.markets]);

@@ -52,6 +52,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-mono);min-hei
 .market-table th,.market-table td{text-align:left;padding:.6rem;border-bottom:1px solid var(--border)}
 .market-table th{position:sticky;top:0;background:var(--bg3)}
 .market-stale{color:var(--yellow)}
+.market-table button{background:var(--bg3);border:1px solid var(--border);color:var(--blue);font:inherit;padding:.45rem .55rem;border-radius:4px;margin:.15rem;cursor:pointer}
+.market-table button:hover,.market-table button:focus-visible{border-color:var(--blue)}
+.market-table button:disabled{opacity:.45;cursor:not-allowed}
+.nfl-forecast-card{background:var(--bg3);border:1px solid var(--blue);border-radius:8px;padding:1.1rem;color:var(--text);font-size:.875rem;line-height:1.65;scroll-margin-top:6rem}
+.nfl-forecast-card p{margin:.7rem 0;overflow-wrap:anywhere}
+.nfl-forecast-card p:first-child{color:var(--yellow);font-size:1rem;font-weight:bold}
+.nfl-forecast-card details{border-top:1px solid var(--border);padding-top:.8rem;margin-top:1rem;font-size:.8rem}
+.nfl-forecast-card summary{font-size:.875rem}
 @media(max-width:600px){.market-controls{grid-template-columns:1fr}}
 .section-label{font-family:var(--font-ui);font-weight:600;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:1.5rem 0 .6rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
 .btn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:.5rem;margin-bottom:.5rem}
@@ -271,7 +279,7 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
 
     <details class="market-board" id="nfl-market-board">
       <summary>NFL Market Board — player props, quarters, halves &amp; more</summary>
-      <p class="focus-note">Select a game in the next 14 days and one category. Schedule discovery is free; loading odds uses API credits and is cached for five minutes. No automatic refresh. History shows NFL observations, not projections. Paper tests support four core props and standard game/quarter/half lines; specialty markets remain quote-only. Futures and live betting are not included.</p>
+      <p class="focus-note">Select a game in the next 14 days and one category. Schedule discovery is free; loading odds uses API credits and is cached for five minutes. History is descriptive. Forecast + track evaluates both sides for one core player market and automatically logs an eligible experimental paper recommendation. No extra odds request, real wager or validated edge is implied. Specialty markets remain quote-only.</p>
       <button class="scan-btn" id="nfl-events-btn" onclick="loadNflEvents()">Load / refresh NFL games (free)</button>
       <div class="market-controls">
         <label for="nfl-event">NFL game<select id="nfl-event"><option value="">Load games first</option></select></label>
@@ -286,7 +294,7 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
       <div id="nfl-market-results" class="market-table-wrap"></div>
       <div id="nfl-research-results" class="focus-note" role="status" aria-live="polite"></div>
       <label class="focus-note"><input type="checkbox" id="nfl-paper-rules"/> Paper rules: full game and player stats include overtime; quarters/halves exclude overtime; two-way ties push. These are research results, not sportsbook settlement. No real bet is placed.</label>
-      <p class="focus-note">Missing player/period data requires review, never an assumed zero or loss. Roster status is not confirmed game-day availability. No validated NFL prop forecast is deployed.</p>
+      <p class="focus-note">Acknowledge the rules before Forecast + track. It considers fresh loaded quotes at your configured books and locks at most one model pick per player/market/game/version. Failed data or model checks return no recommendation. Missing results require review, never an assumed zero or loss. Forecasts are experimental and paper-only; roster status is not confirmed game-day availability.</p>
       <button class="scan-btn" onclick="loadNflPaper(false)">Refresh paper record (no odds credits)</button>
       <button class="scan-btn" onclick="loadNflPaper(true)">Grade completed paper picks (no odds credits)</button>
       <div id="nfl-paper-status" class="focus-note" role="status" aria-live="polite"></div>

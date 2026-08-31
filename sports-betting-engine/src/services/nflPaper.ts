@@ -4,6 +4,7 @@ import { randomUUID } from 'crypto';
 import { UpcomingEvent } from '../api/oddsApiClient';
 import { MarketBoardError, MarketQuote } from './nflMarketBoard';
 import { ESPN_NFL, NFL_CORE_STATS, NFL_RESEARCH_VERSION, NflPlayer, NflResearch, nflName, nflNumber, nflSeason } from './nflResearch';
+import type { NflForecast } from './nflForecast';
 
 export const PAPER_RULES = 'regulation-periods_full-game-includes-ot_v1';
 export type PaperResult = 'PENDING' | 'REVIEW' | 'WIN' | 'LOSS' | 'PUSH';
@@ -12,6 +13,12 @@ export interface NflPaperPick {
   player?: NflPlayer; season: number; version: string; rules: string; savedAt: string;
   result: PaperResult; note: string; actual?: number; gradedAt?: string; source?: string;
   latestPregame?: { price: number; updatedAt: string; observedAt: string };
+  origin?: 'manual' | 'model';
+  forecast?: NflForecast;
+  modelProbability?: number;
+  modelPushProbability?: number;
+  estimatedEV?: number;
+  selectionReasons?: string[];
 }
 export function supportedPaperMarket(market: string): boolean {
   return !!NFL_CORE_STATS[market] || /^(h2h|spreads|totals)(_(q[1-4]|h[12]))?$/.test(market);
@@ -91,8 +98,9 @@ export function gradeNflPaper(pick: NflPaperPick, data: any): { result: PaperRes
 export function nflPaperReport(picks: NflPaperPick[]) {
   const buckets = new Map<string, any>();
   for (const p of picks) {
-    const key = `${p.season} | ${p.quote.market} | ${p.version}`;
-    const b = buckets.get(key) ?? { season: p.season, market: p.quote.market, version: p.version,
+    const origin = p.origin ?? 'manual';
+    const key = `${p.season} | ${p.quote.market} | ${p.version} | ${origin}`;
+    const b = buckets.get(key) ?? { season: p.season, market: p.quote.market, version: p.version, origin,
       tracked: 0, wins: 0, losses: 0, pushes: 0, pending: 0, review: 0, profitUnits: 0, uniqueEvents: new Set() };
     b.tracked++; b.uniqueEvents.add(p.event.id);
     if (p.result === 'WIN') b.wins++;
@@ -105,7 +113,7 @@ export function nflPaperReport(picks: NflPaperPick[]) {
   return { buckets: [...buckets.values()].map(b => ({ ...b, uniqueEvents: b.uniqueEvents.size,
     winRate: b.wins + b.losses ? b.wins / (b.wins + b.losses) : null,
     roi: b.wins + b.losses + b.pushes ? b.profitUnits / (b.wins + b.losses + b.pushes) : null })),
-    note: 'Manual paper selections, flat 1-unit risk each, not real bets or an unbiased model backtest. Related picks are correlated. Pushes excluded from win rate, included in settled-stake ROI. No calibrated model probability or true closing line is available.' };
+    note: 'Paper selections, flat 1-unit risk each, not real bets or an unbiased backtest. Manual and automatically logged model picks are separate. Related picks are correlated. Pushes excluded from win rate, included in settled-stake ROI. Model estimates remain uncalibrated; pregame observations are not verified closing lines.' };
 }
 
 export class NflPaperLedger {
@@ -135,12 +143,51 @@ export class NflPaperLedger {
     const player = NFL_CORE_STATS[quote.market] ? await this.research.player(event, quote.participant) : undefined;
     validate(); // Network requests must not allow a save after kickoff.
     const picks = this.read();
-    const existing = picks.find(p => p.event.id === event.id && p.quote.market === quote.market
+    const existing = picks.find(p => (p.origin ?? 'manual') === 'manual' && p.event.id === event.id && p.quote.market === quote.market
       && nflName(p.quote.participant) === nflName(quote.participant) && p.quote.side === quote.side && p.quote.line === quote.line);
     if (existing) return { pick: existing, duplicate: true };
-    const pick: NflPaperPick = { id: randomUUID(), event: { ...event }, espnEventId, quote: { ...quote }, player,
+    const pick: NflPaperPick = { id: randomUUID(), origin: 'manual', event: { ...event }, espnEventId, quote: { ...quote }, player,
       season: nflSeason(event.commenceTime), version: NFL_RESEARCH_VERSION, rules,
       savedAt: new Date(this.now()).toISOString(), result: 'PENDING', note: 'Manual paper selection; no money wagered and no model probability attached.' };
+    this.write([...picks, pick]); return { pick, duplicate: false };
+  }
+  modelPick(eventId: string, participant: string, market: string, version: string) {
+    return this.read().find(p => p.origin === 'model' && p.event.id === eventId && p.version === version
+      && p.quote.market === market && nflName(p.quote.participant) === nflName(participant));
+  }
+  async saveModel(event: UpcomingEvent, quote: MarketQuote, forecast: NflForecast,
+    assessment: { probability: number; pushProbability: number; estimatedEV: number; eligible: boolean }, rules: string) {
+    const existing = this.modelPick(event.id, quote.participant, quote.market, forecast.version);
+    if (existing) return { pick: existing, duplicate: true };
+    const verify = () => {
+      const age = this.now() - Date.parse(quote.updatedAt ?? '');
+      const inputAge = this.now() - Date.parse(forecast.asOf);
+      if (rules !== PAPER_RULES || !assessment.eligible || forecast.reasons.length
+        || quote.market !== forecast.market || nflName(quote.participant) !== nflName(forecast.player.name)
+        || !Number.isFinite(assessment.probability) || !Number.isFinite(assessment.pushProbability)
+        || assessment.probability < 0 || assessment.pushProbability < 0 || assessment.probability + assessment.pushProbability > 1)
+        throw new MarketBoardError('Model selection is not eligible for paper issuance.');
+      if (!Number.isFinite(age) || age > 15 * 60_000 || age < -60_000 || !Number.isFinite(inputAge)
+        || inputAge > 5 * 60_000 || inputAge < -60_000 || Date.parse(event.commenceTime) <= this.now())
+        throw new MarketBoardError('Quote/input expired or kickoff passed before logging; no recommendation issued.', 409);
+    };
+    verify();
+    const espnEventId = await this.research.matchEvent(event);
+    verify();
+    // One immutable model pick per event/player/market/version, across sides,
+    // books and alternative lines. Concurrent requests re-check after awaits.
+    const picks = this.read();
+    const concurrent = picks.find(p => p.origin === 'model' && p.event.id === event.id && p.version === forecast.version
+      && p.quote.market === quote.market && nflName(p.quote.participant) === nflName(quote.participant));
+    if (concurrent) return { pick: concurrent, duplicate: true };
+    const pick: NflPaperPick = { id: randomUUID(), origin: 'model', event: { ...event }, espnEventId,
+      quote: { ...quote }, player: forecast.player, season: nflSeason(event.commenceTime), version: forecast.version,
+      rules, savedAt: new Date(this.now()).toISOString(), result: 'PENDING', forecast,
+      modelProbability: assessment.probability, modelPushProbability: assessment.pushProbability, estimatedEV: assessment.estimatedEV,
+      selectionReasons: ['Passed fixed data/role gates and player rolling-baseline diagnostic.',
+        'Highest estimated EV among fresh loaded quotes at configured accessible books.',
+        'Experimental residual probability and fixed paper thresholds; no real wager placed.'],
+      note: 'Automatically logged experimental paper recommendation; original forecast and quote are immutable.' };
     this.write([...picks, pick]); return { pick, duplicate: false };
   }
   observe(eventId: string, quotes: MarketQuote[]) {
