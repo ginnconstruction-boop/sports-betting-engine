@@ -9,6 +9,7 @@ import * as dotenv from 'dotenv';
 import { RawEvent, RawApiResponse, MarketKey, QuotaUsage, CacheEntry } from '../types/odds';
 import { logger } from '../utils/logger';
 import { recordApiResponse, isBudgetAllowed, getBudgetTier } from '../services/creditTracker';
+import { assertProductionSport, productionMarkets } from '../config/productionFocus';
 
 dotenv.config();
 
@@ -170,10 +171,13 @@ export async function getOddsBySport(
   bookmakers?: string,
   forceRefresh = false
 ): Promise<{ events: RawEvent[]; quota: QuotaUsage }> {
+  markets = productionMarkets(sportKey, markets);
+  if (!markets.length) throw new Error('No markets are enabled for this sport. NCAAF is spreads and totals only.');
+  const cacheKey = JSON.stringify([sportKey, [...markets].sort(), regions, oddsFormat, bookmakers ?? '']);
 
   // Cache check
   if (!forceRefresh) {
-    const cached = cache.get(sportKey);
+    const cached = cache.get(cacheKey);
     if (cached && Date.now() - cached.fetchedAt < CACHE_WINDOW_MS) {
       const ageSeconds = Math.round((Date.now() - cached.fetchedAt) / 1000);
       logger.info(`[CACHE HIT] ${sportKey} -- using cached data (${ageSeconds}s old)`);
@@ -206,7 +210,7 @@ export async function getOddsBySport(
     const events: RawEvent[] = response.data ?? [];
 
     // Store in cache
-    cache.set(sportKey, {
+    cache.set(cacheKey, {
       data: events,
       fetchedAt: Date.now(),
       sportKey,
@@ -279,6 +283,8 @@ export async function getEventMarkets(
   bookmakers?: string,
   oddsFormat = 'american'
 ): Promise<{ event: RawEvent | null; quota: QuotaUsage }> {
+  markets = productionMarkets(sportKey, markets);
+  if (!markets.length) throw new Error('No markets are enabled for this sport. NCAAF is spreads and totals only.');
   // Budget guard — props are a 'standard' call, blocked in ORANGE/RED
   if (!isBudgetAllowed('standard')) {
     const tier = getBudgetTier();
@@ -339,6 +345,7 @@ export interface UpcomingEvent {
  * Endpoint: GET /v4/sports/{sport}/events
  */
 export async function getUpcomingEvents(sportKey: string): Promise<UpcomingEvent[]> {
+  assertProductionSport(sportKey);
   const client = createClient();
   logger.info(`[EVENTS] ${sportKey} — fetching upcoming events (free)`);
   try {

@@ -10,43 +10,43 @@ export const SPORTS: SportConfig[] = [
   {
     key: 'baseball_mlb',
     name: 'MLB',
-    enabled: true,
+    enabled: false,
     inSeason: true,
   },
   {
     key: 'basketball_nba',
     name: 'NBA',
-    enabled: true,
+    enabled: false,
     inSeason: true,
   },
   {
     key: 'americanfootball_nfl',
     name: 'NFL',
     enabled: true,
-    inSeason: false, // flip to true in season
+    inSeason: true,
   },
   {
     key: 'americanfootball_ncaaf',
     name: 'NCAAF',
     enabled: true,
-    inSeason: false, // flip to true in season
+    inSeason: true,
   },
   {
     key: 'basketball_ncaab',
     name: 'NCAAB',
-    enabled: true,
+    enabled: false,
     inSeason: true,
   },
   {
     key: 'baseball_ncaa',
     name: 'NCAA Baseball',
-    enabled: true,
+    enabled: false,
     inSeason: true,
   },
   {
     key: 'icehockey_nhl',
     name: 'NHL',
-    enabled: true,
+    enabled: false,
     inSeason: true,
   },
 ];

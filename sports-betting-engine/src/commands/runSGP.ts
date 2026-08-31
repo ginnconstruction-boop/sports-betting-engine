@@ -53,7 +53,8 @@ function normalizeName(value: string): string {
   return value.toLowerCase().trim();
 }
 
-export async function runSGP(sportKey: string = 'basketball_nba') {
+export async function runSGP(sportKey: string = 'americanfootball_nfl') {
+  console.log('  RESEARCH ONLY: correlation scores are not win probabilities. Combined prices are estimates; sportsbook SGP pricing and settlement rules may differ.');
   const sportLabel = sportKey.includes('nfl') ? 'NFL' : 'NBA';
   const markets = sportKey.includes('nfl') ? SGP_MARKETS_NFL : SGP_MARKETS_NBA;
   const quota = getSessionQuota();

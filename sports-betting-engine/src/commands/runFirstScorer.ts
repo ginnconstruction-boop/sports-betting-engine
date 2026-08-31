@@ -27,11 +27,11 @@ async function safeRun<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
 // First scorer market keys per sport
 const FIRST_SCORER_MARKETS: Record<string, string[]> = {
   basketball_nba:       ['player_first_basket'],
-  americanfootball_nfl: ['player_first_touchdown', 'player_anytime_td'],
+  americanfootball_nfl: ['player_1st_td', 'player_anytime_td'],
 };
 
 export async function runFirstScorer(
-  sportKey: string = 'basketball_nba'
+  sportKey: string = 'americanfootball_nfl'
 ): Promise<void> {
   const sportLabel = sportKey.includes('nfl') ? 'NFL' : 'NBA';
   const markets = FIRST_SCORER_MARKETS[sportKey] ?? ['player_first_basket'];
@@ -39,6 +39,7 @@ export async function runFirstScorer(
   const userBookKeys = getUserBookKeys();
 
   console.log(`\n  ${sportLabel} First Scorer Props`);
+  console.log('  RESEARCH ONLY: estimates use historical usage assumptions, not a validated current-season touchdown model. Posted prices are also available on the NFL Market Board.');
   console.log('  Scanning for first basket / first TD value...\n');
 
   try {
@@ -101,9 +102,10 @@ export async function runFirstScorer(
             for (const mkt of (bk.markets ?? [])) {
               if (mkt.key !== market) continue;
               for (const outcome of (mkt.outcomes ?? [])) {
-                const name  = outcome.name ?? '';
+                if (outcome.description && String(outcome.name).toLowerCase() === 'no') continue;
+                const name  = outcome.description ?? outcome.name ?? '';
                 const price = outcome.price ?? 0;
-                if (price <= 0) continue; // skip negative prices (not a real first scorer market)
+                if (!Number.isFinite(price) || Math.abs(price) < 100) continue;
                 const existing = playerPrices.get(name) ?? [];
                 existing.push({ book: bk.key, price });
                 playerPrices.set(name, existing);

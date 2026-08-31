@@ -406,6 +406,7 @@ export function scoreAllBets(
     const injuryFlags = keyInjuries.map(i => `${i.playerName} (${i.position}) ${i.status} -- ${i.team}`);
 
     for (const [mKey, market] of Object.entries(event.aggregatedMarkets)) {
+      if (event.sportKey === 'americanfootball_ncaaf' && !['spreads', 'totals'].includes(mKey)) continue;
       const marketKey = mKey as MarketKey;
       const marketIntel = sharpIntelList.find(m => m.marketKey === marketKey);
       const sharpStrength = marketIntel?.recommendationStrength ?? 0;

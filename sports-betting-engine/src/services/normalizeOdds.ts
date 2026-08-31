@@ -108,6 +108,8 @@ export function normalizeEvent(
 
     for (const market of markets) {
       if (!market?.key) continue;
+      // Apply the same college scope to old cached responses as to fresh requests.
+      if (event.sport_key === 'americanfootball_ncaaf' && !['spreads', 'totals'].includes(market.key)) continue;
 
       const outcomes = market.outcomes ?? [];
 

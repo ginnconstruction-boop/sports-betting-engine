@@ -16,7 +16,7 @@ export const PROP_CONFIG = {
   PROPS_ENABLED: true,
 
   // Sports with props enabled
-  ENABLED_SPORTS: ['basketball_nba', 'americanfootball_nfl', 'baseball_mlb', 'icehockey_nhl'] as string[],
+  ENABLED_SPORTS: ['americanfootball_nfl'] as string[],
 
   // NBA prop markets (The Odds API market keys)
   NBA_PROP_MARKETS: [
@@ -67,7 +67,7 @@ export const PROP_CONFIG = {
 
   // First scorer market keys
   NBA_FIRST_SCORER_MARKETS: ['player_first_basket'] as string[],
-  NFL_FIRST_SCORER_MARKETS: ['player_first_touchdown', 'player_anytime_td'] as string[],
+  NFL_FIRST_SCORER_MARKETS: ['player_1st_td', 'player_anytime_td'] as string[],
 
   // Minimum line gap between FanDuel and BetMGM to flag (in points)
   MIN_LINE_GAP: 1.5,

@@ -21,6 +21,7 @@ import { runTeasers }         from './commands/runTeasers';
 import { runLateGames }       from './commands/runLateGames';
 import { printWeeklySummary } from './services/weeklySummary';
 import { runReset }           from './commands/runReset';
+import { isPausedCommand } from './config/productionFocus';
 
 const args = process.argv.slice(2);
 const command = args[0]?.toLowerCase();
@@ -28,6 +29,7 @@ const subcommand = args[1]?.toLowerCase();
 const forceRefresh = args.includes('--force') || args.includes('-f');
 
 async function main() {
+  if (isPausedCommand(command)) throw new Error('This sport is paused for the football season. NFL and NCAAF only; history is preserved.');
   switch (command) {
     // -- Scans ----------------------------------------------
     case 'morning':       await runMorningScan({ forceRefresh }); break;
@@ -45,7 +47,7 @@ async function main() {
       if (!args[1]) { console.log('Usage: sport <key>'); break; }
       await runSportScan(args[1], { forceRefresh }); break;
     // -- Props -----------------------------------------------
-    case 'props': case 'nba-props': await runProps({ forceRun: true, sportKey: 'basketball_nba' }); break;
+    case 'props': await runProps({ forceRun: true, sportKey: 'americanfootball_nfl' }); break;
     case 'mlbprops': await runProps({ forceRun: true, sportKey: 'baseball_mlb' }); break;
     case 'nhlprops': await runProps({ forceRun: true, sportKey: 'icehockey_nhl' }); break;
     case 'nflprops': await runProps({ forceRun: true, sportKey: 'americanfootball_nfl' }); break;
@@ -65,9 +67,9 @@ async function main() {
     case 'calibrate': case 'model': runCalibration(); break;
     case 'retro': case 'analysis': await runRetro(); break;
     case 'sgp': case 'parlay':
-      await runSGP(args[1] ?? 'basketball_nba'); break;
+      await runSGP(args[1] ?? 'americanfootball_nfl'); break;
     case 'altparlays': case 'alt':
-      await runAltParlays(args[1] ?? 'basketball_nba'); break;
+      await runAltParlays(args[1] ?? 'americanfootball_nfl'); break;
     case 'fixresults': case 'fix':
       await runFixResults(); break;
     case 'monitor': case 'linemonitor':
@@ -90,8 +92,8 @@ async function main() {
     // -- Dev -------------------------------------------------
     case 'mock': require('./dev/mockRun'); break;
     default:
-      console.log('\n  -- Scans --        morning | midday | full | nba | mlb | nhl | ncaab');
-      console.log('  -- Props --        props');
+      console.log('\n  -- Football --     morning | midday | full | nfl | ncaaf');
+      console.log('  -- NFL research -- props | nflprops | firsttd | teasers | sgp | altparlays');
       console.log('  -- Tracking --     results | record | week | clv | calibrate');
       console.log('  -- Historical --   historical | historical build | historical fetch YYYY-MM-DD');
       console.log('  -- Dev --          mock\n');

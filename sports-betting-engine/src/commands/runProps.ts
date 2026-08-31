@@ -94,7 +94,7 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
     return;
   }
 
-  const sportKey = options.sportKey ?? 'basketball_nba';
+  const sportKey = options.sportKey ?? 'americanfootball_nfl';
   const sportLabel2 = sportKey === 'baseball_mlb' ? 'MLB'
     : sportKey === 'icehockey_nhl' ? 'NHL'
     : sportKey === 'americanfootball_nfl' ? 'NFL' : 'NBA';
@@ -139,7 +139,9 @@ export async function runProps(options: { forceRun?: boolean; sportKey?: string 
       console.log(`  [SKIP] ${inProgress.length} game(s) already in progress -- excluded from props.`);
     }
     if (upcoming.length === 0) {
-      console.log(`\n  No upcoming ${sportLabel2} games found today.\n`);
+      console.log(`\n  No upcoming ${sportLabel2} games found today.`);
+      if (sportKey === 'americanfootball_nfl') console.log('  Use the NFL Market Board for posted props on games in the next 14 days. Game-day modeling stays separate.');
+      console.log('');
       return;
     }
     console.log(`  Found ${upcoming.length} ${sportLabel2} game(s). Building full intelligence suite...`);

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SBE // Elite v2.2</title>
+<title>SBE // Football 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow+Condensed:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -38,6 +38,21 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-mono);min-hei
 .icon-btn.active{border-color:var(--yellow);color:var(--yellow)}
 
 .main{max-width:960px;margin:0 auto;padding:1.5rem}
+.focus-banner{padding:1rem 1.2rem;border:1px solid var(--green-dim);background:rgba(57,211,83,.05);border-radius:8px;margin-bottom:1rem;line-height:1.6;font-size:.8rem}
+.focus-banner h1{font-family:var(--font-ui);font-size:1.7rem;color:var(--green)}
+.focus-note{color:var(--muted);font-size:.75rem;line-height:1.6;margin:.5rem 0 1rem}
+.market-board{border:1px solid var(--border);border-radius:8px;background:var(--bg2);padding:1rem;margin-top:1rem}
+.market-board summary{cursor:pointer;color:var(--blue);font-size:1rem}
+.market-controls{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin:1rem 0}
+.market-controls label{display:block;font-size:.75rem;color:var(--muted)}
+.market-controls select,.market-search{width:100%;background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:.65rem;border-radius:5px;margin-top:.3rem;font:inherit;min-width:0}
+.market-status{font-size:.8rem;line-height:1.6;margin:.75rem 0;color:var(--yellow)}
+.market-table-wrap{overflow:auto;max-height:550px}
+.market-table{width:100%;border-collapse:collapse;font-size:.73rem;white-space:nowrap}
+.market-table th,.market-table td{text-align:left;padding:.6rem;border-bottom:1px solid var(--border)}
+.market-table th{position:sticky;top:0;background:var(--bg3)}
+.market-stale{color:var(--yellow)}
+@media(max-width:600px){.market-controls{grid-template-columns:1fr}}
 .section-label{font-family:var(--font-ui);font-weight:600;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:1.5rem 0 .6rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
 .btn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:.5rem;margin-bottom:.5rem}
 .scan-btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);font-family:var(--font-ui);font-weight:600;font-size:.85rem;letter-spacing:.05em;padding:.7rem .8rem;border-radius:6px;cursor:pointer;text-align:left;transition:all .15s;display:flex;align-items:center;gap:.5rem;position:relative}
@@ -190,7 +205,7 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
 <!-- LOGIN -->
 <div id="login-screen">
   <div class="login-logo">SBE</div>
-  <div class="login-sub">Sports Betting Engine // Elite Model v2.2</div>
+  <div class="login-sub">Sports Betting Engine // Football 2026</div>
   <div class="login-box">
     <input type="text" id="username" placeholder="Username" autocomplete="username"/>
     <input type="password" id="password" placeholder="Password" autocomplete="current-password"/>
@@ -202,7 +217,7 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
 <!-- DASHBOARD -->
 <div id="dashboard">
   <div class="topbar">
-    <div class="topbar-logo">SBE // ELITE v2.2</div>
+    <div class="topbar-logo">SBE // FOOTBALL 2026</div>
     <div class="topbar-right">
       <span class="topbar-status" id="topbar-date"></span>
       <button class="icon-btn" id="history-toggle-btn" onclick="toggleHistory()" title="Scan History">HISTORY</button>
@@ -216,6 +231,12 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
   </div>
 
   <div class="main">
+    <section class="focus-banner">
+      <h1>NFL season headquarters</h1>
+      NFL props, game lines, quarters, halves and alternate markets.<br>
+      College football: spreads &amp; totals only. Other sports are paused; historical records remain intact.
+    </section>
+    <div class="focus-note">Stats below are lifetime history, not an NFL track record. Football models remain in observation mode while results accumulate. Quotes and research are not automatic betting instructions.</div>
     <!-- STATS -->
     <div class="stats-bar">
       <div class="stat-card" onclick="togglePicks()" style="cursor:pointer" title="Click to view all picks"><div class="stat-label">Total Picks &#x2197;</div><div class="stat-value" id="stat-total">--</div></div>
@@ -227,12 +248,12 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
 
     <!-- PER-SPORT STATS -->
     <div class="sport-stats-bar" id="sport-stats-bar" style="display:none">
-      <div class="sport-stats-label">BY CATEGORY</div>
+      <div class="sport-stats-label">FOOTBALL HISTORY <button class="icon-btn" id="archive-stats-toggle" onclick="toggleArchivedStats()">Show archived sports</button></div>
       <div class="sport-stats-cards" id="sport-stats-cards"></div>
     </div>
 
     <!-- FULL SCANS -->
-    <div class="section-label">Full Scans — All Sports</div>
+    <div class="section-label">Football scans — NFL + college spreads &amp; totals</div>
     <div class="btn-grid">
       <button class="scan-btn prime" onclick="runCmd('morning','Morning Scan')"><span class="num">01</span>Morning Scan</button>
       <button class="scan-btn prime" onclick="runCmd('midday','Midday Card')"><span class="num">02</span>Midday Card</button>
@@ -240,29 +261,36 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
     </div>
 
     <!-- SINGLE SPORT -->
-    <div class="section-label">Single Sport Scans</div>
+    <div class="section-label">NFL first • college football second</div>
     <div class="btn-grid">
-      <button class="scan-btn" onclick="runCmd('nba','NBA')"><span class="num">04</span>NBA</button>
-      <button class="scan-btn" onclick="runCmd('mlb','MLB')"><span class="num">05</span>MLB</button>
-      <button class="scan-btn" onclick="runCmd('nhl','NHL')"><span class="num">06</span>NHL</button>
-      <button class="scan-btn" onclick="runCmd('ncaab','NCAAB')"><span class="num">07</span>NCAAB</button>
-      <button class="scan-btn" onclick="runCmd('nfl','NFL')"><span class="num">08</span>NFL</button>
-      <button class="scan-btn" onclick="runCmd('ncaaf','NCAAF')"><span class="num">09</span>NCAAF</button>
-      <button class="scan-btn" onclick="runCmd('ncaa-baseball','NCAA Baseball')"><span class="num">10</span>NCAA Baseball</button>
+      <button class="scan-btn prime" onclick="runCmd('nfl','NFL Game Lines')"><span class="num">NFL</span>NFL Game Lines</button>
+      <button class="scan-btn prop" onclick="runCmd('nflprops','NFL Core Prop Research')"><span class="num">NFL</span>Core Prop Research</button>
+      <button class="scan-btn" onclick="runCmd('ncaaf','College Spreads & Totals')"><span class="num">CFB</span>Spreads &amp; Totals</button>
     </div>
+    <div class="focus-note">Model scans focus on game-day candidates. For early-week and specialty prices, use the market board below.</div>
+
+    <details class="market-board" id="nfl-market-board">
+      <summary>NFL Market Board — player props, quarters, halves &amp; more</summary>
+      <p class="focus-note">Select a game in the next 14 days and one category. Schedule discovery is free; loading odds uses API credits and is cached for five minutes. No automatic refresh. Availability varies by book and kickoff date. These are posted quotes, not model picks; period and specialty markets are not auto-graded. Futures, live betting and proprietary sportsbook specials are not included.</p>
+      <button class="scan-btn" id="nfl-events-btn" onclick="loadNflEvents()">Load / refresh NFL games (free)</button>
+      <div class="market-controls">
+        <label for="nfl-event">NFL game<select id="nfl-event"><option value="">Load games first</option></select></label>
+        <label for="nfl-group">Market category<select id="nfl-group" onchange="updateNflCost()"><option value="">Load games first</option></select></label>
+      </div>
+      <div class="focus-note" id="nfl-cost">One game, one category per request.</div>
+      <button class="scan-btn prop" id="nfl-quotes-btn" onclick="loadNflQuotes()" disabled>Load posted odds</button>
+      <div class="market-status" id="nfl-market-status" role="status" aria-live="polite"></div>
+      <label class="focus-note" for="nfl-market-search">Filter by player, team, market or sportsbook</label>
+      <input class="market-search" id="nfl-market-search" type="search" placeholder="Search current quotes" oninput="renderNflQuotes()"/>
+      <div id="nfl-quote-count" class="focus-note"></div>
+      <div id="nfl-market-results" class="market-table-wrap"></div>
+    </details>
 
     <!-- PROPS -->
-    <div class="section-label">Player Props &amp; Parlays</div>
+    <div class="section-label">NFL specialty research — estimates, not sportsbook parlay quotes</div>
     <div class="btn-grid">
-      <button class="scan-btn prop" onclick="runCmd('props','NBA Props')"><span class="num">11</span>NBA Props</button>
-      <button class="scan-btn prop" onclick="runCmd('mlbprops','MLB Props')"><span class="num">11b</span>MLB Props</button>
-      <button class="scan-btn prop" onclick="runCmd('nhlprops','NHL Props')"><span class="num">11c</span>NHL Props</button>
-      <button class="scan-btn prop" onclick="runCmd('nflprops','NFL Props')"><span class="num">11d</span>NFL Props</button>
-      <button class="scan-btn prop" onclick="runCmd('altparlays','NBA Alt Parlays')"><span class="num">12</span>NBA Alt Parlays</button>
       <button class="scan-btn prop" onclick="runCmd('altparlays-nfl','NFL Alt Parlays')"><span class="num">13</span>NFL Alt Parlays</button>
-      <button class="scan-btn prop" onclick="runCmd('sgp','NBA SGP')"><span class="num">14</span>NBA SGP</button>
       <button class="scan-btn prop" onclick="runCmd('sgp-nfl','NFL SGP')"><span class="num">15</span>NFL SGP</button>
-      <button class="scan-btn prop" onclick="runCmd('firstbasket','First Basket')"><span class="num">28</span>First Basket</button>
       <button class="scan-btn prop" onclick="runCmd('firsttd','First TD')"><span class="num">29</span>First TD</button>
       <button class="scan-btn prop" onclick="runCmd('teasers','NFL Teasers')"><span class="num">30</span>NFL Teasers</button>
     </div>
@@ -761,9 +789,21 @@ function pickCategoryKey(p) {
 }
 
 let activeSportFilter = null;
+let showArchivedSports = false;
+function toggleArchivedStats() {
+  showArchivedSports = !showArchivedSports;
+  document.getElementById('archive-stats-toggle').textContent = showArchivedSports ? 'Football only' : 'Show archived sports';
+  renderSportStats(officialPicksCache || [], dashboardSummaryCache);
+}
 
 function renderSportStats(picks, dashboardSummary) {
-  const categories = dashboardSummary?.categories || [];
+  const focusCategories = ['NFL', 'NFL Props', 'NCAAF'];
+  const categories = (dashboardSummary?.categories || [])
+    .filter(d => showArchivedSports || focusCategories.includes(d.key))
+    .sort((a,b) => {
+      const rank = key => focusCategories.includes(key) ? focusCategories.indexOf(key) : 99;
+      return rank(a.key) - rank(b.key);
+    });
   if (!categories.length) { document.getElementById('sport-stats-bar').style.display='none'; return; }
 
   const cards = categories.map((d) => {
@@ -1515,6 +1555,7 @@ function showToast(msg, color='green') {
   _toastTimer = setTimeout(() => { el.className = color; }, 5000);
 }
 </script>
+<script src="/nfl-markets.js"></script>
 <div id="toast"></div>
 </body>
 </html>

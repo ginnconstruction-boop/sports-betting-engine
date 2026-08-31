@@ -11,6 +11,10 @@ import express from 'express';
 import * as path from 'path';
 import * as fs from 'fs';
 import { spawn } from 'child_process';
+import { randomBytes } from 'crypto';
+import { isPausedCommand } from './src/config/productionFocus';
+import { NFL_MARKET_GROUPS, NFL_BOARD_WINDOW_DAYS } from './src/config/nflMarkets';
+import { NflMarketBoard, MarketBoardError } from './src/services/nflMarketBoard';
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -30,7 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // ── Sessions ──
 const sessions = new Map<string, { user: string; expires: number }>();
-function genToken(): string { return Math.random().toString(36).slice(2) + Date.now().toString(36); }
+function genToken(): string { return randomBytes(32).toString('hex'); }
 function requireAuth(req: express.Request, res: express.Response, next: express.NextFunction) {
   // Accept token from header (API calls) or query param (browser window.open for reports)
   const token = (req.headers['x-auth-token'] as string) || (req.query.token as string);
@@ -101,6 +105,7 @@ app.post('/api/logout', requireAuth, (req, res) => {
 app.get('/api/stream/:command', requireAuth, (req, res) => {
   const { command } = req.params;
   const label = req.query.label as string ?? command;
+  if (isPausedCommand(command)) return res.status(403).json({ error: 'This sport is paused. Production is focused on NFL and NCAAF; history is preserved.' });
 
   if (!ALLOWED[command]) {
     res.status(400).end();
@@ -244,6 +249,7 @@ app.get('/api/stream/:command', requireAuth, (req, res) => {
 // ── Fallback non-streaming run (kept for compatibility) ──
 app.post('/api/run/:command', requireAuth, async (req, res) => {
   const { command } = req.params;
+  if (isPausedCommand(command)) return res.status(403).json({ error: 'This sport is paused. Production is focused on NFL and NCAAF; history is preserved.' });
   if (!ALLOWED[command]) return res.status(400).json({ error: 'Unknown command' });
 
   const { execSync } = require('child_process');
@@ -255,6 +261,27 @@ app.post('/api/run/:command', requireAuth, async (req, res) => {
     res.json({ ok: true, output });
   } catch (err: any) {
     res.json({ ok: false, output: (err.stdout || '') + (err.stderr || '') || err.message });
+  }
+});
+
+// NFL quote board: event discovery is free; paid odds calls are explicit POSTs.
+const nflMarketBoard = new NflMarketBoard();
+app.get('/api/nfl/events', requireAuth, async (_req, res) => {
+  try {
+    res.json({ events: await nflMarketBoard.events(), windowDays: NFL_BOARD_WINDOW_DAYS,
+      groups: Object.entries(NFL_MARKET_GROUPS).map(([key, g]) => ({ key, label: g.label, maxCredits: g.markets.length })) });
+  } catch {
+    res.status(502).json({ error: 'NFL schedule feed unavailable. Please try again later.' });
+  }
+});
+app.post('/api/nfl/markets', requireAuth, async (req, res) => {
+  const { eventId, group } = req.body ?? {};
+  if (typeof eventId !== 'string' || typeof group !== 'string') return res.status(400).json({ error: 'Select an NFL game and market category.' });
+  try {
+    res.json(await nflMarketBoard.quotes(eventId, group));
+  } catch (err) {
+    if (err instanceof MarketBoardError) return res.status(err.status).json({ error: err.message });
+    res.status(502).json({ error: 'NFL odds feed unavailable or this request is not supported. No recommendation generated. Try another category later.' });
   }
 });
 
@@ -526,5 +553,5 @@ app.get('/api/health', (_, res) => res.json({ ok: true, ts: new Date().toISOStri
 // ── SPA fallback ──
 app.get('*', (_, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 
-app.listen(PORT, () => console.log(`SBE dashboard running on port ${PORT}`));
+app.listen(Number(PORT), process.env.HOST || '0.0.0.0', () => console.log(`SBE dashboard running on port ${PORT}`));
 export default app;

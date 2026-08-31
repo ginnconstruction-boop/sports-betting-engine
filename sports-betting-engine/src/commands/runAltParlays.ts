@@ -61,9 +61,8 @@ function getAltParlayPropMarkets(sportKey: string): string[] {
 }
 
 function getBaseMarkets(sportKey: string) {
-  return sportKey === 'americanfootball_nfl'
-    ? EXTENDED_MARKETS
-    : ['h2h', 'spreads', 'totals'] as const;
+  // Extended markets require per-event requests; the bulk endpoint rejects them.
+  return ['h2h', 'spreads', 'totals'];
 }
 
 function buildTotalAltCandidates(event: EventSummary, sportLabel: string): any[] {
@@ -214,7 +213,8 @@ async function buildAnytimeTdAltLegs(
     .slice(0, 6);
 }
 
-export async function runAltParlays(sportKey: string = 'basketball_nba') {
+export async function runAltParlays(sportKey: string = 'americanfootball_nfl') {
+  console.log('  RESEARCH ONLY: alternate/parlay estimates are not sportsbook quotes or validated hit rates. Use the NFL Market Board for posted alternate prices.');
   const sportLabel = sportKey === 'basketball_nba' ? 'NBA'
     : sportKey === 'americanfootball_nfl' ? 'NFL' : sportKey.toUpperCase();
 

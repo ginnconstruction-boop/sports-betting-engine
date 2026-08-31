@@ -315,7 +315,7 @@ export function scoreFirstScorerProps(
     if (!prop.bestPrice || prop.bestPrice <= 0) continue; // must be plus-money
 
     const marketLabel = prop.marketKey === 'player_first_basket' ? 'First Basket'
-      : prop.marketKey === 'player_first_touchdown' ? 'First TD'
+      : ['player_1st_td', 'player_first_touchdown'].includes(prop.marketKey) ? 'First TD'
       : prop.marketKey === 'player_anytime_td' ? 'Anytime TD'
       : prop.marketKey;
 

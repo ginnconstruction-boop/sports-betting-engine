@@ -503,11 +503,11 @@ export async function runSportScan(
     const isMLBd = sportKey.includes('baseball_mlb');
     const isNHLd = sportKey.includes('nhl');
     console.log('\n  No qualifying plays found today.');
-    console.log(`  Games scanned: ${allSummaries.length}`);
+    console.log(`  Games returned by provider: ${allSummaries.length}`);
     if (allSummaries.length === 0) {
       console.log('  -- No games scheduled in the next 24 hours for this sport.');
     } else {
-      console.log(`  -- ${allSummaries.length} game(s) found but none cleared the signal minimum.`);
+      console.log('  -- No games cleared the time-window, data and signal filters.');
       if (isMLBd) {
         console.log('  TIP: MLB lines may not be fully posted yet.');
         console.log('  Best time to run MLB: 11 AM CT or later.');
@@ -515,7 +515,8 @@ export async function runSportScan(
         console.log('  TIP: NHL lines may not be fully posted yet.');
         console.log('  Best time to run NHL: noon CT or later.');
       } else {
-        console.log('  All games have efficient lines today -- no detectable edge.');
+        console.log('  This does not establish that the market is efficient; games may be outside the 24-hour model window.');
+        if (sportKey === 'americanfootball_nfl') console.log('  Use the NFL Market Board for posted prices in the next 14 days.');
       }
     }
     console.log('');
