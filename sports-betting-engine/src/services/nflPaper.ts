@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import { randomUUID } from 'crypto';
+import { randomUUID, createHash } from 'crypto';
 import { UpcomingEvent } from '../api/oddsApiClient';
 import { MarketBoardError, MarketQuote } from './nflMarketBoard';
 import { ESPN_NFL, NFL_CORE_STATS, NFL_RESEARCH_VERSION, NflPlayer, NflResearch, nflName, nflNumber, nflSeason } from './nflResearch';
@@ -13,6 +13,10 @@ export interface NflPaperPick {
   player?: NflPlayer; season: number; version: string; rules: string; savedAt: string;
   result: PaperResult; note: string; actual?: number; gradedAt?: string; source?: string;
   latestPregame?: { price: number; updatedAt: string; observedAt: string };
+  closeWindow?: { price: number; line: number | null; bookKey: string; updatedAt: string; observedAt: string; method: 'observed_last_5_minutes_not_verified_final_close' };
+  settlementScope?: { bookKey: string; ruleVersion: string; sportsbookRulesVerified: false };
+  gradingAudit?: Array<{ result: PaperResult; actual?: number; note: string; checkedAt: string; source: string; sourceHash: string }>;
+  lastResultCheck?: { at: string; status: 'graded' | 'unavailable' | 'review' };
   origin?: 'manual' | 'model';
   forecast?: NflForecast;
   modelProbability?: number;
@@ -149,6 +153,7 @@ export class NflPaperLedger {
     const pick: NflPaperPick = { id: randomUUID(), origin: 'manual', event: { ...event }, espnEventId, quote: { ...quote }, player,
       season: nflSeason(event.commenceTime), version: NFL_RESEARCH_VERSION, rules,
       savedAt: new Date(this.now()).toISOString(), result: 'PENDING', note: 'Manual paper selection; no money wagered and no model probability attached.' };
+    pick.settlementScope = { bookKey: quote.bookKey, ruleVersion: rules, sportsbookRulesVerified: false };
     this.write([...picks, pick]); return { pick, duplicate: false };
   }
   modelPick(eventId: string, participant: string, market: string, version: string) {
@@ -188,6 +193,7 @@ export class NflPaperLedger {
         'Highest estimated EV among fresh loaded quotes at configured accessible books.',
         'Experimental residual probability and fixed paper thresholds; no real wager placed.'],
       note: 'Automatically logged experimental paper recommendation; original forecast and quote are immutable.' };
+    pick.settlementScope = { bookKey: quote.bookKey, ruleVersion: rules, sportsbookRulesVerified: false };
     this.write([...picks, pick]); return { pick, duplicate: false };
   }
   observe(eventId: string, quotes: MarketQuote[]) {
@@ -200,32 +206,57 @@ export class NflPaperLedger {
       if (!q || !Number.isFinite(stamp) || this.now() - stamp > 15 * 60_000 || stamp > this.now() + 60_000
         || stamp >= Date.parse(p.event.commenceTime) || stamp <= Date.parse(p.latestPregame?.updatedAt ?? p.quote.updatedAt ?? '')) continue;
       p.latestPregame = { price: q.price, updatedAt: q.updatedAt, observedAt: new Date(this.now()).toISOString() }; changed = true;
+      const kickoff = Date.parse(p.event.commenceTime);
+      if (kickoff - this.now() <= 5 * 60_000 && kickoff - stamp <= 5 * 60_000 && stamp <= this.now())
+        p.closeWindow = { ...p.latestPregame, line: q.line, bookKey: q.bookKey, method: 'observed_last_5_minutes_not_verified_final_close' };
     }
     if (changed) this.write(picks);
   }
-  async grade() {
+  async grade(recheckSettled = false) {
     if (this.grading) return this.grading;
-    this.grading = this.gradeBatch().finally(() => { this.grading = null; }); return this.grading;
+    this.grading = this.gradeBatch(recheckSettled).finally(() => { this.grading = null; }); return this.grading;
   }
-  private async gradeBatch() {
-    const eligible = this.read().filter(p => ['PENDING', 'REVIEW'].includes(p.result)
-      && Date.parse(p.event.commenceTime) + 4 * 3600_000 < this.now());
+  private async gradeBatch(recheckSettled: boolean) {
+    const eligible = this.read().filter(p => (recheckSettled
+      ? ['WIN', 'LOSS', 'PUSH'].includes(p.result) && this.now() - Date.parse(p.event.commenceTime) < 14 * 86400_000
+      : ['PENDING', 'REVIEW'].includes(p.result)) && Date.parse(p.event.commenceTime) + 4 * 3600_000 < this.now())
+      .sort((a,b) => Date.parse(a.lastResultCheck?.at ?? a.gradedAt ?? a.savedAt) - Date.parse(b.lastResultCheck?.at ?? b.gradedAt ?? b.savedAt));
     // Bound each button press to ten games, never fan out over the whole season.
     const games = [...new Set(eligible.map(p => p.espnEventId))].slice(0, 10);
     const updates = new Map<string, any>();
+    let sourceFailures = 0;
     for (const id of games) {
       try {
         const data = await this.research.summary(id);
-        for (const p of eligible.filter(p => p.espnEventId === id)) updates.set(p.id, {
-          ...gradeNflPaper(p, data), gradedAt: new Date(this.now()).toISOString(), source: `${ESPN_NFL}/summary?event=${id}` });
+        for (const p of eligible.filter(p => p.espnEventId === id)) {
+          const grade = gradeNflPaper(p, data), checkedAt = new Date(this.now()).toISOString();
+          const source = `${ESPN_NFL}/summary?event=${id}`;
+          const sourceHash = createHash('sha256').update(JSON.stringify(data)).digest('hex');
+          const previous = p.gradingAudit ?? (['WIN','LOSS','PUSH'].includes(p.result)
+            ? [{ result: p.result, actual: p.actual, note: p.note, checkedAt: p.gradedAt ?? p.savedAt,
+                source: p.source ?? 'legacy', sourceHash: 'legacy_unavailable' }] : []);
+          if (recheckSettled && ['REVIEW','PENDING'].includes(grade.result)) {
+            sourceFailures++;
+            updates.set(p.id, { lastResultCheck: { at: checkedAt, status: 'review' } });
+            continue; // Incomplete data is not a correction of a settled result.
+          }
+          const unchanged = p.result === grade.result && p.actual === grade.actual && previous.at(-1)?.sourceHash === sourceHash;
+          updates.set(p.id, { ...grade, gradedAt: checkedAt, source,
+            lastResultCheck: { at: checkedAt, status: 'graded' },
+            gradingAudit: unchanged ? previous : [...previous, { ...grade, checkedAt, source, sourceHash }] });
+        }
       } catch {
-        for (const p of eligible.filter(p => p.espnEventId === id)) updates.set(p.id, { result: 'REVIEW', note: 'NFL result source unavailable. Retry later; no loss or zero assumed.' });
+        for (const p of eligible.filter(p => p.espnEventId === id)) {
+          sourceFailures++;
+          updates.set(p.id, { ...(recheckSettled ? {} : { result: 'REVIEW', note: 'NFL result source unavailable. Retry later; no loss or zero assumed.' }),
+            lastResultCheck: { at: new Date(this.now()).toISOString(), status: 'unavailable' } });
+        }
       }
     }
     // Re-read after awaits so concurrent saves/quote observations are preserved.
-    const picks = this.read().map(p => updates.has(p.id) && ['PENDING', 'REVIEW'].includes(p.result) ? { ...p, ...updates.get(p.id) } : p);
+    const picks = this.read().map(p => updates.has(p.id) && (recheckSettled || ['PENDING', 'REVIEW'].includes(p.result)) ? { ...p, ...updates.get(p.id) } : p);
     if (updates.size) this.write(picks);
     return { checked: updates.size, remainingGames: Math.max(0, new Set(eligible.map(p => p.espnEventId)).size - games.length),
-      picks, report: nflPaperReport(picks) };
+      sourceFailures, picks, report: nflPaperReport(picks) };
   }
 }

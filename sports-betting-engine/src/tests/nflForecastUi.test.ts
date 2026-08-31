@@ -9,7 +9,7 @@ const source=fs.readFileSync(path.join(__dirname,'../../public/nfl-markets.js'),
 class Element {
   children:Element[]=[]; textContent=''; className=''; value=''; disabled=false; checked=false;
   open=false; scrolled=false; focused=false; onclick?:()=>void;
-  classList={remove:()=>{}};
+  classList={remove:()=>{},add:()=>{}};
   append(...elements:Element[]){this.children.push(...elements);}
   prepend(...elements:Element[]){this.children.unshift(...elements);}
   replaceChildren(...elements:Element[]){this.children=elements;}
@@ -56,4 +56,29 @@ test('stale quotes disable forecasting and missing rules focus the visible check
   await app.run(`nflQuoteAction(nflQuotes[0],'forecast')`);
   assert.match(app.document.getElementById('nfl-market-status').textContent,/above the quotes/);
   assert.equal(app.document.getElementById('nfl-paper-rules').focused,true);
+});
+
+test('exact market baseline is visibly separate from a model forecast',()=>{
+  const app=ui();
+  app.run(`nflQuotes=[{quoteId:'q',market:'player_receptions',participant:'Test',side:'Over',line:4.5,price:-110,
+    book:'Test',updatedAt:new Date().toISOString(),marketBaseline:{conditionalNoPushProbability:.5,referenceBooks:[1,2,3]}}];renderNflQuotes();`);
+  const row=app.document.getElementById('nfl-market-results').children[0].children[1].children[0];
+  assert.match(row.children.at(-1).textContent,/50.0% conditional on no push/);
+  assert.match(row.children.at(-1).textContent,/not validated EV/);
+});
+
+test('stat-correction control calls the audit endpoint and renders empty records safely',async()=>{
+  const app=ui();
+  app.run(`nflFetch=async(url,options)=>{document.getElementById('called-endpoint').textContent=url;return {picks:[],checked:0,remainingGames:0,report:{note:'fixture',buckets:[]},metrics:[]};};`);
+  await app.run("loadNflPaper('recheck')");
+  assert.equal(app.document.getElementById('called-endpoint').textContent,'/api/nfl/paper/recheck');
+  assert.match(app.document.getElementById('nfl-paper-status').textContent,/0 checked/);
+});
+
+test('all 13 readiness items and specialty restrictions remain visible and honest',()=>{
+  const section=html.split('id="football-readiness"')[1].split('</details>')[0];
+  assert.equal((section.match(/<li>/g)||[]).length,13);
+  assert.match(section,/feed is not connected yet/);
+  assert.match(section,/Frozen holdout and feature-removal study not completed/);
+  assert.doesNotMatch(html,/onclick="runCmd\('(firsttd|sgp-nfl|altparlays-nfl|teasers)'/);
 });

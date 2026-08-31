@@ -1,23 +1,42 @@
 # Football catch-up checklist
 
-Updated August 30, 2026 (America/Chicago).
+Updated August 31, 2026 (America/Chicago).
 
 Current website: [Sports Betting Engine](https://sports-betting-engine-1.onrender.com/).
 
 **Release target: usable NFL research and paper testing, not validated betting recommendations.** No real bets are placed. A functioning dashboard and passing software tests do not establish a profitable model.
 
+## Latest safety/tracking update — football-foundation-2
+
+The requested 13-item roadmap is **partially implemented, not complete**. See the
+[item-by-item implementation status](research/IMPLEMENTATION_STATUS_2026_08_31.md).
+Spread/ATS/probability/weather safety repairs, exact no-vig price comparisons,
+paper probability/performance metrics and audited stat rechecks are implemented.
+The website now has a visible 13-item readiness checklist.
+
+Important change: automatic NFL model paper issuance now requires verified
+game-specific availability; that feed is not connected. Forecast diagnostics and
+manual paper tracking remain available. Legacy specialty models are paused in
+the API/CLI/UI. Rich workload/opponent inputs, actual weather venues/roofs,
+unseen holdout/ablation testing, guaranteed closing capture and college model
+validation remain open. No tracking reset or old-record restoration occurred.
+
+Local gate: 83 tests, server-inclusive TypeScript build and JS syntax pass;
+dependency audit reports zero vulnerabilities. Deployment verification is
+recorded in the release status report.
+
 | # | Item | Status / remaining work |
 |---|---|---|
-| 1 | Website, login, deployment | College-board release prepared August 31, 2026; local browser verified 96 upcoming college games and 38 posted spread/total quotes for UMass–Rutgers. Deployment verification below. Login configuration unchanged. |
+| 1 | Website, login, deployment | College-board release `dec0648` live August 31, 2026, 7:28 AM Central. Live health, new menu/assets, authenticated 96-game college discovery and 38 UMass–Rutgers spread/total quotes verified. Login configuration unchanged. |
 | 2 | Find all required accounts | Active Render + GitHub + Odds API are the required stack. ESPN public feeds need no account. Old suspended Render web/database/cron services are not dependencies; leave them paused. |
 | 3 | Football-only production | NFL primary; college spreads/totals only. Dedicated **College football — spreads & totals** button opens upcoming-game discovery and quotes, separate from the existing game-day scan. Other sports paused. Earlier records remain in the untouched reset backup. |
 | 4 | NFL market coverage | 16 on-demand quote categories, next 14 days, freshness and credit controls. Availability varies; not every sportsbook special, future or live market is supported. |
-| 5 | NFL player context | Current rosters, injury flags, provisional depth-chart order and regular-season attempts/targets connected. Still verify active/inactive lists, actual starting roles and snap expectations close to kickoff. |
-| 6 | Core prop model audit | Four experimental workload models implemented; live safety gates unchanged. Two-game regular-season conditional price/stat pilot: 3 wins, 4 losses, 2 REVIEW; −1.3214 units on 7 settled selections. Archived availability unverified and 22/68 quoted player/market identities unavailable. This is NOT a verified live-policy replay or evidence of profitability. |
-| 7 | Result grading | Supported core props and standard game/quarter/half paper lines have exact-ID final-score grading. Missing data requires review. Book-specific rules, specialty grading and later stat-correction handling remain separate work. |
+| 5 | NFL player context | Current ESPN rosters/IDs, injury flags, provisional depth and attempts/targets available. Game-specific official active evidence is now required for auto model picks and is not connected; diagnostics/manual paper remain available. |
+| 6 | Core prop model audit | Four baseline stat forecasts retained; v2 tightens availability gating, not forecast equations. Frozen v1 conditional pilot stays 3 wins, 4 losses, 2 REVIEW; −1.3214 units on 7 settled selections. Archived availability and 22/68 identities unresolved. Not a verified live-policy replay. |
+| 7 | Result grading | Exact-ID supported core/period paper grading; missing data requires review. New last-14-day stat-correction button preserves original picks and grading audit. Book-specific participation/settlement and unsupported specialties remain unfinished. |
 | 8 | NFL paper performance | Eligible Forecast + track recommendations auto-save the original quote/model before display. Separate model/manual season/market/version W/L, push, pending, review and unit returns. Fresh prospective sample still needs collecting; no validated NFL accuracy claim. |
-| 9 | Closing prices and calibration | Same-book, same-line pregame observations supported on explicit odds refreshes. Verified near-kickoff closing capture and calibrated forecast probabilities remain unfinished. Do not call current observations true CLV. |
-| 10 | Weekly operation and expansion | Runbook below is ready. Complete NFL paper workflow first, then validate college spreads/totals and specialty models. Parlays, TD estimates and teasers are research-only. |
+| 9 | Closing prices and calibration | Exact-line last-five-minute observation/missed counts, Brier/log loss/calibration bins, drawdown and game-cluster diagnostics added. No automatic final close collection or completed holdout calibration. Do not call observations true CLV. |
+| 10 | Weekly operation and expansion | Manual NFL paper runbook available; model issuance is availability-blocked. College quote board stays open. Legacy parlay/TD/teaser recommendation engines disabled pending validation. |
 
 ## Weekly runbook
 
@@ -36,7 +55,8 @@ For college: click **College football — spreads & totals** → **Load / refres
 
 ## Verification evidence for this release
 
-- College-board / historical-pilot release: all 65 automated tests and TypeScript build passed. Browser verified the named college entry, 96 upcoming games, 38 UMass–Rutgers quotes, 4 BetMGM filter results and a free cached repeat. Isolated API checks: login 200, anonymous college access 401, invalid/out-of-scope college requests 400, official and NFL paper ledgers both zero. The college board never creates picks. Live deployment status will be recorded after verification.
+- College-board / historical-pilot release: all 65 automated tests and TypeScript build passed. Browser verified the named college entry, 96 upcoming games, 38 UMass–Rutgers quotes, 4 BetMGM filter results and a free cached repeat. Browser inspection also corrected the heading's sticky-menu offset and expanded the game selector to full width. Isolated API checks: login 200, anonymous college access 401, invalid/out-of-scope college requests 400, official and NFL paper ledgers both zero. The college board never creates picks.
+- Live release `dec0648ebb6e8e65f2a71821b2745036e7f09566`: Render live at 7:28:09 AM Central on August 31. Public health/new JavaScript verified; anonymous college endpoints return 401. Authenticated checks returned login 200, 96 games, odds 200 with 38 quotes limited to spreads/totals, cached repeat true and invalid/out-of-scope requests 400. Official and NFL paper records remain zero; before/after ledger fingerprints are identical. Pilot plus local/live college QA used 85 credits total (81 + 2 + 2), with 19,853 remaining at the final odds check. No backups, credentials or model safety gates were changed.
 - All 50 automated tests and the TypeScript build passed; production dependency audit reported zero vulnerabilities on the model release. Tests exercise market scope, identities, stale quotes, kickoff boundaries, NFL-specific statistics, missing data, rolling no-lookahead forecasts, persistence before issuance, concurrent duplicate protection, regulation periods vs overtime, report denominators and retries. Three UI regression tests additionally check the visible forecast entry point, first-column actions and paper-rules focus.
 - First fixed-cohort historical stat audit: 96 correlated forecasts across six evaluable player/market pairs; workload beat baseline on three pairs and lost on three. Two additional pairs lacked usable source data. This is not a betting backtest, win rate or ROI. Full method and all results: [NFL_FORECAST_V1.md](NFL_FORECAST_V1.md).
 - Local browser QA issued one automatically logged model paper recommendation, returned the same original on repeat, reopened its original evidence and left the separate official log at zero. Synthetic final-game tests verified grading and model/manual report separation. No QA selections are copied to production.

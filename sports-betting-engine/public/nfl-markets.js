@@ -81,7 +81,7 @@ async function loadNflQuotes() {
   nflClearQuotes(); nflStatus('Loading posted bookmaker prices...');
   try {
     const data = await nflFetch('/api/nfl/markets', { method:'POST', body:JSON.stringify({eventId:game.value,group:group.value}) });
-    nflQuotes = data.quotes;
+    nflQuotes = data.quotes.map((q,i)=>({...q,marketBaseline:data.marketBaselines?.[i]}));
     nflLoadedSelection = {eventId:game.value,group:group.value};
     const stamp = nflDisplayTime(data.fetchedAt);
     const context = `${data.event.awayTeam} @ ${data.event.homeTeam} • ${data.label} • ${data.cached?'Cached':'Fetched'} ${stamp} • Credits remaining at fetch: ${data.remainingCredits ?? 'unknown'}.`;
@@ -99,7 +99,7 @@ function renderNflQuotes() {
   document.getElementById('nfl-quote-count').textContent = `${rows.length} matching quotes (${nflQuotes.length} total). ${forecastRows?`${forecastRows} core-prop quotes with forecast controls, shown first.`:'No supported core-prop quotes match this view. Choose Passing props or Rushing & receiving props, or clear the search filter; availability varies.'} Showing up to 250; filter to narrow. Lines and periods are kept separate. Yellow timestamps need a fresh sportsbook check.`;
   const table = document.createElement('table'); table.className = 'market-table';
   const header = document.createElement('thead'); const hr = document.createElement('tr');
-  for (const label of ['Forecast / paper','Market / period','Player / team','Selection','Line','Odds','Sportsbook','Updated']) {
+  for (const label of ['Forecast / paper','Market / period','Player / team','Selection','Line','Odds','Sportsbook','Updated','Market baseline (not model)']) {
     const th = document.createElement('th'); th.textContent = label; if(label==='Forecast / paper')th.className='nfl-actions'; hr.append(th);
   }
   header.append(hr); table.append(header);
@@ -109,6 +109,10 @@ function renderNflQuotes() {
     const age = Date.now() - Date.parse(q.updatedAt ?? '');
     const stale = !Number.isFinite(age) || age > 15*60_000 || age < -60_000;
     const values = [q.market.replace(/_/g,' '),q.participant || '—',q.side,q.line ?? '—',q.price > 0 ? `+${q.price}` : q.price,q.book,q.updatedAt ? nflDisplayTime(q.updatedAt) : 'Unknown'];
+    const baseline=q.marketBaseline;
+    values.push(baseline?.conditionalNoPushProbability!=null
+      ? `${nflPct(baseline.conditionalNoPushProbability)} conditional on no push · ${baseline.referenceBooks.length} other books · not validated EV`
+      : 'Unavailable: needs exact two-sided prices from 3 other books.');
     values.forEach((value,i) => { const td=document.createElement('td'); td.textContent=String(value); if(i===6&&stale)td.className='market-stale'; tr.append(td); });
     const actions = document.createElement('td'); actions.className='nfl-actions';
     if (nflCore.has(q.market)) {
@@ -176,6 +180,11 @@ function renderNflForecast(panel,data) {
     for(const reason of reasons)nflText(panel,`Quote check: ${reason}`);
   }
   for(const warning of f.warnings)nflText(panel,warning);
+  if(f.coverage) {
+    nflText(panel,`Data coverage: ${f.coverage.playerIdentity} ${f.coverage.availability} ${f.coverage.workload}`);
+    nflText(panel,`Not connected or modeled: ${f.coverage.missingFeatures.join(', ')}.`);
+  }
+  if(data.evidence)nflText(panel,`This forecast attempt (including blocked checks) was archived: ${data.evidence.hash}.`);
   const details=document.createElement('details'),summary=document.createElement('summary');summary.textContent='Audit: locked source games and rolling forecast tests';details.append(summary);
   for(const t of f.evaluation.tests)nflText(details,`${t.eventId} · ${nflDisplayTime(t.date)}: forecast ${nflFixed(t.prediction)}, actual ${t.actual}, baseline ${nflFixed(t.baseline)}; training through ${nflDisplayTime(t.trainingThrough)}.`);
   nflText(details,`Input fingerprint: ${f.dataHash}`);panel.append(details);
@@ -187,10 +196,16 @@ async function loadNflPaper(grade) {
   const status=document.getElementById('nfl-paper-status'),panel=document.getElementById('nfl-paper-results');
   status.textContent=grade?'Checking up to ten completed NFL games...':'Loading separate NFL paper record...';
   try {
-    const data=await nflFetch(grade?'/api/nfl/paper/grade':'/api/nfl/paper',grade?{method:'POST'}:{});
+    const data=await nflFetch(grade==='recheck'?'/api/nfl/paper/recheck':grade?'/api/nfl/paper/grade':'/api/nfl/paper',grade?{method:'POST'}:{});
     panel.replaceChildren();
-    status.textContent=`${data.picks.length} paper selections. ${grade?`${data.checked} checked; ${data.remainingGames} additional games awaiting another grading run. `:''}${data.report.note}`;
+    status.textContent=`${data.picks.length} paper selections. ${grade?`${data.checked} checked; ${data.remainingGames} additional games awaiting another grading run. ${data.sourceFailures??0} source/review failures; settled results are retained on an outage. `:''}${data.report.note}`;
     for(const b of data.report.buckets)nflText(panel,`${b.season} · ${b.origin==='model'?'MODEL PAPER':'MANUAL PAPER'} · ${b.market.replace(/_/g,' ')} · ${b.version}: ${b.wins}W–${b.losses}L–${b.pushes}P · ${b.pending} pending · ${b.review} review · ${b.uniqueEvents} distinct games · ${nflFixed(b.profitUnits,2)} units · settled ROI ${b.roi==null?'unavailable':nflFixed(b.roi*100)+'%'}`);
+    for(const m of data.metrics??[]) {
+      nflText(panel,`${m.group}: probability-scored ${m.probabilityScored}; Brier ${nflFixed(m.multiclassBrier,3)}, log loss ${nflFixed(m.logLoss,3)} (lower is better). Drawdown ${nflFixed(m.maxDrawdownUnits,2)} units; ${m.distinctSettledGames} distinct settled games. This is not holdout validation.`);
+      nflText(panel,`Final-five-minute observations: ${m.closeWindowCaptured} captured, ${m.closeWindowMissed} missed after kickoff. Not verified final closing prices. ${m.settlementRevisions} audited settlement revisions. Game-cluster ROI interval: ${m.approximateGameClusterRoiInterval?m.approximateGameClusterRoiInterval.map(nflPct).join(' to '):'insufficient games'}.`);
+      const bins=m.calibration.filter(b=>b.count);
+      if(bins.length)nflText(panel,'Calibration (non-push): '+bins.map(b=>`${b.count} picks: predicted ${nflPct(b.meanPredictedNonPush)}, observed ${nflPct(b.observedNonPushWinRate)}`).join('; ')+'. Small/correlated samples remain uncertain.');
+    }
     const table=document.createElement('table');table.className='market-table';
     const header=document.createElement('tr');for(const title of ['Origin / model','Game','Selection','Saved price / book','Result','Latest same-line pregame price','Notes']){const th=document.createElement('th');th.textContent=title;header.append(th);}table.append(header);
     for(const p of [...data.picks].reverse().slice(0,100)){

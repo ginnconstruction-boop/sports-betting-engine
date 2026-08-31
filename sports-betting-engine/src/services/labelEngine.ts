@@ -132,6 +132,9 @@ function isNCAAGameLine(c: DecisionCandidate): boolean {
 }
 
 function classify(c: DecisionCandidate): Classification {
+  if (c.winProbability === undefined) return {
+    label: 'PASS', reasons: ['Research ranking only: no validated win probability or betting edge.'],
+  };
   const adjEdge   = c.adjustedEdge ?? 0;
   const riskGrade = c.riskGrade ?? 'HIGH';
   const isPriceOnly = c.riskFlags?.includes('price_only_signal') ?? false;

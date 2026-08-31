@@ -253,8 +253,8 @@ export function compareToLine(
     (awayRating.recentNetRating - homeRating.recentNetRating - homeAdv) * 10
   ) / 10;
 
-  // Gap: positive = posted line favors home more than we think (bet away)
-  //       negative = posted line favors away more than we think (bet home)
+  // A larger home handicap is more favorable to the home bettor.
+  // Model -7 vs offered -3 => +4 points of home-side value.
   const gap = Math.round((postedLine - ourLine) * 10) / 10;
   const absGap = Math.abs(gap);
 
@@ -262,10 +262,10 @@ export function compareToLine(
   let confidence: 'high' | 'medium' | 'low' = 'low';
 
   if (absGap >= 3) {
-    recommendation = gap > 0 ? 'away' : 'home';
+    recommendation = gap > 0 ? 'home' : 'away';
     confidence = absGap >= 5 ? 'high' : 'medium';
   } else if (absGap >= 1.5) {
-    recommendation = gap > 0 ? 'away' : 'home';
+    recommendation = gap > 0 ? 'home' : 'away';
     confidence = 'low';
   }
 

@@ -29,7 +29,7 @@ const subcommand = args[1]?.toLowerCase();
 const forceRefresh = args.includes('--force') || args.includes('-f');
 
 async function main() {
-  if (isPausedCommand(command)) throw new Error('This sport is paused for the football season. NFL and NCAAF only; history is preserved.');
+  if (isPausedCommand(command)) throw new Error('This sport or unvalidated specialty model is paused. NFL/college quotes and supported manual paper tracking remain available; history is preserved.');
   switch (command) {
     // -- Scans ----------------------------------------------
     case 'morning':       await runMorningScan({ forceRefresh }); break;

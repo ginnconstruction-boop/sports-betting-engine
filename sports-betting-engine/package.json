@@ -26,7 +26,7 @@
     "calibrate": "node --require ts-node/register/transpile-only src/index.ts calibrate",
     "history": "node --require ts-node/register/transpile-only src/index.ts historical",
     "validate": "node --require ts-node/register/transpile-only src/utils/validateSetup.ts",
-    "build": "tsc --noEmit && echo 'Type check passed'",
+    "build": "tsc --noEmit -p tsconfig.server.json && echo 'Type check passed'",
     "altparlays": "node --require ts-node/register/transpile-only src/index.ts altparlays",
     "sgp": "node --require ts-node/register/transpile-only src/index.ts sgp",
     "retro": "node --require ts-node/register/transpile-only src/index.ts retro",

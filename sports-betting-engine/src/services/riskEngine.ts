@@ -223,6 +223,11 @@ export function applyRisk(
   const correlatedMatchups = findCorrelatedMatchups(candidates);
 
   return candidates.map(c => {
+    if (c.winProbability === undefined) return {
+      ...c, adjustedWinProbability: undefined, adjustedEdge: undefined,
+      weightedAdjustedEdge: undefined, riskGrade: 'HIGH' as const,
+      riskFlags: ['unvalidated_probability'], riskScore: 0,
+    };
     const flags: string[] = [];
     let riskScore = 0;
 

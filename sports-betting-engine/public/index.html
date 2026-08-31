@@ -253,6 +253,7 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
       College football: spreads &amp; totals only. Other sports are paused; historical records remain intact.
     </section>
     <div class="focus-note">Stats below are lifetime history, not an NFL track record. Football models remain in observation mode while results accumulate. Quotes and research are not automatic betting instructions.</div>
+    <p class="focus-note">Readiness update: automatic NFL paper recommendations are on hold until verified game-specific availability is connected. Forecast diagnostics, quoted odds and manual paper tracking remain available. Open the 13-item checklist below for completed repairs and remaining blockers.</p>
     <!-- STATS -->
     <div class="stats-bar">
       <div class="stat-card" onclick="togglePicks()" style="cursor:pointer" title="Click to view all picks"><div class="stat-label">Total Picks &#x2197;</div><div class="stat-value" id="stat-total">--</div></div>
@@ -285,6 +286,25 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
     </div>
     <div class="focus-note">Model scans focus on game-day candidates. For early-week and specialty prices, use the market board below.</div>
 
+    <details class="market-board" id="football-readiness">
+      <summary>Football readiness — 13-item catch-up checklist</summary>
+      <p class="focus-note">Software repairs do not establish profitable predictions. NFL research, quotes and manual paper tracking are available. Automatic model selections require verified game-specific availability; that feed is not connected yet. No live betting model is approved.</p>
+      <ol class="focus-note">
+        <li>Spread direction: repaired; unvalidated power bonuses removed from football scoring.</li>
+        <li>ATS: selected-pick view deduplicated; unknown venues excluded from venue splits. Complete all-game/closing-line migration still pending.</li>
+        <li>Legacy probability: invented score-to-win estimates and football stake suggestions removed.</li>
+        <li>Weather: UTC-hour parser and unknown/roof safeguards tested. Verified venue/roof feed and forecast archive still pending.</li>
+        <li>Identity/availability: exact ESPN IDs and immutable attempt evidence; cross-provider IDs, transactions and verified active reports still pending.</li>
+        <li>Workload: attempts/targets baseline retained. Snap/route/share/teammate adjustments need data and validation.</li>
+        <li>Opponent strength: generic football proxy disabled. Football-specific opponent-adjusted model still pending.</li>
+        <li>Market baseline: exact-line, two-sided no-vig comparison excludes target book; needs 3 other matched books. Descriptive only.</li>
+        <li>Validation: paper Brier/log loss, calibration bins, drawdown and game-cluster uncertainty available. Frozen holdout and feature-removal study not completed.</li>
+        <li>Tracking: original picks preserved, stat-correction audit added, final-five-minute observations/missed counts. Automated final closing capture and sportsbook settlement still pending.</li>
+        <li>College: separate spreads/totals quote board. Data supplier access and independent model validation still pending.</li>
+        <li>Specialty models: disabled pending distribution/dependence validation. Quotes and supported manual paper grading remain available.</li>
+        <li>Cleanup: unsupported football score bonuses and implied professional-money influence removed; historical records retained.</li>
+      </ol>
+    </details>
     <details class="market-board" id="nfl-market-board">
       <summary>NFL Forecast + track &amp; Market Board</summary>
       <div class="nfl-forecast-guide">
@@ -314,6 +334,8 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
       <p class="focus-note">Acknowledge the rules before Forecast + track. It considers fresh loaded quotes at your configured books and locks at most one model pick per player/market/game/version. Failed data or model checks return no recommendation. Missing results require review, never an assumed zero or loss. Forecasts are experimental and paper-only; roster status is not confirmed game-day availability.</p>
       <button class="scan-btn" onclick="loadNflPaper(false)">Refresh paper record (no odds credits)</button>
       <button class="scan-btn" onclick="loadNflPaper(true)">Grade completed paper picks (no odds credits)</button>
+      <button class="scan-btn" onclick="loadNflPaper('recheck')">Check stat corrections — last 14 days (no odds credits)</button>
+      <p class="focus-note">Availability gate: current roster status is not a verified game-day active report. Until that source is connected, forecast diagnostics can run but automatic model picks remain blocked. Manual paper tracking is still available. Refreshing quotes in the final five minutes can capture an exact-line pregame observation; it is not guaranteed to be the final closing price. No background odds purchases are enabled.</p>
       <div id="nfl-paper-status" class="focus-note" role="status" aria-live="polite"></div>
       <div id="nfl-paper-results" class="market-table-wrap"></div>
     </details>
@@ -336,12 +358,13 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
     </details>
 
     <!-- PROPS -->
-    <div class="section-label">NFL specialty research — estimates, not sportsbook parlay quotes</div>
+    <div class="section-label">NFL specialty models — paused pending validation</div>
+    <p class="focus-note">Quarter/half quotes and supported manual paper tests remain in the NFL board. TD, alternate-line, teaser and parlay model recommendations are disabled until distributions, correlated outcomes and settlement rules are validated. No history was deleted.</p>
     <div class="btn-grid">
-      <button class="scan-btn prop" onclick="runCmd('altparlays-nfl','NFL Alt Parlays')"><span class="num">13</span>NFL Alt Parlays</button>
-      <button class="scan-btn prop" onclick="runCmd('sgp-nfl','NFL SGP')"><span class="num">15</span>NFL SGP</button>
-      <button class="scan-btn prop" onclick="runCmd('firsttd','First TD')"><span class="num">29</span>First TD</button>
-      <button class="scan-btn prop" onclick="runCmd('teasers','NFL Teasers')"><span class="num">30</span>NFL Teasers</button>
+      <button class="scan-btn prop" disabled>NFL Alt Parlays — paused</button>
+      <button class="scan-btn prop" disabled>NFL SGP — paused</button>
+      <button class="scan-btn prop" disabled>First TD — paused</button>
+      <button class="scan-btn prop" disabled>NFL Teasers — paused</button>
     </div>
 
     <!-- TRACKING -->
@@ -1604,7 +1627,7 @@ function showToast(msg, color='green') {
   _toastTimer = setTimeout(() => { el.className = color; }, 5000);
 }
 </script>
-<script src="/nfl-markets.js?v=forecast-visible-1"></script>
+<script src="/nfl-markets.js?v=football-foundation-2"></script>
 <script src="/college-markets.js?v=college-board-1"></script>
 <div id="toast"></div>
 </body>

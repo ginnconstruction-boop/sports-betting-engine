@@ -11,11 +11,14 @@ import { NflRecommendations } from '../services/nflRecommendations';
 import { NflObservation, NflResearch } from '../services/nflResearch';
 
 const now = Date.parse('2026-08-31T01:00:00Z');
-const event = { id:'odds-test', sportKey:'americanfootball_nfl', homeTeam:'Seattle Seahawks', awayTeam:'New England Patriots', commenceTime:'2026-09-10T00:15:00Z' };
+const event = { id:'odds-test', sportKey:'americanfootball_nfl', homeTeam:'Seattle Seahawks', awayTeam:'New England Patriots', commenceTime:'2026-08-31T02:15:00Z' };
 const quote: MarketQuote = { quoteId:'q1', market:'player_pass_yds', participant:'Test Player', side:'Over', line:200.5,
   price:-110, book:'FanDuel', bookKey:'fanduel', updatedAt:new Date(now).toISOString(), stale:false };
 function input(): NflForecastInput {
-  return { player:{ id:'123', name:'Test Player', teamId:'17', team:event.awayTeam, position:'QB', rosterStatus:'Active', injuries:[], fetchedAt:new Date(now).toISOString(), source:'fixture' },
+  return { availability: { eventId: event.id, playerId: '123', teamId: '17', status: 'active',
+      source: 'https://fixture.invalid/official-game-status', sourceKind: 'official_game_status',
+      publishedAt: new Date(now).toISOString(), fetchedAt: new Date(now).toISOString() },
+    player:{ id:'123', name:'Test Player', teamId:'17', team:event.awayTeam, position:'QB', rosterStatus:'Active', injuries:[], fetchedAt:new Date(now).toISOString(), source:'fixture' },
     asOf:new Date(now).toISOString(), depth:{ rows:[{position:'qb',formation:'test',listedOrder:1}],source:'fixture',sourceTimestamp:new Date(now).toISOString() }, sources:[],
     observations:Array.from({length:20},(_,i)=>({eventId:`history-${i}`,date:new Date(Date.parse('2025-08-31T18:00Z')+i*7*86400_000).toISOString(),teamId:'17',opponent:'Fixture opponent',opportunity:20+i,value:(20+i)*8})) };
 }
@@ -68,6 +71,55 @@ test('point projection does not depend on a posted betting line or odds', () => 
   const f=forecast();assessNflQuote(f,{...quote,line:1000,price:300},['fanduel'],now);
   assert.equal(f.point.projection,272);assert.equal(f.reasons.length,0);
   assert.equal(f.currentSeasonGames,0);assert.ok(f.warnings.some(w=>w.includes('prior-season')));
+});
+
+test('missing game-specific availability blocks paper issuance while preserving the diagnostic', async () => {
+  const dir=temp();
+  try {
+    const data=input();delete data.availability;
+    const app=setup(dir,data);
+    const board=await app.board.quotes(event.id,'passing');
+    const result=await app.service.run(event.id,'passing',board.quotes[0].quoteId,PAPER_RULES);
+    assert.equal(result.status,'no_recommendation');
+    assert.ok(result.forecast.point);
+    assert.ok(result.forecast.reasons.some(r=>r.includes('game-specific availability')));
+    assert.equal(app.ledger.read().length,0);
+  } finally { clean(dir); }
+});
+
+test('late pregame capture needs exact book/line and a source timestamp in the five-minute window', async () => {
+  const dir=temp();
+  try {
+    const app=setup(dir);await app.board.quotes(event.id,'passing');
+    const saved=await app.ledger.save(event,quote,PAPER_RULES);
+    const capture=Date.parse(event.commenceTime)-2*60_000;
+    app.setNow(capture);
+    app.ledger.observe(event.id,[{...quote,price:-120,updatedAt:new Date(capture).toISOString()}]);
+    let p=app.ledger.read()[0];
+    assert.equal(p.quote.price,saved.pick.quote.price);assert.equal(p.closeWindow.price,-120);
+    assert.equal(p.closeWindow.method,'observed_last_5_minutes_not_verified_final_close');
+    app.setNow(Date.parse(event.commenceTime)+1);
+    app.ledger.observe(event.id,[{...quote,price:-130,updatedAt:event.commenceTime}]);
+    p=app.ledger.read()[0];assert.equal(p.closeWindow.price,-120);
+  } finally {clean(dir);}
+});
+
+test('stat corrections append an audit trail without changing the original forecast or quote', async () => {
+  const dir=temp();
+  try {
+    const app=setup(dir);const board=await app.board.quotes(event.id,'passing');
+    const issued=await app.service.run(event.id,'passing',board.quotes[0].quoteId,PAPER_RULES);
+    app.setNow(Date.parse(event.commenceTime)+5*3600_000);
+    await app.ledger.grade();const first=app.ledger.read()[0];
+    assert.equal(first.result,'WIN');assert.equal(first.gradingAudit.length,1);
+    app.research.summary=async()=>finalSummary(1);
+    const corrected=await app.ledger.grade(true);const pick=corrected.picks[0];
+    assert.equal(pick.result,'LOSS');assert.equal(pick.gradingAudit.length,2);
+    assert.equal(pick.gradingAudit[0].result,'WIN');
+    assert.deepEqual(pick.quote,issued.pick.quote);assert.deepEqual(pick.forecast,issued.pick.forecast);
+    app.research.summary=async()=>{throw Error('outage');};
+    await app.ledger.grade(true);assert.equal(app.ledger.read()[0].result,'LOSS');
+  } finally {clean(dir);}
 });
 test('integer-stat empirical distribution accounts for pushes; probabilities sum to one', () => {
   const d=nflResidualDistribution(10,[-2,-1,0,0,1,2,3,4],'player_receptions',10);

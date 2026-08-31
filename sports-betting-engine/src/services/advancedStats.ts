@@ -79,6 +79,8 @@ export async function getAdvancedTeamStats(
   sportKey: string,
   teamName: string
 ): Promise<AdvancedTeamStats | null> {
+  // Generic scoring/Pythagorean proxies are not opponent-adjusted football efficiency.
+  if (sportKey.startsWith('americanfootball_')) return null;
   const cacheKey = `${sportKey}__${teamName}__advanced`;
   const cached = statsCache.get(cacheKey);
   if (cached && Date.now() - cached.fetchedAt < CACHE_TTL) return cached.stats;

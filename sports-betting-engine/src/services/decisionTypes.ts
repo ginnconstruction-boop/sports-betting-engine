@@ -235,9 +235,8 @@ export interface DecisionCandidate {
   // ----------------------------------------------------------
 
   /**
-   * Estimated win probability derived from the existing score.
-   * Formula: 0.50 + (score / 100) × 0.15  → range [0.50, 0.65]
-   * Conservative first-pass model; sport/role adjustments in later phases.
+   * Reserved for a validated probability model. Legacy ranking enrichment
+   * deliberately leaves this undefined; scores are not win probabilities.
    */
   winProbability?: number;
 

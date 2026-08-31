@@ -2,11 +2,13 @@ import { createHash } from 'crypto';
 import { UpcomingEvent } from '../api/oddsApiClient';
 import { MarketQuote } from './nflMarketBoard';
 import { NFL_CORE_STATS, NflObservation, NflPlayer, nflName, nflSeason } from './nflResearch';
+import { availabilityReasons, GameAvailability, nflInputCoverage } from './nflEvidence';
 
-export const NFL_FORECAST_VERSION = 'nfl-workload-residual-v1';
+export const NFL_FORECAST_VERSION = 'nfl-workload-residual-v2-availability';
 export const NFL_FORECAST_POLICY = Object.freeze({ minTraining: 8, maxTraining: 20, recentGames: 5,
   minErrors: 8, maxAgeDays: 400, minEstimatedEV: 0.05, minConditionalProbability: 0.55 });
 export interface NflForecastInput {
+  availability?: GameAvailability;
   player: NflPlayer; observations: NflObservation[]; asOf: string;
   depth: { rows: Array<{ formation: string; position: string; listedOrder: number }>; sourceTimestamp: string | null; source: string };
   sources: Array<{ url: string; fetchedAt: string; season: number }>;
@@ -86,6 +88,7 @@ export function buildNflForecast(input: NflForecastInput, event: UpcomingEvent, 
     'Missing game-log rows may omit zero-opportunity appearances. Injuries and role changes can invalidate historical rates.',
   ];
   if (!NFL_CORE_STATS[market]) throw new Error('Unsupported NFL forecast market.');
+  reasons.push(...availabilityReasons(input.availability, input, event, now));
   const cutoff = Math.min(now, Date.parse(event.commenceTime), Date.parse(input.asOf));
   if (!Number.isFinite(cutoff)) throw new Error('Invalid forecast cutoff.');
   if (Date.parse(event.commenceTime) <= now) reasons.push('Kickoff has passed.');
@@ -113,11 +116,11 @@ export function buildNflForecast(input: NflForecastInput, event: UpcomingEvent, 
   if (!input.depth.rows.some(d => d.listedOrder === 1)) reasons.push('No first-listed depth-chart role; verify workload manually.');
   const currentGames = rows.filter(r => nflSeason(r.date) === nflSeason(event.commenceTime)).length;
   if (currentGames < 3) warnings.push('Fewer than three current-season games: heavy prior-season reliance and offseason role uncertainty.');
-  const dataHash = createHash('sha256').update(JSON.stringify({ market, player: input.player.id, rows, asOf: input.asOf })).digest('hex');
+  const dataHash = createHash('sha256').update(JSON.stringify({ market, event, input, rows })).digest('hex');
   return { version: NFL_FORECAST_VERSION, mode: 'experimental_paper' as const, market, player: input.player,
     asOf: input.asOf, dataHash, sources: input.sources, depth: input.depth, observations: rows,
     usableGames: rows.length, excludedGames: excluded, currentSeasonGames: currentGames,
-    point, evaluation, errors, reasons, warnings };
+    point, evaluation, errors, reasons, warnings, availability: input.availability ?? null, coverage: nflInputCoverage(input) };
 }
 export type NflForecast = ReturnType<typeof buildNflForecast>;
 

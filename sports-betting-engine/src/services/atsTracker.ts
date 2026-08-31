@@ -28,6 +28,7 @@ import * as path from 'path';
 import { EventSummary }     from '../types/odds';
 import { getCompletedScores, CompletedScore } from '../api/oddsApiClient';
 import { CreditBudgetGuard } from './creditBudgetGuard';
+import { nflSeason } from './nflResearch';
 
 const SNAPSHOT_DIR = process.env.SNAPSHOT_DIR ?? './snapshots';
 const ATS_LIVE_FILE = path.join(SNAPSHOT_DIR, 'ats_live.json');
@@ -63,7 +64,10 @@ export interface ATSGameResult {
   gameDate:     string;    // YYYY-MM-DD
   homeTeam:     string;
   awayTeam:     string;
-  homeSpread:   number;    // consensus closing spread (home perspective)
+  homeSpread:   number;    // pregame scan consensus, NOT verified closing
+  lineSource?: string;
+  capturedAt?: string;
+  closingVerified?: false;
   homeScore:    number;
   awayScore:    number;
   homeMargin:   number;    // homeScore - awayScore
@@ -166,8 +170,10 @@ function loadRecentSpreadMap(daysBack = 30): Map<string, {
   sportKey:  string;
   gameDate:  string;
   homeSpread: number;
+  capturedAt: string;
+  lineSource: string;
 }> {
-  const spreadMap = new Map<string, { homeTeam: string; awayTeam: string; sportKey: string; gameDate: string; homeSpread: number }>();
+  const spreadMap = new Map<string, { homeTeam: string; awayTeam: string; sportKey: string; gameDate: string; homeSpread: number; capturedAt: string; lineSource: string }>();
 
   try {
     if (!fs.existsSync(SNAPSHOT_DIR)) return spreadMap;
@@ -188,6 +194,11 @@ function loadRecentSpreadMap(daysBack = 30): Map<string, {
         const summaries: EventSummary[] = raw?.eventSummaries ?? [];
 
         for (const s of summaries) {
+          const capturedAt = raw?.metadata?.runTimestamp;
+          const captured = Date.parse(capturedAt ?? '');
+          if (!Number.isFinite(captured) || !Number.isFinite(Date.parse(s.startTime)) || captured >= Date.parse(s.startTime)) continue;
+          const previous = spreadMap.get(s.eventId);
+          if (previous && Date.parse(previous.capturedAt) >= captured) continue;
           const homeSpread = extractHomeSpread(s);
           if (homeSpread === null) continue;
 
@@ -201,6 +212,7 @@ function loadRecentSpreadMap(daysBack = 30): Map<string, {
             sportKey:  s.sportKey,
             gameDate,
             homeSpread,
+            capturedAt, lineSource: file,
           });
         }
       } catch { /* skip malformed snapshot */ }
@@ -260,31 +272,35 @@ function rebuildTeamRecords(gameResults: ATSGameResult[]): Record<string, TeamAT
   };
 
   // Helper to accumulate into a timeframe set
-  const accumulate = (tf: ATSTimeframes, covered: boolean, push: boolean, daysAgo: number) => {
+  const accumulate = (tf: ATSTimeframes, covered: boolean, push: boolean, daysAgo: number, currentSeason: boolean) => {
     const add = (e: ATSEntry) => {
       if (push)        e.pushes++;
       else if (covered) e.wins++;
       else             e.losses++;
     };
     add(tf.allTime);
-    if (daysAgo <= 180) add(tf.season);
+    if (currentSeason) add(tf.season);
     if (daysAgo <= 30)  add(tf.monthly);
     if (daysAgo <= 7)   add(tf.weekly);
   };
 
   for (const g of gameResults) {
+    if (Date.parse(g.gameDate) > now.getTime()) continue;
+    const currentSeason = g.sportKey.startsWith('americanfootball_')
+      ? nflSeason(g.gameDate) === nflSeason(now.getTime())
+      : new Date(g.gameDate).getUTCFullYear() === now.getUTCFullYear();
     const daysAgo = daysBetween(g.gameDate, now);
 
     // Home team record
     const homeRec = getRecord(g.homeTeam, g.sportKey);
-    accumulate(homeRec.home,    g.homeCovered, g.push, daysAgo);
-    accumulate(homeRec.overall, g.homeCovered, g.push, daysAgo);
+    accumulate(homeRec.home,    g.homeCovered, g.push, daysAgo, currentSeason);
+    accumulate(homeRec.overall, g.homeCovered, g.push, daysAgo, currentSeason);
     if (!homeRec.lastGame || g.gameDate > homeRec.lastGame) homeRec.lastGame = g.gameDate;
 
     // Away team record
     const awayRec = getRecord(g.awayTeam, g.sportKey);
-    accumulate(awayRec.away,    g.awayCovered, g.push, daysAgo);
-    accumulate(awayRec.overall, g.awayCovered, g.push, daysAgo);
+    accumulate(awayRec.away,    g.awayCovered, g.push, daysAgo, currentSeason);
+    accumulate(awayRec.overall, g.awayCovered, g.push, daysAgo, currentSeason);
     if (!awayRec.lastGame || g.gameDate > awayRec.lastGame) awayRec.lastGame = g.gameDate;
   }
 
@@ -339,6 +355,7 @@ export async function updateATSTracker(): Promise<number> {
           homeTeam:    spreadEntry.homeTeam,
           awayTeam:    spreadEntry.awayTeam,
           homeSpread:  spreadEntry.homeSpread,
+          lineSource: spreadEntry.lineSource, capturedAt: spreadEntry.capturedAt, closingVerified: false,
           homeScore:   score.homeScore,
           awayScore:   score.awayScore,
           homeMargin:  score.homeScore - score.awayScore,

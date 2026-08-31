@@ -383,6 +383,7 @@ export function scoreAllBets(
   const pinnacleEdgeMap = extractPinnacleEdges(summaries, userBookKeys);
 
   for (const event of summaries) {
+    const footballResearchOnly = event.sportKey.startsWith('americanfootball_');
     const hours = hoursUntil(event.startTime);
 
     // #6 -- filter games too close or too far
@@ -443,7 +444,7 @@ export function scoreAllBets(
       const openerBonus = openerComparison?.isLargeMove ? 6 : 0;
       const powerData = options.powerRatings?.get(event.eventId);
       const powerComparison = powerData?.comparison;
-      const powerBonus = powerComparison?.isBeatPinnacle ? 10
+      const powerMagnitude = powerComparison?.isBeatPinnacle ? 10
         : powerComparison?.confidence === 'high' ? 6
         : powerComparison?.confidence === 'medium' ? 3 : 0;
 
@@ -495,6 +496,10 @@ export function scoreAllBets(
       const sideCandidates: SC[] = [];
 
       for (const side of market.sides) {
+        const powerBonus = marketKey === 'spreads' && (
+          (powerComparison?.recommendation === 'home' && side.outcomeName === event.homeTeam) ||
+          (powerComparison?.recommendation === 'away' && side.outcomeName === event.awayTeam)
+        ) ? powerMagnitude : 0;
         if (!side.consensusPrice) continue;
 
         // User book offers only
@@ -611,9 +616,9 @@ export function scoreAllBets(
         }
 
         const { total: rawTotal, priceScore, lineScore, sharpScore } = scoreBet(
-          priceDiff, maxLineDiff, side.bookCount, sharpStrength,
-          movement.lineAlert || movement.priceAlert, recentMove,
-          weather?.weatherImpact ?? 'none', keyInjuries.length > 0
+          priceDiff, maxLineDiff, side.bookCount, footballResearchOnly ? 0 : sharpStrength,
+          !footballResearchOnly && (movement.lineAlert || movement.priceAlert), recentMove,
+          event.sportKey.startsWith('americanfootball_') ? 'none' : weather?.weatherImpact ?? 'none', keyInjuries.length > 0
         );
 
         // Steam and CLV are side-specific -- must be declared before tier bonuses
@@ -644,9 +649,10 @@ export function scoreAllBets(
         const tier1Bonus = angleBonus + clvBonus + powerBonus;
         const tier2Bonus = rlmBonus + playerImpactBonus + steamBonus + atsBonus + openerBonus;
         const tier3Bonus = officialsBonus + fatigueBonus + motivationBonus + h2hBonus + pinnacleSharpScore;
-        const allBonuses = contextAdj + tier1Bonus + tier2Bonus + tier3Bonus + mlbRunLinePenalty;
+        // Unvalidated contextual/duplicate signals have no football model weight.
+        const allBonuses = footballResearchOnly ? 0 : contextAdj + tier1Bonus + tier2Bonus + tier3Bonus + mlbRunLinePenalty;
         const preMultiplier = Math.max(0, Math.min(rawTotal + allBonuses, 100));
-        const preCalibration = Math.max(0, Math.min(Math.round(preMultiplier * efficiencyMultiplier), 100));
+        const preCalibration = Math.max(0, Math.min(Math.round(preMultiplier * (footballResearchOnly ? 1 : efficiencyMultiplier)), 100));
 
         // Apply learned weights from retrospective analysis
         const preLearnedWeights = applyCalibration(
@@ -655,7 +661,7 @@ export function scoreAllBets(
           marketLabel(marketKey),
           options.calibrationModel ?? null
         );
-        const total = applyLearnedWeights(
+        const total = footballResearchOnly ? preCalibration : applyLearnedWeights(
           preLearnedWeights,
           [...contextSignals.map((s: any) => s.type), ...(situationalList.map((a: any) => a.name))],
           options.learnedWeights ?? {}
@@ -835,11 +841,11 @@ export function scoreAllBets(
         }
       }
 
-      const tier = getTier(best.score, best.signalCount, (event as any).sportKey);
+      const tier = footballResearchOnly ? 'MONITOR' : getTier(best.score, best.signalCount, (event as any).sportKey);
       const tierIcon = tier === 'BET' ? '[HOT] BET' : tier === 'LEAN' ? '[OK] LEAN' : '? MONITOR';
 
-      const winProb = scoreToProbability(best.score);
-      const kellyResult = calculateKelly(winProb, best.bestUserPrice > 0 ? best.bestUserPrice : (best.consensusPrice ?? -110));
+      const kellyResult = event.sportKey.startsWith('americanfootball_') ? { recommendedBetPct: 0 }
+        : calculateKelly(scoreToProbability(best.score), best.bestUserPrice);
       candidates.push({
         rank: 0, tier, grade: scoreToGrade(best.score), score: best.score,
         priceScore: best.priceScore, lineScore: best.lineScore, sharpScore: best.sharpScore,
@@ -858,8 +864,9 @@ export function scoreAllBets(
         marketBestBook: best.marketBestBook, lineDiff: maxLineDiff,
         bookCount: side.bookCount, bookConfidence: bookConfidence(side.bookCount),
         sharpSignal: marketIntel?.sharpIndicators.map(i => i.signal).join(', ') ?? '',
-        recommendation: tierIcon, fadePublicFlag: best.fadeFlag,
-        fadePublicDetail: best.fadeDetail, weatherAlert, injuryFlags,
+        recommendation: footballResearchOnly ? 'RESEARCH RANK — no validated edge' : tierIcon,
+        fadePublicFlag: footballResearchOnly ? false : best.fadeFlag,
+        fadePublicDetail: footballResearchOnly ? 'Inferred movement only; no verified professional/public betting flow.' : best.fadeDetail, weatherAlert, injuryFlags,
         lineMovementAlert: best.movement.lineAlert, lineMovementDetail: best.movement.lineDetail,
         priceMovementAlert: best.movement.priceAlert, priceMovementDetail: best.movement.priceDetail,
         isRecentMovement: best.recentMove, fullReasoning,
@@ -1073,7 +1080,7 @@ export function printTopTen(bets: ScoredBet[], windowHours = 24): void {
     p(`  |  ${bet.betType.padEnd(12)}  [OK] BET: ${bet.side}`);
     // Unit sizing: 1u = $UNIT_SIZE ($10). Kelly pct of bankroll → units + dollars.
     const bankroll = parseFloat(process.env.BANKROLL ?? '0');
-    const kPct = bet.kellyPct > 0 ? bet.kellyPct : 0.5;
+    const kPct = bet.sportKey?.startsWith('americanfootball_') ? 0 : bet.kellyPct > 0 ? bet.kellyPct : 0.5;
     let bankrollLine: string;
     if (bankroll > 0) {
       const dollarAmt  = Math.round(bankroll * kPct / 100);

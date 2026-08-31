@@ -18,6 +18,9 @@ import { NflMarketBoard, MarketBoardError } from './src/services/nflMarketBoard'
 import { NflResearch } from './src/services/nflResearch';
 import { NflPaperLedger, nflPaperReport } from './src/services/nflPaper';
 import { NflRecommendations } from './src/services/nflRecommendations';
+import { NflEvidenceArchive } from './src/services/nflEvidence';
+import { exactMarketBaseline } from './src/services/footballMarketBaseline';
+import { footballPaperMetrics } from './src/services/footballValidation';
 import { CollegeMarketBoard, COLLEGE_WINDOW_DAYS } from './src/services/collegeMarketBoard';
 
 const app  = express();
@@ -109,7 +112,7 @@ app.post('/api/logout', requireAuth, (req, res) => {
 app.get('/api/stream/:command', requireAuth, (req, res) => {
   const { command } = req.params;
   const label = req.query.label as string ?? command;
-  if (isPausedCommand(command)) return res.status(403).json({ error: 'This sport is paused. Production is focused on NFL and NCAAF; history is preserved.' });
+  if (isPausedCommand(command)) return res.status(403).json({ error: 'This sport or unvalidated specialty model is paused. NFL/college quote boards and supported paper tracking remain available; history is preserved.' });
 
   if (!ALLOWED[command]) {
     res.status(400).end();
@@ -253,7 +256,7 @@ app.get('/api/stream/:command', requireAuth, (req, res) => {
 // ── Fallback non-streaming run (kept for compatibility) ──
 app.post('/api/run/:command', requireAuth, async (req, res) => {
   const { command } = req.params;
-  if (isPausedCommand(command)) return res.status(403).json({ error: 'This sport is paused. Production is focused on NFL and NCAAF; history is preserved.' });
+  if (isPausedCommand(command)) return res.status(403).json({ error: 'This sport or unvalidated specialty model is paused. NFL/college quote boards and supported paper tracking remain available; history is preserved.' });
   if (!ALLOWED[command]) return res.status(400).json({ error: 'Unknown command' });
 
   const { execSync } = require('child_process');
@@ -288,7 +291,8 @@ app.post('/api/college/markets', requireAuth, async (req, res) => {
 const nflMarketBoard = new NflMarketBoard();
 const nflResearch = new NflResearch();
 const nflPaper = new NflPaperLedger(path.join(SNAPSHOT_DIR, 'nfl_paper_picks.json'), nflResearch);
-const nflRecommendations = new NflRecommendations(nflMarketBoard, nflResearch, nflPaper);
+const nflRecommendations = new NflRecommendations(nflMarketBoard, nflResearch, nflPaper, undefined, undefined,
+  new NflEvidenceArchive(path.join(SNAPSHOT_DIR, 'nfl_forecast_evidence')));
 app.get('/api/nfl/events', requireAuth, async (_req, res) => {
   try {
     res.json({ events: await nflMarketBoard.events(), windowDays: NFL_BOARD_WINDOW_DAYS,
@@ -304,7 +308,7 @@ app.post('/api/nfl/markets', requireAuth, async (req, res) => {
     const data = await nflMarketBoard.quotes(eventId, group);
     let paperWarning: string | undefined;
     try { nflPaper.observe(eventId, data.quotes); } catch { paperWarning = 'Paper ledger unavailable; pregame observation was not saved.'; }
-    res.json({ ...data, paperWarning });
+    res.json({ ...data, paperWarning, marketBaselines: data.quotes.map(q => exactMarketBaseline(data.event, q, data.quotes)) });
   } catch (err) {
     if (err instanceof MarketBoardError) return res.status(err.status).json({ error: err.message });
     res.status(502).json({ error: 'NFL odds feed unavailable or this request is not supported. No recommendation generated. Try another category later.' });
@@ -331,7 +335,7 @@ app.post('/api/nfl/forecast', requireAuth, async (req, res) => {
   } catch (err) { nflError(res, err); }
 });
 app.get('/api/nfl/paper', requireAuth, (_req, res) => {
-  try { const picks = nflPaper.read(); res.json({ picks, report: nflPaperReport(picks) }); }
+  try { const picks = nflPaper.read(); res.json({ picks, report: nflPaperReport(picks), metrics: footballPaperMetrics(picks) }); }
   catch (err) { nflError(res, err); }
 });
 app.post('/api/nfl/paper', requireAuth, async (req, res) => {
@@ -339,7 +343,10 @@ app.post('/api/nfl/paper', requireAuth, async (req, res) => {
   catch (err) { nflError(res, err); }
 });
 app.post('/api/nfl/paper/grade', requireAuth, async (_req, res) => {
-  try { res.json(await nflPaper.grade()); } catch (err) { nflError(res, err); }
+  try { const data = await nflPaper.grade(); res.json({ ...data, metrics: footballPaperMetrics(data.picks) }); } catch (err) { nflError(res, err); }
+});
+app.post('/api/nfl/paper/recheck', requireAuth, async (_req, res) => {
+  try { const data = await nflPaper.grade(true); res.json({ ...data, metrics: footballPaperMetrics(data.picks) }); } catch (err) { nflError(res, err); }
 });
 
 // ── Picks log ──
@@ -605,7 +612,7 @@ app.post('/api/ats/backfill', requireAuth, async (req, res) => {
 });
 
 // ── Health ──
-app.get('/api/health', (_, res) => res.json({ ok: true, ts: new Date().toISOString() }));
+app.get('/api/health', (_, res) => res.json({ ok: true, release: 'football-foundation-2', ts: new Date().toISOString() }));
 
 // ── SPA fallback ──
 app.get('*', (_, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));

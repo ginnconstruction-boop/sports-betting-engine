@@ -17,6 +17,9 @@ export function productionMarkets(sportKey: string, markets: string[]): string[]
 export const PAUSED_COMMANDS = new Set([
   'nba', 'mlb', 'nhl', 'ncaab', 'ncaa-baseball', 'nba-props',
   'mlbprops', 'nhlprops', 'firstbasket', 'fb',
+  // Legacy specialty models remain disabled; quotes/manual paper stay open.
+  'altparlays', 'altparlays-nfl', 'alt', 'sgp', 'sgp-nfl', 'parlay',
+  'firsttd', 'ftd', 'teasers', 'teaser',
 ]);
 
 export function isPausedCommand(command: string): boolean {
