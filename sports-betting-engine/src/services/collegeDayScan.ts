@@ -9,8 +9,9 @@ import { flattenNflQuotes,MarketBoardError } from './nflMarketBoard';
 import { exactMarketBaseline } from './footballMarketBaseline';
 import { ESPN_COLLEGE,matchCollegeEvent } from './collegeResearch';
 import { fetchNflJson } from './nflResearch';
+import type { CollegePredictions } from './collegePredictions';
 
-export const COLLEGE_SCAN_VERSION='college-day-price-research-v1';
+export const COLLEGE_SCAN_VERSION='college-day-model-paper-v1';
 export const COLLEGE_TIMEZONE='America/Chicago';
 export function collegeDate(ms:number) {
   return new Intl.DateTimeFormat('en-CA',{timeZone:COLLEGE_TIMEZONE,year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(ms));
@@ -40,20 +41,20 @@ const defaultDeps:Dependencies={
     fs.writeFileSync(path.join(root,`${record.date}_${record.id}.json`),JSON.stringify(record,null,2),{flag:'wx'});
   },
 };
-/** Full calendar-day discovery and exact-line price research. No validated college
- * prediction model exists yet; never turn a market reference into a win forecast.
+/** Full calendar-day discovery, independent experimental paper model and separately
+ * labeled exact-line price research. Never turn a market reference into a forecast.
  * One global bulk cache covers ALL dates; source failures are not empty slates. */
 export class CollegeDayScan {
   private busy=false;
   private cache:{at:number;data:Awaited<ReturnType<Dependencies['odds']>>}|null=null;
-  constructor(private deps:Dependencies=defaultDeps){}
-  async scan(date:string) {
+  constructor(private deps:Dependencies=defaultDeps,private model?:Pick<CollegePredictions,'scan'>){}
+  async scan(date:string,trackPaper=false) {
     validateCollegeDate(date,this.deps.now());
     if(this.busy)throw new MarketBoardError('A college full-day scan is already running. Please wait.',409);
     this.busy=true;
-    try{return await this.run(date);}finally{this.busy=false;}
+    try{return await this.run(date,trackPaper);}finally{this.busy=false;}
   }
-  private async run(date:string) {
+  private async run(date:string,trackPaper:boolean) {
     const warnings:string[]=[];
     const [providerResult,scheduleResult]=await Promise.allSettled([this.deps.upcoming(),this.deps.scoreboard(date)]);
     const providerOk=providerResult.status==='fulfilled'&&Array.isArray(providerResult.value);
@@ -114,20 +115,24 @@ export class CollegeDayScan {
         if(candidates.length){shortlist.push({event:row.event,...candidates[0],label:'PRICE RESEARCH ONLY — not a betting recommendation'});row.researchCandidates++;}
       }
       row.status=row.researchCandidates?'price_research_found':row.comparableQuotes?'no_price_candidate':'insufficient_comparison';
-      row.reason=row.researchCandidates?'Exact-line price comparison met the research threshold; college model validation still pending.'
+      row.reason=row.researchCandidates?'Exact-line price comparison met the research threshold. This is separate from the college prediction model.'
         :row.comparableQuotes?'No exact-line price comparison cleared the 2-percentage-point research threshold.'
         :'Need three other fresh two-sided books at the exact same line. No pooled-line substitute.';
     }
     const counts:Record<string,number>={};for(const row of rows)counts[row.status]=(counts[row.status]??0)+1;
+    let modelResult:any={recommendations:[],projections:[],recommendationStatus:'blocked_model_validation'};
+    if(this.model){try{modelResult=await this.model.scan(rows,raw,trackPaper);warnings.push(...modelResult.warnings);}
+      catch{warnings.push('College prediction service failed its integrity or availability checks. No model recommendation was assumed.');}}
     const report={id:randomUUID(),version:COLLEGE_SCAN_VERSION,date,timezone:COLLEGE_TIMEZONE,scannedAt:new Date(this.deps.now()).toISOString(),
       coverage:providerOk&&scheduleOk?'checked_against_two_feeds':'incomplete',providerScheduleAvailable:providerOk,independentScheduleAvailable:scheduleOk,
       providerGames:games.length,independentScheduledGames:scheduleOk?schedule.length:null,unmatchedScheduledGames:unlisted.length,
       gamesWithFreshOdds:rows.filter(r=>r.freshQuotes>0).length,counts,nextDate,oddsStatus,oddsFetchedAt,cached,creditsUsed,remainingCredits,
-      recommendations:[],recommendationStatus:'blocked_model_validation',
-      recommendationNote:'No validated college prediction model is enabled. Price research is not a win forecast, recommendation, proven edge, or instruction to bet.',
+      ...modelResult,
+      recommendationNote:this.model?'Experimental paper spread recommendations only after fixed checks and a successful immutable save. Totals remain research-only because their holdout test failed. No recommendation to wager real money.'
+        :'No validated college prediction model is enabled. Price research is not a win forecast, recommendation, proven edge, or instruction to bet.',
       shortlist:shortlist.sort((a,b)=>b.baseline.conditionalPriceAdvantage-a.baseline.conditionalPriceAdvantage||a.event.id.localeCompare(b.event.id)),rows,unlisted,warnings,
       evidenceSaved:false,
-      note:'All provider-listed games for the selected Central calendar day were checked, with independent schedule gaps disclosed. Started games are excluded from new pregame selections. No automatic picks, bets, grading, or background odds requests. College FCS-only/other provider omissions may not be covered by either feed.'};
+      note:'All provider-listed games for the selected Central calendar day were checked, with independent schedule gaps disclosed. Started games are excluded from new pregame selections. Paper selections are saved only when paper tracking is explicitly enabled for this scan. No bets, automatic grading or background odds requests. College FCS-only/other provider omissions may not be covered by either feed.'};
     try{
       this.deps.archive({...report,evidenceSaved:true,sources:{schedule:scheduleOk?scheduleResult.value:null,provider:providerOk?providerResult.value:null,
         odds:raw.filter(e=>games.some(g=>g.id===e.id))}});report.evidenceSaved=true;

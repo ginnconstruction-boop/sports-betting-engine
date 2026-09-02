@@ -4,9 +4,56 @@ Updated September 2, 2026 (America/Chicago).
 
 Current website: [Sports Betting Engine](https://sports-betting-engine-1.onrender.com/).
 
-**Release target: usable NFL research and paper testing, not validated betting recommendations.** No real bets are placed. A functioning dashboard and passing software tests do not establish a profitable model.
+**Release target: usable football research and experimental paper testing, not proven real-money recommendations.** No real bets are placed. A functioning dashboard and passing software tests do not establish a profitable model.
 
-## Latest college workflow — college-day-scan-4
+## Latest college model — college-model-paper-1
+
+The independent college scoring model is implemented, tested and ready for
+deployment verification. **Spreads: experimental paper only. Totals: research
+only. NFL automatic picks: still blocked by missing verified availability.**
+
+- 2025 held-out score test: 1,565 games; spread RMSE 17.15 vs simple baseline
+  19.71 (pass); total RMSE 15.90 vs 15.72 (fail).
+- Six fixed historical odds dates: 113W–93L, +10.99 hypothetical units, +5.34%
+  ROI. Three dates lost money. This is a reconstructed test, not a live record.
+- Probability calibration **failed**: predicted 67% on average but won 55%.
+  High modeled confidence is not trustworthy; no real-money or stake advice.
+- Website full-day scan can save qualifying paper spreads after explicit
+  checkbox acknowledgment. Original line/price/forecast remains unchanged on
+  repeat scans; separate college W/L, grading, replay and export are visible.
+- Tomorrow (Thursday September 3): local scan verified 10 provider games and
+  generated 10 paper preview candidates. Rutgers–UMass is a disclosed feed gap.
+  Ten test records were saved in isolated QA storage, not production.
+- 126 automated tests, server build and JS syntax pass; dependency audit clear.
+  Historical odds audit used 120 credits; local scan QA used 2; cached repeats 0.
+  Last observed balance: 19,866. No subscription/billing changes.
+
+Detailed evidence and deployment status:
+[College model release report](research/COLLEGE_MODEL_RELEASE_2026_09_02.md).
+
+### What to do tomorrow
+
+1. Refresh the [website](https://sports-betting-engine-1.onrender.com/), open
+   **College football — spreads & totals**, choose **September 3, 2026**.
+2. Check **Save qualifying experimental paper spread recommendations** and
+   click **Scan all college games for this date**. Unchecked means preview only.
+3. Use the college paper record below the scan; it is separate from the official
+   cards at the top. Do not interpret the experimental selections as real bets.
+4. After completed games (at least four hours after kickoff), click **Grade
+   completed college picks**, review WIN/LOSS/PUSH/REVIEW, and export the record.
+
+### Next development priorities
+
+1. Collect prospective paper outcomes and missing-game coverage without changing
+   original selections or treating REVIEW as a loss.
+2. Fix college probability calibration using a new declared development/test
+   split; the existing 2025 holdout must not become a tuning target.
+3. Add and independently test dated roster/QB/injury/venue/weather inputs.
+4. Diagnose totals; keep automatic total picks blocked until separate tests pass.
+5. Continue verified NFL availability and closing-price evidence work; require
+   stronger out-of-sample evidence before any real-money model promotion.
+
+## Previous college workflow — college-day-scan-4
 
 The main college control now scans a selected **Central calendar day**, not a
 single selected game or rolling 24-hour window. One bulk spreads/totals request
@@ -27,9 +74,14 @@ The exact-line price shortlist is research, not a betting recommendation.
 115 automated tests and the server build pass; the current dependency audit is
 clear after a targeted `qs` security patch. Deployment and live verification are
 documented in [the college scan release report](research/COLLEGE_DAY_SCAN_2026_09_02.md).
+Commit `c7b7cab` is live, verified September 2 around 6:15 PM Central. Production
+day scans checked 10 games for Thursday and 68 for Saturday; source gaps are
+shown, and neither price-research shortlist qualified a selection. Local/live
+testing used 4 odds credits total, leaving 19,990. Pick/backup hashes are unchanged.
 
-**Owner action:** Render displays a payment-failed warning. Update billing in the
-Render account to avoid service interruption; no payment details were changed.
+**Billing resolved:** Owner confirmed payment fixed on September 2. Website
+health rechecked at 6:24 PM Central: HTTP 200, `college-day-scan-4`. The billing
+dashboard itself was not rechecked; no payment details were changed by the agent.
 
 ## Previous research/tracking update — football-research-3
 
@@ -96,11 +148,12 @@ release status report.
 10. Before any production-model promotion, require documented data completeness, no-lookahead backtesting, out-of-sample probability calibration, suitable sample size, costs/odds-aware performance and a deliberate approval. Twenty positive picks do not automatically unlock BET labels.
 
 For college: click **College football — spreads & totals** → choose the date →
+check the experimental paper box if you want qualifying spreads recorded →
 **Scan all college games for this date**. No game list needs loading. An empty
-day offers a button for the next listed day. Check coverage and warnings, then
-the separately labeled price-research shortlist. Optional per-game quote/manual
-paper tools are collapsed below. Scan evidence does not create a W/L entry;
-explicit manual paper saves do. Grading is on demand after completed games.
+day offers the next listed day. Check coverage and confidence warnings. Model
+paper selections are separate from the optional price-research shortlist and
+manual picks. Without acknowledgment, the scan previews but creates no W/L
+entries. Grading is on demand after completed games.
 Refresh the website after deployment to replace the old college scan button.
 
 ## Verification evidence for this release
@@ -129,7 +182,7 @@ The owner confirmed that the reset was intentional. Keep the fresh active record
 - Configuration: active Render environment (`ODDS_API_KEY`, dashboard credentials, `SNAPSHOT_DIR`, etc.). Do not commit or share secrets.
 - Recovery: preserve existing daily Render disk snapshots and export important paper history before significant future schema changes. Deploying code is not a database backup.
 
-## Next unresolved work
+## Previous NFL unresolved-work notes (see current priorities above)
 
 August 28 preseason research completed separately: archived game lines and final results recovered for all ten games; zero prices qualified in the frozen consensus-price experiment. A separately labeled favorite benchmark went 4–3 and lost 0.6878 units. Preseason player props are not covered by the provider, so this did not validate the regular-season prop model. No production picks changed. See [full research report](research/AUGUST_28_2026_BACKTEST_REPORT.md).
 

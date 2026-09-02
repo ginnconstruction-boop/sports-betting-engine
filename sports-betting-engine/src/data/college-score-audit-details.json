@@ -1,0 +1,50 @@
+{
+  "version": "college-score-ridge-v1",
+  "generatedAt": "2026-09-02T23:51:03.541Z",
+  "sample": 206,
+  "meanForecastProbability": 0.6704027277582263,
+  "winRate": 0.5485436893203883,
+  "brier": 0.2784437660796788,
+  "constant50PercentBrier": 0.25,
+  "calibrationBins": [
+    {
+      "from": 0.5,
+      "to": 0.6,
+      "sample": 57,
+      "wins": 32,
+      "meanProbability": 0.573342736248237
+    },
+    {
+      "from": 0.6,
+      "to": 0.7,
+      "sample": 80,
+      "wins": 46,
+      "meanProbability": 0.6458392101551481
+    },
+    {
+      "from": 0.7,
+      "to": 0.7999999999999999,
+      "sample": 45,
+      "wins": 24,
+      "meanProbability": 0.7359504779815078
+    },
+    {
+      "from": 0.8,
+      "to": 0.9,
+      "sample": 20,
+      "wins": 10,
+      "meanProbability": 0.8454866008462625
+    },
+    {
+      "from": 0.9,
+      "to": 1,
+      "sample": 4,
+      "wins": 1,
+      "meanProbability": 0.9319464033850494
+    }
+  ],
+  "maxDrawdown": 11.360058441489702,
+  "calibrationApproved": false,
+  "moneyBettingApproved": false,
+  "note": "Held-out historical probabilities are overconfident and are not calibrated win chances. Positive sample ROI does not override this failure. Paper observation only; no real-money or staking recommendation. No formula or selection threshold was retuned after inspecting these results."
+}

@@ -15,15 +15,18 @@ async function main(){
     if(!token)throw Error('Login failed');
     let totalCredits=0;const reports=[];
     for(const date of dates){
-      const r=await call('/api/college/scan',{date});
+      const r=await call('/api/college/scan',{date,trackPaper:false});
       if(r.date!==date||r.timezone!=='America/Chicago'||r.rows.length!==r.providerGames||r.recommendations.length!==0||!r.evidenceSaved)throw Error('College scan contract failed');
       if(r.creditsUsed===null)throw Error('Uncertain odds credits; stop without retry');
       totalCredits+=r.creditsUsed;if(totalCredits>2)throw Error('Unexpected repeated bulk odds charge');
       reports.push({date,providerGames:r.providerGames,independentGames:r.independentScheduledGames,freshGames:r.gamesWithFreshOdds,
         missing:r.unmatchedScheduledGames,counts:r.counts,shortlist:r.shortlist.length,recommendationStatus:r.recommendationStatus,
+        projections:r.projections?.length,paperPreview:r.projections?.reduce((n:number,p:any)=>n+(p.selected?.length??0),0),
+        modelMarkets:r.modelReadiness?.validation.paperApproved,
         cached:r.cached,credits:r.creditsUsed,remaining:r.remainingCredits,evidenceSaved:r.evidenceSaved,warnings:r.warnings});
       // Failures must be investigated, never retried automatically.
       if(r.coverage==='incomplete'||r.oddsStatus==='unavailable')throw Error('Source coverage incomplete; stop without another paid attempt');
+      if(r.providerGames&&(!r.projections?.length||r.recommendationStatus!=='preview_only'))throw Error('Model projection check failed');
     }
     console.log(JSON.stringify({checks:reports,totalCredits,createdPicks:0},null,2));
   }finally{if(token)await call('/api/logout',{}).catch(()=>undefined);}

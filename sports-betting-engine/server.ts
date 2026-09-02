@@ -24,6 +24,7 @@ import { footballPaperMetrics } from './src/services/footballValidation';
 import { CollegeMarketBoard, COLLEGE_WINDOW_DAYS } from './src/services/collegeMarketBoard';
 import { createCollegePaperLedger, COLLEGE_PAPER_RULES } from './src/services/collegePaper';
 import { CollegeDayScan,collegeDate,COLLEGE_TIMEZONE } from './src/services/collegeDayScan';
+import { CollegePredictions } from './src/services/collegePredictions';
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -276,12 +277,18 @@ app.post('/api/run/:command', requireAuth, async (req, res) => {
 // College quotes and explicit manual paper saves are isolated from NFL records/models.
 const collegeMarketBoard = new CollegeMarketBoard();
 const collegePaper = createCollegePaperLedger(path.join(SNAPSHOT_DIR,'college_paper_picks.json'));
-const collegeDayScan = new CollegeDayScan();
+const collegePredictions = new CollegePredictions(collegePaper,SNAPSHOT_DIR);
+const collegeDayScan = new CollegeDayScan(undefined,collegePredictions);
+app.get('/api/college/model-status',requireAuth,(_req,res)=>{
+  try{res.setHeader('Cache-Control','no-store');res.json(collegePredictions.readiness());}
+  catch{res.status(503).json({error:'College model bundle integrity/availability check failed. No model recommendations available.'});}
+});
 app.get('/api/college/scan-config',requireAuth,(_req,res)=>res.json({today:collegeDate(Date.now()),maxDate:collegeDate(Date.now()+13*86400_000),timezone:COLLEGE_TIMEZONE}));
 app.post('/api/college/scan',requireAuth,async(req,res)=>{
-  if(typeof req.body?.date!=='string'||Object.keys(req.body).some(k=>k!=='date'))
+  if(typeof req.body?.date!=='string'||Object.keys(req.body).some(k=>!['date','trackPaper'].includes(k))
+    ||(req.body.trackPaper!==undefined&&typeof req.body.trackPaper!=='boolean'))
     return res.status(400).json({error:'Choose a college scan date. This scans the whole day; individual game IDs are not accepted.'});
-  try{res.setHeader('Cache-Control','no-store');res.json(await collegeDayScan.scan(req.body.date));}
+  try{res.setHeader('Cache-Control','no-store');res.json(await collegeDayScan.scan(req.body.date,req.body.trackPaper===true));}
   catch(e){if(e instanceof MarketBoardError)return res.status(e.status).json({error:e.message});
     res.status(502).json({error:'College full-day scan failed. No recommendation was assumed.'});}
 });
@@ -657,7 +664,7 @@ app.post('/api/ats/backfill', requireAuth, async (req, res) => {
 });
 
 // ── Health ──
-app.get('/api/health', (_, res) => res.json({ ok: true, release: 'college-day-scan-4', ts: new Date().toISOString() }));
+app.get('/api/health', (_, res) => res.json({ ok: true, release: 'college-model-paper-1', ts: new Date().toISOString() }));
 
 // ── SPA fallback ──
 app.get('*', (_, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));

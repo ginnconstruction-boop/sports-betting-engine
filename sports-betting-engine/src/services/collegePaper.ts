@@ -29,7 +29,7 @@ export function gradeCollegePaper(pick:NflPaperPick,data:any) {
     if(![pick.event.homeTeam,pick.event.awayTeam].includes(q.side))return review('Unknown selected college team.');
     actual=(q.side===pick.event.homeTeam?hs-as:as-hs)+q.line;result=actual===0?'PUSH':actual>0?'WIN':'LOSS';
   }
-  return {result,actual,note:'College manual paper result, full game including overtime. Exact saved line and home/away IDs; neutral venue is not home-field advantage. Sportsbook rules/promotions require separate verification.'};
+  return {result,actual,note:`College ${pick.origin==='model'?'experimental model':'manual'} paper result, full game including overtime. Exact saved line and home/away IDs; neutral venue is not home-field advantage. Sportsbook rules/promotions require separate verification.`};
 }
 export function createCollegePaperLedger(file:string,research=new CollegeResearch(),now=()=>Date.now()) {
   return new NflPaperLedger(file,{matchEvent:event=>research.matchEvent(event),summary:id=>research.summary(id),

@@ -11,16 +11,18 @@ async function main() {
     const data:any=await response.json();return {status:response.status,data};
   };
   try {
-    for(const route of ['/api/nfl/paper/export','/api/nfl/paper/no-such-pick/replay','/api/college/paper/export','/api/college/paper/no-such-pick/replay','/api/college/scan-config']) {
+    for(const route of ['/api/nfl/paper/export','/api/nfl/paper/no-such-pick/replay','/api/college/paper/export','/api/college/paper/no-such-pick/replay','/api/college/scan-config','/api/college/model-status']) {
       const r=await call(route,'GET',undefined,false);rows.push({route,anonymous:r.status});if(r.status!==401)throw new Error('Anonymous protection failed');
     }
     const login=await call('/api/login','POST',{username:process.env.DASHBOARD_USER,password:process.env.DASHBOARD_PASS},false);
     if(login.status!==200||!login.data.token)throw new Error('Smoke login failed');token=login.data.token;
-    for(const route of ['/api/health','/api/nfl/paper','/api/nfl/paper/export','/api/nfl/events','/api/college/events','/api/college/paper','/api/college/paper/export','/api/college/scan-config']) {
+    for(const route of ['/api/health','/api/nfl/paper','/api/nfl/paper/export','/api/nfl/events','/api/college/events','/api/college/paper','/api/college/paper/export','/api/college/scan-config','/api/college/model-status']) {
       const r=await call(route);if(r.status!==200)throw new Error('Smoke endpoint failed: '+route);
       rows.push({route,status:r.status,release:r.data.release,picks:r.data.picks?.length,events:r.data.events?.length,
         archivedSources:r.data.evidence?Object.keys(r.data.evidence).length:undefined,missingSources:r.data.missingEvidence?.length});
     }
+    const badMode=await call('/api/college/scan','POST',{date:'2026-09-03',trackPaper:'true'});
+    if(badMode.status!==400)throw Error('Non-boolean college paper mode was accepted');
     const missing=await call('/api/nfl/paper/no-such-pick/replay');if(missing.status!==404)throw new Error('Missing replay did not return 404');
     rows.push({route:'/api/nfl/paper/no-such-pick/replay',status:missing.status});
     const invalid=await call('/api/nfl/forecast','POST',{});if(invalid.status!==400)throw new Error('Invalid forecast not rejected');

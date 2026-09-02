@@ -6,6 +6,11 @@ import { MarketBoardError, MarketQuote } from './nflMarketBoard';
 import { ESPN_NFL, NFL_CORE_STATS, NFL_RESEARCH_VERSION, NflPlayer, NflResearch, nflName, nflNumber, nflSeason } from './nflResearch';
 import type { NflForecast } from './nflForecast';
 import { NflEvidenceArchive } from './nflEvidence';
+import { CollegeProjection,fitCollegeScores } from './collegeScoreModel';
+import { CollegeAssessment,assessCollegeQuote,COLLEGE_SELECTION_VERSION } from './collegeModelQuotes';
+
+export interface CollegeSavedForecast {projection:CollegeProjection;assessment:CollegeAssessment;inputEvidenceHash:string;
+  forecastEvidenceHash:string;bundleHash:string;selectionVersion:string;}
 
 export const PAPER_RULES = 'regulation-periods_full-game-includes-ot_v1';
 export type PaperResult = 'PENDING' | 'REVIEW' | 'WIN' | 'LOSS' | 'PUSH';
@@ -21,6 +26,7 @@ export interface NflPaperPick {
   lastResultCheck?: { at: string; status: 'graded' | 'unavailable' | 'review' };
   origin?: 'manual' | 'model';
   forecast?: NflForecast;
+  collegeForecast?: CollegeSavedForecast;
   modelProbability?: number;
   modelPushProbability?: number;
   estimatedEV?: number;
@@ -140,9 +146,11 @@ const NFL_PAPER_PROFILE: FootballPaperProfile = {
 export class NflPaperLedger {
   private grading: Promise<any> | null = null;
   private settlementArchive: NflEvidenceArchive;
+  private collegeForecastArchive: NflEvidenceArchive;
   constructor(private file: string, private research: Pick<NflResearch, 'matchEvent' | 'player' | 'summary'>, private now = () => Date.now(),
     private profile: FootballPaperProfile = NFL_PAPER_PROFILE) {
     this.settlementArchive = new NflEvidenceArchive(path.join(path.dirname(file), profile.archiveDirectory));
+    this.collegeForecastArchive = new NflEvidenceArchive(path.join(path.dirname(file),'college_forecast_evidence'));
   }
   exportRecord() {
     const picks = this.read();
@@ -155,6 +163,13 @@ export class NflPaperLedger {
         evidence[hash]=payload;sourceBytes+=bytes;
       }
       catch { missingEvidence.push(hash); }
+    }
+    const forecastHashes=new Set(picks.flatMap(p=>p.collegeForecast?[p.collegeForecast.forecastEvidenceHash,p.collegeForecast.inputEvidenceHash]:[]));
+    for(const hash of forecastHashes){
+      try{const payload=this.collegeForecastArchive.read(hash),bytes=Buffer.byteLength(JSON.stringify(payload));
+        if(sourceBytes+bytes>25*1024*1024){omittedEvidence.push(hash);continue;}
+        evidence[hash]=payload;sourceBytes+=bytes;
+      }catch{missingEvidence.push(hash);}
     }
     return { schema: 1, sportKey: this.profile.sportKey, exportedAt: new Date(this.now()).toISOString(), picks, evidence, missingEvidence, omittedEvidence,
       note: `${this.profile.label} paper-only export. Includes original forecasts/quotes and up to 25 MiB of settlement source snapshots; omitted hashes are listed and require a server-disk backup. Does not include the separate official ledger or old reset backups. Missing/legacy evidence cannot be reconstructed by this export.` };
@@ -174,7 +189,18 @@ export class NflPaperLedger {
           savedResult: a.result, savedActual: a.actual, replay, evidenceHash: a.evidenceHash };
       } catch { return { checkedAt: a.checkedAt, status: 'evidence_unavailable_or_corrupt', savedResult: a.result }; }
     });
-    return { id, audits, note: 'Read-only replay using archived box scores and the current paper grader. No provider requests and no record changes. It verifies reproducibility, not sportsbook-specific settlement.' };
+    let forecastReplay:any;
+    if(pick.collegeForecast){
+      try{
+        const f=pick.collegeForecast,input=this.collegeForecastArchive.read(f.inputEvidenceHash),source=this.collegeForecastArchive.read(f.forecastEvidenceHash);
+        const p=fitCollegeScores(input.history,Date.parse(input.asOf),input.config).predict(f.projection.homeId,f.projection.awayId,f.projection.neutral);
+        const assessment=assessCollegeQuote(pick.event,pick.quote,p,input,Date.parse(pick.savedAt));
+        forecastReplay={status:JSON.stringify(p)===JSON.stringify(f.projection)&&JSON.stringify(source.quote)===JSON.stringify(pick.quote)
+          &&source.inputEvidenceHash===f.inputEvidenceHash&&assessment.probability===f.assessment.probability&&assessment.estimatedEV===f.assessment.estimatedEV?'matched':'mismatch',
+          inputEvidenceHash:f.inputEvidenceHash,forecastEvidenceHash:f.forecastEvidenceHash};
+      }catch{forecastReplay={status:'evidence_unavailable_or_corrupt'};}
+    }
+    return { id, audits,forecastReplay, note: 'Read-only replay using archived model inputs and/or box scores. No provider requests and no record changes. It verifies reproducibility, not prediction accuracy or sportsbook-specific settlement.' };
   }
   read(): NflPaperPick[] {
     if (!fs.existsSync(this.file)) return [];
@@ -218,6 +244,36 @@ export class NflPaperLedger {
   modelPick(eventId: string, participant: string, market: string, version: string) {
     return this.read().find(p => p.origin === 'model' && p.event.id === eventId && p.version === version
       && p.quote.market === market && nflName(p.quote.participant) === nflName(participant));
+  }
+  saveCollegeModel(event:UpcomingEvent,quote:MarketQuote,identity:NonNullable<NflPaperPick['verifiedEvent']>,forecast:CollegeSavedForecast,
+    validation:{paperApproved:{spreads:boolean;totals:boolean};moneyBettingApproved:boolean}){
+    const p=forecast.projection,now=this.now(),age=now-Date.parse(identity.fetchedAt);
+    if(this.profile.sportKey!=='americanfootball_ncaaf'||event.sportKey!==this.profile.sportKey
+      ||this.profile.rules!=='college-full-game-includes-ot_v1'||!['spreads','totals'].includes(quote.market)
+      ||validation.paperApproved[quote.market]!==true||validation.moneyBettingApproved!==false
+      ||forecast.selectionVersion!==COLLEGE_SELECTION_VERSION||p.version!=='college-score-ridge-v1'
+      ||p.homeId!==identity.homeTeamId||p.awayId!==identity.awayTeamId||p.neutral!==identity.neutralSite
+      ||typeof identity.neutralSite!=='boolean'||!/^\d+$/.test(identity.espnEventId)||!Number.isFinite(age)||age<0||age>5*60_000)
+      throw new MarketBoardError('College model identity, validation or rules gate failed; no recommendation issued.');
+    const input=this.collegeForecastArchive.read(forecast.inputEvidenceHash),source=this.collegeForecastArchive.read(forecast.forecastEvidenceHash);
+    if(input.kind!=='college_model_inputs_v1'||source.kind!=='college_forecast_v1'||input.bundleHash!==forecast.bundleHash
+      ||source.inputEvidenceHash!==forecast.inputEvidenceHash||JSON.stringify(source.event)!==JSON.stringify(event)
+      ||JSON.stringify(source.identity)!==JSON.stringify(identity)||JSON.stringify(source.quote)!==JSON.stringify(quote)
+      ||JSON.stringify(source.projection)!==JSON.stringify(p)||JSON.stringify(source.assessment)!==JSON.stringify(forecast.assessment))
+      throw new MarketBoardError('Original college forecast evidence could not be verified.');
+    const assessment=assessCollegeQuote(event,quote,p,input,now);
+    if(!assessment.eligible||assessment.probability!==forecast.assessment.probability||assessment.estimatedEV!==forecast.assessment.estimatedEV)
+      throw new MarketBoardError('College quote expired or failed fixed paper thresholds.',409);
+    const picks=this.read(),existing=picks.find(row=>row.origin==='model'&&row.event.id===event.id&&row.version===p.version&&row.quote.market===quote.market);
+    if(existing)return{pick:existing,duplicate:true};
+    const pick:NflPaperPick={id:randomUUID(),origin:'model',event:{...event},quote:{...quote},espnEventId:identity.espnEventId,verifiedEvent:{...identity},
+      season:nflSeason(event.commenceTime),version:p.version,rules:this.profile.rules,savedAt:new Date(now).toISOString(),result:'PENDING',collegeForecast:forecast,
+      modelProbability:assessment.probability,modelPushProbability:assessment.pushProbability,estimatedEV:assessment.estimatedEV,
+      selectionReasons:['Independent college score holdout passed for this market.','Fixed paper thresholds passed; highest estimated EV among fresh configured-book quotes.',
+        'Experimental only: injuries, starting QB, transfers, weather and pace are not modeled.'],
+      note:'Automatically logged experimental college paper recommendation. Original forecast, exact line and price are immutable; no real wager placed.',
+      settlementScope:{bookKey:quote.bookKey,ruleVersion:this.profile.rules,sportsbookRulesVerified:false}};
+    this.write([...picks,pick]);return{pick,duplicate:false};
   }
   async saveModel(event: UpcomingEvent, quote: MarketQuote, forecast: NflForecast,
     assessment: { probability: number; pushProbability: number; estimatedEV: number; eligible: boolean }, rules: string) {
