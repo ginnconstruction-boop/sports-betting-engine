@@ -110,7 +110,34 @@ Automated tests reproduce the report exactly without network calls.
   rows for Lamar Jackson. That was a player-data check using a synthetic event
   wrapper, not verification of a scheduled matchup or an issued forecast/pick.
 
-Deployment and production verification are recorded after the release below.
+### Deployment and final checks
+
+- Commit `61321f9dfbb4e8ee08c2d787b4caf25d52a47a60` pushed to main;
+  Render deployment `dep-daaq27k9v7es73co89s0` live **10:44:07 AM Central**.
+- Public health reports `football-research-3`; deployed HTML and JavaScript both
+  return 200 and contain the new readiness/replay/export features.
+- Authenticated production smoke passed: NFL 15 games, college 96 games, paper
+  and export 200; anonymous export/replay 401, missing replay 404, invalid forecast
+  400. The temporary verification session was logged out. No production pick,
+  valid forecast or grading request was issued.
+- Synthetic local browser fixture (clearly labelled QA Home/QA Away) displayed
+  one WIN; "Verify saved grading" returned matched, and export returned one pick
+  plus one archived source. It remained exclusively in a named temporary QA
+  directory. The synthetic downloaded export was moved there too, away from the
+  user's normal Downloads list. No QA data was copied to production.
+- Final credit check: **147 used, 19,853 remaining**, unchanged. Zero Odds API
+  credits consumed by this release's research/checks. No new subscription.
+- All 104 local research source artifacts passed filename/content SHA-256
+  verification. Frozen report SHA-256:
+  `f0f37e5207be07e8302cd957943d94228dbd9663c464825bf1cde87a406c17e7`.
+- Before/after deployment and smoke checks, production fingerprints match:
+  empty official ledger `4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945`;
+  paper file still absent (zero production records);
+  ATS (58 keys) `a88d1eb14b104a7be04baf9efe8274b98239d9fab8b3b123c2b650662c89f8a3`;
+  329-pick backup `c252ce69b46dadfac7c7894c50c3892a3f97bcaeceefd7f3ddb67a2eb6703bbd`.
+- Isolated QA server stopped. Synthetic export/fixture preserved only in the
+  named temporary QA directory, not in Downloads or production. Post-deployment
+  checklist/evidence notes are local documentation changes after the deployed commit.
 
 ## Next recommendations, in order
 

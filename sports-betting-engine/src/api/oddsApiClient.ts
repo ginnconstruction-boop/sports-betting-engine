@@ -370,6 +370,26 @@ export async function getUpcomingEvents(sportKey: string): Promise<UpcomingEvent
   }
 }
 
+/** One bounded bulk request for the college day scanner, not one call per game.
+ * No retry: an uncertain charged request must not silently spend again. */
+export async function getCollegeSlateOdds(): Promise<{events:RawEvent[];quota:QuotaUsage;creditsUsed:number|null}> {
+  const { CreditBudgetGuard } = await import('../services/creditBudgetGuard');
+  const guard = new CreditBudgetGuard({maxCreditsPerRun:2});
+  const decision = guard.canSpend('odds',2);
+  if(!decision.allowed) throw new Error('College slate odds blocked by credit budget.');
+  const client = createClient();
+  guard.spend('odds',2);
+  try {
+    const response = await client.get('/sports/americanfootball_ncaaf/odds',{
+      params:{regions:'us',markets:'spreads,totals',oddsFormat:'american'},
+    });
+    updateSessionQuota(parseQuotaHeaders(response.headers as Record<string,string>));
+    if(!Array.isArray(response.data))throw new Error('Malformed college odds response');
+    const cost=response.headers['x-requests-last'];
+    return {events:response.data,quota:{...sessionQuota},creditsUsed:cost==null?null:Number(cost)};
+  } catch { throw new Error('College slate odds unavailable. No retry or per-game odds purchases were made.'); }
+}
+
 // ============================================================
 // Completed scores (2 credits per sport per call)
 // ============================================================

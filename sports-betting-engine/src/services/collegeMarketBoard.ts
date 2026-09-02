@@ -2,6 +2,7 @@ import { getUpcomingEvents, getEventMarkets, UpcomingEvent } from '../api/oddsAp
 import { NCAAF } from '../config/productionFocus';
 import { RawEvent, QuotaUsage } from '../types/odds';
 import { flattenNflQuotes, MarketBoardError } from './nflMarketBoard';
+import { randomUUID } from 'crypto';
 
 export const COLLEGE_WINDOW_DAYS = 14;
 export const COLLEGE_MARKETS = ['spreads', 'totals'];
@@ -11,7 +12,8 @@ type Dependencies = {
   now: () => number;
 };
 
-// Quote-only college board. Deliberately has no forecast or ledger dependency.
+// Quote discovery does not issue picks. Explicit paper saves use a server-held
+// quote ID, never a client-supplied line/price or an inferred college forecast.
 export class CollegeMarketBoard {
   private schedule: { at: number; items: UpcomingEvent[] } | null = null;
   private discovery: Promise<void> | null = null;
@@ -48,6 +50,14 @@ export class CollegeMarketBoard {
     this.pending.set(eventId, request);
     return request;
   }
+  selection(eventId:string,quoteId:string) {
+    const hit=this.cache.get(eventId),now=this.deps.now();
+    if(!hit||now-hit.at>=5*60_000)throw new MarketBoardError('College quote session expired. Load posted odds again.',409);
+    if(Date.parse(hit.data.event.commenceTime)<=now)throw new MarketBoardError('College kickoff has passed.',409);
+    const matches=hit.data.quotes.filter((q:any)=>q.quoteId===quoteId);
+    if(matches.length!==1)throw new MarketBoardError('Choose an exact posted college quote.');
+    return {event:{...hit.data.event},quote:{...matches[0]}};
+  }
 
   private async fetch(event: UpcomingEvent) {
     const result = await this.deps.odds(event.id, [...COLLEGE_MARKETS]);
@@ -59,8 +69,9 @@ export class CollegeMarketBoard {
     const now = this.deps.now();
     if (Date.parse(raw.commence_time) <= now || Date.parse(raw.commence_time) > now + COLLEGE_WINDOW_DAYS * 86400_000)
       throw new MarketBoardError('The college game is no longer in the upcoming 14-day window.', 409);
-    const quotes = flattenNflQuotes(raw, COLLEGE_MARKETS, now).filter(q => q.line !== null
-      && (q.market === 'totals' ? ['Over', 'Under'].includes(q.side) : [raw.home_team, raw.away_team].includes(q.side)));
+    const quotes = flattenNflQuotes(raw, COLLEGE_MARKETS, now).filter(q => q.line !== null && !q.participant
+      && (q.market === 'totals' ? ['Over', 'Under'].includes(q.side) : [raw.home_team, raw.away_team].includes(q.side)))
+      .map(q=>({...q,quoteId:randomUUID()}));
     const data = { event: { ...event, commenceTime: raw.commence_time }, quotes,
       fetchedAt: new Date(now).toISOString(), cached: false, remainingCredits: result.quota.remainingRequests,
       missingMarkets: COLLEGE_MARKETS.filter(m => !quotes.some(q => q.market === m)),

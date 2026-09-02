@@ -55,6 +55,9 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.4.0"
   },
+  "overrides": {
+    "qs": "6.16.0"
+  },
   "engines": {
     "node": ">=18.0.0"
   }

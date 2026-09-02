@@ -5,6 +5,7 @@ import { runMorningScan }     from './commands/runMorningScan';
 import { runMiddayFinalCard } from './commands/runMiddayFinalCard';
 import { runFullScan }        from './commands/runFullScan';
 import { runSportScan }       from './commands/runSportScan';
+import { runCollegeDayScan } from './commands/runCollegeDayScan';
 import { runLiveCheck }       from './commands/runLiveCheck';
 import { runCLV }             from './commands/runCLV';
 import { runResults }         from './commands/runResults';
@@ -41,7 +42,7 @@ async function main() {
     case 'nhl':           await runSportScan('icehockey_nhl', { forceRefresh }); break;
     case 'nfl':           await runSportScan('americanfootball_nfl', { forceRefresh }); break;
     case 'ncaab':         await runSportScan('basketball_ncaab', { forceRefresh }); break;
-    case 'ncaaf':         await runSportScan('americanfootball_ncaaf', { forceRefresh }); break;
+    case 'ncaaf':         await runCollegeDayScan(args.find(a=>/^\d{4}-\d{2}-\d{2}$/.test(a))); break;
     case 'ncaa-baseball': await runSportScan('baseball_ncaa', { forceRefresh }); break;
     case 'sport':
       if (!args[1]) { console.log('Usage: sport <key>'); break; }

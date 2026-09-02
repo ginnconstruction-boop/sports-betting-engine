@@ -256,8 +256,8 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
     <p class="focus-note">Readiness update: automatic NFL paper recommendations are on hold until verified game-specific availability is connected. Forecast diagnostics, quoted odds and manual paper tracking remain available. Open the 13-item checklist below for completed repairs and remaining blockers.</p>
     <section class="nfl-forecast-guide" aria-labelledby="football-next-heading">
       <h2 id="football-next-heading">Where we stand — and what to do next</h2>
-      <p><strong>Ready now:</strong> NFL odds research and manual practice-pick tracking. College spreads/totals are quote-only.</p>
-      <p><strong>Not ready:</strong> proven betting recommendations. Automatic NFL model picks remain blocked by missing verified game-day availability.</p>
+      <p><strong>Ready now:</strong> NFL odds research and manual practice-pick tracking. College spreads/totals now have a separate manual practice record, grading, replay and export.</p>
+      <p><strong>Not ready:</strong> proven betting recommendations. Automatic NFL model picks remain blocked by missing verified game-day availability. College scans show date-wide coverage and price research; college prediction-model validation is still pending.</p>
       <ol>
         <li>Research one NFL game using <strong>Forecast + track</strong> below. A blocked forecast is a data check, not a recommended bet.</li>
         <li>For your own practice selection, acknowledge the rules and choose <strong>Save paper</strong>. This is not a model recommendation.</li>
@@ -312,7 +312,7 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
         <li>Market baseline: exact-line, two-sided no-vig comparison excludes target book; needs 3 other matched books. Descriptive only.</li>
         <li>Validation: separate fixed-cohort shadow stat test added; no live-model promotion. Frozen holdout and feature-removal study not completed for betting probabilities; prospective validation remains pending.</li>
         <li>Tracking: original picks, archived grading sources, read-only replay, export, corrections and final-five-minute observations. Automated final closing capture and sportsbook settlement still pending.</li>
-        <li>College: separate spreads/totals quote board. Data supplier access and independent model validation still pending.</li>
+        <li>College: separate spreads/totals quotes and manual paper tracking with exact team IDs, overtime-aware grading, archived sources and replay/export. Independent model validation still pending.</li>
         <li>Specialty models: disabled pending distribution/dependence validation. Quotes and supported manual paper grading remain available.</li>
         <li>Cleanup: unsupported football score bonuses and implied professional-money influence removed; historical records retained.</li>
       </ol>
@@ -354,8 +354,16 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
     </details>
 
     <details class="market-board" id="college-market-board">
-      <summary>College football — upcoming games, spreads &amp; totals</summary>
-      <p class="focus-note">Start here: load college games, choose a matchup, then load its spreads and over/under totals. This board includes upcoming games in the next 14 days, not just today's games. Only games listed by the provider appear.</p>
+      <summary>College football — full-day scan, spreads &amp; totals</summary>
+      <p class="focus-note">Start here: choose a date and scan the entire college slate. No game selection or game-list refresh is needed. Dates use Central time; spreads and totals only.</p>
+      <label for="college-scan-date">College scan date (Central time)</label>
+      <input id="college-scan-date" type="date" onchange="clearCollegeScan()"/>
+      <button class="scan-btn prime" id="college-day-scan-btn" onclick="runCollegeDayScan()">Scan all college games for this date</button>
+      <p class="focus-note">Checks every provider-listed game that day and reports independent schedule gaps. Up to 2 odds credits for one bulk pull, not 2 per game; shared cached odds are reused for five minutes. No automatic picks or wagers. The single-game dropdown below does not affect this scan.</p>
+      <div id="college-scan-status" class="market-status" role="status" aria-live="polite"></div>
+      <div id="college-scan-results"></div>
+      <details id="college-advanced"><summary>Optional: inspect one game / save your own college paper pick</summary>
+      <p class="focus-note">Only use this section for detailed posted prices or manual practice selections. It is separate from the full-day scan and lists the next 14 days.</p>
       <button class="scan-btn" id="college-events-btn" onclick="loadCollegeEvents()">Load / refresh college games (free)</button>
       <div class="market-controls"><label for="college-event">College football game<select id="college-event" onchange="clearCollegeSelection()"><option value="">Load college games first</option></select></label></div>
       <p class="focus-note">Up to 2 odds credits for one game / US region. Repeats are cached for five minutes. No polling or automatic purchases.</p>
@@ -364,10 +372,16 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
       <label class="focus-note" for="college-search">Filter college quotes by team, market or sportsbook</label>
       <input class="market-search" id="college-search" type="search" placeholder="Search college quotes" oninput="renderCollegeQuotes()"/>
       <div id="college-count" class="focus-note"></div>
+      <label class="nfl-paper-rules"><input type="checkbox" id="college-paper-rules"/> College paper rules: full-game spreads and totals include overtime; exact-line ties push. This is my manual practice selection, not a model recommendation or sportsbook settlement.</label>
       <div id="college-results" class="market-table-wrap"></div>
-      <p class="focus-note">These are sportsbook prices, not validated recommendations. Loading this board does not save a pick or update win/loss. College player props, moneylines and other sports remain out of scope. Yellow timestamps need a fresh sportsbook check.</p>
-      <button class="scan-btn" onclick="runCmd('ncaaf','College game-day scan')">Run college game-day scan</button>
-      <p class="focus-note">The separate scan uses the existing model and game-day filters; it may return no qualifying plays even when upcoming games have odds. College model validation is still pending.</p>
+      <p class="focus-note">These are sportsbook prices, not validated recommendations. Loading quotes does not save a pick; use Save college paper explicitly. College player props, moneylines and other sports remain out of scope. Yellow timestamps need a fresh sportsbook check. Home/away are designated teams, not assumed home-field advantage at neutral venues.</p>
+      <button class="scan-btn" onclick="loadCollegePaper(false)">Refresh college paper record (no odds credits)</button>
+      <button class="scan-btn" onclick="loadCollegePaper(true)">Grade completed college picks (no odds credits)</button>
+      <button class="scan-btn" onclick="loadCollegePaper('recheck')">Check college stat corrections — last 14 days</button>
+      <button class="scan-btn" onclick="exportCollegePaper()">Export college paper record</button>
+      <div id="college-paper-status" class="focus-note" role="status" aria-live="polite"></div>
+      <div id="college-paper-results" class="market-table-wrap"></div>
+      </details>
     </details>
 
     <!-- PROPS -->
@@ -1640,8 +1654,8 @@ function showToast(msg, color='green') {
   _toastTimer = setTimeout(() => { el.className = color; }, 5000);
 }
 </script>
-<script src="/nfl-markets.js?v=football-research-3"></script>
-<script src="/college-markets.js?v=college-board-1"></script>
+<script src="/nfl-markets.js?v=college-day-scan-4"></script>
+<script src="/college-markets.js?v=college-day-scan-4"></script>
 <div id="toast"></div>
 </body>
 </html>

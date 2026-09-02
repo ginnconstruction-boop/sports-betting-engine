@@ -58,7 +58,8 @@ class Element {
 function ui(fetcher:(url:string,options?:any)=>Promise<any>){
   const elements=new Map<string,Element>();
   const document={getElementById:(id:string)=>{if(!elements.has(id))elements.set(id,new Element());return elements.get(id);},createElement:()=>new Element()};
-  const ctx=vm.createContext({document,Date,nflFetch:fetcher,nflDisplayTime:(s:string)=>s});
+  const ctx=vm.createContext({document,Date,nflFetch:fetcher,nflDisplayTime:(s:string)=>s,
+    nflText:(parent:Element,text:string)=>{const p=new Element();p.textContent=text;parent.append(p);}});
   vm.runInContext(fs.readFileSync(path.join(__dirname,'../../public/college-markets.js'),'utf8'),ctx);
   return {document,run:(code:string)=>vm.runInContext(code,ctx)};
 }
@@ -89,4 +90,22 @@ test('college empty/failed schedule leaves odds disabled',async()=>{
     await app.run('loadCollegeEvents()');assert.equal(app.document.getElementById('college-quotes-btn').disabled,true);
     assert.equal(app.document.getElementById('college-events-btn').disabled,false);
   }
+});
+
+test('college full-day UI sends only date, hides game-list details, clears stale results and restores buttons on failure',async()=>{
+  const html=fs.readFileSync(path.join(__dirname,'../../public/index.html'),'utf8');
+  assert.match(html,/<details id="college-advanced"><summary>Optional:/);
+  assert.doesNotMatch(html,/onclick="runCmd\('ncaaf'/);
+  const calls:any[]=[];const app=ui(async(url,opts)=>{calls.push({url,body:JSON.parse(opts.body)});
+    return {date:'2026-09-03',providerGames:2,gamesWithFreshOdds:1,unmatchedScheduledGames:0,creditsUsed:2,cached:false,
+      recommendationNote:'Not a betting recommendation',warnings:[],shortlist:[],counts:{no_price_candidate:1},rows:[],unlisted:[],evidenceSaved:true,note:''};});
+  app.document.getElementById('college-scan-date').value='2026-09-03';
+  app.document.getElementById('college-event').value='irrelevant-game';
+  await app.run('runCollegeDayScan()');assert.deepEqual(calls,[{url:'/api/college/scan',body:{date:'2026-09-03'}}]);
+  assert.match(app.document.getElementById('college-scan-status').textContent,/2 provider-listed games checked/);
+  assert.equal(app.document.getElementById('college-day-scan-btn').disabled,false);
+  app.run('clearCollegeScan()');assert.equal(app.document.getElementById('college-scan-results').children.length,0);
+  const fail=ui(async()=>{throw Error('offline');});fail.document.getElementById('college-scan-date').value='2026-09-03';
+  await fail.run('runCollegeDayScan()');assert.match(fail.document.getElementById('college-scan-status').textContent,/failed/);
+  assert.equal(fail.document.getElementById('college-scan-date').disabled,false);
 });

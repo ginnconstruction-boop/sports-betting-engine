@@ -22,6 +22,8 @@ import { NflEvidenceArchive } from './src/services/nflEvidence';
 import { exactMarketBaseline } from './src/services/footballMarketBaseline';
 import { footballPaperMetrics } from './src/services/footballValidation';
 import { CollegeMarketBoard, COLLEGE_WINDOW_DAYS } from './src/services/collegeMarketBoard';
+import { createCollegePaperLedger, COLLEGE_PAPER_RULES } from './src/services/collegePaper';
+import { CollegeDayScan,collegeDate,COLLEGE_TIMEZONE } from './src/services/collegeDayScan';
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -271,8 +273,18 @@ app.post('/api/run/:command', requireAuth, async (req, res) => {
   }
 });
 
-// College is quote-only: neither route creates picks or touches the NFL ledger.
+// College quotes and explicit manual paper saves are isolated from NFL records/models.
 const collegeMarketBoard = new CollegeMarketBoard();
+const collegePaper = createCollegePaperLedger(path.join(SNAPSHOT_DIR,'college_paper_picks.json'));
+const collegeDayScan = new CollegeDayScan();
+app.get('/api/college/scan-config',requireAuth,(_req,res)=>res.json({today:collegeDate(Date.now()),maxDate:collegeDate(Date.now()+13*86400_000),timezone:COLLEGE_TIMEZONE}));
+app.post('/api/college/scan',requireAuth,async(req,res)=>{
+  if(typeof req.body?.date!=='string'||Object.keys(req.body).some(k=>k!=='date'))
+    return res.status(400).json({error:'Choose a college scan date. This scans the whole day; individual game IDs are not accepted.'});
+  try{res.setHeader('Cache-Control','no-store');res.json(await collegeDayScan.scan(req.body.date));}
+  catch(e){if(e instanceof MarketBoardError)return res.status(e.status).json({error:e.message});
+    res.status(502).json({error:'College full-day scan failed. No recommendation was assumed.'});}
+});
 app.get('/api/college/events', requireAuth, async (_req, res) => {
   try { res.json({ events: await collegeMarketBoard.events(), windowDays: COLLEGE_WINDOW_DAYS, maxCredits: 2 }); }
   catch { res.status(502).json({ error: 'College football schedule unavailable. Please try again later.' }); }
@@ -280,11 +292,36 @@ app.get('/api/college/events', requireAuth, async (_req, res) => {
 app.post('/api/college/markets', requireAuth, async (req, res) => {
   if (typeof req.body?.eventId !== 'string' || Object.keys(req.body).some(k => k !== 'eventId'))
     return res.status(400).json({ error: 'Select a college football game. Only spreads and totals are supported.' });
-  try { res.json(await collegeMarketBoard.quotes(req.body.eventId)); }
+  try {
+    const data=await collegeMarketBoard.quotes(req.body.eventId);let paperWarning:string|undefined;
+    try{collegePaper.observe(req.body.eventId,data.quotes);}catch{paperWarning='College paper storage unavailable; no pregame observation saved.';}
+    res.json({...data,paperWarning,marketBaselines:data.quotes.map(q=>exactMarketBaseline(data.event,q,data.quotes))});
+  }
   catch (err) {
     if (err instanceof MarketBoardError) return res.status(err.status).json({ error: err.message });
     res.status(502).json({ error: 'College odds feed unavailable. No prices were assumed and no pick was created.' });
   }
+});
+app.get('/api/college/paper',requireAuth,(_req,res)=>{
+  try{const picks=collegePaper.read();res.json({picks,rules:COLLEGE_PAPER_RULES,report:nflPaperReport(picks),metrics:footballPaperMetrics(picks)});}catch(e){nflError(res,e);}
+});
+app.post('/api/college/paper',requireAuth,async(req,res)=>{
+  if(typeof req.body?.eventId!=='string'||typeof req.body?.quoteId!=='string'||typeof req.body?.rules!=='string'
+    ||Object.keys(req.body).some(k=>!['eventId','quoteId','rules'].includes(k)))
+    return res.status(400).json({error:'Select an exact college quote and acknowledge college paper rules. Client prices, results and forecasts are not accepted.'});
+  try{const {event,quote}=collegeMarketBoard.selection(req.body.eventId,req.body.quoteId);res.json(await collegePaper.save(event,quote,req.body.rules));}catch(e){nflError(res,e);}
+});
+app.post('/api/college/paper/grade',requireAuth,async(_req,res)=>{
+  try{const data=await collegePaper.grade();res.json({...data,metrics:footballPaperMetrics(data.picks)});}catch(e){nflError(res,e);}
+});
+app.post('/api/college/paper/recheck',requireAuth,async(_req,res)=>{
+  try{const data=await collegePaper.grade(true);res.json({...data,metrics:footballPaperMetrics(data.picks)});}catch(e){nflError(res,e);}
+});
+app.get('/api/college/paper/export',requireAuth,(_req,res)=>{
+  try{res.setHeader('Cache-Control','no-store');res.json(collegePaper.exportRecord());}catch(e){nflError(res,e);}
+});
+app.get('/api/college/paper/:id/replay',requireAuth,(req,res)=>{
+  try{res.setHeader('Cache-Control','no-store');res.json(collegePaper.replay(req.params.id));}catch(e){nflError(res,e);}
 });
 
 // NFL quote board: event discovery is free; paid odds calls are explicit POSTs.
@@ -317,7 +354,7 @@ app.post('/api/nfl/markets', requireAuth, async (req, res) => {
 
 function nflError(res: express.Response, err: unknown) {
   if (err instanceof MarketBoardError) return res.status(err.status).json({ error: err.message });
-  return res.status(502).json({ error: 'NFL data or paper storage unavailable. No data was assumed; retry later.' });
+  return res.status(502).json({ error: 'Football data or paper storage unavailable. No data was assumed; retry later.' });
 }
 function nflSelection(body: any) {
   if (typeof body?.eventId !== 'string' || typeof body?.group !== 'string' || typeof body?.quoteId !== 'string')
@@ -620,7 +657,7 @@ app.post('/api/ats/backfill', requireAuth, async (req, res) => {
 });
 
 // ── Health ──
-app.get('/api/health', (_, res) => res.json({ ok: true, release: 'football-research-3', ts: new Date().toISOString() }));
+app.get('/api/health', (_, res) => res.json({ ok: true, release: 'college-day-scan-4', ts: new Date().toISOString() }));
 
 // ── SPA fallback ──
 app.get('*', (_, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));

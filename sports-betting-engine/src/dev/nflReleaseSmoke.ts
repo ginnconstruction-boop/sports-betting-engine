@@ -11,12 +11,12 @@ async function main() {
     const data:any=await response.json();return {status:response.status,data};
   };
   try {
-    for(const route of ['/api/nfl/paper/export','/api/nfl/paper/no-such-pick/replay']) {
+    for(const route of ['/api/nfl/paper/export','/api/nfl/paper/no-such-pick/replay','/api/college/paper/export','/api/college/paper/no-such-pick/replay','/api/college/scan-config']) {
       const r=await call(route,'GET',undefined,false);rows.push({route,anonymous:r.status});if(r.status!==401)throw new Error('Anonymous protection failed');
     }
     const login=await call('/api/login','POST',{username:process.env.DASHBOARD_USER,password:process.env.DASHBOARD_PASS},false);
     if(login.status!==200||!login.data.token)throw new Error('Smoke login failed');token=login.data.token;
-    for(const route of ['/api/health','/api/nfl/paper','/api/nfl/paper/export','/api/nfl/events','/api/college/events']) {
+    for(const route of ['/api/health','/api/nfl/paper','/api/nfl/paper/export','/api/nfl/events','/api/college/events','/api/college/paper','/api/college/paper/export','/api/college/scan-config']) {
       const r=await call(route);if(r.status!==200)throw new Error('Smoke endpoint failed: '+route);
       rows.push({route,status:r.status,release:r.data.release,picks:r.data.picks?.length,events:r.data.events?.length,
         archivedSources:r.data.evidence?Object.keys(r.data.evidence).length:undefined,missingSources:r.data.missingEvidence?.length});
@@ -25,6 +25,14 @@ async function main() {
     rows.push({route:'/api/nfl/paper/no-such-pick/replay',status:missing.status});
     const invalid=await call('/api/nfl/forecast','POST',{});if(invalid.status!==400)throw new Error('Invalid forecast not rejected');
     rows.push({route:'/api/nfl/forecast (invalid)',status:invalid.status});
+    for(const route of ['/api/college/scan','/api/college/paper']){
+      const invalidCollege=await call(route,'POST',{eventId:'forged',date:'2026-09-03',price:-110});
+      if(invalidCollege.status!==400)throw new Error('Invalid college request not rejected');
+      rows.push({route:route+' (invalid)',status:invalidCollege.status});
+    }
+    const missingCollege=await call('/api/college/paper/no-such-pick/replay');
+    if(missingCollege.status!==404)throw new Error('Missing college replay not rejected');
+    rows.push({route:'/api/college/paper/no-such-pick/replay',status:missingCollege.status});
     console.log(JSON.stringify({base,checks:rows,paidOddsCalls:0,createdPicks:0},null,2));
   } finally {if(token)await call('/api/logout','POST',{}).catch(()=>undefined);}
 }

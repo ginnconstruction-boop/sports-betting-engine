@@ -10,6 +10,7 @@ import { NflEvidenceArchive } from './nflEvidence';
 export const PAPER_RULES = 'regulation-periods_full-game-includes-ot_v1';
 export type PaperResult = 'PENDING' | 'REVIEW' | 'WIN' | 'LOSS' | 'PUSH';
 export interface NflPaperPick {
+  verifiedEvent?: { espnEventId: string; homeTeamId: string; awayTeamId: string; neutralSite: boolean | null; source: string; fetchedAt: string };
   id: string; event: UpcomingEvent; espnEventId: string; quote: MarketQuote;
   player?: NflPlayer; season: number; version: string; rules: string; savedAt: string;
   result: PaperResult; note: string; actual?: number; gradedAt?: string; source?: string;
@@ -121,11 +122,27 @@ export function nflPaperReport(picks: NflPaperPick[]) {
     note: 'Paper selections, flat 1-unit risk each, not real bets or an unbiased backtest. Manual and automatically logged model picks are separate. Related picks are correlated. Pushes excluded from win rate, included in settled-stake ROI. Model estimates remain uncalibrated; pregame observations are not verified closing lines.' };
 }
 
+/** Shared persistence/audit lifecycle; each league supplies its own identity,
+ * supported markets, settlement rules and grading. No model coefficients transfer. */
+export interface FootballPaperProfile {
+  sportKey: string; label: string; version: string; rules: string; sourceBase: string;
+  evidenceKind: string; archiveDirectory: string;
+  supports: (market: string) => boolean;
+  grade: typeof gradeNflPaper;
+  verifyEvent?: (event: UpcomingEvent) => Promise<NonNullable<NflPaperPick['verifiedEvent']>>;
+}
+const NFL_PAPER_PROFILE: FootballPaperProfile = {
+  sportKey: 'americanfootball_nfl', label: 'NFL', version: NFL_RESEARCH_VERSION, rules: PAPER_RULES,
+  sourceBase: ESPN_NFL, evidenceKind: 'nfl_settlement_source_v1', archiveDirectory: 'nfl_settlement_evidence',
+  supports: supportedPaperMarket, grade: gradeNflPaper,
+};
+
 export class NflPaperLedger {
   private grading: Promise<any> | null = null;
   private settlementArchive: NflEvidenceArchive;
-  constructor(private file: string, private research: Pick<NflResearch, 'matchEvent' | 'player' | 'summary'>, private now = () => Date.now()) {
-    this.settlementArchive = new NflEvidenceArchive(path.join(path.dirname(file), 'nfl_settlement_evidence'));
+  constructor(private file: string, private research: Pick<NflResearch, 'matchEvent' | 'player' | 'summary'>, private now = () => Date.now(),
+    private profile: FootballPaperProfile = NFL_PAPER_PROFILE) {
+    this.settlementArchive = new NflEvidenceArchive(path.join(path.dirname(file), profile.archiveDirectory));
   }
   exportRecord() {
     const picks = this.read();
@@ -139,8 +156,8 @@ export class NflPaperLedger {
       }
       catch { missingEvidence.push(hash); }
     }
-    return { schema: 1, exportedAt: new Date(this.now()).toISOString(), picks, evidence, missingEvidence, omittedEvidence,
-      note: 'NFL paper-only export. Includes original forecasts/quotes and up to 25 MiB of settlement source snapshots; omitted hashes are listed and require a server-disk backup. Does not include the separate official ledger or old reset backups. Missing/legacy evidence cannot be reconstructed by this export.' };
+    return { schema: 1, sportKey: this.profile.sportKey, exportedAt: new Date(this.now()).toISOString(), picks, evidence, missingEvidence, omittedEvidence,
+      note: `${this.profile.label} paper-only export. Includes original forecasts/quotes and up to 25 MiB of settlement source snapshots; omitted hashes are listed and require a server-disk backup. Does not include the separate official ledger or old reset backups. Missing/legacy evidence cannot be reconstructed by this export.` };
   }
   replay(id: string) {
     const pick = this.read().find(p => p.id === id);
@@ -150,9 +167,9 @@ export class NflPaperLedger {
       try {
         const evidence = this.settlementArchive.read(a.evidenceHash);
         const bytesHash = createHash('sha256').update(JSON.stringify(evidence.data)).digest('hex');
-        if (evidence.kind !== 'nfl_settlement_source_v1' || evidence.espnEventId !== pick.espnEventId
+        if (evidence.kind !== this.profile.evidenceKind || evidence.espnEventId !== pick.espnEventId
           || evidence.source !== a.source || bytesHash !== a.sourceHash) throw new Error('Mismatched source evidence.');
-        const replay = gradeNflPaper(pick, evidence.data);
+        const replay = this.profile.grade(pick, evidence.data);
         return { checkedAt: a.checkedAt, status: replay.result === a.result && replay.actual === a.actual ? 'matched' : 'mismatch',
           savedResult: a.result, savedActual: a.actual, replay, evidenceHash: a.evidenceHash };
       } catch { return { checkedAt: a.checkedAt, status: 'evidence_unavailable_or_corrupt', savedResult: a.result }; }
@@ -163,6 +180,7 @@ export class NflPaperLedger {
     if (!fs.existsSync(this.file)) return [];
     const data = JSON.parse(fs.readFileSync(this.file, 'utf8'));
     if (data.schema !== 1 || !Array.isArray(data.picks)) throw new Error('Invalid NFL paper ledger; refusing to overwrite it.');
+    if(data.picks.some((p:any)=>p.event?.sportKey!==this.profile.sportKey)) throw new Error('Paper ledger contains a different sport; refusing to mix or overwrite records.');
     return data.picks;
   }
   private write(picks: NflPaperPick[]) {
@@ -174,12 +192,17 @@ export class NflPaperLedger {
   async save(event: UpcomingEvent, quote: MarketQuote, rules: string) {
     const validate = () => {
       const age = this.now() - Date.parse(quote.updatedAt ?? '');
-      if (!supportedPaperMarket(quote.market) || rules !== PAPER_RULES) throw new MarketBoardError('Unsupported market or paper rules not acknowledged.');
+      if (event.sportKey !== this.profile.sportKey || !this.profile.supports(quote.market) || rules !== this.profile.rules)
+        throw new MarketBoardError('Unsupported sport/market or paper rules not acknowledged.');
+      if(!Number.isFinite(Date.parse(event.commenceTime)) || !Number.isFinite(quote.price) || Math.abs(quote.price)<100
+        || (quote.market !== 'h2h' && !quote.market.startsWith('h2h_') && !Number.isFinite(quote.line)))
+        throw new MarketBoardError('Invalid exact quote or kickoff.');
       if (!Number.isFinite(age) || age > 15 * 60_000 || age < -60_000
         || Date.parse(event.commenceTime) <= this.now()) throw new MarketBoardError('Quote is stale or kickoff has passed; paper pick not saved.', 409);
     };
     validate();
-    const espnEventId = await this.research.matchEvent(event);
+    const verifiedEvent = this.profile.verifyEvent ? await this.profile.verifyEvent(event) : undefined;
+    const espnEventId = verifiedEvent?.espnEventId ?? await this.research.matchEvent(event);
     const player = NFL_CORE_STATS[quote.market] ? await this.research.player(event, quote.participant) : undefined;
     validate(); // Network requests must not allow a save after kickoff.
     const picks = this.read();
@@ -187,7 +210,7 @@ export class NflPaperLedger {
       && nflName(p.quote.participant) === nflName(quote.participant) && p.quote.side === quote.side && p.quote.line === quote.line);
     if (existing) return { pick: existing, duplicate: true };
     const pick: NflPaperPick = { id: randomUUID(), origin: 'manual', event: { ...event }, espnEventId, quote: { ...quote }, player,
-      season: nflSeason(event.commenceTime), version: NFL_RESEARCH_VERSION, rules,
+      season: nflSeason(event.commenceTime), version: this.profile.version, rules, ...(verifiedEvent?{verifiedEvent}:{}),
       savedAt: new Date(this.now()).toISOString(), result: 'PENDING', note: 'Manual paper selection; no money wagered and no model probability attached.' };
     pick.settlementScope = { bookKey: quote.bookKey, ruleVersion: rules, sportsbookRulesVerified: false };
     this.write([...picks, pick]); return { pick, duplicate: false };
@@ -198,6 +221,8 @@ export class NflPaperLedger {
   }
   async saveModel(event: UpcomingEvent, quote: MarketQuote, forecast: NflForecast,
     assessment: { probability: number; pushProbability: number; estimatedEV: number; eligible: boolean }, rules: string) {
+    if(this.profile.sportKey!=='americanfootball_nfl' || event.sportKey!=='americanfootball_nfl')
+      throw new MarketBoardError('NFL forecast models cannot issue college selections.');
     const existing = this.modelPick(event.id, quote.participant, quote.market, forecast.version);
     if (existing) return { pick: existing, duplicate: true };
     const verify = () => {
@@ -266,11 +291,11 @@ export class NflPaperLedger {
         const data = await this.research.summary(id);
         // Persist the actual grading source BEFORE changing any result. A hash
         // alone cannot reproduce a result after the public source changes.
-        const evidence = this.settlementArchive.record({ kind: 'nfl_settlement_source_v1', espnEventId: id,
-          source: `${ESPN_NFL}/summary?event=${id}`, data });
+        const evidence = this.settlementArchive.record({ kind: this.profile.evidenceKind, espnEventId: id,
+          source: `${this.profile.sourceBase}/summary?event=${id}`, data });
         for (const p of eligible.filter(p => p.espnEventId === id)) {
-          const grade = gradeNflPaper(p, data), checkedAt = new Date(this.now()).toISOString();
-          const source = `${ESPN_NFL}/summary?event=${id}`;
+          const grade = this.profile.grade(p, data), checkedAt = new Date(this.now()).toISOString();
+          const source = `${this.profile.sourceBase}/summary?event=${id}`;
           const sourceHash = createHash('sha256').update(JSON.stringify(data)).digest('hex');
           const previous = p.gradingAudit ?? (['WIN','LOSS','PUSH'].includes(p.result)
             ? [{ result: p.result, actual: p.actual, note: p.note, checkedAt: p.gradedAt ?? p.savedAt,
@@ -288,7 +313,7 @@ export class NflPaperLedger {
       } catch {
         for (const p of eligible.filter(p => p.espnEventId === id)) {
           sourceFailures++;
-          updates.set(p.id, { ...(recheckSettled ? {} : { result: 'REVIEW', note: 'NFL result source unavailable. Retry later; no loss or zero assumed.' }),
+          updates.set(p.id, { ...(recheckSettled ? {} : { result: 'REVIEW', note: `${this.profile.label} result source unavailable. Retry later; no loss or zero assumed.` }),
             lastResultCheck: { at: new Date(this.now()).toISOString(), status: 'unavailable' } });
         }
       }

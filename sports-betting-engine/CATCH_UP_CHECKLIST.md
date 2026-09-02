@@ -1,19 +1,46 @@
 # Football catch-up checklist
 
-Updated August 31, 2026 (America/Chicago).
+Updated September 2, 2026 (America/Chicago).
 
 Current website: [Sports Betting Engine](https://sports-betting-engine-1.onrender.com/).
 
 **Release target: usable NFL research and paper testing, not validated betting recommendations.** No real bets are placed. A functioning dashboard and passing software tests do not establish a profitable model.
 
-## Latest research/tracking update — football-research-3
+## Latest college workflow — college-day-scan-4
+
+The main college control now scans a selected **Central calendar day**, not a
+single selected game or rolling 24-hour window. One bulk spreads/totals request
+costs up to 2 credits, with five-minute reuse across dates. The game dropdown is
+inside an optional inspection section. Empty days, feed failures, missing odds,
+identity/time conflicts and price-test rejections have separate explanations.
+
+Independent schedule coverage is checked. September 3 has 10 provider games
+plus Rutgers–UMass missing from that feed. September 5 has 68 provider games;
+two source kickoff conflicts remain deliberately blocked. These are snapshot
+observations, not permanent schedule guarantees.
+
+College manual paper saving, grading, source replay and export now use the
+shared audited lifecycle with separate college IDs/rules/records. No NFL model
+coefficients were copied. **No validated college recommendation model is enabled.**
+The exact-line price shortlist is research, not a betting recommendation.
+
+115 automated tests and the server build pass; the current dependency audit is
+clear after a targeted `qs` security patch. Deployment and live verification are
+documented in [the college scan release report](research/COLLEGE_DAY_SCAN_2026_09_02.md).
+
+**Owner action:** Render displays a payment-failed warning. Update billing in the
+Render account to avoid service interruption; no payment details were changed.
+
+## Previous research/tracking update — football-research-3
 
 See the [tested changes and ordered next steps](research/NFL_RESEARCH_RELEASE_2026_08_31.md).
 The new release adds plain-language website guidance, verified recent team
 attempt/target-share context, archived grading sources, read-only result replay
 and paper-record export. A separate fixed-cohort shadow test produced 77 stat
 forecasts over 33 games; results were mixed and no new formula was promoted.
-96 tests pass. Production deployment status is recorded in that release report.
+96 tests pass. Commit `61321f9` is live on Render as of August 31 at **10:44 AM
+Central**; authenticated production checks passed. Zero odds credits consumed;
+19,853 remain. Deployment evidence is recorded in that release report.
 
 Automatic recommendations remain blocked by missing verified game-specific
 availability; this source is not yet connected. No additional subscription was
@@ -68,7 +95,13 @@ release status report.
 9. Review **Refresh paper record**, separating model/manual, markets/seasons/versions and noting distinct games. **View original forecast** reopens the locked evidence, including after kickoff. Do not optimize against a handful of correlated picks.
 10. Before any production-model promotion, require documented data completeness, no-lookahead backtesting, out-of-sample probability calibration, suitable sample size, costs/odds-aware performance and a deliberate approval. Twenty positive picks do not automatically unlock BET labels.
 
-For college: click **College football — spreads & totals** → **Load / refresh college games (free)** → choose a matchup → **Load college spreads & totals**. This shows provider-listed games over the next 14 days and costs at most 2 credits per uncached game pull. It is quote-only: no college forecast or win/loss entry is created. The separate **Run college game-day scan** retains the old model/time filters and can return no plays even when the quote board lists upcoming games. Refresh the website after deployment if the new entry is missing.
+For college: click **College football — spreads & totals** → choose the date →
+**Scan all college games for this date**. No game list needs loading. An empty
+day offers a button for the next listed day. Check coverage and warnings, then
+the separately labeled price-research shortlist. Optional per-game quote/manual
+paper tools are collapsed below. Scan evidence does not create a W/L entry;
+explicit manual paper saves do. Grading is on demand after completed games.
+Refresh the website after deployment to replace the old college scan button.
 
 ## Verification evidence for this release
 
