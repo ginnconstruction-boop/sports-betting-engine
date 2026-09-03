@@ -15,6 +15,10 @@ stays available below it. The September 3 no-odds-call audit found 22/22 matched
 current rosters but only 8% weighted context completeness per team without a
 CFBD key; no game was promoted. See the [current-context release report](research/COLLEGE_CONTEXT_RELEASE_2026_09_03.md).
 
+**Live:** commit `6706224`, September 3 at 2:01 PM Central. Public health,
+versioned assets and authentication protection passed. Deployment verification
+made no sportsbook request and did not change or grade an existing paper pick.
+
 ## September 3 safety update — college-safety-2
 
 The unchanged v1 score model now has a fail-closed context layer. Extreme market

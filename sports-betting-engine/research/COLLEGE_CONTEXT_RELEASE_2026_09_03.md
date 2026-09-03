@@ -53,7 +53,12 @@ CollegeFootballData (Tier 3, MEDIUM) is supported server-side for returning
 production, transfers, roster talent, head-coach history, prior-year FCS SRS and
 team records. It requires `CFBD_API_KEY`, which is not currently configured.
 Static data is refreshed at most daily and only during an explicit scan. Six
-provider calls cover the season/slate, not one call per team.
+provider calls cover the season/slate, not one call per team. Those calls are
+separate from sportsbook credits and are subject to the CFBD account's own
+usage limits. This audit made zero CFBD calls because no key was configured.
+CFBD's aggregate returning-production percentage is stored as offensive
+production; overall and defensive returning production stay missing unless a
+separate dated source actually supplies them.
 
 Official school/conference/NCAA imports are Tier 1; verified/corroborated rows
 can be HIGH. Tier 4 and unverified rows are LOW. Conflicting equal-priority
@@ -121,3 +126,17 @@ static season fields, then add vetted official/team depth-chart and availability
 imports for confirmed QBs, coordinators and injuries. Only after a prospective
 archive exists should context coefficients be developed and evaluated on a
 separate chronological holdout.
+
+## Production deployment
+
+Commit `6706224b4e682b3fff0b99db27a143f10d662a98` deployed on September 3,
+2026 at 2:01 PM Central. Public health returned HTTP 200 with release marker
+`college-context-3`; the page and versioned JavaScript returned HTTP 200 and
+contained the SIMPLE READ/WATCH language. Anonymous protected access still
+returned HTTP 401.
+
+Deployment verification did not invoke the college scan, buy odds, create a
+new paper observation, grade a pick, or rewrite an existing opening. Existing
+September 3 safety-v2 paper observations remain immutable and replay through
+their own archived safety version. The context audit did not promote any
+September 3 game, so the published classification list above is unchanged.
