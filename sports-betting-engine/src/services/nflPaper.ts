@@ -333,12 +333,20 @@ export class NflPaperLedger {
     if (this.grading) return this.grading;
     this.grading = this.gradeBatch(recheckSettled).finally(() => { this.grading = null; }); return this.grading;
   }
-  private async gradeBatch(recheckSettled: boolean) {
+  async gradeEvents(ids:string[]) {
+    if(!Array.isArray(ids)||ids.length>10||ids.some(id=>typeof id!=='string'||!/^\d+$/.test(id)))
+      throw new MarketBoardError('Invalid bounded grading batch.');
+    while(this.grading)await this.grading;
+    this.grading=this.gradeBatch(false,new Set(ids)).finally(()=>{this.grading=null;});return this.grading;
+  }
+  private async gradeBatch(recheckSettled: boolean,onlyEvents?:Set<string>) {
     const eligible = this.read().filter(p => (recheckSettled
       ? ['WIN', 'LOSS', 'PUSH'].includes(p.result) && this.now() - Date.parse(p.event.commenceTime) < 14 * 86400_000
-      : ['PENDING', 'REVIEW'].includes(p.result)) && Date.parse(p.event.commenceTime) + 4 * 3600_000 < this.now())
+      : ['PENDING', 'REVIEW'].includes(p.result)) && Date.parse(p.event.commenceTime) + 4 * 3600_000 < this.now()
+      &&(!onlyEvents||onlyEvents.has(p.espnEventId)))
       .sort((a,b) => Date.parse(a.lastResultCheck?.at ?? a.gradedAt ?? a.savedAt) - Date.parse(b.lastResultCheck?.at ?? b.gradedAt ?? b.savedAt));
-    // Bound each button press to ten games, never fan out over the whole season.
+    // Ten games per source batch. The explicit college daily job walks a fixed
+    // backlog in batches; unresolved games are not retried within that run.
     const games = [...new Set(eligible.map(p => p.espnEventId))].slice(0, 10);
     const updates = new Map<string, any>();
     let sourceFailures = 0;

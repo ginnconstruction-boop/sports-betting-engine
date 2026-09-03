@@ -294,7 +294,7 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
     <div class="btn-grid">
       <button class="scan-btn prime" onclick="runCmd('nfl','NFL Game Lines')"><span class="num">NFL</span>NFL Game Lines</button>
       <button class="scan-btn prime" id="nfl-forecast-open" aria-controls="nfl-market-board" onclick="openNflForecast()"><span class="num">NFL</span>Forecast + track</button>
-      <button class="scan-btn prime" id="college-open" aria-controls="college-market-board" onclick="openCollegeBoard()"><span class="num">CFB</span>College football — spreads &amp; totals</button>
+      <button class="scan-btn prime" id="college-open" aria-controls="college-market-board" onclick="runCollegeToday()"><span class="num">CFB</span>College football — scan + track + grade</button>
     </div>
     <div class="focus-note">Model scans focus on game-day candidates. For early-week and specialty prices, use the market board below.</div>
 
@@ -355,15 +355,20 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
 
     <details class="market-board" id="college-market-board">
       <summary>College football — full-day scan, spreads &amp; totals</summary>
-      <p class="focus-note">Start here: choose a date and scan the entire college slate. No game selection or game-list refresh is needed. Dates use Central time; spreads and totals only.</p>
+      <p class="focus-note">One click does today’s work: scan all available college games, save qualifying experimental paper spreads, check previously tracked finished games and refresh your college win/loss record. Today is chosen automatically in Central time. No date, game list or checkbox required.</p>
+      <button class="scan-btn prime" id="college-today-btn" onclick="runCollegeToday()">Run today: scan + paper-track + grade</button>
+      <p class="focus-note">Clicking runs paper testing only: no real bets or stakes. Full-game results include overtime; exact-line ties push. The model’s probability calibration failed; injuries, roster transfers, starting QB and weather are not modeled. Totals remain research-only. Missing games/prices are disclosed, not invented. Each uncached slate pull uses up to 2 odds credits; grading uses no odds credits.</p>
+      <div id="college-daily-status" class="market-status" role="status" aria-live="polite"></div>
+      <details id="college-date-options"><summary>Optional: different date or preview without saving</summary>
       <label for="college-scan-date">College scan date (Central time)</label>
       <input id="college-scan-date" type="date" onchange="clearCollegeScan()"/>
       <label class="nfl-paper-rules"><input type="checkbox" id="college-model-paper-rules" onchange="clearCollegeScan()"/> Save qualifying experimental paper spread recommendations when I scan. Full game includes overtime; exact-line ties push. No real bets or stakes. Forecasts lack injury, roster-transfer, starting-QB and weather adjustments. Leave unchecked to preview only.</label>
       <button class="scan-btn prime" id="college-day-scan-btn" onclick="runCollegeDayScan()">Scan all college games for this date</button>
       <p class="focus-note">Checks every provider-listed game that day and reports independent schedule gaps. Up to 2 odds credits for one bulk pull, not 2 per game; shared cached odds are reused for five minutes. With the paper box checked, qualifying spreads are logged before display. Repeated scans preserve the first pick and original price. Totals: research only, not model recommendations. No wagers or background scans. The single-game dropdown below does not affect this scan.</p>
+      </details>
       <div id="college-scan-status" class="market-status" role="status" aria-live="polite"></div>
       <div id="college-scan-results"></div>
-      <p class="focus-note">College paper wins/losses appear here, separately from the official/lifetime cards at the top. Grade after games finish (at least four hours after kickoff); up to ten games per press. REVIEW means unresolved, not a loss. Refreshing or grading uses no odds credits.</p>
+      <p class="focus-note">College paper wins/losses appear here, separately from the official/lifetime cards at the top. One-click runs grade all eligible tracked games in batches, checking each once. Grading requires a verified final result and at least four hours after kickoff. Future/unfinished games stay pending; click College football later or tomorrow to update them. No scheduled overnight runs. REVIEW means unresolved, not a loss. The separate manual grading button below checks up to ten games.</p>
       <button class="scan-btn" onclick="loadCollegePaper(false)">Refresh college paper record (no odds credits)</button>
       <button class="scan-btn" onclick="loadCollegePaper(true)">Grade completed college picks (no odds credits)</button>
       <button class="scan-btn" onclick="loadCollegePaper('recheck')">Check college stat corrections — last 14 days</button>
@@ -1656,8 +1661,8 @@ function showToast(msg, color='green') {
   _toastTimer = setTimeout(() => { el.className = color; }, 5000);
 }
 </script>
-<script src="/nfl-markets.js?v=college-model-paper-1"></script>
-<script src="/college-markets.js?v=college-model-paper-1"></script>
+<script src="/nfl-markets.js?v=college-one-click-1"></script>
+<script src="/college-markets.js?v=college-one-click-1"></script>
 <div id="toast"></div>
 </body>
 </html>

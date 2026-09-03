@@ -8,8 +8,17 @@ Current website: [Sports Betting Engine](https://sports-betting-engine-1.onrende
 
 ## Latest college model — college-model-paper-1
 
-The independent college scoring model is implemented, tested and ready for
-deployment verification. **Spreads: experimental paper only. Totals: research
+**One-click workflow update — college-one-click-1:** The main **College football —
+scan + track + grade** button now chooses today in Central time, scans the full
+available slate, saves qualifying experimental paper spreads, grades previously
+tracked eligible games in batches until the fixed backlog is checked, and refreshes
+the college W/L record. No date picker, game list or checkbox is needed. The
+date/preview controls remain available under Optional. Final results are required;
+unfinished games stay pending and are checked on a later click, not overnight by
+a scheduler. No real bets. Initial software verification: 134 tests and build pass.
+
+The independent college scoring model is live and verified on September 2 at
+6:56 PM Central. **Spreads: experimental paper only. Totals: research
 only. NFL automatic picks: still blocked by missing verified availability.**
 
 - 2025 held-out score test: 1,565 games; spread RMSE 17.15 vs simple baseline
@@ -21,26 +30,28 @@ only. NFL automatic picks: still blocked by missing verified availability.**
 - Website full-day scan can save qualifying paper spreads after explicit
   checkbox acknowledgment. Original line/price/forecast remains unchanged on
   repeat scans; separate college W/L, grading, replay and export are visible.
-- Tomorrow (Thursday September 3): local scan verified 10 provider games and
+- Tomorrow (Thursday September 3): local and live scans verified 10 provider games and
   generated 10 paper preview candidates. Rutgers–UMass is a disclosed feed gap.
   Ten test records were saved in isolated QA storage, not production.
 - 126 automated tests, server build and JS syntax pass; dependency audit clear.
-  Historical odds audit used 120 credits; local scan QA used 2; cached repeats 0.
-  Last observed balance: 19,866. No subscription/billing changes.
+  Historical odds audit used 120 credits; local/live scan QA used 4; cached repeats 0.
+  Last observed balance: 19,864. No subscription/billing changes.
+- Live commit `fdc0f8ea37d9fe843f1f69cb615d61b6387d3a46`; health, assets,
+  authenticated model/record endpoints and Thursday preview passed. Live smoke
+  created zero picks. Official/ATS/reset-backup fingerprints are unchanged;
+  both NFL and college production paper ledgers remain absent until first saves.
 
 Detailed evidence and deployment status:
 [College model release report](research/COLLEGE_MODEL_RELEASE_2026_09_02.md).
 
 ### What to do tomorrow
 
-1. Refresh the [website](https://sports-betting-engine-1.onrender.com/), open
-   **College football — spreads & totals**, choose **September 3, 2026**.
-2. Check **Save qualifying experimental paper spread recommendations** and
-   click **Scan all college games for this date**. Unchecked means preview only.
-3. Use the college paper record below the scan; it is separate from the official
-   cards at the top. Do not interpret the experimental selections as real bets.
-4. After completed games (at least four hours after kickoff), click **Grade
-   completed college picks**, review WIN/LOSS/PUSH/REVIEW, and export the record.
+Refresh the [website](https://sports-betting-engine-1.onrender.com/) once after
+the update. Then click **College football — scan + track + grade**. That is the
+entire daily workflow. Today is selected by the server in Central time, even if
+an optional date was previously selected. Click again later or the next morning
+to check games that have since finished. The college paper record below the scan
+is separate from the official cards at the top. No real-money approval is implied.
 
 ### Next development priorities
 
@@ -147,13 +158,10 @@ release status report.
 9. Review **Refresh paper record**, separating model/manual, markets/seasons/versions and noting distinct games. **View original forecast** reopens the locked evidence, including after kickoff. Do not optimize against a handful of correlated picks.
 10. Before any production-model promotion, require documented data completeness, no-lookahead backtesting, out-of-sample probability calibration, suitable sample size, costs/odds-aware performance and a deliberate approval. Twenty positive picks do not automatically unlock BET labels.
 
-For college: click **College football — spreads & totals** → choose the date →
-check the experimental paper box if you want qualifying spreads recorded →
-**Scan all college games for this date**. No game list needs loading. An empty
-day offers the next listed day. Check coverage and confidence warnings. Model
-paper selections are separate from the optional price-research shortlist and
-manual picks. Without acknowledgment, the scan previews but creates no W/L
-entries. Grading is on demand after completed games.
+For college: click **College football — scan + track + grade**. It scans today,
+saves qualifying experimental paper spreads and grades eligible saved games.
+Check coverage and confidence warnings. Optional date/preview and single-game
+tools stay separate. No unattended grading or overnight schedule is configured.
 Refresh the website after deployment to replace the old college scan button.
 
 ## Verification evidence for this release

@@ -58,18 +58,41 @@ class Element {
 function ui(fetcher:(url:string,options?:any)=>Promise<any>){
   const elements=new Map<string,Element>();
   const document={getElementById:(id:string)=>{if(!elements.has(id))elements.set(id,new Element());return elements.get(id);},createElement:()=>new Element()};
-  const ctx=vm.createContext({document,Date,nflFetch:fetcher,nflDisplayTime:(s:string)=>s,nflFixed:(v:number,n=1)=>v.toFixed(n),
+  const ctx=vm.createContext({document,Date,setTimeout:(f:()=>void)=>setImmediate(f),nflFetch:fetcher,nflDisplayTime:(s:string)=>s,nflFixed:(v:number,n=1)=>v.toFixed(n),
     nflText:(parent:Element,text:string)=>{const p=new Element();p.textContent=text;parent.append(p);}});
   vm.runInContext(fs.readFileSync(path.join(__dirname,'../../public/college-markets.js'),'utf8'),ctx);
   return {document,run:(code:string)=>vm.runInContext(code,ctx)};
 }
-test('college main-menu entry opens its own section without an API call',()=>{
+test('college main-menu invokes one-click workflow; expanding the section alone remains read-only',()=>{
   const html=fs.readFileSync(path.join(__dirname,'../../public/index.html'),'utf8');
-  assert.match(html,/id="college-open"[^>]*onclick="openCollegeBoard\(\)".*College football/);
+  assert.match(html,/id="college-open"[^>]*onclick="runCollegeToday\(\)".*College football/);
   assert.match(html,/src="\/college-markets.js\?v=/);
   const app=ui(async()=>{throw Error('No API calls on open');});app.run('openCollegeBoard()');
   assert.equal(app.document.getElementById('college-market-board').open,true);
   assert.equal(app.document.getElementById('college-market-board').scrolled,true);
+});
+
+test('one-click UI ignores date/checkbox, sends one start request and displays grading progress',async()=>{
+  const calls:any[]=[];let polls=0;
+  const scan={date:'2026-09-04',providerGames:2,gamesWithFreshOdds:2,unmatchedScheduledGames:0,creditsUsed:2,
+    recommendations:[],projections:[],warnings:[],shortlist:[],counts:{},rows:[],unlisted:[],evidenceSaved:true};
+  const job={id:'job1',date:'2026-09-04',stage:'scanning',status:'running',scan:null,warnings:[],grading:{gamesChecked:0,gamesPlanned:21,picksChecked:0,pending:2,review:0}};
+  const app=ui(async(url,opts)=>{calls.push({url,body:opts?.body});
+    if(url==='/api/college/paper')return{picks:[],report:{buckets:[]}};
+    if(url==='/api/college/today')return job;
+    polls++;return{...job,scan,stage:polls===1?'grading':'finished',status:polls===1?'running':'complete',grading:{...job.grading,gamesChecked:polls===1?10:21,picksChecked:polls===1?10:21}};
+  });
+  app.document.getElementById('college-scan-date').value='2026-10-01';
+  await app.run('Promise.all([runCollegeToday(),runCollegeToday()])');
+  assert.deepEqual(calls[0],{url:'/api/college/today',body:'{}'});assert.equal(calls.filter(c=>c.url==='/api/college/today').length,1);
+  assert.equal(calls.some(c=>c.url==='/api/college/scan'),false);assert.equal(app.document.getElementById('college-scan-date').value,'2026-09-04');
+  assert.match(app.document.getElementById('college-daily-status').textContent,/21\/21 games checked/);
+  assert.equal(app.document.getElementById('college-open').disabled,false);assert.equal(app.document.getElementById('college-today-btn').disabled,false);
+});
+test('one-click UI network failure restores controls and does not automatically restart the job',async()=>{
+  let starts=0;const app=ui(async(url)=>{if(url==='/api/college/paper')return{picks:[],report:{buckets:[]}};starts++;throw Error('offline');});
+  await app.run('runCollegeToday()');assert.equal(starts,1);assert.equal(app.document.getElementById('college-open').disabled,false);
+  assert.match(app.document.getElementById('college-daily-status').textContent,/Could not confirm/);
 });
 test('college UI discovers freely, loads only selected game, renders safely and clears old quotes',async()=>{
   const calls:string[]=[];const app=ui(async(url,options)=>{calls.push(url);

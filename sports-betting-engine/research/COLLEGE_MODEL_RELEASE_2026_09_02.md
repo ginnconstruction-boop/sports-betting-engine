@@ -114,7 +114,42 @@ original forecast replay matched. Actual market quotes may change by Thursday.
   duplicate records, original forecast replay and separate W/L table verified.
 - Historical audit 120 credits; local full-day QA 2 credits; cached repeats 0.
   Last observed balance after local QA: 19,866. No subscription/billing changes.
-- Production deployment/live smoke: pending final verification below.
+- Production deployment/live smoke: passed, details below.
+
+### Verified production deployment
+
+Commit `fdc0f8ea37d9fe843f1f69cb615d61b6387d3a46`, Render deployment
+`dep-dacbeec9v7es73fjvb50`, live **September 2, 2026, 6:55:21 PM Central**.
+Public health returned 200 with `college-model-paper-1`; new JavaScript returned
+200 and includes the confidence warning. Anonymous model-status access is 401.
+There was a transient 502 during the normal service replacement, cleared after
+startup. Authenticated release smoke completed, followed by the two-date preview
+smoke, using existing Render credentials without exposing them.
+
+Live Thursday preview: 10 provider games / 11 independent games, 10 fresh-odds
+games, 10 projections, 10 unsaved spread candidates; totals gate false. One
+unmatched independent schedule entry, UMass–Rutgers, remains disclosed. First
+scan cost 2 credits, repeated date cost 0; both saved scan evidence and returned
+no warnings. **No production picks were created.** Balance: 19,864; total for
+this model effort 124 credits (120 historical + 2 local + 2 live), about 0.62%
+of the 20,000-credit allowance. Account balance also reflects prior/other usage.
+
+Before/after production records, checked around 6:56 PM Central, unchanged:
+
+- Official `picks_log.json`: 0 records, SHA-256
+  `4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945`.
+- NFL and college paper files: absent before and after; no QA records copied.
+- ATS database: 58 keys, SHA-256
+  `a88d1eb14b104a7be04baf9efe8274b98239d9fab8b3b123c2b650662c89f8a3`.
+- Intentional reset backup: 329 records, SHA-256
+  `c252ce69b46dadfac7c7894c50c3892a3f97bcaeceefd7f3ddb67a2eb6703bbd`.
+
+Browser skill used to verify actual date/acknowledgment controls, saved cards,
+duplicate labels and evidence replay, and to access the signed-in hosting shell
+for deployment checks. Local server was restarted and the ten isolated paper
+records survived; their export contains 11 forecast/input sources, none missing.
+The browser was reloaded after changes, then the visible calibration warning and
+separate pending record were checked. Local test server/tabs closed after QA.
 
 Raw research archives and locks: ignored local `snapshots/college-model-v1/`.
 Portable normalized 2025 history, fixed configuration, 2024 residuals, score

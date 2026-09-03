@@ -25,6 +25,7 @@ import { CollegeMarketBoard, COLLEGE_WINDOW_DAYS } from './src/services/collegeM
 import { createCollegePaperLedger, COLLEGE_PAPER_RULES } from './src/services/collegePaper';
 import { CollegeDayScan,collegeDate,COLLEGE_TIMEZONE } from './src/services/collegeDayScan';
 import { CollegePredictions } from './src/services/collegePredictions';
+import { CollegeDailyRun } from './src/services/collegeDailyRun';
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -279,6 +280,16 @@ const collegeMarketBoard = new CollegeMarketBoard();
 const collegePaper = createCollegePaperLedger(path.join(SNAPSHOT_DIR,'college_paper_picks.json'));
 const collegePredictions = new CollegePredictions(collegePaper,SNAPSHOT_DIR);
 const collegeDayScan = new CollegeDayScan(undefined,collegePredictions);
+const collegeDailyRun = new CollegeDailyRun({scan:(date,track)=>collegeDayScan.scan(date,track),read:()=>collegePaper.read(),
+  gradeEvents:ids=>collegePaper.gradeEvents(ids),now:Date.now});
+app.post('/api/college/today',requireAuth,(req,res)=>{
+  if(!req.body||Array.isArray(req.body)||Object.keys(req.body).length)
+    return res.status(400).json({error:'One-click college runs use today in Central time. Dates, prices, results and model overrides are not accepted.'});
+  res.setHeader('Cache-Control','no-store');res.status(202).json(collegeDailyRun.start());
+});
+app.get('/api/college/today/:id',requireAuth,(req,res)=>{
+  try{res.setHeader('Cache-Control','no-store');res.json(collegeDailyRun.get(req.params.id));}catch(e){nflError(res,e);}
+});
 app.get('/api/college/model-status',requireAuth,(_req,res)=>{
   try{res.setHeader('Cache-Control','no-store');res.json(collegePredictions.readiness());}
   catch{res.status(503).json({error:'College model bundle integrity/availability check failed. No model recommendations available.'});}
@@ -664,7 +675,7 @@ app.post('/api/ats/backfill', requireAuth, async (req, res) => {
 });
 
 // ── Health ──
-app.get('/api/health', (_, res) => res.json({ ok: true, release: 'college-model-paper-1', ts: new Date().toISOString() }));
+app.get('/api/health', (_, res) => res.json({ ok: true, release: 'college-one-click-1', ts: new Date().toISOString() }));
 
 // ── SPA fallback ──
 app.get('*', (_, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));

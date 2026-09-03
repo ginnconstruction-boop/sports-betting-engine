@@ -9,17 +9,53 @@ function openCollegeBoard() {
     document.getElementById('college-scan-date').value=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Chicago',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
   }
 }
-let collegeScanBusy=false;
+let collegeScanBusy=false,collegeDailyBusy=false;
+function collegeScanControls(disabled){
+  for(const id of ['college-open','college-today-btn','college-day-scan-btn','college-scan-date','college-model-paper-rules'])document.getElementById(id).disabled=disabled;
+}
+async function runCollegeToday(){
+  if(collegeScanBusy||collegeDailyBusy)return;
+  openCollegeBoard();collegeDailyBusy=true;collegeScanBusy=true;collegeScanControls(true);
+  const status=document.getElementById('college-scan-status'),progress=document.getElementById('college-daily-status');
+  document.getElementById('college-scan-results').replaceChildren();progress.textContent='Starting today’s college scan, paper tracking and grading...';
+  let jobId,shownScan=false;
+  try{
+    let job=await nflFetch('/api/college/today',{method:'POST',body:'{}'});jobId=job.id;
+    document.getElementById('college-scan-date').value=job.date;
+    while(true){
+      const g=job.grading;
+      progress.textContent=job.stage==='scanning'?`${job.date} (Central): scanning all available games and saving qualifying paper spreads...`
+        :`${job.date} (Central): checked ${g.gamesChecked}/${g.gamesPlanned} games for results; ${g.picksChecked} paper selections checked.`;
+      if(job.scan&&!shownScan){renderCollegeDayScan(job.scan);shownScan=true;}
+      else if(!job.scan)status.textContent='Waiting for today’s full-day scan results...';
+      if(job.status!=='running'){
+        progress.textContent=`${job.status==='complete'?'Today’s run finished':'Run finished with issues'}: ${g.gamesChecked}/${g.gamesPlanned} games checked for grading; ${g.pending} pending; ${g.review} review. ${job.warnings.join(' ')} Games not finished stay pending; click College football again later or tomorrow to update them.`;
+        if(!job.scan)status.textContent='Today’s scan did not finish. Any saved records are preserved; see the run warning above.';
+        break;
+      }
+      await new Promise(resolve=>setTimeout(resolve,1000));
+      job=await nflFetch(`/api/college/today/${encodeURIComponent(jobId)}`);
+    }
+  }catch(e){progress.textContent=`Could not confirm the run: ${e.message} ${jobId?'It may still be running on the server; click College football to reconnect.':'Do not assume nothing was saved; inspect the paper record before retrying.'}`;}
+  finally{await loadCollegePaper(false);collegeDailyBusy=false;collegeScanBusy=false;collegeScanControls(false);}
+}
 function clearCollegeScan(){document.getElementById('college-scan-results').replaceChildren();document.getElementById('college-scan-status').textContent='Date or paper mode changed. Run a new full-day scan; previous displayed results are cleared. Saved picks are unchanged.';}
 async function runCollegeDayScan(){
   if(collegeScanBusy)return;
   const input=document.getElementById('college-scan-date'),button=document.getElementById('college-day-scan-btn'),status=document.getElementById('college-scan-status'),panel=document.getElementById('college-scan-results');
   if(!input.value){openCollegeBoard();}
-  collegeScanBusy=true;button.disabled=true;input.disabled=true;panel.replaceChildren();
+  collegeScanBusy=true;collegeScanControls(true);panel.replaceChildren();document.getElementById('college-daily-status').textContent='Optional date scan only; use College football for today’s scan + tracking + grading.';
   const paperBox=document.getElementById('college-model-paper-rules'),trackPaper=paperBox.checked;paperBox.disabled=true;
   const date=input.value;status.textContent=`Scanning all college games for ${date} (Central time). Checking schedules, historical scoring model and posted spreads/totals...`;
   try{
     const data=await nflFetch('/api/college/scan',{method:'POST',body:JSON.stringify({date,trackPaper})});
+    renderCollegeDayScan(data);
+    await loadCollegePaper(false);
+  }catch(e){status.textContent=`College scan failed: ${e.message} Saved records may still exist; refresh the paper record before retrying.`;}
+  finally{collegeScanBusy=false;collegeScanControls(false);}
+}
+function renderCollegeDayScan(data){
+    const input=document.getElementById('college-scan-date'),status=document.getElementById('college-scan-status'),panel=document.getElementById('college-scan-results');panel.replaceChildren();
     status.textContent=`${data.date} · Central time · ${data.providerGames} provider-listed games checked; ${data.gamesWithFreshOdds} with fresh odds; ${data.unmatchedScheduledGames} independent schedule entries unmatched. ${data.cached?'Cached odds reused. ':''}Odds credits this scan: ${data.creditsUsed??'unknown'}.`;
     const previewCount=(data.projections??[]).reduce((n,r)=>n+(r.selected?.length??0),0);
     nflText(panel,data.recommendationStatus==='preview_only'?`Preview: ${previewCount} experimental paper spread candidates — not yet saved · ${data.projections?.length??0} games projected`
@@ -68,9 +104,6 @@ async function runCollegeDayScan(){
       for(const c of r.selected??[])nflText(details,`Unsaved paper preview: ${c.quote.side} ${c.quote.line} · ${c.quote.book} ${c.quote.price}. Not in the win/loss record until saved.`);
     }
     panel.append(details);nflText(panel,`${data.evidenceSaved?'Scan evidence saved separately from picks.':'Scan evidence was not saved.'} ${data.note}`);
-    await loadCollegePaper(false);
-  }catch(e){status.textContent=`College scan failed: ${e.message} No recommendation was assumed.`;}
-  finally{collegeScanBusy=false;button.disabled=false;input.disabled=false;paperBox.disabled=false;}
 }
 function collegeStatus(message) { document.getElementById('college-status').textContent = message; }
 function clearCollegeSelection() {
@@ -162,6 +195,7 @@ async function saveCollegePaper(quote) {
 }
 let collegePaperBusy=false;
 async function loadCollegePaper(mode) {
+  if(collegeDailyBusy&&mode)return;
   if(collegePaperBusy)return;collegePaperBusy=true;
   const status=document.getElementById('college-paper-status'),panel=document.getElementById('college-paper-results');
   status.textContent=mode?'Checking up to ten college games...':'Loading separate college practice record...';
