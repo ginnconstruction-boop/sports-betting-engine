@@ -1,25 +1,11 @@
 import { UpcomingEvent } from '../api/oddsApiClient';
 import { MarketBoardError } from './nflMarketBoard';
-import { fetchNflJson, nflName, nflSeason } from './nflResearch';
+import { fetchNflJson, nflSeason } from './nflResearch';
+import {collegeTeamMatches,resolveCollegeTeam} from './collegeEntities';
+export {collegeTeamMatches,COLLEGE_TEAM_ALIASES} from './collegeEntities';
 import type { NflPaperPick } from './nflPaper';
 
 export const ESPN_COLLEGE = 'https://site.api.espn.com/apis/site/v2/sports/football/college-football';
-// Explicit source-ID aliases reviewed against the current ESPN scoreboard.
-// Do not guess by initials, fuzzy edit distance or treating State as optional.
-export const COLLEGE_TEAM_ALIASES: Record<string,string[]> = {
-  '113': ['UMass Minutemen'], '399': ['Albany'],
-  '2029': ['Arkansas Pine Bluff Golden Lions'],
-  // September 2 Week 1 feed review: explicit aliases bound to ESPN team IDs.
-  '2754': ['Youngstown St Penguins'], '2643': ['Citadel Bulldogs'],
-  '2026': ['Appalachian State Mountaineers'], '2572': ['Southern Mississippi Golden Eagles'],
-  '2447': ['Nicholls State Colonels'], '2277': ['Houston Baptist Huskies'],
-  '2545': ['Southeastern Louisiana Lions'], '2534': ['Sam Houston State Bearkats'],
-};
-export function collegeTeamMatches(name:string,team:any): boolean {
-  if(!team?.id||!name)return false;
-  return [team.displayName,team.shortDisplayName,team.location,
-    ...(COLLEGE_TEAM_ALIASES[String(team.id)]??[])].filter(Boolean).some(n=>nflName(n)===nflName(name));
-}
 export function matchCollegeEvent(event:UpcomingEvent,data:any,source:string,fetchedAt:string): NonNullable<NflPaperPick['verifiedEvent']> {
   if(event.sportKey!=='americanfootball_ncaaf'||!Number.isFinite(Date.parse(event.commenceTime)))throw new MarketBoardError('Not a valid college game.');
   const matches=(data.events??[]).filter((e:any)=>{
@@ -38,12 +24,19 @@ export function matchCollegeEvent(event:UpcomingEvent,data:any,source:string,fet
     if(sameTeams.length===1&&Number.isFinite(Date.parse(sameTeams[0].date))
       &&Math.abs(Date.parse(sameTeams[0].date)-Date.parse(event.commenceTime))>15*60_000)
       throw new MarketBoardError(`College kickoff conflict: odds feed ${event.commenceTime}; independent schedule ${sameTeams[0].date}. No pick until the sources agree.`,422);
-    throw new MarketBoardError('Unique college game identity could not be verified. No fuzzy team-name guess or pick was made.',422);
+    throw new MarketBoardError('UNMATCHED GAME — MANUAL REVIEW. Unique college game identity could not be verified. No fuzzy team-name guess or pick was made.',422);
   }
   const competition=matches[0].competitions[0],homeTeamId=String(competition.competitors.find((c:any)=>c.homeAway==='home').team.id),
     awayTeamId=String(competition.competitors.find((c:any)=>c.homeAway==='away').team.id);
   if(!/^\d+$/.test(homeTeamId)||!/^\d+$/.test(awayTeamId)||homeTeamId===awayTeamId)throw new MarketBoardError('College team IDs are invalid.',422);
-  return {espnEventId:String(matches[0].id),homeTeamId,awayTeamId,
+  const teams=competition.competitors.map((c:any)=>c.team);
+  const homeEntity=resolveCollegeTeam(event.homeTeam,teams),awayEntity=resolveCollegeTeam(event.awayTeam,teams);
+  if(!homeEntity.resolved||!awayEntity.resolved||homeEntity.espnTeamId===awayEntity.espnTeamId)
+    throw new MarketBoardError('UNMATCHED GAME — MANUAL REVIEW. Ambiguous canonical team names.',422);
+  return {espnEventId:String(matches[0].id),homeTeamId,awayTeamId,homeEntity,awayEntity,
+    homeConferenceId:String(teams.find((t:any)=>String(t.id)===homeTeamId)?.conferenceId??''),
+    awayConferenceId:String(teams.find((t:any)=>String(t.id)===awayTeamId)?.conferenceId??''),
+    week:Number.isInteger(matches[0].week?.number)?matches[0].week.number:null,
     neutralSite:typeof competition.neutralSite==='boolean'?competition.neutralSite:null,source,fetchedAt};
 }
 

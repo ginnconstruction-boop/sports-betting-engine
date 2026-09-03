@@ -36,6 +36,6 @@ export function createCollegePaperLedger(file:string,research=new CollegeResearc
     player:async()=>{throw new Error('College player props are out of scope.');}},now,{
       sportKey:'americanfootball_ncaaf',label:'College football',version:'college-manual-paper-v1',rules:COLLEGE_PAPER_RULES,
       sourceBase:ESPN_COLLEGE,evidenceKind:'college_settlement_source_v1',archiveDirectory:'college_settlement_evidence',
-      supports:market=>['spreads','totals'].includes(market),grade:gradeCollegePaper,verifyEvent:event=>research.identity(event),
+      supports:market=>market==='spreads',grade:gradeCollegePaper,verifyEvent:event=>research.identity(event),
     });
 }

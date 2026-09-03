@@ -355,9 +355,9 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
 
     <details class="market-board" id="college-market-board">
       <summary>College football — full-day scan, spreads &amp; totals</summary>
-      <p class="focus-note">One click does today’s work: scan all available college games, save qualifying experimental paper spreads, check previously tracked finished games and refresh your college win/loss record. Today is chosen automatically in Central time. No date, game list or checkbox required.</p>
+      <p class="focus-note">One click does today’s work: scan all available college games, show context/calibration warnings, save eligible monitor-only spread observations separately from qualified paper picks, check previously tracked finished games and refresh college win/loss and CLV observations. Today is chosen automatically in Central time. No date, game list or checkbox required.</p>
       <button class="scan-btn prime" id="college-today-btn" onclick="runCollegeToday()">Run today: scan + paper-track + grade</button>
-      <p class="focus-note">Clicking runs paper testing only: no real bets or stakes. Full-game results include overtime; exact-line ties push. The model’s probability calibration failed; injuries, roster transfers, starting QB and weather are not modeled. Totals remain research-only. Missing games/prices are disclosed, not invented. Each uncached slate pull uses up to 2 odds credits; grading uses no odds credits.</p>
+      <p class="focus-note">NO RELIABLE EDGE is a valid result. Clicking runs paper testing only: no real bets, Kelly or stakes. Full-game results include overtime; exact-line ties push. Probability calibration failed; verified roster/QB/depth context is missing. Extreme discrepancies become MODEL WARNING, not A+ picks. PAPER MONITOR is not a qualified betting recommendation. Totals remain research-only with paper saving disabled. Each uncached slate pull uses up to 2 odds credits; grading uses no odds credits.</p>
       <div id="college-daily-status" class="market-status" role="status" aria-live="polite"></div>
       <details id="college-date-options"><summary>Optional: different date or preview without saving</summary>
       <label for="college-scan-date">College scan date (Central time)</label>
@@ -1661,8 +1661,8 @@ function showToast(msg, color='green') {
   _toastTimer = setTimeout(() => { el.className = color; }, 5000);
 }
 </script>
-<script src="/nfl-markets.js?v=college-one-click-1"></script>
-<script src="/college-markets.js?v=college-one-click-1"></script>
+<script src="/nfl-markets.js?v=college-safety-2"></script>
+<script src="/college-markets.js?v=college-safety-2"></script>
 <div id="toast"></div>
 </body>
 </html>

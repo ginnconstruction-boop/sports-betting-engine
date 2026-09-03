@@ -43,4 +43,18 @@ experimental spreads only, totals research-only, calibration failed, no real bet
   scan/grading completed with zero odds credits and no created picks.
 - Browser skill verifies the actual main button runs the job without selecting
   a date or checkbox, hides optional date controls and restores buttons on finish.
-- Production deployment verification will be added after release.
+- Production commit `4d9c65f55fce180e159e6ce43a2c848f824b4a4b` deployed via
+  Render `dep-dacbm83bc2fs739gm5lg` (September 2, 7:11 PM Central).
+  Public health returns `college-one-click-1`; current HTML/JS expose the new
+  main button and handler. Anonymous job status returns 401.
+- Authenticated production endpoint smoke passed, including date-override
+  rejection and missing-job checks. The real today-only workflow completed on
+  September 2: zero games, recommendations, pending/review records, source
+  failures or warnings; zero odds credits; zero picks before and after.
+  Nonempty slates/backlogs are covered by automated tests and prior model QA,
+  not presented as a nonempty production run tonight.
+- Before/after production fingerprints match: official picks remain empty,
+  ATS database retains 58 keys, and the intentional-reset backup retains 329
+  records. NFL and college paper ledgers remain absent until their first saved
+  selections. No records were reset, restored, merged or deleted. Local QA
+  server was stopped after verification.

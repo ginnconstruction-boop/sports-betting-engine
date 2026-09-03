@@ -83,6 +83,8 @@ const LEGACY_OFFICIAL_BET_TYPES = new Set([
 export type PickRecordBucket = 'official' | 'tracked';
 
 export interface OfficialRecommendationPolicyInput {
+  sportKey?:string;
+  sport?:string;
   finalDecisionLabel?: PickRecord['finalDecisionLabel'];
   recommendedLabel?: PickRecord['recommendedLabel'];
   marketType?: string;
@@ -97,6 +99,7 @@ export interface OfficialRecommendationPolicyInput {
 export function shouldSaveAsOfficialRecommendation(
   pick: OfficialRecommendationPolicyInput,
 ): boolean {
+  if(pick.sportKey==='americanfootball_ncaaf'||String(pick.sport??'').toLowerCase()==='ncaaf')return false;
   const label = pick.recommendedLabel ?? pick.finalDecisionLabel;
   if (label !== 'BET') return false;
   if ((pick.marketType ?? 'game_line') !== 'game_line') return false;
@@ -207,6 +210,7 @@ export function savePicksFromTopTen(
   const newPicks: PickRecord[] = [];
 
   for (const bet of bets) {
+    if(bet.sportKey==='americanfootball_ncaaf'||String(bet.sport).toLowerCase()==='ncaaf')continue;
     const label = bet.recommendedLabel ?? bet.finalDecisionLabel;
     if (
       label !== undefined &&

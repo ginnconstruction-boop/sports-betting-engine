@@ -99,6 +99,10 @@ export function applyFootballGuardrails(
   const marketKey = (value: string) => ({ spreads: 'spread', totals: 'total', h2h: 'moneyline' }[String(value ?? '').toLowerCase()] ?? String(value ?? '').toLowerCase());
 
   return candidates.map(candidate => {
+    if(normalizeSportKey(candidate)==='americanfootball_ncaaf')return {...candidate,score:0,grade:'PAPER PASS',finalGrade:'PAPER PASS',
+      tier:'MONITOR' as const,finalDecisionLabel:'PASS' as const,kellyPct:undefined,winProbability:undefined,adjustedWinProbability:undefined,
+      trueEdge:undefined,adjustedEdge:undefined,footballGuardrailActive:true,
+      labelReasons:['Legacy college ranking disabled; use the audited college paper/context workflow. No reliable edge, stake or real-money recommendation.']};
     if (!isFootball(candidate) || !candidate.finalDecisionLabel) return candidate;
 
     const sportKey = normalizeSportKey(candidate);

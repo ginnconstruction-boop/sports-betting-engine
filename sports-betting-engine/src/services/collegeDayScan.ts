@@ -77,6 +77,8 @@ export class CollegeDayScan {
         reason:duplicates.has(event.id)?'Duplicate provider event ID.':started?'Kickoff has passed; no new pregame selection.':reason,
         quoteCount:0,freshQuotes:0,marketsChecked:0,comparableQuotes:0,researchCandidates:0};
     });
+    const canonicalCounts=new Map<string,number>();for(const r of rows)if(r.identity)canonicalCounts.set(r.identity.espnEventId,(canonicalCounts.get(r.identity.espnEventId)??0)+1);
+    for(const r of rows)if(r.identity&&canonicalCounts.get(r.identity.espnEventId)>1){r.status='ambiguous_provider_game';r.reason='Multiple provider IDs map to one canonical game. Manual review required.';}
     const unlisted=schedule.filter((e:any)=>!mapped.has(String(e.id))).map((e:any)=>({espnEventId:String(e.id),name:String(e.name??'College game'),
       commenceTime:e.date,reason:'Not matched to an odds-provider game for this date; no price or pick assumed.'}));
     const eligible=rows.filter(r=>r.status==='awaiting_odds');
@@ -128,7 +130,7 @@ export class CollegeDayScan {
       providerGames:games.length,independentScheduledGames:scheduleOk?schedule.length:null,unmatchedScheduledGames:unlisted.length,
       gamesWithFreshOdds:rows.filter(r=>r.freshQuotes>0).length,counts,nextDate,oddsStatus,oddsFetchedAt,cached,creditsUsed,remainingCredits,
       ...modelResult,
-      recommendationNote:this.model?'Experimental paper spread recommendations only after fixed checks and a successful immutable save. Totals remain research-only because their holdout test failed. No recommendation to wager real money.'
+      recommendationNote:this.model?'Qualified PAPER BET/LEAN and unqualified PAPER MONITOR records are separate. Missing context or extreme disagreement can mean NO RELIABLE EDGE. Totals remain research-only because their holdout test failed. No real-money or stake recommendation.'
         :'No validated college prediction model is enabled. Price research is not a win forecast, recommendation, proven edge, or instruction to bet.',
       shortlist:shortlist.sort((a,b)=>b.baseline.conditionalPriceAdvantage-a.baseline.conditionalPriceAdvantage||a.event.id.localeCompare(b.event.id)),rows,unlisted,warnings,
       evidenceSaved:false,

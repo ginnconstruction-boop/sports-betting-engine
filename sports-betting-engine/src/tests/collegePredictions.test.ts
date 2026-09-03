@@ -7,6 +7,7 @@ import {CollegePredictions,loadCollegeModelBundle} from '../services/collegePred
 import {createCollegePaperLedger} from '../services/collegePaper';
 import {NflEvidenceArchive} from '../services/nflEvidence';
 import {nflPaperReport} from '../services/nflPaper';
+import {fitCollegeScores} from '../services/collegeScoreModel';
 const now=Date.parse('2026-09-02T22:00:00Z');
 function fixture(){
   let clock=now,calls=0,fail=false;
@@ -24,6 +25,10 @@ function fixture(){
   const summary={header:{league:{slug:'college-football'},season:{year:2026,type:2},competitions:[{id:'123',date:event.commenceTime,
     status:{type:{completed:true,state:'post',name:'STATUS_FINAL'}},competitors:[{homeAway:'home',team:{id:'0'},score:'24'},{homeAway:'away',team:{id:'1'},score:'21'}]}]}};
   const research:any={identity:async()=>identity,matchEvent:async()=>identity.espnEventId,summary:async()=>summary};
+  const model=fitCollegeScores(history,now,bundle.payload.config).predict('0','1',false);
+  const line=-model.homeMargin+5;
+  raw.bookmakers[0].markets[0].outcomes[0].point=line;raw.bookmakers[0].markets[0].outcomes[1].point=-line;
+  summary.header.competitions[0].competitors[0].score='100';summary.header.competitions[0].competitors[1].score='0';
   const paper=createCollegePaperLedger(path.join(root,'college_paper_picks.json'),research,()=>clock);
   const service=new CollegePredictions(paper,root,async()=>{calls++;if(fail)throw Error('Offline');return{events:[]};},()=>clock,()=>bundle);
   return{root,event,identity,row,raw,service,paper,bundle,setClock:(n:number)=>{clock=n;},fail:()=>{fail=true;},calls:()=>calls};
@@ -39,15 +44,16 @@ test('college preview → paper save → deduplicate → source replay → grade
   const f=fixture();try{
     const preview=await f.service.scan([f.row],[f.raw],false);assert.equal(preview.recommendations.length,0);assert.equal(f.paper.read().length,0);
     assert.equal(preview.projections[0].selected.length,1);assert.equal(f.calls(),4);
-    const first=await f.service.scan([f.row],[f.raw],true);assert.equal(first.recommendations.length,1);assert.equal(f.calls(),4);
-    const pick=first.recommendations[0].pick;assert.equal(pick.origin,'model');assert.equal(pick.quote.market,'spreads');
+    const first=await f.service.scan([f.row],[f.raw],true);assert.equal(first.recommendations.length,0);assert.equal(first.monitors.length,1);assert.equal(f.calls(),4);
+    const pick=first.monitors[0].pick;assert.equal(pick.origin,'model');assert.equal(pick.quote.market,'spreads');
+    assert.equal(pick.collegeForecast.safety.classification,'PAPER MONITOR');assert.equal(pick.collegeForecast.safety.kellyEnabled,false);
     assert.equal(f.paper.replay(pick.id).forecastReplay.status,'matched');
-    f.raw.bookmakers[0].markets[0].outcomes[0].point=21;
-    const second=await f.service.scan([f.row],[f.raw],true);assert.equal(second.recommendations[0].duplicate,true);
-    assert.equal(second.recommendations[0].pick.quote.line,20);assert.equal(f.paper.read().length,1);
+    f.raw.bookmakers[0].markets[0].outcomes[0].point=pick.quote.line+1;f.raw.bookmakers[0].markets[0].outcomes[1].point=-pick.quote.line-1;
+    const second=await f.service.scan([f.row],[f.raw],true);assert.equal(second.monitors[0].duplicate,true);
+    assert.equal(second.monitors[0].pick.quote.line,pick.quote.line);assert.equal(f.paper.read().length,1);
     f.setClock(Date.parse(f.event.commenceTime)+5*3600_000);const graded=await f.paper.grade();assert.equal(graded.picks[0].result,'WIN');
     const replay=f.paper.replay(pick.id);assert.equal(replay.forecastReplay.status,'matched');assert.equal(replay.audits[0].status,'matched');
-    const exp=f.paper.exportRecord();assert.equal(exp.picks.length,1);assert.equal(Object.keys(exp.evidence).length,3);assert.equal(exp.missingEvidence.length,0);
+    const exp=f.paper.exportRecord();assert.equal(exp.picks.length,1);assert.equal(Object.keys(exp.evidence).length,5);assert.equal(exp.missingEvidence.length,0);
     const report=nflPaperReport(exp.picks);assert.equal(report.buckets[0].origin,'model');assert.equal(report.buckets[0].wins,1);
   }finally{fs.rmSync(f.root,{recursive:true,force:true});}
 });
@@ -65,7 +71,7 @@ test('college model failures, mismatched quotes, missing venue and kickoff canno
 });
 test('college storage and corrupted forecast evidence fail closed without erasing records',async()=>{
   const f=fixture();try{
-    const first=await f.service.scan([f.row],[f.raw],true),pick=first.recommendations[0].pick;
+    const first=await f.service.scan([f.row],[f.raw],true),pick=first.monitors[0].pick;
     const evidenceFile=path.join(f.root,'college_forecast_evidence',pick.collegeForecast.forecastEvidenceHash+'.json');
     fs.writeFileSync(evidenceFile,'corrupted fixture');assert.equal(f.paper.replay(pick.id).forecastReplay.status,'evidence_unavailable_or_corrupt');
     assert.equal(f.paper.read()[0].result,'PENDING');assert.equal(f.paper.exportRecord().missingEvidence.length,1);
@@ -75,5 +81,24 @@ test('college storage and corrupted forecast evidence fail closed without erasin
     fs.writeFileSync(path.join(f.root,'college_paper_picks.json'),'corrupt ledger fixture');
     const failed=await f.service.scan([f.row],[f.raw],true);assert.equal(failed.recommendations.length,0);
     assert.equal(fs.readFileSync(path.join(f.root,'college_paper_picks.json'),'utf8'),'corrupt ledger fixture');
+  }finally{fs.rmSync(f.root,{recursive:true,force:true});}
+});
+test('v2 opening snapshots reject changed forecasts; totals cannot bypass the failed gate even with a forged approval',async()=>{
+  const f=fixture();try{
+    const r=await f.service.scan([f.row],[f.raw],true),pick=r.monitors[0].pick;
+    assert.equal(f.paper.replay(pick.id).openingIntegrity,true);
+    assert.throws(()=>f.paper.saveCollegeModel(f.event,{...pick.quote,market:'totals'},f.identity,pick.collegeForecast,
+      {paperApproved:{spreads:true,totals:true},moneyBettingApproved:false}),/gate/);
+    const forged=structuredClone(pick.collegeForecast);forged.safety.kellyEnabled=true;
+    assert.throws(()=>f.paper.saveCollegeModel(f.event,pick.quote,f.identity,forged,f.bundle.payload.validation),/gate/);
+    const ledgerFile=path.join(f.root,'college_paper_picks.json'),d=JSON.parse(fs.readFileSync(ledgerFile,'utf8'));
+    d.picks[0].quote.line+=1;fs.writeFileSync(ledgerFile,JSON.stringify(d));assert.throws(()=>f.paper.read(),/Immutable/);
+  }finally{fs.rmSync(f.root,{recursive:true,force:true});}
+});
+test('two provider IDs for the same canonical game cannot duplicate a v2 opening pick',async()=>{
+  const f=fixture();try{
+    await f.service.scan([f.row],[f.raw],true);
+    const row={...f.row,event:{...f.event,id:'replacement-provider-id'}},raw={...f.raw,id:row.event.id};
+    const r=await f.service.scan([row],[raw],true);assert.equal(r.monitors[0].duplicate,true);assert.equal(f.paper.read().length,1);
   }finally{fs.rmSync(f.root,{recursive:true,force:true});}
 });

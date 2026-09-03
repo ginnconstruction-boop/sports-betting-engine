@@ -43,11 +43,14 @@ test('official restart policy only accepts BET moneylines and spreads', () => {
   assert.equal(shouldSaveAsOfficialRecommendation({ recommendedLabel: 'BET', marketType: 'player_prop', betType: 'Player Prop' }), false);
 });
 
-test('football BET is capped at LEAN until 20 graded comparable picks', () => {
-  const [result] = applyFootballGuardrails([candidate()], []);
+test('NFL BET remains capped at LEAN while legacy college cannot bypass its separate paper workflow', () => {
+  const [result] = applyFootballGuardrails([candidate({sport:'NFL',sportKey:'americanfootball_nfl'})], []);
   assert.equal(result.finalDecisionLabel, 'LEAN');
   assert.equal(result.footballGuardrailActive, true);
   assert.equal(result.footballHistorySampleSize, 0);
+  const [college]=applyFootballGuardrails([candidate({score:100,grade:'A+',kellyPct:20})],[]);
+  assert.equal(college.finalDecisionLabel,'PASS');assert.equal(college.grade,'PAPER PASS');assert.equal(college.kellyPct,undefined);assert.equal(college.score,0);
+  assert.equal(shouldSaveAsOfficialRecommendation({sportKey:'americanfootball_ncaaf',recommendedLabel:'BET',betType:'Spread'}),false);
 });
 
 test('football totals stay research-only even after 20 positive results', () => {
@@ -56,11 +59,11 @@ test('football totals stay research-only even after 20 positive results', () => 
     betType: 'Total', pickedPrice: -110, gameResult: 'WIN',
   }));
   const [positive] = applyFootballGuardrails([candidate({ betType: 'Total' })], positiveHistory);
-  assert.equal(positive.finalDecisionLabel, 'MONITOR');
+  assert.equal(positive.finalDecisionLabel, 'PASS');
 
   const negativeHistory = positiveHistory.map(p => ({ ...p, gameResult: 'LOSS' }));
   const [negative] = applyFootballGuardrails([candidate({ betType: 'Total' })], negativeHistory);
-  assert.equal(negative.finalDecisionLabel, 'MONITOR');
+  assert.equal(negative.finalDecisionLabel, 'PASS');
 });
 
 test('NCAA calibration does not leak baseball performance into NCAAF', () => {

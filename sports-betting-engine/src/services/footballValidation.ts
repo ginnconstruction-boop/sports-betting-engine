@@ -9,7 +9,7 @@ const mean = (xs: number[]) => xs.length ? xs.reduce((a, b) => a + b, 0) / xs.le
 export function footballPaperMetrics(picks: NflPaperPick[], now = Date.now()) {
   const groups = new Map<string, NflPaperPick[]>();
   for (const p of picks) {
-    const key = [p.season, p.version, p.origin ?? 'manual', p.quote.market].join(' | ');
+    const key = [p.season, p.version, p.origin ?? 'manual', p.quote.market,p.collegeForecast?.safety?.classification??'legacy/manual'].join(' | ');
     groups.set(key, [...(groups.get(key) ?? []), p]);
   }
   return [...groups].map(([group, rows]) => {

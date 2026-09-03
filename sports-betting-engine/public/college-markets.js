@@ -59,14 +59,15 @@ function renderCollegeDayScan(data){
     status.textContent=`${data.date} · Central time · ${data.providerGames} provider-listed games checked; ${data.gamesWithFreshOdds} with fresh odds; ${data.unmatchedScheduledGames} independent schedule entries unmatched. ${data.cached?'Cached odds reused. ':''}Odds credits this scan: ${data.creditsUsed??'unknown'}.`;
     const previewCount=(data.projections??[]).reduce((n,r)=>n+(r.selected?.length??0),0);
     nflText(panel,data.recommendationStatus==='preview_only'?`Preview: ${previewCount} experimental paper spread candidates — not yet saved · ${data.projections?.length??0} games projected`
-      :`${data.recommendations.length} saved experimental paper spread recommendations · ${data.projections?.length??0} games projected`,'strong');
+      :`${data.recommendations.length} qualified paper spread recommendations · ${data.monitors?.length??0} monitor-only observations saved · ${data.projections?.length??0} games projected`,'strong');
+    if(!data.recommendations.length)nflText(panel,'NO RELIABLE EDGE — monitor/warning classifications are not qualified paper bets.','strong');
     nflText(panel,data.recommendationNote);
     if(data.modelReadiness?.calibration)nflText(panel,'Confidence warning: historical win-probability estimates were overconfident (67% forecast vs 55% observed). These selections are for paper observation only, not real-money betting or stake sizing.');
     if(data.recommendationStatus==='preview_only')nflText(panel,'PREVIEW ONLY: no model picks were saved. Check the paper-tracking box above and scan again to save qualifying spreads.');
     if(['model_data_unavailable','blocked_model_validation'].includes(data.recommendationStatus))nflText(panel,'Model unavailable: this is not a successful no-edge conclusion. Check the warnings below.');
-    for(const rec of data.recommendations){
+    for(const rec of [...data.recommendations,...(data.monitors??[])]){
       const pick=rec.pick,q=pick.quote,p=pick.collegeForecast.projection,card=document.createElement('div');card.className='nfl-forecast-guide';
-      nflText(card,`${q.side} ${q.line>0?'+':''}${q.line} · ${q.book} ${q.price>0?'+':''}${q.price} — EXPERIMENTAL PAPER`,'strong');
+      nflText(card,`${q.side} ${q.line>0?'+':''}${q.line} · ${q.book} ${q.price>0?'+':''}${q.price} — ${pick.collegeForecast.safety?.classification??'LEGACY EXPERIMENTAL PAPER'}`,'strong');
       nflText(card,`${pick.event.awayTeam} @ ${pick.event.homeTeam} — ${nflDisplayTime(pick.event.commenceTime)}`);
       nflText(card,`Model score: ${pick.event.awayTeam} ${nflFixed(p.awayScore,1)}; ${pick.event.homeTeam} ${nflFixed(p.homeScore,1)}. Fair home spread ${nflFixed(p.fairHomeSpread,1)}. ${p.neutral?'Neutral venue.':'Non-neutral venue.'}`);
       nflText(card,`${rec.duplicate?'Already tracked: ORIGINAL pick/price retained, not a refreshed offer.':'Saved before display.'} ${pick.result} · ${p.homeGames}/${p.awayGames} prior games (home/away); current-season games ${p.homeCurrentGames}/${p.awayCurrentGames}.`);
@@ -77,6 +78,13 @@ function renderCollegeDayScan(data){
       nflText(details,`2025 chronological score test: ${v.games} eligible games; ${v.excluded} excluded. Spread RMSE ${nflFixed(v.margin.rmse,2)} vs simple baseline ${nflFixed(v.baselineMargin.rmse,2)} — paper gate passed. Total RMSE ${nflFixed(v.total.rmse,2)} vs ${nflFixed(v.baselineTotal.rmse,2)} — failed; no totals model picks.`);
       nflText(details,`Six fixed historical dates: ${a.wins}W–${a.losses}L–${a.pushes}P; ${nflFixed(a.profitUnits,2)} hypothetical units; ${nflFixed(a.roi*100,1)}% ROI. Reconstructed, not archived live forecasts. Win-rate uncertainty approximately ${nflFixed(a.winRate95Wilson[0]*100,1)}%–${nflFixed(a.winRate95Wilson[1]*100,1)}% (95% interval). Not proof of profitability.`);
       if(r.calibration){const c=r.calibration;nflText(details,`Probability calibration FAILED: mean forecast ${(c.meanForecastProbability*100).toFixed(1)}% vs observed ${(c.winRate*100).toFixed(1)}%. Brier error ${nflFixed(c.brier,3)} vs 0.250 for a constant 50% estimate (lower is better). Three of six dates lost units. No model probability is a trustworthy win chance.`);}
+      if(r.calibrationResearch){const e=r.calibrationResearch;
+        nflText(details,'Calibration research: earlier three fixed dates fit; later three evaluate. Already-inspected historical data, not a new untouched holdout. Neither method approved.');
+        for(const [name,m]of Object.entries({raw:{test:e.rawSameTest},...e.methods})){
+          const t=m.test;nflText(details,`${name}: ${t.sample} evaluation games; Brier ${nflFixed(t.brier,3)}; slope ${nflFixed(t.calibrationSlope,2)}; intercept ${nflFixed(t.calibrationIntercept,2)}.`);
+          for(const b of t.reliability)nflText(details,`${b.label}: n=${b.count}; predicted ${b.predictedAverage==null?'unavailable':nflFixed(b.predictedAverage*100,1)+'%'}; observed ${b.actualWinRate==null?'unavailable':nflFixed(b.actualWinRate*100,1)+'%'}; Brier contribution ${nflFixed(b.brierContribution,4)}.`);
+        }
+      }
       nflText(details,r.limitations);panel.append(details);
     }
     if(!data.providerGames)nflText(panel,data.providerScheduleAvailable?'No games listed by the odds provider for this date. This is a schedule/coverage result, not a no-edge conclusion.':'The game feed failed. This is not a successful empty scan.');
@@ -102,8 +110,25 @@ function renderCollegeDayScan(data){
     for(const r of data.projections??[]){const p=r.projection;
       nflText(details,`${r.event.awayTeam} @ ${r.event.homeTeam}: projected away ${nflFixed(p.awayScore,1)}, home ${nflFixed(p.homeScore,1)}; total ${nflFixed(p.total,1)} (research only). ${r.reason}`);
       for(const c of r.selected??[])nflText(details,`Unsaved paper preview: ${c.quote.side} ${c.quote.line} · ${c.quote.book} ${c.quote.price}. Not in the win/loss record until saved.`);
+      if(r.safety)renderCollegeDiagnostic(panel,r);
     }
     panel.append(details);nflText(panel,`${data.evidenceSaved?'Scan evidence saved separately from picks.':'Scan evidence was not saved.'} ${data.note}`);
+}
+function renderCollegeDiagnostic(panel,row){
+  const s=row.safety,p=row.projection,d=document.createElement('details'),title=document.createElement('summary');
+  title.textContent=`${row.event.awayTeam} @ ${row.event.homeTeam} — ${s.classification}`;d.append(title);
+  const q=row.market;nflText(d,q?`MARKET: ${q.side} ${q.line} ${q.price} · ${q.book}. Consensus home spread ${nflFixed(s.marketConsensus.homeLine,1)} (${s.marketConsensus.books.length} books).`:'MARKET: no usable exact spread.');
+  nflText(d,`MODEL: ${row.event.awayTeam} ${nflFixed(p.awayScore,1)}, ${row.event.homeTeam} ${nflFixed(p.homeScore,1)}. Raw home margin ${nflFixed(p.homeMargin,1)}. Talent-adjusted margin ${s.talentAdjustedHomeMargin==null?'unavailable — no invented adjustment':nflFixed(s.talentAdjustedHomeMargin,1)}.`);
+  nflText(d,`${s.marketDisagreementStatus}: ${s.marketDisagreementPoints==null?'unavailable':nflFixed(Math.abs(s.marketDisagreementPoints),1)} pts. Context reliability ${s.confidence}; this is not a probability or a 100-point grade.`);
+  for(const side of ['home','away']){const c=s.rosterContext[side],b=s.rosterContext[side+'Blend'];
+    nflText(d,`ROSTER CONTEXT — ${side}: ${c.status}; returning production ${c.features.returningProduction??'unavailable'}; QB verified ${c.qbVerified?'yes':'no'}; QB continuity ${c.features.qbContinuity??'unavailable'}; transfers +${c.features.transferAdditions??'?'} / -${c.features.transferLosses??'?'}; coaching changes ${c.features.headCoachChange??'unknown'}.`);
+    nflText(d,`Early-season prior weight ${(b.preseasonWeight*100).toFixed(1)}%; current-season weight ${(b.currentSeasonWeight*100).toFixed(1)}%. Diagnostic/unfitted blend, not an active score correction. ${c.issues.join(' ')}`);
+  }
+  nflText(d,`FBS/FCS: ${s.mismatch.awayDivision} @ ${s.mismatch.homeDivision}. Current-season sample ${p.awayCurrentGames}/${p.homeCurrentGames}; week ${s.week??'unknown'}. ${s.mismatch.warning??''}`);
+  nflText(d,`${s.calibrationStatus}: ${s.rawProbability==null?'unavailable':nflFixed(s.rawProbability*100,1)+'%'}. ${s.calibratedLabel}: ${s.calibratedProbability==null?'unavailable':nflFixed(s.calibratedProbability*100,1)+'% conditional on no push'}. No Kelly or stake sizing.`);
+  nflText(d,`MODEL RELIABILITY: spread historical gate ${s.spreadHoldoutPassed?'passed':'failed'}; calibration not approved. Failed checks: ${Object.entries(s.checks).filter(([,ok])=>!ok).map(([name])=>name).join(', ')||'none'}.`);
+  nflText(d,`${s.totalsStatus} Research total ${nflFixed(p.total,1)}.`);
+  nflText(d,`FINAL: ${s.classification}. WHY: ${s.reasons.join(' ')}`,'strong');panel.append(d);
 }
 function collegeStatus(message) { document.getElementById('college-status').textContent = message; }
 function clearCollegeSelection() {
@@ -173,7 +198,8 @@ function renderCollegeQuotes() {
     values.forEach((value,i) => { const cell = document.createElement('td'); cell.textContent = String(value);
       if (i===5 && (!Number.isFinite(age) || age>15*60_000 || age< -60_000)) cell.className = 'market-stale'; row.append(cell); });
     const actions=document.createElement('td'),save=document.createElement('button');save.textContent='Save college paper';
-    save.disabled=!quote.quoteId||!Number.isFinite(age)||age>15*60_000||age< -60_000;
+    save.disabled=quote.market==='totals'||!quote.quoteId||!Number.isFinite(age)||age>15*60_000||age< -60_000;
+    if(quote.market==='totals')save.textContent='Totals — research only';
     save.onclick=()=>saveCollegePaper(quote);actions.append(save);
     const b=collegeBaselines.find(b=>b.targetBook===quote.bookKey&&b.market===quote.market&&b.side===quote.side&&b.line===quote.line);
     if(b){const note=document.createElement('p');note.textContent=b.conditionalNoPushProbability==null?'Market comparison unavailable: needs three other fresh exact-line books.'
@@ -185,6 +211,7 @@ function renderCollegeQuotes() {
 }
 async function saveCollegePaper(quote) {
   if(collegeBusy||!collegeLoadedEvent)return;
+  if(quote.market==='totals'){collegeStatus('TOTAL PROJECTION — RESEARCH ONLY. Historical holdout gate failed; paper saving disabled.');return;}
   if(!document.getElementById('college-paper-rules').checked){collegeStatus('Check the college paper-rules box first.');document.getElementById('college-paper-rules').focus();return;}
   collegeSetBusy(true);
   try{
@@ -203,7 +230,8 @@ async function loadCollegePaper(mode) {
     const endpoint=mode==='recheck'?'/api/college/paper/recheck':mode?'/api/college/paper/grade':'/api/college/paper';
     const data=await nflFetch(endpoint,mode?{method:'POST'}:{});panel.replaceChildren();
     status.textContent=`${data.picks.length} college paper selections. ${mode?`${data.checked} checked; ${data.remainingGames} more games; ${data.sourceFailures??0} unavailable/review checks. `:''}Separate from NFL and official records. Grading is on demand; sportsbook rules require separate verification.`;
-    for(const b of data.report.buckets)nflText(panel,`${b.season} · ${b.market} · ${b.origin==='model'?'EXPERIMENTAL MODEL PAPER':'MANUAL PAPER'} · ${b.version}: ${b.wins}W–${b.losses}L–${b.pushes}P; ${b.pending} pending; ${b.review} review; ${nflFixed(b.profitUnits,2)} units; settled ROI ${b.roi==null?'unavailable':nflFixed(b.roi*100)+'%'}.`);
+    for(const b of data.report.buckets)nflText(panel,`${b.season} · ${b.market} · ${b.classification??(b.origin==='model'?'EXPERIMENTAL MODEL PAPER':'MANUAL PAPER')} · ${b.version}: ${b.wins}W–${b.losses}L–${b.pushes}P; ${b.pending} pending; ${b.review} review; ${nflFixed(b.profitUnits,2)} hypothetical units; settled ROI ${b.roi==null?'unavailable':nflFixed(b.roi*100)+'%'}.`);
+    if(data.clv){const c=data.clv;nflText(panel,`Separate CLV observation proxies: ${c.lineSamples}/${c.tracked} line samples; average ${c.averageSpreadClv==null?'unavailable':nflFixed(c.averageSpreadClv,2)} pts; median ${c.medianSpreadClv==null?'unavailable':nflFixed(c.medianSpreadClv,2)} pts; positive ${c.positiveClvRate==null?'unavailable':nflFixed(c.positiveClvRate*100,1)+'%'}. Exact-line price CLV ${c.averagePriceClv==null?'unavailable':nflFixed(c.averagePriceClv,2)+' percentage points'} (${c.priceSamples} samples). ${c.note}`);}
     for(const m of data.metrics??[])nflText(panel,`${m.distinctSettledGames} distinct settled games; ${m.settlementRevisions} result corrections; ${m.closeWindowCaptured} final-five-minute observations, ${m.closeWindowMissed} missed. These are not verified final closing prices or calibrated model results.`);
     const table=document.createElement('table');table.className='market-table';const heading=document.createElement('tr');
     for(const label of ['Game','Selection','Saved book / price','Result','Venue / audit','Notes']){const cell=document.createElement('th');cell.textContent=label;heading.append(cell);}table.append(heading);

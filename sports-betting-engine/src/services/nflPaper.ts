@@ -8,14 +8,18 @@ import type { NflForecast } from './nflForecast';
 import { NflEvidenceArchive } from './nflEvidence';
 import { CollegeProjection,fitCollegeScores } from './collegeScoreModel';
 import { CollegeAssessment,assessCollegeQuote,COLLEGE_SELECTION_VERSION } from './collegeModelQuotes';
+import {CollegeSafety,assessCollegeSafety,COLLEGE_SAFETY_VERSION} from './collegeSafety';
+import {CollegeLineObservation,collegeLineObservations} from './collegeClv';
+import {flattenNflQuotes} from './nflMarketBoard';
 
 export interface CollegeSavedForecast {projection:CollegeProjection;assessment:CollegeAssessment;inputEvidenceHash:string;
-  forecastEvidenceHash:string;bundleHash:string;selectionVersion:string;}
+  forecastEvidenceHash:string;bundleHash:string;selectionVersion:string;safety?:CollegeSafety;}
 
 export const PAPER_RULES = 'regulation-periods_full-game-includes-ot_v1';
 export type PaperResult = 'PENDING' | 'REVIEW' | 'WIN' | 'LOSS' | 'PUSH';
 export interface NflPaperPick {
-  verifiedEvent?: { espnEventId: string; homeTeamId: string; awayTeamId: string; neutralSite: boolean | null; source: string; fetchedAt: string };
+  verifiedEvent?: { espnEventId: string; homeTeamId: string; awayTeamId: string; neutralSite: boolean | null; source: string; fetchedAt: string;
+    homeEntity?:any;awayEntity?:any;homeConferenceId?:string;awayConferenceId?:string;week?:number|null };
   id: string; event: UpcomingEvent; espnEventId: string; quote: MarketQuote;
   player?: NflPlayer; season: number; version: string; rules: string; savedAt: string;
   result: PaperResult; note: string; actual?: number; gradedAt?: string; source?: string;
@@ -31,7 +35,13 @@ export interface NflPaperPick {
   modelPushProbability?: number;
   estimatedEV?: number;
   selectionReasons?: string[];
+  openingHash?:string;
+  collegeLineObservations?:CollegeLineObservation[];
 }
+function paperOpeningHash(p:NflPaperPick){return createHash('sha256').update(JSON.stringify({event:p.event,espnEventId:p.espnEventId,
+  quote:p.quote,verifiedEvent:p.verifiedEvent,season:p.season,version:p.version,rules:p.rules,savedAt:p.savedAt,
+  origin:p.origin,collegeForecast:p.collegeForecast,modelProbability:p.modelProbability,modelPushProbability:p.modelPushProbability,
+  estimatedEV:p.estimatedEV,selectionReasons:p.selectionReasons})).digest('hex');}
 export function supportedPaperMarket(market: string): boolean {
   return !!NFL_CORE_STATS[market] || /^(h2h|spreads|totals)(_(q[1-4]|h[12]))?$/.test(market);
 }
@@ -111,8 +121,9 @@ export function nflPaperReport(picks: NflPaperPick[]) {
   const buckets = new Map<string, any>();
   for (const p of picks) {
     const origin = p.origin ?? 'manual';
-    const key = `${p.season} | ${p.quote.market} | ${p.version} | ${origin}`;
-    const b = buckets.get(key) ?? { season: p.season, market: p.quote.market, version: p.version, origin,
+    const classification=p.collegeForecast?.safety?.classification??'legacy/manual';
+    const key = `${p.season} | ${p.quote.market} | ${p.version} | ${origin} | ${classification}`;
+    const b = buckets.get(key) ?? { season: p.season, market: p.quote.market, version: p.version, origin,classification,
       tracked: 0, wins: 0, losses: 0, pushes: 0, pending: 0, review: 0, profitUnits: 0, uniqueEvents: new Set() };
     b.tracked++; b.uniqueEvents.add(p.event.id);
     if (p.result === 'WIN') b.wins++;
@@ -164,7 +175,8 @@ export class NflPaperLedger {
       }
       catch { missingEvidence.push(hash); }
     }
-    const forecastHashes=new Set(picks.flatMap(p=>p.collegeForecast?[p.collegeForecast.forecastEvidenceHash,p.collegeForecast.inputEvidenceHash]:[]));
+    const forecastHashes=new Set(picks.flatMap(p=>[...(p.collegeForecast?[p.collegeForecast.forecastEvidenceHash,p.collegeForecast.inputEvidenceHash]:[]),
+      ...(p.collegeLineObservations??[]).map(o=>o.evidenceHash).filter(Boolean)]));
     for(const hash of forecastHashes){
       try{const payload=this.collegeForecastArchive.read(hash),bytes=Buffer.byteLength(JSON.stringify(payload));
         if(sourceBytes+bytes>25*1024*1024){omittedEvidence.push(hash);continue;}
@@ -195,21 +207,30 @@ export class NflPaperLedger {
         const f=pick.collegeForecast,input=this.collegeForecastArchive.read(f.inputEvidenceHash),source=this.collegeForecastArchive.read(f.forecastEvidenceHash);
         const p=fitCollegeScores(input.history,Date.parse(input.asOf),input.config).predict(f.projection.homeId,f.projection.awayId,f.projection.neutral);
         const assessment=assessCollegeQuote(pick.event,pick.quote,p,input,Date.parse(pick.savedAt));
-        forecastReplay={status:JSON.stringify(p)===JSON.stringify(f.projection)&&JSON.stringify(source.quote)===JSON.stringify(pick.quote)
+        const safetyMatched=!f.safety||JSON.stringify(f.safety)===JSON.stringify(assessCollegeSafety({event:pick.event,identity:pick.verifiedEvent,projection:p,
+          candidate:{quote:pick.quote,assessment:f.assessment},quotes:flattenNflQuotes(source.rawOdds,['spreads','totals'],Date.parse(p.asOf)),
+          rosters:source.rosters??[],now:Date.parse(p.asOf),spreadHoldoutPassed:input.validation.paperApproved.spreads,calibrator:source.calibrator,
+          contextCoefficients:source.contextCoefficients}));
+        forecastReplay={status:safetyMatched&&JSON.stringify(p)===JSON.stringify(f.projection)&&JSON.stringify(source.quote)===JSON.stringify(pick.quote)
           &&source.inputEvidenceHash===f.inputEvidenceHash&&assessment.probability===f.assessment.probability&&assessment.estimatedEV===f.assessment.estimatedEV?'matched':'mismatch',
           inputEvidenceHash:f.inputEvidenceHash,forecastEvidenceHash:f.forecastEvidenceHash};
       }catch{forecastReplay={status:'evidence_unavailable_or_corrupt'};}
     }
-    return { id, audits,forecastReplay, note: 'Read-only replay using archived model inputs and/or box scores. No provider requests and no record changes. It verifies reproducibility, not prediction accuracy or sportsbook-specific settlement.' };
+    const observations=(pick.collegeLineObservations??[]).map(o=>{try{const source=this.collegeForecastArchive.read(o.evidenceHash);
+      const {evidenceHash,...saved}=o;return{id:o.id,status:JSON.stringify(saved)===JSON.stringify(source.observation)?'matched':'mismatch'};
+    }catch{return{id:o.id,status:'evidence_unavailable_or_corrupt'};}});
+    return { id, audits,forecastReplay,observations,openingIntegrity:pick.openingHash?paperOpeningHash(pick)===pick.openingHash:'legacy_hash_unavailable', note: 'Read-only replay using archived model inputs and/or box scores. No provider requests and no record changes. It verifies reproducibility, not prediction accuracy or sportsbook-specific settlement.' };
   }
   read(): NflPaperPick[] {
     if (!fs.existsSync(this.file)) return [];
     const data = JSON.parse(fs.readFileSync(this.file, 'utf8'));
     if (data.schema !== 1 || !Array.isArray(data.picks)) throw new Error('Invalid NFL paper ledger; refusing to overwrite it.');
     if(data.picks.some((p:any)=>p.event?.sportKey!==this.profile.sportKey)) throw new Error('Paper ledger contains a different sport; refusing to mix or overwrite records.');
+    if(data.picks.some((p:NflPaperPick)=>p.openingHash&&paperOpeningHash(p)!==p.openingHash))throw Error('Immutable opening prediction was altered; refusing to overwrite ledger.');
     return data.picks;
   }
   private write(picks: NflPaperPick[]) {
+    if(picks.some(p=>p.openingHash&&paperOpeningHash(p)!==p.openingHash))throw Error('Immutable opening prediction change refused.');
     fs.mkdirSync(path.dirname(this.file), { recursive: true });
     const tmp = `${this.file}.${randomUUID()}.tmp`;
     fs.writeFileSync(tmp, JSON.stringify({ schema: 1, picks }, null, 2), { flag: 'wx' });
@@ -239,6 +260,7 @@ export class NflPaperLedger {
       season: nflSeason(event.commenceTime), version: this.profile.version, rules, ...(verifiedEvent?{verifiedEvent}:{}),
       savedAt: new Date(this.now()).toISOString(), result: 'PENDING', note: 'Manual paper selection; no money wagered and no model probability attached.' };
     pick.settlementScope = { bookKey: quote.bookKey, ruleVersion: rules, sportsbookRulesVerified: false };
+    if(event.sportKey==='americanfootball_ncaaf')pick.openingHash=paperOpeningHash(pick);
     this.write([...picks, pick]); return { pick, duplicate: false };
   }
   modelPick(eventId: string, participant: string, market: string, version: string) {
@@ -249,9 +271,11 @@ export class NflPaperLedger {
     validation:{paperApproved:{spreads:boolean;totals:boolean};moneyBettingApproved:boolean}){
     const p=forecast.projection,now=this.now(),age=now-Date.parse(identity.fetchedAt);
     if(this.profile.sportKey!=='americanfootball_ncaaf'||event.sportKey!==this.profile.sportKey
-      ||this.profile.rules!=='college-full-game-includes-ot_v1'||!['spreads','totals'].includes(quote.market)
+      ||this.profile.rules!=='college-full-game-includes-ot_v1'||quote.market!=='spreads'
       ||validation.paperApproved[quote.market]!==true||validation.moneyBettingApproved!==false
       ||forecast.selectionVersion!==COLLEGE_SELECTION_VERSION||p.version!=='college-score-ridge-v1'
+      ||forecast.safety?.version!==COLLEGE_SAFETY_VERSION||!forecast.safety.trackable||forecast.safety.moneyBettingApproved!==false
+      ||forecast.safety.kellyEnabled!==false||forecast.safety.recommendedStake!==null
       ||p.homeId!==identity.homeTeamId||p.awayId!==identity.awayTeamId||p.neutral!==identity.neutralSite
       ||typeof identity.neutralSite!=='boolean'||!/^\d+$/.test(identity.espnEventId)||!Number.isFinite(age)||age<0||age>5*60_000)
       throw new MarketBoardError('College model identity, validation or rules gate failed; no recommendation issued.');
@@ -259,21 +283,26 @@ export class NflPaperLedger {
     if(input.kind!=='college_model_inputs_v1'||source.kind!=='college_forecast_v1'||input.bundleHash!==forecast.bundleHash
       ||source.inputEvidenceHash!==forecast.inputEvidenceHash||JSON.stringify(source.event)!==JSON.stringify(event)
       ||JSON.stringify(source.identity)!==JSON.stringify(identity)||JSON.stringify(source.quote)!==JSON.stringify(quote)
-      ||JSON.stringify(source.projection)!==JSON.stringify(p)||JSON.stringify(source.assessment)!==JSON.stringify(forecast.assessment))
+      ||JSON.stringify(source.projection)!==JSON.stringify(p)||JSON.stringify(source.assessment)!==JSON.stringify(forecast.assessment)
+      ||JSON.stringify(source.safety)!==JSON.stringify(forecast.safety))
       throw new MarketBoardError('Original college forecast evidence could not be verified.');
+    const safety=assessCollegeSafety({event,identity,projection:p,candidate:{quote,assessment:forecast.assessment},
+      quotes:flattenNflQuotes(source.rawOdds,['spreads','totals'],Date.parse(p.asOf)),rosters:source.rosters??[],now:Date.parse(p.asOf),
+      spreadHoldoutPassed:input.validation.paperApproved.spreads,calibrator:source.calibrator,contextCoefficients:source.contextCoefficients});
+    if(!safety.trackable||JSON.stringify(safety)!==JSON.stringify(forecast.safety))throw new MarketBoardError('College context safety gate failed.');
     const assessment=assessCollegeQuote(event,quote,p,input,now);
     if(!assessment.eligible||assessment.probability!==forecast.assessment.probability||assessment.estimatedEV!==forecast.assessment.estimatedEV)
       throw new MarketBoardError('College quote expired or failed fixed paper thresholds.',409);
-    const picks=this.read(),existing=picks.find(row=>row.origin==='model'&&row.event.id===event.id&&row.version===p.version&&row.quote.market===quote.market);
+    const version=p.version+'+'+COLLEGE_SAFETY_VERSION;
+    const picks=this.read(),existing=picks.find(row=>row.origin==='model'&&row.espnEventId===identity.espnEventId&&row.version===version&&row.quote.market===quote.market);
     if(existing)return{pick:existing,duplicate:true};
     const pick:NflPaperPick={id:randomUUID(),origin:'model',event:{...event},quote:{...quote},espnEventId:identity.espnEventId,verifiedEvent:{...identity},
-      season:nflSeason(event.commenceTime),version:p.version,rules:this.profile.rules,savedAt:new Date(now).toISOString(),result:'PENDING',collegeForecast:forecast,
+      season:nflSeason(event.commenceTime),version,rules:this.profile.rules,savedAt:new Date(now).toISOString(),result:'PENDING',collegeForecast:structuredClone(forecast),
       modelProbability:assessment.probability,modelPushProbability:assessment.pushProbability,estimatedEV:assessment.estimatedEV,
-      selectionReasons:['Independent college score holdout passed for this market.','Fixed paper thresholds passed; highest estimated EV among fresh configured-book quotes.',
-        'Experimental only: injuries, starting QB, transfers, weather and pace are not modeled.'],
-      note:'Automatically logged experimental college paper recommendation. Original forecast, exact line and price are immutable; no real wager placed.',
+      selectionReasons:safety.reasons,
+      note:safety.classification+': immutable forward observation, not real-money advice. Original forecast, exact line and price are preserved.',
       settlementScope:{bookKey:quote.bookKey,ruleVersion:this.profile.rules,sportsbookRulesVerified:false}};
-    this.write([...picks,pick]);return{pick,duplicate:false};
+    pick.openingHash=paperOpeningHash(pick);this.write([...picks,pick]);return{pick,duplicate:false};
   }
   async saveModel(event: UpcomingEvent, quote: MarketQuote, forecast: NflForecast,
     assessment: { probability: number; pushProbability: number; estimatedEV: number; eligible: boolean }, rules: string) {
@@ -317,6 +346,15 @@ export class NflPaperLedger {
     const picks = this.read(); let changed = false;
     for (const p of picks) {
       if (p.event.id !== eventId || this.now() >= Date.parse(p.event.commenceTime)) continue;
+      if(p.event.sportKey==='americanfootball_ncaaf'){
+        const existing=p.collegeLineObservations??[],ids=new Set(existing.map(o=>o.id));
+        for(const observation of collegeLineObservations(p,quotes,this.now())){
+          if(ids.has(observation.id))continue;
+          const evidence=this.collegeForecastArchive.record({kind:'college_line_observation_v1',observation});
+          existing.push({...observation,evidenceHash:evidence.hash});ids.add(observation.id);changed=true;
+        }
+        p.collegeLineObservations=existing;
+      }
       const q = quotes.find(q => q.market === p.quote.market && q.participant === p.quote.participant
         && q.side === p.quote.side && q.line === p.quote.line && q.bookKey === p.quote.bookKey);
       const stamp = Date.parse(q?.updatedAt ?? '');

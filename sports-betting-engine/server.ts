@@ -26,6 +26,7 @@ import { createCollegePaperLedger, COLLEGE_PAPER_RULES } from './src/services/co
 import { CollegeDayScan,collegeDate,COLLEGE_TIMEZONE } from './src/services/collegeDayScan';
 import { CollegePredictions } from './src/services/collegePredictions';
 import { CollegeDailyRun } from './src/services/collegeDailyRun';
+import {collegeClvReport} from './src/services/collegeClv';
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -321,7 +322,7 @@ app.post('/api/college/markets', requireAuth, async (req, res) => {
   }
 });
 app.get('/api/college/paper',requireAuth,(_req,res)=>{
-  try{const picks=collegePaper.read();res.json({picks,rules:COLLEGE_PAPER_RULES,report:nflPaperReport(picks),metrics:footballPaperMetrics(picks)});}catch(e){nflError(res,e);}
+  try{const picks=collegePaper.read();res.json({picks,rules:COLLEGE_PAPER_RULES,report:nflPaperReport(picks),metrics:footballPaperMetrics(picks),clv:collegeClvReport(picks)});}catch(e){nflError(res,e);}
 });
 app.post('/api/college/paper',requireAuth,async(req,res)=>{
   if(typeof req.body?.eventId!=='string'||typeof req.body?.quoteId!=='string'||typeof req.body?.rules!=='string'
@@ -330,10 +331,10 @@ app.post('/api/college/paper',requireAuth,async(req,res)=>{
   try{const {event,quote}=collegeMarketBoard.selection(req.body.eventId,req.body.quoteId);res.json(await collegePaper.save(event,quote,req.body.rules));}catch(e){nflError(res,e);}
 });
 app.post('/api/college/paper/grade',requireAuth,async(_req,res)=>{
-  try{const data=await collegePaper.grade();res.json({...data,metrics:footballPaperMetrics(data.picks)});}catch(e){nflError(res,e);}
+  try{const data=await collegePaper.grade();res.json({...data,metrics:footballPaperMetrics(data.picks),clv:collegeClvReport(data.picks)});}catch(e){nflError(res,e);}
 });
 app.post('/api/college/paper/recheck',requireAuth,async(_req,res)=>{
-  try{const data=await collegePaper.grade(true);res.json({...data,metrics:footballPaperMetrics(data.picks)});}catch(e){nflError(res,e);}
+  try{const data=await collegePaper.grade(true);res.json({...data,metrics:footballPaperMetrics(data.picks),clv:collegeClvReport(data.picks)});}catch(e){nflError(res,e);}
 });
 app.get('/api/college/paper/export',requireAuth,(_req,res)=>{
   try{res.setHeader('Cache-Control','no-store');res.json(collegePaper.exportRecord());}catch(e){nflError(res,e);}
@@ -675,7 +676,7 @@ app.post('/api/ats/backfill', requireAuth, async (req, res) => {
 });
 
 // ── Health ──
-app.get('/api/health', (_, res) => res.json({ ok: true, release: 'college-one-click-1', ts: new Date().toISOString() }));
+app.get('/api/health', (_, res) => res.json({ ok: true, release: 'college-safety-2', ts: new Date().toISOString() }));
 
 // ── SPA fallback ──
 app.get('*', (_, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));

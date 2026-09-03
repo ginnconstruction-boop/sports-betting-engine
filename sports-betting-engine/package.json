@@ -42,6 +42,9 @@
     "lategames": "node --require ts-node/register/transpile-only src/index.ts lategames",
     "teasers": "node --require ts-node/register/transpile-only src/index.ts teasers",
     "typecheck": "tsc --noEmit",
+    "lint": "eslint src/services/college*.ts src/services/nflPaper.ts src/services/footballGuardrail.ts src/services/footballValidation.ts src/services/closingLineTracker.ts src/dev/college*.ts src/tests/college*.ts server.ts public/college-markets.js",
+    "test:college": "node --require ts-node/register/transpile-only --test src/tests/college*.test.ts",
+    "evaluate:college": "node --require ts-node/register/transpile-only src/dev/collegeSafetyAudit.ts",
     "test": "node --require ts-node/register/transpile-only --test src/tests/*.test.ts"
   },
   "dependencies": {
@@ -60,5 +63,9 @@
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/parser": "8.69.0",
+    "eslint": "10.9.1"
   }
 }

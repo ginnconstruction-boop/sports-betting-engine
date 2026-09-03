@@ -1,0 +1,515 @@
+{
+  "payload": {
+    "version": "college-conferences-v1",
+    "seasons": {
+      "2023": {
+        "1": "FBS",
+        "4": "FBS",
+        "5": "FBS",
+        "8": "FBS",
+        "9": "FBS",
+        "12": "FBS",
+        "15": "FBS",
+        "17": "FBS",
+        "18": "FBS",
+        "20": "FCS",
+        "21": "FCS",
+        "22": "FCS",
+        "24": "FCS",
+        "25": "FCS",
+        "27": "FCS",
+        "28": "FCS",
+        "29": "FCS",
+        "30": "FCS",
+        "31": "FCS",
+        "32": "FCS",
+        "37": "FBS",
+        "48": "FCS",
+        "151": "FBS",
+        "177": "FCS",
+        "179": "FCS"
+      },
+      "2024": {
+        "1": "FBS",
+        "4": "FBS",
+        "5": "FBS",
+        "8": "FBS",
+        "9": "FBS",
+        "12": "FBS",
+        "15": "FBS",
+        "17": "FBS",
+        "18": "FBS",
+        "20": "FCS",
+        "21": "FCS",
+        "22": "FCS",
+        "24": "FCS",
+        "25": "FCS",
+        "27": "FCS",
+        "28": "FCS",
+        "29": "FCS",
+        "30": "FCS",
+        "31": "FCS",
+        "32": "FCS",
+        "37": "FBS",
+        "48": "FCS",
+        "151": "FBS",
+        "177": "FCS",
+        "179": "FCS"
+      },
+      "2025": {
+        "1": "FBS",
+        "4": "FBS",
+        "5": "FBS",
+        "8": "FBS",
+        "9": "FBS",
+        "12": "FBS",
+        "15": "FBS",
+        "17": "FBS",
+        "18": "FBS",
+        "20": "FCS",
+        "21": "FCS",
+        "22": "FCS",
+        "24": "FCS",
+        "25": "FCS",
+        "27": "FCS",
+        "28": "FCS",
+        "29": "FCS",
+        "30": "FCS",
+        "31": "FCS",
+        "32": "FCS",
+        "37": "FBS",
+        "48": "FCS",
+        "151": "FBS",
+        "177": "FCS",
+        "179": "FCS"
+      },
+      "2026": {
+        "1": "FBS",
+        "4": "FBS",
+        "5": "FBS",
+        "8": "FBS",
+        "9": "FBS",
+        "12": "FBS",
+        "15": "FBS",
+        "17": "FBS",
+        "18": "FBS",
+        "20": "FCS",
+        "21": "FCS",
+        "22": "FCS",
+        "24": "FCS",
+        "25": "FCS",
+        "27": "FCS",
+        "28": "FCS",
+        "29": "FCS",
+        "30": "FCS",
+        "31": "FCS",
+        "32": "FCS",
+        "37": "FBS",
+        "48": "FCS",
+        "151": "FBS",
+        "177": "FCS",
+        "179": "FCS"
+      }
+    },
+    "sources": [
+      {
+        "source": "https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2023/types/2/groups/80/children?limit=100",
+        "fetchedAt": "2026-09-03T00:38:34.934Z",
+        "data": {
+          "count": 11,
+          "pageIndex": 1,
+          "pageSize": 100,
+          "pageCount": 1,
+          "items": [
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2023/types/2/groups/151?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2023/types/2/groups/1?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2023/types/2/groups/4?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2023/types/2/groups/5?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2023/types/2/groups/12?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2023/types/2/groups/18?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2023/types/2/groups/15?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2023/types/2/groups/17?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2023/types/2/groups/9?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2023/types/2/groups/8?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2023/types/2/groups/37?lang=en&region=us"
+            }
+          ]
+        }
+      },
+      {
+        "source": "https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2023/types/2/groups/81/children?limit=100",
+        "fetchedAt": "2026-09-03T00:38:34.970Z",
+        "data": {
+          "count": 14,
+          "pageIndex": 1,
+          "pageSize": 100,
+          "pageCount": 1,
+          "items": [
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2023/types/2/groups/20?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2023/types/2/groups/48?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2023/types/2/groups/32?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2023/types/2/groups/22?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2023/types/2/groups/24?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2023/types/2/groups/21?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2023/types/2/groups/25?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2023/types/2/groups/179?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2023/types/2/groups/27?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2023/types/2/groups/28?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2023/types/2/groups/29?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2023/types/2/groups/30?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2023/types/2/groups/31?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2023/types/2/groups/177?lang=en&region=us"
+            }
+          ]
+        }
+      },
+      {
+        "source": "https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/80/children?limit=100",
+        "fetchedAt": "2026-09-03T00:38:35.004Z",
+        "data": {
+          "count": 11,
+          "pageIndex": 1,
+          "pageSize": 100,
+          "pageCount": 1,
+          "items": [
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/151?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/1?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/4?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/5?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/12?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/18?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/15?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/17?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/9?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/8?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/37?lang=en&region=us"
+            }
+          ]
+        }
+      },
+      {
+        "source": "https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/81/children?limit=100",
+        "fetchedAt": "2026-09-03T00:38:35.036Z",
+        "data": {
+          "count": 14,
+          "pageIndex": 1,
+          "pageSize": 100,
+          "pageCount": 1,
+          "items": [
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/20?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/48?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/32?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/22?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/24?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/21?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/25?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/179?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/27?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/28?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/29?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/30?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/31?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2024/types/2/groups/177?lang=en&region=us"
+            }
+          ]
+        }
+      },
+      {
+        "source": "https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2025/types/2/groups/80/children?limit=100",
+        "fetchedAt": "2026-09-03T00:38:35.066Z",
+        "data": {
+          "count": 11,
+          "pageIndex": 1,
+          "pageSize": 100,
+          "pageCount": 1,
+          "items": [
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2025/types/2/groups/151?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2025/types/2/groups/1?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2025/types/2/groups/4?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2025/types/2/groups/5?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2025/types/2/groups/12?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2025/types/2/groups/18?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2025/types/2/groups/15?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2025/types/2/groups/17?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2025/types/2/groups/9?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2025/types/2/groups/8?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2025/types/2/groups/37?lang=en&region=us"
+            }
+          ]
+        }
+      },
+      {
+        "source": "https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2025/types/2/groups/81/children?limit=100",
+        "fetchedAt": "2026-09-03T00:38:35.094Z",
+        "data": {
+          "count": 14,
+          "pageIndex": 1,
+          "pageSize": 100,
+          "pageCount": 1,
+          "items": [
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2025/types/2/groups/20?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2025/types/2/groups/48?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2025/types/2/groups/32?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2025/types/2/groups/22?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2025/types/2/groups/24?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2025/types/2/groups/21?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2025/types/2/groups/25?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2025/types/2/groups/179?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2025/types/2/groups/27?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2025/types/2/groups/28?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2025/types/2/groups/29?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2025/types/2/groups/30?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2025/types/2/groups/31?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2025/types/2/groups/177?lang=en&region=us"
+            }
+          ]
+        }
+      },
+      {
+        "source": "https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2026/types/2/groups/80/children?limit=100",
+        "fetchedAt": "2026-09-03T00:38:35.128Z",
+        "data": {
+          "count": 11,
+          "pageIndex": 1,
+          "pageSize": 100,
+          "pageCount": 1,
+          "items": [
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2026/types/2/groups/151?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2026/types/2/groups/1?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2026/types/2/groups/4?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2026/types/2/groups/5?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2026/types/2/groups/12?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2026/types/2/groups/18?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2026/types/2/groups/15?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2026/types/2/groups/17?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2026/types/2/groups/9?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2026/types/2/groups/8?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2026/types/2/groups/37?lang=en&region=us"
+            }
+          ]
+        }
+      },
+      {
+        "source": "https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2026/types/2/groups/81/children?limit=100",
+        "fetchedAt": "2026-09-03T00:38:35.160Z",
+        "data": {
+          "count": 14,
+          "pageIndex": 1,
+          "pageSize": 100,
+          "pageCount": 1,
+          "items": [
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2026/types/2/groups/20?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2026/types/2/groups/48?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2026/types/2/groups/32?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2026/types/2/groups/22?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2026/types/2/groups/24?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2026/types/2/groups/21?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2026/types/2/groups/25?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2026/types/2/groups/179?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2026/types/2/groups/27?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2026/types/2/groups/28?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2026/types/2/groups/29?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2026/types/2/groups/30?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2026/types/2/groups/31?lang=en&region=us"
+            },
+            {
+              "$ref": "http://sports.core.api.espn.com/v2/sports/football/leagues/college-football/seasons/2026/types/2/groups/177?lang=en&region=us"
+            }
+          ]
+        }
+      }
+    ],
+    "note": "Season-scoped ESPN metadata fetched now; historical groups are descriptive, not point-in-time roster evidence."
+  },
+  "sha256": "022845064c873418adf4866934b0c802f3ad67ce0be68096fb9cf0806c0fd9d1"
+}

@@ -1,6 +1,18 @@
 # Football catch-up checklist
 
-Updated September 2, 2026 (America/Chicago).
+Updated September 3, 2026 (America/Chicago).
+
+## September 3 safety update — college-safety-2
+
+The unchanged v1 score model now has a fail-closed context layer. Extreme market
+disagreement, missing roster/QB data, FBS/FCS mismatch and failed calibration can
+downgrade a game to PAPER MONITOR/PASS or MODEL WARNING. No qualified v2 bets are
+currently produced. Generic college A+/Kelly/official paths and all college total
+paper saves are blocked. Canonical UMass matching, immutable forward snapshots,
+append-only line observations and separate CLV diagnostics were added. On the
+archived September 3 slate: 5 monitor-only, 5 warnings, 0 qualified bets. A fresh
+QA scan matched all 11 current games including UMass–Rutgers. See the detailed
+[safety release report](research/COLLEGE_SAFETY_RELEASE_2026_09_03.md).
 
 Current website: [Sports Betting Engine](https://sports-betting-engine-1.onrender.com/).
 
@@ -15,7 +27,10 @@ tracked eligible games in batches until the fixed backlog is checked, and refres
 the college W/L record. No date picker, game list or checkbox is needed. The
 date/preview controls remain available under Optional. Final results are required;
 unfinished games stay pending and are checked on a later click, not overnight by
-a scheduler. No real bets. Initial software verification: 134 tests and build pass.
+a scheduler. No real bets. Live commit `4d9c65f`, verified September 2 at 7:13 PM
+Central: 134 tests and build pass; public assets/health and authenticated endpoint
+checks pass. Today's empty-slate one-click run completed with zero picks and zero
+odds credits. Details: [one-click release report](research/COLLEGE_ONE_CLICK_2026_09_02.md).
 
 The independent college scoring model is live and verified on September 2 at
 6:56 PM Central. **Spreads: experimental paper only. Totals: research
@@ -27,8 +42,8 @@ only. NFL automatic picks: still blocked by missing verified availability.**
   ROI. Three dates lost money. This is a reconstructed test, not a live record.
 - Probability calibration **failed**: predicted 67% on average but won 55%.
   High modeled confidence is not trustworthy; no real-money or stake advice.
-- Website full-day scan can save qualifying paper spreads after explicit
-  checkbox acknowledgment. Original line/price/forecast remains unchanged on
+- The one-click daily scan saves qualifying paper spreads; the optional date
+  preview retains its paper checkbox. Original line/price/forecast remains unchanged on
   repeat scans; separate college W/L, grading, replay and export are visible.
 - Tomorrow (Thursday September 3): local and live scans verified 10 provider games and
   generated 10 paper preview candidates. Rutgers–UMass is a disclosed feed gap.
