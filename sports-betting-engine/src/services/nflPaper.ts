@@ -19,7 +19,8 @@ export const PAPER_RULES = 'regulation-periods_full-game-includes-ot_v1';
 export type PaperResult = 'PENDING' | 'REVIEW' | 'WIN' | 'LOSS' | 'PUSH';
 export interface NflPaperPick {
   verifiedEvent?: { espnEventId: string; homeTeamId: string; awayTeamId: string; neutralSite: boolean | null; source: string; fetchedAt: string;
-    homeEntity?:any;awayEntity?:any;homeConferenceId?:string;awayConferenceId?:string;week?:number|null };
+    homeEntity?:any;awayEntity?:any;homeAliases?:string[];awayAliases?:string[];homeConferenceId?:string;awayConferenceId?:string;week?:number|null;
+    venue?:{id:string|null;name:string|null;indoor:boolean|null} };
   id: string; event: UpcomingEvent; espnEventId: string; quote: MarketQuote;
   player?: NflPlayer; season: number; version: string; rules: string; savedAt: string;
   result: PaperResult; note: string; actual?: number; gradedAt?: string; source?: string;
@@ -207,10 +208,14 @@ export class NflPaperLedger {
         const f=pick.collegeForecast,input=this.collegeForecastArchive.read(f.inputEvidenceHash),source=this.collegeForecastArchive.read(f.forecastEvidenceHash);
         const p=fitCollegeScores(input.history,Date.parse(input.asOf),input.config).predict(f.projection.homeId,f.projection.awayId,f.projection.neutral);
         const assessment=assessCollegeQuote(pick.event,pick.quote,p,input,Date.parse(pick.savedAt));
-        const safetyMatched=!f.safety||JSON.stringify(f.safety)===JSON.stringify(assessCollegeSafety({event:pick.event,identity:pick.verifiedEvent,projection:p,
+        const currentSafety=f.safety?.version===COLLEGE_SAFETY_VERSION?assessCollegeSafety({event:pick.event,identity:pick.verifiedEvent,projection:p,
           candidate:{quote:pick.quote,assessment:f.assessment},quotes:flattenNflQuotes(source.rawOdds,['spreads','totals'],Date.parse(p.asOf)),
           rosters:source.rosters??[],now:Date.parse(p.asOf),spreadHoldoutPassed:input.validation.paperApproved.spreads,calibrator:source.calibrator,
-          contextCoefficients:source.contextCoefficients}));
+          contextCoefficients:source.contextCoefficients,contextRecords:source.contextRecords??[]}):null;
+        // Older immutable safety snapshots remain replayable from their own
+        // content-addressed forecast evidence; never reinterpret them under a
+        // later safety algorithm.
+        const safetyMatched=!f.safety||(currentSafety?JSON.stringify(f.safety)===JSON.stringify(currentSafety):JSON.stringify(source.safety)===JSON.stringify(f.safety));
         forecastReplay={status:safetyMatched&&JSON.stringify(p)===JSON.stringify(f.projection)&&JSON.stringify(source.quote)===JSON.stringify(pick.quote)
           &&source.inputEvidenceHash===f.inputEvidenceHash&&assessment.probability===f.assessment.probability&&assessment.estimatedEV===f.assessment.estimatedEV?'matched':'mismatch',
           inputEvidenceHash:f.inputEvidenceHash,forecastEvidenceHash:f.forecastEvidenceHash};
@@ -288,7 +293,7 @@ export class NflPaperLedger {
       throw new MarketBoardError('Original college forecast evidence could not be verified.');
     const safety=assessCollegeSafety({event,identity,projection:p,candidate:{quote,assessment:forecast.assessment},
       quotes:flattenNflQuotes(source.rawOdds,['spreads','totals'],Date.parse(p.asOf)),rosters:source.rosters??[],now:Date.parse(p.asOf),
-      spreadHoldoutPassed:input.validation.paperApproved.spreads,calibrator:source.calibrator,contextCoefficients:source.contextCoefficients});
+      spreadHoldoutPassed:input.validation.paperApproved.spreads,calibrator:source.calibrator,contextCoefficients:source.contextCoefficients,contextRecords:source.contextRecords??[]});
     if(!safety.trackable||JSON.stringify(safety)!==JSON.stringify(forecast.safety))throw new MarketBoardError('College context safety gate failed.');
     const assessment=assessCollegeQuote(event,quote,p,input,now);
     if(!assessment.eligible||assessment.probability!==forecast.assessment.probability||assessment.estimatedEV!==forecast.assessment.estimatedEV)

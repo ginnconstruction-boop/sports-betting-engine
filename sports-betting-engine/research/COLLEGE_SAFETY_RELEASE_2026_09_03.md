@@ -135,5 +135,24 @@ one QA bulk pull used 2 odds credits; no production pick was created.
   unapproved. Prospective samples, verified context coverage and verified closes
   are the next data dependencies. Real-money and totals stay disabled.
 
-Production deployment verification is pending at the time this report section
-was written and will be appended after release.
+## Production deployment
+
+Commit `f7d816aad033c1c9f5fe7021cd1c0c0d4b374ced` deployed successfully on
+Render as deploy `dep-dacrn2p5efls73cp1e80` at September 3, 2026, 1:25:15 PM
+Central. Public health returned HTTP 200 with release marker
+`college-safety-2`; the versioned JavaScript and page both contained the new
+diagnostic/NO RELIABLE EDGE interface, and anonymous protected access returned
+HTTP 401.
+
+The authenticated production smoke suite passed with zero paid odds calls and
+zero created picks. It exercised protected exports/replays plus fail-closed
+invalid NFL forecast and college scan/paper requests. The current-day production
+one-click scan was deliberately not invoked for deployment QA because the full
+behavior had already passed in an isolated browser test; invoking it would have
+spent two more odds credits and created production monitor observations.
+
+Pre/post-deploy production data fingerprints were identical: the active general
+pick log remained empty; NFL and college paper ledgers remained absent; the ATS
+database remained at 58 records; and the intentional-reset backup remained at
+329 records. No result, backup, credential or saved recommendation was changed
+by the release.

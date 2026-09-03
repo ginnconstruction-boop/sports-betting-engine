@@ -2,6 +2,19 @@
 
 Updated September 3, 2026 (America/Chicago).
 
+## September 3 current-context update — college-context-3
+
+The college scan now saves dated, source-ranked current-season context before
+the existing safety review. It can ingest current rosters and game-day context
+from ESPN, with optional server-side CollegeFootballData support for returning
+production, transfers, talent, coaching history and prior FCS quality. Missing
+or conflicting fields remain explicit and lower context completeness; they do
+not create a point adjustment. The website now leads with a SIMPLE READ:
+**RECOMMENDATION**, **WATCH**, **PASS**, or **AVOID**, while the detailed audit
+stays available below it. The September 3 no-odds-call audit found 22/22 matched
+current rosters but only 8% weighted context completeness per team without a
+CFBD key; no game was promoted. See the [current-context release report](research/COLLEGE_CONTEXT_RELEASE_2026_09_03.md).
+
 ## September 3 safety update — college-safety-2
 
 The unchanged v1 score model now has a fail-closed context layer. Extreme market
@@ -13,6 +26,11 @@ append-only line observations and separate CLV diagnostics were added. On the
 archived September 3 slate: 5 monitor-only, 5 warnings, 0 qualified bets. A fresh
 QA scan matched all 11 current games including UMass–Rutgers. See the detailed
 [safety release report](research/COLLEGE_SAFETY_RELEASE_2026_09_03.md).
+
+**Live:** commit `f7d816a`, Render deploy `dep-dacrn2p5efls73cp1e80`, September
+3 at 1:25 PM Central. Public health/assets and authenticated smoke checks passed
+with zero production picks and zero paid odds calls; all saved-data fingerprints
+were unchanged across deployment.
 
 Current website: [Sports Betting Engine](https://sports-betting-engine-1.onrender.com/).
 

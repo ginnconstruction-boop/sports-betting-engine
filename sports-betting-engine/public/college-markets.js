@@ -29,7 +29,8 @@ async function runCollegeToday(){
       if(job.scan&&!shownScan){renderCollegeDayScan(job.scan);shownScan=true;}
       else if(!job.scan)status.textContent='Waiting for today’s full-day scan results...';
       if(job.status!=='running'){
-        progress.textContent=`${job.status==='complete'?'Today’s run finished':'Run finished with issues'}: ${g.gamesChecked}/${g.gamesPlanned} games checked for grading; ${g.pending} pending; ${g.review} review. ${job.warnings.join(' ')} Games not finished stay pending; click College football again later or tomorrow to update them.`;
+        const outcome=job.status==='complete'?'Today’s run finished':job.status==='partial'?'Today’s run finished with safety notices':'Run did not finish';
+        progress.textContent=`${outcome}: ${g.gamesChecked}/${g.gamesPlanned} games checked for grading; ${g.pending} pending; ${g.review} review. ${job.warnings.join(' ')} Games not finished stay pending; click College football again later or tomorrow to update them.`;
         if(!job.scan)status.textContent='Today’s scan did not finish. Any saved records are preserved; see the run warning above.';
         break;
       }
@@ -62,16 +63,27 @@ function renderCollegeDayScan(data){
       :`${data.recommendations.length} qualified paper spread recommendations · ${data.monitors?.length??0} monitor-only observations saved · ${data.projections?.length??0} games projected`,'strong');
     if(!data.recommendations.length)nflText(panel,'NO RELIABLE EDGE — monitor/warning classifications are not qualified paper bets.','strong');
     nflText(panel,data.recommendationNote);
+    const simple=document.createElement('div');simple.className='nfl-forecast-guide';nflText(simple,'SIMPLE READ','strong');
+    nflText(simple,'RECOMMENDATION = qualified paper play · WATCH = model direction, but not enough verified evidence · PASS = neutral/no useful edge · AVOID = data or model warning.');
+    for(const row of data.projections??[]){const s=row.safety,q=row.market;let label,explanation;
+      if(s.qualified){label='RECOMMENDATION';explanation=`Paper-only recommendation: ${q?`${q.side} ${q.line>0?'+':''}${q.line}`:'spread candidate'}.`;}
+      else if(s.classification==='PAPER MONITOR'){label='WATCH';explanation=`Raw model leans ${q?`${q.side} ${q.line>0?'+':''}${q.line}`:'one side'}, but the evidence is not strong enough to recommend it.`;}
+      else if(s.classification==='MODEL WARNING'){label='AVOID';explanation='The model and market disagree too much for the available football information. Do not treat this as a pick.';}
+      else{label='PASS';explanation='No usable recommendation from this game.';}
+      nflText(simple,`${label} — ${row.event.awayTeam} @ ${row.event.homeTeam}: ${explanation}`,label==='RECOMMENDATION'?'strong':undefined);
+    }
+    panel.append(simple);
     if(data.modelReadiness?.calibration)nflText(panel,'Confidence warning: historical win-probability estimates were overconfident (67% forecast vs 55% observed). These selections are for paper observation only, not real-money betting or stake sizing.');
     if(data.recommendationStatus==='preview_only')nflText(panel,'PREVIEW ONLY: no model picks were saved. Check the paper-tracking box above and scan again to save qualifying spreads.');
     if(['model_data_unavailable','blocked_model_validation'].includes(data.recommendationStatus))nflText(panel,'Model unavailable: this is not a successful no-edge conclusion. Check the warnings below.');
     for(const rec of [...data.recommendations,...(data.monitors??[])]){
       const pick=rec.pick,q=pick.quote,p=pick.collegeForecast.projection,card=document.createElement('div');card.className='nfl-forecast-guide';
-      nflText(card,`${q.side} ${q.line>0?'+':''}${q.line} · ${q.book} ${q.price>0?'+':''}${q.price} — ${pick.collegeForecast.safety?.classification??'LEGACY EXPERIMENTAL PAPER'}`,'strong');
+      const classification=pick.collegeForecast.safety?.classification??'LEGACY EXPERIMENTAL PAPER';
+      nflText(card,`${classification==='PAPER MONITOR'?'WATCH ONLY — raw model lean':'PAPER RECOMMENDATION'}: ${q.side} ${q.line>0?'+':''}${q.line} · ${q.book} ${q.price>0?'+':''}${q.price}`,'strong');
       nflText(card,`${pick.event.awayTeam} @ ${pick.event.homeTeam} — ${nflDisplayTime(pick.event.commenceTime)}`);
       nflText(card,`Model score: ${pick.event.awayTeam} ${nflFixed(p.awayScore,1)}; ${pick.event.homeTeam} ${nflFixed(p.homeScore,1)}. Fair home spread ${nflFixed(p.fairHomeSpread,1)}. ${p.neutral?'Neutral venue.':'Non-neutral venue.'}`);
       nflText(card,`${rec.duplicate?'Already tracked: ORIGINAL pick/price retained, not a refreshed offer.':'Saved before display.'} ${pick.result} · ${p.homeGames}/${p.awayGames} prior games (home/away); current-season games ${p.homeCurrentGames}/${p.awayCurrentGames}.`);
-      nflText(card,'No injury, transfer, starting-QB or weather adjustment. This is a paper experiment, not advice to place a real bet.');panel.append(card);
+      nflText(card,classification==='PAPER MONITOR'?'Why it is only a watch: current football evidence or calibration is incomplete. It is not a recommendation.':'Paper testing only; no real-money or stake recommendation.');panel.append(card);
     }
     if(data.modelReadiness){const r=data.modelReadiness,v=r.validation,a=r.oddsAudit;
       const details=document.createElement('details'),summary=document.createElement('summary');summary.textContent='Model test results and limitations';details.append(summary);
@@ -120,6 +132,10 @@ function renderCollegeDiagnostic(panel,row){
   const q=row.market;nflText(d,q?`MARKET: ${q.side} ${q.line} ${q.price} · ${q.book}. Consensus home spread ${nflFixed(s.marketConsensus.homeLine,1)} (${s.marketConsensus.books.length} books).`:'MARKET: no usable exact spread.');
   nflText(d,`MODEL: ${row.event.awayTeam} ${nflFixed(p.awayScore,1)}, ${row.event.homeTeam} ${nflFixed(p.homeScore,1)}. Raw home margin ${nflFixed(p.homeMargin,1)}. Talent-adjusted margin ${s.talentAdjustedHomeMargin==null?'unavailable — no invented adjustment':nflFixed(s.talentAdjustedHomeMargin,1)}.`);
   nflText(d,`${s.marketDisagreementStatus}: ${s.marketDisagreementPoints==null?'unavailable':nflFixed(Math.abs(s.marketDisagreementPoints),1)} pts. Context reliability ${s.confidence}; this is not a probability or a 100-point grade.`);
+  if(s.currentContext){for(const side of ['away','home']){const c=s.currentContext[side],team=side==='away'?row.event.awayTeam:row.event.homeTeam;
+    nflText(d,`CURRENT CONTEXT — ${team}: ${c.completeness}% complete; reliability ${c.reliability}; QB ${c.qb.starter??'unknown'} — ${c.qb.status}; returning production ${c.sections.returningProduction.status}; transfers ${c.sections.transfers.status}; coaching ${c.sections.coaching.status}; talent/depth ${c.sections.talentDepth.status}; injuries ${c.sections.injuries.status}; weather ${c.sections.weather.status}.`);
+    const w=c.weather;nflText(d,`Weather diagnostic: ${w.indoor===true?'indoor':w.temperatureF==null?'unavailable':`${w.temperatureF}°F`}; wind ${w.windMph??'unknown'} mph; gust ${w.gustMph??'unknown'} mph; precipitation ${w.precipitationProbability??'unknown'}%. No point adjustment.`);
+  }nflText(d,`Context-adjusted model: ${s.currentContext.adjustedModel}`);}
   for(const side of ['home','away']){const c=s.rosterContext[side],b=s.rosterContext[side+'Blend'];
     nflText(d,`ROSTER CONTEXT — ${side}: ${c.status}; returning production ${c.features.returningProduction??'unavailable'}; QB verified ${c.qbVerified?'yes':'no'}; QB continuity ${c.features.qbContinuity??'unavailable'}; transfers +${c.features.transferAdditions??'?'} / -${c.features.transferLosses??'?'}; coaching changes ${c.features.headCoachChange??'unknown'}.`);
     nflText(d,`Early-season prior weight ${(b.preseasonWeight*100).toFixed(1)}%; current-season weight ${(b.currentSeasonWeight*100).toFixed(1)}%. Diagnostic/unfitted blend, not an active score correction. ${c.issues.join(' ')}`);

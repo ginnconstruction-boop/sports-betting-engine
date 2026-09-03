@@ -30,7 +30,9 @@ function fixture(){
   raw.bookmakers[0].markets[0].outcomes[0].point=line;raw.bookmakers[0].markets[0].outcomes[1].point=-line;
   summary.header.competitions[0].competitors[0].score='100';summary.header.competitions[0].competitors[1].score='0';
   const paper=createCollegePaperLedger(path.join(root,'college_paper_picks.json'),research,()=>clock);
-  const service=new CollegePredictions(paper,root,async()=>{calls++;if(fail)throw Error('Offline');return{events:[]};},()=>clock,()=>bundle);
+  const service=new CollegePredictions(paper,root,async(url:string)=>{calls++;if(fail)throw Error('Offline');
+    if(url.includes('/summary?event='))return{gameInfo:{venue:{indoor:false},weather:{temperature:70,gust:5,precipitation:0}}};
+    const roster=url.match(/\/teams\/(\d+)\/roster/);if(roster)return{season:{year:2026},team:{id:roster[1]},athletes:[]};return{events:[]};},()=>clock,()=>bundle);
   return{root,event,identity,row,raw,service,paper,bundle,setClock:(n:number)=>{clock=n;},fail:()=>{fail=true;},calls:()=>calls};
 }
 test('bundled college model retains frozen audit hashes and separate spread/total validation',()=>{
@@ -43,9 +45,10 @@ test('bundled college model retains frozen audit hashes and separate spread/tota
 test('college preview → paper save → deduplicate → source replay → grade → export retains original forecast',async()=>{
   const f=fixture();try{
     const preview=await f.service.scan([f.row],[f.raw],false);assert.equal(preview.recommendations.length,0);assert.equal(f.paper.read().length,0);
-    assert.equal(preview.projections[0].selected.length,1);assert.equal(f.calls(),4);
-    const first=await f.service.scan([f.row],[f.raw],true);assert.equal(first.recommendations.length,0);assert.equal(first.monitors.length,1);assert.equal(f.calls(),4);
+    assert.equal(preview.projections[0].selected.length,1);assert.equal(f.calls(),7);
+    const first=await f.service.scan([f.row],[f.raw],true);assert.equal(first.recommendations.length,0);assert.equal(first.monitors.length,1);assert.equal(f.calls(),7);
     const pick=first.monitors[0].pick;assert.equal(pick.origin,'model');assert.equal(pick.quote.market,'spreads');
+    assert.ok(pick.collegeForecast.safety.currentContext.home.completeness>0);
     assert.equal(pick.collegeForecast.safety.classification,'PAPER MONITOR');assert.equal(pick.collegeForecast.safety.kellyEnabled,false);
     assert.equal(f.paper.replay(pick.id).forecastReplay.status,'matched');
     f.raw.bookmakers[0].markets[0].outcomes[0].point=pick.quote.line+1;f.raw.bookmakers[0].markets[0].outcomes[1].point=-pick.quote.line-1;

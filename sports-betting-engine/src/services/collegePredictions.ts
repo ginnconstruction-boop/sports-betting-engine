@@ -12,6 +12,9 @@ import type {RawEvent} from '../types/odds';
 import {loadCollegeRosterSnapshots,loadCollegeContextCoefficients} from './collegeContext';
 import {assessCollegeSafety,COLLEGE_SAFETY_VERSION} from './collegeSafety';
 import {loadCollegeCalibration} from './collegeCalibration';
+import {CollegeContextIngestion,ContextTeamSeed} from './collegeContextIngestion';
+import {COLLEGE_CONTEXT_EVIDENCE_VERSION,CollegeContextRecord,loadCollegeContextRecords} from './collegeContextEvidence';
+import {collegeDivision} from './collegeContext';
 export const COLLEGE_MODEL_LIMITATIONS='Paper observation only. Missing verified roster/QB/depth inputs reduce confidence; no invented talent points. Raw probabilities are not calibrated. Current roster point adjustments are inactive pending dated data and validation. Totals, Kelly, stake sizing and real-money recommendations disabled.';
 export function loadCollegeModelBundle(file=path.resolve(__dirname,'../data/college-score-ridge-v1.json')){
   const bundle=JSON.parse(fs.readFileSync(file,'utf8'));
@@ -26,12 +29,15 @@ export function loadCollegeModelBundle(file=path.resolve(__dirname,'../data/coll
 export class CollegePredictions {
   private cache:{at:number;season:number;games:CollegeResult[];sources:any[]}|null=null;
   private archive:NflEvidenceArchive;
+  private context:CollegeContextIngestion;
   constructor(private paper:NflPaperLedger,private root:string,private get=fetchNflJson,private now=()=>Date.now(),private load=loadCollegeModelBundle){
     this.archive=new NflEvidenceArchive(path.join(root,'college_forecast_evidence'));
+    this.context=new CollegeContextIngestion(root,get,now);
   }
   readiness(){const b=this.load(),calibration=JSON.parse(fs.readFileSync(path.resolve(__dirname,'../data/college-score-audit-details.json'),'utf8'));
     return{version:b.payload.version,safetyVersion:COLLEGE_SAFETY_VERSION,bundleHash:b.sha256,validation:b.payload.validation,oddsAudit:b.payload.oddsAudit,calibration,
-      calibrationResearch:loadCollegeCalibration()?.evaluation??null,limitations:COLLEGE_MODEL_LIMITATIONS};}
+      calibrationResearch:loadCollegeCalibration()?.evaluation??null,contextData:{version:COLLEGE_CONTEXT_EVIDENCE_VERSION,store:'append-only normalized field evidence',
+        cfbdConfigured:Boolean(process.env.CFBD_API_KEY),pointAdjustmentsApproved:false,historicalContextBacktest:'unavailable'},limitations:COLLEGE_MODEL_LIMITATIONS};}
   private async current(season:number){
     if(this.cache&&this.cache.season===season&&this.now()-this.cache.at<3600_000)return this.cache;
     const groups:CollegeResult[][]=[],sources:any[]=[],today=new Date(this.now()).toISOString().slice(0,10).replace(/-/g,'');
@@ -55,6 +61,15 @@ export class CollegePredictions {
     if(!eligible.length)return{recommendations,monitors,projections,modelReadiness:readiness,recommendationStatus:'no_verified_upcoming_games',warnings};
     let rosters:ReturnType<typeof loadCollegeRosterSnapshots>=[];
     try{rosters=loadCollegeRosterSnapshots(this.root);}catch{warnings.push('Roster-context store invalid; missing-data penalties apply.');}
+    let contextRecords:CollegeContextRecord[]=[];
+    try{
+      const seeds:ContextTeamSeed[]=eligible.flatMap(row=>[
+        {teamId:row.identity.homeTeamId,teamName:row.event.homeTeam,aliases:row.identity.homeAliases,eventId:row.identity.espnEventId,commenceTime:row.event.commenceTime,division:collegeDivision(nflSeason(row.event.commenceTime),row.identity.homeConferenceId),venue:row.identity.venue},
+        {teamId:row.identity.awayTeamId,teamName:row.event.awayTeam,aliases:row.identity.awayAliases,eventId:row.identity.espnEventId,commenceTime:row.event.commenceTime,division:collegeDivision(nflSeason(row.event.commenceTime),row.identity.awayConferenceId),venue:row.identity.venue},
+      ]);
+      const refreshed=await this.context.refresh(seeds);contextRecords=refreshed.records;warnings.push(...refreshed.warnings);
+    }catch{warnings.push('Current football-context refresh/store failed; all affected fields remain unknown and confidence stays reduced.');
+      try{contextRecords=loadCollegeContextRecords(this.root);}catch{contextRecords=[];}}
     const calibrator=loadCollegeCalibration()?.artifact;
     const contextCoefficients=loadCollegeContextCoefficients();
     let all:CollegeResult[],model:ReturnType<typeof fitCollegeScores>,asOf:number,inputsHash:string;
@@ -77,8 +92,9 @@ export class CollegePredictions {
       const quotes=exact?flattenNflQuotes(event,['spreads','totals'],this.now()):[];
       const {selected,assessed}=selectCollegeQuotes(row.event,quotes,p,b,asOf,{spreads:b.validation.paperApproved.spreads,totals:false});
       const candidate=selected.find(c=>c.quote.market==='spreads')??assessed.filter(c=>c.quote.market==='spreads').sort((a,b)=>b.assessment.pointGap-a.assessment.pointGap)[0];
+      const eventContextRecords=contextRecords.filter(record=>[p.homeId,p.awayId].includes(record.teamId)&&(record.eventId===null||record.eventId===row.identity.espnEventId));
       const safety=assessCollegeSafety({event:row.event,identity:row.identity,projection:p,quotes,candidate,rosters,now:asOf,
-        spreadHoldoutPassed:b.validation.paperApproved.spreads,calibrator,contextCoefficients});
+        spreadHoldoutPassed:b.validation.paperApproved.spreads,calibrator,contextCoefficients,contextRecords:eventContextRecords});
       const item={event:row.event,projection:p,safety,market:candidate?.quote,selected:trackPaper?undefined:safety.trackable?selected:[],
         reason:safety.classification+': '+safety.reasons.join(' '),quotesAssessed:assessed.length};
       row.modelReason=item.reason;projections.push(item);
@@ -86,12 +102,12 @@ export class CollegePredictions {
       if(Date.parse(row.event.commenceTime)<=this.now()){row.modelReason='Kickoff passed before archival; no new forward paper prediction.';continue;}
       // Archive warnings/passes too; never quietly erase unfavorable forward evidence.
       try{this.archive.record({kind:'college_diagnostic_v2',createdAt:new Date(this.now()).toISOString(),inputEvidenceHash:inputsHash,
-        event:row.event,identity:row.identity,projection:p,safety,rawOdds:event??null,rosters,calibrator,contextCoefficients});}
+        event:row.event,identity:row.identity,projection:p,safety,rawOdds:event??null,rosters,contextRecords:eventContextRecords,calibrator,contextCoefficients});}
       catch{warnings.push('Diagnostic evidence could not be archived. No paper save for this game.');continue;}
       for(const candidate of safety.trackable?selected:[]){
         try{
           const evidenceHash=this.archive.record({kind:'college_forecast_v1',event:row.event,identity:row.identity,projection:p,
-            ...candidate,safety,rosters,calibrator,contextCoefficients,inputEvidenceHash:inputsHash,selectionVersion:COLLEGE_SELECTION_VERSION,rawOdds:event}).hash;
+            ...candidate,safety,rosters,contextRecords:eventContextRecords,calibrator,contextCoefficients,inputEvidenceHash:inputsHash,selectionVersion:COLLEGE_SELECTION_VERSION,rawOdds:event}).hash;
           const result=this.paper.saveCollegeModel(row.event,candidate.quote,row.identity,{projection:p,assessment:candidate.assessment,
             inputEvidenceHash:inputsHash,forecastEvidenceHash:evidenceHash,bundleHash:bundle.sha256,selectionVersion:COLLEGE_SELECTION_VERSION,safety},b.validation);
           (safety.qualified?recommendations:monitors).push({...result,label:safety.classification+' — not a real-money betting recommendation'});

@@ -53,13 +53,18 @@ const kickoff = '2026-11-02T00:20:00Z'; // prior evening in Chicago; UTC/server 
 const weatherNow = Date.parse('2026-11-01T12:00Z');
 const venue: WeatherVenue = { id: 'fixture', name: 'Verified test venue', latitude: 41, longitude: -87,
   roof: 'outdoor', source: 'test-fixture', verifiedAt: '2026-11-01T11:00Z' };
-const weather = { hourly_units: { time: 'unixtime', temperature_2m: '°F', wind_speed_10m: 'mp/h',
+const weather = { hourly_units: { time: 'unixtime', temperature_2m: '°F', apparent_temperature: '°F',
+  relative_humidity_2m: '%', precipitation_probability: '%', weather_code: 'wmo code', wind_speed_10m: 'mp/h',
   wind_gusts_10m: 'mp/h', precipitation: 'mm' }, hourly: {
   time: [Date.parse('2026-11-02T00:00Z') / 1000], temperature_2m: [42], wind_speed_10m: [16],
+  apparent_temperature: [36], relative_humidity_2m: [71], precipitation_probability: [34], weather_code: [3],
   wind_gusts_10m: [25], wind_direction_10m: [90], precipitation: [0] } };
 test('weather matches epoch kickoff across timezone/date/DST and rejects nulls and wrong units', () => {
   const result = parseKickoffWeather(weather, kickoff, venue, weatherNow);
   assert.equal(result.status, 'available'); assert.equal(result.tempF, 42);
+  assert.equal(result.feelsLikeF, 36); assert.equal(result.humidityPct, 71);
+  assert.equal(result.precipitationProbability, 34); assert.equal(result.weatherCode, 3);
+  assert.deepEqual(result.diagnosticFlags, ['WIND_15_PLUS','GUST_25_PLUS']); assert.equal(result.severeWeatherFlag, true);
   assert.equal(result.forecastHour, '2026-11-02T00:00:00.000Z');
   assert.equal(result.providerIssuedAt, null); assert.equal(result.modelUse, 'context_only');
   assert.equal(parseKickoffWeather({ ...weather, hourly: { ...weather.hourly, wind_speed_10m: [null] } },

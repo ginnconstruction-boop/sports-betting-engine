@@ -33,11 +33,13 @@ export function matchCollegeEvent(event:UpcomingEvent,data:any,source:string,fet
   const homeEntity=resolveCollegeTeam(event.homeTeam,teams),awayEntity=resolveCollegeTeam(event.awayTeam,teams);
   if(!homeEntity.resolved||!awayEntity.resolved||homeEntity.espnTeamId===awayEntity.espnTeamId)
     throw new MarketBoardError('UNMATCHED GAME — MANUAL REVIEW. Ambiguous canonical team names.',422);
-  return {espnEventId:String(matches[0].id),homeTeamId,awayTeamId,homeEntity,awayEntity,
+  const aliases=(id:string)=>{const team=teams.find((t:any)=>String(t.id)===id);return [team?.shortDisplayName,team?.location,team?.abbreviation].filter((x:any)=>typeof x==='string'&&x.trim());};
+  return {espnEventId:String(matches[0].id),homeTeamId,awayTeamId,homeEntity,awayEntity,homeAliases:aliases(homeTeamId),awayAliases:aliases(awayTeamId),
     homeConferenceId:String(teams.find((t:any)=>String(t.id)===homeTeamId)?.conferenceId??''),
     awayConferenceId:String(teams.find((t:any)=>String(t.id)===awayTeamId)?.conferenceId??''),
     week:Number.isInteger(matches[0].week?.number)?matches[0].week.number:null,
-    neutralSite:typeof competition.neutralSite==='boolean'?competition.neutralSite:null,source,fetchedAt};
+    neutralSite:typeof competition.neutralSite==='boolean'?competition.neutralSite:null,
+    venue:{id:competition.venue?.id?String(competition.venue.id):null,name:competition.venue?.fullName??null,indoor:typeof competition.venue?.indoor==='boolean'?competition.venue.indoor:null},source,fetchedAt};
 }
 
 export class CollegeResearch {

@@ -71,6 +71,20 @@ test('college main-menu invokes one-click workflow; expanding the section alone 
   assert.equal(app.document.getElementById('college-market-board').open,true);
   assert.equal(app.document.getElementById('college-market-board').scrolled,true);
 });
+test('college scan UI leads with plain-language recommendation/watch/pass/avoid meanings',()=>{
+  const script=fs.readFileSync(path.join(__dirname,'../../public/college-markets.js'),'utf8');
+  assert.match(script,/SIMPLE READ/);assert.match(script,/RECOMMENDATION = qualified paper play/);assert.match(script,/WATCH ONLY — raw model lean/);
+  assert.match(script,/Today’s run finished with safety notices/);assert.doesNotMatch(script,/Run finished with issues/);
+});
+test('simple read renders a plain label and explanation for every projected game',()=>{
+  const app=ui(async()=>({})),projection=(classification:string,qualified=false)=>({event:{...game},projection:{awayScore:20,homeScore:24,total:44},market:{side:'Away',line:3.5},
+    safety:{classification,qualified},reason:'Paper-only fixture.'});
+  app.run(`renderCollegeDiagnostic=()=>{};renderCollegeDayScan(${JSON.stringify({date:'2026-09-03',recommendations:[],monitors:[],projections:[
+    projection('PAPER MONITOR'),projection('PAPER PASS'),projection('MODEL WARNING')],recommendationNote:'Paper only.',warnings:[],shortlist:[],counts:{},rows:[],unlisted:[]})})`);
+  const text=(node:Element):string=>[node.textContent,...node.children.map(text)].join(' '),rendered=text(app.document.getElementById('college-scan-results'));
+  assert.match(rendered,/WATCH — Away @ Home: Raw model leans Away \+3\.5, but the evidence is not strong enough/);
+  assert.match(rendered,/PASS — Away @ Home: No usable recommendation/);assert.match(rendered,/AVOID — Away @ Home: The model and market disagree too much/);
+});
 
 test('one-click UI ignores date/checkbox, sends one start request and displays grading progress',async()=>{
   const calls:any[]=[];let polls=0;
