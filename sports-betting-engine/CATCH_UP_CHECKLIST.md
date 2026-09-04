@@ -1,6 +1,27 @@
 # Football catch-up checklist
 
-Updated September 3, 2026 (America/Chicago).
+Updated September 4, 2026 (America/Chicago).
+
+## September 3 outcome review — college-backtest-4
+
+The five exact production **WATCH** lines from September 3 finished 3–2 for
++0.80 hypothetical units. They were monitor-only observations, not official
+recommendations, and five plays are far too few to prove an edge. More
+importantly, all ten available raw model directions finished 4–6, while the
+five games already blocked as **AVOID / MODEL WARNING** finished 1–4. Margin
+error was also much larger in FBS/FCS games than FBS/FBS games on this slate.
+
+The score model was not retuned to these outcomes. The general safety layer is
+now stricter: any FBS/FCS game without a validated depth/talent adjustment is
+**AVOID / MODEL WARNING**, cannot enter the visible paper W/L ledger, and remains
+diagnostic only. The historical score metrics remain unchanged, and the prior
+34-game FBS/FCS direction sample (12–22, -10.95 hypothetical units) supports the
+safety restriction. See the [September 3 outcome report](research/COLLEGE_BACKTEST_2026_09_03.md).
+
+**Next action:** after the live release reports `college-backtest-4`, refresh the
+website and click **College football — scan + track + grade** once. The click
+scans today's complete available slate and grades eligible saved September 3
+paper observations; it does not place a real bet.
 
 ## September 3 current-context update — college-context-3
 

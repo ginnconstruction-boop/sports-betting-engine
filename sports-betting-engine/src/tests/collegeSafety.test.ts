@@ -72,8 +72,14 @@ test('market boundaries are explicit; extreme discrepancies and provider anomali
   const f=fixture(),s=assessCollegeSafety(f);assert.equal(s.classification,'MODEL WARNING');assert.equal(s.confidence,'LOW');assert.equal(s.trackable,false);
   assert.equal(s.mismatch.hugeFcsUnderdog,true);assert.equal(s.talentAdjustedHomeMargin,null);assert.equal(s.kellyEnabled,false);assert.equal(s.recommendedStake,null);
   for(const q of f.quotes)q.line=q.side===f.event.homeTeam?-25:25;
-  assert.equal(assessCollegeSafety(f).classification,'PAPER MONITOR');
+  assert.equal(assessCollegeSafety(f).classification,'MODEL WARNING');
   f.quotes[0].line=-7;assert.equal(assessCollegeSafety(f).classification,'MODEL WARNING');
+});
+test('unadjusted FBS/FCS is diagnostic-only while an equally incomplete FBS/FBS game can remain a monitor',()=>{
+  const mismatch=fixture();for(const q of mismatch.quotes)q.line=q.side===mismatch.event.homeTeam?-25:25;
+  assert.equal(assessCollegeSafety(mismatch).classification,'MODEL WARNING');assert.equal(assessCollegeSafety(mismatch).trackable,false);
+  const sameDivision=fixture();sameDivision.identity.awayConferenceId='8';for(const q of sameDivision.quotes)q.line=q.side===sameDivision.event.homeTeam?-25:25;
+  assert.equal(assessCollegeSafety(sameDivision).classification,'PAPER MONITOR');assert.equal(assessCollegeSafety(sameDivision).trackable,true);
 });
 test('totals, stale lines, started games and invalid venue never become qualified paper bets',()=>{
   const f=fixture();f.candidate.quote={...f.candidate.quote,market:'totals'};

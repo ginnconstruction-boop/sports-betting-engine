@@ -6,7 +6,7 @@ import {CollegeRosterSnapshot,collegeDivision,contextMarginAdjustment,rosterCont
 import {CalibrationArtifact,calibratedProbability} from './collegeCalibration';
 import {nflSeason} from './nflResearch';
 import {CollegeContextRecord,contextBlendWeights,resolveCollegeTeamContext} from './collegeContextEvidence';
-export const COLLEGE_SAFETY_VERSION='college-paper-safety-v3';
+export const COLLEGE_SAFETY_VERSION='college-paper-safety-v4';
 export type CollegePaperClass='PAPER BET'|'PAPER LEAN'|'PAPER MONITOR'|'PAPER PASS'|'MODEL WARNING';
 export const COLLEGE_TOTALS_LABEL='TOTAL PROJECTION — RESEARCH ONLY. Historical holdout gate failed.';
 export const median=(values:number[])=>{const a=[...values].sort((x,y)=>x-y);return a.length?(a[Math.floor(a.length/2)]+a[Math.ceil(a.length/2)-1])/2:null;};
@@ -66,7 +66,8 @@ function buildSafety(args:Parameters<typeof assessCollegeSafety>[0]){
   else if(!args.spreadHoldoutPassed){reasons.push('Spread historical gate failed.');}
   else if(disagreement==='EXTREME DISAGREEMENT'&&low){classification='MODEL WARNING';reasons.push('Extreme market disagreement and incomplete football context; no reliable edge.');}
   else if(!candidate?.assessment.eligible||consensus.homeLine===null){reasons.push('No fresh spread candidate with sufficient information.');}
-  else if(low||disagreement==='EXTREME DISAGREEMENT'||mismatch&&!context.adjusted||consensus.books.length<3||!args.calibrator?.approved){
+  else if(mismatch&&!context.adjusted){classification='MODEL WARNING';reasons.push('FBS/FCS matchup has no validated depth/talent adjustment. Raw direction is diagnostic only.');}
+  else if(low||disagreement==='EXTREME DISAGREEMENT'||consensus.books.length<3||!args.calibrator?.approved){
     classification='PAPER MONITOR';reasons.push('Unverified roster/QB, early sample, mismatch or probability calibration: observation only, not a qualified paper bet.');
   }else{classification=disagreement==='LARGE DISAGREEMENT'?'PAPER LEAN':'PAPER BET';reasons.push('Paper-only context and validation gates passed.');}
   if(!context.adjusted)reasons.push(context.reason);
