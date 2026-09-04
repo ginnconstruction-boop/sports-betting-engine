@@ -3,7 +3,8 @@ import * as path from 'path';
 import {createHash,randomUUID} from 'crypto';
 
 export const COLLEGE_CONTEXT_EVIDENCE_VERSION='college-context-evidence-v1';
-export type ContextDomain='qb'|'roster'|'returning_production'|'transfers'|'coaching'|'talent'|'fcs'|'injuries'|'weather';
+export type ContextDomain='qb'|'roster'|'returning_production'|'transfers'|'coaching'|'talent'|'fcs'|'injuries'|'weather'|'current_season'|'market';
+export type ContextIngestionReason='NO_SOURCE_ATTEMPTED'|'SOURCE_RETURNED_EMPTY'|'PARSER_FAILED'|'TEAM_MATCH_FAILED'|'STALE_SOURCE'|'CONFLICTING_SOURCES'|'VALIDATION_FAILED'|'DATA_PROVIDER_UNAVAILABLE';
 export type QbStatus='CONFIRMED'|'EXPECTED'|'COMPETITION'|'QUESTIONABLE'|'OUT'|'UNKNOWN';
 export type AvailabilityStatus='OUT'|'DOUBTFUL'|'QUESTIONABLE'|'PROBABLE'|'AVAILABLE'|'UNKNOWN';
 export type ContextReliability='HIGH'|'MEDIUM'|'LOW'|'INSUFFICIENT';
@@ -20,7 +21,7 @@ export interface CollegeContextRecord {
 export type NewCollegeContextRecord=Omit<CollegeContextRecord,'id'|'schema'>;
 export interface ResolvedContextField {
   field:string;value:unknown;status:'AVAILABLE'|'MISSING'|'STALE'|'CONFLICT';reliability:ContextReliability;
-  records:CollegeContextRecord[];
+  records:CollegeContextRecord[];diagnosticReason:ContextIngestionReason|null;
 }
 export interface ContextSection {
   status:'complete'|'partial'|'missing'|'conflict';coverage:number;reliability:ContextReliability;
@@ -33,7 +34,8 @@ export const CONTEXT_COMPLETENESS_POLICY={version:'college-context-coverage-v1',
   coaching:.10,talentDepth:.12,injuries:.10,weather:.10,currentSample:.05}} as const;
 const RELIABILITY_SCORE:Record<ContextReliability,number>={INSUFFICIENT:0,LOW:1,MEDIUM:2,HIGH:3};
 const DOMAIN_TTL:Record<ContextDomain,number>={qb:72*3600_000,roster:30*86400_000,returning_production:180*86400_000,
-  transfers:30*86400_000,coaching:180*86400_000,talent:180*86400_000,fcs:30*86400_000,injuries:24*3600_000,weather:6*3600_000};
+  transfers:30*86400_000,coaching:180*86400_000,talent:180*86400_000,fcs:30*86400_000,injuries:24*3600_000,weather:6*3600_000,
+  current_season:24*3600_000,market:6*3600_000};
 const REQUIRED={
   roster:['roster.currentSeasonAvailable'],
   qb:['qb.status','qb.starterName'],
@@ -43,7 +45,12 @@ const REQUIRED={
   talentDepth:['talent.rosterComposite','talent.depthTier','talent.classification'],
   injuries:['injuries.teamStatus'],
   weather:['weather.temperatureF','weather.feelsLikeF','weather.windMph','weather.gustMph','weather.precipitationProbability','weather.precipitationMm','weather.humidityPct','weather.indoor'],
+  currentSeason:['current.gamesPlayed','current.lastOpponent','current.lastScore','current.pointsPerGame','current.yardsPerGame','current.pointsAllowedPerGame','current.yardsAllowedPerGame','current.primaryQb','current.qbAttempts'],
 } as const;
+const INGESTION_FIELDS:Record<ContextDomain,string>={qb:'qb.ingestionStatus',roster:'roster.ingestionStatus',returning_production:'returning.ingestionStatus',
+  transfers:'transfers.ingestionStatus',coaching:'coaching.ingestionStatus',talent:'talent.ingestionStatus',fcs:'fcs.ingestionStatus',injuries:'injuries.ingestionStatus',
+  weather:'weather.ingestionStatus',current_season:'current.ingestionStatus',market:'market.ingestionStatus'};
+const INGESTION_FAILURES=new Set<ContextIngestionReason>(['SOURCE_RETURNED_EMPTY','PARSER_FAILED','TEAM_MATCH_FAILED','VALIDATION_FAILED','DATA_PROVIDER_UNAVAILABLE']);
 
 function stable(value:any):string {
   if(Array.isArray(value))return'['+value.map(stable).join(',')+']';
@@ -102,19 +109,28 @@ function applicable(row:CollegeContextRecord,teamId:string,season:number,eventId
 }
 function isUnknown(value:unknown){return value===null||value==='UNKNOWN'||value==='UNKNOWN_FCS'||value==='unavailable';}
 export function resolveContextField(records:CollegeContextRecord[],args:{teamId:string;season:number;eventId:string;field:string;asOf:number}):ResolvedContextField{
+  const domain=(Object.entries(INGESTION_FIELDS).find(([,field])=>field.split('.')[0]===args.field.split('.')[0])?.[0]??
+    (args.field.startsWith('injury.')?'injuries':args.field.startsWith('fcs.')?'fcs':null)) as ContextDomain|null;
+  const diagnostic=domain?records.filter(r=>r.field===INGESTION_FIELDS[domain]&&applicable(r,args.teamId,args.season,args.eventId,args.asOf))
+    .sort((a,b)=>Date.parse(b.source.retrievedAt)-Date.parse(a.source.retrievedAt))[0]:undefined;
+  const fieldDiagnostic=records.filter(r=>r.field===`${args.field}.diagnostic`&&applicable(r,args.teamId,args.season,args.eventId,args.asOf))
+    .sort((a,b)=>Date.parse(b.source.retrievedAt)-Date.parse(a.source.retrievedAt))[0];
+  const missingReason=():ContextIngestionReason=>fieldDiagnostic&&INGESTION_FAILURES.has(fieldDiagnostic.value as ContextIngestionReason)
+    ?fieldDiagnostic.value as ContextIngestionReason:diagnostic&&INGESTION_FAILURES.has(diagnostic.value as ContextIngestionReason)
+      ?diagnostic.value as ContextIngestionReason:'NO_SOURCE_ATTEMPTED';
   const known=records.filter(r=>r.field===args.field&&applicable(r,args.teamId,args.season,args.eventId,args.asOf));
-  if(!known.length)return{field:args.field,value:null,status:'MISSING',reliability:'INSUFFICIENT',records:[]};
+  if(!known.length)return{field:args.field,value:null,status:'MISSING',reliability:'INSUFFICIENT',records:[],diagnosticReason:missingReason()};
   const fresh=known.filter(r=>args.asOf-Date.parse(r.source.retrievedAt)<=DOMAIN_TTL[r.domain]);
-  if(!fresh.length)return{field:args.field,value:null,status:'STALE',reliability:'INSUFFICIENT',records:known};
+  if(!fresh.length)return{field:args.field,value:null,status:'STALE',reliability:'INSUFFICIENT',records:known,diagnosticReason:'STALE_SOURCE'};
   const allOrdered=[...fresh].sort((a,b)=>Date.parse(b.source.retrievedAt)-Date.parse(a.source.retrievedAt)),bySource=new Map<string,CollegeContextRecord>();
   for(const row of allOrdered){const key=`${row.source.name}|${row.source.url}`;if(!bySource.has(key))bySource.set(key,row);}const latestBySource=[...bySource.values()];
   const ordered=latestBySource.sort((a,b)=>a.source.tier-b.source.tier||RELIABILITY_SCORE[b.source.reliability]-RELIABILITY_SCORE[a.source.reliability]
     ||Date.parse(b.source.retrievedAt)-Date.parse(a.source.retrievedAt));
   const top=ordered[0],peers=ordered.filter(r=>r.source.tier===top.source.tier&&r.source.reliability===top.source.reliability);
   const values=new Set(peers.map(r=>stable(r.value)));
-  if(values.size>1||peers.some(r=>r.verification==='CONFLICTED'))return{field:args.field,value:null,status:'CONFLICT',reliability:'LOW',records:allOrdered};
-  if(isUnknown(top.value))return{field:args.field,value:top.value,status:'MISSING',reliability:top.source.reliability,records:allOrdered};
-  return{field:args.field,value:top.value,status:'AVAILABLE',reliability:top.source.reliability,records:allOrdered};
+  if(values.size>1||peers.some(r=>r.verification==='CONFLICTED'))return{field:args.field,value:null,status:'CONFLICT',reliability:'LOW',records:allOrdered,diagnosticReason:'CONFLICTING_SOURCES'};
+  if(isUnknown(top.value))return{field:args.field,value:top.value,status:'MISSING',reliability:top.source.reliability,records:allOrdered,diagnosticReason:missingReason()};
+  return{field:args.field,value:top.value,status:'AVAILABLE',reliability:top.source.reliability,records:allOrdered,diagnosticReason:null};
 }
 function section(records:CollegeContextRecord[],args:{teamId:string;season:number;eventId:string;asOf:number},fields:readonly string[]):ContextSection{
   const resolved=Object.fromEntries(fields.map(field=>[field,resolveContextField(records,{...args,field})]));
@@ -127,20 +143,23 @@ export function resolveCollegeTeamContext(records:CollegeContextRecord[],args:{t
   const common={teamId:args.teamId,season:args.season,eventId:args.eventId,asOf:args.asOf};
   const roster=section(records,common,REQUIRED.roster),qb=section(records,common,REQUIRED.qb),returningProduction=section(records,common,REQUIRED.returningProduction),
     transfers=section(records,common,REQUIRED.transfers),coaching=section(records,common,REQUIRED.coaching),talentDepth=section(records,common,REQUIRED.talentDepth),
-    injuries=section(records,common,REQUIRED.injuries),weather=section(records,common,REQUIRED.weather);
-  const sections={roster,qb,returningProduction,transfers,coaching,talentDepth,injuries,weather},w=CONTEXT_COMPLETENESS_POLICY.weights;
+    injuries=section(records,common,REQUIRED.injuries),weather=section(records,common,REQUIRED.weather),currentSeason=section(records,common,REQUIRED.currentSeason);
+  const sections={roster,qb,returningProduction,transfers,coaching,talentDepth,injuries,weather,currentSeason},w=CONTEXT_COMPLETENESS_POLICY.weights;
   const currentSample=Math.min(1,Math.max(0,args.currentGames)/3),completeness=roster.coverage*w.roster+qb.coverage*w.qb+returningProduction.coverage*w.returningProduction
-    +transfers.coverage*w.transfers+coaching.coverage*w.coaching+talentDepth.coverage*w.talentDepth+injuries.coverage*w.injuries+weather.coverage*w.weather+currentSample*w.currentSample;
+    +transfers.coverage*w.transfers+coaching.coverage*w.coaching+talentDepth.coverage*w.talentDepth+injuries.coverage*w.injuries+weather.coverage*w.weather+currentSeason.coverage*currentSample*w.currentSample;
   const present=Object.values(sections).filter(s=>s.coverage>0),reliability:ContextReliability=present.length
     ?present.reduce((min,s)=>RELIABILITY_SCORE[s.reliability]<RELIABILITY_SCORE[min]?s.reliability:min,'HIGH' as ContextReliability):'INSUFFICIENT';
-  const fcsTier=resolveContextField(records,{...common,field:'fcs.tier'});
+  const fcsTier=resolveContextField(records,{...common,field:'fcs.tier'}),starter=value(qb,'qb.starterName');
+  const qbTransfers=resolveContextField(records,{...common,field:'transfers.qbAdditions'}).value as Array<{name?:string;previousSchool?:string}>|null;
+  const matchingTransfer=Array.isArray(qbTransfers)&&starter?qbTransfers.find(item=>String(item.name??'').toLowerCase()===String(starter).toLowerCase()):undefined;
   const playerRows=records.filter(r=>r.domain==='injuries'&&r.playerId&&applicable(r,args.teamId,args.season,args.eventId,args.asOf)),players=[...new Set(playerRows.map(r=>r.playerId!))].map(playerId=>{
     const latest=(field:string)=>playerRows.filter(r=>r.playerId===playerId&&r.field===field).sort((a,b)=>Date.parse(b.source.retrievedAt)-Date.parse(a.source.retrievedAt))[0];
     return{playerId,name:latest('injury.playerName')?.value??null,position:latest('injury.position')?.value??null,status:latest('injury.status')?.value??'UNKNOWN',lastVerifiedAt:latest('injury.status')?.source.retrievedAt??null};});
   return{version:COLLEGE_CONTEXT_EVIDENCE_VERSION,teamId:args.teamId,teamName:args.teamName,asOf:new Date(args.asOf).toISOString(),sections,
     completeness:Number((completeness*100).toFixed(1)),reliability,currentSampleCoverage:Number((currentSample*100).toFixed(1)),fcsTier,
-    qb:{starter:value(qb,'qb.starterName'),status:value(qb,'qb.status')??'UNKNOWN',returningStarter:resolveContextField(records,{...common,field:'qb.returningStarter'}).value,
-      transfer:resolveContextField(records,{...common,field:'qb.transfer'}).value,careerStarts:resolveContextField(records,{...common,field:'qb.careerStarts'}).value,
+    qb:{starter,status:value(qb,'qb.status')??'UNKNOWN',returningStarter:resolveContextField(records,{...common,field:'qb.returningStarter'}).value,
+      transfer:matchingTransfer?true:resolveContextField(records,{...common,field:'qb.transfer'}).value,previousSchool:matchingTransfer?.previousSchool??resolveContextField(records,{...common,field:'qb.previousSchool'}).value,
+      depthChartStatus:resolveContextField(records,{...common,field:'qb.depthChartStatus'}).value,careerStarts:resolveContextField(records,{...common,field:'qb.careerStarts'}).value,
       priorSeasonStarts:resolveContextField(records,{...common,field:'qb.priorSeasonStarts'}).value,currentSeasonStarts:resolveContextField(records,{...common,field:'qb.currentSeasonStarts'}).value,
       injuryStatus:resolveContextField(records,{...common,field:'qb.injuryStatus'}).value},
     returning:{overall:value(returningProduction,'returning.overallPct'),offense:value(returningProduction,'returning.offensePct'),defense:value(returningProduction,'returning.defensePct')},
@@ -152,6 +171,9 @@ export function resolveCollegeTeamContext(records:CollegeContextRecord[],args:{t
       windMph:value(weather,'weather.windMph'),gustMph:value(weather,'weather.gustMph'),precipitationProbability:value(weather,'weather.precipitationProbability'),
       precipitationMm:value(weather,'weather.precipitationMm'),humidityPct:value(weather,'weather.humidityPct'),indoor:value(weather,'weather.indoor'),
       flags:resolveContextField(records,{...common,field:'weather.flags'}).value},
+    currentSeason:{gamesPlayed:value(currentSeason,'current.gamesPlayed'),lastOpponent:value(currentSeason,'current.lastOpponent'),lastScore:value(currentSeason,'current.lastScore'),
+      pointsPerGame:value(currentSeason,'current.pointsPerGame'),yardsPerGame:value(currentSeason,'current.yardsPerGame'),pointsAllowedPerGame:value(currentSeason,'current.pointsAllowedPerGame'),
+      yardsAllowedPerGame:value(currentSeason,'current.yardsAllowedPerGame'),primaryQb:value(currentSeason,'current.primaryQb'),qbAttempts:value(currentSeason,'current.qbAttempts')},
     contextAdjustedMargin:null,contextAdjustmentReason:'Unavailable — football-context point coefficients are not validated.'};
 }
 export function contextBlendWeights(week:number|null,currentGames:number,completeness:number){

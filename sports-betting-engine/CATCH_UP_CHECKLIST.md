@@ -2,6 +2,24 @@
 
 Updated September 4, 2026 (America/Chicago).
 
+## September 4 context-ingestion repair — college-context-ingestion-5
+
+The live ESPN game summary was already returning current-season results,
+offense/defense averages, primary passers and opening/current spread data, but
+the ingestion parser ignored those fields. The scan now captures them, labels a
+verified active current-season primary passer as **EXPECTED** (never
+CONFIRMED), records opening-line movement without changing the model, and gives
+every missing field a debug reason such as SOURCE_RETURNED_EMPTY,
+TEAM_MATCH_FAILED or DATA_PROVIDER_UNAVAILABLE.
+
+On the eight-game September 4 slate, average achievable completeness with the
+currently configured sources rose from about 8.7% to 17.4%. SJSU, Eastern
+Michigan and Stanford rose from 9.7% to 29.7%; Miami remained 8% because it had
+not played and ESPN supplied neither a depth chart nor a structured starter.
+The 80% gate was not changed: 0 of 16 teams reached it, and the evidence shows
+it is not routinely achievable without the unconfigured CollegeFootballData
+feed plus official injury/coordinator inputs. See the [ingestion audit](research/COLLEGE_CONTEXT_INGESTION_AUDIT_2026_09_04.md).
+
 ## September 3 outcome review — college-backtest-4
 
 The five exact production **WATCH** lines from September 3 finished 3–2 for

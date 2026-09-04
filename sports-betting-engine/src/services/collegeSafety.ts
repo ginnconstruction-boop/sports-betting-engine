@@ -5,8 +5,8 @@ import {CollegeAssessment} from './collegeModelQuotes';
 import {CollegeRosterSnapshot,collegeDivision,contextMarginAdjustment,rosterContext,selectRosterSnapshot,ContextCoefficientArtifact} from './collegeContext';
 import {CalibrationArtifact,calibratedProbability} from './collegeCalibration';
 import {nflSeason} from './nflResearch';
-import {CollegeContextRecord,contextBlendWeights,resolveCollegeTeamContext} from './collegeContextEvidence';
-export const COLLEGE_SAFETY_VERSION='college-paper-safety-v4';
+import {CollegeContextRecord,contextBlendWeights,resolveCollegeTeamContext,resolveContextField} from './collegeContextEvidence';
+export const COLLEGE_SAFETY_VERSION='college-paper-safety-v5';
 export type CollegePaperClass='PAPER BET'|'PAPER LEAN'|'PAPER MONITOR'|'PAPER PASS'|'MODEL WARNING';
 export const COLLEGE_TOTALS_LABEL='TOTAL PROJECTION — RESEARCH ONLY. Historical holdout gate failed.';
 export const median=(values:number[])=>{const a=[...values].sort((x,y)=>x-y);return a.length?(a[Math.floor(a.length/2)]+a[Math.ceil(a.length/2)-1])/2:null;};
@@ -43,6 +43,11 @@ function buildSafety(args:Parameters<typeof assessCollegeSafety>[0]){
   const homeBlendV2=contextBlendWeights(week,p.homeCurrentGames,homeContext.completeness),awayBlendV2=contextBlendWeights(week,p.awayCurrentGames,awayContext.completeness);
   const consensus=collegeMarketConsensus(event,args.quotes,now),gap=consensus.homeLine===null?null:p.homeMargin+consensus.homeLine;
   const disagreement=marketDisagreement(gap),mismatch=divisions.every(d=>d!=='UNKNOWN')&&divisions[0]!==divisions[1];
+  const marketField=(field:string)=>resolveContextField(args.contextRecords??[],{teamId:p.homeId,season,eventId:identity?.espnEventId,field,asOf:now});
+  const opening=marketField('market.openingHomeSpread').value as number|null,current=marketField('market.currentHomeSpread').value as number|null;
+  const movement=marketField('market.movementPoints').value as number|null,movementDirection=marketField('market.movementDirection').value as string|null;
+  const modelDirection=gap===null||Math.abs(gap)<3?'NO_STRONG_DIRECTION':gap>0?'HOME':'AWAY',movementSide=movementDirection==='TOWARD_HOME'?'HOME':movementDirection==='TOWARD_AWAY'?'AWAY':null;
+  const modelMarketDivergence=modelDirection!=='NO_STRONG_DIRECTION'&&movementSide!==null&&movementSide!==modelDirection;
   const richLow=homeContext.completeness<80||awayContext.completeness<80||!['HIGH','MEDIUM'].includes(homeContext.reliability)||!['HIGH','MEDIUM'].includes(awayContext.reliability)
     ||homeContext.qb.status!=='CONFIRMED'||awayContext.qb.status!=='CONFIRMED';
   const low=richLow||home.completeness<1||away.completeness<1||!home.qbVerified||!away.qbVerified||!home.injuryVerified||!away.injuryVerified
@@ -85,6 +90,9 @@ function buildSafety(args:Parameters<typeof assessCollegeSafety>[0]){
       completenessAverage:Number(((homeContext.completeness+awayContext.completeness)/2).toFixed(1)),
       reliability:[homeContext.reliability,awayContext.reliability].sort((a,b)=>({INSUFFICIENT:0,LOW:1,MEDIUM:2,HIGH:3}[a]-{INSUFFICIENT:0,LOW:1,MEDIUM:2,HIGH:3}[b]))[0],
       adjustedModel:'Unavailable — context coefficients are not validated.'},
+    marketMovement:{available:[opening,current,movement].every(Number.isFinite),provider:marketField('market.provider').value,openingHomeSpread:opening,currentHomeSpread:current,
+      movementPoints:movement,movementDirection,modelDirection,modelMarketDivergence,label:modelMarketDivergence?'MODEL/MARKET DIVERGENCE — review only':null,
+      note:'Independent market diagnostic only; never changes the projection or classification.'},
     extremeDisagreementReview:disagreement==='EXTREME DISAGREEMENT'?{talent:[awayContext.sections.talentDepth.status,homeContext.sections.talentDepth.status],
       qb:[awayContext.qb.status,homeContext.qb.status],fcs:[awayContext.fcsTier.value,homeContext.fcsTier.value],transfers:[awayContext.sections.transfers.status,homeContext.sections.transfers.status],
       coaching:[awayContext.sections.coaching.status,homeContext.sections.coaching.status],depth:[awayContext.talent.depthTier,homeContext.talent.depthTier],

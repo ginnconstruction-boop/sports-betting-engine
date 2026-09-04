@@ -81,6 +81,14 @@ test('unadjusted FBS/FCS is diagnostic-only while an equally incomplete FBS/FBS 
   const sameDivision=fixture();sameDivision.identity.awayConferenceId='8';for(const q of sameDivision.quotes)q.line=q.side===sameDivision.event.homeTeam?-25:25;
   assert.equal(assessCollegeSafety(sameDivision).classification,'PAPER MONITOR');assert.equal(assessCollegeSafety(sameDivision).trackable,true);
 });
+test('opening-line movement flags model/market divergence without changing the projection or classification',()=>{
+  const f:any=fixture();f.identity.awayConferenceId='8';for(const q of f.quotes)q.line=q.side===f.event.homeTeam?-25:25;
+  const context=(field:string,value:unknown):any=>({id:field,schema:1,teamId:'1',teamName:'FBS Home',season:2026,eventId:'123',playerId:null,domain:'market',field,value,
+    effectiveFrom:'2026-09-03T11:00:00Z',effectiveTo:'2026-09-04T05:00:00Z',source:{name:'ESPN',url:'https://site.api.espn.com/summary',tier:2,reliability:'MEDIUM',publishedAt:'2026-09-03T11:00:00Z',retrievedAt:'2026-09-03T11:00:00Z'},verification:'REPORTED',rawPayloadHash:'a'.repeat(64)});
+  f.contextRecords=[context('market.provider','DraftKings'),context('market.openingHomeSpread',-22),context('market.currentHomeSpread',-25),context('market.movementPoints',-3),context('market.movementDirection','TOWARD_HOME')];
+  const result=assessCollegeSafety(f);assert.equal(result.rawProjectedHomeMargin,20);assert.equal(result.classification,'PAPER MONITOR');assert.equal(result.marketMovement.available,true);
+  assert.equal(result.marketMovement.modelDirection,'AWAY');assert.equal(result.marketMovement.modelMarketDivergence,true);assert.match(result.marketMovement.label,/DIVERGENCE/);
+});
 test('totals, stale lines, started games and invalid venue never become qualified paper bets',()=>{
   const f=fixture();f.candidate.quote={...f.candidate.quote,market:'totals'};
   const s=assessCollegeSafety(f);assert.equal(s.classification,'PAPER PASS');assert.equal(s.trackable,false);assert.match(s.totalsStatus,/holdout gate failed/);

@@ -8,7 +8,7 @@ import {contextRecordsFromCfbd,contextRecordsFromEspnSummary,contextSourceReliab
 
 const hash='a'.repeat(64),asOf=Date.parse('2026-09-03T16:00:00Z');
 function row(field:string,value:unknown,patch:Partial<NewCollegeContextRecord>={}):NewCollegeContextRecord{return{
-  teamId:'164',teamName:'Rutgers Scarlet Knights',season:2026,eventId:null,playerId:null,domain:field.startsWith('qb.')?'qb':field.startsWith('weather.')?'weather':field.startsWith('injur')?'injuries':field.startsWith('returning.')?'returning_production':field.startsWith('transfers.')?'transfers':field.startsWith('coaching.')?'coaching':field.startsWith('fcs.')?'fcs':'talent',
+  teamId:'164',teamName:'Rutgers Scarlet Knights',season:2026,eventId:null,playerId:null,domain:field.startsWith('qb.')?'qb':field.startsWith('weather.')?'weather':field.startsWith('injur')?'injuries':field.startsWith('returning.')?'returning_production':field.startsWith('transfers.')?'transfers':field.startsWith('coaching.')?'coaching':field.startsWith('fcs.')?'fcs':field.startsWith('current.')?'current_season':field.startsWith('market.')?'market':'talent',
   field,value,effectiveFrom:'2026-09-03T12:00:00Z',effectiveTo:null,source:{name:'Official Rutgers',url:'https://scarletknights.com/context',tier:1,reliability:'HIGH',publishedAt:'2026-09-03T11:00:00Z',retrievedAt:'2026-09-03T12:00:00Z'},
   verification:'VERIFIED',rawPayloadHash:hash,...patch};}
 test('source hierarchy and reliability distinguish official verification from secondary and unverified data',()=>{
@@ -41,6 +41,28 @@ test('QB hierarchy keeps EXPECTED separate from CONFIRMED and ESPN depth chart c
   const records=contextRecordsFromEspnSummary({depthchart:[{team:{id:'164'},positions:[{position:{abbreviation:'QB'},athletes:[{athlete:{id:'7',displayName:'Example QB'}}]}]}]},[team],'https://site.api.espn.com/summary',asOf,hash);
   assert.equal(records.find(r=>r.field==='qb.status')?.value,'EXPECTED');assert.ok(!records.some(r=>r.value==='CONFIRMED'));
 });
+test('ESPN summary ingests current-season primary passer as EXPECTED, team production and opening movement',()=>{
+  const team:any={teamId:'164',teamName:'Rutgers Scarlet Knights',eventId:'2',commenceTime:'2026-09-03T22:00:00Z',division:'FBS',venue:{indoor:false}};
+  const summary={header:{competitions:[{competitors:[{team:{id:'164'}}]}]},gameInfo:{venue:{indoor:false},weather:{temperature:75,gust:12,precipitation:20}},
+    lastFiveGames:[{team:{id:'164'},events:[{id:'1',gameDate:'2026-08-29T18:00:00Z',opponent:{displayName:'Temple Owls'},gameResult:'W',score:'31-20',homeTeamScore:'31',awayTeamScore:'20'}]}],
+    boxscore:{teams:[{team:{id:'164'},statistics:[{name:'totalPointsPerGame',displayValue:'31.0'},{name:'yardsPerGame',displayValue:'420.0'},
+      {name:'totalPointsPerGameAllowed',displayValue:'20.0'},{name:'yardsPerGameAllowed',displayValue:'310.0'}]}]},
+    leaders:[{team:{id:'164'},leaders:[{name:'passingYards',leaders:[{displayValue:'21/30, 280 YDS',athlete:{id:'7',displayName:'Example QB',position:{abbreviation:'QB'},status:{type:'active'}}}]}]}],
+    pickcenter:[{provider:{name:'DraftKings'},pointSpread:{home:{open:{line:'-3.5'},close:{line:'-2.5'}}}}]};
+  const records=contextRecordsFromEspnSummary(summary,[team],'https://site.api.espn.com/summary',asOf,hash),get=(field:string)=>records.find(r=>r.field===field)?.value;
+  assert.equal(get('qb.starterName'),'Example QB');assert.equal(get('qb.status'),'EXPECTED');assert.equal(get('current.gamesPlayed'),1);assert.equal(get('current.lastOpponent'),'Temple Owls');
+  assert.equal(get('current.pointsPerGame'),31);assert.equal(get('current.yardsAllowedPerGame'),310);assert.equal(get('market.openingHomeSpread'),-3.5);assert.equal(get('market.currentHomeSpread'),-2.5);
+  assert.equal(get('market.movementDirection'),'TOWARD_AWAY');assert.ok(!records.some(r=>r.value==='CONFIRMED'));
+});
+test('ingestion diagnostics distinguish parser failure, team mismatch, source empty and partial weather',()=>{
+  const team:any={teamId:'164',teamName:'Rutgers Scarlet Knights',eventId:'2',commenceTime:'2026-09-03T22:00:00Z',division:'FBS',venue:{indoor:false}};
+  const parser=contextRecordsFromEspnSummary(null,[team],'https://site.api.espn.com/summary',asOf,hash),mismatch=contextRecordsFromEspnSummary({header:{competitions:[{competitors:[{team:{id:'999'}}]}]}},[team],'https://site.api.espn.com/summary',asOf,hash);
+  assert.equal(parser.find(r=>r.field==='qb.ingestionStatus')?.value,'PARSER_FAILED');assert.equal(mismatch.find(r=>r.field==='qb.ingestionStatus')?.value,'TEAM_MATCH_FAILED');
+  const partial=contextRecordsFromEspnSummary({header:{competitions:[{competitors:[{team:{id:'164'}}]}]},gameInfo:{weather:{temperature:75,gust:9}}},[team],'https://site.api.espn.com/summary',asOf,hash).map(withId);
+  const wind=resolveContextField(partial,{teamId:'164',season:2026,eventId:'2',field:'weather.windMph',asOf});
+  assert.equal(wind.status,'MISSING');assert.equal(wind.diagnosticReason,'SOURCE_RETURNED_EMPTY');
+  const qb=resolveContextField(partial,{teamId:'164',season:2026,eventId:'2',field:'qb.starterName',asOf});assert.equal(qb.diagnosticReason,'SOURCE_RETURNED_EMPTY');
+});
 test('context completeness is transparent, separate from reliability and never creates point adjustments',()=>{
   const fields=[row('qb.status','CONFIRMED',{eventId:'1'}),row('qb.starterName','Example QB',{eventId:'1'}),row('returning.overallPct',.6),row('returning.offensePct',.5),row('returning.defensePct',.7),
     row('transfers.additions',10),row('transfers.departures',8),row('transfers.quality',{rated:5}),row('coaching.headCoach','Coach'),row('coaching.newHeadCoach',false),
@@ -72,7 +94,7 @@ test('CFBD fixtures map returning production, portal movement, talent, coaching 
   const payloads={
     returning:[{team:'Rutgers',percentPPA:.61,percentDefensePPA:.57,percentPassingPPA:.72,percentReceivingPPA:.64,percentRushingPPA:.53}],
     portal:[
-      {origin:'Rutgers',destination:'Idaho',position:'QB',rating:.86,eligibility:'Immediate'},
+      {origin:'Rutgers',destination:'Idaho',position:'QB',firstName:'Transfer',lastName:'Quarterback',rating:.86,eligibility:'Immediate'},
       {origin:'Idaho',destination:'Rutgers',position:'WR',rating:.81,eligibility:'Immediate'},
       {origin:'Rutgers',destination:null,position:'RB',rating:.75,eligibility:'Withdrawn'},
     ],
@@ -90,4 +112,10 @@ test('CFBD fixtures map returning production, portal movement, talent, coaching 
   assert.equal(get('164','coaching.newHeadCoach'),false);assert.equal(get('70','fcs.previousSrsRank'),3);
   assert.equal(get('70','fcs.tier'),'ELITE_FCS');assert.deepEqual(get('70','fcs.previousRecord'),{wins:10,losses:4});assert.equal(get('70','talent.providerChecked'),true);
   assert.ok(records.every(r=>r.source.tier===3));assert.ok(records.every(r=>!r.field.includes('adjustment')));
+});
+test('QB transfer identity is derived only when the expected starter matches raw portal evidence',()=>{
+  const records=[withId(row('qb.starterName','Transfer Quarterback',{eventId:'1'})),withId(row('qb.status','EXPECTED',{eventId:'1'})),
+    withId(row('transfers.qbAdditions',[{name:'Transfer Quarterback',previousSchool:'Rutgers'}]))];
+  const result=resolveCollegeTeamContext(records,{teamId:'164',teamName:'Rutgers',season:2026,eventId:'1',asOf,currentGames:0});
+  assert.equal(result.qb.transfer,true);assert.equal(result.qb.previousSchool,'Rutgers');
 });
