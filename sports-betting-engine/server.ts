@@ -16,6 +16,8 @@ import { isPausedCommand } from './src/config/productionFocus';
 import { NFL_MARKET_GROUPS, NFL_BOARD_WINDOW_DAYS } from './src/config/nflMarkets';
 import { NflMarketBoard, MarketBoardError } from './src/services/nflMarketBoard';
 import { NflResearch } from './src/services/nflResearch';
+import {NflverseSnapResearch} from './src/services/nflSnapResearch';
+import {OfficialNflInjuryReports} from './src/services/nflOfficialReports';
 import { NflContextIngestion } from './src/services/nflContextIngestion';
 import { NflDailyRun } from './src/services/nflDailyRun';
 import { nflReadinessChecklist } from './src/services/nflReadiness';
@@ -348,11 +350,12 @@ app.get('/api/college/paper/:id/replay',requireAuth,(req,res)=>{
 
 // NFL quote board: event discovery is free; paid odds calls are explicit POSTs.
 const nflMarketBoard = new NflMarketBoard();
-const nflResearch = new NflResearch();
+const nflOfficialReports=new OfficialNflInjuryReports();
+const nflResearch = new NflResearch(undefined,undefined,new NflverseSnapResearch(),nflOfficialReports);
 const nflPaper = new NflPaperLedger(path.join(SNAPSHOT_DIR, 'nfl_paper_picks.json'), nflResearch);
 const nflRecommendations = new NflRecommendations(nflMarketBoard, nflResearch, nflPaper, undefined, undefined,
   new NflEvidenceArchive(path.join(SNAPSHOT_DIR, 'nfl_forecast_evidence')));
-const nflContext = new NflContextIngestion(SNAPSHOT_DIR,nflResearch);
+const nflContext = new NflContextIngestion(SNAPSHOT_DIR,nflResearch,undefined,Date.now,undefined,nflOfficialReports);
 const nflDailyRun = new NflDailyRun({events:()=>nflMarketBoard.events(),preflight:async events=>({...await nflContext.refresh(events),readiness:nflReadinessChecklist()}),read:()=>nflPaper.read(),
   gradeEvents:ids=>nflPaper.gradeEvents(ids),now:Date.now});
 app.post('/api/nfl/today',requireAuth,(req,res)=>{
@@ -688,7 +691,7 @@ app.post('/api/ats/backfill', requireAuth, async (req, res) => {
 });
 
 // ── Health ──
-app.get('/api/health', (_, res) => res.json({ ok: true, release: 'nfl-context-preflight-8', ts: new Date().toISOString() }));
+app.get('/api/health', (_, res) => res.json({ ok: true, release: 'nfl-official-injury-report-9', ts: new Date().toISOString() }));
 
 // ── SPA fallback ──
 app.get('*', (_, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));

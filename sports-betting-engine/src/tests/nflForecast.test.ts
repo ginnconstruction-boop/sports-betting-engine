@@ -143,6 +143,11 @@ test('injury, stale depth, unknown role and incomplete history block issuance wi
   assert.ok(buildNflForecast(short,event,quote.market,now).reasons.some(r=>r.includes('rolling forecast errors')));
   const stale=input();stale.player.fetchedAt='2026-01-01';assert.ok(buildNflForecast(stale,event,quote.market,now).reasons.some(r=>r.includes('Roster snapshot')));
 });
+
+test('official weekly injury context is diagnostic and blocks automatic paper issuance without claiming inactive',()=>{const data=input();data.officialInjuryContext={status:'PARTIAL_SUCCESS',source:'https://www.nfl.com/injuries/league/2026/reg1',
+  fetchedAt:new Date(now).toISOString(),teamRows:5,playerRows:[{injury:'Ankle',practiceStatus:'Limited Participation in Practice',gameStatus:'Questionable'}],note:'official weekly report'};
+  const forecast=buildNflForecast(data,event,quote.market,now);assert.ok(forecast.reasons.some(r=>r.includes('official weekly NFL injury report')));assert.equal(forecast.officialInjuryContext.playerRows[0].gameStatus,'Questionable');
+});
 test('a model that does not beat the simple baseline cannot issue experimental picks', () => {
   const data=input();data.observations=data.observations.map(r=>({...r,value:200,opportunity:25}));
   const f=buildNflForecast(data,event,quote.market,now);assert.ok(f.reasons.some(r=>r.includes('did not beat')));

@@ -42,7 +42,7 @@
     "lategames": "node --require ts-node/register/transpile-only src/index.ts lategames",
     "teasers": "node --require ts-node/register/transpile-only src/index.ts teasers",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint src/services/college*.ts src/services/nflPaper.ts src/services/footballGuardrail.ts src/services/footballValidation.ts src/services/closingLineTracker.ts src/services/nflContext*.ts src/services/nflDailyRun.ts src/services/nflReadiness.ts src/dev/college*.ts src/dev/nflContextAudit.ts src/tests/college*.ts src/tests/nflContext*.ts src/tests/nflDailyRun.test.ts server.ts public/college-markets.js public/nfl-markets.js",
+    "lint": "eslint src/services/college*.ts src/services/nflPaper.ts src/services/footballGuardrail.ts src/services/footballValidation.ts src/services/closingLineTracker.ts src/services/nflContext*.ts src/services/nflDailyRun.ts src/services/nflReadiness.ts src/services/nflOfficial*.ts src/services/nflFreeResearchData.ts src/services/nflSnapResearch.ts src/dev/college*.ts src/dev/nflContextAudit.ts src/tests/college*.ts src/tests/nflContext*.ts src/tests/nflDailyRun.test.ts src/tests/nflOfficial*.ts src/tests/nflFreeResearchData.test.ts src/tests/nflSnapResearch.test.ts server.ts public/college-markets.js public/nfl-markets.js",
     "test:college": "node --require ts-node/register/transpile-only --test src/tests/college*.test.ts",
     "evaluate:college": "node --require ts-node/register/transpile-only src/dev/collegeSafetyAudit.ts",
     "context:import": "node --require ts-node/register/transpile-only src/dev/collegeContextEvidenceImport.ts",

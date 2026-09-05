@@ -47,8 +47,8 @@ export class NflEvidenceArchive {
 export function nflInputCoverage(input: NflForecastInput) {
   return { playerIdentity: 'Exact ESPN player/team IDs; snapshot membership, not full transaction history.',
     availability: input.availability ? 'Game-specific evidence supplied; freshness checked separately.' : 'Missing verified game-specific availability.',
-    workload: 'Attempts/targets and recorded production only.',
-    missingFeatures: ['cross-provider ID feed', 'historical transactions', 'dated practice reports', 'snap share',
+    workload: input.snapContext?.recent.length?`Attempts/targets plus ${input.snapContext.recent.length} cross-provider recent snap observations; no snap coefficient enabled.`:'Attempts/targets and recorded production; snap context unavailable.',
+    missingFeatures: ['official cross-provider ID feed', 'historical transactions', 'forecast-time archived practice reports',
       'routes', 'red-zone opportunities', 'teammate absences', 'starting QB/line/coaching changes',
       'opponent-adjusted EPA/success/pressure', 'neutral-situation pace', 'verified venue/roof weather'],
     modelChangesEnabled: false };

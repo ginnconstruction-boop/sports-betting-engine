@@ -9,6 +9,8 @@ export const NFL_FORECAST_POLICY = Object.freeze({ minTraining: 8, maxTraining: 
   minErrors: 8, maxAgeDays: 400, minEstimatedEV: 0.05, minConditionalProbability: 0.55 });
 export interface NflForecastInput {
   workloadContext?: Awaited<ReturnType<import('./nflResearch').NflResearch['workloadContext']>>;
+  snapContext?: Awaited<ReturnType<import('./nflSnapResearch').NflverseSnapResearch['context']>>|null;
+  officialInjuryContext?:{status:string;source:string|null;fetchedAt:string|null;teamRows:number|null;playerRows:Array<{injury:string;practiceStatus:string;gameStatus:string}>;note:string}|null;
   availability?: GameAvailability;
   player: NflPlayer; observations: NflObservation[]; asOf: string;
   depth: { rows: Array<{ formation: string; position: string; listedOrder: number }>; sourceTimestamp: string | null; source: string };
@@ -90,6 +92,7 @@ export function buildNflForecast(input: NflForecastInput, event: UpcomingEvent, 
   ];
   if (!NFL_CORE_STATS[market]) throw new Error('Unsupported NFL forecast market.');
   reasons.push(...availabilityReasons(input.availability, input, event, now));
+  if(input.officialInjuryContext?.playerRows.length)reasons.push('Player appears on the official weekly NFL injury report; review practice/game status and game-day inactives before any paper selection.');
   const cutoff = Math.min(now, Date.parse(event.commenceTime), Date.parse(input.asOf));
   if (!Number.isFinite(cutoff)) throw new Error('Invalid forecast cutoff.');
   if (Date.parse(event.commenceTime) <= now) reasons.push('Kickoff has passed.');
@@ -122,7 +125,7 @@ export function buildNflForecast(input: NflForecastInput, event: UpcomingEvent, 
     asOf: input.asOf, dataHash, sources: input.sources, depth: input.depth, observations: rows,
     usableGames: rows.length, excludedGames: excluded, currentSeasonGames: currentGames,
     point, evaluation, errors, reasons, warnings, availability: input.availability ?? null, coverage: nflInputCoverage(input),
-    workloadContext: input.workloadContext ?? null };
+    workloadContext: input.workloadContext ?? null,snapContext:input.snapContext??null,officialInjuryContext:input.officialInjuryContext??null };
 }
 export type NflForecast = ReturnType<typeof buildNflForecast>;
 

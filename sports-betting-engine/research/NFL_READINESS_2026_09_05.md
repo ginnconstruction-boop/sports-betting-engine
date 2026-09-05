@@ -33,13 +33,13 @@ Run September 5 at 6:25 PM Central against the earliest upcoming NFL slate:
 | # | Area | Current state | Meaning |
 |---|---|---|---|
 | 1 | Context source registry | Ready | Each source records configuration, attempt, success, exact failure, and refresh interval. |
-| 2 | Injuries and availability | Blocked source | Dated injury/news context is diagnostic. Official game-specific inactive status is still missing. |
+| 2 | Injuries and availability | Partial | The free official weekly NFL report and dated injury/news context are diagnostic. Official game-specific inactive status is still missing. |
 | 3 | Roster, depth, QB role | Context ready | Current rosters and expected depth-chart QBs load; expected never means confirmed active. |
 | 4 | One-click NFL preflight | Ready | Full current-day slate, context refresh, and bounded grading; zero odds calls. |
 | 5 | Full-game NFL model | Research required | Quotes/manual paper tracking exist, but no independently validated NFL spread, total, or moneyline model is approved. |
 | 6 | Four core player props | Paper diagnostic | Passing yards, rushing yards, receiving yards, and receptions have experimental workload forecasts; issuance stays availability-gated. |
-| 7 | Workload | Partial | Attempts, targets, and verified team shares exist; snaps, routes, red-zone roles, and teammate interactions remain missing. |
-| 8 | Opponent matchup | Research required | No validated EPA, pressure, coverage, pace, or opponent-adjustment coefficients are active. |
+| 7 | Workload | Partial | Attempts, targets, verified team shares, and free dated snap diagnostics exist; routes, red-zone roles, and teammate interactions remain missing. |
+| 8 | Opponent matchup | Diagnostic only | Free dated team/opponent EPA, efficiency, sack, and QB-hit summaries load. No opponent-adjustment coefficient is active. |
 | 9 | Weather and venue | Context only | Provider fields are preserved when present; no unvalidated points are added or removed. |
 | 10 | Market comparison | Ready | Exact-line, two-sided reference requires three other books and rejects stale/mismatched prices. |
 | 11 | Paper record and CLV | Partial | Immutable records, grading, replay, export, corrections, and final-five-minute observations exist. Unattended verified closing capture is missing. |

@@ -2,6 +2,8 @@ import { UpcomingEvent } from '../api/oddsApiClient';
 import { MarketBoardError, MarketQuote } from './nflMarketBoard';
 import { parseWorkloadEvidence, summarizeWorkloadEvidence, WorkloadEvidence } from './nflWorkloadContext';
 import type { NflForecastInput } from './nflForecast';
+import type {NflverseSnapResearch} from './nflSnapResearch';
+import {OfficialNflInjuryReports} from './nflOfficialReports';
 
 export const NFL_RESEARCH_VERSION = 'nfl-observed-baseline-v1';
 export const NFL_CORE_STATS: Record<string, { field: string; category: string }> = {
@@ -94,7 +96,7 @@ export function parseNflDepth(data: any, player: NflPlayer, season: number) {
 export class NflResearch {
   private cache = new Map<string, { at: number; value: any }>();
   private pending = new Map<string, Promise<any>>();
-  constructor(private get: Fetcher = fetchNflJson, private now = () => Date.now()) {}
+  constructor(private get: Fetcher = fetchNflJson, private now = () => Date.now(),private snaps?:NflverseSnapResearch,private official?:OfficialNflInjuryReports) {}
   private async cached(url: string, ttl = 5 * 60_000): Promise<any> {
     const hit = this.cache.get(url);
     if (hit && this.now() - hit.at < ttl) return hit.value;
@@ -194,7 +196,15 @@ export class NflResearch {
       depth = { rows: parseNflDepth(data, player, season), source, sourceTimestamp: data.timestamp ?? null };
     } catch { /* An unavailable depth chart blocks issuance downstream. */ }
     const workloadContext = await this.workloadContext(player, observations, market, cutoff);
-    return { player, observations, asOf, depth, sources, workloadContext };
+    const snapContext=this.snaps?await this.snaps.context(player.name,season,cutoff):null;
+    let officialInjuryContext:NflForecastInput['officialInjuryContext']=null;
+    if(this.official)try{const gameId=await this.matchEvent(event),game=await this.summary(gameId),week=Number(game?.header?.week),competitors=game?.header?.competitions?.[0]?.competitors??[],
+        team=competitors.find((row:any)=>String(row?.team?.id)===player.teamId),label=String(team?.team?.name??'');
+      if(!Number.isInteger(week)||week<1||week>18||!label)throw Error('Official report event/team identity is incomplete.');const report=await this.official.report(season,week),teamRows=report.rows.filter(row=>nflName(row.team)===nflName(label)),playerRows=teamRows.filter(row=>nflName(row.player)===nflName(player.name));
+      officialInjuryContext={status:report.status,source:report.source,fetchedAt:report.fetchedAt,teamRows:report.teams.some(name=>nflName(name)===nflName(label))?teamRows.length:null,
+        playerRows:playerRows.map(row=>({injury:row.injury,practiceStatus:row.practiceStatus,gameStatus:row.gameStatus})),note:report.note};}
+    catch(error){officialInjuryContext={status:'SOURCE_FIELD_UNAVAILABLE',source:null,fetchedAt:null,teamRows:null,playerRows:[],note:error instanceof Error?error.message:'Official weekly injury report unavailable.'};}
+    return { player, observations, asOf, depth, sources, workloadContext,snapContext,officialInjuryContext };
   }
   async workloadContext(player: NflPlayer, observations: NflObservation[], market: string, cutoff: number) {
     // Explicitly bounded to five recent listed appearances. No paid odds calls.

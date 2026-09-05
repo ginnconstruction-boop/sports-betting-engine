@@ -304,13 +304,13 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
       <p class="focus-note">“Ready” below means the software function is tested, not that a profitable betting model has been proven. NFL work remains paper-only. Verified game-day inactive status, calibrated probabilities and a validated full-game model are not available yet.</p>
       <ol class="focus-note">
         <li><strong>READY:</strong> source registry records each NFL data attempt and failure.</li>
-        <li><strong>PARTIAL:</strong> dated injury/news context loads; verified official game-day inactive status still needs a source.</li>
+        <li><strong>PARTIAL:</strong> the free official NFL weekly injury report loads; the game-day inactives page still needs live-format verification.</li>
         <li><strong>READY — DIAGNOSTIC:</strong> current rosters, depth charts and expected quarterbacks load without claiming confirmed availability.</li>
         <li><strong>READY:</strong> one click checks today’s full NFL slate and grades eligible paper records without buying odds.</li>
         <li><strong>WAITING FOR VALIDATION:</strong> no approved full-game spread, moneyline or total model.</li>
         <li><strong>PAPER TEST:</strong> passing yards, rushing yards, receiving yards and receptions have experimental forecasts.</li>
-        <li><strong>PARTIAL:</strong> attempts, targets and team opportunity share exist; snaps, routes and red-zone roles do not.</li>
-        <li><strong>WAITING FOR RESEARCH:</strong> opponent-adjusted EPA, pressure, coverage and pace are not active inputs.</li>
+        <li><strong>PARTIAL:</strong> attempts, targets, team opportunity share and free snap diagnostics exist; routes and red-zone roles do not.</li>
+        <li><strong>DIAGNOSTIC:</strong> free dated team/opponent EPA, efficiency, sack and QB-hit summaries load, but have no model weight.</li>
         <li><strong>DIAGNOSTIC:</strong> weather and venue context loads when available; no unvalidated point adjustment is applied.</li>
         <li><strong>READY:</strong> exact-line market comparison requires three other books and rejects stale or mismatched prices.</li>
         <li><strong>PARTIAL:</strong> immutable paper picks, grading, replay and final-five-minute observations work; unattended closing capture is pending.</li>
@@ -1668,7 +1668,7 @@ function showToast(msg, color='green') {
   _toastTimer = setTimeout(() => { el.className = color; }, 5000);
 }
 </script>
-<script src="/nfl-markets.js?v=nfl-context-preflight-8"></script>
+<script src="/nfl-markets.js?v=nfl-official-injury-report-9"></script>
 <script src="/college-markets.js?v=college-context-refresh-7"></script>
 <div id="toast"></div>
 </body>

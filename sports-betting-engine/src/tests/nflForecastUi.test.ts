@@ -78,7 +78,7 @@ test('stat-correction control calls the audit endpoint and renders empty records
 test('all 15 NFL readiness items and specialty restrictions remain visible and honest',()=>{
   const section=html.split('id="football-readiness"')[1].split('</details>')[0];
   assert.equal((section.match(/<li>/g)||[]).length,15);
-  assert.match(section,/verified official game-day inactive status still needs a source/i);
+  assert.match(section,/free official NFL weekly injury report loads/i);
   assert.match(section,/NFL probabilities are not calibrated/);
   assert.doesNotMatch(html,/onclick="runCmd\('(firsttd|sgp-nfl|altparlays-nfl|teasers)'/);
 });
@@ -88,4 +88,5 @@ test('one-click NFL preflight is prominent and states that it spends no odds cre
   assert.match(html,/id="nfl-today-btn"[^>]*onclick="runNflToday\(\)"[^>]*>Run NFL daily preflight \+ grade \(free\)/);
   assert.match(source,/\/api\/nfl\/today/);assert.match(source,/Odds credits: 0/);assert.match(source,/No model adjustment or recommendation was created/);
   assert.match(source,/waiting for a reliable source/);assert.match(source,/not confirmed active/);
+  assert.match(source,/team\/opponent research/);assert.match(source,/Snap-share context/);assert.match(source,/no forecast adjustment/);
 });
