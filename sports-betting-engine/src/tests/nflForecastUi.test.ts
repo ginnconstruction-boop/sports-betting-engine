@@ -75,10 +75,17 @@ test('stat-correction control calls the audit endpoint and renders empty records
   assert.match(app.document.getElementById('nfl-paper-status').textContent,/0 checked/);
 });
 
-test('all 13 readiness items and specialty restrictions remain visible and honest',()=>{
+test('all 15 NFL readiness items and specialty restrictions remain visible and honest',()=>{
   const section=html.split('id="football-readiness"')[1].split('</details>')[0];
-  assert.equal((section.match(/<li>/g)||[]).length,13);
-  assert.match(section,/feed is not connected yet/);
-  assert.match(section,/Frozen holdout and feature-removal study not completed/);
+  assert.equal((section.match(/<li>/g)||[]).length,15);
+  assert.match(section,/verified official game-day inactive status still needs a source/i);
+  assert.match(section,/NFL probabilities are not calibrated/);
   assert.doesNotMatch(html,/onclick="runCmd\('(firsttd|sgp-nfl|altparlays-nfl|teasers)'/);
+});
+
+test('one-click NFL preflight is prominent and states that it spends no odds credits',()=>{
+  assert.match(html,/id="nfl-today-open"[^>]*onclick="runNflToday\(\)"/);
+  assert.match(html,/id="nfl-today-btn"[^>]*onclick="runNflToday\(\)"[^>]*>Run NFL daily preflight \+ grade \(free\)/);
+  assert.match(source,/\/api\/nfl\/today/);assert.match(source,/Odds credits: 0/);assert.match(source,/No model adjustment or recommendation was created/);
+  assert.match(source,/waiting for a reliable source/);assert.match(source,/not confirmed active/);
 });

@@ -5,6 +5,34 @@ let nflBoardBusy = false;
 let nflLoadedSelection = null;
 let nflActionBusy = false;
 const nflCore = new Set(['player_pass_yds','player_rush_yds','player_reception_yds','player_receptions']);
+let nflDailyBusy=false;
+async function runNflToday(){
+  if(nflDailyBusy)return;openNflForecast();nflDailyBusy=true;
+  const status=document.getElementById('nfl-daily-status'),panel=document.getElementById('nfl-daily-results');
+  for(const id of ['nfl-today-open','nfl-today-btn'])document.getElementById(id).disabled=true;panel.replaceChildren();status.textContent='Starting the free NFL schedule, roster, quarterback, injury/weather and paper-grade preflight...';
+  let jobId;
+  try{let job=await nflFetch('/api/nfl/today',{method:'POST',body:'{}'});jobId=job.id;
+    while(true){status.textContent=job.stage==='discovering'?'Loading today’s remaining NFL games (no odds credits)...':job.stage==='context'?'Checking current NFL context sources (no odds credits)...':`Checking ${job.grading.gamesChecked}/${job.grading.gamesPlanned} completed games for paper results...`;
+      if(job.status!=='running'){renderNflDaily(job);break;}await new Promise(resolve=>setTimeout(resolve,1000));job=await nflFetch(`/api/nfl/today/${encodeURIComponent(jobId)}`);}
+  }catch(error){status.textContent=`NFL preflight could not be confirmed: ${error.message} ${jobId?'The server may still be finishing; wait before retrying.':'No odds or recommendation was assumed.'}`;}
+  finally{for(const id of ['nfl-today-open','nfl-today-btn'])document.getElementById(id).disabled=false;nflDailyBusy=false;}
+}
+function renderNflDaily(job){
+  const status=document.getElementById('nfl-daily-status'),panel=document.getElementById('nfl-daily-results'),data=job.preflight,g=job.grading;panel.replaceChildren();
+  status.textContent=`${job.date} Central NFL preflight ${job.status}: ${data?.summary?.games??0} remaining games, ${data?.summary?.teams??0} teams; ${g.picksChecked} paper selections checked. Odds credits: 0. ${job.warnings.join(' ')}`;
+  if(!data){nflText(panel,'No completed preflight report is available. Existing paper records remain unchanged.');return;}
+  nflText(panel,`Context coverage: ${data.summary.rostersLoaded}/${data.summary.teams} rosters; ${data.summary.expectedQbs}/${data.summary.teams} expected depth-chart QBs; average ${data.summary.averageCompleteness}% diagnostic completeness; verified official game availability ${data.summary.officialAvailability}/${data.summary.teams}. No model adjustment or recommendation was created.`);
+  const sources=document.createElement('details'),sourceTitle=document.createElement('summary');sourceTitle.textContent='NFL context source status';sources.append(sourceTitle);
+  for(const source of data.sourceRegistry.sources)nflText(sources,`${source.category} — ${source.sourceName}: ${source.lastResult}; configured ${source.configured?'yes':'no'}; last attempt ${source.lastAttempt?nflDisplayTime(source.lastAttempt):'never'}${source.failureReason?`; ${source.failureReason}`:''}.`);panel.append(sources);
+  const games=document.createElement('details'),gameTitle=document.createElement('summary');gameTitle.textContent='Today’s game context';games.append(gameTitle);
+  for(const game of data.games){nflText(games,`${game.event.awayTeam} @ ${game.event.homeTeam} — ${game.teams.map(team=>`${team.teamName}: ${team.roster.status==='SUCCESS'?'roster loaded':'roster needs review'}; expected QB ${team.qb.name??'unknown'} (not confirmed active); ${team.injuries.listed===null?'injury/news list unavailable':`${team.injuries.listed} injury/news entries`}; context ${team.completeness}% complete`).join(' · ')}. Weather ${nflFriendlyStatus(game.weather.status)}; verified game-day availability ${nflFriendlyStatus(game.availability.status)}.`);}panel.append(games);
+  const checklist=document.createElement('details'),checkTitle=document.createElement('summary');checkTitle.textContent='NFL implementation checklist 1–15';checklist.append(checkTitle);
+  for(const item of data.readiness.items)nflText(checklist,`${item.id}. ${item.name} — ${nflFriendlyStatus(item.status)}: ${item.detail}`);panel.append(checklist);
+}
+function nflFriendlyStatus(value){const labels={SUCCESS:'ready',PARTIAL_SUCCESS:'partial',IMPLEMENTED:'ready',IMPLEMENTED_DIAGNOSTIC:'context only',PAPER_DIAGNOSTIC:'paper test only',
+  PARTIAL:'partial',DIAGNOSTIC_ONLY:'context only',ACTIVE:'active',BLOCKED_SOURCE:'waiting for a reliable source',RESEARCH_REQUIRED:'research required',NOT_APPROVED:'not approved',QUOTE_ONLY:'prices only',
+  NO_PROVIDER_CONFIGURED:'not connected',NO_SOURCE_ATTEMPTED:'not checked',SOURCE_RETURNED_EMPTY:'no data returned',SOURCE_FIELD_UNAVAILABLE:'data unavailable',SOURCE_HTTP_ERROR:'source unavailable',
+  SOURCE_RATE_LIMITED:'source rate-limited',SOURCE_AUTH_FAILED:'source sign-in failed',PARSER_FAILED:'data could not be read',TEAM_MATCH_FAILED:'team match failed',VALIDATION_FAILED:'validation failed'};return labels[value]??String(value).toLowerCase().replaceAll('_',' ');}
 function openNflForecast() {
   const board=document.getElementById('nfl-market-board');
   board.open=true;

@@ -16,6 +16,9 @@ import { isPausedCommand } from './src/config/productionFocus';
 import { NFL_MARKET_GROUPS, NFL_BOARD_WINDOW_DAYS } from './src/config/nflMarkets';
 import { NflMarketBoard, MarketBoardError } from './src/services/nflMarketBoard';
 import { NflResearch } from './src/services/nflResearch';
+import { NflContextIngestion } from './src/services/nflContextIngestion';
+import { NflDailyRun } from './src/services/nflDailyRun';
+import { nflReadinessChecklist } from './src/services/nflReadiness';
 import { NflPaperLedger, nflPaperReport } from './src/services/nflPaper';
 import { NflRecommendations } from './src/services/nflRecommendations';
 import { NflEvidenceArchive } from './src/services/nflEvidence';
@@ -349,6 +352,15 @@ const nflResearch = new NflResearch();
 const nflPaper = new NflPaperLedger(path.join(SNAPSHOT_DIR, 'nfl_paper_picks.json'), nflResearch);
 const nflRecommendations = new NflRecommendations(nflMarketBoard, nflResearch, nflPaper, undefined, undefined,
   new NflEvidenceArchive(path.join(SNAPSHOT_DIR, 'nfl_forecast_evidence')));
+const nflContext = new NflContextIngestion(SNAPSHOT_DIR,nflResearch);
+const nflDailyRun = new NflDailyRun({events:()=>nflMarketBoard.events(),preflight:async events=>({...await nflContext.refresh(events),readiness:nflReadinessChecklist()}),read:()=>nflPaper.read(),
+  gradeEvents:ids=>nflPaper.gradeEvents(ids),now:Date.now});
+app.post('/api/nfl/today',requireAuth,(req,res)=>{
+  if(!req.body||Array.isArray(req.body)||Object.keys(req.body).length)return res.status(400).json({error:'One-click NFL preflight accepts no games, prices, results or model overrides.'});
+  res.setHeader('Cache-Control','no-store');res.status(202).json(nflDailyRun.start());
+});
+app.get('/api/nfl/today/:id',requireAuth,(req,res)=>{try{res.setHeader('Cache-Control','no-store');res.json(nflDailyRun.get(req.params.id));}catch(error){nflError(res,error);}});
+app.get('/api/nfl/readiness',requireAuth,(_req,res)=>{res.setHeader('Cache-Control','no-store');res.json(nflReadinessChecklist());});
 app.get('/api/nfl/events', requireAuth, async (_req, res) => {
   try {
     res.json({ events: await nflMarketBoard.events(), windowDays: NFL_BOARD_WINDOW_DAYS,
@@ -676,7 +688,7 @@ app.post('/api/ats/backfill', requireAuth, async (req, res) => {
 });
 
 // ── Health ──
-app.get('/api/health', (_, res) => res.json({ ok: true, release: 'college-context-refresh-7', ts: new Date().toISOString() }));
+app.get('/api/health', (_, res) => res.json({ ok: true, release: 'nfl-context-preflight-8', ts: new Date().toISOString() }));
 
 // ── SPA fallback ──
 app.get('*', (_, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));

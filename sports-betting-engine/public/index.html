@@ -293,32 +293,39 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
     <div class="section-label">NFL first • college football second</div>
     <div class="btn-grid">
       <button class="scan-btn prime" onclick="runCmd('nfl','NFL Game Lines')"><span class="num">NFL</span>NFL Game Lines</button>
+      <button class="scan-btn prime" id="nfl-today-open" onclick="runNflToday()"><span class="num">NFL</span>NFL daily preflight + grade</button>
       <button class="scan-btn prime" id="nfl-forecast-open" aria-controls="nfl-market-board" onclick="openNflForecast()"><span class="num">NFL</span>Forecast + track</button>
       <button class="scan-btn prime" id="college-open" aria-controls="college-market-board" onclick="runCollegeToday()"><span class="num">CFB</span>College football — scan + track + grade</button>
     </div>
     <div class="focus-note">Model scans focus on game-day candidates. For early-week and specialty prices, use the market board below.</div>
 
     <details class="market-board" id="football-readiness">
-      <summary>Football readiness — 13-item catch-up checklist</summary>
-      <p class="focus-note">Software repairs do not establish profitable predictions. NFL research, quotes and manual paper tracking are available. Automatic model selections require verified game-specific availability; that feed is not connected yet. No live betting model is approved.</p>
+      <summary>NFL readiness — 15-item catch-up checklist</summary>
+      <p class="focus-note">“Ready” below means the software function is tested, not that a profitable betting model has been proven. NFL work remains paper-only. Verified game-day inactive status, calibrated probabilities and a validated full-game model are not available yet.</p>
       <ol class="focus-note">
-        <li>Spread direction: repaired; unvalidated power bonuses removed from football scoring.</li>
-        <li>ATS: selected-pick view deduplicated; unknown venues excluded from venue splits. Complete all-game/closing-line migration still pending.</li>
-        <li>Legacy probability: invented score-to-win estimates and football stake suggestions removed.</li>
-        <li>Weather: UTC-hour parser and unknown/roof safeguards tested. Verified venue/roof feed and forecast archive still pending.</li>
-        <li>Identity/availability: exact ESPN IDs and immutable attempt evidence; cross-provider IDs, transactions and verified active reports still pending.</li>
-        <li>Workload: verified recent team attempt/target shares added as descriptive context. The live forecast is unchanged; snap/route/teammate inputs and validated adjustments remain pending.</li>
-        <li>Opponent strength: generic football proxy disabled. Football-specific opponent-adjusted model still pending.</li>
-        <li>Market baseline: exact-line, two-sided no-vig comparison excludes target book; needs 3 other matched books. Descriptive only.</li>
-        <li>Validation: separate fixed-cohort shadow stat test added; no live-model promotion. Frozen holdout and feature-removal study not completed for betting probabilities; prospective validation remains pending.</li>
-        <li>Tracking: original picks, archived grading sources, read-only replay, export, corrections and final-five-minute observations. Automated final closing capture and sportsbook settlement still pending.</li>
-        <li>College: independent scoring model and experimental paper spreads after fixed validation/price gates, with frozen forecasts and win/loss tracking. Totals failed the initial holdout gate and remain research-only. Manual picks remain separately labeled.</li>
-        <li>Specialty models: disabled pending distribution/dependence validation. Quotes and supported manual paper grading remain available.</li>
-        <li>Cleanup: unsupported football score bonuses and implied professional-money influence removed; historical records retained.</li>
+        <li><strong>READY:</strong> source registry records each NFL data attempt and failure.</li>
+        <li><strong>PARTIAL:</strong> dated injury/news context loads; verified official game-day inactive status still needs a source.</li>
+        <li><strong>READY — DIAGNOSTIC:</strong> current rosters, depth charts and expected quarterbacks load without claiming confirmed availability.</li>
+        <li><strong>READY:</strong> one click checks today’s full NFL slate and grades eligible paper records without buying odds.</li>
+        <li><strong>WAITING FOR VALIDATION:</strong> no approved full-game spread, moneyline or total model.</li>
+        <li><strong>PAPER TEST:</strong> passing yards, rushing yards, receiving yards and receptions have experimental forecasts.</li>
+        <li><strong>PARTIAL:</strong> attempts, targets and team opportunity share exist; snaps, routes and red-zone roles do not.</li>
+        <li><strong>WAITING FOR RESEARCH:</strong> opponent-adjusted EPA, pressure, coverage and pace are not active inputs.</li>
+        <li><strong>DIAGNOSTIC:</strong> weather and venue context loads when available; no unvalidated point adjustment is applied.</li>
+        <li><strong>READY:</strong> exact-line market comparison requires three other books and rejects stale or mismatched prices.</li>
+        <li><strong>PARTIAL:</strong> immutable paper picks, grading, replay and final-five-minute observations work; unattended closing capture is pending.</li>
+        <li><strong>NOT APPROVED:</strong> NFL probabilities are not calibrated and Kelly staking remains disabled.</li>
+        <li><strong>QUOTE ONLY:</strong> touchdowns, attempts, completions, combined and longest props need separate validation.</li>
+        <li><strong>QUOTE ONLY:</strong> quarter and half markets need their own models; full-game logic will not be reused.</li>
+        <li><strong>ACTIVE:</strong> forward-test promotion requires enough distinct games, baseline improvement, calibration and CLV.</li>
       </ol>
     </details>
     <details class="market-board" id="nfl-market-board">
       <summary>NFL Forecast + track &amp; Market Board</summary>
+      <p class="focus-note">Start with the free NFL daily preflight. It checks every remaining game today, current rosters, expected depth-chart quarterbacks, available injury/weather context and existing paper results. It deliberately buys no odds and creates no recommendation. Load one game/category afterward only when you want prices or a core player forecast.</p>
+      <button class="scan-btn prime" id="nfl-today-btn" onclick="runNflToday()">Run NFL daily preflight + grade (free)</button>
+      <div id="nfl-daily-status" class="market-status" role="status" aria-live="polite"></div>
+      <div id="nfl-daily-results" class="focus-note"></div>
       <div class="nfl-forecast-guide">
         <strong>Forecast + track — start here</strong>
         <ol>
@@ -1661,7 +1668,7 @@ function showToast(msg, color='green') {
   _toastTimer = setTimeout(() => { el.className = color; }, 5000);
 }
 </script>
-<script src="/nfl-markets.js?v=college-safety-2"></script>
+<script src="/nfl-markets.js?v=nfl-context-preflight-8"></script>
 <script src="/college-markets.js?v=college-context-refresh-7"></script>
 <div id="toast"></div>
 </body>
