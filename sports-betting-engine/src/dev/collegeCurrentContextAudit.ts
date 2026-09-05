@@ -8,6 +8,7 @@ import {ESPN_COLLEGE} from '../services/collegeResearch';
 
 async function main(){
   const compact=process.argv[2]??new Date().toISOString().slice(0,10).replace(/-/g,'');
+  const brief=process.argv.includes('--compact');
   if(!/^\d{8}$/.test(compact))throw Error('Usage: collegeCurrentContextAudit.ts YYYYMMDD');
   const season=Number(compact.slice(0,4)),url=`${ESPN_COLLEGE}/scoreboard?dates=${compact}&groups=80&limit=500`,retrieved=Date.now(),response=await fetch(url,{signal:AbortSignal.timeout(20_000)});
   if(!response.ok)throw Error(`ESPN scoreboard ${response.status}`);const data:any=await response.json(),root=fs.mkdtempSync(path.join(os.tmpdir(),'college-context-audit-'));
@@ -21,8 +22,8 @@ async function main(){
     const concise=(team:any)=>({team:team.teamName,completeness:team.completeness,reliability:team.reliability,qb:team.qb,roster:team.sections.roster.status,
       returningProduction:team.sections.returningProduction.status,transfers:team.sections.transfers.status,coaching:team.sections.coaching.status,
       talentDepth:team.sections.talentDepth.status,currentSeason:team.currentSeason,fcsTier:team.fcsTier.value??'UNKNOWN_FCS',injuries:team.sections.injuries.status,weather:team.sections.weather.status,
-      weatherValues:team.weather,missingDiagnostics:Object.fromEntries(Object.values(team.sections).flatMap((section:any)=>Object.entries(section.fields)).filter(([,field]:any)=>field.status!=='AVAILABLE')
-        .map(([field,value]:any)=>[field,value.diagnosticReason]))});
+      weatherValues:team.weather,...brief?{}:{missingDiagnostics:Object.fromEntries(Object.values(team.sections).flatMap((section:any)=>Object.entries(section.fields)).filter(([,field]:any)=>field.status!=='AVAILABLE')
+        .map(([field,value]:any)=>[field,value.diagnosticReason]))}});
     const resolvedTeams:any[]=[];
     const summary=games.map((g:any)=>{const resolve=(team:any)=>{const initial=resolveCollegeTeamContext(refreshed.records,{teamId:team.teamId,teamName:team.teamName,season,eventId:g.eventId,asOf:forecastAt,currentGames:0});
         return resolveCollegeTeamContext(refreshed.records,{teamId:team.teamId,teamName:team.teamName,season,eventId:g.eventId,asOf:forecastAt,currentGames:Number(initial.currentSeason.gamesPlayed??0)});},away=resolve(g.away),home=resolve(g.home);
@@ -31,9 +32,15 @@ async function main(){
         openingHomeSpread:field('market.openingHomeSpread'),currentHomeSpread:field('market.currentHomeSpread'),movementPoints:field('market.movementPoints'),direction:field('market.movementDirection')}};});
     const values=resolvedTeams.map(team=>team.completeness).sort((a,b)=>a-b),fieldBlocks:Record<string,number>={};
     for(const team of resolvedTeams)for(const section of Object.values(team.sections) as any[])for(const [field,resolved] of Object.entries(section.fields) as any)if(resolved.status!=='AVAILABLE')fieldBlocks[field]=(fieldBlocks[field]??0)+1;
+    const distribution={'0–19%':values.filter(value=>value<20).length,'20–39%':values.filter(value=>value>=20&&value<40).length,
+      '40–59%':values.filter(value=>value>=40&&value<60).length,'60–79%':values.filter(value=>value>=60&&value<80).length,'80%+':values.filter(value=>value>=80).length};
+    const representative=new Set(['Ohio Bobcats @ Nebraska Cornhuskers','Coastal Carolina Chanticleers @ West Virginia Mountaineers','Oregon State Beavers @ Houston Cougars',
+      'Arkansas State Red Wolves @ Memphis Tigers','Clemson Tigers @ LSU Tigers','UNLV Rebels @ Hawai\'i Rainbow Warriors','Bryant Bulldogs @ Army Black Knights']);
     console.log(JSON.stringify({date:compact,source:url,retrievedAt:new Date(retrieved).toISOString(),sportsbookOddsCalls:0,records:refreshed.total,warnings:refreshed.warnings,
+      storage:refreshed.storage,sourceRegistry:refreshed.sourceRegistry,
       completeness:{teams:values.length,average:values.reduce((sum,value)=>sum+value,0)/values.length,median:(values[Math.floor((values.length-1)/2)]+values[Math.ceil((values.length-1)/2)])/2,
-        atLeast80:values.filter(value=>value>=80).length,fieldBlocks},games:summary},null,2));
+        minimum:values[0]??null,maximum:values.at(-1)??null,distribution,atLeast80:values.filter(value=>value>=80).length,fieldBlocks},
+      games:process.argv.includes('--representative')?summary.filter((game:any)=>representative.has(game.game)):summary},null,2));
   }finally{fs.rmSync(root,{recursive:true,force:true});}
 }
 main().catch(error=>{console.error(error instanceof Error?error.message:String(error));process.exitCode=1;});

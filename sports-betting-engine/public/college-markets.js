@@ -99,6 +99,11 @@ function renderCollegeDayScan(data){
       }
       nflText(details,r.limitations);panel.append(details);
     }
+    if(data.contextSourceRegistry){const registry=document.createElement('details'),heading=document.createElement('summary');heading.textContent='Current football-context source status';registry.append(heading);
+      nflText(registry,`Evidence load: ${data.contextStorage?.loadStatus??data.contextSourceRegistry.loadStatus}; evidence store: ${data.contextStorage?.storeStatus??'not run'}; source-registry store: ${data.contextStorage?.registryStore?.status??'not run'}.`);
+      for(const source of data.contextSourceRegistry.sources)nflText(registry,`${source.category} — ${source.sourceName}: ${source.lastResult}; enabled ${source.enabled?'yes':'no'}; configured ${source.configured?'yes':'no'}; credentials ${source.credentialsRequired?(source.credentialsPresent?'present':'missing'):'not required'}; refresh ${source.refreshInterval}; last attempt ${source.lastAttempt?nflDisplayTime(source.lastAttempt):'never'}; last success ${source.lastSuccess?nflDisplayTime(source.lastSuccess):'never'}${source.failureReason?`; detail ${source.failureReason}`:''}.`);
+      panel.append(registry);
+    }
     if(!data.providerGames)nflText(panel,data.providerScheduleAvailable?'No games listed by the odds provider for this date. This is a schedule/coverage result, not a no-edge conclusion.':'The game feed failed. This is not a successful empty scan.');
     if(!data.providerGames&&data.nextDate){
       const next=document.createElement('button');next.textContent=`Scan next listed game day: ${data.nextDate}`;

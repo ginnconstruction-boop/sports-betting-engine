@@ -60,7 +60,7 @@ test('ingestion diagnostics distinguish parser failure, team mismatch, source em
   assert.equal(parser.find(r=>r.field==='qb.ingestionStatus')?.value,'PARSER_FAILED');assert.equal(mismatch.find(r=>r.field==='qb.ingestionStatus')?.value,'TEAM_MATCH_FAILED');
   const partial=contextRecordsFromEspnSummary({header:{competitions:[{competitors:[{team:{id:'164'}}]}]},gameInfo:{weather:{temperature:75,gust:9}}},[team],'https://site.api.espn.com/summary',asOf,hash).map(withId);
   const wind=resolveContextField(partial,{teamId:'164',season:2026,eventId:'2',field:'weather.windMph',asOf});
-  assert.equal(wind.status,'MISSING');assert.equal(wind.diagnosticReason,'SOURCE_RETURNED_EMPTY');
+  assert.equal(wind.status,'MISSING');assert.equal(wind.diagnosticReason,'SOURCE_FIELD_UNAVAILABLE');
   const qb=resolveContextField(partial,{teamId:'164',season:2026,eventId:'2',field:'qb.starterName',asOf});assert.equal(qb.diagnosticReason,'SOURCE_RETURNED_EMPTY');
 });
 test('context completeness is transparent, separate from reliability and never creates point adjustments',()=>{

@@ -10,6 +10,7 @@ import { exactMarketBaseline } from './footballMarketBaseline';
 import { ESPN_COLLEGE,matchCollegeEvent } from './collegeResearch';
 import { fetchNflJson } from './nflResearch';
 import type { CollegePredictions } from './collegePredictions';
+import {safeContextFailure} from './collegeContextSources';
 
 export const COLLEGE_SCAN_VERSION='college-day-model-paper-v1';
 export const COLLEGE_TIMEZONE='America/Chicago';
@@ -124,7 +125,7 @@ export class CollegeDayScan {
     const counts:Record<string,number>={};for(const row of rows)counts[row.status]=(counts[row.status]??0)+1;
     let modelResult:any={recommendations:[],projections:[],recommendationStatus:'blocked_model_validation'};
     if(this.model){try{modelResult=await this.model.scan(rows,raw,trackPaper);warnings.push(...modelResult.warnings);}
-      catch{warnings.push('College prediction service failed its integrity or availability checks. No model recommendation was assumed.');}}
+      catch(error){warnings.push(`College prediction service failed its integrity or availability checks: ${safeContextFailure(error)}. No model recommendation was assumed.`);}}
     const report={id:randomUUID(),version:COLLEGE_SCAN_VERSION,date,timezone:COLLEGE_TIMEZONE,scannedAt:new Date(this.deps.now()).toISOString(),
       coverage:providerOk&&scheduleOk?'checked_against_two_feeds':'incomplete',providerScheduleAvailable:providerOk,independentScheduleAvailable:scheduleOk,
       providerGames:games.length,independentScheduledGames:scheduleOk?schedule.length:null,unmatchedScheduledGames:unlisted.length,

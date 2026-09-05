@@ -1,5 +1,8 @@
 # College current-context ingestion audit — September 4, 2026
 
+> Superseded for the live ingestion failure by the
+> [September 5 context-refresh repair](COLLEGE_CONTEXT_REFRESH_REPAIR_2026_09_05.md).
+
 ## Outcome
 
 The pipeline was retrieving useful ESPN data and then discarding it. The repair

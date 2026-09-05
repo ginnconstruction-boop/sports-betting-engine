@@ -4,7 +4,9 @@ import {createHash,randomUUID} from 'crypto';
 
 export const COLLEGE_CONTEXT_EVIDENCE_VERSION='college-context-evidence-v1';
 export type ContextDomain='qb'|'roster'|'returning_production'|'transfers'|'coaching'|'talent'|'fcs'|'injuries'|'weather'|'current_season'|'market';
-export type ContextIngestionReason='NO_SOURCE_ATTEMPTED'|'SOURCE_RETURNED_EMPTY'|'PARSER_FAILED'|'TEAM_MATCH_FAILED'|'STALE_SOURCE'|'CONFLICTING_SOURCES'|'VALIDATION_FAILED'|'DATA_PROVIDER_UNAVAILABLE';
+export type ContextIngestionReason='SUCCESS'|'PARTIAL_SUCCESS'|'NO_PROVIDER_CONFIGURED'|'NO_SOURCE_ATTEMPTED'|'SOURCE_RETURNED_EMPTY'|
+  'SOURCE_FIELD_UNAVAILABLE'|'SOURCE_HTTP_ERROR'|'SOURCE_RATE_LIMITED'|'SOURCE_AUTH_FAILED'|'PARSER_FAILED'|'TEAM_MATCH_FAILED'|'STALE_SOURCE'|
+  'CONFLICTING_SOURCES'|'VALIDATION_FAILED'|'STORE_FAILED'|'LOAD_FAILED'|'DATA_PROVIDER_UNAVAILABLE';
 export type QbStatus='CONFIRMED'|'EXPECTED'|'COMPETITION'|'QUESTIONABLE'|'OUT'|'UNKNOWN';
 export type AvailabilityStatus='OUT'|'DOUBTFUL'|'QUESTIONABLE'|'PROBABLE'|'AVAILABLE'|'UNKNOWN';
 export type ContextReliability='HIGH'|'MEDIUM'|'LOW'|'INSUFFICIENT';
@@ -50,7 +52,8 @@ const REQUIRED={
 const INGESTION_FIELDS:Record<ContextDomain,string>={qb:'qb.ingestionStatus',roster:'roster.ingestionStatus',returning_production:'returning.ingestionStatus',
   transfers:'transfers.ingestionStatus',coaching:'coaching.ingestionStatus',talent:'talent.ingestionStatus',fcs:'fcs.ingestionStatus',injuries:'injuries.ingestionStatus',
   weather:'weather.ingestionStatus',current_season:'current.ingestionStatus',market:'market.ingestionStatus'};
-const INGESTION_FAILURES=new Set<ContextIngestionReason>(['SOURCE_RETURNED_EMPTY','PARSER_FAILED','TEAM_MATCH_FAILED','VALIDATION_FAILED','DATA_PROVIDER_UNAVAILABLE']);
+const INGESTION_FAILURES=new Set<ContextIngestionReason>(['NO_PROVIDER_CONFIGURED','SOURCE_RETURNED_EMPTY','SOURCE_FIELD_UNAVAILABLE','SOURCE_HTTP_ERROR',
+  'SOURCE_RATE_LIMITED','SOURCE_AUTH_FAILED','PARSER_FAILED','TEAM_MATCH_FAILED','VALIDATION_FAILED','STORE_FAILED','LOAD_FAILED','DATA_PROVIDER_UNAVAILABLE']);
 
 function stable(value:any):string {
   if(Array.isArray(value))return'['+value.map(stable).join(',')+']';
@@ -87,7 +90,7 @@ export function loadCollegeContextRecords(root:string):CollegeContextRecord[]{
 }
 /** Atomic append-only index plus a content-addressed copy of every field record. */
 export function appendCollegeContextRecords(root:string,incoming:NewCollegeContextRecord[]){
-  if(!Array.isArray(incoming)||incoming.length>5000)throw Error('Expected at most 5000 context records');
+  if(!Array.isArray(incoming)||incoming.length>50_000)throw Error('Expected at most 50000 context records');
   const existing=loadCollegeContextRecords(root),byId=new Map(existing.map(r=>[r.id,r])),dir=directory(root);fs.mkdirSync(path.join(dir,'records'),{recursive:true});
   for(const row of incoming){validateContextRecord(row);const id=createHash('sha256').update(stable(row)).digest('hex'),record:CollegeContextRecord={id,schema:1,...structuredClone(row)};
     const prior=byId.get(id);if(prior)continue;byId.set(id,record);
@@ -97,8 +100,12 @@ export function appendCollegeContextRecords(root:string,incoming:NewCollegeConte
   const tmp=path.join(dir,randomUUID()+'.tmp');fs.writeFileSync(tmp,JSON.stringify({schema:1,version:COLLEGE_CONTEXT_EVIDENCE_VERSION,records},null,2),{flag:'wx'});
   fs.renameSync(tmp,path.join(dir,'index.json'));return{added:records.length-existing.length,total:records.length};
 }
+export function materializeCollegeContextRecords(incoming:NewCollegeContextRecord[]):CollegeContextRecord[]{
+  return incoming.map(row=>{validateContextRecord(row);return{id:createHash('sha256').update(stable(row)).digest('hex'),schema:1,...structuredClone(row)};});
+}
+export function hashCollegeContextPayload(payload:unknown){return createHash('sha256').update(stable(payload)).digest('hex');}
 export function archiveCollegeContextPayload(root:string,payload:unknown){
-  const bytes=stable(payload),hash=createHash('sha256').update(bytes).digest('hex'),dir=path.join(directory(root),'raw');fs.mkdirSync(dir,{recursive:true});
+  const hash=hashCollegeContextPayload(payload),dir=path.join(directory(root),'raw');fs.mkdirSync(dir,{recursive:true});
   const file=path.join(dir,hash+'.json');try{fs.writeFileSync(file,JSON.stringify(payload),{flag:'wx'});}catch(e:any){if(e.code!=='EEXIST')throw e;}
   return hash;
 }
@@ -117,7 +124,7 @@ export function resolveContextField(records:CollegeContextRecord[],args:{teamId:
     .sort((a,b)=>Date.parse(b.source.retrievedAt)-Date.parse(a.source.retrievedAt))[0];
   const missingReason=():ContextIngestionReason=>fieldDiagnostic&&INGESTION_FAILURES.has(fieldDiagnostic.value as ContextIngestionReason)
     ?fieldDiagnostic.value as ContextIngestionReason:diagnostic&&INGESTION_FAILURES.has(diagnostic.value as ContextIngestionReason)
-      ?diagnostic.value as ContextIngestionReason:'NO_SOURCE_ATTEMPTED';
+      ?diagnostic.value as ContextIngestionReason:diagnostic?'SOURCE_RETURNED_EMPTY':'NO_SOURCE_ATTEMPTED';
   const known=records.filter(r=>r.field===args.field&&applicable(r,args.teamId,args.season,args.eventId,args.asOf));
   if(!known.length)return{field:args.field,value:null,status:'MISSING',reliability:'INSUFFICIENT',records:[],diagnosticReason:missingReason()};
   const fresh=known.filter(r=>args.asOf-Date.parse(r.source.retrievedAt)<=DOMAIN_TTL[r.domain]);

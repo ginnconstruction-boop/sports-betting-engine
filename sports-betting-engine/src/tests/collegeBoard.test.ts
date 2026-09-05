@@ -75,6 +75,7 @@ test('college scan UI leads with plain-language recommendation/watch/pass/avoid 
   const script=fs.readFileSync(path.join(__dirname,'../../public/college-markets.js'),'utf8');
   assert.match(script,/SIMPLE READ/);assert.match(script,/RECOMMENDATION = qualified paper play/);assert.match(script,/WATCH ONLY — raw model lean/);
   assert.match(script,/Today’s run finished with safety notices/);assert.doesNotMatch(script,/Run finished with issues/);
+  assert.match(script,/Current football-context source status/);assert.match(script,/source\.lastResult/);
 });
 test('simple read renders a plain label and explanation for every projected game',()=>{
   const app=ui(async()=>({})),projection=(classification:string,qualified=false)=>({event:{...game},projection:{awayScore:20,homeScore:24,total:44},market:{side:'Away',line:3.5},
