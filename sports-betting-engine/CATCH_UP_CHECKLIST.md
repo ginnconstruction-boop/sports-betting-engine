@@ -1,6 +1,31 @@
 # Football catch-up checklist
 
-Updated September 4, 2026 (America/Chicago).
+Updated September 5, 2026 (America/Chicago).
+
+## September 4 outcome review — college-sep4-review-6
+
+The honest official recommendation record for the two explicitly audited games
+was **0–0** because neither cleared the PAPER BET/LEAN gates. The single
+**WATCH** side, Eastern Michigan -2.5, lost 27–21 to San Jose State (**0–1
+watch-only**). The blocked **AVOID / MODEL WARNING** side, Stanford +24.5, also
+lost when Miami won 45–6. Counting both raw directions only as a hypothetical
+diagnostic gives **0–2**, not an official betting record.
+
+Both misses opposed the observed market-movement direction. That is useful
+forward-test evidence, but two games do not justify a formula or threshold
+change. The model and safety gates were not retuned. The website record is now
+easier to read: it separately totals official model paper recommendations,
+watch-only observations, and manual practice picks before the detailed buckets.
+See the [September 4 outcome report](research/COLLEGE_BACKTEST_2026_09_04.md).
+
+All 164 automated tests, the server build/typecheck and lint passed; the
+production dependency audit is clear. Historical spread/total/calibration
+metrics are unchanged.
+
+**Next action:** refresh the website, click **College football — scan + track +
+grade**, and read the three plain record lines below the scan. Today's model will
+ingest completed 2026 games normally, but yesterday's results will not be used
+to rewrite yesterday's frozen observations.
 
 ## September 4 context-ingestion repair — college-context-ingestion-5
 

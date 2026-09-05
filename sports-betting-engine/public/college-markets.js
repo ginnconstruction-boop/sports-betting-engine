@@ -242,6 +242,16 @@ async function saveCollegePaper(quote) {
   }catch(e){collegeStatus(e.message);}finally{collegeSetBusy(false);renderCollegeQuotes();}
 }
 let collegePaperBusy=false;
+function collegePaperPlainSummary(buckets){
+  const add=(rows)=>rows.reduce((a,b)=>({wins:a.wins+(b.wins??0),losses:a.losses+(b.losses??0),pushes:a.pushes+(b.pushes??0),
+    pending:a.pending+(b.pending??0),review:a.review+(b.review??0),units:a.units+(b.profitUnits??0)}),{wins:0,losses:0,pushes:0,pending:0,review:0,units:0});
+  const model=buckets.filter(b=>b.origin==='model'),qualified=add(model.filter(b=>['PAPER BET','PAPER LEAN'].includes(b.classification))),
+    watch=add(model.filter(b=>b.classification==='PAPER MONITOR')),manual=add(buckets.filter(b=>b.origin!=='model'));
+  const line=(label,r,note)=>`${label}: ${r.wins}W–${r.losses}L–${r.pushes}P; ${r.pending} pending; ${r.review} review; ${nflFixed(r.units,2)} hypothetical units.${note}`;
+  return [line('OFFICIAL MODEL PAPER RECOMMENDATIONS',qualified,''),
+    line('WATCH-ONLY MODEL OBSERVATIONS',watch,' These are tracked model leans, not recommendations.'),
+    line('YOUR MANUAL PRACTICE PICKS',manual,' These are your selections, not model recommendations.')];
+}
 async function loadCollegePaper(mode) {
   if(collegeDailyBusy&&mode)return;
   if(collegePaperBusy)return;collegePaperBusy=true;
@@ -251,6 +261,7 @@ async function loadCollegePaper(mode) {
     const endpoint=mode==='recheck'?'/api/college/paper/recheck':mode?'/api/college/paper/grade':'/api/college/paper';
     const data=await nflFetch(endpoint,mode?{method:'POST'}:{});panel.replaceChildren();
     status.textContent=`${data.picks.length} college paper selections. ${mode?`${data.checked} checked; ${data.remainingGames} more games; ${data.sourceFailures??0} unavailable/review checks. `:''}Separate from NFL and official records. Grading is on demand; sportsbook rules require separate verification.`;
+    for(const summary of collegePaperPlainSummary(data.report.buckets))nflText(panel,summary,'strong');
     for(const b of data.report.buckets)nflText(panel,`${b.season} · ${b.market} · ${b.classification??(b.origin==='model'?'EXPERIMENTAL MODEL PAPER':'MANUAL PAPER')} · ${b.version}: ${b.wins}W–${b.losses}L–${b.pushes}P; ${b.pending} pending; ${b.review} review; ${nflFixed(b.profitUnits,2)} hypothetical units; settled ROI ${b.roi==null?'unavailable':nflFixed(b.roi*100)+'%'}.`);
     if(data.clv){const c=data.clv;nflText(panel,`Separate CLV observation proxies: ${c.lineSamples}/${c.tracked} line samples; average ${c.averageSpreadClv==null?'unavailable':nflFixed(c.averageSpreadClv,2)} pts; median ${c.medianSpreadClv==null?'unavailable':nflFixed(c.medianSpreadClv,2)} pts; positive ${c.positiveClvRate==null?'unavailable':nflFixed(c.positiveClvRate*100,1)+'%'}. Exact-line price CLV ${c.averagePriceClv==null?'unavailable':nflFixed(c.averagePriceClv,2)+' percentage points'} (${c.priceSamples} samples). ${c.note}`);}
     for(const m of data.metrics??[])nflText(panel,`${m.distinctSettledGames} distinct settled games; ${m.settlementRevisions} result corrections; ${m.closeWindowCaptured} final-five-minute observations, ${m.closeWindowMissed} missed. These are not verified final closing prices or calibrated model results.`);

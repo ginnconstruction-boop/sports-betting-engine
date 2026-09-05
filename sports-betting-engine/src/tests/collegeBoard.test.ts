@@ -86,6 +86,20 @@ test('simple read renders a plain label and explanation for every projected game
   assert.match(rendered,/PASS — Away @ Home: No usable recommendation/);assert.match(rendered,/AVOID — Away @ Home: The model and market disagree too much/);
 });
 
+test('college paper record plainly separates recommendations, watch-only observations and manual picks',async()=>{
+  const buckets=[
+    {origin:'model',classification:'PAPER BET',wins:1,losses:0,pushes:0,pending:0,review:0,profitUnits:.91},
+    {origin:'model',classification:'PAPER MONITOR',wins:0,losses:1,pushes:0,pending:1,review:0,profitUnits:-1},
+    {origin:'manual',wins:2,losses:1,pushes:1,pending:0,review:1,profitUnits:.5},
+  ];
+  const app=ui(async()=>({picks:[],report:{buckets}}));await app.run('loadCollegePaper(false)');
+  const panel=app.document.getElementById('college-paper-results'),text=panel.children.map(c=>c.textContent).join(' ');
+  assert.match(text,/OFFICIAL MODEL PAPER RECOMMENDATIONS: 1W–0L–0P/);
+  assert.match(text,/WATCH-ONLY MODEL OBSERVATIONS: 0W–1L–0P; 1 pending/);
+  assert.match(text,/not recommendations/);
+  assert.match(text,/YOUR MANUAL PRACTICE PICKS: 2W–1L–1P/);
+});
+
 test('one-click UI ignores date/checkbox, sends one start request and displays grading progress',async()=>{
   const calls:any[]=[];let polls=0;
   const scan={date:'2026-09-04',providerGames:2,gamesWithFreshOdds:2,unmatchedScheduledGames:0,creditsUsed:2,
