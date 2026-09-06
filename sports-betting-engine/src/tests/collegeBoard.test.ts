@@ -73,7 +73,7 @@ test('college main-menu invokes one-click workflow; expanding the section alone 
 });
 test('college scan UI leads with plain-language recommendation/watch/pass/avoid meanings',()=>{
   const script=fs.readFileSync(path.join(__dirname,'../../public/college-markets.js'),'utf8');
-  assert.match(script,/SIMPLE READ/);assert.match(script,/RECOMMENDATION = qualified paper play/);assert.match(script,/WATCH ONLY — raw model lean/);
+  assert.match(script,/SIMPLE READ/);assert.match(script,/RECOMMENDATION = qualified paper play/);assert.match(script,/WATCH ONLY — NO SIDE RECOMMENDED/);
   assert.match(script,/Today’s run finished with safety notices/);assert.doesNotMatch(script,/Run finished with issues/);
   assert.match(script,/Current football-context source status/);assert.match(script,/source\.lastResult/);
 });
@@ -83,7 +83,8 @@ test('simple read renders a plain label and explanation for every projected game
   app.run(`renderCollegeDiagnostic=()=>{};renderCollegeDayScan(${JSON.stringify({date:'2026-09-03',recommendations:[],monitors:[],projections:[
     projection('PAPER MONITOR'),projection('PAPER PASS'),projection('MODEL WARNING')],recommendationNote:'Paper only.',warnings:[],shortlist:[],counts:{},rows:[],unlisted:[]})})`);
   const text=(node:Element):string=>[node.textContent,...node.children.map(text)].join(' '),rendered=text(app.document.getElementById('college-scan-results'));
-  assert.match(rendered,/WATCH — Away @ Home: Raw model leans Away \+3\.5, but the evidence is not strong enough/);
+  assert.match(rendered,/WATCH — Away @ Home: Football context or calibration is incomplete, so no side is shown or recommended/);
+  assert.doesNotMatch(rendered,/WATCH — Away @ Home:.*Away \+3\.5/);
   assert.match(rendered,/PASS — Away @ Home: No usable recommendation/);assert.match(rendered,/AVOID — Away @ Home: The model and market disagree too much/);
 });
 

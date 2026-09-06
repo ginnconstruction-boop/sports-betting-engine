@@ -64,10 +64,10 @@ function renderCollegeDayScan(data){
     if(!data.recommendations.length)nflText(panel,'NO RELIABLE EDGE — monitor/warning classifications are not qualified paper bets.','strong');
     nflText(panel,data.recommendationNote);
     const simple=document.createElement('div');simple.className='nfl-forecast-guide';nflText(simple,'SIMPLE READ','strong');
-    nflText(simple,'RECOMMENDATION = qualified paper play · WATCH = model direction, but not enough verified evidence · PASS = neutral/no useful edge · AVOID = data or model warning.');
+    nflText(simple,'RECOMMENDATION = qualified paper play · WATCH = worth reviewing later, but no side is recommended · PASS = neutral/no useful edge · AVOID = data or model warning.');
     for(const row of data.projections??[]){const s=row.safety,q=row.market;let label,explanation;
       if(s.qualified){label='RECOMMENDATION';explanation=`Paper-only recommendation: ${q?`${q.side} ${q.line>0?'+':''}${q.line}`:'spread candidate'}.`;}
-      else if(s.classification==='PAPER MONITOR'){label='WATCH';explanation=`Raw model leans ${q?`${q.side} ${q.line>0?'+':''}${q.line}`:'one side'}, but the evidence is not strong enough to recommend it.`;}
+      else if(s.classification==='PAPER MONITOR'){label='WATCH';explanation='Football context or calibration is incomplete, so no side is shown or recommended.';}
       else if(s.classification==='MODEL WARNING'){label='AVOID';explanation='The model and market disagree too much for the available football information. Do not treat this as a pick.';}
       else{label='PASS';explanation='No usable recommendation from this game.';}
       nflText(simple,`${label} — ${row.event.awayTeam} @ ${row.event.homeTeam}: ${explanation}`,label==='RECOMMENDATION'?'strong':undefined);
@@ -79,11 +79,11 @@ function renderCollegeDayScan(data){
     for(const rec of [...data.recommendations,...(data.monitors??[])]){
       const pick=rec.pick,q=pick.quote,p=pick.collegeForecast.projection,card=document.createElement('div');card.className='nfl-forecast-guide';
       const classification=pick.collegeForecast.safety?.classification??'LEGACY EXPERIMENTAL PAPER';
-      nflText(card,`${classification==='PAPER MONITOR'?'WATCH ONLY — raw model lean':'PAPER RECOMMENDATION'}: ${q.side} ${q.line>0?'+':''}${q.line} · ${q.book} ${q.price>0?'+':''}${q.price}`,'strong');
+      nflText(card,classification==='PAPER MONITOR'?'WATCH ONLY — NO SIDE RECOMMENDED':`PAPER RECOMMENDATION: ${q.side} ${q.line>0?'+':''}${q.line} · ${q.book} ${q.price>0?'+':''}${q.price}`,'strong');
       nflText(card,`${pick.event.awayTeam} @ ${pick.event.homeTeam} — ${nflDisplayTime(pick.event.commenceTime)}`);
-      nflText(card,`Model score: ${pick.event.awayTeam} ${nflFixed(p.awayScore,1)}; ${pick.event.homeTeam} ${nflFixed(p.homeScore,1)}. Fair home spread ${nflFixed(p.fairHomeSpread,1)}. ${p.neutral?'Neutral venue.':'Non-neutral venue.'}`);
+      if(classification!=='PAPER MONITOR')nflText(card,`Model score: ${pick.event.awayTeam} ${nflFixed(p.awayScore,1)}; ${pick.event.homeTeam} ${nflFixed(p.homeScore,1)}. Fair home spread ${nflFixed(p.fairHomeSpread,1)}. ${p.neutral?'Neutral venue.':'Non-neutral venue.'}`);
       nflText(card,`${rec.duplicate?'Already tracked: ORIGINAL pick/price retained, not a refreshed offer.':'Saved before display.'} ${pick.result} · ${p.homeGames}/${p.awayGames} prior games (home/away); current-season games ${p.homeCurrentGames}/${p.awayCurrentGames}.`);
-      nflText(card,classification==='PAPER MONITOR'?'Why it is only a watch: current football evidence or calibration is incomplete. It is not a recommendation.':'Paper testing only; no real-money or stake recommendation.');panel.append(card);
+      nflText(card,classification==='PAPER MONITOR'?'Why it is only a watch: current football evidence or calibration is incomplete. The underlying line is retained in the audit record for model learning, but hidden here so it cannot be mistaken for a recommendation.':'Paper testing only; no real-money or stake recommendation.');panel.append(card);
     }
     if(data.modelReadiness){const r=data.modelReadiness,v=r.validation,a=r.oddsAudit;
       const details=document.createElement('details'),summary=document.createElement('summary');summary.textContent='Model test results and limitations';details.append(summary);
