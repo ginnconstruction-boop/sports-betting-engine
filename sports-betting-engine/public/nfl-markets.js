@@ -247,11 +247,20 @@ async function loadNflPaper(grade) {
       const bins=m.calibration.filter(b=>b.count);
       if(bins.length)nflText(panel,'Calibration (non-push): '+bins.map(b=>`${b.count} picks: predicted ${nflPct(b.meanPredictedNonPush)}, observed ${nflPct(b.observedNonPushWinRate)}`).join('; ')+'. Small/correlated samples remain uncertain.');
     }
+    if(data.forwardGate){
+      const gate=document.createElement('details'),title=document.createElement('summary');title.textContent='Forward evidence gates for the four core props';gate.append(title);
+      nflText(gate,'These gates were frozen before 2026 results. Passing permits a separate research review only—never real-money betting or Kelly staking.');
+      for(const market of data.forwardGate.markets){
+        const failed=market.checks.filter(check=>!check.pass).map(check=>`${check.id.replace(/_/g,' ')} ${JSON.stringify(check.value)} (needs ${check.required})`);
+        nflText(gate,`${market.market.replace(/_/g,' ')} — ${market.status.replace(/_/g,' ')}. ${market.settled} settled picks across ${market.distinctGames} games; model MAE ${nflFixed(market.modelMae)} vs simple average ${nflFixed(market.baselineMae)}; binary Brier ${nflFixed(market.binaryBrier,3)}; observed late quotes ${market.observedCloseWindows}, verified closes ${market.verifiedCloses}. ${failed.length?`Still needed: ${failed.join('; ')}.`:'All frozen checks passed; independent review is still required.'}`);
+      }
+      nflText(gate,data.forwardGate.note);panel.append(gate);
+    }
     const table=document.createElement('table');table.className='market-table';
-    const header=document.createElement('tr');for(const title of ['Origin / model','Game','Selection','Saved price / book','Result','Latest same-line pregame price','Notes']){const th=document.createElement('th');th.textContent=title;header.append(th);}table.append(header);
+    const header=document.createElement('tr');for(const title of ['Origin / model','Game','Selection','Saved price / book','Result','Latest pregame line / price','Notes']){const th=document.createElement('th');th.textContent=title;header.append(th);}table.append(header);
     for(const p of [...data.picks].reverse().slice(0,100)){
       const row=document.createElement('tr');
-      const values=[`${p.origin==='model'?'MODEL PAPER':'MANUAL PAPER'} / ${p.version}`,`${p.event.awayTeam} @ ${p.event.homeTeam} · ${nflDisplayTime(p.event.commenceTime)}`,`${p.quote.market} ${p.quote.participant} ${p.quote.side} ${p.quote.line??''}`,`${p.quote.price>0?'+':''}${p.quote.price} / ${p.quote.book}`,p.result,p.latestPregame?`${p.latestPregame.price} at ${nflDisplayTime(p.latestPregame.updatedAt)} (not a verified closing line)`:'Not captured',p.note];
+      const values=[`${p.origin==='model'?'MODEL PAPER':'MANUAL PAPER'} / ${p.version}`,`${p.event.awayTeam} @ ${p.event.homeTeam} · ${nflDisplayTime(p.event.commenceTime)}`,`${p.quote.market} ${p.quote.participant} ${p.quote.side} ${p.quote.line??''}`,`${p.quote.price>0?'+':''}${p.quote.price} / ${p.quote.book}`,p.result,p.latestPregame?`${p.latestPregame.line??p.quote.line??''} at ${p.latestPregame.price} · ${nflDisplayTime(p.latestPregame.updatedAt)} (not a verified closing line)`:'Not captured',p.note];
       for(const value of values){const td=document.createElement('td');td.textContent=value;row.append(td);}
       if(p.origin==='model'&&p.forecast){
         const button=document.createElement('button');button.textContent='View original forecast';

@@ -21,6 +21,7 @@ import {OfficialNflInjuryReports} from './src/services/nflOfficialReports';
 import { NflContextIngestion } from './src/services/nflContextIngestion';
 import { NflDailyRun } from './src/services/nflDailyRun';
 import { nflReadinessChecklist } from './src/services/nflReadiness';
+import { nflForwardGate } from './src/services/nflForwardGate';
 import { NflPaperLedger, nflPaperReport } from './src/services/nflPaper';
 import { NflRecommendations } from './src/services/nflRecommendations';
 import { NflEvidenceArchive } from './src/services/nflEvidence';
@@ -406,7 +407,7 @@ app.post('/api/nfl/forecast', requireAuth, async (req, res) => {
   } catch (err) { nflError(res, err); }
 });
 app.get('/api/nfl/paper', requireAuth, (_req, res) => {
-  try { const picks = nflPaper.read(); res.json({ picks, report: nflPaperReport(picks), metrics: footballPaperMetrics(picks) }); }
+  try { const picks = nflPaper.read(); res.json({ picks, report: nflPaperReport(picks), metrics: footballPaperMetrics(picks), forwardGate: nflForwardGate(picks) }); }
   catch (err) { nflError(res, err); }
 });
 app.get('/api/nfl/paper/export', requireAuth, (_req, res) => {
@@ -422,10 +423,10 @@ app.post('/api/nfl/paper', requireAuth, async (req, res) => {
   catch (err) { nflError(res, err); }
 });
 app.post('/api/nfl/paper/grade', requireAuth, async (_req, res) => {
-  try { const data = await nflPaper.grade(); res.json({ ...data, metrics: footballPaperMetrics(data.picks) }); } catch (err) { nflError(res, err); }
+  try { const data = await nflPaper.grade(); res.json({ ...data, metrics: footballPaperMetrics(data.picks), forwardGate: nflForwardGate(data.picks) }); } catch (err) { nflError(res, err); }
 });
 app.post('/api/nfl/paper/recheck', requireAuth, async (_req, res) => {
-  try { const data = await nflPaper.grade(true); res.json({ ...data, metrics: footballPaperMetrics(data.picks) }); } catch (err) { nflError(res, err); }
+  try { const data = await nflPaper.grade(true); res.json({ ...data, metrics: footballPaperMetrics(data.picks), forwardGate: nflForwardGate(data.picks) }); } catch (err) { nflError(res, err); }
 });
 
 // ── Picks log ──
@@ -691,7 +692,7 @@ app.post('/api/ats/backfill', requireAuth, async (req, res) => {
 });
 
 // ── Health ──
-app.get('/api/health', (_, res) => res.json({ ok: true, release: 'nfl-official-injury-report-9', ts: new Date().toISOString() }));
+app.get('/api/health', (_, res) => res.json({ ok: true, release: 'nfl-forward-gate-game-line-audit-10', ts: new Date().toISOString() }));
 
 // ── SPA fallback ──
 app.get('*', (_, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));

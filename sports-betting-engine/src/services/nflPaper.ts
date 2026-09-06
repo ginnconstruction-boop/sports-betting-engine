@@ -24,8 +24,9 @@ export interface NflPaperPick {
   id: string; event: UpcomingEvent; espnEventId: string; quote: MarketQuote;
   player?: NflPlayer; season: number; version: string; rules: string; savedAt: string;
   result: PaperResult; note: string; actual?: number; gradedAt?: string; source?: string;
-  latestPregame?: { price: number; updatedAt: string; observedAt: string };
-  closeWindow?: { price: number; line: number | null; bookKey: string; updatedAt: string; observedAt: string; method: 'observed_last_5_minutes_not_verified_final_close' };
+  latestPregame?: { price: number; line?: number | null; updatedAt: string; observedAt: string };
+  closeWindow?: { price: number; line: number | null; bookKey: string; updatedAt: string; observedAt: string;
+    method: 'observed_last_5_minutes_not_verified_final_close' | 'verified_same_book_final_close' };
   settlementScope?: { bookKey: string; ruleVersion: string; sportsbookRulesVerified: false };
   gradingAudit?: Array<{ result: PaperResult; actual?: number; note: string; checkedAt: string; source: string; sourceHash: string; evidenceHash?: string }>;
   lastResultCheck?: { at: string; status: 'graded' | 'unavailable' | 'review' };
@@ -360,12 +361,16 @@ export class NflPaperLedger {
         }
         p.collegeLineObservations=existing;
       }
-      const q = quotes.find(q => q.market === p.quote.market && q.participant === p.quote.participant
-        && q.side === p.quote.side && q.line === p.quote.line && q.bookKey === p.quote.bookKey);
+      // Standard player-prop feeds normally expose one primary line per
+      // book/player/side. Capture a moved line only when that identity is
+      // unique; alternative-line ambiguity fails closed.
+      const candidates = quotes.filter(q => q.market === p.quote.market && q.participant === p.quote.participant
+        && q.side === p.quote.side && q.bookKey === p.quote.bookKey);
+      const q = candidates.length === 1 ? candidates[0] : undefined;
       const stamp = Date.parse(q?.updatedAt ?? '');
       if (!q || !Number.isFinite(stamp) || this.now() - stamp > 15 * 60_000 || stamp > this.now() + 60_000
         || stamp >= Date.parse(p.event.commenceTime) || stamp <= Date.parse(p.latestPregame?.updatedAt ?? p.quote.updatedAt ?? '')) continue;
-      p.latestPregame = { price: q.price, updatedAt: q.updatedAt, observedAt: new Date(this.now()).toISOString() }; changed = true;
+      p.latestPregame = { price: q.price, line: q.line, updatedAt: q.updatedAt, observedAt: new Date(this.now()).toISOString() }; changed = true;
       const kickoff = Date.parse(p.event.commenceTime);
       if (kickoff - this.now() <= 5 * 60_000 && kickoff - stamp <= 5 * 60_000 && stamp <= this.now())
         p.closeWindow = { ...p.latestPregame, line: q.line, bookKey: q.bookKey, method: 'observed_last_5_minutes_not_verified_final_close' };

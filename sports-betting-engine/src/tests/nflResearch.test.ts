@@ -151,13 +151,15 @@ test('paper persistence deduplicates across books, refuses stale/post-kickoff, p
     assert.equal((await ledger.grade()).checked,0);
   } finally {fs.rmSync(dir,{recursive:true});}
 });
-test('paper observations only compare the same market, player, side, line and book before kickoff', async () => {
+test('paper observations capture unique same-selection line movement, reject alternatives, and stop at kickoff', async () => {
   const dir=fs.mkdtempSync(path.join(os.tmpdir(),'nfl-paper-observe-'));let now=Date.parse('2025-12-14T17:59:30Z');
   const ledger=new NflPaperLedger(path.join(dir,'paper.json'),{matchEvent:async()=> '401772798',player:async()=>player,summary:async()=>summary()},()=>now);
   try {
     await ledger.save(event,quote,PAPER_RULES);
-    ledger.observe(event.id,[{...quote,line:200,price:120,updatedAt:'2025-12-14T17:59:20Z'}]);assert.equal(ledger.read()[0].latestPregame,undefined);
-    ledger.observe(event.id,[{...quote,price:120,updatedAt:'2025-12-14T17:59:20Z'}]);assert.equal(ledger.read()[0].latestPregame.price,120);
+    ledger.observe(event.id,[{...quote,line:200,price:120,updatedAt:'2025-12-14T17:59:10Z'},
+      {...quote,line:199.5,price:-110,updatedAt:'2025-12-14T17:59:10Z'}]);assert.equal(ledger.read()[0].latestPregame,undefined);
+    ledger.observe(event.id,[{...quote,line:200,price:120,updatedAt:'2025-12-14T17:59:20Z'}]);assert.equal(ledger.read()[0].latestPregame.price,120);
+    assert.equal(ledger.read()[0].latestPregame.line,200);assert.equal(ledger.read()[0].closeWindow.line,200);
     now=Date.parse(kickoff);ledger.observe(event.id,[{...quote,price:160,updatedAt:kickoff}]);assert.equal(ledger.read()[0].latestPregame.price,120);
   } finally {fs.rmSync(dir,{recursive:true});}
 });
