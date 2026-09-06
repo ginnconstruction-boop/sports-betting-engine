@@ -16,6 +16,7 @@ import {CollegeContextIngestion,ContextTeamSeed} from './collegeContextIngestion
 import {COLLEGE_CONTEXT_EVIDENCE_VERSION,CollegeContextRecord,loadCollegeContextRecords} from './collegeContextEvidence';
 import {collegeDivision} from './collegeContext';
 import {loadCollegeContextSourceRegistry,safeContextFailure} from './collegeContextSources';
+import {collegeTuningReadiness} from './collegeTuningProtocol';
 export const COLLEGE_MODEL_LIMITATIONS='Paper observation only. Missing verified roster/QB/depth inputs reduce confidence; no invented talent points. Raw probabilities are not calibrated. Current roster point adjustments are inactive pending dated data and validation. Totals, Kelly, stake sizing and real-money recommendations disabled.';
 export function loadCollegeModelBundle(file=path.resolve(__dirname,'../data/college-score-ridge-v1.json')){
   const bundle=JSON.parse(fs.readFileSync(file,'utf8'));
@@ -37,7 +38,7 @@ export class CollegePredictions {
   }
   readiness(){const b=this.load(),calibration=JSON.parse(fs.readFileSync(path.resolve(__dirname,'../data/college-score-audit-details.json'),'utf8'));
     return{version:b.payload.version,safetyVersion:COLLEGE_SAFETY_VERSION,bundleHash:b.sha256,validation:b.payload.validation,oddsAudit:b.payload.oddsAudit,calibration,
-      calibrationResearch:loadCollegeCalibration()?.evaluation??null,contextData:{version:COLLEGE_CONTEXT_EVIDENCE_VERSION,store:'append-only normalized field evidence',
+      calibrationResearch:loadCollegeCalibration()?.evaluation??null,tuning:collegeTuningReadiness(Boolean(process.env.CFBD_API_KEY)),contextData:{version:COLLEGE_CONTEXT_EVIDENCE_VERSION,store:'append-only normalized field evidence',
         cfbdConfigured:Boolean(process.env.CFBD_API_KEY),pointAdjustmentsApproved:false,historicalContextBacktest:'unavailable',sourceRegistry:loadCollegeContextSourceRegistry(this.root)},limitations:COLLEGE_MODEL_LIMITATIONS};}
   private async current(season:number){
     if(this.cache&&this.cache.season===season&&this.now()-this.cache.at<3600_000)return this.cache;

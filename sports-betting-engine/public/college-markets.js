@@ -97,6 +97,7 @@ function renderCollegeDayScan(data){
           for(const b of t.reliability)nflText(details,`${b.label}: n=${b.count}; predicted ${b.predictedAverage==null?'unavailable':nflFixed(b.predictedAverage*100,1)+'%'}; observed ${b.actualWinRate==null?'unavailable':nflFixed(b.actualWinRate*100,1)+'%'}; Brier contribution ${nflFixed(b.brierContribution,4)}.`);
         }
       }
+      if(r.tuning)nflText(details,`NEXT MODEL RESEARCH: ${r.tuning.version}. Protocol locked; future evaluation begins ${r.tuning.forwardCutoff}. Data status: ${r.tuning.dataStatus}. ${r.tuning.nextAction} No production activation approved.`);
       nflText(details,r.limitations);panel.append(details);
     }
     if(data.contextSourceRegistry){const registry=document.createElement('details'),heading=document.createElement('summary');heading.textContent='Current football-context source status';registry.append(heading);
