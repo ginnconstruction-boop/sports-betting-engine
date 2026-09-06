@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
 import {appendCollegeContextRecords,contextBlendWeights,loadCollegeContextRecords,NewCollegeContextRecord,resolveCollegeTeamContext,resolveContextField} from '../services/collegeContextEvidence';
-import {contextRecordsFromCfbd,contextRecordsFromEspnSummary,contextSourceReliability} from '../services/collegeContextIngestion';
+import {completedCurrentSeasonGames,contextRecordsFromCfbd,contextRecordsFromEspnSummary,contextSourceReliability} from '../services/collegeContextIngestion';
 
 const hash='a'.repeat(64),asOf=Date.parse('2026-09-03T16:00:00Z');
 function row(field:string,value:unknown,patch:Partial<NewCollegeContextRecord>={}):NewCollegeContextRecord{return{
@@ -44,7 +44,7 @@ test('QB hierarchy keeps EXPECTED separate from CONFIRMED and ESPN depth chart c
 test('ESPN summary ingests current-season primary passer as EXPECTED, team production and opening movement',()=>{
   const team:any={teamId:'164',teamName:'Rutgers Scarlet Knights',eventId:'2',commenceTime:'2026-09-03T22:00:00Z',division:'FBS',venue:{indoor:false}};
   const summary={header:{competitions:[{competitors:[{team:{id:'164'}}]}]},gameInfo:{venue:{indoor:false},weather:{temperature:75,gust:12,precipitation:20}},
-    lastFiveGames:[{team:{id:'164'},events:[{id:'1',gameDate:'2026-08-29T18:00:00Z',opponent:{displayName:'Temple Owls'},gameResult:'W',score:'31-20',homeTeamScore:'31',awayTeamScore:'20'}]}],
+    lastFiveGames:[{team:{id:'164'},events:[{id:'1',gameDate:'2026-08-29T18:00:00Z',opponent:{displayName:'Temple Owls'},gameResult:'W',score:'31-20',homeTeamScore:'31',awayTeamScore:'20',status:{type:{completed:true,state:'post',name:'STATUS_FINAL'}}}]}],
     boxscore:{teams:[{team:{id:'164'},statistics:[{name:'totalPointsPerGame',displayValue:'31.0'},{name:'yardsPerGame',displayValue:'420.0'},
       {name:'totalPointsPerGameAllowed',displayValue:'20.0'},{name:'yardsPerGameAllowed',displayValue:'310.0'}]}]},
     leaders:[{team:{id:'164'},leaders:[{name:'passingYards',leaders:[{displayValue:'21/30, 280 YDS',athlete:{id:'7',displayName:'Example QB',position:{abbreviation:'QB'},status:{type:'active'}}}]}]}],
@@ -70,7 +70,42 @@ test('context completeness is transparent, separate from reliability and never c
     row('talent.rosterComposite',700),row('talent.depthTier','HIGH'),row('talent.classification','FBS')].map(withId);
   const c=resolveCollegeTeamContext(fields,{teamId:'164',teamName:'Rutgers',season:2026,eventId:'1',asOf,currentGames:0});
   assert.equal(c.sections.qb.status,'complete');assert.equal(c.sections.weather.status,'missing');assert.ok(c.completeness>50&&c.completeness<90);assert.equal(c.reliability,'HIGH');
+  assert.match(c.completenessMethod,/Deprecated legacy/);assert.ok(c.unweightedFieldCoverage>40&&c.unweightedFieldCoverage<60);assert.equal(c.dataCompleteness.critical.total,5);
   assert.equal(c.contextAdjustedMargin,null);assert.match(c.contextAdjustmentReason,/not validated/);
+});
+test('context reports provider, normalization, matching, attachment, validation and freshness separately',()=>{
+  const records=[withId(row('returning.sourceStatus','SUCCESS')),withId(row('returning.ingestionStatus','AVAILABLE')),
+    withId(row('returning.offensePct',.61)),withId(row('returning.defensePct',.57))];
+  const context=resolveCollegeTeamContext(records,{teamId:'164',teamName:'Rutgers',season:2026,eventId:'1',asOf,currentGames:0}),
+    pipeline=context.pipelineDiagnostics.returningProduction;
+  assert.equal(pipeline.stages.SOURCE_SUCCESS,'PASS');assert.equal(pipeline.stages.NORMALIZATION_SUCCESS,'PASS');
+  assert.equal(pipeline.stages.ENTITY_MATCH_SUCCESS,'PASS');assert.equal(pipeline.stages.CONTEXT_ATTACHED,'PARTIAL');
+  assert.equal(pipeline.stages.FIELD_VALID,'PARTIAL');assert.equal(pipeline.stages.FRESH_AT_FORECAST_TIME,'PARTIAL');
+  assert.deepEqual([pipeline.validFields,pipeline.requiredFields,pipeline.freshFields],[2,3,2]);assert.equal(pipeline.forecastAt,new Date(asOf).toISOString());
+  assert.equal(pipeline.latestSourceRetrievedAt,'2026-09-03T12:00:00Z');
+  assert.equal(context.dataCompleteness.weighted,false);assert.equal(context.dataCompleteness.high.partial,1);
+});
+test('current-season samples require a verified final before forecast and handle same-day, postponed and timezone-crossing games',()=>{
+  const events=[
+    {id:'week0',week:{number:0},gameDate:'2026-08-29T23:30:00-05:00',gameResult:'W',homeTeamScore:'31',awayTeamScore:'20',status:{type:{completed:true,state:'post',name:'STATUS_FINAL'}}},
+    {id:'week1-same-day-final',week:{number:1},gameDate:'2026-09-03T10:00:00-05:00',gameResult:'L',homeTeamScore:'17',awayTeamScore:'21',status:{type:{completed:true,state:'post',name:'STATUS_FINAL'}}},
+    {id:'overtime-final',week:{number:1},gameDate:'2026-09-03T08:00:00-07:00',gameResult:'W',homeTeamScore:'27',awayTeamScore:'24',status:{type:{completed:true,state:'post',name:'STATUS_FINAL_OVERTIME'}}},
+    {id:'in-progress',gameDate:'2026-09-03T13:00:00-05:00',gameResult:'',homeTeamScore:'7',awayTeamScore:'7',status:{type:{completed:false,state:'in',name:'STATUS_IN_PROGRESS'}}},
+    {id:'postponed',gameDate:'2026-09-02T18:00:00-05:00',gameResult:'',homeTeamScore:'0',awayTeamScore:'0',status:{type:{completed:false,state:'pre',name:'STATUS_POSTPONED'}}},
+    {id:'canceled',gameDate:'2026-09-01T18:00:00-04:00',gameResult:'',homeTeamScore:'0',awayTeamScore:'0',status:{type:{completed:false,state:'pre',name:'STATUS_CANCELED'}}},
+    {id:'legacy-win-no-status',gameDate:'2026-09-01T12:00:00-04:00',gameResult:'W',homeTeamScore:'20',awayTeamScore:'10'},
+    {id:'after-forecast',gameDate:'2026-09-03T16:30:00-05:00',gameResult:'W',homeTeamScore:'20',awayTeamScore:'10',status:{type:{completed:true,state:'post',name:'STATUS_FINAL'}}},
+    {id:'target',gameDate:'2026-09-03T20:00:00-05:00',gameResult:'W',homeTeamScore:'30',awayTeamScore:'20',status:{type:{completed:true,state:'post',name:'STATUS_FINAL'}}},
+  ];
+  const summary={lastFiveGames:[{team:{id:'164'},events}]},retrieved=Date.parse('2026-09-03T20:00:00Z'),kickoff=Date.parse('2026-09-04T01:00:00Z');
+  assert.deepEqual(completedCurrentSeasonGames(summary,'164',2026,retrieved,'target',kickoff).map(game=>game.id),['week0','week1-same-day-final','overtime-final']);
+});
+test('an old W/L marker without explicit ESPN final status cannot become a current-season sample',()=>{
+  const team:any={teamId:'164',teamName:'Rutgers Scarlet Knights',eventId:'2',commenceTime:'2026-09-03T22:00:00Z',division:'FBS'};
+  const summary={header:{competitions:[{competitors:[{team:{id:'164'}}]}]},lastFiveGames:[{team:{id:'164'},events:[{
+    id:'old',gameDate:'2026-08-29T18:00:00Z',gameResult:'W',homeTeamScore:'31',awayTeamScore:'20'}]}]};
+  const records=contextRecordsFromEspnSummary(summary,[team],'https://site.api.espn.com/summary',asOf,hash).map(withId),field=resolveContextField(records,{teamId:'164',season:2026,eventId:'2',field:'current.gamesPlayed',asOf});
+  assert.equal(field.status,'MISSING');assert.equal(field.diagnosticReason,'VALIDATION_FAILED');
 });
 test('Week 1 blend exposes structure but remains explicitly unfitted',()=>{
   const first=contextBlendWeights(1,0,80),later=contextBlendWeights(7,6,80);assert.equal(first.priorSeasonWeight,1);assert.equal(first.currentSeasonWeight,0);

@@ -29,6 +29,13 @@ export interface ContextSection {
   status:'complete'|'partial'|'missing'|'conflict';coverage:number;reliability:ContextReliability;
   fields:Record<string,ResolvedContextField>;
 }
+export type ContextPipelineStage='PASS'|'PARTIAL'|'FAIL'|'UNKNOWN';
+export interface ContextPipelineDiagnostic {
+  forecastAt:string;sourceResult:string;sourceName:string|null;latestSourceRetrievedAt:string|null;
+  stages:{SOURCE_SUCCESS:ContextPipelineStage;NORMALIZATION_SUCCESS:ContextPipelineStage;ENTITY_MATCH_SUCCESS:ContextPipelineStage;
+    CONTEXT_ATTACHED:ContextPipelineStage;FIELD_VALID:ContextPipelineStage;FRESH_AT_FORECAST_TIME:ContextPipelineStage};
+  validFields:number;requiredFields:number;freshFields:number;
+}
 
 export const QB_STATUS_ORDER:Record<QbStatus,number>={CONFIRMED:5,EXPECTED:4,COMPETITION:3,QUESTIONABLE:2,OUT:1,UNKNOWN:0};
 export const AVAILABILITY_STATUS_ORDER:Record<AvailabilityStatus,number>={AVAILABLE:5,PROBABLE:4,QUESTIONABLE:3,DOUBTFUL:2,OUT:1,UNKNOWN:0};
@@ -52,6 +59,9 @@ const REQUIRED={
 const INGESTION_FIELDS:Record<ContextDomain,string>={qb:'qb.ingestionStatus',roster:'roster.ingestionStatus',returning_production:'returning.ingestionStatus',
   transfers:'transfers.ingestionStatus',coaching:'coaching.ingestionStatus',talent:'talent.ingestionStatus',fcs:'fcs.ingestionStatus',injuries:'injuries.ingestionStatus',
   weather:'weather.ingestionStatus',current_season:'current.ingestionStatus',market:'market.ingestionStatus'};
+export const SOURCE_STATUS_FIELDS:Record<ContextDomain,string>={qb:'qb.sourceStatus',roster:'roster.sourceStatus',returning_production:'returning.sourceStatus',
+  transfers:'transfers.sourceStatus',coaching:'coaching.sourceStatus',talent:'talent.sourceStatus',fcs:'fcs.sourceStatus',injuries:'injuries.sourceStatus',
+  weather:'weather.sourceStatus',current_season:'current.sourceStatus',market:'market.sourceStatus'};
 const INGESTION_FAILURES=new Set<ContextIngestionReason>(['NO_PROVIDER_CONFIGURED','SOURCE_RETURNED_EMPTY','SOURCE_FIELD_UNAVAILABLE','SOURCE_HTTP_ERROR',
   'SOURCE_RATE_LIMITED','SOURCE_AUTH_FAILED','PARSER_FAILED','TEAM_MATCH_FAILED','VALIDATION_FAILED','STORE_FAILED','LOAD_FAILED','DATA_PROVIDER_UNAVAILABLE']);
 
@@ -145,6 +155,34 @@ function section(records:CollegeContextRecord[],args:{teamId:string;season:numbe
   const coverage=available.length/fields.length,reliability=available.length?available.reduce((min,f)=>RELIABILITY_SCORE[f.reliability]<RELIABILITY_SCORE[min]?f.reliability:min,'HIGH' as ContextReliability):'INSUFFICIENT';
   return{status:conflict?'conflict':coverage===1?'complete':coverage>0?'partial':'missing',coverage,reliability,fields:resolved};
 }
+function stage(ok:boolean|null,partial=false):ContextPipelineStage{return ok===null?'UNKNOWN':ok?(partial?'PARTIAL':'PASS'):'FAIL';}
+function pipeline(records:CollegeContextRecord[],args:{teamId:string;season:number;eventId:string;asOf:number},domain:ContextDomain,value:ContextSection):ContextPipelineDiagnostic{
+  const relevant=records.filter(row=>row.domain===domain&&applicable(row,args.teamId,args.season,args.eventId,args.asOf));
+  const latest=(field:string)=>relevant.filter(row=>row.field===field).sort((a,b)=>Date.parse(b.source.retrievedAt)-Date.parse(a.source.retrievedAt))[0];
+  const sourceRow=latest(SOURCE_STATUS_FIELDS[domain]),ingestionRow=latest(INGESTION_FIELDS[domain]);
+  const sourceResult=String(sourceRow?.value??ingestionRow?.value??'NO_SOURCE_ATTEMPTED');
+  const sourceOk=['SUCCESS','PARTIAL_SUCCESS','AVAILABLE'].includes(sourceResult),sourceFailed=!sourceOk&&sourceResult!=='NO_SOURCE_ATTEMPTED';
+  const normalized=relevant.filter(row=>row.field!==SOURCE_STATUS_FIELDS[domain]&&row.field!==INGESTION_FIELDS[domain]
+    &&!row.field.endsWith('.diagnostic')&&!row.field.endsWith('providerChecked'));
+  const valid=Object.values(value.fields).filter(field=>field.status==='AVAILABLE').length;
+  const fresh=Object.values(value.fields).filter(field=>field.status==='AVAILABLE'&&field.records.some(row=>args.asOf-Date.parse(row.source.retrievedAt)<=DOMAIN_TTL[row.domain])).length;
+  const matchFailed=sourceResult==='TEAM_MATCH_FAILED'||String(ingestionRow?.value)==='TEAM_MATCH_FAILED';
+  const latestSource=(sourceRow??ingestionRow??normalized[0])?.source??null;
+  return{forecastAt:new Date(args.asOf).toISOString(),sourceResult,sourceName:latestSource?.name??null,latestSourceRetrievedAt:latestSource?.retrievedAt??null,
+    stages:{SOURCE_SUCCESS:stage(sourceOk?true:sourceFailed?false:null,sourceResult==='PARTIAL_SUCCESS'),
+      NORMALIZATION_SUCCESS:stage(normalized.length?true:sourceOk?false:null),ENTITY_MATCH_SUCCESS:stage(matchFailed?false:normalized.length?true:null),
+      CONTEXT_ATTACHED:stage(valid?true:sourceOk?false:null,valid>0&&valid<Object.keys(value.fields).length),
+      FIELD_VALID:stage(valid===Object.keys(value.fields).length?true:valid?true:false,valid>0&&valid<Object.keys(value.fields).length),
+      FRESH_AT_FORECAST_TIME:stage(fresh===Object.keys(value.fields).length?true:fresh?true:false,fresh>0&&fresh<Object.keys(value.fields).length)},
+    validFields:valid,requiredFields:Object.keys(value.fields).length,freshFields:fresh};
+}
+function qualityItem(status:ResolvedContextField['status']|ContextSection['status']){
+  return status==='AVAILABLE'||status==='complete'?'AVAILABLE':status==='partial'?'PARTIAL':status==='conflict'||status==='CONFLICT'?'CONFLICT':status==='STALE'?'STALE':'MISSING';
+}
+function qualityGroup(items:Record<string,string>){
+  const values=Object.values(items);return{available:values.filter(value=>value==='AVAILABLE').length,partial:values.filter(value=>value==='PARTIAL').length,
+    missing:values.filter(value=>!['AVAILABLE','PARTIAL'].includes(value)).length,total:values.length,items};
+}
 function value(section:ContextSection,field:string){return section.fields[field]?.status==='AVAILABLE'?section.fields[field].value:null;}
 export function resolveCollegeTeamContext(records:CollegeContextRecord[],args:{teamId:string;teamName:string;season:number;eventId:string;asOf:number;currentGames:number}){
   const common={teamId:args.teamId,season:args.season,eventId:args.eventId,asOf:args.asOf};
@@ -152,8 +190,10 @@ export function resolveCollegeTeamContext(records:CollegeContextRecord[],args:{t
     transfers=section(records,common,REQUIRED.transfers),coaching=section(records,common,REQUIRED.coaching),talentDepth=section(records,common,REQUIRED.talentDepth),
     injuries=section(records,common,REQUIRED.injuries),weather=section(records,common,REQUIRED.weather),currentSeason=section(records,common,REQUIRED.currentSeason);
   const sections={roster,qb,returningProduction,transfers,coaching,talentDepth,injuries,weather,currentSeason},w=CONTEXT_COMPLETENESS_POLICY.weights;
-  const currentSample=Math.min(1,Math.max(0,args.currentGames)/3),completeness=roster.coverage*w.roster+qb.coverage*w.qb+returningProduction.coverage*w.returningProduction
-    +transfers.coverage*w.transfers+coaching.coverage*w.coaching+talentDepth.coverage*w.talentDepth+injuries.coverage*w.injuries+weather.coverage*w.weather+currentSeason.coverage*currentSample*w.currentSample;
+  const currentSample=Math.min(1,Math.max(0,args.currentGames)/3),allFields=Object.values(sections).flatMap(section=>Object.values(section.fields)),
+    unweightedFieldCoverage=allFields.length?allFields.filter(field=>field.status==='AVAILABLE').length/allFields.length:0,
+    legacyCompleteness=roster.coverage*w.roster+qb.coverage*w.qb+returningProduction.coverage*w.returningProduction+transfers.coverage*w.transfers
+      +coaching.coverage*w.coaching+talentDepth.coverage*w.talentDepth+injuries.coverage*w.injuries+weather.coverage*w.weather+currentSeason.coverage*currentSample*w.currentSample;
   const present=Object.values(sections).filter(s=>s.coverage>0),reliability:ContextReliability=present.length
     ?present.reduce((min,s)=>RELIABILITY_SCORE[s.reliability]<RELIABILITY_SCORE[min]?s.reliability:min,'HIGH' as ContextReliability):'INSUFFICIENT';
   const fcsTier=resolveContextField(records,{...common,field:'fcs.tier'}),starter=value(qb,'qb.starterName');
@@ -162,8 +202,18 @@ export function resolveCollegeTeamContext(records:CollegeContextRecord[],args:{t
   const playerRows=records.filter(r=>r.domain==='injuries'&&r.playerId&&applicable(r,args.teamId,args.season,args.eventId,args.asOf)),players=[...new Set(playerRows.map(r=>r.playerId!))].map(playerId=>{
     const latest=(field:string)=>playerRows.filter(r=>r.playerId===playerId&&r.field===field).sort((a,b)=>Date.parse(b.source.retrievedAt)-Date.parse(a.source.retrievedAt))[0];
     return{playerId,name:latest('injury.playerName')?.value??null,position:latest('injury.position')?.value??null,status:latest('injury.status')?.value??'UNKNOWN',lastVerifiedAt:latest('injury.status')?.source.retrievedAt??null};});
-  return{version:COLLEGE_CONTEXT_EVIDENCE_VERSION,teamId:args.teamId,teamName:args.teamName,asOf:new Date(args.asOf).toISOString(),sections,
-    completeness:Number((completeness*100).toFixed(1)),reliability,currentSampleCoverage:Number((currentSample*100).toFixed(1)),fcsTier,
+  const pipelineDiagnostics={roster:pipeline(records,common,'roster',roster),qb:pipeline(records,common,'qb',qb),
+    returningProduction:pipeline(records,common,'returning_production',returningProduction),transfers:pipeline(records,common,'transfers',transfers),
+    coaching:pipeline(records,common,'coaching',coaching),talentDepth:pipeline(records,common,'talent',talentDepth),
+    injuries:pipeline(records,common,'injuries',injuries),weather:pipeline(records,common,'weather',weather),currentSeason:pipeline(records,common,'current_season',currentSeason)};
+  const dataCompleteness={version:'college-context-categories-v1',weighted:false,
+    critical:qualityGroup({startingQb:qualityItem(qb.fields['qb.starterName'].status),qbAvailability:qualityItem(qb.fields['qb.status'].status),
+      verifiedRoster:qualityItem(roster.status),currentSeasonSample:qualityItem(currentSeason.fields['current.gamesPlayed'].status),majorInjuries:qualityItem(injuries.status)}),
+    high:qualityGroup({returningProduction:qualityItem(returningProduction.status),transfers:qualityItem(transfers.status),talentDepth:qualityItem(talentDepth.status),coaching:qualityItem(coaching.status)}),
+    medium:qualityGroup({weather:qualityItem(weather.status)}),note:'Category counts are descriptive only. No statistical weights or point values are applied.'};
+  return{version:COLLEGE_CONTEXT_EVIDENCE_VERSION,teamId:args.teamId,teamName:args.teamName,asOf:new Date(args.asOf).toISOString(),sections,pipelineDiagnostics,dataCompleteness,
+    completeness:Number((legacyCompleteness*100).toFixed(1)),completenessMethod:'Deprecated legacy weighted display value; never used by the decision engine.',
+    unweightedFieldCoverage:Number((unweightedFieldCoverage*100).toFixed(1)),reliability,currentSampleCoverage:Number((currentSample*100).toFixed(1)),fcsTier,
     qb:{starter,status:value(qb,'qb.status')??'UNKNOWN',returningStarter:resolveContextField(records,{...common,field:'qb.returningStarter'}).value,
       transfer:matchingTransfer?true:resolveContextField(records,{...common,field:'qb.transfer'}).value,previousSchool:matchingTransfer?.previousSchool??resolveContextField(records,{...common,field:'qb.previousSchool'}).value,
       depthChartStatus:resolveContextField(records,{...common,field:'qb.depthChartStatus'}).value,careerStarts:resolveContextField(records,{...common,field:'qb.careerStarts'}).value,

@@ -4,6 +4,7 @@ import {canonicalCollegeName,resolveCollegeTeam} from './collegeEntities';
 import {ESPN_COLLEGE} from './collegeResearch';
 import {appendCollegeContextRecords,archiveCollegeContextPayload,CollegeContextRecord,ContextDomain,ContextIngestionReason,ContextReliability,hashCollegeContextPayload,
   loadCollegeContextRecords,materializeCollegeContextRecords,NewCollegeContextRecord,validateContextRecord,VerificationStatus} from './collegeContextEvidence';
+import {SOURCE_STATUS_FIELDS} from './collegeContextEvidence';
 import {CollegeContextCategory,CollegeContextSourceRegistry,safeContextFailure} from './collegeContextSources';
 
 export interface ContextTeamSeed {teamId:string;teamName:string;aliases?:string[];eventId:string;commenceTime:string;division:'FBS'|'FCS'|'UNKNOWN';venue?:{id:string|null;name:string|null;indoor:boolean|null};}
@@ -33,6 +34,9 @@ const STATUS_FIELD:Record<ContextDomain,string>={qb:'qb.ingestionStatus',roster:
 function status(rows:NewCollegeContextRecord[],team:ContextTeamSeed,domain:ContextDomain,value:'AVAILABLE'|ContextIngestionReason,url:string,hash:string,at:string,effectiveTo:string|null=null){
   recordIf(rows,team,domain,STATUS_FIELD[domain],value,url,hash,at,'REPORTED',effectiveTo);
 }
+function sourceStatus(rows:NewCollegeContextRecord[],team:ContextTeamSeed,domain:ContextDomain,value:ContextIngestionReason,url:string,hash:string,at:string,effectiveTo:string|null=null){
+  recordIf(rows,team,domain,SOURCE_STATUS_FIELDS[domain],value,url,hash,at,'REPORTED',effectiveTo);
+}
 function fieldMissing(rows:NewCollegeContextRecord[],team:ContextTeamSeed,domain:ContextDomain,field:string,reason:ContextIngestionReason,url:string,hash:string,at:string,effectiveTo:string|null=null){
   recordIf(rows,team,domain,`${field}.diagnostic`,reason,url,hash,at,'REPORTED',effectiveTo);
 }
@@ -56,10 +60,22 @@ function teamStats(summary:any,teamId:string){
   const team=(summary?.boxscore?.teams??[]).find((x:any)=>String(x?.team?.id)===teamId),map=new Map<string,number>();
   for(const item of team?.statistics??[]){const n=Number(item.displayValue);if(Number.isFinite(n))map.set(String(item.name),n);}return map;
 }
-function currentGames(summary:any,teamId:string,season:number,retrieved:number,eventId:string){
+export const ESPN_FINAL_COMPLETION_STATUSES=['STATUS_FINAL','STATUS_FINAL_OVERTIME'] as const;
+export const ESPN_EXPLICIT_NONFINAL_STATUSES=['STATUS_SCHEDULED','STATUS_IN_PROGRESS','STATUS_HALFTIME','STATUS_DELAYED','STATUS_POSTPONED','STATUS_CANCELED','STATUS_CANCELLED'] as const;
+export function espnEventCompletionStatus(game:any):'FINAL'|'NOT_FINAL'|'UNVERIFIED'{
+  const type=game?.status?.type,name=String(type?.name??'').toUpperCase();
+  if(type?.completed===true&&type?.state==='post'&&(ESPN_FINAL_COMPLETION_STATUSES as readonly string[]).includes(name))return'FINAL';
+  if((ESPN_EXPLICIT_NONFINAL_STATUSES as readonly string[]).includes(name))return'NOT_FINAL';
+  return'UNVERIFIED';
+}
+function currentSeasonCandidates(summary:any,teamId:string,season:number,retrieved:number,eventId:string,kickoff:number){
   const group=(Array.isArray(summary?.lastFiveGames)?summary.lastFiveGames:[]).find((x:any)=>String(x?.team?.id)===teamId),start=Date.parse(`${season}-07-01T00:00:00Z`);
-  return (group?.events??[]).filter((game:any)=>String(game.id)!==eventId&&Number.isFinite(Date.parse(game.gameDate))&&Date.parse(game.gameDate)>=start&&Date.parse(game.gameDate)<retrieved)
+  const cutoff=Math.min(retrieved,kickoff);
+  return (group?.events??[]).filter((game:any)=>String(game.id)!==eventId&&Number.isFinite(Date.parse(game.gameDate))&&Date.parse(game.gameDate)>=start&&Date.parse(game.gameDate)<cutoff)
     .sort((a:any,b:any)=>Date.parse(a.gameDate)-Date.parse(b.gameDate));
+}
+export function completedCurrentSeasonGames(summary:any,teamId:string,season:number,retrieved:number,eventId:string,kickoff:number){
+  return currentSeasonCandidates(summary,teamId,season,retrieved,eventId,kickoff).filter(game=>espnEventCompletionStatus(game)==='FINAL');
 }
 function summaryTeamIds(summary:any){return (summary?.header?.competitions?.[0]?.competitors??[]).map((c:any)=>String(c?.team?.id??'')).filter(Boolean);}
 export function contextRecordsFromEspnSummary(summary:any,teams:ContextTeamSeed[],url:string,retrieved:number,rawPayloadHash:string){
@@ -86,8 +102,11 @@ export function contextRecordsFromEspnSummary(summary:any,teams:ContextTeamSeed[
     if(finite(gust)&&gust>=20)flags.push('GUST_20_PLUS');else if(finite(gust)&&gust>=15)flags.push('GUST_15_PLUS');
     if(finite(temp)&&temp>=95)flags.push('EXTREME_HEAT');if(finite(temp)&&temp<=32)flags.push('EXTREME_COLD');
     if(flags.length)recordIf(rows,team,'weather','weather.flags',flags,url,rawPayloadHash,at,'REPORTED',end);
-    const games=currentGames(summary,team.teamId,nflSeason(team.commenceTime),retrieved,team.eventId),last=games.at(-1),stats=teamStats(summary,team.teamId),leader=passingLeader(summary,team.teamId),depth=qbDepth(summary,team.teamId);
-    recordIf(rows,team,'current_season','current.gamesPlayed',games.length,url,rawPayloadHash,at,'REPORTED',end);
+    const candidates=currentSeasonCandidates(summary,team.teamId,nflSeason(team.commenceTime),retrieved,team.eventId,Date.parse(team.commenceTime)),
+      unresolved=candidates.filter(game=>espnEventCompletionStatus(game)==='UNVERIFIED'),games=candidates.filter(game=>espnEventCompletionStatus(game)==='FINAL'),
+      last=games.at(-1),stats=teamStats(summary,team.teamId),leader=passingLeader(summary,team.teamId),depth=qbDepth(summary,team.teamId);
+    if(unresolved.length)fieldMissing(rows,team,'current_season','current.gamesPlayed','VALIDATION_FAILED',url,rawPayloadHash,at,end);
+    else recordIf(rows,team,'current_season','current.gamesPlayed',games.length,url,rawPayloadHash,at,'REPORTED',end);
     if(last){recordIf(rows,team,'current_season','current.lastOpponent',last.opponent?.displayName,url,rawPayloadHash,at,'REPORTED',end);
       recordIf(rows,team,'current_season','current.lastScore',{teamResult:last.gameResult,score:last.score,homeScore:Number(last.homeTeamScore),awayScore:Number(last.awayTeamScore),gameId:String(last.id),playedAt:last.gameDate},url,rawPayloadHash,at,'REPORTED',end);}
     const statFields:Record<string,string>={totalPointsPerGame:'current.pointsPerGame',yardsPerGame:'current.yardsPerGame',totalPointsPerGameAllowed:'current.pointsAllowedPerGame',yardsPerGameAllowed:'current.yardsAllowedPerGame'};
@@ -99,7 +118,7 @@ export function contextRecordsFromEspnSummary(summary:any,teams:ContextTeamSeed[
     if(expected){recordIf(rows,team,'qb','qb.starterName',expected.name,url,rawPayloadHash,at,'REPORTED',end);recordIf(rows,team,'qb','qb.status','EXPECTED',url,rawPayloadHash,at,'REPORTED',end);
       recordIf(rows,team,'qb','qb.depthChartStatus',depth?'ESPN_DEPTH_CHART':'CURRENT_SEASON_PRIMARY_PASSER',url,rawPayloadHash,at,'REPORTED',end);}
     status(rows,team,'qb',expected?'SUCCESS':'SOURCE_RETURNED_EMPTY',url,rawPayloadHash,at,end);
-    status(rows,team,'current_season',games.length?'PARTIAL_SUCCESS':'SOURCE_RETURNED_EMPTY',url,rawPayloadHash,at,end);
+    status(rows,team,'current_season',unresolved.length?'VALIDATION_FAILED':'PARTIAL_SUCCESS',url,rawPayloadHash,at,end);
     const groups=injuryGroups(summary).filter((g:any)=>String(g?.team?.id??g?.teamId)===team.teamId),listed=groups.flatMap((g:any)=>g.injuries??g.items??[]);
     if(groups.length)recordIf(rows,team,'injuries','injuries.teamStatus',{providerListed:listed.length,scope:'ESPN game-summary listings only'},url,rawPayloadHash,at,'REPORTED',end);
     for(const item of listed){const athlete=item.athlete??item,player=athlete.displayName??athlete.fullName,status=String(item.status??item.type?.name??'UNKNOWN').toUpperCase();
@@ -186,14 +205,17 @@ export function contextRecordsFromCfbd(payloads:{returning:any;portal:any;talent
   for(const item of Array.isArray(payloads.records)?payloads.records:[]){const team=teamForProvider(item.team,teams);if(!team||team.division!=='FCS')continue;
     const total=(item.total??item.records??[]),record=Array.isArray(total)?total.find((r:any)=>r.type==='total'):total;recordIf(rows,team,'fcs','fcs.previousRecord',record??item,urls.records,hashes.records,at);
   }
-  const sourceByDomain:{domain:ContextDomain;url:string;hash:string}[]=[
-    {domain:'returning_production',url:urls.returning,hash:hashes.returning},{domain:'transfers',url:urls.portal,hash:hashes.portal},
-    {domain:'talent',url:urls.talent,hash:hashes.talent},{domain:'coaching',url:urls.coaches,hash:hashes.coaches},
-    {domain:'fcs',url:urls.fcsRatings,hash:hashes.fcsRatings},
+  const sourceByDomain:{domain:ContextDomain;url:string;hash:string;payload:any}[]=[
+    {domain:'returning_production',url:urls.returning,hash:hashes.returning,payload:payloads.returning},{domain:'transfers',url:urls.portal,hash:hashes.portal,payload:payloads.portal},
+    {domain:'talent',url:urls.talent,hash:hashes.talent,payload:payloads.talent},{domain:'coaching',url:urls.coaches,hash:hashes.coaches,payload:payloads.coaches},
+    {domain:'fcs',url:urls.fcsRatings,hash:hashes.fcsRatings,payload:payloads.fcsRatings},
   ];
-  for(const team of teams)for(const item of sourceByDomain){if(item.domain==='fcs'&&team.division!=='FCS')continue;
-    const available=rows.some(row=>row.teamId===team.teamId&&row.domain===item.domain&&!row.field.endsWith('providerChecked')&&!row.field.endsWith('ingestionStatus'));
-    status(rows,team,item.domain,available?'AVAILABLE':'SOURCE_RETURNED_EMPTY',item.url,item.hash,at);
+  for(const item of sourceByDomain){const anyMapped=rows.some(row=>row.domain===item.domain&&!row.field.endsWith('providerChecked')&&!row.field.endsWith('ingestionStatus')),
+      providerHasRows=Array.isArray(item.payload)&&item.payload.length>0;
+    for(const team of teams){if(item.domain==='fcs'&&team.division!=='FCS')continue;
+      const available=rows.some(row=>row.teamId===team.teamId&&row.domain===item.domain&&!row.field.endsWith('providerChecked')&&!row.field.endsWith('ingestionStatus'));
+      status(rows,team,item.domain,available?'AVAILABLE':providerHasRows&&!anyMapped?'TEAM_MATCH_FAILED':'SOURCE_RETURNED_EMPTY',item.url,item.hash,at);
+    }
   }
   return rows;
 }
@@ -210,6 +232,7 @@ async function mapLimit<T>(values:T[],limit:number,work:(value:T)=>Promise<void>
   let next=0;await Promise.all(Array.from({length:Math.min(limit,values.length)},async()=>{while(next<values.length){const index=next++;await work(values[index]);}}));
 }
 type SourceOutcome={result:ContextIngestionReason;reason?:string};
+function cachedResult(value:unknown):ContextIngestionReason{return value==='AVAILABLE'?'SUCCESS':typeof value==='string'?value as ContextIngestionReason:'SOURCE_RETURNED_EMPTY';}
 function aggregateOutcomes(rows:SourceOutcome[]):SourceOutcome{
   if(!rows.length)return{result:'NO_SOURCE_ATTEMPTED'};const successful=rows.filter(row=>['SUCCESS','PARTIAL_SUCCESS'].includes(row.result));
   if(successful.length===rows.length)return{result:rows.some(row=>row.result==='PARTIAL_SUCCESS')?'PARTIAL_SUCCESS':'SUCCESS',reason:rows.find(row=>row.reason)?.reason};
@@ -219,7 +242,7 @@ function aggregateOutcomes(rows:SourceOutcome[]):SourceOutcome{
 }
 export class CollegeContextIngestion {
   constructor(private root:string,private get=fetchNflJson,private now=()=>Date.now(),private apiKey=process.env.CFBD_API_KEY,
-    private wait=(ms:number)=>new Promise(resolve=>setTimeout(resolve,ms)),private append=appendCollegeContextRecords){}
+    private wait=(ms:number)=>new Promise(resolve=>setTimeout(resolve,ms)),private append=appendCollegeContextRecords,private cfbdFetch=fetch){}
   private async request(url:string){
     let last:unknown;for(let attempt=0;attempt<2;attempt++)try{return{payload:await this.get(url),result:'SUCCESS' as ContextIngestionReason};}
     catch(error){last=error;const result=providerFailure(error);if(attempt||result==='SOURCE_AUTH_FAILED')return{payload:null,result,reason:safeContextFailure(error)};await this.wait(250);}
@@ -232,7 +255,6 @@ export class CollegeContextIngestion {
     if(registry.loadFailure)warnings.push(`College context source registry LOAD_FAILED: ${registry.loadFailure}. Source collection will continue; the corrupt registry will not be overwritten.`);
     const outcomes=new Map<string,SourceOutcome[]>(),note=(prefix:string,category:CollegeContextCategory,result:ContextIngestionReason,reason?:string)=>{
       const id=`${prefix}:${category}`;outcomes.set(id,[...(outcomes.get(id)??[]),{result,reason}]);};
-    const cachedResult=(value:unknown):ContextIngestionReason=>value==='AVAILABLE'?'SUCCESS':typeof value==='string'?value as ContextIngestionReason:'SOURCE_RETURNED_EMPTY';
     const byEvent=new Map<string,ContextTeamSeed[]>();for(const team of unique)byEvent.set(team.eventId,[...(byEvent.get(team.eventId)??[]),team]);
     await mapLimit([...byEvent.entries()],8,async([eventId,eventTeams])=>{
       if(eventTeams.every(t=>recently(records,t.teamId,'weather.providerChecked',this.now(),15*60_000,eventId,true)
@@ -241,14 +263,15 @@ export class CollegeContextIngestion {
           const states=eventTeams.map(team=>cachedResult(recentRecord(records,team.teamId,STATUS_FIELD[domain],this.now(),15*60_000,eventId)?.value)),outcome=aggregateOutcomes(states.map(result=>({result})));
           note('espn-game-summary',category,outcome.result,'Fresh cached source evidence reused.');}return;}
       const url=`${ESPN_COLLEGE}/summary?event=${eventId}`,at=new Date(this.now()).toISOString(),fetched=await this.request(url);
-      if(fetched.result==='SUCCESS'){let hash=hashCollegeContextPayload(fetched.payload);try{archiveCollegeContextPayload(this.root,fetched.payload);}catch(error){warnings.push(`Raw ESPN context archive STORE_FAILED for event ${eventId}: ${safeContextFailure(error)}.`);}
+      if(fetched.result==='SUCCESS'){let hash=hashCollegeContextPayload(fetched.payload);for(const team of eventTeams)for(const domain of ['qb','current_season','injuries','weather','market'] as ContextDomain[])sourceStatus(incoming,team,domain,'SUCCESS',url,hash,at,new Date(Date.parse(team.commenceTime)+6*HOUR).toISOString());
+        try{archiveCollegeContextPayload(this.root,fetched.payload);}catch(error){warnings.push(`Raw ESPN context archive STORE_FAILED for event ${eventId}: ${safeContextFailure(error)}.`);}
         try{const parsed=contextRecordsFromEspnSummary(fetched.payload,eventTeams,url,this.now(),hash);incoming.push(...parsed);
           for(const [category,domain]of [['QB','qb'],['CURRENT_SEASON','current_season'],['INJURIES','injuries'],['WEATHER','weather']] as [CollegeContextCategory,ContextDomain][]){
             const states=parsed.filter(row=>row.domain===domain&&row.field===STATUS_FIELD[domain]).map(row=>String(row.value) as ContextIngestionReason);
             note('espn-game-summary',category,states.every(value=>value==='SUCCESS')?'SUCCESS':states.some(value=>['SUCCESS','PARTIAL_SUCCESS'].includes(value))?'PARTIAL_SUCCESS':states[0]??'SOURCE_RETURNED_EMPTY');}
         }catch(error){const reason=safeContextFailure(error);for(const team of eventTeams)for(const domain of ['qb','current_season','injuries','weather','market'] as ContextDomain[])status(incoming,team,domain,'PARSER_FAILED',url,hash,at);
           for(const category of ['QB','CURRENT_SEASON','INJURIES','WEATHER'] as CollegeContextCategory[])note('espn-game-summary',category,'PARSER_FAILED',reason);warnings.push(`ESPN context PARSER_FAILED for event ${eventId}: ${reason}.`);}}
-      else{const hash=failureHash({url,at,status:fetched.result});for(const team of eventTeams)for(const domain of ['qb','current_season','injuries','weather','market'] as ContextDomain[])status(incoming,team,domain,fetched.result,url,hash,at);
+      else{const hash=failureHash({url,at,status:fetched.result});for(const team of eventTeams)for(const domain of ['qb','current_season','injuries','weather','market'] as ContextDomain[]){sourceStatus(incoming,team,domain,fetched.result,url,hash,at);status(incoming,team,domain,fetched.result,url,hash,at);}
         for(const category of ['QB','CURRENT_SEASON','INJURIES','WEATHER'] as CollegeContextCategory[])note('espn-game-summary',category,fetched.result,fetched.reason);warnings.push(`ESPN context ${fetched.result} for event ${eventId}: ${fetched.reason}.`);}
     });
     await mapLimit([...new Map(unique.map(t=>[t.teamId,t])).values()],8,async team=>{
@@ -256,18 +279,20 @@ export class CollegeContextIngestion {
         note('espn-roster','ROSTER',cachedResult(recentRecord(records,team.teamId,'roster.ingestionStatus',this.now(),7*DAY,null)?.value),'Fresh cached source evidence reused.');
         note('espn-roster','COACHING',cachedResult(recentRecord(records,team.teamId,'coaching.ingestionStatus',this.now(),7*DAY,null)?.value),'Fresh cached head-coach evidence reused.');return;}
       const url=`${ESPN_COLLEGE}/teams/${team.teamId}/roster`,at=new Date(this.now()).toISOString(),fetched=await this.request(url);
-      if(fetched.result==='SUCCESS'){const hash=hashCollegeContextPayload(fetched.payload);try{archiveCollegeContextPayload(this.root,fetched.payload);}catch(error){warnings.push(`${team.teamName}: raw roster archive STORE_FAILED: ${safeContextFailure(error)}.`);}
+      if(fetched.result==='SUCCESS'){const hash=hashCollegeContextPayload(fetched.payload);sourceStatus(incoming,team,'roster','SUCCESS',url,hash,at);sourceStatus(incoming,team,'coaching','SUCCESS',url,hash,at);
+        try{archiveCollegeContextPayload(this.root,fetched.payload);}catch(error){warnings.push(`${team.teamName}: raw roster archive STORE_FAILED: ${safeContextFailure(error)}.`);}
         try{const parsed=contextRecordsFromEspnRoster(fetched.payload,team,url,this.now(),hash);incoming.push(...parsed);const rosterState=parsed.find(row=>row.field==='roster.ingestionStatus')?.value as ContextIngestionReason??'SOURCE_RETURNED_EMPTY';
           const coachingState=parsed.find(row=>row.field==='coaching.ingestionStatus')?.value as ContextIngestionReason??'SOURCE_RETURNED_EMPTY';note('espn-roster','ROSTER',rosterState);note('espn-roster','COACHING',coachingState);}
         catch(error){const reason=safeContextFailure(error);status(incoming,team,'roster','PARSER_FAILED',url,hash,at);status(incoming,team,'coaching','PARSER_FAILED',url,hash,at);note('espn-roster','ROSTER','PARSER_FAILED',reason);note('espn-roster','COACHING','PARSER_FAILED',reason);}}
-      else{const hash=failureHash({url,at,status:fetched.result});status(incoming,team,'roster',fetched.result,url,hash,at);status(incoming,team,'coaching',fetched.result,url,hash,at);
+      else{const hash=failureHash({url,at,status:fetched.result});sourceStatus(incoming,team,'roster',fetched.result,url,hash,at);sourceStatus(incoming,team,'coaching',fetched.result,url,hash,at);status(incoming,team,'roster',fetched.result,url,hash,at);status(incoming,team,'coaching',fetched.result,url,hash,at);
         note('espn-roster','ROSTER',fetched.result,fetched.reason);note('espn-roster','COACHING',fetched.result,fetched.reason);warnings.push(`${team.teamName}: ESPN roster ${fetched.result}: ${fetched.reason}.`);}
     });
-    for(const team of unique){const parsed=contextRecordsFromInternalClassification(team,this.now());incoming.push(...parsed);note('verified-schedule','CLASSIFICATION',team.division==='UNKNOWN'?'VALIDATION_FAILED':'SUCCESS');}
+    for(const team of unique){const parsed=contextRecordsFromInternalClassification(team,this.now()),at=new Date(this.now()).toISOString(),url=`${ESPN_COLLEGE}/scoreboard`,hash=failureHash({teamId:team.teamId,season:nflSeason(team.commenceTime),division:team.division,at});
+      sourceStatus(incoming,team,'talent',team.division==='UNKNOWN'?'VALIDATION_FAILED':'SUCCESS',url,hash,at);incoming.push(...parsed);note('verified-schedule','CLASSIFICATION',team.division==='UNKNOWN'?'VALIDATION_FAILED':'SUCCESS');}
     if(this.apiKey){const cfbd=await this.cfbd(unique,records);incoming.push(...cfbd.rows);for(const [category,result]of Object.entries(cfbd.outcomes) as [CollegeContextCategory,SourceOutcome][])note('cfbd',category,result.result,result.reason);warnings.push(...cfbd.warnings);}
     else{const at=new Date(this.now()).toISOString();for(const team of unique)for(const domain of ['returning_production','transfers','talent','coaching'] as ContextDomain[]){
       if(recently(records,team.teamId,STATUS_FIELD[domain],this.now(),DAY))continue;
-        const url=`${CFBD}/`;status(incoming,team,domain,'NO_PROVIDER_CONFIGURED',url,failureHash({url,at,domain,status:'NO_PROVIDER_CONFIGURED'}),at);}
+        const url=`${CFBD}/`,hash=failureHash({url,at,domain,status:'NO_PROVIDER_CONFIGURED'});sourceStatus(incoming,team,domain,'NO_PROVIDER_CONFIGURED',url,hash,at);status(incoming,team,domain,'NO_PROVIDER_CONFIGURED',url,hash,at);}
       warnings.push('CollegeFootballData key is not configured; returning production, transfers, talent and coaching remain unavailable unless verified imports exist.');}
     for(const [id,rows]of outcomes){const split=id.indexOf(':'),prefix=id.slice(0,split),category=id.slice(split+1) as CollegeContextCategory,result=aggregateOutcomes(rows);registry.markCategory(prefix,category,result.result,result.reason);}
     const valid:NewCollegeContextRecord[]=[];let rejected=0;for(const row of incoming)try{validateContextRecord(row);valid.push(row);}catch(error){rejected++;warnings.push(`Context record VALIDATION_FAILED for team ${row.teamId}, field ${row.field}: ${safeContextFailure(error)}.`);}
@@ -279,12 +304,17 @@ export class CollegeContextIngestion {
     return{added,total:Math.max(total,combined.length),warnings,records:combined,sourceRegistry:registry.snapshot(),storage:{loadStatus,loadFailure,storeStatus,rejected,registryStore}};
   }
   private async cfbd(teams:ContextTeamSeed[],records:CollegeContextRecord[]){
-    if(teams.every(t=>recently(records,t.teamId,'talent.providerChecked',this.now(),DAY)))return{rows:[] as NewCollegeContextRecord[],warnings:[] as string[],outcomes:{
-      TRANSFERS:{result:'SUCCESS',reason:'Fresh cached evidence reused.'},RETURNING_PRODUCTION:{result:'SUCCESS',reason:'Fresh cached evidence reused.'},
-      TALENT_DEPTH:{result:'PARTIAL_SUCCESS',reason:'Fresh cached evidence reused.'},COACHING:{result:'PARTIAL_SUCCESS',reason:'Fresh cached evidence reused.'}} as Record<string,SourceOutcome>};
+    const cachedDomains:{domain:ContextDomain;category:CollegeContextCategory}[]=[{domain:'returning_production',category:'RETURNING_PRODUCTION'},
+      {domain:'transfers',category:'TRANSFERS'},{domain:'talent',category:'TALENT_DEPTH'},{domain:'coaching',category:'COACHING'}];
+    if(teams.every(team=>cachedDomains.every(item=>recentRecord(records,team.teamId,STATUS_FIELD[item.domain],this.now(),DAY)))){
+      const outcomes={} as Record<string,SourceOutcome>;
+      for(const item of cachedDomains){const states=teams.map(team=>cachedResult(recentRecord(records,team.teamId,STATUS_FIELD[item.domain],this.now(),DAY)?.value)),result=aggregateOutcomes(states.map(value=>({result:value})));
+        outcomes[item.category]={...result,reason:`Fresh cached team-level evidence reused. ${states.filter(value=>['SUCCESS','PARTIAL_SUCCESS'].includes(value)).length}/${states.length} teams have attached context.`};}
+      return{rows:[] as NewCollegeContextRecord[],warnings:[] as string[],outcomes};
+    }
     const season=nflSeason(teams[0].commenceTime),urls={returning:`${CFBD}/player/returning?year=${season}`,portal:`${CFBD}/player/portal?year=${season}`,talent:`${CFBD}/talent?year=${season}`,
       coaches:`${CFBD}/coaches?minYear=${season-1}&maxYear=${season}`,fcsRatings:`${CFBD}/ratings/srs/expanded?year=${season-1}&classification=fcs`,records:`${CFBD}/records?year=${season-1}`};
-    const fetchOne=async(url:string)=>{let last:unknown;for(let attempt=0;attempt<2;attempt++)try{const response=await fetch(url,{headers:{Authorization:`Bearer ${this.apiKey}`},signal:AbortSignal.timeout(12_000)});
+    const fetchOne=async(url:string)=>{let last:unknown;for(let attempt=0;attempt<2;attempt++)try{const response=await this.cfbdFetch(url,{headers:{Authorization:`Bearer ${this.apiKey}`},signal:AbortSignal.timeout(12_000)});
         if(!response.ok)throw Error(`CFBD HTTP ${response.status}`);return{payload:await response.json(),result:'SUCCESS' as ContextIngestionReason};}
       catch(error){last=error;const result=providerFailure(error);if(attempt||result==='SOURCE_AUTH_FAILED')return{payload:null,result,reason:safeContextFailure(error)};await this.wait(500);}return{payload:null,result:providerFailure(last),reason:safeContextFailure(last)};};
     const names=Object.keys(urls) as (keyof typeof urls)[],results=await Promise.all(names.map(async name=>[name,await fetchOne(urls[name])] as const)),byName=Object.fromEntries(results) as Record<keyof typeof urls,{payload:any;result:ContextIngestionReason;reason?:string}>;
@@ -294,10 +324,12 @@ export class CollegeContextIngestion {
     const domains:{key:keyof typeof urls;domain:ContextDomain;category:CollegeContextCategory}[]=[{key:'returning',domain:'returning_production',category:'RETURNING_PRODUCTION'},
       {key:'portal',domain:'transfers',category:'TRANSFERS'},{key:'talent',domain:'talent',category:'TALENT_DEPTH'},{key:'coaches',domain:'coaching',category:'COACHING'}];
     const outcomes={} as Record<string,SourceOutcome>;
-    for(const item of domains){const fetched=byName[item.key];if(fetched.result!=='SUCCESS'){rows=rows.filter(row=>!(row.domain===item.domain&&row.field===STATUS_FIELD[item.domain]));const at=new Date(this.now()).toISOString();
-        for(const team of teams)status(rows,team,item.domain,fetched.result,urls[item.key],failureHash({url:urls[item.key],at,status:fetched.result}),at);outcomes[item.category]={result:fetched.result,reason:fetched.reason};warnings.push(`CollegeFootballData ${item.category} ${fetched.result}: ${fetched.reason}.`);}
-      else{const has=rows.some(row=>row.domain===item.domain&&!row.field.endsWith('ingestionStatus')&&!row.field.endsWith('providerChecked')&&!row.field.endsWith('.diagnostic'));
-        outcomes[item.category]={result:has?(item.category==='TRANSFERS'?'SUCCESS':'PARTIAL_SUCCESS'):'SOURCE_RETURNED_EMPTY'};}}
+    for(const item of domains){const fetched=byName[item.key],at=new Date(this.now()).toISOString(),hash=failureHash({url:urls[item.key],at,status:fetched.result});
+      for(const team of teams)sourceStatus(rows,team,item.domain,fetched.result,urls[item.key],fetched.result==='SUCCESS'?hashes[item.key]:hash,at);
+      if(fetched.result!=='SUCCESS'){rows=rows.filter(row=>!(row.domain===item.domain&&row.field===STATUS_FIELD[item.domain]));
+        for(const team of teams)status(rows,team,item.domain,fetched.result,urls[item.key],hash,at);outcomes[item.category]={result:fetched.result,reason:fetched.reason};warnings.push(`CollegeFootballData ${item.category} ${fetched.result}: ${fetched.reason}.`);}
+      else{const states=teams.map(team=>cachedResult(rows.find(row=>row.teamId===team.teamId&&row.domain===item.domain&&row.field===STATUS_FIELD[item.domain])?.value)),result=aggregateOutcomes(states.map(value=>({result:value})));
+        outcomes[item.category]={...result,reason:`Provider request succeeded; ${states.filter(value=>['SUCCESS','PARTIAL_SUCCESS'].includes(value)).length}/${states.length} teams have attached context.`};}}
     return{rows,warnings,outcomes};
   }
 }

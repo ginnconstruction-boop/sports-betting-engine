@@ -11,7 +11,7 @@ function seed(teamId:string,teamName:string,eventId='1001',division:'FBS'|'FCS'=
   aliases:[teamName.replace(/ (Cornhuskers|Bobcats|Tigers|Eagles)$/,'')],venue:{id:'1',name:'Test Stadium',indoor:false}};}
 const teams=[seed('158','Nebraska Cornhuskers'),seed('195','Ohio Bobcats')];
 function summary(eventTeams=teams){return{header:{competitions:[{competitors:eventTeams.map(team=>({team:{id:team.teamId}}))}]},gameInfo:{venue:{indoor:false},weather:{temperature:78,feelsLikeTemperature:79,windSpeed:8,gust:12,precipitation:20,precipitationAmount:0,humidity:52}},
-  lastFiveGames:eventTeams.map(team=>({team:{id:team.teamId},events:[{id:`old-${team.teamId}`,gameDate:'2026-08-29T18:00:00Z',opponent:{displayName:'Earlier Opponent'},gameResult:'W',score:'31-20',homeTeamScore:'31',awayTeamScore:'20'}]})),
+  lastFiveGames:eventTeams.map(team=>({team:{id:team.teamId},events:[{id:`old-${team.teamId}`,gameDate:'2026-08-29T18:00:00Z',opponent:{displayName:'Earlier Opponent'},gameResult:'W',score:'31-20',homeTeamScore:'31',awayTeamScore:'20',status:{type:{completed:true,state:'post',name:'STATUS_FINAL'}}}]})),
   boxscore:{teams:eventTeams.map(team=>({team:{id:team.teamId},statistics:[{name:'totalPointsPerGame',displayValue:'31.0'},{name:'yardsPerGame',displayValue:'420.0'},
     {name:'totalPointsPerGameAllowed',displayValue:'20.0'},{name:'yardsPerGameAllowed',displayValue:'310.0'}]}))},
   leaders:eventTeams.map(team=>({team:{id:team.teamId},leaders:[{name:'passingYards',leaders:[{displayValue:'21/30, 280 YDS',athlete:{id:`qb-${team.teamId}`,displayName:`QB ${team.teamId}`,position:{abbreviation:'QB'},status:{type:'active'}}}]}]})),
@@ -92,5 +92,35 @@ test('append-only context storage accepts the September 5-sized record batch tha
     const records=Array.from({length:5001},(_,i):NewCollegeContextRecord=>({teamId:'158',teamName:'Nebraska Cornhuskers',season:2026,eventId:'123',playerId:null,domain:'current_season',
       field:`current.bulkDiagnostic${i}`,value:i,effectiveFrom:at,effectiveTo:null,source:{name:'ESPN',url:'https://example.test/context',tier:2,reliability:'MEDIUM',publishedAt:at,retrievedAt:at},verification:'REPORTED',rawPayloadHash:hash}));
     const saved=appendCollegeContextRecords(root,records);assert.equal(saved.added,5001);assert.equal(saved.total,5001);
+  }finally{fs.rmSync(root,{recursive:true,force:true});}
+});
+
+test('CFBD cache preserves team-level attachment gaps instead of promoting provider success',async()=>{
+  const root=fs.mkdtempSync(path.join(os.tmpdir(),'college-ingestion-cfbd-cache-'));let cfbdCalls=0;try{
+    const payload=(url:string)=>url.includes('/player/returning')?[{team:'Nebraska',percentPPA:.6,percentDefensePPA:.5}]
+      :url.includes('/player/portal')?[{origin:'Nebraska',destination:'Ohio',position:'WR',rating:.8,eligibility:'Immediate'}]
+      :url.includes('/talent')?[{school:'Nebraska',talent:700},{school:'Ohio',talent:500}]
+      :url.includes('/coaches')?[{firstName:'Coach',lastName:'One',seasons:[{year:2026,school:'Nebraska'}]},{firstName:'Coach',lastName:'Two',seasons:[{year:2026,school:'Ohio'}]}]:[];
+    const cfbdFetch=(async(input:any)=>{cfbdCalls++;return new Response(JSON.stringify(payload(String(input))),{status:200,headers:{'content-type':'application/json'}});}) as typeof fetch;
+    const ingestion=new CollegeContextIngestion(root,contextGet(),()=>now,'test-key',async()=>{},appendCollegeContextRecords,cfbdFetch);
+    const first=await ingestion.refresh(teams),returning=first.sourceRegistry.sources.find((row:any)=>row.id==='cfbd:RETURNING_PRODUCTION');
+    assert.equal(returning.lastResult,'PARTIAL_SUCCESS');assert.match(returning.failureReason,/1\/2 teams have attached context/);
+    const ohio=resolveCollegeTeamContext(first.records,{teamId:'195',teamName:'Ohio Bobcats',season:2026,eventId:'1001',asOf:now,currentGames:1});
+    assert.equal(ohio.pipelineDiagnostics.returningProduction.stages.SOURCE_SUCCESS,'PASS');assert.equal(ohio.pipelineDiagnostics.returningProduction.stages.CONTEXT_ATTACHED,'FAIL');
+    assert.equal(cfbdCalls,6);const second=await ingestion.refresh(teams);assert.equal(cfbdCalls,6);
+    const cached=second.sourceRegistry.sources.find((row:any)=>row.id==='cfbd:RETURNING_PRODUCTION');assert.equal(cached.lastResult,'PARTIAL_SUCCESS');assert.match(cached.failureReason,/1\/2 teams have attached context/);
+  }finally{fs.rmSync(root,{recursive:true,force:true});}
+});
+
+test('successful CFBD request with wholly unmapped teams reports mapping failure, not usable success',async()=>{
+  const root=fs.mkdtempSync(path.join(os.tmpdir(),'college-ingestion-cfbd-unmapped-'));try{
+    const payload=(url:string)=>url.includes('/player/returning')?[{team:'Unmapped University',percentPPA:.6,percentDefensePPA:.5}]
+      :url.includes('/player/portal')?[]:url.includes('/talent')?[{school:'Unmapped University',talent:700}]
+      :url.includes('/coaches')?[{firstName:'Unknown',lastName:'Coach',seasons:[{year:2026,school:'Unmapped University'}]}]:[];
+    const cfbdFetch=(async(input:any)=>new Response(JSON.stringify(payload(String(input))),{status:200,headers:{'content-type':'application/json'}})) as typeof fetch;
+    const result=await new CollegeContextIngestion(root,contextGet(),()=>now,'test-key',async()=>{},appendCollegeContextRecords,cfbdFetch).refresh(teams);
+    const returning=result.sourceRegistry.sources.find((row:any)=>row.id==='cfbd:RETURNING_PRODUCTION');assert.equal(returning.lastResult,'TEAM_MATCH_FAILED');
+    for(const team of teams){const context=resolveCollegeTeamContext(result.records,{teamId:team.teamId,teamName:team.teamName,season:2026,eventId:'1001',asOf:now,currentGames:1}),pipeline=context.pipelineDiagnostics.returningProduction;
+      assert.equal(context.returning.offense,null);assert.equal(pipeline.stages.SOURCE_SUCCESS,'PASS');assert.equal(pipeline.stages.ENTITY_MATCH_SUCCESS,'FAIL');assert.equal(pipeline.stages.CONTEXT_ATTACHED,'FAIL');}
   }finally{fs.rmSync(root,{recursive:true,force:true});}
 });

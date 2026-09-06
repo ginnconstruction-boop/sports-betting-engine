@@ -48,7 +48,9 @@ function buildSafety(args:Parameters<typeof assessCollegeSafety>[0]){
   const movement=marketField('market.movementPoints').value as number|null,movementDirection=marketField('market.movementDirection').value as string|null;
   const modelDirection=gap===null||Math.abs(gap)<3?'NO_STRONG_DIRECTION':gap>0?'HOME':'AWAY',movementSide=movementDirection==='TOWARD_HOME'?'HOME':movementDirection==='TOWARD_AWAY'?'AWAY':null;
   const modelMarketDivergence=modelDirection!=='NO_STRONG_DIRECTION'&&movementSide!==null&&movementSide!==modelDirection;
-  const richLow=homeContext.completeness<80||awayContext.completeness<80||!['HIGH','MEDIUM'].includes(homeContext.reliability)||!['HIGH','MEDIUM'].includes(awayContext.reliability)
+  const categoryGaps=(context:typeof homeContext)=>context.dataCompleteness.critical.available<context.dataCompleteness.critical.total
+    ||context.dataCompleteness.high.missing>0;
+  const richLow=categoryGaps(homeContext)||categoryGaps(awayContext)||!['HIGH','MEDIUM'].includes(homeContext.reliability)||!['HIGH','MEDIUM'].includes(awayContext.reliability)
     ||homeContext.qb.status!=='CONFIRMED'||awayContext.qb.status!=='CONFIRMED';
   const low=richLow||home.completeness<1||away.completeness<1||!home.qbVerified||!away.qbVerified||!home.injuryVerified||!away.injuryVerified
     ||home.quality===null||away.quality===null||Math.min(p.homeCurrentGames,p.awayCurrentGames)<3||divisions.includes('UNKNOWN');
@@ -58,7 +60,9 @@ function buildSafety(args:Parameters<typeof assessCollegeSafety>[0]){
     priorInputsFresh:[p.homeLastGame,p.awayLastGame].every(t=>Number.isFinite(Date.parse(t))&&now-Date.parse(t)<400*86400_000&&Date.parse(t)<now),
     distinctTeams:p.homeId!==p.awayId,venueKnown:typeof identity?.neutralSite==='boolean',homeFieldApplied:p.neutral===identity?.neutralSite,
     providerLine:!consensus.issues.length&&consensus.homeLine!==null,canonicalIds:p.homeId===identity?.homeTeamId&&p.awayId===identity?.awayTeamId,
-    transferData:[homeContext,awayContext].every(c=>c.sections.transfers.coverage===1),contextAtLeast80:homeContext.completeness>=80&&awayContext.completeness>=80,
+    transferData:[homeContext,awayContext].every(c=>c.sections.transfers.coverage===1),
+    criticalContextComplete:[homeContext,awayContext].every(c=>c.dataCompleteness.critical.available===c.dataCompleteness.critical.total),
+    highContextPresent:[homeContext,awayContext].every(c=>c.dataCompleteness.high.missing===0),
     contextReliable:[homeContext,awayContext].every(c=>['HIGH','MEDIUM'].includes(c.reliability)),weatherAvailable:[homeContext,awayContext].every(c=>c.sections.weather.coverage>0)};
   const reasons:string[]=[],probability=candidate?.assessment.probability??null,push=candidate?.assessment.pushProbability??0;
   const conditional=probability===null||push>=1?null:probability/(1-push);
@@ -87,7 +91,8 @@ function buildSafety(args:Parameters<typeof assessCollegeSafety>[0]){
     rosterContext:{home,away,...context},mismatch:{homeDivision:divisions[0],awayDivision:divisions[1],isMismatch:mismatch,hugeFcsUnderdog:isHugeUnderdog,
       warning:isHugeUnderdog?'Possible regression-to-mean bias: huge FCS underdog; depth/talent validation required.':null},
     currentContext:{home:conciseContext(homeContext),away:conciseContext(awayContext),homeBlend:homeBlendV2,awayBlend:awayBlendV2,
-      completenessAverage:Number(((homeContext.completeness+awayContext.completeness)/2).toFixed(1)),
+      legacyCompletenessAverage:Number(((homeContext.completeness+awayContext.completeness)/2).toFixed(1)),
+      categoryCounts:{home:homeContext.dataCompleteness,away:awayContext.dataCompleteness},
       reliability:[homeContext.reliability,awayContext.reliability].sort((a,b)=>({INSUFFICIENT:0,LOW:1,MEDIUM:2,HIGH:3}[a]-{INSUFFICIENT:0,LOW:1,MEDIUM:2,HIGH:3}[b]))[0],
       adjustedModel:'Unavailable — context coefficients are not validated.'},
     marketMovement:{available:[opening,current,movement].every(Number.isFinite),provider:marketField('market.provider').value,openingHomeSpread:opening,currentHomeSpread:current,

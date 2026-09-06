@@ -692,7 +692,7 @@ app.post('/api/ats/backfill', requireAuth, async (req, res) => {
 });
 
 // ── Health ──
-app.get('/api/health', (_, res) => res.json({ ok: true, release: 'college-v2-data-readiness-13',
+app.get('/api/health', (_, res) => res.json({ ok: true, release: 'college-phase1-data-integrity-14',
   integrations:{cfbdConfigured:Boolean(process.env.CFBD_API_KEY)},ts: new Date().toISOString() }));
 
 // ── SPA fallback ──
