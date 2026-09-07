@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "version": "college-context-source-registry-v1",
-  "updatedAt": "2026-09-07T19:20:33.318Z",
+  "updatedAt": "2026-09-07T19:25:57.667Z",
   "sources": [
     {
       "id": "espn-game-summary:QB",
@@ -14,9 +14,9 @@
       "credentialsRequired": false,
       "credentialsPresent": true,
       "refreshInterval": "15 minutes",
-      "lastAttempt": "2026-09-07T19:20:33.295Z",
+      "lastAttempt": "2026-09-07T19:25:57.649Z",
       "lastSuccess": null,
-      "lastFailure": "2026-09-07T19:20:33.295Z",
+      "lastFailure": "2026-09-07T19:25:57.649Z",
       "failureReason": "Fresh cached source evidence reused.",
       "lastResult": "SOURCE_RETURNED_EMPTY"
     },
@@ -31,8 +31,8 @@
       "credentialsRequired": false,
       "credentialsPresent": true,
       "refreshInterval": "15 minutes",
-      "lastAttempt": "2026-09-07T19:20:33.296Z",
-      "lastSuccess": "2026-09-07T19:20:33.296Z",
+      "lastAttempt": "2026-09-07T19:25:57.649Z",
+      "lastSuccess": "2026-09-07T19:25:57.649Z",
       "lastFailure": null,
       "failureReason": "Fresh cached source evidence reused.",
       "lastResult": "PARTIAL_SUCCESS"
@@ -48,9 +48,9 @@
       "credentialsRequired": false,
       "credentialsPresent": true,
       "refreshInterval": "15 minutes",
-      "lastAttempt": "2026-09-07T19:20:33.296Z",
+      "lastAttempt": "2026-09-07T19:25:57.649Z",
       "lastSuccess": null,
-      "lastFailure": "2026-09-07T19:20:33.296Z",
+      "lastFailure": "2026-09-07T19:25:57.649Z",
       "failureReason": "Fresh cached source evidence reused.",
       "lastResult": "SOURCE_RETURNED_EMPTY"
     },
@@ -65,8 +65,8 @@
       "credentialsRequired": false,
       "credentialsPresent": true,
       "refreshInterval": "15 minutes",
-      "lastAttempt": "2026-09-07T19:20:33.296Z",
-      "lastSuccess": "2026-09-07T19:20:33.296Z",
+      "lastAttempt": "2026-09-07T19:25:57.649Z",
+      "lastSuccess": "2026-09-07T19:25:57.649Z",
       "lastFailure": null,
       "failureReason": "Fresh cached source evidence reused.",
       "lastResult": "PARTIAL_SUCCESS"
@@ -82,8 +82,8 @@
       "credentialsRequired": false,
       "credentialsPresent": true,
       "refreshInterval": "7 days",
-      "lastAttempt": "2026-09-07T19:20:33.296Z",
-      "lastSuccess": "2026-09-07T19:20:33.296Z",
+      "lastAttempt": "2026-09-07T19:25:57.649Z",
+      "lastSuccess": "2026-09-07T19:25:57.649Z",
       "lastFailure": null,
       "failureReason": null,
       "lastResult": "SUCCESS"
@@ -99,9 +99,9 @@
       "credentialsRequired": false,
       "credentialsPresent": true,
       "refreshInterval": "7 days",
-      "lastAttempt": "2026-09-07T19:20:33.296Z",
+      "lastAttempt": "2026-09-07T19:25:57.649Z",
       "lastSuccess": "2026-09-07T13:30:27.951Z",
-      "lastFailure": "2026-09-07T19:20:33.296Z",
+      "lastFailure": "2026-09-07T19:25:57.649Z",
       "failureReason": "Fresh cached head-coach evidence reused.",
       "lastResult": "NO_PROVIDER_CONFIGURED"
     },
@@ -116,8 +116,8 @@
       "credentialsRequired": false,
       "credentialsPresent": true,
       "refreshInterval": "per slate",
-      "lastAttempt": "2026-09-07T19:20:33.296Z",
-      "lastSuccess": "2026-09-07T19:20:33.296Z",
+      "lastAttempt": "2026-09-07T19:25:57.649Z",
+      "lastSuccess": "2026-09-07T19:25:57.649Z",
       "lastFailure": null,
       "failureReason": null,
       "lastResult": "SUCCESS"

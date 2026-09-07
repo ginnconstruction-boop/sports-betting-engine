@@ -7,6 +7,12 @@
       "eventId": "401858212",
       "forecastAt": "2026-09-07T13:30:28.478Z",
       "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "a3f471c160419c057162475a566eadbe1e6c0e19c82375f0c80ae6ab3a36befb",
+      "eventId": "401858212",
+      "forecastAt": "2026-09-07T19:25:58.401Z",
+      "window": "ACTUAL_PREKICK"
     }
   ],
   "finals": [],
@@ -27,6 +33,14 @@
     {
       "id": "fbb53be20c19e68e0f3fe8d6704a5c5cbf443e6244066a09f4063e8696e0f4d8",
       "failedAt": "2026-09-07T13:30:28.007Z"
+    },
+    {
+      "id": "2564b58be1a3275b8133cdc4f56f6afe7af143785bf86c218effe6588439a1c5",
+      "failedAt": "2026-09-07T18:57:14.023Z"
+    },
+    {
+      "id": "8281688f2bfd979e1170fdc17ec5821eb444c9b1505b8bb5cdfd0ed6ab9d11f7",
+      "failedAt": "2026-09-07T18:57:14.023Z"
     }
   ]
 }
