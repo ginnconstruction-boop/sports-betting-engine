@@ -7,6 +7,12 @@
       "captureEventId": "manual-70ad6d0f9fc8c89e2f2f1657cb3183c9",
       "completedAt": "2026-09-07T13:30:28.496Z",
       "trigger": "MANUAL"
+    },
+    {
+      "id": "9eb9b92665954ee3128d6ec2ba90c96f2f394c20fcc66a38a6e7d3c75d50ed9f",
+      "captureEventId": "manual-fbd5e77f6d975c2ab042a00ce45d4531",
+      "completedAt": "2026-09-07T18:57:14.788Z",
+      "trigger": "MANUAL"
     }
   ]
 }

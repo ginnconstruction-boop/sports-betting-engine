@@ -1,0 +1,24 @@
+{
+  "id": "f7d8f5438a0bedd595fce438bf85dfb77fa8c25b5b75e9f8160bdc9b3cc4b046",
+  "schema": 1,
+  "teamId": "2567",
+  "teamName": "SMU Mustangs",
+  "season": 2026,
+  "eventId": "401858212",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.providerChecked",
+  "value": true,
+  "effectiveFrom": "2026-09-07T18:57:13.873Z",
+  "effectiveTo": "2026-09-08T05:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858212",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-07T18:57:13.873Z",
+    "retrievedAt": "2026-09-07T18:57:13.873Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e65c7e224a3d0bac06aad1b6de68117fa75abec061e0f4d4a7cde81e2b9c664b"
+}

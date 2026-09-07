@@ -1,0 +1,8 @@
+{
+  "id": "49c86e5b2eeb31b9e8cd21e728000ead6ec05fdc570b07212d8d622896dc0954",
+  "schema": 1,
+  "provider": "CollegeFootballData",
+  "url": "https://api.collegefootballdata.com/ratings/core?year=2026",
+  "retrievedAt": "2026-09-07T18:57:14.023Z",
+  "payload": []
+}

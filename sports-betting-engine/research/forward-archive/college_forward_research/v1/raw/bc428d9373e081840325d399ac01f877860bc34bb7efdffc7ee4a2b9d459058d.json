@@ -1,0 +1,1170 @@
+{
+  "id": "bc428d9373e081840325d399ac01f877860bc34bb7efdffc7ee4a2b9d459058d",
+  "schema": 1,
+  "provider": "CollegeFootballData",
+  "url": "https://api.collegefootballdata.com/ratings/srs/expanded?year=2025&classification=fcs",
+  "retrievedAt": "2026-09-07T18:57:14.048Z",
+  "payload": [
+    {
+      "year": 2025,
+      "team": "North Dakota State",
+      "classification": "fcs",
+      "conference": "MVFC",
+      "division": null,
+      "ranking": 1,
+      "rating": 1.5
+    },
+    {
+      "year": 2025,
+      "team": "Montana State",
+      "classification": "fcs",
+      "conference": "Big Sky",
+      "division": null,
+      "ranking": 2,
+      "rating": -1.7
+    },
+    {
+      "year": 2025,
+      "team": "Montana",
+      "classification": "fcs",
+      "conference": "Big Sky",
+      "division": null,
+      "ranking": 3,
+      "rating": -6.1
+    },
+    {
+      "year": 2025,
+      "team": "North Dakota",
+      "classification": "fcs",
+      "conference": "MVFC",
+      "division": null,
+      "ranking": 4,
+      "rating": -6.2
+    },
+    {
+      "year": 2025,
+      "team": "Tarleton State",
+      "classification": "fcs",
+      "conference": "UAC",
+      "division": null,
+      "ranking": 5,
+      "rating": -7
+    },
+    {
+      "year": 2025,
+      "team": "Stephen F. Austin",
+      "classification": "fcs",
+      "conference": "Southland",
+      "division": null,
+      "ranking": 6,
+      "rating": -11.4
+    },
+    {
+      "year": 2025,
+      "team": "Illinois State",
+      "classification": "fcs",
+      "conference": "MVFC",
+      "division": null,
+      "ranking": 7,
+      "rating": -11.7
+    },
+    {
+      "year": 2025,
+      "team": "Southern Illinois",
+      "classification": "fcs",
+      "conference": "MVFC",
+      "division": null,
+      "ranking": 7,
+      "rating": -11.7
+    },
+    {
+      "year": 2025,
+      "team": "South Dakota State",
+      "classification": "fcs",
+      "conference": "MVFC",
+      "division": null,
+      "ranking": 9,
+      "rating": -12.2
+    },
+    {
+      "year": 2025,
+      "team": "Abilene Christian",
+      "classification": "fcs",
+      "conference": "UAC",
+      "division": null,
+      "ranking": 10,
+      "rating": -13.5
+    },
+    {
+      "year": 2025,
+      "team": "UC Davis",
+      "classification": "fcs",
+      "conference": "Big Sky",
+      "division": null,
+      "ranking": 11,
+      "rating": -14.1
+    },
+    {
+      "year": 2025,
+      "team": "Lehigh",
+      "classification": "fcs",
+      "conference": "Patriot",
+      "division": null,
+      "ranking": 12,
+      "rating": -14.5
+    },
+    {
+      "year": 2025,
+      "team": "South Dakota",
+      "classification": "fcs",
+      "conference": "MVFC",
+      "division": null,
+      "ranking": 13,
+      "rating": -14.7
+    },
+    {
+      "year": 2025,
+      "team": "Sacramento State",
+      "classification": "fcs",
+      "conference": "Big Sky",
+      "division": null,
+      "ranking": 14,
+      "rating": -14.8
+    },
+    {
+      "year": 2025,
+      "team": "Youngstown State",
+      "classification": "fcs",
+      "conference": "MVFC",
+      "division": null,
+      "ranking": 15,
+      "rating": -14.9
+    },
+    {
+      "year": 2025,
+      "team": "Idaho State",
+      "classification": "fcs",
+      "conference": "Big Sky",
+      "division": null,
+      "ranking": 16,
+      "rating": -15
+    },
+    {
+      "year": 2025,
+      "team": "Yale",
+      "classification": "fcs",
+      "conference": "Ivy",
+      "division": null,
+      "ranking": 17,
+      "rating": -16.1
+    },
+    {
+      "year": 2025,
+      "team": "Austin Peay",
+      "classification": "fcs",
+      "conference": "UAC",
+      "division": null,
+      "ranking": 18,
+      "rating": -16.2
+    },
+    {
+      "year": 2025,
+      "team": "Villanova",
+      "classification": "fcs",
+      "conference": "Coastal Athletic",
+      "division": null,
+      "ranking": 19,
+      "rating": -16.6
+    },
+    {
+      "year": 2025,
+      "team": "Southern Utah",
+      "classification": "fcs",
+      "conference": "UAC",
+      "division": null,
+      "ranking": 20,
+      "rating": -16.9
+    },
+    {
+      "year": 2025,
+      "team": "Harvard",
+      "classification": "fcs",
+      "conference": "Ivy",
+      "division": null,
+      "ranking": 21,
+      "rating": -17.2
+    },
+    {
+      "year": 2025,
+      "team": "SE Louisiana",
+      "classification": "fcs",
+      "conference": "Southland",
+      "division": null,
+      "ranking": 22,
+      "rating": -18.5
+    },
+    {
+      "year": 2025,
+      "team": "Tennessee Tech",
+      "classification": "fcs",
+      "conference": "OVC-Big South",
+      "division": null,
+      "ranking": 22,
+      "rating": -18.5
+    },
+    {
+      "year": 2025,
+      "team": "Northern Arizona",
+      "classification": "fcs",
+      "conference": "Big Sky",
+      "division": null,
+      "ranking": 24,
+      "rating": -19.4
+    },
+    {
+      "year": 2025,
+      "team": "West Georgia",
+      "classification": "fcs",
+      "conference": "UAC",
+      "division": null,
+      "ranking": 25,
+      "rating": -20.1
+    },
+    {
+      "year": 2025,
+      "team": "Mercer",
+      "classification": "fcs",
+      "conference": "Southern",
+      "division": null,
+      "ranking": 26,
+      "rating": -20.2
+    },
+    {
+      "year": 2025,
+      "team": "Rhode Island",
+      "classification": "fcs",
+      "conference": "Coastal Athletic",
+      "division": null,
+      "ranking": 26,
+      "rating": -20.2
+    },
+    {
+      "year": 2025,
+      "team": "Idaho",
+      "classification": "fcs",
+      "conference": "Big Sky",
+      "division": null,
+      "ranking": 28,
+      "rating": -20.4
+    },
+    {
+      "year": 2025,
+      "team": "UT Rio Grande Valley",
+      "classification": "fcs",
+      "conference": "Southland",
+      "division": null,
+      "ranking": 29,
+      "rating": -20.5
+    },
+    {
+      "year": 2025,
+      "team": "Cal Poly",
+      "classification": "fcs",
+      "conference": "Big Sky",
+      "division": null,
+      "ranking": 30,
+      "rating": -21.6
+    },
+    {
+      "year": 2025,
+      "team": "Alabama State",
+      "classification": "fcs",
+      "conference": "SWAC",
+      "division": "East",
+      "ranking": 31,
+      "rating": -22.1
+    },
+    {
+      "year": 2025,
+      "team": "Monmouth",
+      "classification": "fcs",
+      "conference": "Coastal Athletic",
+      "division": null,
+      "ranking": 32,
+      "rating": -22.3
+    },
+    {
+      "year": 2025,
+      "team": "New Hampshire",
+      "classification": "fcs",
+      "conference": "Coastal Athletic",
+      "division": null,
+      "ranking": 33,
+      "rating": -23.3
+    },
+    {
+      "year": 2025,
+      "team": "Lamar",
+      "classification": "fcs",
+      "conference": "Southland",
+      "division": null,
+      "ranking": 34,
+      "rating": -23.5
+    },
+    {
+      "year": 2025,
+      "team": "Eastern Washington",
+      "classification": "fcs",
+      "conference": "Big Sky",
+      "division": null,
+      "ranking": 35,
+      "rating": -23.9
+    },
+    {
+      "year": 2025,
+      "team": "Incarnate Word",
+      "classification": "fcs",
+      "conference": "Southland",
+      "division": null,
+      "ranking": 36,
+      "rating": -24.1
+    },
+    {
+      "year": 2025,
+      "team": "East Tennessee State",
+      "classification": "fcs",
+      "conference": "Southern",
+      "division": null,
+      "ranking": 37,
+      "rating": -24.6
+    },
+    {
+      "year": 2025,
+      "team": "Eastern Kentucky",
+      "classification": "fcs",
+      "conference": "UAC",
+      "division": null,
+      "ranking": 38,
+      "rating": -24.7
+    },
+    {
+      "year": 2025,
+      "team": "St. Thomas (MN)",
+      "classification": "fcs",
+      "conference": "Pioneer",
+      "division": null,
+      "ranking": 39,
+      "rating": -25.2
+    },
+    {
+      "year": 2025,
+      "team": "Dartmouth",
+      "classification": "fcs",
+      "conference": "Ivy",
+      "division": null,
+      "ranking": 40,
+      "rating": -25.4
+    },
+    {
+      "year": 2025,
+      "team": "Lafayette",
+      "classification": "fcs",
+      "conference": "Patriot",
+      "division": null,
+      "ranking": 41,
+      "rating": -26
+    },
+    {
+      "year": 2025,
+      "team": "Northern Colorado",
+      "classification": "fcs",
+      "conference": "Big Sky",
+      "division": null,
+      "ranking": 42,
+      "rating": -26.2
+    },
+    {
+      "year": 2025,
+      "team": "Drake",
+      "classification": "fcs",
+      "conference": "Pioneer",
+      "division": null,
+      "ranking": 43,
+      "rating": -26.4
+    },
+    {
+      "year": 2025,
+      "team": "South Carolina State",
+      "classification": "fcs",
+      "conference": "MEAC",
+      "division": null,
+      "ranking": 44,
+      "rating": -26.5
+    },
+    {
+      "year": 2025,
+      "team": "Western Carolina",
+      "classification": "fcs",
+      "conference": "Southern",
+      "division": null,
+      "ranking": 45,
+      "rating": -26.6
+    },
+    {
+      "year": 2025,
+      "team": "Northern Iowa",
+      "classification": "fcs",
+      "conference": "MVFC",
+      "division": null,
+      "ranking": 46,
+      "rating": -26.7
+    },
+    {
+      "year": 2025,
+      "team": "Wofford",
+      "classification": "fcs",
+      "conference": "Southern",
+      "division": null,
+      "ranking": 46,
+      "rating": -26.7
+    },
+    {
+      "year": 2025,
+      "team": "Jackson State",
+      "classification": "fcs",
+      "conference": "SWAC",
+      "division": "East",
+      "ranking": 46,
+      "rating": -26.7
+    },
+    {
+      "year": 2025,
+      "team": "William & Mary",
+      "classification": "fcs",
+      "conference": "Coastal Athletic",
+      "division": null,
+      "ranking": 49,
+      "rating": -27
+    },
+    {
+      "year": 2025,
+      "team": "Elon",
+      "classification": "fcs",
+      "conference": "Coastal Athletic",
+      "division": null,
+      "ranking": 49,
+      "rating": -27
+    },
+    {
+      "year": 2025,
+      "team": "Gardner-Webb",
+      "classification": "fcs",
+      "conference": "OVC-Big South",
+      "division": null,
+      "ranking": 51,
+      "rating": -27.3
+    },
+    {
+      "year": 2025,
+      "team": "Stony Brook",
+      "classification": "fcs",
+      "conference": "Coastal Athletic",
+      "division": null,
+      "ranking": 51,
+      "rating": -27.3
+    },
+    {
+      "year": 2025,
+      "team": "Weber State",
+      "classification": "fcs",
+      "conference": "Big Sky",
+      "division": null,
+      "ranking": 53,
+      "rating": -27.4
+    },
+    {
+      "year": 2025,
+      "team": "Pennsylvania",
+      "classification": "fcs",
+      "conference": "Ivy",
+      "division": null,
+      "ranking": 53,
+      "rating": -27.4
+    },
+    {
+      "year": 2025,
+      "team": "Presbyterian",
+      "classification": "fcs",
+      "conference": "Pioneer",
+      "division": null,
+      "ranking": 55,
+      "rating": -27.7
+    },
+    {
+      "year": 2025,
+      "team": "UT Martin",
+      "classification": "fcs",
+      "conference": "OVC-Big South",
+      "division": null,
+      "ranking": 56,
+      "rating": -28.3
+    },
+    {
+      "year": 2025,
+      "team": "San Diego",
+      "classification": "fcs",
+      "conference": "Pioneer",
+      "division": null,
+      "ranking": 56,
+      "rating": -28.3
+    },
+    {
+      "year": 2025,
+      "team": "Prairie View A&M",
+      "classification": "fcs",
+      "conference": "SWAC",
+      "division": "West",
+      "ranking": 58,
+      "rating": -28.4
+    },
+    {
+      "year": 2025,
+      "team": "Lindenwood",
+      "classification": "fcs",
+      "conference": "OVC-Big South",
+      "division": null,
+      "ranking": 59,
+      "rating": -28.6
+    },
+    {
+      "year": 2025,
+      "team": "Maine",
+      "classification": "fcs",
+      "conference": "Coastal Athletic",
+      "division": null,
+      "ranking": 60,
+      "rating": -28.7
+    },
+    {
+      "year": 2025,
+      "team": "Central Arkansas",
+      "classification": "fcs",
+      "conference": "UAC",
+      "division": null,
+      "ranking": 61,
+      "rating": -28.8
+    },
+    {
+      "year": 2025,
+      "team": "Indiana State",
+      "classification": "fcs",
+      "conference": "MVFC",
+      "division": null,
+      "ranking": 61,
+      "rating": -28.8
+    },
+    {
+      "year": 2025,
+      "team": "Nicholls",
+      "classification": "fcs",
+      "conference": "Southland",
+      "division": null,
+      "ranking": 63,
+      "rating": -28.9
+    },
+    {
+      "year": 2025,
+      "team": "Holy Cross",
+      "classification": "fcs",
+      "conference": "Patriot",
+      "division": null,
+      "ranking": 64,
+      "rating": -29.7
+    },
+    {
+      "year": 2025,
+      "team": "Princeton",
+      "classification": "fcs",
+      "conference": "Ivy",
+      "division": null,
+      "ranking": 65,
+      "rating": -29.8
+    },
+    {
+      "year": 2025,
+      "team": "Towson",
+      "classification": "fcs",
+      "conference": "Coastal Athletic",
+      "division": null,
+      "ranking": 66,
+      "rating": -29.9
+    },
+    {
+      "year": 2025,
+      "team": "Brown",
+      "classification": "fcs",
+      "conference": "Ivy",
+      "division": null,
+      "ranking": 67,
+      "rating": -30.2
+    },
+    {
+      "year": 2025,
+      "team": "Central Connecticut",
+      "classification": "fcs",
+      "conference": "NEC",
+      "division": null,
+      "ranking": 68,
+      "rating": -30.4
+    },
+    {
+      "year": 2025,
+      "team": "McNeese",
+      "classification": "fcs",
+      "conference": "Southland",
+      "division": null,
+      "ranking": 69,
+      "rating": -30.6
+    },
+    {
+      "year": 2025,
+      "team": "North Carolina Central",
+      "classification": "fcs",
+      "conference": "MEAC",
+      "division": null,
+      "ranking": 70,
+      "rating": -30.8
+    },
+    {
+      "year": 2025,
+      "team": "Colgate",
+      "classification": "fcs",
+      "conference": "Patriot",
+      "division": null,
+      "ranking": 71,
+      "rating": -30.9
+    },
+    {
+      "year": 2025,
+      "team": "The Citadel",
+      "classification": "fcs",
+      "conference": "Southern",
+      "division": null,
+      "ranking": 72,
+      "rating": -31
+    },
+    {
+      "year": 2025,
+      "team": "Richmond",
+      "classification": "fcs",
+      "conference": "Patriot",
+      "division": null,
+      "ranking": 73,
+      "rating": -31.5
+    },
+    {
+      "year": 2025,
+      "team": "Delaware State",
+      "classification": "fcs",
+      "conference": "MEAC",
+      "division": null,
+      "ranking": 74,
+      "rating": -31.6
+    },
+    {
+      "year": 2025,
+      "team": "Charleston Southern",
+      "classification": "fcs",
+      "conference": "OVC-Big South",
+      "division": null,
+      "ranking": 75,
+      "rating": -31.9
+    },
+    {
+      "year": 2025,
+      "team": "Southeast Missouri State",
+      "classification": "fcs",
+      "conference": "OVC-Big South",
+      "division": null,
+      "ranking": 75,
+      "rating": -31.9
+    },
+    {
+      "year": 2025,
+      "team": "Sacred Heart",
+      "classification": "fcs",
+      "conference": "FCS Independents",
+      "division": null,
+      "ranking": 77,
+      "rating": -32.5
+    },
+    {
+      "year": 2025,
+      "team": "Dayton",
+      "classification": "fcs",
+      "conference": "Pioneer",
+      "division": null,
+      "ranking": 78,
+      "rating": -32.7
+    },
+    {
+      "year": 2025,
+      "team": "Duquesne",
+      "classification": "fcs",
+      "conference": "NEC",
+      "division": null,
+      "ranking": 79,
+      "rating": -32.8
+    },
+    {
+      "year": 2025,
+      "team": "North Alabama",
+      "classification": "fcs",
+      "conference": "UAC",
+      "division": null,
+      "ranking": 80,
+      "rating": -33
+    },
+    {
+      "year": 2025,
+      "team": "Utah Tech",
+      "classification": "fcs",
+      "conference": "UAC",
+      "division": null,
+      "ranking": 81,
+      "rating": -33.3
+    },
+    {
+      "year": 2025,
+      "team": "Long Island University",
+      "classification": "fcs",
+      "conference": "NEC",
+      "division": null,
+      "ranking": 82,
+      "rating": -33.5
+    },
+    {
+      "year": 2025,
+      "team": "Mercyhurst",
+      "classification": "fcs",
+      "conference": "NEC",
+      "division": null,
+      "ranking": 83,
+      "rating": -33.6
+    },
+    {
+      "year": 2025,
+      "team": "Furman",
+      "classification": "fcs",
+      "conference": "Southern",
+      "division": null,
+      "ranking": 84,
+      "rating": -33.7
+    },
+    {
+      "year": 2025,
+      "team": "East Texas A&M",
+      "classification": "fcs",
+      "conference": "Southland",
+      "division": null,
+      "ranking": 85,
+      "rating": -34
+    },
+    {
+      "year": 2025,
+      "team": "Chattanooga",
+      "classification": "fcs",
+      "conference": "Southern",
+      "division": null,
+      "ranking": 86,
+      "rating": -34.2
+    },
+    {
+      "year": 2025,
+      "team": "Cornell",
+      "classification": "fcs",
+      "conference": "Ivy",
+      "division": null,
+      "ranking": 86,
+      "rating": -34.2
+    },
+    {
+      "year": 2025,
+      "team": "Portland State",
+      "classification": "fcs",
+      "conference": "Big Sky",
+      "division": null,
+      "ranking": 88,
+      "rating": -34.7
+    },
+    {
+      "year": 2025,
+      "team": "Merrimack",
+      "classification": "fcs",
+      "conference": "FCS Independents",
+      "division": null,
+      "ranking": 89,
+      "rating": -34.9
+    },
+    {
+      "year": 2025,
+      "team": "Murray State",
+      "classification": "fcs",
+      "conference": "MVFC",
+      "division": null,
+      "ranking": 90,
+      "rating": -35.2
+    },
+    {
+      "year": 2025,
+      "team": "Western Illinois",
+      "classification": "fcs",
+      "conference": "OVC-Big South",
+      "division": null,
+      "ranking": 91,
+      "rating": -35.3
+    },
+    {
+      "year": 2025,
+      "team": "Bethune-Cookman",
+      "classification": "fcs",
+      "conference": "SWAC",
+      "division": "East",
+      "ranking": 92,
+      "rating": -36.4
+    },
+    {
+      "year": 2025,
+      "team": "Columbia",
+      "classification": "fcs",
+      "conference": "Ivy",
+      "division": null,
+      "ranking": 93,
+      "rating": -36.7
+    },
+    {
+      "year": 2025,
+      "team": "Marist",
+      "classification": "fcs",
+      "conference": "Pioneer",
+      "division": null,
+      "ranking": 94,
+      "rating": -36.9
+    },
+    {
+      "year": 2025,
+      "team": "Campbell",
+      "classification": "fcs",
+      "conference": "Coastal Athletic",
+      "division": null,
+      "ranking": 95,
+      "rating": -37
+    },
+    {
+      "year": 2025,
+      "team": "Butler",
+      "classification": "fcs",
+      "conference": "Pioneer",
+      "division": null,
+      "ranking": 95,
+      "rating": -37
+    },
+    {
+      "year": 2025,
+      "team": "Eastern Illinois",
+      "classification": "fcs",
+      "conference": "OVC-Big South",
+      "division": null,
+      "ranking": 97,
+      "rating": -37.1
+    },
+    {
+      "year": 2025,
+      "team": "Georgetown",
+      "classification": "fcs",
+      "conference": "Patriot",
+      "division": null,
+      "ranking": 98,
+      "rating": -38.6
+    },
+    {
+      "year": 2025,
+      "team": "UAlbany",
+      "classification": "fcs",
+      "conference": "Coastal Athletic",
+      "division": null,
+      "ranking": 99,
+      "rating": -38.7
+    },
+    {
+      "year": 2025,
+      "team": "Texas Southern",
+      "classification": "fcs",
+      "conference": "SWAC",
+      "division": "West",
+      "ranking": 100,
+      "rating": -38.9
+    },
+    {
+      "year": 2025,
+      "team": "Bryant",
+      "classification": "fcs",
+      "conference": "Coastal Athletic",
+      "division": null,
+      "ranking": 101,
+      "rating": -39
+    },
+    {
+      "year": 2025,
+      "team": "Grambling",
+      "classification": "fcs",
+      "conference": "SWAC",
+      "division": "West",
+      "ranking": 102,
+      "rating": -39.1
+    },
+    {
+      "year": 2025,
+      "team": "Morgan State",
+      "classification": "fcs",
+      "conference": "MEAC",
+      "division": null,
+      "ranking": 103,
+      "rating": -39.4
+    },
+    {
+      "year": 2025,
+      "team": "Stonehill",
+      "classification": "fcs",
+      "conference": "NEC",
+      "division": null,
+      "ranking": 104,
+      "rating": -39.5
+    },
+    {
+      "year": 2025,
+      "team": "Bucknell",
+      "classification": "fcs",
+      "conference": "Patriot",
+      "division": null,
+      "ranking": 105,
+      "rating": -39.9
+    },
+    {
+      "year": 2025,
+      "team": "Alcorn State",
+      "classification": "fcs",
+      "conference": "SWAC",
+      "division": "West",
+      "ranking": 106,
+      "rating": -40.2
+    },
+    {
+      "year": 2025,
+      "team": "Wagner",
+      "classification": "fcs",
+      "conference": "NEC",
+      "division": null,
+      "ranking": 107,
+      "rating": -40.4
+    },
+    {
+      "year": 2025,
+      "team": "Robert Morris",
+      "classification": "fcs",
+      "conference": "NEC",
+      "division": null,
+      "ranking": 108,
+      "rating": -41.8
+    },
+    {
+      "year": 2025,
+      "team": "Howard",
+      "classification": "fcs",
+      "conference": "MEAC",
+      "division": null,
+      "ranking": 109,
+      "rating": -41.9
+    },
+    {
+      "year": 2025,
+      "team": "Houston Christian",
+      "classification": "fcs",
+      "conference": "Southland",
+      "division": null,
+      "ranking": 110,
+      "rating": -42.6
+    },
+    {
+      "year": 2025,
+      "team": "Tennessee State",
+      "classification": "fcs",
+      "conference": "OVC-Big South",
+      "division": null,
+      "ranking": 111,
+      "rating": -42.7
+    },
+    {
+      "year": 2025,
+      "team": "Samford",
+      "classification": "fcs",
+      "conference": "Southern",
+      "division": null,
+      "ranking": 112,
+      "rating": -43.5
+    },
+    {
+      "year": 2025,
+      "team": "Morehead State",
+      "classification": "fcs",
+      "conference": "Pioneer",
+      "division": null,
+      "ranking": 113,
+      "rating": -43.8
+    },
+    {
+      "year": 2025,
+      "team": "Fordham",
+      "classification": "fcs",
+      "conference": "Patriot",
+      "division": null,
+      "ranking": 114,
+      "rating": -43.9
+    },
+    {
+      "year": 2025,
+      "team": "Alabama A&M",
+      "classification": "fcs",
+      "conference": "SWAC",
+      "division": "East",
+      "ranking": 115,
+      "rating": -44.5
+    },
+    {
+      "year": 2025,
+      "team": "North Carolina A&T",
+      "classification": "fcs",
+      "conference": "Coastal Athletic",
+      "division": null,
+      "ranking": 116,
+      "rating": -46.1
+    },
+    {
+      "year": 2025,
+      "team": "Northwestern State",
+      "classification": "fcs",
+      "conference": "Southland",
+      "division": null,
+      "ranking": 117,
+      "rating": -46.2
+    },
+    {
+      "year": 2025,
+      "team": "New Haven",
+      "classification": "fcs",
+      "conference": "NEC",
+      "division": null,
+      "ranking": 118,
+      "rating": -46.3
+    },
+    {
+      "year": 2025,
+      "team": "Florida A&M",
+      "classification": "fcs",
+      "conference": "SWAC",
+      "division": "East",
+      "ranking": 118,
+      "rating": -46.3
+    },
+    {
+      "year": 2025,
+      "team": "Norfolk State",
+      "classification": "fcs",
+      "conference": "MEAC",
+      "division": null,
+      "ranking": 120,
+      "rating": -47
+    },
+    {
+      "year": 2025,
+      "team": "Arkansas-Pine Bluff",
+      "classification": "fcs",
+      "conference": "SWAC",
+      "division": "West",
+      "ranking": 121,
+      "rating": -47.7
+    },
+    {
+      "year": 2025,
+      "team": "VMI",
+      "classification": "fcs",
+      "conference": "Southern",
+      "division": null,
+      "ranking": 122,
+      "rating": -48
+    },
+    {
+      "year": 2025,
+      "team": "Saint Francis",
+      "classification": "fcs",
+      "conference": "NEC",
+      "division": null,
+      "ranking": 123,
+      "rating": -49.2
+    },
+    {
+      "year": 2025,
+      "team": "Hampton",
+      "classification": "fcs",
+      "conference": "Coastal Athletic",
+      "division": null,
+      "ranking": 124,
+      "rating": -49.4
+    },
+    {
+      "year": 2025,
+      "team": "Valparaiso",
+      "classification": "fcs",
+      "conference": "Pioneer",
+      "division": null,
+      "ranking": 125,
+      "rating": -50.4
+    },
+    {
+      "year": 2025,
+      "team": "Mississippi Valley State",
+      "classification": "fcs",
+      "conference": "SWAC",
+      "division": "East",
+      "ranking": 125,
+      "rating": -50.4
+    },
+    {
+      "year": 2025,
+      "team": "Southern",
+      "classification": "fcs",
+      "conference": "SWAC",
+      "division": "West",
+      "ranking": 127,
+      "rating": -51.6
+    },
+    {
+      "year": 2025,
+      "team": "Davidson",
+      "classification": "fcs",
+      "conference": "Pioneer",
+      "division": null,
+      "ranking": 128,
+      "rating": -51.8
+    },
+    {
+      "year": 2025,
+      "team": "Stetson",
+      "classification": "fcs",
+      "conference": "Pioneer",
+      "division": null,
+      "ranking": 129,
+      "rating": -53.5
+    }
+  ]
+}

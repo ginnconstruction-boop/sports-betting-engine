@@ -1,0 +1,24 @@
+{
+  "id": "7705d07c4cb9840a7e83178258d5168600bdd283372585c32697cafea8e390a3",
+  "schema": 1,
+  "teamId": "52",
+  "teamName": "Florida State Seminoles",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.depthTier.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-07T18:57:13.874Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-07T18:57:13.874Z",
+    "retrievedAt": "2026-09-07T18:57:13.874Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "bfbeb97c3fc3d433c04588e08f0d31b0227c8b0d7756ecb301ca56a2117cb8ad"
+}
