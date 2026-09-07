@@ -13,6 +13,12 @@
       "captureEventId": "manual-fbd5e77f6d975c2ab042a00ce45d4531",
       "completedAt": "2026-09-07T18:57:14.788Z",
       "trigger": "MANUAL"
+    },
+    {
+      "id": "70193146235a1effb0077b0e8079add134fc0d16a9a73c92879b6d9ed4b177a5",
+      "captureEventId": "manual-10a5f3693faf83aa9a3b73ab798d2a96",
+      "completedAt": "2026-09-07T19:15:47.052Z",
+      "trigger": "MANUAL"
     }
   ]
 }

@@ -1,0 +1,24 @@
+{
+  "id": "2f082b3ca48114a3fc063f57db3b9c4b0d199f7a97726769ac9ba208aff1f214",
+  "schema": 1,
+  "teamId": "52",
+  "teamName": "Florida State Seminoles",
+  "season": 2026,
+  "eventId": "401858212",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-07T19:15:46.160Z",
+  "effectiveTo": "2026-09-08T05:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858212",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-07T19:15:46.160Z",
+    "retrievedAt": "2026-09-07T19:15:46.160Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "68ec2df1ca1b3f14eec1506617cc22b05cb248cc6783215b880feba1dc6a707d"
+}
