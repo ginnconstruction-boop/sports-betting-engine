@@ -48,6 +48,12 @@ jobs:
 
       - run: npm ci
 
+      - name: Verify required research provider secrets
+        shell: bash
+        run: |
+          test -n "${ODDS_API_KEY}" || { echo "ODDS_API_KEY is not configured."; exit 1; }
+          test -n "${CFBD_API_KEY}" || { echo "CFBD_API_KEY is not configured."; exit 1; }
+
       - name: Select explicit capture trigger
         id: protocol
         shell: bash
@@ -80,5 +86,22 @@ jobs:
             echo "No new immutable records to persist."
           else
             git commit -m "chore(research): archive forward collection [skip render]"
+            git push origin HEAD:${GITHUB_REF_NAME}
+          fi
+
+      - name: Generate the deterministic Phase 8 monitoring report
+        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
+        shell: bash
+        run: npm run research:college-forward-monitoring -- --generated-at=$(date -u +%Y-%m-%dT%H:%M:%S.000Z)
+
+      - name: Persist the research-only monitoring artifact
+        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
+        shell: bash
+        run: |
+          git add sports-betting-engine/research/results/college-forward-monitoring-v1
+          if git diff --cached --quiet; then
+            echo "No new monitoring artifact to persist."
+          else
+            git commit -m "chore(research): archive forward monitoring [skip render]"
             git push origin HEAD:${GITHUB_REF_NAME}
           fi

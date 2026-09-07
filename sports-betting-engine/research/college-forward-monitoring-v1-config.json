@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "college-forward-monitoring-v1",
+  "activatedAt": "2026-09-07T13:33:48.000Z",
+  "scheduleGraceMinutes": 60,
+  "preliminaryReportingN": 25,
+  "milestones": [25, 50, 100, 250, 500, 1000],
+  "holdoutPolicy": {
+    "development": "Weeks 0-5",
+    "validation": "Weeks 6-9",
+    "lockedHoldout": "Week 10+",
+    "postseason": "Excluded until separately declared",
+    "regimes": "FBS/FBS and FBS/FCS remain separate"
+  },
+  "fbsFbsGate": {
+    "finalized": 250,
+    "modelAIntegrityPercent": 90,
+    "teamEfficiencyPercent": 90,
+    "qbPercent": 85,
+    "rosterPercent": 80,
+    "talentPercent": 80,
+    "transferPercent": 70,
+    "entityMatchPercent": 99,
+    "providerSuccessPercent": 95,
+    "development": 100,
+    "validation": 75,
+    "holdout": 75,
+    "unresolvedLeakageViolations": 0
+  },
+  "fbsFcsGate": {
+    "finalized": 75,
+    "fcsQualityPercent": 80,
+    "qbPercent": 70,
+    "rosterPercent": 70,
+    "talentPercent": 70,
+    "entityMatchPercent": 99,
+    "unresolvedLeakageViolations": 0
+  },
+  "modelChangesAuthorized": false,
+  "thresholdOptimizationAuthorized": false
+}
