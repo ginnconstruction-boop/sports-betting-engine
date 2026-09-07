@@ -49,13 +49,13 @@ test('college grading rejects NFL data, missing scores, malformed/unsupported ma
   for(const change of [(d:any)=>d.header.league.slug='nfl',(d:any)=>d.header.competitions[0].competitors[0].score=null,
     (d:any)=>d.header.competitions[0].competitors[0].score='-1',(d:any)=>d.header.competitions[0].competitors[0].score='3.5',
     (d:any)=>d.header.competitions[0].competitors[0].team.id='999']){
-    const d=summary();change(d);assert.equal(gradeCollegePaper(pick(),d).result,'REVIEW');
+    const d=summary();change(d);assert.equal(gradeCollegePaper(pick(),d).result,'UNABLE_TO_GRADE');
   }
-  assert.equal(gradeCollegePaper({...pick(),quote:{...quote,market:'player_pass_yds'}},summary()).result,'REVIEW');
-  assert.equal(gradeCollegePaper({...pick(),rules:'NFL-rules'},summary()).result,'REVIEW');
-  assert.equal(gradeCollegePaper({...pick(),verifiedEvent:undefined},summary()).result,'REVIEW');
+  assert.equal(gradeCollegePaper({...pick(),quote:{...quote,market:'player_pass_yds'}},summary()).result,'UNABLE_TO_GRADE');
+  assert.equal(gradeCollegePaper({...pick(),rules:'NFL-rules'},summary()).result,'UNABLE_TO_GRADE');
+  assert.equal(gradeCollegePaper({...pick(),verifiedEvent:undefined},summary()).result,'UNABLE_TO_GRADE');
   const pending=summary();pending.header.competitions[0].status.type.completed=false;
-  assert.equal(gradeCollegePaper(pick(),pending).result,'PENDING');
+  assert.equal(gradeCollegePaper(pick(),pending).result,'UNABLE_TO_GRADE');
 });
 function temp(){return fs.mkdtempSync(path.join(os.tmpdir(),'college-paper-test-'));}
 function clean(dir:string){assert.equal(path.dirname(path.resolve(dir)),path.resolve(os.tmpdir()));assert.match(path.basename(dir),/^college-paper-test-/);fs.rmSync(dir,{recursive:true});}

@@ -33,6 +33,7 @@ import { CollegeDayScan,collegeDate,COLLEGE_TIMEZONE } from './src/services/coll
 import { CollegePredictions } from './src/services/collegePredictions';
 import { CollegeDailyRun } from './src/services/collegeDailyRun';
 import {collegeClvReport} from './src/services/collegeClv';
+import {PAPER_APPLICATION_RELEASE} from './src/services/footballSettlement';
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -692,7 +693,7 @@ app.post('/api/ats/backfill', requireAuth, async (req, res) => {
 });
 
 // ── Health ──
-app.get('/api/health', (_, res) => res.json({ ok: true, release: 'college-phase1-data-integrity-14',
+app.get('/api/health', (_, res) => res.json({ ok: true, release: PAPER_APPLICATION_RELEASE,
   integrations:{cfbdConfigured:Boolean(process.env.CFBD_API_KEY)},ts: new Date().toISOString() }));
 
 // ── SPA fallback ──

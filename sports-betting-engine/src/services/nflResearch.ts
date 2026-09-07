@@ -160,10 +160,11 @@ export class NflResearch {
         'Last season is shown separately; injuries, team changes, role changes and opponent strength are not modeled.',
         ...(player.injuries.length ? player.injuries.map(i => `Roster injury: ${i.status}${i.date ? ` (reported ${i.date})` : ''}; verify current status.`) : ['No listed roster injury does not confirm health.'])] };
   }
-  async matchEvent(event: UpcomingEvent): Promise<string> {
+  async eventIdentity(event:UpcomingEvent){
     const date = Date.parse(event.commenceTime);
     const day = (ms: number) => new Date(ms).toISOString().slice(0, 10).replace(/-/g, '');
-    const data = await this.cached(`${ESPN_NFL}/scoreboard?dates=${day(date - 86400_000)}-${day(date + 86400_000)}&limit=100`);
+    const source=`${ESPN_NFL}/scoreboard?dates=${day(date - 86400_000)}-${day(date + 86400_000)}&limit=100`;
+    const data = await this.cached(source);
     const matches = (data.events ?? []).filter((e: any) => {
       const c = e.competitions?.[0];
       return Math.abs(Date.parse(e.date) - date) <= 2 * 3600_000
@@ -172,7 +173,16 @@ export class NflResearch {
     });
     if (matches.length !== 1 || !/^\d+$/.test(matches[0].id)) throw new MarketBoardError('Unique ESPN game could not be verified; paper pick not saved.', 422);
     if (Number(matches[0].season?.type) !== 2) throw new MarketBoardError('Paper testing is limited to regular-season NFL games.', 422);
-    return matches[0].id;
+    const competition=matches[0].competitions?.[0],home=competition?.competitors?.filter((t:any)=>t.homeAway==='home')??[],
+      away=competition?.competitors?.filter((t:any)=>t.homeAway==='away')??[];
+    if(home.length!==1||away.length!==1||home[0].team?.id==null||away[0].team?.id==null
+      ||String(home[0].team.id)===String(away[0].team.id))throw new MarketBoardError('NFL canonical home/away IDs could not be verified.',422);
+    return {espnEventId:String(matches[0].id),homeTeamId:String(home[0].team.id),awayTeamId:String(away[0].team.id),
+      neutralSite:typeof competition.neutralSite==='boolean'?competition.neutralSite:null,source,
+      fetchedAt:new Date(this.cache.get(source)?.at??this.now()).toISOString()};
+  }
+  async matchEvent(event: UpcomingEvent): Promise<string> {
+    return (await this.eventIdentity(event)).espnEventId;
   }
   async forecastInputs(event: UpcomingEvent, name: string, market: string): Promise<NflForecastInput> {
     if (!NFL_CORE_STATS[market]) throw new MarketBoardError('Unsupported NFL forecast market.');

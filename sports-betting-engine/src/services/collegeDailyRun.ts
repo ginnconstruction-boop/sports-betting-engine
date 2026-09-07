@@ -13,7 +13,7 @@ export interface CollegeDailyJob {
   id:string;date:string;startedAt:string;finishedAt?:string;
   status:'running'|'complete'|'partial'|'failed';stage:'scanning'|'grading'|'finished';
   scan:any|null;warnings:string[];
-  grading:{gamesPlanned:number;gamesChecked:number;picksChecked:number;sourceFailures:number;pending:number;review:number};
+  grading:{gamesPlanned:number;gamesChecked:number;picksChecked:number;sourceFailures:number;pending:number;unableToGrade:number;legacyReview:number;voids:number;review:number};
 }
 /** One explicit click starts finite work, not a scheduler. The job survives a
  * disconnected browser, but not a server restart. Saved picks/results are durable.
@@ -26,7 +26,7 @@ export class CollegeDailyRun {
     if(this.active)return this.get(this.active.id);
     for(const id of [...this.jobs.keys()].slice(0,Math.max(0,this.jobs.size-9)))this.jobs.delete(id);
     const job:CollegeDailyJob={id:randomUUID(),date:collegeDate(this.deps.now()),startedAt:new Date(this.deps.now()).toISOString(),
-      status:'running',stage:'scanning',scan:null,warnings:[],grading:{gamesPlanned:0,gamesChecked:0,picksChecked:0,sourceFailures:0,pending:0,review:0}};
+      status:'running',stage:'scanning',scan:null,warnings:[],grading:{gamesPlanned:0,gamesChecked:0,picksChecked:0,sourceFailures:0,pending:0,unableToGrade:0,legacyReview:0,voids:0,review:0}};
     this.jobs.set(job.id,job);this.active=job;
     void this.execute(job).catch(()=>{job.status='failed';job.warnings.push('Daily run interrupted. Saved picks/results remain intact; inspect the record before retrying.');})
       .finally(()=>{job.stage='finished';job.finishedAt=new Date(this.deps.now()).toISOString();this.active=null;});
@@ -48,14 +48,17 @@ export class CollegeDailyRun {
     }catch{job.warnings.push('Today’s scan could not finish. Grading existing paper picks will still be attempted. No automatic odds retry.');}
     job.stage='grading';
     try{
-      const eligible=this.deps.read().filter(p=>p.event.sportKey==='americanfootball_ncaaf'&&['PENDING','REVIEW'].includes(p.result)
+      const eligible=this.deps.read().filter(p=>p.event.sportKey==='americanfootball_ncaaf'&&['PENDING','REVIEW','UNABLE_TO_GRADE'].includes(p.result)
         &&Date.parse(p.event.commenceTime)+4*3600_000<this.deps.now());
       const ids=[...new Set(eligible.map(p=>p.espnEventId))];job.grading.gamesPlanned=ids.length;
       for(let i=0;i<ids.length;i+=10){
         const batch=ids.slice(i,i+10),r=await this.deps.gradeEvents(batch);
         job.grading.gamesChecked+=batch.length;job.grading.picksChecked+=r.checked;job.grading.sourceFailures+=r.sourceFailures;
       }
-      const picks=this.deps.read();job.grading.pending=picks.filter(p=>p.result==='PENDING').length;job.grading.review=picks.filter(p=>p.result==='REVIEW').length;
+      const picks=this.deps.read();job.grading.pending=picks.filter(p=>p.result==='PENDING').length;
+      job.grading.unableToGrade=picks.filter(p=>p.result==='UNABLE_TO_GRADE').length;
+      job.grading.legacyReview=picks.filter(p=>p.result==='REVIEW').length;job.grading.review=job.grading.unableToGrade+job.grading.legacyReview;
+      job.grading.voids=picks.filter(p=>p.result==='VOID').length;
       if(job.grading.sourceFailures)job.warnings.push('Some result sources were unavailable. Those selections remain unresolved, never assumed losses.');
     }catch{job.warnings.push('Grading could not finish. Previously saved picks/results were preserved; inspect the paper record.');}
     job.status=job.warnings.length?'partial':'complete';

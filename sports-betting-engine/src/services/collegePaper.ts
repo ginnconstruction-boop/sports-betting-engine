@@ -1,36 +1,70 @@
 import { NflPaperLedger, NflPaperPick } from './nflPaper';
 import { nflNumber, nflSeason } from './nflResearch';
 import { CollegeResearch, ESPN_COLLEGE } from './collegeResearch';
+import {GameResultEvidence, SavedFullGameSelection, settleFullGame} from './footballSettlement';
 
 export const COLLEGE_PAPER_RULES='college-full-game-includes-ot_v1';
-export function gradeCollegePaper(pick:NflPaperPick,data:any) {
-  const review=(note:string)=>({result:'REVIEW' as const,note});
-  const game=data?.header?.competitions?.[0],identity=pick.verifiedEvent,q=pick.quote;
-  if(pick.event.sportKey!=='americanfootball_ncaaf'||pick.rules!==COLLEGE_PAPER_RULES||!['spreads','totals'].includes(q.market)
-    ||!identity||data?.header?.league?.slug!=='college-football'||data.header.competitions?.length!==1
-    ||String(game?.id)!==pick.espnEventId||identity.espnEventId!==pick.espnEventId
-    ||Number(data.header.season?.type)!==2||Number(data.header.season?.year)!==pick.season
-    ||pick.season!==nflSeason(pick.event.commenceTime)||!Number.isFinite(Date.parse(game?.date??''))
-    ||Math.abs(Date.parse(game.date)-Date.parse(pick.event.commenceTime))>15*60_000)
-    return review('College game/season/rules identity does not match the saved selection.');
-  const home=game.competitors?.filter((c:any)=>c.homeAway==='home')??[],away=game.competitors?.filter((c:any)=>c.homeAway==='away')??[];
-  if(game.competitors?.length!==2||home.length!==1||away.length!==1||String(home[0].team?.id)!==identity.homeTeamId
-    ||String(away[0].team?.id)!==identity.awayTeamId||identity.homeTeamId===identity.awayTeamId)
-    return review('College home/away team IDs do not match.');
-  if(game.status?.type?.completed!==true||game.status?.type?.state!=='post')return {result:'PENDING' as const,note:'Awaiting completed college game.'};
-  if(!['STATUS_FINAL','STATUS_FINAL_OVERTIME'].includes(game.status.type.name))return review('Unusual college final status; verify manually.');
-  const hs=nflNumber(home[0].score),as=nflNumber(away[0].score);
-  if(!Number.isInteger(hs)||!Number.isInteger(as)||hs<0||as<0||(hs===0&&as===0)||!Number.isFinite(q.line))return review('College final scores or exact line are missing/invalid.');
-  let actual:number,result:'WIN'|'LOSS'|'PUSH';
-  if(q.market==='totals') {
-    if(!['Over','Under'].includes(q.side))return review('Invalid college total side.');
-    actual=hs+as;result=actual===q.line?'PUSH':(q.side==='Over'?actual>q.line:actual<q.line)?'WIN':'LOSS';
-  }else{
-    if(![pick.event.homeTeam,pick.event.awayTeam].includes(q.side))return review('Unknown selected college team.');
-    actual=(q.side===pick.event.homeTeam?hs-as:as-hs)+q.line;result=actual===0?'PUSH':actual>0?'WIN':'LOSS';
-  }
-  return {result,actual,note:`College ${pick.origin==='model'?'experimental model':'manual'} paper result, full game including overtime. Exact saved line and home/away IDs; neutral venue is not home-field advantage. Sportsbook rules/promotions require separate verification.`};
+
+interface EvidenceMeta {sourceProvider?:string;sourceRetrievalTimestamp?:string;gradingTimestamp?:string;}
+const timestampOrNull=(value:unknown)=>typeof value==='string'&&Number.isFinite(Date.parse(value))?new Date(Date.parse(value)).toISOString():null;
+
+/** Extract only provider facts. Settlement remains a separate pure operation. */
+export function collegeResultEvidence(pick:NflPaperPick,data:any,meta:EvidenceMeta={}):GameResultEvidence {
+  const game=data?.header?.competitions?.length===1?data.header.competitions[0]:null;
+  const home=game?.competitors?.filter((c:any)=>c.homeAway==='home')??[];
+  const away=game?.competitors?.filter((c:any)=>c.homeAway==='away')??[];
+  const status=game?.status?.type;
+  return {
+    sourceProvider:meta.sourceProvider??ESPN_COLLEGE,
+    providerEventId:game?.id==null?null:String(game.id),
+    canonicalEventId:game?.id==null?null:String(game.id),
+    homeCanonicalId:home.length===1&&home[0].team?.id!=null?String(home[0].team.id):null,
+    awayCanonicalId:away.length===1&&away[0].team?.id!=null?String(away[0].team.id):null,
+    homeFinalScore:home.length===1?nflNumber(home[0].score):null,
+    awayFinalScore:away.length===1?nflNumber(away[0].score):null,
+    explicitStatus:typeof status?.name==='string'?status.name:null,
+    statusCompleted:typeof status?.completed==='boolean'?status.completed:null,
+    statusState:typeof status?.state==='string'?status.state:null,
+    eventCompletionTimestamp:timestampOrNull(status?.completedAt??game?.completionTime),
+    sourceRetrievalTimestamp:meta.sourceRetrievalTimestamp??'NOT_RECORDED',
+    gradingTimestamp:meta.gradingTimestamp??'NOT_RECORDED',
+  };
 }
+
+export function savedCollegeSelection(pick:NflPaperPick):SavedFullGameSelection|null {
+  const identity=pick.verifiedEvent,q=pick.quote;
+  if(!identity||!['spreads','totals'].includes(q.market)||!Number.isFinite(q.line))return null;
+  const selectedTeamCanonicalId=q.market==='spreads'
+    ? q.side===pick.event.homeTeam?identity.homeTeamId:q.side===pick.event.awayTeam?identity.awayTeamId:undefined
+    : undefined;
+  return {canonicalEventId:pick.espnEventId,homeCanonicalId:identity.homeTeamId,awayCanonicalId:identity.awayTeamId,
+    market:q.market as 'spreads'|'totals',selectedSide:q.side,selectedTeamCanonicalId,line:q.line as number,americanPrice:q.price};
+}
+
+/** Deterministic replayable settlement from an immutable pick plus archived evidence. */
+export function settleCollegePaper(pick:NflPaperPick,evidence:GameResultEvidence){
+  const selection=savedCollegeSelection(pick);
+  return selection?settleFullGame(selection,evidence):{result:'UNABLE_TO_GRADE' as const,
+    note:'Original college selection identity, market, side, or line is missing.'};
+}
+
+export function gradeCollegePaper(pick:NflPaperPick,data:any,meta:EvidenceMeta={}) {
+  const evidence=collegeResultEvidence(pick,data,meta);
+  const game=data?.header?.competitions?.length===1?data.header.competitions[0]:null;
+  const invalidIdentity=pick.event.sportKey!=='americanfootball_ncaaf'||pick.rules!==COLLEGE_PAPER_RULES
+    ||!['spreads','totals'].includes(pick.quote.market)||!pick.verifiedEvent
+    ||data?.header?.league?.slug!=='college-football'||!game
+    ||Number(data?.header?.season?.type)!==2||Number(data?.header?.season?.year)!==pick.season
+    ||pick.season!==nflSeason(pick.event.commenceTime)||!Number.isFinite(Date.parse(game?.date??''))
+    ||Math.abs(Date.parse(game.date)-Date.parse(pick.event.commenceTime))>15*60_000;
+  if(invalidIdentity)return {result:'UNABLE_TO_GRADE' as const,
+    note:'College game, season, rules, or kickoff identity cannot be verified against the saved selection.',resultEvidence:evidence};
+  const settled=settleCollegePaper(pick,evidence);
+  return {...settled,resultEvidence:evidence,note:settled.result==='WIN'||settled.result==='LOSS'||settled.result==='PUSH'
+    ? `College ${pick.origin==='model'?'experimental model':'manual'} paper result. ${settled.note} Exact saved line, price, event ID and team IDs were used. Sportsbook-specific rules require separate verification.`
+    : settled.note};
+}
+
 export function createCollegePaperLedger(file:string,research=new CollegeResearch(),now=()=>Date.now()) {
   return new NflPaperLedger(file,{matchEvent:event=>research.matchEvent(event),summary:id=>research.summary(id),
     player:async()=>{throw new Error('College player props are out of scope.');}},now,{

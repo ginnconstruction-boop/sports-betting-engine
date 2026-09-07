@@ -32,8 +32,8 @@ export function footballPaperMetrics(picks: NflPaperPick[], now = Date.now()) {
     });
     const games = new Map<string, { kickoff: string; profit: number; stake: number }>();
     for (const p of settled) {
-      const g = games.get(p.event.id) ?? { kickoff: p.event.commenceTime, profit: 0, stake: 0 };
-      g.profit += paperProfit(p.result, p.quote.price); g.stake++; games.set(p.event.id, g);
+      const gameId=p.espnEventId||p.event.id,g = games.get(gameId) ?? { kickoff: p.event.commenceTime, profit: 0, stake: 0 };
+      g.profit += paperProfit(p.result, p.quote.price); g.stake++; games.set(gameId, g);
     }
     const gameRows = [...games.values()].sort((a, b) => Date.parse(a.kickoff) - Date.parse(b.kickoff));
     let cumulative = 0, peak = 0, maxDrawdownUnits = 0;
@@ -50,7 +50,9 @@ export function footballPaperMetrics(picks: NflPaperPick[], now = Date.now()) {
     simulations.sort((a, b) => a - b);
     const started = rows.filter(p => Date.parse(p.event.commenceTime) <= now);
     return { group, tracked: rows.length, settled: settled.length, distinctSettledGames: gameRows.length,
-      unresolved: rows.filter(p => p.result === 'PENDING' || p.result === 'REVIEW').length,
+      unresolved: rows.filter(p => ['PENDING','REVIEW','UNABLE_TO_GRADE'].includes(p.result)).length,
+      pending:rows.filter(p=>p.result==='PENDING').length,unableToGrade:rows.filter(p=>p.result==='UNABLE_TO_GRADE').length,
+      voids:rows.filter(p=>p.result==='VOID').length,legacyReview:rows.filter(p=>p.result==='REVIEW').length,
       probabilityScored: probabilistic.length, multiclassBrier: brier, logLoss, calibration: bins,
       profitUnits: cumulative, roi: settled.length ? cumulative / settled.length : null, maxDrawdownUnits,
       approximateGameClusterRoiInterval: simulations.length ? [simulations[24], simulations[974]] : null,

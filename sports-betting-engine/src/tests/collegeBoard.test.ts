@@ -97,7 +97,7 @@ test('college paper record plainly separates recommendations, watch-only observa
   const app=ui(async()=>({picks:[],report:{buckets}}));await app.run('loadCollegePaper(false)');
   const panel=app.document.getElementById('college-paper-results'),text=panel.children.map(c=>c.textContent).join(' ');
   assert.match(text,/OFFICIAL MODEL PAPER RECOMMENDATIONS: 1W–0L–0P/);
-  assert.match(text,/WATCH-ONLY MODEL OBSERVATIONS: 0W–1L–0P; 1 pending/);
+  assert.match(text,/WATCH-ONLY MODEL OBSERVATIONS: 0W–1L–0P; 0 void; 1 pending/);
   assert.match(text,/not recommendations/);
   assert.match(text,/YOUR MANUAL PRACTICE PICKS: 2W–1L–1P/);
 });

@@ -11,12 +11,25 @@ import { CollegeAssessment,assessCollegeQuote,COLLEGE_SELECTION_VERSION } from '
 import {CollegeSafety,assessCollegeSafety,COLLEGE_SAFETY_VERSION} from './collegeSafety';
 import {CollegeLineObservation,collegeLineObservations} from './collegeClv';
 import {flattenNflQuotes} from './nflMarketBoard';
+import {GameResultEvidence, PAPER_APPLICATION_RELEASE, PAPER_SETTLEMENT_VERSION, PaperResult} from './footballSettlement';
 
 export interface CollegeSavedForecast {projection:CollegeProjection;assessment:CollegeAssessment;inputEvidenceHash:string;
   forecastEvidenceHash:string;bundleHash:string;selectionVersion:string;safety?:CollegeSafety;}
 
 export const PAPER_RULES = 'regulation-periods_full-game-includes-ot_v1';
-export type PaperResult = 'PENDING' | 'REVIEW' | 'WIN' | 'LOSS' | 'PUSH';
+export type {PaperResult} from './footballSettlement';
+export interface PaperSelectionSnapshot {
+  schema:'football-paper-selection-v2';pickId:string;providerEventId:string;canonicalEventId:string;
+  homeCanonicalId:string;awayCanonicalId:string;sport:string;league:string;marketType:string;participant:string;
+  selectedSide:string;exactLine:number|null;exactAmericanPrice:number;sportsbook:string;sportsbookKey:string;
+  marketTimestamp:string;recommendationTimestamp:string;scanTimestamp:string;scheduledKickoff:string;
+  modelVersion:string;featureDataVersion:string;decisionRuleVersion:string;calibrationVersion:string;
+  applicationRelease:string;settlementVersion:string;originalProjection:unknown;originalMarketDisagreement:unknown;originalSafetyContext:unknown;
+}
+export interface GradingAuditEntry {result:PaperResult;actual?:number;note:string;checkedAt:string;source:string;sourceHash:string;
+  evidenceHash?:string;resultEvidence?:GameResultEvidence;}
+export interface SettlementCorrection {previousResult:PaperResult;newResult:PaperResult;previousEvidenceHash:string|null;newEvidenceHash:string;
+  correctedAt:string;reason:string;}
 export interface NflPaperPick {
   verifiedEvent?: { espnEventId: string; homeTeamId: string; awayTeamId: string; neutralSite: boolean | null; source: string; fetchedAt: string;
     homeEntity?:any;awayEntity?:any;homeAliases?:string[];awayAliases?:string[];homeConferenceId?:string;awayConferenceId?:string;week?:number|null;
@@ -24,12 +37,14 @@ export interface NflPaperPick {
   id: string; event: UpcomingEvent; espnEventId: string; quote: MarketQuote;
   player?: NflPlayer; season: number; version: string; rules: string; savedAt: string;
   result: PaperResult; note: string; actual?: number; gradedAt?: string; source?: string;
+  resultEvidence?:GameResultEvidence;
   latestPregame?: { price: number; line?: number | null; updatedAt: string; observedAt: string };
   closeWindow?: { price: number; line: number | null; bookKey: string; updatedAt: string; observedAt: string;
     method: 'observed_last_5_minutes_not_verified_final_close' | 'verified_same_book_final_close' };
   settlementScope?: { bookKey: string; ruleVersion: string; sportsbookRulesVerified: false };
-  gradingAudit?: Array<{ result: PaperResult; actual?: number; note: string; checkedAt: string; source: string; sourceHash: string; evidenceHash?: string }>;
-  lastResultCheck?: { at: string; status: 'graded' | 'unavailable' | 'review' };
+  gradingAudit?: GradingAuditEntry[];
+  settlementCorrections?:SettlementCorrection[];
+  lastResultCheck?: { at: string; status: 'graded' | 'unavailable' | 'review' | 'pending' | 'unable' };
   origin?: 'manual' | 'model';
   forecast?: NflForecast;
   collegeForecast?: CollegeSavedForecast;
@@ -38,12 +53,58 @@ export interface NflPaperPick {
   estimatedEV?: number;
   selectionReasons?: string[];
   openingHash?:string;
+  openingHashVersion?:'paper-opening-v2';
+  selectionSnapshot?:PaperSelectionSnapshot;
+  compatibility?:{schema:'PHASE2'|'LEGACY';missingFields:string[]};
   collegeLineObservations?:CollegeLineObservation[];
 }
-function paperOpeningHash(p:NflPaperPick){return createHash('sha256').update(JSON.stringify({event:p.event,espnEventId:p.espnEventId,
+function paperOpeningHashV1(p:NflPaperPick){return createHash('sha256').update(JSON.stringify({event:p.event,espnEventId:p.espnEventId,
   quote:p.quote,verifiedEvent:p.verifiedEvent,season:p.season,version:p.version,rules:p.rules,savedAt:p.savedAt,
   origin:p.origin,collegeForecast:p.collegeForecast,modelProbability:p.modelProbability,modelPushProbability:p.modelPushProbability,
   estimatedEV:p.estimatedEV,selectionReasons:p.selectionReasons})).digest('hex');}
+function paperOpeningHash(p:NflPaperPick){return p.openingHashVersion==='paper-opening-v2'
+  ?createHash('sha256').update(JSON.stringify({selectionSnapshot:p.selectionSnapshot,event:p.event,espnEventId:p.espnEventId,
+    quote:p.quote,verifiedEvent:p.verifiedEvent,player:p.player,season:p.season,version:p.version,rules:p.rules,savedAt:p.savedAt,
+    origin:p.origin,forecast:p.forecast,collegeForecast:p.collegeForecast,modelProbability:p.modelProbability,
+    modelPushProbability:p.modelPushProbability,estimatedEV:p.estimatedEV,selectionReasons:p.selectionReasons,
+    settlementScope:p.settlementScope})).digest('hex')
+  :paperOpeningHashV1(p);}
+function selectionSnapshot(p:NflPaperPick):PaperSelectionSnapshot{
+  const college=p.collegeForecast,nfl=p.forecast,safety=college?.safety;
+  return {schema:'football-paper-selection-v2',pickId:p.id,providerEventId:p.event.id,canonicalEventId:p.espnEventId,
+    homeCanonicalId:p.verifiedEvent?.homeTeamId??'NOT_RECORDED',awayCanonicalId:p.verifiedEvent?.awayTeamId??'NOT_RECORDED',
+    sport:p.event.sportKey,league:p.event.sportKey==='americanfootball_ncaaf'?'NCAAF':'NFL',marketType:p.quote.market,
+    participant:p.quote.participant,selectedSide:p.quote.side,exactLine:p.quote.line,exactAmericanPrice:p.quote.price,
+    sportsbook:p.quote.book,sportsbookKey:p.quote.bookKey,marketTimestamp:p.quote.updatedAt??'NOT_RECORDED',
+    recommendationTimestamp:p.savedAt,scanTimestamp:college?.projection.asOf??nfl?.asOf??(p.origin==='manual'?'NOT_APPLICABLE_MANUAL_SAVE':'NOT_RECORDED'),
+    scheduledKickoff:p.event.commenceTime,modelVersion:p.origin==='model'?p.version:'NOT_APPLICABLE_MANUAL_SAVE',
+    featureDataVersion:college?.bundleHash??nfl?.dataHash??(p.origin==='manual'?'NOT_APPLICABLE_MANUAL_SAVE':'NOT_RECORDED'),
+    decisionRuleVersion:college?`${college.selectionVersion}+${safety?.version??'SAFETY_NOT_RECORDED'}`:p.rules,
+    calibrationVersion:safety?.calibrationVersion??'NOT_APPLICABLE_OR_UNCALIBRATED',applicationRelease:PAPER_APPLICATION_RELEASE,
+    settlementVersion:PAPER_SETTLEMENT_VERSION,originalProjection:college?.projection??nfl?.point??null,
+    originalMarketDisagreement:safety?.marketDisagreementPoints??null,
+    originalSafetyContext:safety??(nfl?{reasons:nfl.reasons,warnings:nfl.warnings,coverage:nfl.coverage}:null)};
+}
+function sealOpening(p:NflPaperPick){p.openingHashVersion='paper-opening-v2';p.selectionSnapshot=selectionSnapshot(p);p.openingHash=paperOpeningHash(p);
+  p.compatibility=compatibility(p);}
+function compatibility(p:NflPaperPick){const missing:string[]=[];
+  if(!p.selectionSnapshot)missing.push('versioned selection snapshot');
+  if(!p.openingHash)missing.push('opening integrity hash');
+  if(!p.verifiedEvent?.homeTeamId)missing.push('home canonical ID');
+  if(!p.verifiedEvent?.awayTeamId)missing.push('away canonical ID');
+  return {schema:(p.selectionSnapshot&&p.openingHashVersion==='paper-opening-v2'?'PHASE2':'LEGACY') as 'PHASE2'|'LEGACY',missingFields:missing};}
+function genericResultEvidence(pick:NflPaperPick,data:any,meta:{sourceProvider?:string;sourceRetrievalTimestamp?:string;gradingTimestamp?:string}):GameResultEvidence{
+  const game=data?.header?.competitions?.length===1?data.header.competitions[0]:null,home=game?.competitors?.filter((c:any)=>c.homeAway==='home')??[],
+    away=game?.competitors?.filter((c:any)=>c.homeAway==='away')??[],status=game?.status?.type;
+  const stamp=status?.completedAt??game?.completionTime,completion=typeof stamp==='string'&&Number.isFinite(Date.parse(stamp))?new Date(Date.parse(stamp)).toISOString():null;
+  return {sourceProvider:meta.sourceProvider??'NOT_RECORDED',providerEventId:game?.id==null?null:String(game.id),canonicalEventId:game?.id==null?null:String(game.id),
+    homeCanonicalId:home.length===1&&home[0].team?.id!=null?String(home[0].team.id):pick.verifiedEvent?.homeTeamId??null,
+    awayCanonicalId:away.length===1&&away[0].team?.id!=null?String(away[0].team.id):pick.verifiedEvent?.awayTeamId??null,
+    homeFinalScore:home.length===1?nflNumber(home[0].score):null,awayFinalScore:away.length===1?nflNumber(away[0].score):null,
+    explicitStatus:typeof status?.name==='string'?status.name:null,statusCompleted:typeof status?.completed==='boolean'?status.completed:null,
+    statusState:typeof status?.state==='string'?status.state:null,eventCompletionTimestamp:completion,
+    sourceRetrievalTimestamp:meta.sourceRetrievalTimestamp??'NOT_RECORDED',gradingTimestamp:meta.gradingTimestamp??'NOT_RECORDED'};
+}
 export function supportedPaperMarket(market: string): boolean {
   return !!NFL_CORE_STATS[market] || /^(h2h|spreads|totals)(_(q[1-4]|h[12]))?$/.test(market);
 }
@@ -58,8 +119,8 @@ function compared(value: number, line: number, side: string): PaperResult {
 // Conservative paper settlement only. Missing player/category/period never becomes zero.
 // No sportsbook DNP/early-injury promotions are inferred from a box score.
 export function gradeNflPaper(pick: NflPaperPick, data: any): { result: PaperResult; note: string; actual?: number } {
-  const review = (note: string) => ({ result: 'REVIEW' as const, note });
-  if (pick.rules !== PAPER_RULES || !supportedPaperMarket(pick.quote.market)) return review('Unsupported paper rule or market.');
+  const unable = (note: string) => ({ result: 'UNABLE_TO_GRADE' as const, note });
+  if (pick.rules !== PAPER_RULES || !supportedPaperMarket(pick.quote.market)) return unable('Unsupported paper rule or market.');
   const game = data?.header?.competitions?.[0];
   const home = game?.competitors?.find((c: any) => c.homeAway === 'home');
   const away = game?.competitors?.find((c: any) => c.homeAway === 'away');
@@ -69,23 +130,27 @@ export function gradeNflPaper(pick: NflPaperPick, data: any): { result: PaperRes
     || nflName(away?.team?.displayName) !== nflName(pick.event.awayTeam)
     || !Number.isFinite(Date.parse(game?.date ?? ''))
     || Math.abs(Date.parse(game.date) - Date.parse(pick.event.commenceTime)) > 2 * 3600_000)
-    return review('Source game identity, season or kickoff does not match.');
-  if (game.status?.type?.completed !== true || game.status?.type?.state !== 'post')
-    return { result: 'PENDING', note: 'Awaiting a completed game.' };
-  if (!['STATUS_FINAL', 'STATUS_FINAL_OVERTIME'].includes(game.status.type.name)) return review('Unusual final status; verify manually.');
+    return unable('Source game identity, season or kickoff does not match.');
+  if (['STATUS_CANCELED','STATUS_CANCELLED','STATUS_ABANDONED'].includes(game.status?.type?.name))
+    return {result:'VOID',note:`Event has explicit invalidating status ${game.status.type.name}; paper selection is void.`};
+  if (['STATUS_SCHEDULED','STATUS_IN_PROGRESS','STATUS_HALFTIME','STATUS_DELAYED','STATUS_POSTPONED'].includes(game.status?.type?.name))
+    return { result: 'PENDING', note: 'Awaiting an approved explicit final status.' };
+  if (game.status?.type?.completed !== true || game.status?.type?.state !== 'post'
+    || !['STATUS_FINAL', 'STATUS_FINAL_OVERTIME'].includes(game.status?.type?.name))
+    return unable('Result status is missing, unknown, or inconsistent with an approved explicit final.');
   const q = pick.quote, core = NFL_CORE_STATS[q.market];
   if (core) {
-    if (!pick.player || q.line === null || !['Over', 'Under'].includes(q.side)) return review('Missing player identity, side or line.');
+    if (!pick.player || q.line === null || !['Over', 'Under'].includes(q.side)) return unable('Missing player identity, side or line.');
     const blocks = (data.boxscore?.players ?? []).filter((b: any) => String(b.team?.id) === pick.player.teamId);
-    if (blocks.length !== 1) return review('Player team box score missing or ambiguous.');
+    if (blocks.length !== 1) return unable('Player team box score missing or ambiguous.');
     const stats = blocks[0].statistics?.filter((s: any) => s.name === core.category) ?? [];
-    if (stats.length !== 1) return review('Player stat category missing or ambiguous.');
+    if (stats.length !== 1) return unable('Player stat category missing or ambiguous.');
     const rows = (stats[0].athletes ?? []).filter((r: any) => String(r.athlete?.id) === pick.player.id);
     if (rows.length !== 1 || nflName(rows[0].athlete?.displayName) !== nflName(pick.player.name))
-      return review('Player row missing or ambiguous. Verify participation; no zero or DNP assumption.');
+      return unable('Player row missing or ambiguous. Verify participation; no zero or DNP assumption.');
     const index = (stats[0].keys ?? []).indexOf(core.field);
     const actual = index >= 0 ? nflNumber(rows[0].stats?.[index]) : null;
-    if (actual === null) return review('Numeric player result missing.');
+    if (actual === null) return unable('Numeric player result missing.');
     return { result: compared(actual, q.line, q.side), actual,
       note: 'Paper result from final player box score, including overtime; sportsbook participation rules require separate verification.' };
   }
@@ -103,15 +168,15 @@ export function gradeNflPaper(pick: NflPaperPick, data: any): { result: PaperRes
     return scores.some(v => v === null) ? null : scores.reduce((a, b) => a + b, 0);
   }
   const hs = score(home), as = score(away);
-  if (hs === null || as === null) return review('Final score or required regulation-period scores missing.');
+  if (hs === null || as === null) return unable('Final score or required regulation-period scores missing.');
   let result: PaperResult, actual: number;
   if (market === 'totals') {
-    if (q.line === null || !['Over', 'Under'].includes(q.side)) return review('Missing total line or invalid side.');
+    if (q.line === null || !['Over', 'Under'].includes(q.side)) return unable('Missing total line or invalid side.');
     actual = hs + as; result = compared(actual, q.line, q.side);
   } else {
     const isHome = nflName(q.side) === nflName(pick.event.homeTeam);
-    if (!isHome && nflName(q.side) !== nflName(pick.event.awayTeam)) return review('Unknown selected team; three-way markets unsupported.');
-    if (market === 'spreads' && q.line === null) return review('Missing spread.');
+    if (!isHome && nflName(q.side) !== nflName(pick.event.awayTeam)) return unable('Unknown selected team; three-way markets unsupported.');
+    if (market === 'spreads' && q.line === null) return unable('Missing spread.');
     actual = (isHome ? hs - as : as - hs) + (market === 'spreads' ? q.line : 0);
     result = actual === 0 ? 'PUSH' : actual > 0 ? 'WIN' : 'LOSS';
   }
@@ -126,19 +191,22 @@ export function nflPaperReport(picks: NflPaperPick[]) {
     const classification=p.collegeForecast?.safety?.classification??'legacy/manual';
     const key = `${p.season} | ${p.quote.market} | ${p.version} | ${origin} | ${classification}`;
     const b = buckets.get(key) ?? { season: p.season, market: p.quote.market, version: p.version, origin,classification,
-      tracked: 0, wins: 0, losses: 0, pushes: 0, pending: 0, review: 0, profitUnits: 0, uniqueEvents: new Set() };
-    b.tracked++; b.uniqueEvents.add(p.event.id);
+      tracked: 0, wins: 0, losses: 0, pushes: 0, voids:0,pending: 0, unableToGrade:0,legacyReview:0,review: 0,
+      profitUnits: 0, uniqueEvents: new Set() };
+    b.tracked++; b.uniqueEvents.add(p.espnEventId||p.event.id);
     if (p.result === 'WIN') b.wins++;
     else if (p.result === 'LOSS') b.losses++;
     else if (p.result === 'PUSH') b.pushes++;
-    else if (p.result === 'REVIEW') b.review++;
+    else if (p.result === 'VOID') b.voids++;
+    else if (p.result === 'UNABLE_TO_GRADE') {b.unableToGrade++;b.review++;}
+    else if (p.result === 'REVIEW') {b.legacyReview++;b.review++;}
     else b.pending++;
     b.profitUnits += paperProfit(p.result, p.quote.price); buckets.set(key, b);
   }
   return { buckets: [...buckets.values()].map(b => ({ ...b, uniqueEvents: b.uniqueEvents.size,
     winRate: b.wins + b.losses ? b.wins / (b.wins + b.losses) : null,
     roi: b.wins + b.losses + b.pushes ? b.profitUnits / (b.wins + b.losses + b.pushes) : null })),
-    note: 'Paper selections, flat 1-unit risk each, not real bets or an unbiased backtest. Manual and automatically logged model picks are separate. Related picks are correlated. Pushes excluded from win rate, included in settled-stake ROI. Model estimates remain uncalibrated; pregame observations are not verified closing lines.' };
+    note: 'Paper selections use flat 1-unit risk, not win-1-unit. At negative odds a win returns less than +1 unit; a loss is -1 unit. Pushes are excluded from win rate and included in settled-stake ROI; void, pending, unable-to-grade and legacy review records affect neither units nor ROI. Model estimates remain uncalibrated; pregame observations are not verified closing lines.' };
 }
 
 /** Shared persistence/audit lifecycle; each league supplies its own identity,
@@ -147,7 +215,8 @@ export interface FootballPaperProfile {
   sportKey: string; label: string; version: string; rules: string; sourceBase: string;
   evidenceKind: string; archiveDirectory: string;
   supports: (market: string) => boolean;
-  grade: typeof gradeNflPaper;
+  grade: (pick:NflPaperPick,data:any,meta?:{sourceProvider?:string;sourceRetrievalTimestamp?:string;gradingTimestamp?:string})=>
+    {result:PaperResult;note:string;actual?:number;resultEvidence?:GameResultEvidence};
   verifyEvent?: (event: UpcomingEvent) => Promise<NonNullable<NflPaperPick['verifiedEvent']>>;
 }
 const NFL_PAPER_PROFILE: FootballPaperProfile = {
@@ -160,10 +229,15 @@ export class NflPaperLedger {
   private grading: Promise<any> | null = null;
   private settlementArchive: NflEvidenceArchive;
   private collegeForecastArchive: NflEvidenceArchive;
-  constructor(private file: string, private research: Pick<NflResearch, 'matchEvent' | 'player' | 'summary'>, private now = () => Date.now(),
+  constructor(private file: string, private research: Pick<NflResearch, 'matchEvent' | 'player' | 'summary'> &
+    {eventIdentity?:(event:UpcomingEvent)=>Promise<NonNullable<NflPaperPick['verifiedEvent']>>}, private now = () => Date.now(),
     private profile: FootballPaperProfile = NFL_PAPER_PROFILE) {
     this.settlementArchive = new NflEvidenceArchive(path.join(path.dirname(file), profile.archiveDirectory));
     this.collegeForecastArchive = new NflEvidenceArchive(path.join(path.dirname(file),'college_forecast_evidence'));
+  }
+  private evaluate(pick:NflPaperPick,data:any,meta:{sourceProvider?:string;sourceRetrievalTimestamp?:string;gradingTimestamp?:string}){
+    const grade=this.profile.grade(pick,data,meta);
+    return {...grade,resultEvidence:grade.resultEvidence??genericResultEvidence(pick,data,meta)};
   }
   exportRecord() {
     const picks = this.read();
@@ -185,7 +259,8 @@ export class NflPaperLedger {
         evidence[hash]=payload;sourceBytes+=bytes;
       }catch{missingEvidence.push(hash);}
     }
-    return { schema: 1, sportKey: this.profile.sportKey, exportedAt: new Date(this.now()).toISOString(), picks, evidence, missingEvidence, omittedEvidence,
+    return { schema: 1,paperSchema:'football-paper-ledger-v2-compatible',resultSemanticsVersion:PAPER_SETTLEMENT_VERSION,
+      sportKey: this.profile.sportKey, exportedAt: new Date(this.now()).toISOString(), picks, evidence, missingEvidence, omittedEvidence,
       note: `${this.profile.label} paper-only export. Includes original forecasts/quotes and up to 25 MiB of settlement source snapshots; omitted hashes are listed and require a server-disk backup. Does not include the separate official ledger or old reset backups. Missing/legacy evidence cannot be reconstructed by this export.` };
   }
   replay(id: string) {
@@ -198,9 +273,11 @@ export class NflPaperLedger {
         const bytesHash = createHash('sha256').update(JSON.stringify(evidence.data)).digest('hex');
         if (evidence.kind !== this.profile.evidenceKind || evidence.espnEventId !== pick.espnEventId
           || evidence.source !== a.source || bytesHash !== a.sourceHash) throw new Error('Mismatched source evidence.');
-        const replay = this.profile.grade(pick, evidence.data);
-        return { checkedAt: a.checkedAt, status: replay.result === a.result && replay.actual === a.actual ? 'matched' : 'mismatch',
-          savedResult: a.result, savedActual: a.actual, replay, evidenceHash: a.evidenceHash };
+        const replay = this.evaluate(pick,evidence.data,{sourceProvider:this.profile.sourceBase,
+          sourceRetrievalTimestamp:evidence.retrievedAt??a.resultEvidence?.sourceRetrievalTimestamp??'NOT_RECORDED',gradingTimestamp:a.checkedAt});
+        const resultEvidenceMatched=!a.resultEvidence||JSON.stringify(replay.resultEvidence)===JSON.stringify(a.resultEvidence);
+        return { checkedAt: a.checkedAt, status: replay.result === a.result && replay.actual === a.actual&&resultEvidenceMatched ? 'matched' : 'mismatch',
+          savedResult: a.result, savedActual: a.actual, replay, evidenceHash: a.evidenceHash,resultEvidenceMatched };
       } catch { return { checkedAt: a.checkedAt, status: 'evidence_unavailable_or_corrupt', savedResult: a.result }; }
     });
     let forecastReplay:any;
@@ -225,7 +302,8 @@ export class NflPaperLedger {
     const observations=(pick.collegeLineObservations??[]).map(o=>{try{const source=this.collegeForecastArchive.read(o.evidenceHash);
       const {evidenceHash,...saved}=o;return{id:o.id,status:JSON.stringify(saved)===JSON.stringify(source.observation)?'matched':'mismatch'};
     }catch{return{id:o.id,status:'evidence_unavailable_or_corrupt'};}});
-    return { id, audits,forecastReplay,observations,openingIntegrity:pick.openingHash?paperOpeningHash(pick)===pick.openingHash:'legacy_hash_unavailable', note: 'Read-only replay using archived model inputs and/or box scores. No provider requests and no record changes. It verifies reproducibility, not prediction accuracy or sportsbook-specific settlement.' };
+    return { id, audits,forecastReplay,observations,corrections:pick.settlementCorrections??[],compatibility:compatibility(pick),
+      openingIntegrity:pick.openingHash?paperOpeningHash(pick)===pick.openingHash:'legacy_hash_unavailable', note: 'Read-only replay using the archived opening selection and archived result evidence. No current market, provider request, or record mutation is used. It verifies reproducibility, not prediction accuracy or sportsbook-specific settlement.' };
   }
   read(): NflPaperPick[] {
     if (!fs.existsSync(this.file)) return [];
@@ -233,10 +311,11 @@ export class NflPaperLedger {
     if (data.schema !== 1 || !Array.isArray(data.picks)) throw new Error('Invalid NFL paper ledger; refusing to overwrite it.');
     if(data.picks.some((p:any)=>p.event?.sportKey!==this.profile.sportKey)) throw new Error('Paper ledger contains a different sport; refusing to mix or overwrite records.');
     if(data.picks.some((p:NflPaperPick)=>p.openingHash&&paperOpeningHash(p)!==p.openingHash))throw Error('Immutable opening prediction was altered; refusing to overwrite ledger.');
-    return data.picks;
+    return data.picks.map((p:NflPaperPick)=>({...p,compatibility:compatibility(p)}));
   }
   private write(picks: NflPaperPick[]) {
     if(picks.some(p=>p.openingHash&&paperOpeningHash(p)!==p.openingHash))throw Error('Immutable opening prediction change refused.');
+    if(new Set(picks.map(p=>p.id)).size!==picks.length)throw Error('Duplicate paper pick IDs refused.');
     fs.mkdirSync(path.dirname(this.file), { recursive: true });
     const tmp = `${this.file}.${randomUUID()}.tmp`;
     fs.writeFileSync(tmp, JSON.stringify({ schema: 1, picks }, null, 2), { flag: 'wx' });
@@ -254,19 +333,19 @@ export class NflPaperLedger {
         || Date.parse(event.commenceTime) <= this.now()) throw new MarketBoardError('Quote is stale or kickoff has passed; paper pick not saved.', 409);
     };
     validate();
-    const verifiedEvent = this.profile.verifyEvent ? await this.profile.verifyEvent(event) : undefined;
+    const verifiedEvent = this.profile.verifyEvent ? await this.profile.verifyEvent(event) : await this.research.eventIdentity?.(event);
     const espnEventId = verifiedEvent?.espnEventId ?? await this.research.matchEvent(event);
     const player = NFL_CORE_STATS[quote.market] ? await this.research.player(event, quote.participant) : undefined;
     validate(); // Network requests must not allow a save after kickoff.
     const picks = this.read();
-    const existing = picks.find(p => (p.origin ?? 'manual') === 'manual' && p.event.id === event.id && p.quote.market === quote.market
+    const existing = picks.find(p => (p.origin ?? 'manual') === 'manual' && p.espnEventId === espnEventId && p.quote.market === quote.market
       && nflName(p.quote.participant) === nflName(quote.participant) && p.quote.side === quote.side && p.quote.line === quote.line);
     if (existing) return { pick: existing, duplicate: true };
     const pick: NflPaperPick = { id: randomUUID(), origin: 'manual', event: { ...event }, espnEventId, quote: { ...quote }, player,
       season: nflSeason(event.commenceTime), version: this.profile.version, rules, ...(verifiedEvent?{verifiedEvent}:{}),
       savedAt: new Date(this.now()).toISOString(), result: 'PENDING', note: 'Manual paper selection; no money wagered and no model probability attached.' };
     pick.settlementScope = { bookKey: quote.bookKey, ruleVersion: rules, sportsbookRulesVerified: false };
-    if(event.sportKey==='americanfootball_ncaaf')pick.openingHash=paperOpeningHash(pick);
+    sealOpening(pick);
     this.write([...picks, pick]); return { pick, duplicate: false };
   }
   modelPick(eventId: string, participant: string, market: string, version: string) {
@@ -308,7 +387,7 @@ export class NflPaperLedger {
       selectionReasons:safety.reasons,
       note:safety.classification+': immutable forward observation, not real-money advice. Original forecast, exact line and price are preserved.',
       settlementScope:{bookKey:quote.bookKey,ruleVersion:this.profile.rules,sportsbookRulesVerified:false}};
-    pick.openingHash=paperOpeningHash(pick);this.write([...picks,pick]);return{pick,duplicate:false};
+    sealOpening(pick);this.write([...picks,pick]);return{pick,duplicate:false};
   }
   async saveModel(event: UpcomingEvent, quote: MarketQuote, forecast: NflForecast,
     assessment: { probability: number; pushProbability: number; estimatedEV: number; eligible: boolean }, rules: string) {
@@ -329,15 +408,16 @@ export class NflPaperLedger {
         throw new MarketBoardError('Quote/input expired or kickoff passed before logging; no recommendation issued.', 409);
     };
     verify();
-    const espnEventId = await this.research.matchEvent(event);
+    const verifiedEvent=await this.research.eventIdentity?.(event);
+    const espnEventId = verifiedEvent?.espnEventId??await this.research.matchEvent(event);
     verify();
     // One immutable model pick per event/player/market/version, across sides,
     // books and alternative lines. Concurrent requests re-check after awaits.
     const picks = this.read();
-    const concurrent = picks.find(p => p.origin === 'model' && p.event.id === event.id && p.version === forecast.version
+    const concurrent = picks.find(p => p.origin === 'model' && p.espnEventId === espnEventId && p.version === forecast.version
       && p.quote.market === quote.market && nflName(p.quote.participant) === nflName(quote.participant));
     if (concurrent) return { pick: concurrent, duplicate: true };
-    const pick: NflPaperPick = { id: randomUUID(), origin: 'model', event: { ...event }, espnEventId,
+    const pick: NflPaperPick = { id: randomUUID(), origin: 'model', event: { ...event }, espnEventId,...(verifiedEvent?{verifiedEvent}:{}),
       quote: { ...quote }, player: forecast.player, season: nflSeason(event.commenceTime), version: forecast.version,
       rules, savedAt: new Date(this.now()).toISOString(), result: 'PENDING', forecast,
       modelProbability: assessment.probability, modelPushProbability: assessment.pushProbability, estimatedEV: assessment.estimatedEV,
@@ -345,7 +425,7 @@ export class NflPaperLedger {
         'Highest estimated EV among fresh loaded quotes at configured accessible books.',
         'Experimental residual probability and fixed paper thresholds; no real wager placed.'],
       note: 'Automatically logged experimental paper recommendation; original forecast and quote are immutable.' };
-    pick.settlementScope = { bookKey: quote.bookKey, ruleVersion: rules, sportsbookRulesVerified: false };
+    pick.settlementScope = { bookKey: quote.bookKey, ruleVersion: rules, sportsbookRulesVerified: false };sealOpening(pick);
     this.write([...picks, pick]); return { pick, duplicate: false };
   }
   observe(eventId: string, quotes: MarketQuote[]) {
@@ -389,8 +469,8 @@ export class NflPaperLedger {
   }
   private async gradeBatch(recheckSettled: boolean,onlyEvents?:Set<string>) {
     const eligible = this.read().filter(p => (recheckSettled
-      ? ['WIN', 'LOSS', 'PUSH'].includes(p.result) && this.now() - Date.parse(p.event.commenceTime) < 14 * 86400_000
-      : ['PENDING', 'REVIEW'].includes(p.result)) && Date.parse(p.event.commenceTime) + 4 * 3600_000 < this.now()
+      ? ['WIN', 'LOSS', 'PUSH','VOID'].includes(p.result) && this.now() - Date.parse(p.event.commenceTime) < 14 * 86400_000
+      : ['PENDING', 'REVIEW','UNABLE_TO_GRADE'].includes(p.result)) && Date.parse(p.event.commenceTime) + 4 * 3600_000 < this.now()
       &&(!onlyEvents||onlyEvents.has(p.espnEventId)))
       .sort((a,b) => Date.parse(a.lastResultCheck?.at ?? a.gradedAt ?? a.savedAt) - Date.parse(b.lastResultCheck?.at ?? b.gradedAt ?? b.savedAt));
     // Ten games per source batch. The explicit college daily job walks a fixed
@@ -401,37 +481,48 @@ export class NflPaperLedger {
     for (const id of games) {
       try {
         const data = await this.research.summary(id);
+        const retrievedAt=new Date(this.now()).toISOString();
         // Persist the actual grading source BEFORE changing any result. A hash
         // alone cannot reproduce a result after the public source changes.
         const evidence = this.settlementArchive.record({ kind: this.profile.evidenceKind, espnEventId: id,
-          source: `${this.profile.sourceBase}/summary?event=${id}`, data });
+          source: `${this.profile.sourceBase}/summary?event=${id}`,retrievedAt, data });
         for (const p of eligible.filter(p => p.espnEventId === id)) {
-          const grade = this.profile.grade(p, data), checkedAt = new Date(this.now()).toISOString();
+          const checkedAt = new Date(this.now()).toISOString();
           const source = `${this.profile.sourceBase}/summary?event=${id}`;
+          const grade = this.evaluate(p,data,{sourceProvider:this.profile.sourceBase,sourceRetrievalTimestamp:retrievedAt,gradingTimestamp:checkedAt});
+          if(!recheckSettled&&['UNABLE_TO_GRADE','REVIEW'].includes(grade.result))sourceFailures++;
           const sourceHash = createHash('sha256').update(JSON.stringify(data)).digest('hex');
-          const previous = p.gradingAudit ?? (['WIN','LOSS','PUSH'].includes(p.result)
+          const previous = p.gradingAudit ?? (['WIN','LOSS','PUSH','VOID'].includes(p.result)
             ? [{ result: p.result, actual: p.actual, note: p.note, checkedAt: p.gradedAt ?? p.savedAt,
                 source: p.source ?? 'legacy', sourceHash: 'legacy_unavailable' }] : []);
-          if (recheckSettled && ['REVIEW','PENDING'].includes(grade.result)) {
+          if (recheckSettled && ['REVIEW','PENDING','UNABLE_TO_GRADE'].includes(grade.result)) {
             sourceFailures++;
-            updates.set(p.id, { lastResultCheck: { at: checkedAt, status: 'review' } });
+            updates.set(p.id, { lastResultCheck: { at: checkedAt, status: grade.result==='PENDING'?'pending':'unable' } });
             continue; // Incomplete data is not a correction of a settled result.
           }
           const unchanged = p.result === grade.result && p.actual === grade.actual && previous.at(-1)?.sourceHash === sourceHash;
-          updates.set(p.id, { ...grade, gradedAt: checkedAt, source,
-            lastResultCheck: { at: checkedAt, status: 'graded' },
-            gradingAudit: unchanged && previous.at(-1)?.evidenceHash ? previous : [...previous, { ...grade, checkedAt, source, sourceHash, evidenceHash: evidence.hash }] });
+          const audit:GradingAuditEntry={result:grade.result,actual:grade.actual,note:grade.note,checkedAt,source,sourceHash,
+            evidenceHash:evidence.hash,...(grade.resultEvidence?{resultEvidence:grade.resultEvidence}:{})};
+          const gradingAudit=unchanged&&previous.at(-1)?.evidenceHash?previous:[...previous,audit];
+          const terminal=['WIN','LOSS','PUSH','VOID'].includes(grade.result),changedSettlement=recheckSettled&&terminal
+            &&(p.result!==grade.result||p.actual!==grade.actual);
+          const settlementCorrections=changedSettlement?[...(p.settlementCorrections??[]),{previousResult:p.result,newResult:grade.result,
+            previousEvidenceHash:previous.at(-1)?.evidenceHash??null,newEvidenceHash:evidence.hash,correctedAt:checkedAt,
+            reason:'Authoritative provider result was explicitly rechecked; original selection remained unchanged.'}]:p.settlementCorrections;
+          updates.set(p.id, { ...grade,...(terminal?{gradedAt:checkedAt}:{}), source,
+            lastResultCheck: { at: checkedAt, status: terminal?'graded':grade.result==='PENDING'?'pending':'unable' },
+            gradingAudit,...(settlementCorrections?{settlementCorrections}:{}) });
         }
       } catch {
         for (const p of eligible.filter(p => p.espnEventId === id)) {
           sourceFailures++;
-          updates.set(p.id, { ...(recheckSettled ? {} : { result: 'REVIEW', note: `${this.profile.label} result source unavailable. Retry later; no loss or zero assumed.` }),
+          updates.set(p.id, { ...(recheckSettled ? {} : { result: 'UNABLE_TO_GRADE', note: `${this.profile.label} result source unavailable. Retry later; no loss or zero assumed.` }),
             lastResultCheck: { at: new Date(this.now()).toISOString(), status: 'unavailable' } });
         }
       }
     }
     // Re-read after awaits so concurrent saves/quote observations are preserved.
-    const picks = this.read().map(p => updates.has(p.id) && (recheckSettled || ['PENDING', 'REVIEW'].includes(p.result)) ? { ...p, ...updates.get(p.id) } : p);
+    const picks = this.read().map(p => updates.has(p.id) && (recheckSettled || ['PENDING', 'REVIEW','UNABLE_TO_GRADE'].includes(p.result)) ? { ...p, ...updates.get(p.id) } : p);
     if (updates.size) this.write(picks);
     return { checked: updates.size, remainingGames: Math.max(0, new Set(eligible.map(p => p.espnEventId)).size - games.length),
       sourceFailures, picks, report: nflPaperReport(picks) };

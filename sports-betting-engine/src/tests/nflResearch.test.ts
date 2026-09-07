@@ -68,16 +68,16 @@ test('NFL props grade exact IDs/stat columns including true zero, push and under
   for(const market of ['player_receptions', 'player_reception_yds']) assert.equal(gradeNflPaper(pick({quote:{...quote,market,line:0.5,side:'Under'}}), summary()).result,'WIN');
   assert.equal(gradeNflPaper(pick({quote:{...quote,market:'player_rush_yds',line:15}}),summary()).result,'PUSH');
 });
-test('missing/ambiguous player stats and wrong game identity require review, never a zero', () => {
+test('missing/ambiguous player stats and wrong game identity are unable to grade, never a zero', () => {
   const missing=summary();missing.boxscore.players=[];
-  assert.equal(gradeNflPaper(pick(), missing).result,'REVIEW');
+  assert.equal(gradeNflPaper(pick(), missing).result,'UNABLE_TO_GRADE');
   const wrong=summary();wrong.header.competitions[0].id='999';
-  assert.equal(gradeNflPaper(pick(), wrong).result,'REVIEW');
-  assert.equal(gradeNflPaper(pick({player:{...player,id:'999'}}),summary()).result,'REVIEW');
+  assert.equal(gradeNflPaper(pick(), wrong).result,'UNABLE_TO_GRADE');
+  assert.equal(gradeNflPaper(pick({player:{...player,id:'999'}}),summary()).result,'UNABLE_TO_GRADE');
   const dup=summary();dup.boxscore.players[0].statistics[0].athletes.push(dup.boxscore.players[0].statistics[0].athletes[0]);
-  assert.equal(gradeNflPaper(pick(),dup).result,'REVIEW');
+  assert.equal(gradeNflPaper(pick(),dup).result,'UNABLE_TO_GRADE');
   const unfinished=summary();unfinished.header.competitions[0].status.type.completed=false;
-  assert.equal(gradeNflPaper(pick(),unfinished).result,'PENDING');
+  assert.equal(gradeNflPaper(pick(),unfinished).result,'UNABLE_TO_GRADE');
 });
 test('game, quarter and half grading respects selected team, signed spread, pushes and period', () => {
   const grade=(market:string,side:string,line:number|null)=>gradeNflPaper(pick({quote:{...quote,market,side,line,participant:''}}),summary());
@@ -88,16 +88,16 @@ test('game, quarter and half grading respects selected team, signed spread, push
   assert.equal(grade('h2h_q4',event.homeTeam,null).result,'PUSH');
   assert.equal(grade('totals_h1','Over',23).result,'PUSH');
   assert.equal(grade('totals_h2','Under',6.5).result,'WIN');
-  assert.equal(grade('h2h_3_way_q1','Draw',null).result,'REVIEW');
+  assert.equal(grade('h2h_3_way_q1','Draw',null).result,'UNABLE_TO_GRADE');
 });
-test('regulation periods exclude OT; missing or inconsistent periods require review', () => {
+test('regulation periods exclude OT; missing or inconsistent periods are unable to grade', () => {
   const ot=summary(); const away=ot.header.competitions[0].competitors[1];
   away.score='22';away.linescores.push({displayValue:'6'});
   const q=(market:string)=>pick({quote:{...quote,market,line:7,side:'Under'}});
   assert.equal(gradeNflPaper(q('totals_h2'),ot).actual,6);
   assert.equal(gradeNflPaper(q('totals'),ot).actual,35);
-  away.linescores.pop();assert.equal(gradeNflPaper(q('totals_h2'),ot).result,'REVIEW');
-  away.linescores.pop();assert.equal(gradeNflPaper(q('totals_q1'),ot).result,'REVIEW');
+  away.linescores.pop();assert.equal(gradeNflPaper(q('totals_h2'),ot).result,'UNABLE_TO_GRADE');
+  away.linescores.pop();assert.equal(gradeNflPaper(q('totals_q1'),ot).result,'UNABLE_TO_GRADE');
 });
 test('paper report separates seasons and exact markets, excludes review/pending from ROI', () => {
   const report=nflPaperReport([pick({result:'WIN',quote:{...quote,price:150}}),pick({id:'p2',result:'LOSS'}),pick({id:'p3',result:'PUSH'}),pick({id:'p4',result:'REVIEW'}),pick({id:'p5',season:2026}),pick({id:'p6',quote:{...quote,market:'player_receptions'}})]);
@@ -124,10 +124,10 @@ test('opportunity baselines exclude missing values and preserve true zero', () =
   assert.equal(summarizeNflLogs(rows,189).meanOpportunities,14);
   assert.equal(summarizeNflLogs(rows,189).opportunityGames,2);
 });
-test('result-source outage stays reviewable and retries safely', async () => {
+test('result-source outage stays unable-to-grade and retries safely', async () => {
   const dir=fs.mkdtempSync(path.join(os.tmpdir(),'nfl-paper-outage-'));let now=Date.parse('2025-12-14T17:59:30Z'),failed=true;
   const ledger=new NflPaperLedger(path.join(dir,'paper.json'),{matchEvent:async()=> '401772798',player:async()=>player,summary:async()=>{if(failed)throw Error('offline');return summary();}},()=>now);
-  try {await ledger.save(event,quote,PAPER_RULES);now=Date.parse('2025-12-14T23:00Z');assert.equal((await ledger.grade()).picks[0].result,'REVIEW');failed=false;assert.equal((await ledger.grade()).picks[0].result,'WIN');}
+  try {await ledger.save(event,quote,PAPER_RULES);now=Date.parse('2025-12-14T23:00Z');assert.equal((await ledger.grade()).picks[0].result,'UNABLE_TO_GRADE');failed=false;assert.equal((await ledger.grade()).picks[0].result,'WIN');}
   finally {fs.rmSync(dir,{recursive:true});}
 });
 test('corrupt ledger is never silently reset or overwritten', () => {
