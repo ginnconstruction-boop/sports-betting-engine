@@ -31,6 +31,12 @@
       "captureEventId": "manual-712a4cd949cced6862e29e8b723a9e6e",
       "completedAt": "2026-09-07T19:25:58.412Z",
       "trigger": "MANUAL"
+    },
+    {
+      "id": "ebebbe3fe0a65481d29a8ca033b186d9c0b507afcfbbc6fcce052ab0f2dee60b",
+      "captureEventId": "2026-09-07-1400-ct",
+      "completedAt": "2026-09-07T21:56:38.998Z",
+      "trigger": "SCHEDULED_1400_CT"
     }
   ]
 }

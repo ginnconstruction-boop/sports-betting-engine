@@ -1,0 +1,24 @@
+{
+  "id": "1746db5218a8f055956a7310be133ac7dba58a9856581b6979a43a23f33cd29e",
+  "schema": 1,
+  "teamId": "2567",
+  "teamName": "SMU Mustangs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.depthTier.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-07T21:56:38.408Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-07T21:56:38.408Z",
+    "retrievedAt": "2026-09-07T21:56:38.408Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "b90d20580e3cdba8a02fea58eb280804804ff8b55736356d288f6e348efb6ae0"
+}
