@@ -1,0 +1,24 @@
+{
+  "id": "6b89a863061b5a0bcff7a1fa56ec13e1ccdc29a7538ab4f6f56a57fd471bf942",
+  "schema": 1,
+  "teamId": "52",
+  "teamName": "Florida State Seminoles",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.playerCount",
+  "value": 100,
+  "effectiveFrom": "2026-09-07T13:30:27.898Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/52/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-07T13:30:27.898Z",
+    "retrievedAt": "2026-09-07T13:30:27.898Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e1f85e33fb9c80b9516e92b768d2ede746cdebe9c28c50ed99bbda0af457b312"
+}

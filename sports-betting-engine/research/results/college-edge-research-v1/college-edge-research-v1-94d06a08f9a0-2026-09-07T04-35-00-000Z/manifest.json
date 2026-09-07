@@ -1,0 +1,102 @@
+{
+  "runId": "college-edge-research-v1-94d06a08f9a0-2026-09-07T04-35-00-000Z",
+  "generatedAt": "2026-09-07T04:35:00.000Z",
+  "datasetHash": "94d06a08f9a02c336b03573dd9c6dba97c01ac31b6f6000f29108fc91adb025b",
+  "configurationHash": "2dba8f2bbd6831b5cf920e683ba3adb1eb65f07cc3ff7930008ce017e4276cef",
+  "evidencePolicy": "Evidence classes are analyzed separately. Cross-evidence pooling is prohibited.",
+  "evidenceClassification": {
+    "reconstructed": "Frozen model replay plus archived pregame sportsbook quotes; not an untouched live forecast.",
+    "syntheticDerived": "Chronological score-model replay without a sportsbook line; projection-error research only.",
+    "archivedLive": "Included only when an explicit exported immutable ledger is supplied."
+  },
+  "quoteSelectionRule": "For every forecasted game, form valid fresh symmetric book pairs; compute the median home spread; choose the model side from that median; use the exact side/price from the pair nearest the median, then newest timestamp, then book key. No result or existing recommendation gate is consulted.",
+  "codeHashes": {
+    "engine": "53304c06de6d17bbb2c78428dc98d9213b725dc0aa2c152138c3ac35035ff6ba",
+    "adapter": "edc0c0dec23c71e7f6afa1f0bbf3eea53254e2cd2ae97bedf583e404a34c91fa",
+    "configurationFile": "7007bb890c51bfd4967ac2ed7a8861f27edcf6e73cab5b7b691f9f90b07c223f"
+  },
+  "sourceFiles": {
+    "configuration-lock.json": {
+      "sha256": "de5339a96d4da00167365905ce4f3ca6ee56023c823e7e43a02211100f2618cc",
+      "bytes": 56242
+    },
+    "registered-protocol.json": {
+      "sha256": "4f235e423c8a640f9581275196e399122d7232909fa2d260b665ce8930f714b6",
+      "bytes": 3264
+    },
+    "odds-audit-report.json": {
+      "sha256": "6617b5716bca217f193c63fa781bf25cfea6f5b2fb14d08cd9bedbdae161faa0",
+      "bytes": 150126
+    },
+    "holdout-report.json": {
+      "sha256": "a474560972afe8f06572ba01fa74fba133a68a539c113f8fabb705e83513d97b",
+      "bytes": 1413918
+    },
+    "frozen/2025-09-06.json": {
+      "sha256": "0ff9d3ea3b72e365c4b22df6f4eb724a5c39b13673f98d97cf27d462f877da74",
+      "bytes": 1085261
+    },
+    "frozen/2025-09-20.json": {
+      "sha256": "3b2f34dc74877d895eb728b8c4d5eac2483735c544c8efc70a74ce8b4912f477",
+      "bytes": 978480
+    },
+    "frozen/2025-10-11.json": {
+      "sha256": "b5a440b4ef83df27cb9dbcd42e455f3f2e60bd2c07e1302ef9b4b954b0fd88a0",
+      "bytes": 943203
+    },
+    "frozen/2025-10-25.json": {
+      "sha256": "6cc0505117a720b82dd7bdae275532cfdfa1b386e6eaa9842e430764947b0218",
+      "bytes": 824808
+    },
+    "frozen/2025-11-08.json": {
+      "sha256": "d778739518d428a223d83aae724d2946c402fc08622ad293ec88f8f01d5e89e6",
+      "bytes": 848418
+    },
+    "frozen/2025-11-22.json": {
+      "sha256": "4b65fe118555b0ece56ab7607e0d44900b0821c374755be1b202f5e6d4778265",
+      "bytes": 1084350
+    },
+    "sources/2025-08-80.json": {
+      "sha256": "d8f5ff6f8315a47c4b9c730721655fd700414f1ad47808c601340160253bf039",
+      "bytes": 1446784
+    },
+    "sources/2025-08-81.json": {
+      "sha256": "7a9a74159329ef7d50c10800040c5e3660d613b3088a2ca82e4aa567eb3855de",
+      "bytes": 1126504
+    },
+    "sources/2025-09-80.json": {
+      "sha256": "3513ca9c4d219867ca8bfce3087f0f1b403ef60ec915fb0fe1cee6b457117709",
+      "bytes": 4284685
+    },
+    "sources/2025-09-81.json": {
+      "sha256": "caa158bd3aa7bf3845deb3834a0041cceb7f7f7664c60687858ad77e785344f4",
+      "bytes": 3012691
+    },
+    "sources/2025-10-80.json": {
+      "sha256": "f053bc16ba6224c1d382dfea1308c53cf0aec2e0974bab5ea7bc38cc9ac0ccb3",
+      "bytes": 3670334
+    },
+    "sources/2025-10-81.json": {
+      "sha256": "83688c022a12c38de43c4733f4fa977e11c72d03c2ed4391f82c0254a300ceb9",
+      "bytes": 2278905
+    },
+    "sources/2025-11-80.json": {
+      "sha256": "0ec17e19cf4d8487bac48f9cfb2bf854255d12c586efb792749e2c6be5e06a0c",
+      "bytes": 4731666
+    },
+    "sources/2025-11-81.json": {
+      "sha256": "b28e13f6666ba054d5f672cd1266550779e5058e0e597361a9283738130e8903",
+      "bytes": 2743329
+    },
+    "sources/2025-12-80.json": {
+      "sha256": "b1204bc3e210445bcd7c440e9e5e433dcadb68b24211aa7a0c29bd275c7087f2",
+      "bytes": 692496
+    },
+    "sources/2025-12-81.json": {
+      "sha256": "7cfc0a8f6870ac805c73eb9eccdc4f33ee5a27bea8024ec64a8adc69f28ac3b6",
+      "bytes": 276069
+    }
+  },
+  "liveLedgerIncluded": false,
+  "reproductionCommand": "npm run research:college-edge -- --generated-at=2026-09-07T04:35:00.000Z"
+}

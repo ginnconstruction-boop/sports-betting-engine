@@ -1,0 +1,4904 @@
+{
+  "schemaVersion": "college-edge-research-v1",
+  "researchLabel": "DISCOVERY_SAMPLE_NOT_ACTIVATION_EVIDENCE",
+  "generatedAt": "2026-09-07T04:35:00.000Z",
+  "applicationVersion": "2.1.0",
+  "configuration": {
+    "version": "college-edge-research-v1",
+    "edgeBuckets": [
+      {
+        "label": "0–1.5",
+        "minExclusive": null,
+        "maxInclusive": 1.5
+      },
+      {
+        "label": ">1.5–3",
+        "minExclusive": 1.5,
+        "maxInclusive": 3
+      },
+      {
+        "label": ">3–5",
+        "minExclusive": 3,
+        "maxInclusive": 5
+      },
+      {
+        "label": ">5–7",
+        "minExclusive": 5,
+        "maxInclusive": 7
+      },
+      {
+        "label": ">7–10",
+        "minExclusive": 7,
+        "maxInclusive": 10
+      },
+      {
+        "label": ">10",
+        "minExclusive": 10,
+        "maxInclusive": null
+      }
+    ],
+    "marketSpreadBuckets": [
+      {
+        "label": "0–3",
+        "minExclusive": null,
+        "maxInclusive": 3
+      },
+      {
+        "label": ">3–7",
+        "minExclusive": 3,
+        "maxInclusive": 7
+      },
+      {
+        "label": ">7–14",
+        "minExclusive": 7,
+        "maxInclusive": 14
+      },
+      {
+        "label": ">14–21",
+        "minExclusive": 14,
+        "maxInclusive": 21
+      },
+      {
+        "label": ">21–30",
+        "minExclusive": 21,
+        "maxInclusive": 30
+      },
+      {
+        "label": ">30–40",
+        "minExclusive": 30,
+        "maxInclusive": 40
+      },
+      {
+        "label": ">40",
+        "minExclusive": 40,
+        "maxInclusive": null
+      }
+    ],
+    "minimumSamples": {
+      "insufficient": 10,
+      "low": 30,
+      "moderate": 100
+    }
+  },
+  "configurationHash": "2dba8f2bbd6831b5cf920e683ba3adb1eb65f07cc3ff7930008ce017e4276cef",
+  "datasetHash": "94d06a08f9a02c336b03573dd9c6dba97c01ac31b6f6000f29108fc91adb025b",
+  "pointInTimeRules": {
+    "forecastBeforeKickoff": true,
+    "inputsNoLaterThanForecast": true,
+    "resultsNoEarlierThanKickoff": true
+  },
+  "evidencePolicy": "Evidence classes are analyzed separately. Cross-evidence pooling is prohibited.",
+  "evidence": {
+    "RECONSTRUCTED_FORECAST": {
+      "evidenceClass": "RECONSTRUCTED_FORECAST",
+      "counts": {
+        "inputRows": 318,
+        "atsEligible": 318,
+        "marginErrorEligible": 318,
+        "excludedFromAts": 0,
+        "exactDuplicatesExcluded": 0
+      },
+      "overall": {
+        "observations": 318,
+        "distinctGames": 318,
+        "correlatedRepeatObservations": 0,
+        "wins": 162,
+        "losses": 151,
+        "pushes": 5,
+        "atsPercentage": 0.517572,
+        "averageUnits": -0.008127,
+        "totalUnits": -2.584289,
+        "roi": -0.008127,
+        "unitEligible": 318,
+        "averageAmericanPrice": -107.172956,
+        "priceSample": 318,
+        "disagreement": {
+          "signedMean": 0.789405,
+          "absoluteMean": 5.883677,
+          "absoluteMedian": 4.684278,
+          "absoluteStdDev": 4.986617
+        },
+        "winRateStandardError": 0.028244,
+        "confidenceInterval95": {
+          "low": 0.462337,
+          "high": 0.57238,
+          "method": "WILSON"
+        },
+        "averageBreakEvenRate": 0.522996,
+        "excessWinRateVsPrice": -0.005424,
+        "approximateZVsPrice": -0.192111,
+        "modelMarginError": {
+          "sample": 318,
+          "meanError": 1.161853,
+          "mae": 13.423494,
+          "rmse": 17.540431
+        },
+        "sampleWarning": "LARGER_SAMPLE"
+      },
+      "byEdgeBucket": {
+        ">1.5–3": {
+          "observations": 45,
+          "distinctGames": 45,
+          "correlatedRepeatObservations": 0,
+          "wins": 24,
+          "losses": 19,
+          "pushes": 2,
+          "atsPercentage": 0.55814,
+          "averageUnits": 0.071077,
+          "totalUnits": 3.198485,
+          "roi": 0.071077,
+          "unitEligible": 45,
+          "averageAmericanPrice": -105.266667,
+          "priceSample": 45,
+          "disagreement": {
+            "signedMean": 0.74611,
+            "absoluteMean": 2.172022,
+            "absoluteMedian": 2.076789,
+            "absoluteStdDev": 0.4035
+          },
+          "winRateStandardError": 0.075732,
+          "confidenceInterval95": {
+            "low": 0.411076,
+            "high": 0.695667,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.522989,
+          "excessWinRateVsPrice": 0.03515,
+          "approximateZVsPrice": 0.46148,
+          "modelMarginError": {
+            "sample": 45,
+            "meanError": 3.398334,
+            "mae": 13.869569,
+            "rmse": 17.206619
+          },
+          "sampleWarning": "RESEARCH_SAMPLE"
+        },
+        ">10": {
+          "observations": 55,
+          "distinctGames": 55,
+          "correlatedRepeatObservations": 0,
+          "wins": 26,
+          "losses": 29,
+          "pushes": 0,
+          "atsPercentage": 0.472727,
+          "averageUnits": -0.095982,
+          "totalUnits": -5.278988,
+          "roi": -0.095982,
+          "unitEligible": 55,
+          "averageAmericanPrice": -109.836364,
+          "priceSample": 55,
+          "disagreement": {
+            "signedMean": -3.847331,
+            "absoluteMean": 14.571485,
+            "absoluteMedian": 13.165038,
+            "absoluteStdDev": 4.344653
+          },
+          "winRateStandardError": 0.06732,
+          "confidenceInterval95": {
+            "low": 0.346931,
+            "high": 0.602085,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.523333,
+          "excessWinRateVsPrice": -0.050606,
+          "approximateZVsPrice": -0.751424,
+          "modelMarginError": {
+            "sample": 55,
+            "meanError": 7.456422,
+            "mae": 19.108704,
+            "rmse": 24.017025
+          },
+          "sampleWarning": "RESEARCH_SAMPLE"
+        },
+        ">3–5": {
+          "observations": 70,
+          "distinctGames": 70,
+          "correlatedRepeatObservations": 0,
+          "wins": 35,
+          "losses": 33,
+          "pushes": 2,
+          "atsPercentage": 0.514706,
+          "averageUnits": -0.013311,
+          "totalUnits": -0.931749,
+          "roi": -0.013311,
+          "unitEligible": 70,
+          "averageAmericanPrice": -103.728571,
+          "priceSample": 70,
+          "disagreement": {
+            "signedMean": 1.921531,
+            "absoluteMean": 3.93724,
+            "absoluteMedian": 3.881756,
+            "absoluteStdDev": 0.601287
+          },
+          "winRateStandardError": 0.060608,
+          "confidenceInterval95": {
+            "low": 0.398348,
+            "high": 0.629492,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.522421,
+          "excessWinRateVsPrice": -0.007715,
+          "approximateZVsPrice": -0.127363,
+          "modelMarginError": {
+            "sample": 70,
+            "meanError": -1.757246,
+            "mae": 12.048089,
+            "rmse": 15.02892
+          },
+          "sampleWarning": "RESEARCH_SAMPLE"
+        },
+        ">5–7": {
+          "observations": 44,
+          "distinctGames": 44,
+          "correlatedRepeatObservations": 0,
+          "wins": 31,
+          "losses": 13,
+          "pushes": 0,
+          "atsPercentage": 0.704545,
+          "averageUnits": 0.348025,
+          "totalUnits": 15.31308,
+          "roi": 0.348025,
+          "unitEligible": 44,
+          "averageAmericanPrice": -105.204545,
+          "priceSample": 44,
+          "disagreement": {
+            "signedMean": 2.6409,
+            "absoluteMean": 5.803136,
+            "absoluteMedian": 5.677196,
+            "absoluteStdDev": 0.57726
+          },
+          "winRateStandardError": 0.068782,
+          "confidenceInterval95": {
+            "low": 0.557798,
+            "high": 0.818445,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.523149,
+          "excessWinRateVsPrice": 0.181396,
+          "approximateZVsPrice": 2.409074,
+          "modelMarginError": {
+            "sample": 44,
+            "meanError": 1.722737,
+            "mae": 10.140629,
+            "rmse": 14.353364
+          },
+          "sampleWarning": "RESEARCH_SAMPLE"
+        },
+        ">7–10": {
+          "observations": 49,
+          "distinctGames": 49,
+          "correlatedRepeatObservations": 0,
+          "wins": 28,
+          "losses": 21,
+          "pushes": 0,
+          "atsPercentage": 0.571429,
+          "averageUnits": 0.095189,
+          "totalUnits": 4.664285,
+          "roi": 0.095189,
+          "unitEligible": 49,
+          "averageAmericanPrice": -109.510204,
+          "priceSample": 49,
+          "disagreement": {
+            "signedMean": 3.630273,
+            "absoluteMean": 8.204039,
+            "absoluteMedian": 8.080625,
+            "absoluteStdDev": 0.872583
+          },
+          "winRateStandardError": 0.070696,
+          "confidenceInterval95": {
+            "low": 0.432705,
+            "high": 0.699767,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.522615,
+          "excessWinRateVsPrice": 0.048814,
+          "approximateZVsPrice": 0.68409,
+          "modelMarginError": {
+            "sample": 49,
+            "meanError": -1.487416,
+            "mae": 13.330679,
+            "rmse": 17.416988
+          },
+          "sampleWarning": "RESEARCH_SAMPLE"
+        },
+        "0–1.5": {
+          "observations": 55,
+          "distinctGames": 55,
+          "correlatedRepeatObservations": 0,
+          "wins": 18,
+          "losses": 36,
+          "pushes": 1,
+          "atsPercentage": 0.333333,
+          "averageUnits": -0.355444,
+          "totalUnits": -19.549402,
+          "roi": -0.355444,
+          "unitEligible": 55,
+          "averageAmericanPrice": -109.945455,
+          "priceSample": 55,
+          "disagreement": {
+            "signedMean": 0.008526,
+            "absoluteMean": 0.707161,
+            "absoluteMedian": 0.670021,
+            "absoluteStdDev": 0.434445
+          },
+          "winRateStandardError": 0.06415,
+          "confidenceInterval95": {
+            "low": 0.222414,
+            "high": 0.46639,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.523611,
+          "excessWinRateVsPrice": -0.190277,
+          "approximateZVsPrice": -2.799617,
+          "modelMarginError": {
+            "sample": 55,
+            "meanError": -1.335799,
+            "mae": 11.832809,
+            "rmse": 15.403754
+          },
+          "sampleWarning": "RESEARCH_SAMPLE"
+        }
+      },
+      "byDirection": {
+        "MODEL_FAVORS_FAVORITE": {
+          "observations": 124,
+          "distinctGames": 124,
+          "correlatedRepeatObservations": 0,
+          "wins": 66,
+          "losses": 57,
+          "pushes": 1,
+          "atsPercentage": 0.536585,
+          "averageUnits": 0.02722,
+          "totalUnits": 3.37525,
+          "roi": 0.02722,
+          "unitEligible": 124,
+          "averageAmericanPrice": -108.33871,
+          "priceSample": 124,
+          "disagreement": {
+            "signedMean": 4.115013,
+            "absoluteMean": 4.612889,
+            "absoluteMedian": 3.873758,
+            "absoluteStdDev": 3.322003
+          },
+          "winRateStandardError": 0.044963,
+          "confidenceInterval95": {
+            "low": 0.44869,
+            "high": 0.622265,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52358,
+          "excessWinRateVsPrice": 0.013005,
+          "approximateZVsPrice": 0.288789,
+          "modelMarginError": {
+            "sample": 124,
+            "meanError": -2.506142,
+            "mae": 11.606193,
+            "rmse": 14.929432
+          },
+          "sampleWarning": "LARGER_SAMPLE"
+        },
+        "MODEL_FAVORS_UNDERDOG": {
+          "observations": 191,
+          "distinctGames": 191,
+          "correlatedRepeatObservations": 0,
+          "wins": 93,
+          "losses": 94,
+          "pushes": 4,
+          "atsPercentage": 0.497326,
+          "averageUnits": -0.04566,
+          "totalUnits": -8.721117,
+          "roi": -0.04566,
+          "unitEligible": 191,
+          "averageAmericanPrice": -106.39267,
+          "priceSample": 191,
+          "disagreement": {
+            "signedMean": -1.448735,
+            "absoluteMean": 6.709599,
+            "absoluteMedian": 5.025822,
+            "absoluteStdDev": 5.699016
+          },
+          "winRateStandardError": 0.036563,
+          "confidenceInterval95": {
+            "low": 0.426443,
+            "high": 0.568317,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.522652,
+          "excessWinRateVsPrice": -0.025325,
+          "approximateZVsPrice": -0.693349,
+          "modelMarginError": {
+            "sample": 191,
+            "meanError": 3.495855,
+            "mae": 14.744811,
+            "rmse": 19.14883
+          },
+          "sampleWarning": "LARGER_SAMPLE"
+        },
+        "NO_MARKET_FAVORITE": {
+          "observations": 3,
+          "distinctGames": 3,
+          "correlatedRepeatObservations": 0,
+          "wins": 3,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.920526,
+          "totalUnits": 2.761578,
+          "roi": 0.920526,
+          "unitEligible": 3,
+          "averageAmericanPrice": -108.666667,
+          "priceSample": 3,
+          "disagreement": {
+            "signedMean": 5.82586,
+            "absoluteMean": 5.82586,
+            "absoluteMedian": 5.936391,
+            "absoluteStdDev": 1.300836
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.438503,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.520727,
+          "excessWinRateVsPrice": 0.479273,
+          "approximateZVsPrice": 1.661677,
+          "modelMarginError": {
+            "sample": 3,
+            "meanError": 4.17414,
+            "mae": 4.414746,
+            "rmse": 7.404492
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        }
+      },
+      "byFavoriteComparison": {
+        "MODEL_FLIPS_MARKET_FAVORITE": {
+          "observations": 37,
+          "distinctGames": 37,
+          "correlatedRepeatObservations": 0,
+          "wins": 22,
+          "losses": 15,
+          "pushes": 0,
+          "atsPercentage": 0.594595,
+          "averageUnits": 0.136423,
+          "totalUnits": 5.047661,
+          "roi": 0.136423,
+          "unitEligible": 37,
+          "averageAmericanPrice": -98.594595,
+          "priceSample": 37,
+          "disagreement": {
+            "signedMean": 4.341118,
+            "absoluteMean": 9.008774,
+            "absoluteMedian": 7.29945,
+            "absoluteStdDev": 5.759126
+          },
+          "winRateStandardError": 0.080715,
+          "confidenceInterval95": {
+            "low": 0.43486,
+            "high": 0.736535,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.522296,
+          "excessWinRateVsPrice": 0.072299,
+          "approximateZVsPrice": 0.880428,
+          "modelMarginError": {
+            "sample": 37,
+            "meanError": -2.922199,
+            "mae": 13.037534,
+            "rmse": 16.460072
+          },
+          "sampleWarning": "RESEARCH_SAMPLE"
+        },
+        "MODEL_MAKES_FAVORITE_STRONGER": {
+          "observations": 124,
+          "distinctGames": 124,
+          "correlatedRepeatObservations": 0,
+          "wins": 66,
+          "losses": 57,
+          "pushes": 1,
+          "atsPercentage": 0.536585,
+          "averageUnits": 0.02722,
+          "totalUnits": 3.37525,
+          "roi": 0.02722,
+          "unitEligible": 124,
+          "averageAmericanPrice": -108.33871,
+          "priceSample": 124,
+          "disagreement": {
+            "signedMean": 4.115013,
+            "absoluteMean": 4.612889,
+            "absoluteMedian": 3.873758,
+            "absoluteStdDev": 3.322003
+          },
+          "winRateStandardError": 0.044963,
+          "confidenceInterval95": {
+            "low": 0.44869,
+            "high": 0.622265,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52358,
+          "excessWinRateVsPrice": 0.013005,
+          "approximateZVsPrice": 0.288789,
+          "modelMarginError": {
+            "sample": 124,
+            "meanError": -2.506142,
+            "mae": 11.606193,
+            "rmse": 14.929432
+          },
+          "sampleWarning": "LARGER_SAMPLE"
+        },
+        "MODEL_MAKES_FAVORITE_WEAKER": {
+          "observations": 154,
+          "distinctGames": 154,
+          "correlatedRepeatObservations": 0,
+          "wins": 71,
+          "losses": 79,
+          "pushes": 4,
+          "atsPercentage": 0.473333,
+          "averageUnits": -0.089408,
+          "totalUnits": -13.768778,
+          "roi": -0.089408,
+          "unitEligible": 154,
+          "averageAmericanPrice": -108.266234,
+          "priceSample": 154,
+          "disagreement": {
+            "signedMean": -2.839804,
+            "absoluteMean": 6.1572,
+            "absoluteMedian": 4.634908,
+            "absoluteStdDev": 5.544195
+          },
+          "winRateStandardError": 0.040767,
+          "confidenceInterval95": {
+            "low": 0.395099,
+            "high": 0.552899,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.522737,
+          "excessWinRateVsPrice": -0.049404,
+          "approximateZVsPrice": -1.211391,
+          "modelMarginError": {
+            "sample": 154,
+            "meanError": 5.037855,
+            "mae": 15.155001,
+            "rmse": 19.74034
+          },
+          "sampleWarning": "LARGER_SAMPLE"
+        },
+        "PICK_EM": {
+          "observations": 3,
+          "distinctGames": 3,
+          "correlatedRepeatObservations": 0,
+          "wins": 3,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.920526,
+          "totalUnits": 2.761578,
+          "roi": 0.920526,
+          "unitEligible": 3,
+          "averageAmericanPrice": -108.666667,
+          "priceSample": 3,
+          "disagreement": {
+            "signedMean": 5.82586,
+            "absoluteMean": 5.82586,
+            "absoluteMedian": 5.936391,
+            "absoluteStdDev": 1.300836
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.438503,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.520727,
+          "excessWinRateVsPrice": 0.479273,
+          "approximateZVsPrice": 1.661677,
+          "modelMarginError": {
+            "sample": 3,
+            "meanError": 4.17414,
+            "mae": 4.414746,
+            "rmse": 7.404492
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        }
+      },
+      "byMarketSpread": {
+        ">14–21": {
+          "observations": 35,
+          "distinctGames": 35,
+          "correlatedRepeatObservations": 0,
+          "wins": 17,
+          "losses": 17,
+          "pushes": 1,
+          "atsPercentage": 0.5,
+          "averageUnits": -0.04544,
+          "totalUnits": -1.590391,
+          "roi": -0.04544,
+          "unitEligible": 35,
+          "averageAmericanPrice": -110.371429,
+          "priceSample": 35,
+          "disagreement": {
+            "signedMean": 0.461296,
+            "absoluteMean": 6.132481,
+            "absoluteMedian": 4.919499,
+            "absoluteStdDev": 4.788612
+          },
+          "winRateStandardError": 0.085749,
+          "confidenceInterval95": {
+            "low": 0.340693,
+            "high": 0.659307,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.524606,
+          "excessWinRateVsPrice": -0.024606,
+          "approximateZVsPrice": -0.287301,
+          "modelMarginError": {
+            "sample": 35,
+            "meanError": -3.14701,
+            "mae": 14.04116,
+            "rmse": 17.903889
+          },
+          "sampleWarning": "RESEARCH_SAMPLE"
+        },
+        ">21–30": {
+          "observations": 33,
+          "distinctGames": 33,
+          "correlatedRepeatObservations": 0,
+          "wins": 14,
+          "losses": 18,
+          "pushes": 1,
+          "atsPercentage": 0.4375,
+          "averageUnits": -0.158759,
+          "totalUnits": -5.239057,
+          "roi": -0.158759,
+          "unitEligible": 33,
+          "averageAmericanPrice": -109.69697,
+          "priceSample": 33,
+          "disagreement": {
+            "signedMean": -3.956282,
+            "absoluteMean": 5.999637,
+            "absoluteMedian": 4.041062,
+            "absoluteStdDev": 5.78311
+          },
+          "winRateStandardError": 0.087695,
+          "confidenceInterval95": {
+            "low": 0.281653,
+            "high": 0.606744,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.523099,
+          "excessWinRateVsPrice": -0.085599,
+          "approximateZVsPrice": -0.969482,
+          "modelMarginError": {
+            "sample": 33,
+            "meanError": 9.6381,
+            "mae": 14.39385,
+            "rmse": 19.327896
+          },
+          "sampleWarning": "RESEARCH_SAMPLE"
+        },
+        ">3–7": {
+          "observations": 70,
+          "distinctGames": 70,
+          "correlatedRepeatObservations": 0,
+          "wins": 38,
+          "losses": 30,
+          "pushes": 2,
+          "atsPercentage": 0.558824,
+          "averageUnits": 0.068052,
+          "totalUnits": 4.763644,
+          "roi": 0.068052,
+          "unitEligible": 70,
+          "averageAmericanPrice": -106.985714,
+          "priceSample": 70,
+          "disagreement": {
+            "signedMean": 3.532532,
+            "absoluteMean": 5.10713,
+            "absoluteMedian": 4.486928,
+            "absoluteStdDev": 3.464732
+          },
+          "winRateStandardError": 0.060213,
+          "confidenceInterval95": {
+            "low": 0.440819,
+            "high": 0.670538,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.523301,
+          "excessWinRateVsPrice": 0.035522,
+          "approximateZVsPrice": 0.586482,
+          "modelMarginError": {
+            "sample": 70,
+            "meanError": -1.861103,
+            "mae": 12.193264,
+            "rmse": 15.723246
+          },
+          "sampleWarning": "RESEARCH_SAMPLE"
+        },
+        ">30–40": {
+          "observations": 24,
+          "distinctGames": 24,
+          "correlatedRepeatObservations": 0,
+          "wins": 10,
+          "losses": 14,
+          "pushes": 0,
+          "atsPercentage": 0.416667,
+          "averageUnits": -0.203889,
+          "totalUnits": -4.893333,
+          "roi": -0.203889,
+          "unitEligible": 24,
+          "averageAmericanPrice": -110,
+          "priceSample": 24,
+          "disagreement": {
+            "signedMean": -7.706277,
+            "absoluteMean": 8.970104,
+            "absoluteMedian": 8.939652,
+            "absoluteStdDev": 5.510185
+          },
+          "winRateStandardError": 0.100635,
+          "confidenceInterval95": {
+            "low": 0.244676,
+            "high": 0.611653,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.523732,
+          "excessWinRateVsPrice": -0.107065,
+          "approximateZVsPrice": -1.050206,
+          "modelMarginError": {
+            "sample": 24,
+            "meanError": 9.060443,
+            "mae": 17.735566,
+            "rmse": 22.527622
+          },
+          "sampleWarning": "LOW_SAMPLE"
+        },
+        ">40": {
+          "observations": 15,
+          "distinctGames": 15,
+          "correlatedRepeatObservations": 0,
+          "wins": 9,
+          "losses": 6,
+          "pushes": 0,
+          "atsPercentage": 0.6,
+          "averageUnits": 0.1564,
+          "totalUnits": 2.345994,
+          "roi": 0.1564,
+          "unitEligible": 15,
+          "averageAmericanPrice": -108.666667,
+          "priceSample": 15,
+          "disagreement": {
+            "signedMean": -12.309412,
+            "absoluteMean": 12.309412,
+            "absoluteMedian": 10.790556,
+            "absoluteStdDev": 7.252681
+          },
+          "winRateStandardError": 0.126491,
+          "confidenceInterval95": {
+            "low": 0.357468,
+            "high": 0.801755,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.520718,
+          "excessWinRateVsPrice": 0.079282,
+          "approximateZVsPrice": 0.614641,
+          "modelMarginError": {
+            "sample": 15,
+            "meanError": 13.942746,
+            "mae": 15.215443,
+            "rmse": 20.818158
+          },
+          "sampleWarning": "LOW_SAMPLE"
+        },
+        ">7–14": {
+          "observations": 83,
+          "distinctGames": 83,
+          "correlatedRepeatObservations": 0,
+          "wins": 41,
+          "losses": 42,
+          "pushes": 0,
+          "atsPercentage": 0.493976,
+          "averageUnits": -0.049849,
+          "totalUnits": -4.137469,
+          "roi": -0.049849,
+          "unitEligible": 83,
+          "averageAmericanPrice": -109.180723,
+          "priceSample": 83,
+          "disagreement": {
+            "signedMean": 3.463904,
+            "absoluteMean": 5.215671,
+            "absoluteMedian": 4.940867,
+            "absoluteStdDev": 4.459277
+          },
+          "winRateStandardError": 0.054878,
+          "confidenceInterval95": {
+            "low": 0.389089,
+            "high": 0.599396,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.521854,
+          "excessWinRateVsPrice": -0.027878,
+          "approximateZVsPrice": -0.508454,
+          "modelMarginError": {
+            "sample": 83,
+            "meanError": 0.066217,
+            "mae": 13.507795,
+            "rmse": 17.159245
+          },
+          "sampleWarning": "RESEARCH_SAMPLE"
+        },
+        "0–3": {
+          "observations": 58,
+          "distinctGames": 58,
+          "correlatedRepeatObservations": 0,
+          "wins": 33,
+          "losses": 24,
+          "pushes": 1,
+          "atsPercentage": 0.578947,
+          "averageUnits": 0.106316,
+          "totalUnits": 6.166323,
+          "roi": 0.106316,
+          "unitEligible": 58,
+          "averageAmericanPrice": -99.603448,
+          "priceSample": 58,
+          "disagreement": {
+            "signedMean": 3.452645,
+            "absoluteMean": 4.62174,
+            "absoluteMedian": 3.694264,
+            "absoluteStdDev": 4.090724
+          },
+          "winRateStandardError": 0.065396,
+          "confidenceInterval95": {
+            "low": 0.449801,
+            "high": 0.698124,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.523513,
+          "excessWinRateVsPrice": 0.055435,
+          "approximateZVsPrice": 0.837974,
+          "modelMarginError": {
+            "sample": 58,
+            "meanError": -2.418162,
+            "mae": 11.615048,
+            "rmse": 15.462053
+          },
+          "sampleWarning": "RESEARCH_SAMPLE"
+        }
+      },
+      "byWeekRegime": {
+        "WEEK_0_TO_2": {
+          "observations": 70,
+          "distinctGames": 70,
+          "correlatedRepeatObservations": 0,
+          "wins": 33,
+          "losses": 35,
+          "pushes": 2,
+          "atsPercentage": 0.485294,
+          "averageUnits": -0.068018,
+          "totalUnits": -4.761235,
+          "roi": -0.068018,
+          "unitEligible": 70,
+          "averageAmericanPrice": -109.9,
+          "priceSample": 70,
+          "disagreement": {
+            "signedMean": -4.86034,
+            "absoluteMean": 9.754314,
+            "absoluteMedian": 8.679863,
+            "absoluteStdDev": 6.759506
+          },
+          "winRateStandardError": 0.060608,
+          "confidenceInterval95": {
+            "low": 0.370508,
+            "high": 0.601652,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.523481,
+          "excessWinRateVsPrice": -0.038187,
+          "approximateZVsPrice": -0.630498,
+          "modelMarginError": {
+            "sample": 70,
+            "meanError": 8.196055,
+            "mae": 15.974696,
+            "rmse": 21.466986
+          },
+          "sampleWarning": "RESEARCH_SAMPLE"
+        },
+        "WEEK_3_TO_5": {
+          "observations": 57,
+          "distinctGames": 57,
+          "correlatedRepeatObservations": 0,
+          "wins": 25,
+          "losses": 32,
+          "pushes": 0,
+          "atsPercentage": 0.438596,
+          "averageUnits": -0.163229,
+          "totalUnits": -9.304029,
+          "roi": -0.163229,
+          "unitEligible": 57,
+          "averageAmericanPrice": -110.105263,
+          "priceSample": 57,
+          "disagreement": {
+            "signedMean": 1.870308,
+            "absoluteMean": 6.892858,
+            "absoluteMedian": 6.644018,
+            "absoluteStdDev": 4.51589
+          },
+          "winRateStandardError": 0.065725,
+          "confidenceInterval95": {
+            "low": 0.317727,
+            "high": 0.56722,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.523973,
+          "excessWinRateVsPrice": -0.085377,
+          "approximateZVsPrice": -1.290645,
+          "modelMarginError": {
+            "sample": 57,
+            "meanError": 0.243727,
+            "mae": 14.450648,
+            "rmse": 18.330562
+          },
+          "sampleWarning": "RESEARCH_SAMPLE"
+        },
+        "WEEK_6_PLUS": {
+          "observations": 191,
+          "distinctGames": 191,
+          "correlatedRepeatObservations": 0,
+          "wins": 104,
+          "losses": 84,
+          "pushes": 3,
+          "atsPercentage": 0.553191,
+          "averageUnits": 0.06011,
+          "totalUnits": 11.480975,
+          "roi": 0.06011,
+          "unitEligible": 191,
+          "averageAmericanPrice": -105.298429,
+          "priceSample": 191,
+          "disagreement": {
+            "signedMean": 2.537419,
+            "absoluteMean": 4.16395,
+            "absoluteMedian": 3.613137,
+            "absoluteStdDev": 3.133224
+          },
+          "winRateStandardError": 0.036259,
+          "confidenceInterval95": {
+            "low": 0.481766,
+            "high": 0.622486,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.522526,
+          "excessWinRateVsPrice": 0.030666,
+          "approximateZVsPrice": 0.841793,
+          "modelMarginError": {
+            "sample": 191,
+            "meanError": -1.142131,
+            "mae": 12.181965,
+            "rmse": 15.590854
+          },
+          "sampleWarning": "LARGER_SAMPLE"
+        }
+      },
+      "byMatchup": {
+        "FBS vs FBS": {
+          "observations": 279,
+          "distinctGames": 279,
+          "correlatedRepeatObservations": 0,
+          "wins": 148,
+          "losses": 126,
+          "pushes": 5,
+          "atsPercentage": 0.540146,
+          "averageUnits": 0.034587,
+          "totalUnits": 9.649767,
+          "roi": 0.034587,
+          "unitEligible": 279,
+          "averageAmericanPrice": -106.784946,
+          "priceSample": 279,
+          "disagreement": {
+            "signedMean": 2.585221,
+            "absoluteMean": 5.019647,
+            "absoluteMedian": 4.270651,
+            "absoluteStdDev": 3.855682
+          },
+          "winRateStandardError": 0.030109,
+          "confidenceInterval95": {
+            "low": 0.480986,
+            "high": 0.598196,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.522903,
+          "excessWinRateVsPrice": 0.017243,
+          "approximateZVsPrice": 0.571446,
+          "modelMarginError": {
+            "sample": 279,
+            "meanError": -1.278769,
+            "mae": 12.423166,
+            "rmse": 16.081029
+          },
+          "sampleWarning": "LARGER_SAMPLE"
+        },
+        "FBS vs FCS": {
+          "observations": 39,
+          "distinctGames": 39,
+          "correlatedRepeatObservations": 0,
+          "wins": 14,
+          "losses": 25,
+          "pushes": 0,
+          "atsPercentage": 0.358974,
+          "averageUnits": -0.313694,
+          "totalUnits": -12.234056,
+          "roi": -0.313694,
+          "unitEligible": 39,
+          "averageAmericanPrice": -109.948718,
+          "priceSample": 39,
+          "disagreement": {
+            "signedMean": -12.057583,
+            "absoluteMean": 12.064815,
+            "absoluteMedian": 13.139739,
+            "absoluteStdDev": 7.270361
+          },
+          "winRateStandardError": 0.076813,
+          "confidenceInterval95": {
+            "low": 0.227421,
+            "high": 0.515819,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.523658,
+          "excessWinRateVsPrice": -0.164683,
+          "approximateZVsPrice": -2.059201,
+          "modelMarginError": {
+            "sample": 39,
+            "meanError": 18.621686,
+            "mae": 20.579686,
+            "rmse": 25.664884
+          },
+          "sampleWarning": "RESEARCH_SAMPLE"
+        }
+      },
+      "byConference": {
+        "1 @ 1": {
+          "observations": 25,
+          "distinctGames": 25,
+          "correlatedRepeatObservations": 0,
+          "wins": 13,
+          "losses": 11,
+          "pushes": 1,
+          "atsPercentage": 0.541667,
+          "averageUnits": 0.033858,
+          "totalUnits": 0.846441,
+          "roi": 0.033858,
+          "unitEligible": 25,
+          "averageAmericanPrice": -110.48,
+          "priceSample": 25,
+          "disagreement": {
+            "signedMean": 1.783386,
+            "absoluteMean": 3.921695,
+            "absoluteMedian": 2.991303,
+            "absoluteStdDev": 2.880068
+          },
+          "winRateStandardError": 0.101707,
+          "confidenceInterval95": {
+            "low": 0.350749,
+            "high": 0.721087,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.524798,
+          "excessWinRateVsPrice": 0.016869,
+          "approximateZVsPrice": 0.165482,
+          "modelMarginError": {
+            "sample": 25,
+            "meanError": -2.363386,
+            "mae": 10.758576,
+            "rmse": 14.055523
+          },
+          "sampleWarning": "LOW_SAMPLE"
+        },
+        "1 @ 151": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": 11.301032,
+            "absoluteMean": 11.301032,
+            "absoluteMedian": 11.301032,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": -0.52381,
+          "approximateZVsPrice": -1.048809,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": -14.801032,
+            "mae": 14.801032,
+            "rmse": 14.801032
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "1 @ 17": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.952381,
+          "totalUnits": 0.952381,
+          "roi": 0.952381,
+          "unitEligible": 1,
+          "averageAmericanPrice": -105,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": 7.686064,
+            "absoluteMean": 7.686064,
+            "absoluteMedian": 7.686064,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.206549,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.512195,
+          "excessWinRateVsPrice": 0.487805,
+          "approximateZVsPrice": 0.9759,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 40.313936,
+            "mae": 40.313936,
+            "rmse": 40.313936
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "1 @ 18": {
+          "observations": 3,
+          "distinctGames": 3,
+          "correlatedRepeatObservations": 0,
+          "wins": 2,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0.666667,
+          "averageUnits": 0.278339,
+          "totalUnits": 0.835017,
+          "roi": 0.278339,
+          "unitEligible": 3,
+          "averageAmericanPrice": -109.333333,
+          "priceSample": 3,
+          "disagreement": {
+            "signedMean": 2.327685,
+            "absoluteMean": 6.531995,
+            "absoluteMedian": 6.306464,
+            "absoluteStdDev": 2.352649
+          },
+          "winRateStandardError": 0.272166,
+          "confidenceInterval95": {
+            "low": 0.20766,
+            "high": 0.938508,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.522283,
+          "excessWinRateVsPrice": 0.144383,
+          "approximateZVsPrice": 0.500656,
+          "modelMarginError": {
+            "sample": 3,
+            "meanError": 12.005648,
+            "mae": 12.005648,
+            "rmse": 18.986388
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "1 @ 4": {
+          "observations": 3,
+          "distinctGames": 3,
+          "correlatedRepeatObservations": 0,
+          "wins": 3,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.90368,
+          "totalUnits": 2.711039,
+          "roi": 0.90368,
+          "unitEligible": 3,
+          "averageAmericanPrice": -110.666667,
+          "priceSample": 3,
+          "disagreement": {
+            "signedMean": 5.901566,
+            "absoluteMean": 5.901566,
+            "absoluteMedian": 6.004393,
+            "absoluteStdDev": 2.243914
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.438503,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.525307,
+          "excessWinRateVsPrice": 0.474693,
+          "approximateZVsPrice": 1.646495,
+          "modelMarginError": {
+            "sample": 3,
+            "meanError": 2.598434,
+            "mae": 6.329722,
+            "rmse": 7.684851
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "1 @ 5": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.925926,
+          "totalUnits": 0.925926,
+          "roi": 0.925926,
+          "unitEligible": 1,
+          "averageAmericanPrice": -108,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -8.247335,
+            "absoluteMean": 8.247335,
+            "absoluteMedian": 8.247335,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.206549,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.519231,
+          "excessWinRateVsPrice": 0.480769,
+          "approximateZVsPrice": 0.96225,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 6.747335,
+            "mae": 6.747335,
+            "rmse": 6.747335
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "1 @ 9": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -118,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": 2.563742,
+            "absoluteMean": 2.563742,
+            "absoluteMedian": 2.563742,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.541284,
+          "excessWinRateVsPrice": -0.541284,
+          "approximateZVsPrice": -1.086278,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": -24.563742,
+            "mae": 24.563742,
+            "rmse": 24.563742
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "12 @ 1": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -3.979123,
+            "absoluteMean": 3.979123,
+            "absoluteMedian": 3.979123,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": -0.52381,
+          "approximateZVsPrice": -1.048809,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 24.479123,
+            "mae": 24.479123,
+            "rmse": 24.479123
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "12 @ 12": {
+          "observations": 12,
+          "distinctGames": 12,
+          "correlatedRepeatObservations": 0,
+          "wins": 6,
+          "losses": 6,
+          "pushes": 0,
+          "atsPercentage": 0.5,
+          "averageUnits": -0.043738,
+          "totalUnits": -0.524855,
+          "roi": -0.043738,
+          "unitEligible": 12,
+          "averageAmericanPrice": -110.666667,
+          "priceSample": 12,
+          "disagreement": {
+            "signedMean": 2.582996,
+            "absoluteMean": 4.914324,
+            "absoluteMedian": 3.694264,
+            "absoluteStdDev": 4.504518
+          },
+          "winRateStandardError": 0.144338,
+          "confidenceInterval95": {
+            "low": 0.253782,
+            "high": 0.746218,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.525184,
+          "excessWinRateVsPrice": -0.025184,
+          "approximateZVsPrice": -0.174699,
+          "modelMarginError": {
+            "sample": 12,
+            "meanError": -4.624662,
+            "mae": 8.551623,
+            "rmse": 12.611905
+          },
+          "sampleWarning": "LOW_SAMPLE"
+        },
+        "12 @ 15": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -7.079732,
+            "absoluteMean": 7.079732,
+            "absoluteMedian": 7.079732,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": -0.52381,
+          "approximateZVsPrice": -1.048809,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 23.579732,
+            "mae": 23.579732,
+            "rmse": 23.579732
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "12 @ 17": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -7.185328,
+            "absoluteMean": 7.185328,
+            "absoluteMedian": 7.185328,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": -0.52381,
+          "approximateZVsPrice": -1.048809,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 17.185328,
+            "mae": 17.185328,
+            "rmse": 17.185328
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "12 @ 37": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -114,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": 5.01154,
+            "absoluteMean": 5.01154,
+            "absoluteMedian": 5.01154,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.53271,
+          "excessWinRateVsPrice": -0.53271,
+          "approximateZVsPrice": -1.067708,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": -14.51154,
+            "mae": 14.51154,
+            "rmse": 14.51154
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "12 @ 4": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 0,
+          "pushes": 1,
+          "atsPercentage": null,
+          "averageUnits": 0,
+          "totalUnits": 0,
+          "roi": 0,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -4.853879,
+            "absoluteMean": 4.853879,
+            "absoluteMedian": 4.853879,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": null,
+          "confidenceInterval95": null,
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": null,
+          "approximateZVsPrice": null,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 4.853879,
+            "mae": 4.853879,
+            "rmse": 4.853879
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "12 @ 5": {
+          "observations": 3,
+          "distinctGames": 3,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 2,
+          "pushes": 0,
+          "atsPercentage": 0.333333,
+          "averageUnits": -0.363636,
+          "totalUnits": -1.090909,
+          "roi": -0.363636,
+          "unitEligible": 3,
+          "averageAmericanPrice": -110,
+          "priceSample": 3,
+          "disagreement": {
+            "signedMean": -7.27456,
+            "absoluteMean": 7.27456,
+            "absoluteMedian": 1.915527,
+            "absoluteStdDev": 8.567717
+          },
+          "winRateStandardError": 0.272166,
+          "confidenceInterval95": {
+            "low": 0.061492,
+            "high": 0.79234,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": -0.190476,
+          "approximateZVsPrice": -0.660578,
+          "modelMarginError": {
+            "sample": 3,
+            "meanError": 9.607893,
+            "mae": 9.607893,
+            "rmse": 10.416167
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "12 @ 8": {
+          "observations": 3,
+          "distinctGames": 3,
+          "correlatedRepeatObservations": 0,
+          "wins": 2,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0.666667,
+          "averageUnits": 0.259552,
+          "totalUnits": 0.778656,
+          "roi": 0.259552,
+          "unitEligible": 3,
+          "averageAmericanPrice": -113,
+          "priceSample": 3,
+          "disagreement": {
+            "signedMean": -9.358229,
+            "absoluteMean": 9.358229,
+            "absoluteMedian": 7.808596,
+            "absoluteStdDev": 5.687801
+          },
+          "winRateStandardError": 0.272166,
+          "confidenceInterval95": {
+            "low": 0.20766,
+            "high": 0.938508,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.530468,
+          "excessWinRateVsPrice": 0.136199,
+          "approximateZVsPrice": 0.472685,
+          "modelMarginError": {
+            "sample": 3,
+            "meanError": 1.191562,
+            "mae": 14.347502,
+            "rmse": 16.392203
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "12 @ 9": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.909091,
+          "totalUnits": 0.909091,
+          "roi": 0.909091,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -7.753331,
+            "absoluteMean": 7.753331,
+            "absoluteMedian": 7.753331,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.206549,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": 0.47619,
+          "approximateZVsPrice": 0.953463,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": -16.746669,
+            "mae": 16.746669,
+            "rmse": 16.746669
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "15 @ 1": {
+          "observations": 3,
+          "distinctGames": 3,
+          "correlatedRepeatObservations": 0,
+          "wins": 2,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0.666667,
+          "averageUnits": 0.272727,
+          "totalUnits": 0.818182,
+          "roi": 0.272727,
+          "unitEligible": 3,
+          "averageAmericanPrice": -109.666667,
+          "priceSample": 3,
+          "disagreement": {
+            "signedMean": -4.205257,
+            "absoluteMean": 6.300193,
+            "absoluteMedian": 7.243916,
+            "absoluteStdDev": 2.29233
+          },
+          "winRateStandardError": 0.272166,
+          "confidenceInterval95": {
+            "low": 0.20766,
+            "high": 0.938508,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52305,
+          "excessWinRateVsPrice": 0.143617,
+          "approximateZVsPrice": 0.498032,
+          "modelMarginError": {
+            "sample": 3,
+            "meanError": 8.705257,
+            "mae": 8.705257,
+            "rmse": 11.047611
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "15 @ 15": {
+          "observations": 14,
+          "distinctGames": 14,
+          "correlatedRepeatObservations": 0,
+          "wins": 8,
+          "losses": 6,
+          "pushes": 0,
+          "atsPercentage": 0.571429,
+          "averageUnits": 0.086969,
+          "totalUnits": 1.217569,
+          "roi": 0.086969,
+          "unitEligible": 14,
+          "averageAmericanPrice": -110.571429,
+          "priceSample": 14,
+          "disagreement": {
+            "signedMean": 3.149046,
+            "absoluteMean": 4.486031,
+            "absoluteMedian": 4.698406,
+            "absoluteStdDev": 2.341756
+          },
+          "winRateStandardError": 0.13226,
+          "confidenceInterval95": {
+            "low": 0.325906,
+            "high": 0.786192,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52507,
+          "excessWinRateVsPrice": 0.046358,
+          "approximateZVsPrice": 0.347351,
+          "modelMarginError": {
+            "sample": 14,
+            "meanError": 6.136668,
+            "mae": 10.121666,
+            "rmse": 14.52017
+          },
+          "sampleWarning": "LOW_SAMPLE"
+        },
+        "15 @ 18": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": 7.76128,
+            "absoluteMean": 7.76128,
+            "absoluteMedian": 7.76128,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": -0.52381,
+          "approximateZVsPrice": -1.048809,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": -22.76128,
+            "mae": 22.76128,
+            "rmse": 22.76128
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "15 @ 4": {
+          "observations": 2,
+          "distinctGames": 2,
+          "correlatedRepeatObservations": 0,
+          "wins": 2,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.930736,
+          "totalUnits": 1.861472,
+          "roi": 0.930736,
+          "unitEligible": 2,
+          "averageAmericanPrice": -107.5,
+          "priceSample": 2,
+          "disagreement": {
+            "signedMean": -10.321371,
+            "absoluteMean": 10.321371,
+            "absoluteMedian": 10.321371,
+            "absoluteStdDev": 2.057621
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.34238,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.518002,
+          "excessWinRateVsPrice": 0.481998,
+          "approximateZVsPrice": 1.36418,
+          "modelMarginError": {
+            "sample": 2,
+            "meanError": 5.321371,
+            "mae": 5.321371,
+            "rmse": 5.855101
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "15 @ 5": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -115,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -11.222245,
+            "absoluteMean": 11.222245,
+            "absoluteMedian": 11.222245,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.534884,
+          "excessWinRateVsPrice": -0.534884,
+          "approximateZVsPrice": -1.072381,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 45.222245,
+            "mae": 45.222245,
+            "rmse": 45.222245
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "15 @ 8": {
+          "observations": 2,
+          "distinctGames": 2,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0.5,
+          "averageUnits": -0.02381,
+          "totalUnits": -0.047619,
+          "roi": -0.02381,
+          "unitEligible": 2,
+          "averageAmericanPrice": -107.5,
+          "priceSample": 2,
+          "disagreement": {
+            "signedMean": -10.016911,
+            "absoluteMean": 10.016911,
+            "absoluteMedian": 10.016911,
+            "absoluteStdDev": 0.773644
+          },
+          "winRateStandardError": 0.353553,
+          "confidenceInterval95": {
+            "low": 0.094531,
+            "high": 0.905469,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.518002,
+          "excessWinRateVsPrice": -0.018002,
+          "approximateZVsPrice": -0.050951,
+          "modelMarginError": {
+            "sample": 2,
+            "meanError": 10.516911,
+            "mae": 10.516911,
+            "rmse": 11.000672
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "15 @ 9": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.877193,
+          "totalUnits": 0.877193,
+          "roi": 0.877193,
+          "unitEligible": 1,
+          "averageAmericanPrice": -114,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": 3.976138,
+            "absoluteMean": 3.976138,
+            "absoluteMedian": 3.976138,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.206549,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.53271,
+          "excessWinRateVsPrice": 0.46729,
+          "approximateZVsPrice": 0.936586,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 18.523862,
+            "mae": 18.523862,
+            "rmse": 18.523862
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "151 @ 12": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.980392,
+          "totalUnits": 0.980392,
+          "roi": 0.980392,
+          "unitEligible": 1,
+          "averageAmericanPrice": -102,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": 6.525937,
+            "absoluteMean": 6.525937,
+            "absoluteMedian": 6.525937,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.206549,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.50495,
+          "excessWinRateVsPrice": 0.49505,
+          "approximateZVsPrice": 0.990148,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 3.974063,
+            "mae": 3.974063,
+            "rmse": 3.974063
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "151 @ 15": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.909091,
+          "totalUnits": 0.909091,
+          "roi": 0.909091,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": 6.147414,
+            "absoluteMean": 6.147414,
+            "absoluteMedian": 6.147414,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.206549,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": 0.47619,
+          "approximateZVsPrice": 0.953463,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 0.852586,
+            "mae": 0.852586,
+            "rmse": 0.852586
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "151 @ 151": {
+          "observations": 18,
+          "distinctGames": 18,
+          "correlatedRepeatObservations": 0,
+          "wins": 9,
+          "losses": 9,
+          "pushes": 0,
+          "atsPercentage": 0.5,
+          "averageUnits": -0.036782,
+          "totalUnits": -0.66207,
+          "roi": -0.036782,
+          "unitEligible": 18,
+          "averageAmericanPrice": -109,
+          "priceSample": 18,
+          "disagreement": {
+            "signedMean": 4.99648,
+            "absoluteMean": 4.997906,
+            "absoluteMedian": 4.367222,
+            "absoluteStdDev": 3.615069
+          },
+          "winRateStandardError": 0.117851,
+          "confidenceInterval95": {
+            "low": 0.29031,
+            "high": 0.70969,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52148,
+          "excessWinRateVsPrice": -0.02148,
+          "approximateZVsPrice": -0.182434,
+          "modelMarginError": {
+            "sample": 18,
+            "meanError": -1.718702,
+            "mae": 12.816723,
+            "rmse": 16.287078
+          },
+          "sampleWarning": "LOW_SAMPLE"
+        },
+        "151 @ 17": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.877193,
+          "totalUnits": 0.877193,
+          "roi": 0.877193,
+          "unitEligible": 1,
+          "averageAmericanPrice": -114,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": 5.177088,
+            "absoluteMean": 5.177088,
+            "absoluteMedian": 5.177088,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.206549,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.53271,
+          "excessWinRateVsPrice": 0.46729,
+          "approximateZVsPrice": 0.936586,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": -1.677088,
+            "mae": 1.677088,
+            "rmse": 1.677088
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "151 @ 18": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -108,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -2.5225,
+            "absoluteMean": 2.5225,
+            "absoluteMedian": 2.5225,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.519231,
+          "excessWinRateVsPrice": -0.519231,
+          "approximateZVsPrice": -1.03923,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 13.5225,
+            "mae": 13.5225,
+            "rmse": 13.5225
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "151 @ 37": {
+          "observations": 2,
+          "distinctGames": 2,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0.5,
+          "averageUnits": -0.02381,
+          "totalUnits": -0.047619,
+          "roi": -0.02381,
+          "unitEligible": 2,
+          "averageAmericanPrice": -107.5,
+          "priceSample": 2,
+          "disagreement": {
+            "signedMean": 5.787419,
+            "absoluteMean": 5.787419,
+            "absoluteMedian": 5.787419,
+            "absoluteStdDev": 4.442811
+          },
+          "winRateStandardError": 0.353553,
+          "confidenceInterval95": {
+            "low": 0.094531,
+            "high": 0.905469,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.518002,
+          "excessWinRateVsPrice": -0.018002,
+          "approximateZVsPrice": -0.050951,
+          "modelMarginError": {
+            "sample": 2,
+            "meanError": -4.287419,
+            "mae": 5.057189,
+            "rmse": 6.630016
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "151 @ 4": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.952381,
+          "totalUnits": 0.952381,
+          "roi": 0.952381,
+          "unitEligible": 1,
+          "averageAmericanPrice": -105,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -11.173408,
+            "absoluteMean": 11.173408,
+            "absoluteMedian": 11.173408,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.206549,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.512195,
+          "excessWinRateVsPrice": 0.487805,
+          "approximateZVsPrice": 0.9759,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": -8.826592,
+            "mae": 8.826592,
+            "rmse": 8.826592
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "151 @ 8": {
+          "observations": 4,
+          "distinctGames": 4,
+          "correlatedRepeatObservations": 0,
+          "wins": 4,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.911939,
+          "totalUnits": 3.647756,
+          "roi": 0.911939,
+          "unitEligible": 4,
+          "averageAmericanPrice": -109.75,
+          "priceSample": 4,
+          "disagreement": {
+            "signedMean": -1.821523,
+            "absoluteMean": 2.996077,
+            "absoluteMedian": 2.60658,
+            "absoluteStdDev": 1.099298
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.510109,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.523131,
+          "excessWinRateVsPrice": 0.476869,
+          "approximateZVsPrice": 1.90952,
+          "modelMarginError": {
+            "sample": 4,
+            "meanError": -1.928477,
+            "mae": 12.503923,
+            "rmse": 14.464444
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "17 @ 12": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.909091,
+          "totalUnits": 0.909091,
+          "roi": 0.909091,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": 11.570805,
+            "absoluteMean": 11.570805,
+            "absoluteMedian": 11.570805,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.206549,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": 0.47619,
+          "approximateZVsPrice": 0.953463,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": -6.070805,
+            "mae": 6.070805,
+            "rmse": 6.070805
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "17 @ 15": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -107,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": 0.172279,
+            "absoluteMean": 0.172279,
+            "absoluteMedian": 0.172279,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.516908,
+          "excessWinRateVsPrice": -0.516908,
+          "approximateZVsPrice": -1.034408,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": -1.672279,
+            "mae": 1.672279,
+            "rmse": 1.672279
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "17 @ 17": {
+          "observations": 19,
+          "distinctGames": 19,
+          "correlatedRepeatObservations": 0,
+          "wins": 8,
+          "losses": 10,
+          "pushes": 1,
+          "atsPercentage": 0.444444,
+          "averageUnits": -0.138805,
+          "totalUnits": -2.637299,
+          "roi": -0.138805,
+          "unitEligible": 19,
+          "averageAmericanPrice": -98.684211,
+          "priceSample": 19,
+          "disagreement": {
+            "signedMean": 3.654386,
+            "absoluteMean": 3.770279,
+            "absoluteMedian": 3.981399,
+            "absoluteStdDev": 2.900237
+          },
+          "winRateStandardError": 0.117121,
+          "confidenceInterval95": {
+            "low": 0.245595,
+            "high": 0.662836,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.521832,
+          "excessWinRateVsPrice": -0.077388,
+          "approximateZVsPrice": -0.657286,
+          "modelMarginError": {
+            "sample": 19,
+            "meanError": -2.549123,
+            "mae": 15.683017,
+            "rmse": 18.635756
+          },
+          "sampleWarning": "LOW_SAMPLE"
+        },
+        "17 @ 4": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.869565,
+          "totalUnits": 0.869565,
+          "roi": 0.869565,
+          "unitEligible": 1,
+          "averageAmericanPrice": -115,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": 11.255376,
+            "absoluteMean": 11.255376,
+            "absoluteMedian": 11.255376,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.206549,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.534884,
+          "excessWinRateVsPrice": 0.465116,
+          "approximateZVsPrice": 0.932505,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": -7.255376,
+            "mae": 7.255376,
+            "rmse": 7.255376
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "17 @ 8": {
+          "observations": 2,
+          "distinctGames": 2,
+          "correlatedRepeatObservations": 0,
+          "wins": 2,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.909091,
+          "totalUnits": 1.818182,
+          "roi": 0.909091,
+          "unitEligible": 2,
+          "averageAmericanPrice": -110,
+          "priceSample": 2,
+          "disagreement": {
+            "signedMean": -6.318778,
+            "absoluteMean": 6.318778,
+            "absoluteMedian": 6.318778,
+            "absoluteStdDev": 0.685052
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.34238,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": 0.47619,
+          "approximateZVsPrice": 1.3484,
+          "modelMarginError": {
+            "sample": 2,
+            "meanError": -1.681222,
+            "mae": 1.814948,
+            "rmse": 2.473973
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "17 @ 9": {
+          "observations": 2,
+          "distinctGames": 2,
+          "correlatedRepeatObservations": 0,
+          "wins": 2,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.926244,
+          "totalUnits": 1.852487,
+          "roi": 0.926244,
+          "unitEligible": 2,
+          "averageAmericanPrice": -108,
+          "priceSample": 2,
+          "disagreement": {
+            "signedMean": 2.033992,
+            "absoluteMean": 8.787202,
+            "absoluteMedian": 8.787202,
+            "absoluteStdDev": 2.033992
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.34238,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.519186,
+          "excessWinRateVsPrice": 0.480814,
+          "approximateZVsPrice": 1.360949,
+          "modelMarginError": {
+            "sample": 2,
+            "meanError": 2.966008,
+            "mae": 7.712798,
+            "rmse": 8.263441
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "179 @ 1": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -14.919707,
+            "absoluteMean": 14.919707,
+            "absoluteMedian": 14.919707,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": -0.52381,
+          "approximateZVsPrice": -1.048809,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 24.419707,
+            "mae": 24.419707,
+            "rmse": 24.419707
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "179 @ 12": {
+          "observations": 2,
+          "distinctGames": 2,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 2,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -2,
+          "roi": -1,
+          "unitEligible": 2,
+          "averageAmericanPrice": -110,
+          "priceSample": 2,
+          "disagreement": {
+            "signedMean": -4.903983,
+            "absoluteMean": 4.903983,
+            "absoluteMedian": 4.903983,
+            "absoluteStdDev": 3.911832
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.65762,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": -0.52381,
+          "approximateZVsPrice": -1.48324,
+          "modelMarginError": {
+            "sample": 2,
+            "meanError": 23.903983,
+            "mae": 23.903983,
+            "rmse": 24.307708
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "179 @ 15": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.909091,
+          "totalUnits": 0.909091,
+          "roi": 0.909091,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -1.775481,
+            "absoluteMean": 1.775481,
+            "absoluteMedian": 1.775481,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.206549,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": 0.47619,
+          "approximateZVsPrice": 0.953463,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": -6.724519,
+            "mae": 6.724519,
+            "rmse": 6.724519
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "179 @ 37": {
+          "observations": 2,
+          "distinctGames": 2,
+          "correlatedRepeatObservations": 0,
+          "wins": 2,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.900974,
+          "totalUnits": 1.801948,
+          "roi": 0.900974,
+          "unitEligible": 2,
+          "averageAmericanPrice": -111,
+          "priceSample": 2,
+          "disagreement": {
+            "signedMean": -15.216543,
+            "absoluteMean": 15.216543,
+            "absoluteMedian": 15.216543,
+            "absoluteStdDev": 2.051505
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.34238,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.526056,
+          "excessWinRateVsPrice": 0.473944,
+          "approximateZVsPrice": 1.342341,
+          "modelMarginError": {
+            "sample": 2,
+            "meanError": -4.783457,
+            "mae": 4.783457,
+            "rmse": 5.373694
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "179 @ 8": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -3.492519,
+            "absoluteMean": 3.492519,
+            "absoluteMedian": 3.492519,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": -0.52381,
+          "approximateZVsPrice": -1.048809,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 8.992519,
+            "mae": 8.992519,
+            "rmse": 8.992519
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "18 @ 1": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 0,
+          "pushes": 1,
+          "atsPercentage": null,
+          "averageUnits": 0,
+          "totalUnits": 0,
+          "roi": 0,
+          "unitEligible": 1,
+          "averageAmericanPrice": -115,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -4.936845,
+            "absoluteMean": 4.936845,
+            "absoluteMedian": 4.936845,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": null,
+          "confidenceInterval95": null,
+          "averageBreakEvenRate": 0.534884,
+          "excessWinRateVsPrice": null,
+          "approximateZVsPrice": null,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 4.936845,
+            "mae": 4.936845,
+            "rmse": 4.936845
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "18 @ 151": {
+          "observations": 2,
+          "distinctGames": 2,
+          "correlatedRepeatObservations": 0,
+          "wins": 2,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.889328,
+          "totalUnits": 1.778656,
+          "roi": 0.889328,
+          "unitEligible": 2,
+          "averageAmericanPrice": -112.5,
+          "priceSample": 2,
+          "disagreement": {
+            "signedMean": 0.957881,
+            "absoluteMean": 0.957881,
+            "absoluteMedian": 0.957881,
+            "absoluteStdDev": 0.045677
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.34238,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.529347,
+          "excessWinRateVsPrice": 0.470653,
+          "approximateZVsPrice": 1.333508,
+          "modelMarginError": {
+            "sample": 2,
+            "meanError": 7.542119,
+            "mae": 7.542119,
+            "rmse": 8.806063
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "20 @ 17": {
+          "observations": 4,
+          "distinctGames": 4,
+          "correlatedRepeatObservations": 0,
+          "wins": 4,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.910032,
+          "totalUnits": 3.640128,
+          "roi": 0.910032,
+          "unitEligible": 4,
+          "averageAmericanPrice": -110,
+          "priceSample": 4,
+          "disagreement": {
+            "signedMean": -7.414979,
+            "absoluteMean": 7.414979,
+            "absoluteMedian": 7.649702,
+            "absoluteStdDev": 3.620565
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.510109,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.523674,
+          "excessWinRateVsPrice": 0.476326,
+          "approximateZVsPrice": 1.907441,
+          "modelMarginError": {
+            "sample": 4,
+            "meanError": -5.085021,
+            "mae": 5.539248,
+            "rmse": 10.229741
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "20 @ 4": {
+          "observations": 2,
+          "distinctGames": 2,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 2,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -2,
+          "roi": -1,
+          "unitEligible": 2,
+          "averageAmericanPrice": -110,
+          "priceSample": 2,
+          "disagreement": {
+            "signedMean": -17.255505,
+            "absoluteMean": 17.255505,
+            "absoluteMedian": 17.255505,
+            "absoluteStdDev": 0.679836
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.65762,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": -0.52381,
+          "approximateZVsPrice": -1.48324,
+          "modelMarginError": {
+            "sample": 2,
+            "meanError": 29.255505,
+            "mae": 29.255505,
+            "rmse": 29.256057
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "20 @ 5": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -115,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -24.809913,
+            "absoluteMean": 24.809913,
+            "absoluteMedian": 24.809913,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.534884,
+          "excessWinRateVsPrice": -0.534884,
+          "approximateZVsPrice": -1.072381,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 56.309913,
+            "mae": 56.309913,
+            "rmse": 56.309913
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "21 @ 12": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": 0.141028,
+            "absoluteMean": 0.141028,
+            "absoluteMedian": 0.141028,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": -0.52381,
+          "approximateZVsPrice": -1.048809,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": -0.641028,
+            "mae": 0.641028,
+            "rmse": 0.641028
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "21 @ 17": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -112,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -3.467872,
+            "absoluteMean": 3.467872,
+            "absoluteMedian": 3.467872,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.528302,
+          "excessWinRateVsPrice": -0.528302,
+          "approximateZVsPrice": -1.058301,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 13.967872,
+            "mae": 13.967872,
+            "rmse": 13.967872
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "21 @ 5": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.909091,
+          "totalUnits": 0.909091,
+          "roi": 0.909091,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -20.907257,
+            "absoluteMean": 20.907257,
+            "absoluteMedian": 20.907257,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.206549,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": 0.47619,
+          "approximateZVsPrice": 0.953463,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 18.407257,
+            "mae": 18.407257,
+            "rmse": 18.407257
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "24 @ 151": {
+          "observations": 2,
+          "distinctGames": 2,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 2,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -2,
+          "roi": -1,
+          "unitEligible": 2,
+          "averageAmericanPrice": -110,
+          "priceSample": 2,
+          "disagreement": {
+            "signedMean": -14.051164,
+            "absoluteMean": 14.051164,
+            "absoluteMedian": 14.051164,
+            "absoluteStdDev": 0.692373
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.65762,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": -0.52381,
+          "approximateZVsPrice": -1.48324,
+          "modelMarginError": {
+            "sample": 2,
+            "meanError": 34.551164,
+            "mae": 34.551164,
+            "rmse": 34.5759
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "24 @ 37": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -10.916637,
+            "absoluteMean": 10.916637,
+            "absoluteMedian": 10.916637,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": -0.52381,
+          "approximateZVsPrice": -1.048809,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 40.416637,
+            "mae": 40.416637,
+            "rmse": 40.416637
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "24 @ 8": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.909091,
+          "totalUnits": 0.909091,
+          "roi": 0.909091,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -21.256249,
+            "absoluteMean": 21.256249,
+            "absoluteMedian": 21.256249,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.206549,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": 0.47619,
+          "approximateZVsPrice": 0.953463,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 6.756249,
+            "mae": 6.756249,
+            "rmse": 6.756249
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "25 @ 15": {
+          "observations": 2,
+          "distinctGames": 2,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 2,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -2,
+          "roi": -1,
+          "unitEligible": 2,
+          "averageAmericanPrice": -110,
+          "priceSample": 2,
+          "disagreement": {
+            "signedMean": -9.291183,
+            "absoluteMean": 9.291183,
+            "absoluteMedian": 9.291183,
+            "absoluteStdDev": 3.848556
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.65762,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": -0.52381,
+          "approximateZVsPrice": -1.48324,
+          "modelMarginError": {
+            "sample": 2,
+            "meanError": 32.791183,
+            "mae": 32.791183,
+            "rmse": 34.044245
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "29 @ 1": {
+          "observations": 2,
+          "distinctGames": 2,
+          "correlatedRepeatObservations": 0,
+          "wins": 2,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.917508,
+          "totalUnits": 1.835017,
+          "roi": 0.917508,
+          "unitEligible": 2,
+          "averageAmericanPrice": -109,
+          "priceSample": 2,
+          "disagreement": {
+            "signedMean": -12.615498,
+            "absoluteMean": 12.615498,
+            "absoluteMedian": 12.615498,
+            "absoluteStdDev": 3.487299
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.34238,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52152,
+          "excessWinRateVsPrice": 0.47848,
+          "approximateZVsPrice": 1.354601,
+          "modelMarginError": {
+            "sample": 2,
+            "meanError": 8.115498,
+            "mae": 8.115498,
+            "rmse": 9.796518
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "29 @ 8": {
+          "observations": 4,
+          "distinctGames": 4,
+          "correlatedRepeatObservations": 0,
+          "wins": 2,
+          "losses": 2,
+          "pushes": 0,
+          "atsPercentage": 0.5,
+          "averageUnits": -0.036878,
+          "totalUnits": -0.147513,
+          "roi": -0.036878,
+          "unitEligible": 4,
+          "averageAmericanPrice": -109,
+          "priceSample": 4,
+          "disagreement": {
+            "signedMean": -14.810892,
+            "absoluteMean": 14.810892,
+            "absoluteMedian": 16.260148,
+            "absoluteStdDev": 4.049638
+          },
+          "winRateStandardError": 0.25,
+          "confidenceInterval95": {
+            "low": 0.150039,
+            "high": 0.849961,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.521498,
+          "excessWinRateVsPrice": -0.021498,
+          "approximateZVsPrice": -0.086071,
+          "modelMarginError": {
+            "sample": 4,
+            "meanError": 20.560892,
+            "mae": 20.560892,
+            "rmse": 24.859629
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "30 @ 1": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -26.208237,
+            "absoluteMean": 26.208237,
+            "absoluteMedian": 26.208237,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": -0.52381,
+          "approximateZVsPrice": -1.048809,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 55.708237,
+            "mae": 55.708237,
+            "rmse": 55.708237
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "30 @ 37": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -3.366922,
+            "absoluteMean": 3.366922,
+            "absoluteMedian": 3.366922,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": -0.52381,
+          "approximateZVsPrice": -1.048809,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 6.866922,
+            "mae": 6.866922,
+            "rmse": 6.866922
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "30 @ 5": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -1.290398,
+            "absoluteMean": 1.290398,
+            "absoluteMedian": 1.290398,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": -0.52381,
+          "approximateZVsPrice": -1.048809,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 23.790398,
+            "mae": 23.790398,
+            "rmse": 23.790398
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "30 @ 8": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -14.80049,
+            "absoluteMean": 14.80049,
+            "absoluteMedian": 14.80049,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": -0.52381,
+          "approximateZVsPrice": -1.048809,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 22.30049,
+            "mae": 22.30049,
+            "rmse": 22.30049
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "31 @ 1": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.909091,
+          "totalUnits": 0.909091,
+          "roi": 0.909091,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -17.124491,
+            "absoluteMean": 17.124491,
+            "absoluteMedian": 17.124491,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.206549,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": 0.47619,
+          "approximateZVsPrice": 0.953463,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 0.624491,
+            "mae": 0.624491,
+            "rmse": 0.624491
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "31 @ 151": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -15.129702,
+            "absoluteMean": 15.129702,
+            "absoluteMedian": 15.129702,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": -0.52381,
+          "approximateZVsPrice": -1.048809,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 36.629702,
+            "mae": 36.629702,
+            "rmse": 36.629702
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "31 @ 37": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -105,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -29.976426,
+            "absoluteMean": 29.976426,
+            "absoluteMedian": 29.976426,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.512195,
+          "excessWinRateVsPrice": -0.512195,
+          "approximateZVsPrice": -1.024695,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 33.976426,
+            "mae": 33.976426,
+            "rmse": 33.976426
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "37 @ 1": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.952381,
+          "totalUnits": 0.952381,
+          "roi": 0.952381,
+          "unitEligible": 1,
+          "averageAmericanPrice": -105,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -10.086195,
+            "absoluteMean": 10.086195,
+            "absoluteMedian": 10.086195,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.206549,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.512195,
+          "excessWinRateVsPrice": 0.487805,
+          "approximateZVsPrice": 0.9759,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": -9.913805,
+            "mae": 9.913805,
+            "rmse": 9.913805
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "37 @ 12": {
+          "observations": 5,
+          "distinctGames": 5,
+          "correlatedRepeatObservations": 0,
+          "wins": 3,
+          "losses": 2,
+          "pushes": 0,
+          "atsPercentage": 0.6,
+          "averageUnits": 0.145455,
+          "totalUnits": 0.727273,
+          "roi": 0.145455,
+          "unitEligible": 5,
+          "averageAmericanPrice": -111.6,
+          "priceSample": 5,
+          "disagreement": {
+            "signedMean": 6.571625,
+            "absoluteMean": 9.018853,
+            "absoluteMedian": 6.644018,
+            "absoluteStdDev": 4.789171
+          },
+          "winRateStandardError": 0.219089,
+          "confidenceInterval95": {
+            "low": 0.230724,
+            "high": 0.882379,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.527366,
+          "excessWinRateVsPrice": 0.072634,
+          "approximateZVsPrice": 0.325318,
+          "modelMarginError": {
+            "sample": 5,
+            "meanError": -9.471625,
+            "mae": 11.414017,
+            "rmse": 12.77988
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "37 @ 15": {
+          "observations": 2,
+          "distinctGames": 2,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 2,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -2,
+          "roi": -1,
+          "unitEligible": 2,
+          "averageAmericanPrice": -110.5,
+          "priceSample": 2,
+          "disagreement": {
+            "signedMean": 1.564579,
+            "absoluteMean": 2.47519,
+            "absoluteMedian": 2.47519,
+            "absoluteStdDev": 1.564579
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.65762,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.524938,
+          "excessWinRateVsPrice": -0.524938,
+          "approximateZVsPrice": -1.486599,
+          "modelMarginError": {
+            "sample": 2,
+            "meanError": -3.564579,
+            "mae": 9.97519,
+            "rmse": 10.592952
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "37 @ 151": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.892857,
+          "totalUnits": 0.892857,
+          "roi": 0.892857,
+          "unitEligible": 1,
+          "averageAmericanPrice": -112,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -4.466268,
+            "absoluteMean": 4.466268,
+            "absoluteMedian": 4.466268,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.206549,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.528302,
+          "excessWinRateVsPrice": 0.471698,
+          "approximateZVsPrice": 0.944911,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": -6.533732,
+            "mae": 6.533732,
+            "rmse": 6.533732
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "37 @ 37": {
+          "observations": 19,
+          "distinctGames": 19,
+          "correlatedRepeatObservations": 0,
+          "wins": 11,
+          "losses": 8,
+          "pushes": 0,
+          "atsPercentage": 0.578947,
+          "averageUnits": 0.108459,
+          "totalUnits": 2.060726,
+          "roi": 0.108459,
+          "unitEligible": 19,
+          "averageAmericanPrice": -109.631579,
+          "priceSample": 19,
+          "disagreement": {
+            "signedMean": 5.167899,
+            "absoluteMean": 5.273504,
+            "absoluteMedian": 5.411432,
+            "absoluteStdDev": 3.305199
+          },
+          "winRateStandardError": 0.113269,
+          "confidenceInterval95": {
+            "low": 0.362759,
+            "high": 0.768581,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52292,
+          "excessWinRateVsPrice": 0.056028,
+          "approximateZVsPrice": 0.488952,
+          "modelMarginError": {
+            "sample": 19,
+            "meanError": -5.325793,
+            "mae": 12.378029,
+            "rmse": 16.556052
+          },
+          "sampleWarning": "LOW_SAMPLE"
+        },
+        "37 @ 5": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -108,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -5.435556,
+            "absoluteMean": 5.435556,
+            "absoluteMedian": 5.435556,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.519231,
+          "excessWinRateVsPrice": -0.519231,
+          "approximateZVsPrice": -1.03923,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 15.435556,
+            "mae": 15.435556,
+            "rmse": 15.435556
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "37 @ 8": {
+          "observations": 4,
+          "distinctGames": 4,
+          "correlatedRepeatObservations": 0,
+          "wins": 2,
+          "losses": 2,
+          "pushes": 0,
+          "atsPercentage": 0.5,
+          "averageUnits": -0.045455,
+          "totalUnits": -0.181818,
+          "roi": -0.045455,
+          "unitEligible": 4,
+          "averageAmericanPrice": -108.75,
+          "priceSample": 4,
+          "disagreement": {
+            "signedMean": -1.851559,
+            "absoluteMean": 5.189287,
+            "absoluteMedian": 3.964283,
+            "absoluteStdDev": 4.86402
+          },
+          "winRateStandardError": 0.25,
+          "confidenceInterval95": {
+            "low": 0.150039,
+            "high": 0.849961,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.520906,
+          "excessWinRateVsPrice": -0.020906,
+          "approximateZVsPrice": -0.083697,
+          "modelMarginError": {
+            "sample": 4,
+            "meanError": 26.226559,
+            "mae": 26.226559,
+            "rmse": 29.714346
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "4 @ 1": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -120,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": 11.673058,
+            "absoluteMean": 11.673058,
+            "absoluteMedian": 11.673058,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.545455,
+          "excessWinRateVsPrice": -0.545455,
+          "approximateZVsPrice": -1.095445,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": -17.173058,
+            "mae": 17.173058,
+            "rmse": 17.173058
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "4 @ 15": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.869565,
+          "totalUnits": 0.869565,
+          "roi": 0.869565,
+          "unitEligible": 1,
+          "averageAmericanPrice": -115,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": 7.124558,
+            "absoluteMean": 7.124558,
+            "absoluteMedian": 7.124558,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.206549,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.534884,
+          "excessWinRateVsPrice": 0.465116,
+          "approximateZVsPrice": 0.932505,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 3.375442,
+            "mae": 3.375442,
+            "rmse": 3.375442
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "4 @ 151": {
+          "observations": 2,
+          "distinctGames": 2,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 2,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -2,
+          "roi": -1,
+          "unitEligible": 2,
+          "averageAmericanPrice": -112.5,
+          "priceSample": 2,
+          "disagreement": {
+            "signedMean": 11.333363,
+            "absoluteMean": 11.333363,
+            "absoluteMedian": 11.333363,
+            "absoluteStdDev": 6.490626
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.65762,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.529347,
+          "excessWinRateVsPrice": -0.529347,
+          "approximateZVsPrice": -1.499804,
+          "modelMarginError": {
+            "sample": 2,
+            "meanError": -24.583363,
+            "mae": 24.583363,
+            "rmse": 25.13575
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "4 @ 4": {
+          "observations": 28,
+          "distinctGames": 28,
+          "correlatedRepeatObservations": 0,
+          "wins": 11,
+          "losses": 17,
+          "pushes": 0,
+          "atsPercentage": 0.392857,
+          "averageUnits": -0.246014,
+          "totalUnits": -6.888387,
+          "roi": -0.246014,
+          "unitEligible": 28,
+          "averageAmericanPrice": -102.178571,
+          "priceSample": 28,
+          "disagreement": {
+            "signedMean": 2.080305,
+            "absoluteMean": 3.518046,
+            "absoluteMedian": 3.068221,
+            "absoluteStdDev": 2.882012
+          },
+          "winRateStandardError": 0.092296,
+          "confidenceInterval95": {
+            "low": 0.235657,
+            "high": 0.57591,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.522172,
+          "excessWinRateVsPrice": -0.129315,
+          "approximateZVsPrice": -1.369889,
+          "modelMarginError": {
+            "sample": 28,
+            "meanError": -1.401734,
+            "mae": 13.468356,
+            "rmse": 16.52759
+          },
+          "sampleWarning": "LOW_SAMPLE"
+        },
+        "4 @ 5": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -0.041957,
+            "absoluteMean": 0.041957,
+            "absoluteMedian": 0.041957,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": -0.52381,
+          "approximateZVsPrice": -1.048809,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 38.041957,
+            "mae": 38.041957,
+            "rmse": 38.041957
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "4 @ 8": {
+          "observations": 2,
+          "distinctGames": 2,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0.5,
+          "averageUnits": -0.045455,
+          "totalUnits": -0.090909,
+          "roi": -0.045455,
+          "unitEligible": 2,
+          "averageAmericanPrice": -112.5,
+          "priceSample": 2,
+          "disagreement": {
+            "signedMean": 0.484986,
+            "absoluteMean": 1.546873,
+            "absoluteMedian": 1.546873,
+            "absoluteStdDev": 0.484986
+          },
+          "winRateStandardError": 0.353553,
+          "confidenceInterval95": {
+            "low": 0.094531,
+            "high": 0.905469,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.529347,
+          "excessWinRateVsPrice": -0.029347,
+          "approximateZVsPrice": -0.083148,
+          "modelMarginError": {
+            "sample": 2,
+            "meanError": 7.515014,
+            "mae": 7.515014,
+            "rmse": 8.535374
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "48 @ 151": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -10.673696,
+            "absoluteMean": 10.673696,
+            "absoluteMedian": 10.673696,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": -0.52381,
+          "approximateZVsPrice": -1.048809,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 34.173696,
+            "mae": 34.173696,
+            "rmse": 34.173696
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "48 @ 37": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -7.702635,
+            "absoluteMean": 7.702635,
+            "absoluteMedian": 7.702635,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": -0.52381,
+          "approximateZVsPrice": -1.048809,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 12.202635,
+            "mae": 12.202635,
+            "rmse": 12.202635
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "48 @ 4": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -6.996904,
+            "absoluteMean": 6.996904,
+            "absoluteMedian": 6.996904,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": -0.52381,
+          "approximateZVsPrice": -1.048809,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 28.496904,
+            "mae": 28.496904,
+            "rmse": 28.496904
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "5 @ 1": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": 6.767152,
+            "absoluteMean": 6.767152,
+            "absoluteMedian": 6.767152,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": -0.52381,
+          "approximateZVsPrice": -1.048809,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": -30.267152,
+            "mae": 30.267152,
+            "rmse": 30.267152
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "5 @ 17": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.877193,
+          "totalUnits": 0.877193,
+          "roi": 0.877193,
+          "unitEligible": 1,
+          "averageAmericanPrice": -114,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": 20.670304,
+            "absoluteMean": 20.670304,
+            "absoluteMedian": 20.670304,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.206549,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.53271,
+          "excessWinRateVsPrice": 0.46729,
+          "approximateZVsPrice": 0.936586,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": -12.170304,
+            "mae": 12.170304,
+            "rmse": 12.170304
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "5 @ 18": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.909091,
+          "totalUnits": 0.909091,
+          "roi": 0.909091,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": 8.219008,
+            "absoluteMean": 8.219008,
+            "absoluteMedian": 8.219008,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.206549,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": 0.47619,
+          "approximateZVsPrice": 0.953463,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": -6.719008,
+            "mae": 6.719008,
+            "rmse": 6.719008
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "5 @ 4": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -105,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": 11.160377,
+            "absoluteMean": 11.160377,
+            "absoluteMedian": 11.160377,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.512195,
+          "excessWinRateVsPrice": -0.512195,
+          "approximateZVsPrice": -1.024695,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": -11.660377,
+            "mae": 11.660377,
+            "rmse": 11.660377
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "5 @ 5": {
+          "observations": 33,
+          "distinctGames": 33,
+          "correlatedRepeatObservations": 0,
+          "wins": 20,
+          "losses": 13,
+          "pushes": 0,
+          "atsPercentage": 0.606061,
+          "averageUnits": 0.166035,
+          "totalUnits": 5.479152,
+          "roi": 0.166035,
+          "unitEligible": 33,
+          "averageAmericanPrice": -108.424242,
+          "priceSample": 33,
+          "disagreement": {
+            "signedMean": 3.69204,
+            "absoluteMean": 4.052147,
+            "absoluteMedian": 3.602345,
+            "absoluteStdDev": 3.051127
+          },
+          "winRateStandardError": 0.085058,
+          "confidenceInterval95": {
+            "low": 0.436834,
+            "high": 0.753169,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.520084,
+          "excessWinRateVsPrice": 0.085977,
+          "approximateZVsPrice": 0.988596,
+          "modelMarginError": {
+            "sample": 33,
+            "meanError": -3.252646,
+            "mae": 13.636073,
+            "rmse": 17.116901
+          },
+          "sampleWarning": "RESEARCH_SAMPLE"
+        },
+        "5 @ 8": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.909091,
+          "totalUnits": 0.909091,
+          "roi": 0.909091,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": 8.762794,
+            "absoluteMean": 8.762794,
+            "absoluteMedian": 8.762794,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.206549,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": 0.47619,
+          "approximateZVsPrice": 0.953463,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": -2.762794,
+            "mae": 2.762794,
+            "rmse": 2.762794
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "5 @ 9": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": 15.595751,
+            "absoluteMean": 15.595751,
+            "absoluteMedian": 15.595751,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": -0.52381,
+          "approximateZVsPrice": -1.048809,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": -29.595751,
+            "mae": 29.595751,
+            "rmse": 29.595751
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "8 @ 1": {
+          "observations": 2,
+          "distinctGames": 2,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0.5,
+          "averageUnits": -0.02381,
+          "totalUnits": -0.047619,
+          "roi": -0.02381,
+          "unitEligible": 2,
+          "averageAmericanPrice": -107.5,
+          "priceSample": 2,
+          "disagreement": {
+            "signedMean": 6.241081,
+            "absoluteMean": 6.241081,
+            "absoluteMedian": 6.241081,
+            "absoluteStdDev": 1.586255
+          },
+          "winRateStandardError": 0.353553,
+          "confidenceInterval95": {
+            "low": 0.094531,
+            "high": 0.905469,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.518002,
+          "excessWinRateVsPrice": -0.018002,
+          "approximateZVsPrice": -0.050951,
+          "modelMarginError": {
+            "sample": 2,
+            "meanError": -13.491081,
+            "mae": 17.163745,
+            "rmse": 21.831248
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "8 @ 151": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.952381,
+          "totalUnits": 0.952381,
+          "roi": 0.952381,
+          "unitEligible": 1,
+          "averageAmericanPrice": -105,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": 13.241545,
+            "absoluteMean": 13.241545,
+            "absoluteMedian": 13.241545,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.206549,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.512195,
+          "excessWinRateVsPrice": 0.487805,
+          "approximateZVsPrice": 0.9759,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": -5.241545,
+            "mae": 5.241545,
+            "rmse": 5.241545
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "8 @ 8": {
+          "observations": 25,
+          "distinctGames": 25,
+          "correlatedRepeatObservations": 0,
+          "wins": 12,
+          "losses": 12,
+          "pushes": 1,
+          "atsPercentage": 0.5,
+          "averageUnits": -0.036271,
+          "totalUnits": -0.906781,
+          "roi": -0.036271,
+          "unitEligible": 25,
+          "averageAmericanPrice": -92.96,
+          "priceSample": 25,
+          "disagreement": {
+            "signedMean": 3.226788,
+            "absoluteMean": 3.555233,
+            "absoluteMedian": 3.336292,
+            "absoluteStdDev": 2.349143
+          },
+          "winRateStandardError": 0.102062,
+          "confidenceInterval95": {
+            "low": 0.314274,
+            "high": 0.685726,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.521244,
+          "excessWinRateVsPrice": -0.021244,
+          "approximateZVsPrice": -0.20834,
+          "modelMarginError": {
+            "sample": 25,
+            "meanError": -3.606788,
+            "mae": 9.794993,
+            "rmse": 13.156797
+          },
+          "sampleWarning": "LOW_SAMPLE"
+        },
+        "9 @ 37": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.909091,
+          "totalUnits": 0.909091,
+          "roi": 0.909091,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -0.561801,
+            "absoluteMean": 0.561801,
+            "absoluteMedian": 0.561801,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.206549,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": 0.47619,
+          "approximateZVsPrice": 0.953463,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": -9.438199,
+            "mae": 9.438199,
+            "rmse": 9.438199
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "9 @ 5": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 1,
+          "pushes": 0,
+          "atsPercentage": 0,
+          "averageUnits": -1,
+          "totalUnits": -1,
+          "roi": -1,
+          "unitEligible": 1,
+          "averageAmericanPrice": -106,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": 10.494782,
+            "absoluteMean": 10.494782,
+            "absoluteMedian": 10.494782,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0,
+            "high": 0.793451,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.514563,
+          "excessWinRateVsPrice": -0.514563,
+          "approximateZVsPrice": -1.029563,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": -10.994782,
+            "mae": 10.994782,
+            "rmse": 10.994782
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "9 @ 8": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.909091,
+          "totalUnits": 0.909091,
+          "roi": 0.909091,
+          "unitEligible": 1,
+          "averageAmericanPrice": -110,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": -3.85064,
+            "absoluteMean": 3.85064,
+            "absoluteMedian": 3.85064,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.206549,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.52381,
+          "excessWinRateVsPrice": 0.47619,
+          "approximateZVsPrice": 0.953463,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": -25.14936,
+            "mae": 25.14936,
+            "rmse": 25.14936
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        }
+      },
+      "byNeutralSite": {
+        "NEUTRAL": {
+          "observations": 1,
+          "distinctGames": 1,
+          "correlatedRepeatObservations": 0,
+          "wins": 1,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": 1,
+          "averageUnits": 0.943396,
+          "totalUnits": 0.943396,
+          "roi": 0.943396,
+          "unitEligible": 1,
+          "averageAmericanPrice": -106,
+          "priceSample": 1,
+          "disagreement": {
+            "signedMean": 4.180281,
+            "absoluteMean": 4.180281,
+            "absoluteMedian": 4.180281,
+            "absoluteStdDev": 0
+          },
+          "winRateStandardError": 0,
+          "confidenceInterval95": {
+            "low": 0.206549,
+            "high": 1,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.514563,
+          "excessWinRateVsPrice": 0.485437,
+          "approximateZVsPrice": 0.971286,
+          "modelMarginError": {
+            "sample": 1,
+            "meanError": 12.819719,
+            "mae": 12.819719,
+            "rmse": 12.819719
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "NON_NEUTRAL": {
+          "observations": 317,
+          "distinctGames": 317,
+          "correlatedRepeatObservations": 0,
+          "wins": 161,
+          "losses": 151,
+          "pushes": 5,
+          "atsPercentage": 0.516026,
+          "averageUnits": -0.011128,
+          "totalUnits": -3.527686,
+          "roi": -0.011128,
+          "unitEligible": 317,
+          "averageAmericanPrice": -107.176656,
+          "priceSample": 317,
+          "disagreement": {
+            "signedMean": 0.778708,
+            "absoluteMean": 5.88905,
+            "absoluteMedian": 4.693381,
+            "absoluteStdDev": 4.993557
+          },
+          "winRateStandardError": 0.028292,
+          "confidenceInterval95": {
+            "low": 0.460717,
+            "high": 0.570945,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.523022,
+          "excessWinRateVsPrice": -0.006996,
+          "approximateZVsPrice": -0.247427,
+          "modelMarginError": {
+            "sample": 317,
+            "meanError": 1.125077,
+            "mae": 13.425399,
+            "rmse": 17.553315
+          },
+          "sampleWarning": "LARGER_SAMPLE"
+        }
+      },
+      "byContextCompleteness": {
+        "UNKNOWN": {
+          "observations": 318,
+          "distinctGames": 318,
+          "correlatedRepeatObservations": 0,
+          "wins": 162,
+          "losses": 151,
+          "pushes": 5,
+          "atsPercentage": 0.517572,
+          "averageUnits": -0.008127,
+          "totalUnits": -2.584289,
+          "roi": -0.008127,
+          "unitEligible": 318,
+          "averageAmericanPrice": -107.172956,
+          "priceSample": 318,
+          "disagreement": {
+            "signedMean": 0.789405,
+            "absoluteMean": 5.883677,
+            "absoluteMedian": 4.684278,
+            "absoluteStdDev": 4.986617
+          },
+          "winRateStandardError": 0.028244,
+          "confidenceInterval95": {
+            "low": 0.462337,
+            "high": 0.57238,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.522996,
+          "excessWinRateVsPrice": -0.005424,
+          "approximateZVsPrice": -0.192111,
+          "modelMarginError": {
+            "sample": 318,
+            "meanError": 1.161853,
+            "mae": 13.423494,
+            "rmse": 17.540431
+          },
+          "sampleWarning": "LARGER_SAMPLE"
+        }
+      },
+      "byLineMovement": {
+        "MOVEMENT_UNKNOWN": {
+          "observations": 318,
+          "distinctGames": 318,
+          "correlatedRepeatObservations": 0,
+          "wins": 162,
+          "losses": 151,
+          "pushes": 5,
+          "atsPercentage": 0.517572,
+          "averageUnits": -0.008127,
+          "totalUnits": -2.584289,
+          "roi": -0.008127,
+          "unitEligible": 318,
+          "averageAmericanPrice": -107.172956,
+          "priceSample": 318,
+          "disagreement": {
+            "signedMean": 0.789405,
+            "absoluteMean": 5.883677,
+            "absoluteMedian": 4.684278,
+            "absoluteStdDev": 4.986617
+          },
+          "winRateStandardError": 0.028244,
+          "confidenceInterval95": {
+            "low": 0.462337,
+            "high": 0.57238,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.522996,
+          "excessWinRateVsPrice": -0.005424,
+          "approximateZVsPrice": -0.192111,
+          "modelMarginError": {
+            "sample": 318,
+            "meanError": 1.161853,
+            "mae": 13.423494,
+            "rmse": 17.540431
+          },
+          "sampleWarning": "LARGER_SAMPLE"
+        }
+      },
+      "baselines": {
+        "allEligibleModelSides": {
+          "observations": 318,
+          "distinctGames": 318,
+          "correlatedRepeatObservations": 0,
+          "wins": 162,
+          "losses": 151,
+          "pushes": 5,
+          "atsPercentage": 0.517572,
+          "averageUnits": -0.008127,
+          "totalUnits": -2.584289,
+          "roi": -0.008127,
+          "unitEligible": 318,
+          "averageAmericanPrice": -107.172956,
+          "priceSample": 318,
+          "disagreement": {
+            "signedMean": 0.789405,
+            "absoluteMean": 5.883677,
+            "absoluteMedian": 4.684278,
+            "absoluteStdDev": 4.986617
+          },
+          "winRateStandardError": 0.028244,
+          "confidenceInterval95": {
+            "low": 0.462337,
+            "high": 0.57238,
+            "method": "WILSON"
+          },
+          "averageBreakEvenRate": 0.522996,
+          "excessWinRateVsPrice": -0.005424,
+          "approximateZVsPrice": -0.192111,
+          "modelMarginError": {
+            "sample": 318,
+            "meanError": 1.161853,
+            "mae": 13.423494,
+            "rmse": 17.540431
+          },
+          "sampleWarning": "LARGER_SAMPLE"
+        },
+        "random50Reference": {
+          "atsRate": 0.5,
+          "roi": null
+        },
+        "marketNoEdgeReference": {
+          "atsRate": 0.5,
+          "roi": null,
+          "note": "Symmetric direction reference only; no selectable price or ROI is inferred."
+        }
+      },
+      "monotonicity": {
+        "eligible": true,
+        "direction": "NOT_MONOTONIC",
+        "rates": [
+          {
+            "bucket": "0–1.5",
+            "n": 54,
+            "atsPercentage": 0.333333
+          },
+          {
+            "bucket": ">1.5–3",
+            "n": 43,
+            "atsPercentage": 0.55814
+          },
+          {
+            "bucket": ">3–5",
+            "n": 68,
+            "atsPercentage": 0.514706
+          },
+          {
+            "bucket": ">5–7",
+            "n": 44,
+            "atsPercentage": 0.704545
+          },
+          {
+            "bucket": ">7–10",
+            "n": 49,
+            "atsPercentage": 0.571429
+          },
+          {
+            "bucket": ">10",
+            "n": 55,
+            "atsPercentage": 0.472727
+          }
+        ]
+      },
+      "hypothesesWorthForwardTesting": [
+        "Preregister an untouched forward comparison of the >5–7 disagreement bucket; its discovery ATS rate was 70.5% across 44 non-push results."
+      ],
+      "resultsAgainstModel": [
+        "Larger model-market disagreement did not improve ATS results monotonically.",
+        "The all-model-sides ATS rate was below the average archived-price break-even rate."
+      ],
+      "exclusions": {},
+      "integrityWarnings": {}
+    },
+    "SYNTHETIC_DERIVED_RESEARCH": {
+      "evidenceClass": "SYNTHETIC_DERIVED_RESEARCH",
+      "counts": {
+        "inputRows": 1565,
+        "atsEligible": 0,
+        "marginErrorEligible": 1565,
+        "excludedFromAts": 1565,
+        "exactDuplicatesExcluded": 0
+      },
+      "overall": {
+        "observations": 0,
+        "distinctGames": 0,
+        "correlatedRepeatObservations": 0,
+        "wins": 0,
+        "losses": 0,
+        "pushes": 0,
+        "atsPercentage": null,
+        "averageUnits": null,
+        "totalUnits": null,
+        "roi": null,
+        "unitEligible": 0,
+        "averageAmericanPrice": null,
+        "priceSample": 0,
+        "disagreement": {
+          "signedMean": null,
+          "absoluteMean": null,
+          "absoluteMedian": null,
+          "absoluteStdDev": null
+        },
+        "winRateStandardError": null,
+        "confidenceInterval95": null,
+        "averageBreakEvenRate": null,
+        "excessWinRateVsPrice": null,
+        "approximateZVsPrice": null,
+        "modelMarginError": {
+          "sample": 1565,
+          "meanError": -1.261395,
+          "mae": 13.381345,
+          "rmse": 17.149137
+        },
+        "sampleWarning": "INSUFFICIENT_SAMPLE"
+      },
+      "byEdgeBucket": {},
+      "byDirection": {},
+      "byFavoriteComparison": {},
+      "byMarketSpread": {},
+      "byWeekRegime": {},
+      "byMatchup": {},
+      "byConference": {},
+      "byNeutralSite": {},
+      "byContextCompleteness": {},
+      "byLineMovement": {},
+      "baselines": {
+        "allEligibleModelSides": {
+          "observations": 0,
+          "distinctGames": 0,
+          "correlatedRepeatObservations": 0,
+          "wins": 0,
+          "losses": 0,
+          "pushes": 0,
+          "atsPercentage": null,
+          "averageUnits": null,
+          "totalUnits": null,
+          "roi": null,
+          "unitEligible": 0,
+          "averageAmericanPrice": null,
+          "priceSample": 0,
+          "disagreement": {
+            "signedMean": null,
+            "absoluteMean": null,
+            "absoluteMedian": null,
+            "absoluteStdDev": null
+          },
+          "winRateStandardError": null,
+          "confidenceInterval95": null,
+          "averageBreakEvenRate": null,
+          "excessWinRateVsPrice": null,
+          "approximateZVsPrice": null,
+          "modelMarginError": {
+            "sample": 1565,
+            "meanError": -1.261395,
+            "mae": 13.381345,
+            "rmse": 17.149137
+          },
+          "sampleWarning": "INSUFFICIENT_SAMPLE"
+        },
+        "random50Reference": {
+          "atsRate": 0.5,
+          "roi": null
+        },
+        "marketNoEdgeReference": {
+          "atsRate": 0.5,
+          "roi": null,
+          "note": "Symmetric direction reference only; no selectable price or ROI is inferred."
+        }
+      },
+      "monotonicity": {
+        "eligible": false,
+        "direction": "INSUFFICIENT",
+        "rates": [
+          {
+            "bucket": "0–1.5",
+            "n": 0,
+            "atsPercentage": null
+          },
+          {
+            "bucket": ">1.5–3",
+            "n": 0,
+            "atsPercentage": null
+          },
+          {
+            "bucket": ">3–5",
+            "n": 0,
+            "atsPercentage": null
+          },
+          {
+            "bucket": ">5–7",
+            "n": 0,
+            "atsPercentage": null
+          },
+          {
+            "bucket": ">7–10",
+            "n": 0,
+            "atsPercentage": null
+          },
+          {
+            "bucket": ">10",
+            "n": 0,
+            "atsPercentage": null
+          }
+        ]
+      },
+      "hypothesesWorthForwardTesting": [],
+      "resultsAgainstModel": [],
+      "exclusions": {
+        "FORECAST_NOT_BEFORE_KICKOFF": 88
+      },
+      "integrityWarnings": {}
+    }
+  },
+  "datasetInventory": {
+    "ARCHIVED_LIVE_FORECAST": {
+      "rows": 0,
+      "atsEligible": 0,
+      "marginErrorEligible": 0
+    },
+    "RECONSTRUCTED_FORECAST": {
+      "rows": 318,
+      "atsEligible": 318,
+      "marginErrorEligible": 318
+    },
+    "SYNTHETIC_DERIVED_RESEARCH": {
+      "rows": 1565,
+      "atsEligible": 0,
+      "marginErrorEligible": 1565
+    }
+  },
+  "modelVersionsByEvidence": {
+    "ARCHIVED_LIVE_FORECAST": [],
+    "RECONSTRUCTED_FORECAST": [
+      "college-score-ridge-v1"
+    ],
+    "SYNTHETIC_DERIVED_RESEARCH": [
+      "college-score-ridge-v1"
+    ]
+  },
+  "sourceLabelsByEvidence": {
+    "ARCHIVED_LIVE_FORECAST": [],
+    "RECONSTRUCTED_FORECAST": [
+      "six-date-2025-all-model-sides-consensus-adjacent-exact-quote"
+    ],
+    "SYNTHETIC_DERIVED_RESEARCH": [
+      "chronological-2025-score-replay"
+    ]
+  },
+  "crossEvidenceCombinedMetrics": null,
+  "limitations": [
+    "This is exploratory historical research, not validation or activation evidence.",
+    "Historical selection effects and repeated games across model versions can create dependence.",
+    "Context and line-movement segments are unavailable unless timestamped fields were archived.",
+    "No price, closing line, context field, or result is imputed."
+  ],
+  "multipleComparisonsWarning": "Many exploratory subgroup comparisons are reported without multiplicity correction. Apparent winners require preregistered untouched forward confirmation."
+}

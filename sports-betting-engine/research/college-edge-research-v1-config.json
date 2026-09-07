@@ -1,0 +1,21 @@
+{
+  "version": "college-edge-research-v1",
+  "edgeBuckets": [
+    { "label": "0–1.5", "minExclusive": null, "maxInclusive": 1.5 },
+    { "label": ">1.5–3", "minExclusive": 1.5, "maxInclusive": 3 },
+    { "label": ">3–5", "minExclusive": 3, "maxInclusive": 5 },
+    { "label": ">5–7", "minExclusive": 5, "maxInclusive": 7 },
+    { "label": ">7–10", "minExclusive": 7, "maxInclusive": 10 },
+    { "label": ">10", "minExclusive": 10, "maxInclusive": null }
+  ],
+  "marketSpreadBuckets": [
+    { "label": "0–3", "minExclusive": null, "maxInclusive": 3 },
+    { "label": ">3–7", "minExclusive": 3, "maxInclusive": 7 },
+    { "label": ">7–14", "minExclusive": 7, "maxInclusive": 14 },
+    { "label": ">14–21", "minExclusive": 14, "maxInclusive": 21 },
+    { "label": ">21–30", "minExclusive": 21, "maxInclusive": 30 },
+    { "label": ">30–40", "minExclusive": 30, "maxInclusive": 40 },
+    { "label": ">40", "minExclusive": 40, "maxInclusive": null }
+  ],
+  "minimumSamples": { "insufficient": 10, "low": 30, "moderate": 100 }
+}

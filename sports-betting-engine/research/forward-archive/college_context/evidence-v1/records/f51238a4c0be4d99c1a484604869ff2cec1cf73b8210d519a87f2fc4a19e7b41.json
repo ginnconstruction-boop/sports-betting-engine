@@ -1,0 +1,24 @@
+{
+  "id": "f51238a4c0be4d99c1a484604869ff2cec1cf73b8210d519a87f2fc4a19e7b41",
+  "schema": 1,
+  "teamId": "52",
+  "teamName": "Florida State Seminoles",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.sourceStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-07T13:30:27.951Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-07T13:30:27.951Z",
+    "retrievedAt": "2026-09-07T13:30:27.951Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "af44c7bf7d20d8abacb1b6c5866c74aca14cbca0d58940ada6fe6a9d7f5b5126"
+}

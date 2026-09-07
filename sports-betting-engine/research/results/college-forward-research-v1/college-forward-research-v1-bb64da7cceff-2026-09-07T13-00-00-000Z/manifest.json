@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "college-forward-research-manifest-v1",
+  "runId": "college-forward-research-v1-bb64da7cceff-2026-09-07T13-00-00-000Z",
+  "generatedAt": "2026-09-07T13:00:00.000Z",
+  "datasetHash": "bb64da7cceffc076e56c902a04016e155d75bbc5dd49b74d03425700365a165e",
+  "configurationHash": "f2e1604aa93808d01b9760c08d606932cae955be54559748c9438733bde40ab3",
+  "archiveCounts": {
+    "snapshots": 0,
+    "finals": 0,
+    "corrections": 0,
+    "failures": 0
+  },
+  "codeHashes": {
+    "archive": "84a87aabe219744e6e505795eb3d095eca28a0e1abdc1dd256f5b8756883e4f3",
+    "sources": "f2d08c0eed48b6e6f208868b9ffbd27e248476b45b1f92531548147b73bdeff8",
+    "importer": "d51823ee47045b8ac11e1f414e58e6b39574645eb7b6b13fd9a537e8f9bbb24a",
+    "reporter": "ddaf25123886a52a1343111c82a4e9c1ac82ed53b437f87c4d49628376348158",
+    "config": "a06d9094f39ed06e77efa5243f19e83a476e40df5a881250af4fb66374aaf719"
+  },
+  "productionChanged": false,
+  "reproductionCommand": "npm run research:college-forward-report -- --generated-at=2026-09-07T13:00:00.000Z --verification=271/271_PASS"
+}

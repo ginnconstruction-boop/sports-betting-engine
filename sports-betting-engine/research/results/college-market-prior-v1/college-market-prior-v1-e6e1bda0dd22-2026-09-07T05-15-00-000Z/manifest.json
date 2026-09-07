@@ -1,0 +1,19 @@
+{
+  "runId": "college-market-prior-v1-e6e1bda0dd22-2026-09-07T05-15-00-000Z",
+  "generatedAt": "2026-09-07T05:15:00.000Z",
+  "datasetVersion": "phase3-reconstructed-all-model-sides-2025-v1",
+  "datasetHash": "e6e1bda0dd22ea35089107b99ac0e1701df3910e55a0b126815352a5e2189bef",
+  "configurationHash": "acf22f300027a6851b731efd718d15e168ef9e7cce2373aa48e86b0eade214e2",
+  "codeHashes": {
+    "engine": "f4a4b1f5fcdecf7fdb7d9d01eb89ce78e7974f0bc777602fca790ecaedf1d8c1",
+    "adapter": "0a8fc43700b0923c9d11f6e07988fec3ef77e8a03f881f7dc7f2d9fbf854097a",
+    "configuration": "323d864b110fe25e0cc4964c33f2893a62cf6a37ecd5bfd0e3b69fb3fa05b7e3"
+  },
+  "sourceManifest": {
+    "path": "research/results/college-edge-research-v1/college-edge-research-v1-94d06a08f9a0-2026-09-07T04-35-00-000Z/manifest.json",
+    "sha256": "2a1372324761ccbe5a77f158b9dcf632920ee6af41d238b89a48c718f4b8e802"
+  },
+  "selectionMetric": "VALIDATION_RMSE_THEN_MAE",
+  "productionChanged": false,
+  "reproductionCommand": "npm run research:college-market-prior -- --generated-at=2026-09-07T05:15:00.000Z"
+}

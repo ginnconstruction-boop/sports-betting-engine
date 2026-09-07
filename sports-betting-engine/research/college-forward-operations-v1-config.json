@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "college-forward-operations-v1",
+  "datasetVersion": "college-forward-research-v1",
+  "protectedCutoff": "2026-09-07T12:45:00.000Z",
+  "timezone": "America/Chicago",
+  "scheduledRuns": [
+    { "trigger": "SCHEDULED_0700_CT", "cron": "0 7 * * *", "localTime": "07:00" },
+    { "trigger": "SCHEDULED_1400_CT", "cron": "0 14 * * *", "localTime": "14:00" }
+  ],
+  "scheduler": "GITHUB_ACTIONS",
+  "authoritativeStorage": "GIT_DEFAULT_BRANCH_IMMUTABLE_COMMITS",
+  "manualTrigger": "GITHUB_WORKFLOW_DISPATCH_OR_CLI",
+  "captureHorizonHours": 36,
+  "cfbdMaximumRequestsPerRun": 4,
+  "marketMaximumRequestsPerRun": 1,
+  "highFrequencyPolling": false,
+  "productionBettingChanges": false
+}

@@ -1,0 +1,113 @@
+{
+  "runId": "2ffb5f37c78dea24a28712f4488dad477defc81bced0d72315a9db91b4a767ec",
+  "schemaVersion": "college-forward-operations-v1",
+  "captureEventId": "manual-70ad6d0f9fc8c89e2f2f1657cb3183c9",
+  "trigger": "MANUAL",
+  "scheduledFor": null,
+  "startedAt": "2026-09-07T13:30:27.412Z",
+  "completedAt": "2026-09-07T13:30:28.496Z",
+  "dryRun": false,
+  "status": "DEGRADED",
+  "observations": [
+    {
+      "eventId": "401858437",
+      "originalScheduledKickoff": "2026-09-06T20:00Z",
+      "latestVerifiedKickoff": "2026-09-06T20:00Z",
+      "scheduleStatus": "FINAL",
+      "status": "SKIPPED_STARTED",
+      "snapshotId": null,
+      "minutesToKickoff": null,
+      "message": "Kickoff passed or game entered a started/final state."
+    },
+    {
+      "eventId": "401856661",
+      "originalScheduledKickoff": "2026-09-06T23:30Z",
+      "latestVerifiedKickoff": "2026-09-06T23:30Z",
+      "scheduleStatus": "FINAL",
+      "status": "SKIPPED_STARTED",
+      "snapshotId": null,
+      "minutesToKickoff": null,
+      "message": "Kickoff passed or game entered a started/final state."
+    },
+    {
+      "eventId": "401858438",
+      "originalScheduledKickoff": "2026-09-06T23:30Z",
+      "latestVerifiedKickoff": "2026-09-06T23:30Z",
+      "scheduleStatus": "FINAL",
+      "status": "SKIPPED_STARTED",
+      "snapshotId": null,
+      "minutesToKickoff": null,
+      "message": "Kickoff passed or game entered a started/final state."
+    },
+    {
+      "eventId": "401858212",
+      "originalScheduledKickoff": "2026-09-07T23:30Z",
+      "latestVerifiedKickoff": "2026-09-07T23:30Z",
+      "scheduleStatus": "SCHEDULED",
+      "status": "CAPTURED",
+      "snapshotId": "cd5779ff9fe1383223864a05f98c239776c97dfd666e2a2cf0eab51b355ffac8",
+      "minutesToKickoff": 599.5253666666666,
+      "message": "Immutable pregame snapshot captured."
+    }
+  ],
+  "requestPlan": [
+    {
+      "provider": "ESPN",
+      "category": "GAME_CONTEXT",
+      "scope": "1 events; stale/missing summaries only",
+      "cache": "UNKNOWN",
+      "maximumRequests": 1,
+      "priority": 1
+    },
+    {
+      "provider": "ESPN",
+      "category": "ROSTER",
+      "scope": "unique stale/missing teams only",
+      "cache": "UNKNOWN",
+      "maximumRequests": 2,
+      "priority": 2
+    },
+    {
+      "provider": "CollegeFootballData",
+      "category": "SHARED_FORWARD_FACTS",
+      "scope": "whole-season shared payloads",
+      "cache": "UNKNOWN",
+      "maximumRequests": 4,
+      "priority": 3
+    },
+    {
+      "provider": "The Odds API",
+      "category": "EXTERNAL_MARKET_BENCHMARK",
+      "scope": "one bulk college spread/total request",
+      "cache": "UNKNOWN",
+      "maximumRequests": 1,
+      "priority": 4
+    },
+    {
+      "provider": "ESPN",
+      "category": "MODEL_A_CURRENT_RESULTS",
+      "scope": "season-to-date as of 2026-09-07T13:30:27.412Z",
+      "cache": "UNKNOWN",
+      "maximumRequests": 2,
+      "priority": 5
+    }
+  ],
+  "metrics": {
+    "apiRequests": 6,
+    "cacheHits": 4,
+    "cfbdRequests": 0,
+    "marketRequests": 1
+  },
+  "deferred": [],
+  "providerFailures": [
+    {
+      "provider": "ESPN_CONTEXT",
+      "type": "PARTIAL_CONTEXT",
+      "retryable": true,
+      "nextEligibleAttempt": "2026-09-07T13:45:28.007Z",
+      "message": "CollegeFootballData key is not configured; returning production, transfers, talent and coaching remain unavailable unless verified imports exist."
+    }
+  ],
+  "discoveryFailures": [],
+  "idempotentRetry": false
+}

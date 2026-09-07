@@ -1,0 +1,84 @@
+name: College forward research collector
+
+on:
+  schedule:
+    - cron: '0 7 * * *'
+      timezone: 'America/Chicago'
+    - cron: '0 14 * * *'
+      timezone: 'America/Chicago'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Plan the collection without writing archive records'
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: college-forward-research-v1
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: sports-betting-engine
+    env:
+      ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+      CFBD_API_KEY: ${{ secrets.CFBD_API_KEY }}
+      FORWARD_RESEARCH_ROOT: ${{ github.workspace }}/sports-betting-engine/research/forward-archive
+      FORWARD_SCHEDULER_CONFIGURED: 'true'
+      FORWARD_DURABLE_STORAGE: 'git'
+      FORWARD_IDEMPOTENCY_KEY: ${{ github.run_id }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: sports-betting-engine/package-lock.json
+
+      - run: npm ci
+
+      - name: Select explicit capture trigger
+        id: protocol
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "trigger=MANUAL" >> "$GITHUB_OUTPUT"
+          elif [[ "${{ github.event.schedule }}" == "0 7 * * *" ]]; then
+            echo "trigger=SCHEDULED_0700_CT" >> "$GITHUB_OUTPUT"
+          else
+            echo "trigger=SCHEDULED_1400_CT" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run the shared forward collector
+        shell: bash
+        run: |
+          dry_flag=""
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.dry_run }}" == "true" ]]; then
+            dry_flag="--dry-run"
+          fi
+          npm run research:college-forward-collect -- --trigger=${{ steps.protocol.outputs.trigger }} --idempotency-key=${FORWARD_IDEMPOTENCY_KEY} ${dry_flag}
+
+      - name: Persist the authoritative immutable archive
+        if: ${{ !(github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
+        shell: bash
+        run: |
+          git config user.name "college-forward-collector"
+          git config user.email "college-forward-collector@users.noreply.github.com"
+          git add sports-betting-engine/research/forward-archive
+          if git diff --cached --quiet; then
+            echo "No new immutable records to persist."
+          else
+            git commit -m "chore(research): archive forward collection [skip render]"
+            git push origin HEAD:${GITHUB_REF_NAME}
+          fi

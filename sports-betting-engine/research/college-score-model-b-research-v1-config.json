@@ -1,0 +1,40 @@
+{
+  "version": "college-score-model-b-research-v1",
+  "selectionSeason": 2024,
+  "evaluationSeason": 2025,
+  "candidateGrid": {
+    "b1": [
+      { "ridge": 20, "previousSeasonWeight": 1, "halfLifeDays": null },
+      { "ridge": 20, "previousSeasonWeight": 0.65, "halfLifeDays": 365 },
+      { "ridge": 20, "previousSeasonWeight": 0.5, "halfLifeDays": 180 }
+    ],
+    "b2": [
+      { "ridge": 20, "transitionGames": 1 },
+      { "ridge": 20, "transitionGames": 2 },
+      { "ridge": 20, "transitionGames": 4 },
+      { "ridge": 20, "transitionGames": 8 },
+      { "ridge": 100, "transitionGames": 1 },
+      { "ridge": 100, "transitionGames": 2 },
+      { "ridge": 100, "transitionGames": 4 },
+      { "ridge": 100, "transitionGames": 8 }
+    ],
+    "b3": [
+      { "ridge": 20, "transitionGames": 4, "mismatchThreshold": 21, "beyondThresholdFactor": 0.5 },
+      { "ridge": 20, "transitionGames": 4, "mismatchThreshold": 21, "beyondThresholdFactor": 0.75 },
+      { "ridge": 20, "transitionGames": 4, "mismatchThreshold": 28, "beyondThresholdFactor": 0.5 },
+      { "ridge": 20, "transitionGames": 4, "mismatchThreshold": 28, "beyondThresholdFactor": 0.75 }
+    ]
+  },
+  "gate": {
+    "minimumEvaluationGames": 1000,
+    "minimumCoverage": 0.9,
+    "minimumRmseImprovementPointsVsModelA": 0.25,
+    "minimumRelativeRmseImprovementVsModelA": 0.01,
+    "requireMaeImprovement": true,
+    "minimumEarlyBiasReductionPoints": 1,
+    "minimumFbsFcsBiasReductionPointsWhenModeled": 2,
+    "requireFbsFbsRmseNotWorse": true,
+    "requireNoLeakage": true,
+    "requireReproducibility": true
+  }
+}

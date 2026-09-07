@@ -1,0 +1,37 @@
+{
+  "version": "college-forward-research-v1",
+  "lockedAt": "2026-09-07T12:45:00.000Z",
+  "season": 2026,
+  "partitions": {
+    "development": "All games and evidence before lockedAt, including previously inspected 2026 games",
+    "forwardValidation": "Pregame snapshots first created at or after lockedAt",
+    "holdout": "Not assigned until a future protocol is registered before fitting"
+  },
+  "snapshotWindows": [
+    { "name": "T24H", "minimumMinutesBeforeKickoff": 1080, "maximumMinutesBeforeKickoff": 1800, "marketNetworkAllowed": false },
+    { "name": "T6H", "minimumMinutesBeforeKickoff": 240, "maximumMinutesBeforeKickoff": 480, "marketNetworkAllowed": false },
+    { "name": "T1H", "minimumMinutesBeforeKickoff": 30, "maximumMinutesBeforeKickoff": 90, "marketNetworkAllowed": true },
+    { "name": "LATEST_PREKICK", "minimumMinutesBeforeKickoff": 0.0167, "maximumMinutesBeforeKickoff": 30, "marketNetworkAllowed": true }
+  ],
+  "requiredWindow": "LATEST_PREKICK",
+  "milestones": [50, 100, 250, 500, 1000],
+  "snapshotWindows": [
+    { "name": "T24H", "minimumMinutesBeforeKickoff": 1080, "maximumMinutesBeforeKickoff": 1800, "marketNetworkAllowed": false },
+    { "name": "T6H", "minimumMinutesBeforeKickoff": 240, "maximumMinutesBeforeKickoff": 480, "marketNetworkAllowed": false },
+    { "name": "T1H", "minimumMinutesBeforeKickoff": 30, "maximumMinutesBeforeKickoff": 90, "marketNetworkAllowed": true },
+    { "name": "LATEST_PREKICK", "minimumMinutesBeforeKickoff": 0, "maximumMinutesBeforeKickoff": 30, "marketNetworkAllowed": true }
+  ],
+  "requiredLatestWindow": "LATEST_PREKICK",
+  "milestones": [50, 100, 250, 500, 1000],
+  "largeIndependentMismatchPoints": 21,
+  "providerPolicies": {
+    "ESPN_SUMMARY": { "ttlMinutes": 15, "maximumAttempts": 2 },
+    "ESPN_ROSTER": { "ttlMinutes": 10080, "maximumAttempts": 2 },
+    "CFBD_CORE": { "ttlMinutes": 360, "maximumAttempts": 2 },
+    "CFBD_GAMES": { "ttlMinutes": 360, "maximumAttempts": 2 },
+    "CFBD_FCS_SRS": { "ttlMinutes": 1440, "maximumAttempts": 2 },
+    "ODDS_MARKET": { "ttlMinutes": 5, "maximumAttempts": 1 }
+  },
+  "maximumCfbdRequestsPerCaptureRun": 4,
+  "productionChangesAllowed": false
+}

@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "college-forward-operations-report-manifest-v1",
+  "generatedAt": "2026-09-07T13:35:00.000Z",
+  "artifactHash": "49ab015760ece2ea3cb3dbcc07e95ddcb37a852fad69179805bddc6bd9528f5c",
+  "files": [
+    "artifact.json",
+    "manifest.json",
+    "report.md"
+  ],
+  "deployment": "CODE_READY_NOT_ACTIVATED"
+}

@@ -1,0 +1,347 @@
+{
+  "schemaVersion": "college-forward-research-v1",
+  "researchLabel": "RESEARCH_ONLY — COLLECT FACTS FIRST; MODEL LATER",
+  "generatedAt": "2026-09-07T13:00:00.000Z",
+  "configuration": {
+    "version": "college-forward-research-v1",
+    "lockedAt": "2026-09-07T12:45:00.000Z",
+    "season": 2026,
+    "partitions": {
+      "development": "All games and evidence before lockedAt, including previously inspected 2026 games",
+      "forwardValidation": "Pregame snapshots first created at or after lockedAt",
+      "holdout": "Not assigned until a future protocol is registered before fitting"
+    },
+    "snapshotWindows": [
+      {
+        "name": "T24H",
+        "minimumMinutesBeforeKickoff": 1080,
+        "maximumMinutesBeforeKickoff": 1800,
+        "marketNetworkAllowed": false
+      },
+      {
+        "name": "T6H",
+        "minimumMinutesBeforeKickoff": 240,
+        "maximumMinutesBeforeKickoff": 480,
+        "marketNetworkAllowed": false
+      },
+      {
+        "name": "T1H",
+        "minimumMinutesBeforeKickoff": 30,
+        "maximumMinutesBeforeKickoff": 90,
+        "marketNetworkAllowed": true
+      },
+      {
+        "name": "LATEST_PREKICK",
+        "minimumMinutesBeforeKickoff": 0,
+        "maximumMinutesBeforeKickoff": 30,
+        "marketNetworkAllowed": true
+      }
+    ],
+    "requiredWindow": "LATEST_PREKICK",
+    "milestones": [
+      50,
+      100,
+      250,
+      500,
+      1000
+    ],
+    "requiredLatestWindow": "LATEST_PREKICK",
+    "largeIndependentMismatchPoints": 21,
+    "providerPolicies": {
+      "ESPN_SUMMARY": {
+        "ttlMinutes": 15,
+        "maximumAttempts": 2
+      },
+      "ESPN_ROSTER": {
+        "ttlMinutes": 10080,
+        "maximumAttempts": 2
+      },
+      "CFBD_CORE": {
+        "ttlMinutes": 360,
+        "maximumAttempts": 2
+      },
+      "CFBD_GAMES": {
+        "ttlMinutes": 360,
+        "maximumAttempts": 2
+      },
+      "CFBD_FCS_SRS": {
+        "ttlMinutes": 1440,
+        "maximumAttempts": 2
+      },
+      "ODDS_MARKET": {
+        "ttlMinutes": 5,
+        "maximumAttempts": 1
+      }
+    },
+    "maximumCfbdRequestsPerCaptureRun": 4,
+    "productionChangesAllowed": false
+  },
+  "configurationHash": "f2e1604aa93808d01b9760c08d606932cae955be54559748c9438733bde40ab3",
+  "archiveRoot": "C:\\Users\\Ginnh\\Downloads\\sports-betting-engine-current\\sports-betting-engine\\snapshots\\college_forward_research\\v1",
+  "architecture": [
+    "Content-addressed immutable raw payload, pregame snapshot, verified-final, correction, and source-failure records.",
+    "One append-only index references immutable records; loading rehashes every record and fails on corruption.",
+    "Canonical ESPN event/team identity is preserved alongside every provider event ID.",
+    "Every pregame record includes Model A, optional shadow-only candidates, football evidence, six-stage diagnostics, explicit failures, and a separate market namespace.",
+    "Deterministic NDJSON export and manifest derive from the immutable authority; dataset hash excludes export timestamp."
+  ],
+  "sources": [
+    {
+      "provider": "ESPN public college feeds",
+      "categories": [
+        "canonical schedule identity",
+        "current-season samples",
+        "QB/depth evidence",
+        "rosters",
+        "injuries",
+        "weather",
+        "venue"
+      ],
+      "policy": "Existing Phase 1 adapters and content-addressed raw records are reused; summary TTL 15 minutes and roster TTL 7 days."
+    },
+    {
+      "provider": "CollegeFootballData",
+      "categories": [
+        "CORE offense/defense/overall with play samples",
+        "completed opponent history",
+        "returning production",
+        "transfers",
+        "talent",
+        "coaching",
+        "prior FCS SRS"
+      ],
+      "policy": "New forward collector adds /ratings/core and current-season /games snapshots. Four-call run ceiling, two attempts maximum, and 6h/24h cache TTLs."
+    },
+    {
+      "provider": "Odds API / exact sportsbook quote",
+      "categories": [
+        "home/away spread",
+        "price",
+        "sportsbook",
+        "quote timestamp"
+      ],
+      "policy": "External benchmark namespace only. New network calls are allowed only in T-1H/latest windows; existing valid cached quotes can be reused."
+    },
+    {
+      "provider": "Verified final source",
+      "categories": [
+        "final score",
+        "final margin",
+        "FINAL/FINAL_OVERTIME status"
+      ],
+      "policy": "Saved only after kickoff and never replaces a pregame record."
+    }
+  ],
+  "categories": [
+    {
+      "name": "TEAM_EFFICIENCY",
+      "fields": "CFBD CORE overall/offense/defense, model version and qualifying-play sample where legitimately returned."
+    },
+    {
+      "name": "OPPONENT_HISTORY",
+      "fields": "Earlier completed games, opponent IDs, date, score, venue orientation, neutral/conference flags."
+    },
+    {
+      "name": "QB",
+      "fields": "starter identity, CONFIRMED/EXPECTED/COMPETITION/QUESTIONABLE/OUT/UNKNOWN, availability, source disagreement and timestamp."
+    },
+    {
+      "name": "ROSTER / TRANSFERS / TALENT",
+      "fields": "provider-supported roster, returning production, portal counts/positions, composite and subdivision facts; no point values."
+    },
+    {
+      "name": "COACHING / INJURIES",
+      "fields": "head coach and supported continuity facts; player/team injury facts with UNKNOWN retained."
+    },
+    {
+      "name": "FBS_FCS",
+      "fields": "subdivision, conference, completed history and prior FCS SRS only after exact matching."
+    },
+    {
+      "name": "WEATHER / ENVIRONMENT",
+      "fields": "temperature, wind/gust, precipitation, humidity, venue, indoor/neutral facts when returned."
+    }
+  ],
+  "snapshotPolicy": [
+    {
+      "name": "T24H",
+      "minimumMinutesBeforeKickoff": 1080,
+      "maximumMinutesBeforeKickoff": 1800,
+      "marketNetworkAllowed": false
+    },
+    {
+      "name": "T6H",
+      "minimumMinutesBeforeKickoff": 240,
+      "maximumMinutesBeforeKickoff": 480,
+      "marketNetworkAllowed": false
+    },
+    {
+      "name": "T1H",
+      "minimumMinutesBeforeKickoff": 30,
+      "maximumMinutesBeforeKickoff": 90,
+      "marketNetworkAllowed": true
+    },
+    {
+      "name": "LATEST_PREKICK",
+      "minimumMinutesBeforeKickoff": 0,
+      "maximumMinutesBeforeKickoff": 30,
+      "marketNetworkAllowed": true
+    }
+  ],
+  "requiredWindow": "LATEST_PREKICK",
+  "immutability": [
+    "Snapshot IDs are SHA-256 hashes of canonical content. Exact duplicate writes are idempotent; conflicting same-event/window/timestamp writes fail.",
+    "Final records are immutable. A changed final or context fact must be an append-only correction targeting the original ID.",
+    "Source payloads are independently content-addressed. Original forecast/model/market values are never regenerated into an older snapshot.",
+    "All feature publication, retrieval, effective, forecast, capture and kickoff timestamps are validated in order."
+  ],
+  "separation": [
+    "Football evidence rejects fields, definitions, or providers containing sportsbook, spread, odds, total, moneyline, consensus, closing-line or market-implied terms.",
+    "Market evidence is allowed only under EXTERNAL_MARKET_BENCHMARK and is not passed into Model A or a shadow candidate.",
+    "Every research candidate must carry shadowOnly=true. No Phase 6 module is imported by the recommendation engine."
+  ],
+  "fbsFcs": [
+    "FBS/FCS is a separate coverage regime; classification and prior FCS quality evidence are stored without an arbitrary point adjustment.",
+    "Missing or ambiguous FCS evidence remains UNKNOWN/failed. Current production MODEL_UNAVAILABLE treatment is unchanged.",
+    "Future research can choose a separate model/prior or continued abstention only after sufficient forward evidence."
+  ],
+  "contextStrategy": [
+    "Existing ESPN and CFBD normalized evidence is copied with raw hashes and original source timestamps.",
+    "QB UNKNOWN is never converted to healthy; COMPETITION and source disagreement are preserved.",
+    "No player-value, roster-value, coaching-value, injury-value, talent-value, weather-value or transfer-value point adjustment exists in Phase 6."
+  ],
+  "costControls": [
+    "T-24H and T-6H do not authorize new market requests. T-1H and latest-prekick may make one bounded market attempt when no valid cached quote exists.",
+    "CFBD collection uses shared whole-season snapshots: CORE, FBS games, FCS games and prior FCS SRS, capped at four requests per run.",
+    "CFBD TTLs: six hours for CORE/current games and 24 hours for prior FCS SRS; concurrent identical requests coalesce.",
+    "Provider retries are bounded at two for football data and one for market data. Failures are persisted rather than triggering unbounded retries."
+  ],
+  "coverage": {
+    "schemaVersion": "college-forward-coverage-v1",
+    "season": 2026,
+    "bySeason": {
+      "2026": {
+        "expected": 0,
+        "captured": 0,
+        "missed": 0,
+        "percent": null
+      }
+    },
+    "bySlate": {},
+    "expectedGames": 0,
+    "gamesCaptured": 0,
+    "gamesMissed": 0,
+    "capturePercent": null,
+    "pregameSnapshots": 0,
+    "verifiedFinals": 0,
+    "coverage": {
+      "qb": {
+        "covered": 0,
+        "total": 0,
+        "percent": null
+      },
+      "roster": {
+        "covered": 0,
+        "total": 0,
+        "percent": null
+      },
+      "efficiency": {
+        "covered": 0,
+        "total": 0,
+        "percent": null
+      },
+      "injury": {
+        "covered": 0,
+        "total": 0,
+        "percent": null
+      },
+      "talent": {
+        "covered": 0,
+        "total": 0,
+        "percent": null
+      },
+      "fcs": {
+        "covered": 0,
+        "total": 0,
+        "percent": null
+      },
+      "weather": {
+        "covered": 0,
+        "total": 0,
+        "percent": null
+      },
+      "market": {
+        "covered": 0,
+        "total": 0,
+        "percent": null
+      }
+    },
+    "regime": {
+      "weeks0To2": 0,
+      "weeks3To5": 0,
+      "week6Plus": 0,
+      "fbsFbs": 0,
+      "fbsFcs": 0,
+      "conference": 0,
+      "nonconference": 0,
+      "neutral": 0,
+      "largeIndependentMismatch": 0,
+      "verifiedQb": 0,
+      "unverifiedQb": 0,
+      "highContext": 0,
+      "lowContext": 0
+    },
+    "milestones": [
+      {
+        "target": 50,
+        "reached": false,
+        "remaining": 50
+      },
+      {
+        "target": 100,
+        "reached": false,
+        "remaining": 100
+      },
+      {
+        "target": 250,
+        "reached": false,
+        "remaining": 250
+      },
+      {
+        "target": 500,
+        "reached": false,
+        "remaining": 500
+      },
+      {
+        "target": 1000,
+        "reached": false,
+        "remaining": 1000
+      }
+    ],
+    "failures": 0,
+    "corrections": 0
+  },
+  "verification": {
+    "typecheck": "PASS",
+    "lint": "PASS",
+    "tests": "271 passed; 0 failed"
+  },
+  "productionChanged": false,
+  "capability": {
+    "decision": "CAPABLE OF CLEAN 2026 FORWARD COLLECTION WITHOUT FUTURE-INFORMATION LEAKAGE",
+    "reasons": [
+      "Protected cutoff is enforced at 2026-09-07T12:45:00.000Z.",
+      "Pregame, source and model timestamps fail closed at forecast/kickoff boundaries.",
+      "Immutable corrections and verified finals preserve original evidence.",
+      "Coverage includes missed games and raw N, so silence cannot masquerade as success.",
+      "Exports are deterministic and versioned."
+    ],
+    "operationalStatus": "Archive is correctly empty at lock. Invoke the standalone research capture/import job before eligible kickoffs; do not backfill earlier 2026 games."
+  },
+  "limitations": [
+    "No scheduler was attached to the production website; research capture must be invoked by an explicit research job.",
+    "Source availability and account entitlements can still produce persisted UNKNOWN/FAIL states.",
+    "CORE is a provider rating and external football input, not an independently audited in-house formula.",
+    "No Model B v2 fitting or performance interpretation is authorized at collection milestones."
+  ]
+}

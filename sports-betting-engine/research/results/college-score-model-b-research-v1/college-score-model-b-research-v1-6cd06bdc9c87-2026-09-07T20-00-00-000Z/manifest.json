@@ -1,0 +1,20 @@
+{
+  "runId": "college-score-model-b-research-v1-6cd06bdc9c87-2026-09-07T20-00-00-000Z",
+  "generatedAt": "2026-09-07T20:00:00.000Z",
+  "datasetHash": "6cd06bdc9c87d4382af8e7837f52014e1b01135b90a66a0d2f6fc77706bd2d30",
+  "configurationHash": "a725b66e00adaa8187dba29c81cc2a181d073a4854805c978978a247b6f17c94",
+  "productionChanged": false,
+  "selectionSeason": 2024,
+  "evaluationSeason": 2025,
+  "codeHashes": {
+    "modelB": "24146ecaa8b7b673cc870454be5c235f203604588b28a79c4307ac83cc18d819",
+    "forwardArchive": "2dde74099087bc0097e5854d678656a89002d74dab47f2c31b1d9383f70a4607",
+    "runner": "21576836c2a38b63a71635bca30f24f0bb0742d343c1887a29550f4d2f706a9f",
+    "configuration": "678be60f7eaf04484423e521ce5e6b5fdb0a360956bfabce95648849ebd72562"
+  },
+  "sourceHashes": {
+    "development": "d3a356a4c7bca1bb8772f3367ecfe6f84654e0c779c197ff66f240a3b7b260a8",
+    "holdout": "6ca55f00f8807a58eb10ed9c59890b3edcc77e676ea3a5003df334c38633a0f7"
+  },
+  "reproductionCommand": "npm run research:college-score-model-b -- --generated-at=2026-09-07T20:00:00.000Z --verification=253/253_PASS"
+}

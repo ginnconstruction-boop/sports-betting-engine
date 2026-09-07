@@ -1,0 +1,13 @@
+{
+  "id": "f49aa3859f4c5c5cd842f940317744e75f34bd89deaceca5d7a41ba40ef45b03",
+  "provider": "CollegeFootballData",
+  "requestCategory": "TEAM_EFFICIENCY",
+  "canonicalEventId": "401858212",
+  "teamId": "52",
+  "failedAt": "2026-09-07T13:30:28.007Z",
+  "errorClass": "AUTH_FAILURE",
+  "attempts": 0,
+  "retryState": "NOT_APPLICABLE",
+  "finalAvailability": "UNAVAILABLE",
+  "message": "CFBD_API_KEY is not configured."
+}
