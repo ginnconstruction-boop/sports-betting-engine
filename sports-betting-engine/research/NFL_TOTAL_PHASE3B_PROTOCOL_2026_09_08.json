@@ -1,0 +1,63 @@
+{
+  "schemaVersion": "nfl-total-phase3b-protocol-v1",
+  "declaredAt": "2026-09-08T16:10:00.000Z",
+  "protectedForwardCutoff": "2026-09-08T02:19:07.588Z",
+  "sourceArtifact": "research/nfl-spread-phase3a/sources/games.csv.gz",
+  "sourceDocumentation": "https://nflreadr.nflverse.com/articles/dictionary_schedules.html",
+  "target": "FINAL_GAME_TOTAL",
+  "auditSeasons": { "from": 1999, "through": 2025 },
+  "featureConstructionSeasons": { "from": 2014, "through": 2025 },
+  "developmentSeasons": { "from": 2016, "through": 2023 },
+  "validationSeason": 2024,
+  "lockedHoldoutSeason": 2025,
+  "walkForwardSeasons": { "from": 2019, "through": 2025 },
+  "primaryGameType": "REG",
+  "postseasonTreatment": "AUDIT_SEPARATELY_NOT_FIT",
+  "totalModelA": {
+    "version": "nfl-game-line-ridge-research-v2-audit-metrics",
+    "ridge": 3,
+    "halfLifeDays": 180,
+    "frozen": true
+  },
+  "featurePolicy": {
+    "opponentRidge": 20,
+    "opponentHalfLifeDays": 365,
+    "currentSeasonBlendGames": 4,
+    "rollingGames": 4,
+    "minimumPriorGamesPerTeam": 8,
+    "candidateRidge": 10,
+    "sameCalendarDayResultsExcluded": true
+  },
+  "candidates": {
+    "B1_OFFENSE_DEFENSE": ["BLENDED_OFFENSE_SUM", "BLENDED_DEFENSE_SUM"],
+    "B1_PLUS_OPPONENT_ADJUSTMENT": ["BLENDED_OFFENSE_SUM", "BLENDED_DEFENSE_SUM", "OPPONENT_ADJUSTED_TOTAL", "RECENT_COMBINED_TOTAL"],
+    "B2_PLUS_PACE": "MODEL_UNAVAILABLE_POINT_IN_TIME_PACE",
+    "B3_PLUS_PASS_RUN": "MODEL_UNAVAILABLE_POINT_IN_TIME_PASS_RUN",
+    "B4_PLUS_QB": "QB_CONTEXT_UNAVAILABLE",
+    "B5_PLUS_SAFE_SCHEDULE": ["BLENDED_OFFENSE_SUM", "BLENDED_DEFENSE_SUM", "OPPONENT_ADJUSTED_TOTAL", "RECENT_COMBINED_TOTAL", "REST_SUM", "HOME_SHORT_WEEK", "AWAY_SHORT_WEEK", "DIVISIONAL_GAME", "NEUTRAL_SITE", "PREVIOUS_OVERTIME_COUNT"]
+  },
+  "selection": "Lowest validation RMSE among evaluable predeclared candidates; feature families and ridge are fixed before results.",
+  "ensembleWeights": { "from": 0, "through": 1, "step": 0.01, "selectedOn": "VALIDATION_ONLY" },
+  "advancementGate": {
+    "minimumLockedHoldoutN": 250,
+    "minimumMaeImprovementVsModelA": 0.01,
+    "minimumRmseImprovementVsModelA": 0.01,
+    "maximumAbsoluteBias": 1.5,
+    "minimumIncrementalRmseImprovementBeyondMarket": 0.005,
+    "requireStableWalkForward": true,
+    "requireNoLeakage": true,
+    "requireNoMarketContamination": true,
+    "requireNoMajorRegimeCollapse": true
+  },
+  "restrictions": {
+    "overUnderNotSelectionTarget": true,
+    "noProbabilityCalibration": true,
+    "noKelly": true,
+    "noStaking": true,
+    "noThresholdTuning": true,
+    "noProductionChanges": true,
+    "manualOnly": true,
+    "newPaidProviderCalls": 0,
+    "newPaidCredits": 0
+  }
+}

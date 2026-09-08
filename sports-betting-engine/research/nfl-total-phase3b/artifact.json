@@ -1,0 +1,1317 @@
+{
+  "schemaVersion": "nfl-total-phase3b-artifact-v1",
+  "generatedAt": "2026-09-08T16:10:00.000Z",
+  "protocolHash": "316460be31b99783c9cc718a0872cef973c942a0ad616f41ca28d87a4217f0e7",
+  "source": {
+    "file": "research/nfl-spread-phase3a/sources/games.csv.gz",
+    "compressedHash": "a2a47ecc207b8d94628a2d0e1c4c1eaaf9417de98ce47ce342fd7a430e00c09b",
+    "parsedHash": "9e85134759fee5cfc61d48586adf16323f1eaef3e0a573a82805b6b0c2b64e51",
+    "newProviderCalls": 0,
+    "newPaidCredits": 0,
+    "newCacheFiles": 0
+  },
+  "modelAFormula": {
+    "version": "nfl-game-line-ridge-research-v2-audit-metrics",
+    "config": {
+      "version": "nfl-game-line-ridge-research-v2-audit-metrics",
+      "ridge": 3,
+      "halfLifeDays": 180,
+      "frozen": true
+    },
+    "formula": "Two-score ridge projects home and away points separately from league intercept, team offense, opponent defense, and learned home advantage; Total Model A is projected home points plus projected away points.",
+    "features": [
+      "same-season and prior-season earlier final scores",
+      "team offense identity",
+      "opponent defense identity",
+      "home/neutral venue"
+    ],
+    "weights": "current season 1.0, previous season 0.65, 180-day half-life",
+    "fallback": "Requires at least 100 league games and six prior appearances for both teams; otherwise MODEL_UNAVAILABLE.",
+    "earlySeason": "previous season enters at 0.65 without roster or pace continuity.",
+    "QB": "not numeric",
+    "weather": "not numeric",
+    "pace": "not numeric",
+    "marketContamination": false
+  },
+  "featureAudit": [
+    {
+      "feature": "team offense / opponent defense",
+      "source": "earlier final scores",
+      "safety": "RECONSTRUCTED_WITHOUT_FUTURE_INFO",
+      "transformation": "regularized chronological scoring components",
+      "coefficient": "fitted team coefficients",
+      "fallback": "MODEL_UNAVAILABLE",
+      "missing": "row excluded"
+    },
+    {
+      "feature": "home field",
+      "source": "nflverse location",
+      "safety": "SAFE_HISTORICAL_SNAPSHOT",
+      "transformation": "learned and split across two team-score equations",
+      "coefficient": "fitted",
+      "fallback": "zero neutral",
+      "missing": "invalid game"
+    },
+    {
+      "feature": "QB",
+      "source": "revised final starter",
+      "safety": "UNAVAILABLE",
+      "transformation": null,
+      "coefficient": null,
+      "fallback": "none",
+      "missing": "QB_CONTEXT_UNAVAILABLE"
+    },
+    {
+      "feature": "pace/pass-run/OL",
+      "source": null,
+      "safety": "UNAVAILABLE",
+      "transformation": null,
+      "coefficient": null,
+      "fallback": "none",
+      "missing": "MODEL_UNAVAILABLE"
+    },
+    {
+      "feature": "weather/roof state",
+      "source": "game-recorded conditions",
+      "safety": "UNSAFE_FUTURE_LEAKAGE",
+      "transformation": null,
+      "coefficient": null,
+      "fallback": "none",
+      "missing": "excluded from candidates"
+    },
+    {
+      "feature": "market total",
+      "source": "nflverse total_line",
+      "safety": "SAFE_HISTORICAL_SNAPSHOT",
+      "transformation": "external benchmark only",
+      "coefficient": null,
+      "fallback": "none",
+      "missing": "never passed into independent candidate"
+    }
+  ],
+  "dataset": {
+    "auditSeasons": {
+      "from": 1999,
+      "through": 2025
+    },
+    "seasons": {
+      "1999": {
+        "regular": 248,
+        "playoffs": 11
+      },
+      "2000": {
+        "regular": 248,
+        "playoffs": 11
+      },
+      "2001": {
+        "regular": 248,
+        "playoffs": 11
+      },
+      "2002": {
+        "regular": 256,
+        "playoffs": 11
+      },
+      "2003": {
+        "regular": 256,
+        "playoffs": 11
+      },
+      "2004": {
+        "regular": 256,
+        "playoffs": 11
+      },
+      "2005": {
+        "regular": 256,
+        "playoffs": 11
+      },
+      "2006": {
+        "regular": 256,
+        "playoffs": 11
+      },
+      "2007": {
+        "regular": 256,
+        "playoffs": 11
+      },
+      "2008": {
+        "regular": 256,
+        "playoffs": 11
+      },
+      "2009": {
+        "regular": 256,
+        "playoffs": 11
+      },
+      "2010": {
+        "regular": 256,
+        "playoffs": 11
+      },
+      "2011": {
+        "regular": 256,
+        "playoffs": 11
+      },
+      "2012": {
+        "regular": 256,
+        "playoffs": 11
+      },
+      "2013": {
+        "regular": 256,
+        "playoffs": 11
+      },
+      "2014": {
+        "regular": 256,
+        "playoffs": 11
+      },
+      "2015": {
+        "regular": 256,
+        "playoffs": 11
+      },
+      "2016": {
+        "regular": 256,
+        "playoffs": 11
+      },
+      "2017": {
+        "regular": 256,
+        "playoffs": 11
+      },
+      "2018": {
+        "regular": 256,
+        "playoffs": 11
+      },
+      "2019": {
+        "regular": 256,
+        "playoffs": 11
+      },
+      "2020": {
+        "regular": 256,
+        "playoffs": 13
+      },
+      "2021": {
+        "regular": 272,
+        "playoffs": 13
+      },
+      "2022": {
+        "regular": 271,
+        "playoffs": 13
+      },
+      "2023": {
+        "regular": 272,
+        "playoffs": 13
+      },
+      "2024": {
+        "regular": 272,
+        "playoffs": 13
+      },
+      "2025": {
+        "regular": 272,
+        "playoffs": 13
+      }
+    },
+    "totalFinalGames": 7276,
+    "regularFinalGames": 6967,
+    "postseasonFinalGames": 309,
+    "sourceExclusions": {
+      "NOT_FINAL": 272
+    },
+    "featureRows": 3151,
+    "featureExclusions": {},
+    "commonRows": 2639,
+    "developmentN": 2095,
+    "validationN": 272,
+    "lockedHoldoutN": 272,
+    "marketHoldoutN": 272
+  },
+  "baselines": {
+    "leagueAverage": {
+      "n": 272,
+      "mae": 10.970819665001619,
+      "rmse": 13.797547171759222,
+      "bias": 0.49426085389796226
+    },
+    "recentCombined": {
+      "n": 272,
+      "mae": 11.249080882352942,
+      "rmse": 14.130505499159069,
+      "bias": -0.41360294117647056
+    },
+    "priorSeasonCombined": {
+      "n": 272,
+      "mae": 10.770112456747412,
+      "rmse": 13.519794987467634,
+      "bias": 0.20220588235294068
+    },
+    "simpleOffenseDefense": {
+      "n": 272,
+      "mae": 10.863806770651486,
+      "rmse": 13.61199358275464,
+      "bias": -0.17856122485501763
+    },
+    "leagueAverageValue": 45.53147444021969
+  },
+  "earlySeason": {
+    "method": "Four-game linear blend from prior offense/defense scoring to current-season scoring.",
+    "holdoutWeeks1to4": {
+      "model": {
+        "n": 64,
+        "mae": 11.323021302209474,
+        "rmse": 13.756919604233985,
+        "bias": 1.0612881133209493
+      },
+      "market": {
+        "n": 64,
+        "mae": 11.40625,
+        "rmse": 13.828186793647243,
+        "bias": 1.4375
+      },
+      "warning": null
+    }
+  },
+  "candidateDefinitions": {
+    "B1_OFFENSE_DEFENSE": [
+      "BLENDED_OFFENSE_SUM",
+      "BLENDED_DEFENSE_SUM"
+    ],
+    "B1_PLUS_OPPONENT_ADJUSTMENT": [
+      "BLENDED_OFFENSE_SUM",
+      "BLENDED_DEFENSE_SUM",
+      "OPPONENT_ADJUSTED_TOTAL",
+      "RECENT_COMBINED_TOTAL"
+    ],
+    "B2_PLUS_PACE": "MODEL_UNAVAILABLE_POINT_IN_TIME_PACE",
+    "B3_PLUS_PASS_RUN": "MODEL_UNAVAILABLE_POINT_IN_TIME_PASS_RUN",
+    "B4_PLUS_QB": "QB_CONTEXT_UNAVAILABLE",
+    "B5_PLUS_SAFE_SCHEDULE": [
+      "BLENDED_OFFENSE_SUM",
+      "BLENDED_DEFENSE_SUM",
+      "OPPONENT_ADJUSTED_TOTAL",
+      "RECENT_COMBINED_TOTAL",
+      "REST_SUM",
+      "HOME_SHORT_WEEK",
+      "AWAY_SHORT_WEEK",
+      "DIVISIONAL_GAME",
+      "NEUTRAL_SITE",
+      "PREVIOUS_OVERTIME_COUNT"
+    ]
+  },
+  "validationCandidates": {
+    "B1_OFFENSE_DEFENSE": {
+      "features": [
+        "BLENDED_OFFENSE_SUM",
+        "BLENDED_DEFENSE_SUM"
+      ],
+      "development": {
+        "n": 2095,
+        "mae": 10.831141232191136,
+        "rmse": 13.64139419765139,
+        "bias": -2.74720580413213e-16
+      },
+      "validation": {
+        "n": 272,
+        "mae": 9.840495605842355,
+        "rmse": 12.776827489395925,
+        "bias": 0.9899539173049351
+      },
+      "coefficients": {
+        "BLENDED_OFFENSE_SUM": 0.42414477742623835,
+        "BLENDED_DEFENSE_SUM": 0.17995010252376228
+      }
+    },
+    "B1_PLUS_OPPONENT_ADJUSTMENT": {
+      "features": [
+        "BLENDED_OFFENSE_SUM",
+        "BLENDED_DEFENSE_SUM",
+        "OPPONENT_ADJUSTED_TOTAL",
+        "RECENT_COMBINED_TOTAL"
+      ],
+      "development": {
+        "n": 2095,
+        "mae": 10.82226825714003,
+        "rmse": 13.629715789316405,
+        "bias": -4.395529286611408e-15
+      },
+      "validation": {
+        "n": 272,
+        "mae": 9.882253121448604,
+        "rmse": 12.822055943950472,
+        "bias": 1.2630278719631465
+      },
+      "coefficients": {
+        "BLENDED_OFFENSE_SUM": 0.2840040816495048,
+        "BLENDED_DEFENSE_SUM": 0.050597527387210364,
+        "OPPONENT_ADJUSTED_TOTAL": 0.38021675234839425,
+        "RECENT_COMBINED_TOTAL": 0.07948741862322023
+      }
+    },
+    "B5_PLUS_SAFE_SCHEDULE": {
+      "features": [
+        "BLENDED_OFFENSE_SUM",
+        "BLENDED_DEFENSE_SUM",
+        "OPPONENT_ADJUSTED_TOTAL",
+        "RECENT_COMBINED_TOTAL",
+        "REST_SUM",
+        "HOME_SHORT_WEEK",
+        "AWAY_SHORT_WEEK",
+        "DIVISIONAL_GAME",
+        "NEUTRAL_SITE",
+        "PREVIOUS_OVERTIME_COUNT"
+      ],
+      "development": {
+        "n": 2095,
+        "mae": 10.813410944805947,
+        "rmse": 13.600571730517926,
+        "bias": 6.647559723578981e-16
+      },
+      "validation": {
+        "n": 272,
+        "mae": 9.896187285693559,
+        "rmse": 12.899252322860987,
+        "bias": 1.248200427855546
+      },
+      "coefficients": {
+        "BLENDED_OFFENSE_SUM": 0.27771817939600724,
+        "BLENDED_DEFENSE_SUM": 0.04831199053736811,
+        "OPPONENT_ADJUSTED_TOTAL": 0.3907866900010518,
+        "RECENT_COMBINED_TOTAL": 0.08330847524137389,
+        "REST_SUM": -0.08345613875020728,
+        "HOME_SHORT_WEEK": 0.37782813160851153,
+        "AWAY_SHORT_WEEK": 0.051348438559355086,
+        "DIVISIONAL_GAME": -1.3733112209236866,
+        "NEUTRAL_SITE": -3.3203676268194946,
+        "PREVIOUS_OVERTIME_COUNT": -0.9680416098890071
+      }
+    }
+  },
+  "selected": {
+    "name": "B1_OFFENSE_DEFENSE",
+    "features": [
+      "BLENDED_OFFENSE_SUM",
+      "BLENDED_DEFENSE_SUM"
+    ],
+    "lockedModel": {
+      "version": "nfl-total-phase3b-v1",
+      "features": [
+        "BLENDED_OFFENSE_SUM",
+        "BLENDED_DEFENSE_SUM"
+      ],
+      "lambda": 10,
+      "intercept": 18.064184735599426,
+      "coefficients": {
+        "BLENDED_OFFENSE_SUM": 0.42628647682168747,
+        "BLENDED_DEFENSE_SUM": 0.1756037010233512
+      },
+      "means": {
+        "BLENDED_OFFENSE_SUM": 45.634031574898636,
+        "BLENDED_DEFENSE_SUM": 45.63752993065551
+      },
+      "scales": {
+        "BLENDED_OFFENSE_SUM": 6.895274166352391,
+        "BLENDED_DEFENSE_SUM": 5.989460569670611
+      },
+      "trainingN": 2367,
+      "trainingHash": "e6d5a580ca2b5f1aad08f401b86fbdb97bb9530ff12748843c2e343ea75fbbd1"
+    },
+    "holdout": {
+      "n": 272,
+      "mae": 10.734603024231133,
+      "rmse": 13.466884807812503,
+      "bias": 0.145627414089416
+    }
+  },
+  "splits": {
+    "development": {
+      "from": 2016,
+      "through": 2023
+    },
+    "validation": 2024,
+    "holdout": 2025
+  },
+  "walkForward": [
+    {
+      "season": 2019,
+      "trainingN": 768,
+      "testN": 256,
+      "metrics": {
+        "n": 256,
+        "mae": 10.988750272330071,
+        "rmse": 13.780643440689689,
+        "bias": 0.6041884097337166
+      },
+      "modelA": {
+        "n": 256,
+        "mae": 11.121049288876105,
+        "rmse": 13.774980676625349,
+        "bias": 0.04475554693213876
+      },
+      "coefficients": {
+        "BLENDED_OFFENSE_SUM": 0.4494562016326849,
+        "BLENDED_DEFENSE_SUM": 0.13845878752374544
+      }
+    },
+    {
+      "season": 2020,
+      "trainingN": 1024,
+      "testN": 256,
+      "metrics": {
+        "n": 256,
+        "mae": 10.68899475564927,
+        "rmse": 13.519257104184492,
+        "bias": 1.8241177289493085
+      },
+      "modelA": {
+        "n": 256,
+        "mae": 10.727722394286742,
+        "rmse": 13.577445023807634,
+        "bias": 1.1090389516134445
+      },
+      "coefficients": {
+        "BLENDED_OFFENSE_SUM": 0.3969545160805348,
+        "BLENDED_DEFENSE_SUM": 0.21388557663458913
+      }
+    },
+    {
+      "season": 2021,
+      "trainingN": 1280,
+      "testN": 272,
+      "metrics": {
+        "n": 272,
+        "mae": 11.025956470259077,
+        "rmse": 13.61033903016516,
+        "bias": -0.6883554009469188
+      },
+      "modelA": {
+        "n": 272,
+        "mae": 11.315609779309554,
+        "rmse": 13.931960055271695,
+        "bias": -1.5997595289537625
+      },
+      "coefficients": {
+        "BLENDED_OFFENSE_SUM": 0.4201613451294666,
+        "BLENDED_DEFENSE_SUM": 0.24074128262919162
+      }
+    },
+    {
+      "season": 2022,
+      "trainingN": 1552,
+      "testN": 271,
+      "metrics": {
+        "n": 271,
+        "mae": 10.93154159689473,
+        "rmse": 13.72489391585663,
+        "bias": -0.8524896492520024
+      },
+      "modelA": {
+        "n": 271,
+        "mae": 10.934741384798912,
+        "rmse": 13.858067637313729,
+        "bias": -0.7311372937970223
+      },
+      "coefficients": {
+        "BLENDED_OFFENSE_SUM": 0.4137434202055184,
+        "BLENDED_DEFENSE_SUM": 0.1996554001310224
+      }
+    },
+    {
+      "season": 2023,
+      "trainingN": 1823,
+      "testN": 272,
+      "metrics": {
+        "n": 272,
+        "mae": 10.605741899944931,
+        "rmse": 13.377006468936868,
+        "bias": -0.8527296621464684
+      },
+      "modelA": {
+        "n": 272,
+        "mae": 10.630242630138394,
+        "rmse": 13.517677701843116,
+        "bias": -0.13859946356375577
+      },
+      "coefficients": {
+        "BLENDED_OFFENSE_SUM": 0.4075512774941903,
+        "BLENDED_DEFENSE_SUM": 0.19446936972160872
+      }
+    },
+    {
+      "season": 2024,
+      "trainingN": 2095,
+      "testN": 272,
+      "metrics": {
+        "n": 272,
+        "mae": 9.840495605842355,
+        "rmse": 12.776827489395925,
+        "bias": 0.9899539173049351
+      },
+      "modelA": {
+        "n": 272,
+        "mae": 10.099850877865904,
+        "rmse": 13.015267531347964,
+        "bias": 1.381351611944378
+      },
+      "coefficients": {
+        "BLENDED_OFFENSE_SUM": 0.42414477742623835,
+        "BLENDED_DEFENSE_SUM": 0.17995010252376228
+      }
+    },
+    {
+      "season": 2025,
+      "trainingN": 2367,
+      "testN": 272,
+      "metrics": {
+        "n": 272,
+        "mae": 10.734603024231133,
+        "rmse": 13.466884807812503,
+        "bias": 0.145627414089416
+      },
+      "modelA": {
+        "n": 272,
+        "mae": 10.652450423959998,
+        "rmse": 13.453033280514775,
+        "bias": -0.1311608514672604
+      },
+      "coefficients": {
+        "BLENDED_OFFENSE_SUM": 0.42628647682168747,
+        "BLENDED_DEFENSE_SUM": 0.1756037010233512
+      }
+    }
+  ],
+  "totalModelA": {
+    "holdout": {
+      "n": 272,
+      "mae": 10.652450423959998,
+      "rmse": 13.453033280514775,
+      "bias": -0.1311608514672604
+    },
+    "bySeason": [
+      {
+        "season": 2016,
+        "games": 256,
+        "excluded": 0,
+        "modelTotal": {
+          "count": 256,
+          "mae": 10.234175467683839,
+          "rmse": 12.769740421678803,
+          "bias": -0.000722519598813004
+        },
+        "marketTotal": {
+          "count": 256,
+          "mae": 9.91796875,
+          "rmse": 12.428231471130557,
+          "bias": -0.02734375
+        }
+      },
+      {
+        "season": 2017,
+        "games": 256,
+        "excluded": 0,
+        "modelTotal": {
+          "count": 256,
+          "mae": 11.762821218266426,
+          "rmse": 14.851466544342454,
+          "bias": -1.0297514596089556
+        },
+        "marketTotal": {
+          "count": 256,
+          "mae": 11.162109375,
+          "rmse": 14.155422161225005,
+          "bias": -0.673828125
+        }
+      },
+      {
+        "season": 2018,
+        "games": 256,
+        "excluded": 0,
+        "modelTotal": {
+          "count": 256,
+          "mae": 11.132668512182596,
+          "rmse": 14.210798887092283,
+          "bias": 0.631725229593158
+        },
+        "marketTotal": {
+          "count": 256,
+          "mae": 10.59765625,
+          "rmse": 13.464725326756577,
+          "bias": 0.16796875
+        }
+      },
+      {
+        "season": 2019,
+        "games": 256,
+        "excluded": 0,
+        "modelTotal": {
+          "count": 256,
+          "mae": 11.121049288876105,
+          "rmse": 13.774980676625349,
+          "bias": 0.04475554693213876
+        },
+        "marketTotal": {
+          "count": 256,
+          "mae": 10.828125,
+          "rmse": 13.428630793941727,
+          "bias": 0.4921875
+        }
+      },
+      {
+        "season": 2020,
+        "games": 256,
+        "excluded": 0,
+        "modelTotal": {
+          "count": 256,
+          "mae": 10.727722394286742,
+          "rmse": 13.577445023807634,
+          "bias": 1.1090389516134445
+        },
+        "marketTotal": {
+          "count": 256,
+          "mae": 10.146484375,
+          "rmse": 12.849603289109746,
+          "bias": 1.505859375
+        }
+      },
+      {
+        "season": 2021,
+        "games": 272,
+        "excluded": 0,
+        "modelTotal": {
+          "count": 272,
+          "mae": 11.315609779309554,
+          "rmse": 13.931960055271695,
+          "bias": -1.5997595289537625
+        },
+        "marketTotal": {
+          "count": 272,
+          "mae": 10.788602941176471,
+          "rmse": 13.281559252454908,
+          "bias": -0.49080882352941174
+        }
+      },
+      {
+        "season": 2022,
+        "games": 271,
+        "excluded": 0,
+        "modelTotal": {
+          "count": 271,
+          "mae": 10.934741384798912,
+          "rmse": 13.858067637313729,
+          "bias": -0.7311372937970223
+        },
+        "marketTotal": {
+          "count": 271,
+          "mae": 10.394833948339484,
+          "rmse": 13.227919707142078,
+          "bias": -0.33948339483394835
+        }
+      },
+      {
+        "season": 2023,
+        "games": 272,
+        "excluded": 0,
+        "modelTotal": {
+          "count": 272,
+          "mae": 10.630242630138394,
+          "rmse": 13.517677701843116,
+          "bias": -0.13859946356375577
+        },
+        "marketTotal": {
+          "count": 272,
+          "mae": 10.238970588235293,
+          "rmse": 13.130146049991891,
+          "bias": 0.5882352941176471
+        }
+      },
+      {
+        "season": 2024,
+        "games": 272,
+        "excluded": 0,
+        "modelTotal": {
+          "count": 272,
+          "mae": 10.099850877865904,
+          "rmse": 13.015267531347964,
+          "bias": 1.381351611944378
+        },
+        "marketTotal": {
+          "count": 272,
+          "mae": 9.729779411764707,
+          "rmse": 12.551548123403649,
+          "bias": 1.4761029411764706
+        }
+      },
+      {
+        "season": 2025,
+        "games": 272,
+        "excluded": 0,
+        "modelTotal": {
+          "count": 272,
+          "mae": 10.652450423959998,
+          "rmse": 13.453033280514775,
+          "bias": -0.1311608514672604
+        },
+        "marketTotal": {
+          "count": 272,
+          "mae": 10.393382352941176,
+          "rmse": 13.18644580397525,
+          "bias": 1.150735294117647
+        }
+      }
+    ]
+  },
+  "market": {
+    "label": "HISTORICAL MARKET TOTAL BENCHMARK — QUOTE TIME/CLOSE NOT VERIFIED",
+    "holdout": {
+      "n": 272,
+      "mae": 10.393382352941176,
+      "rmse": 13.18644580397525,
+      "bias": 1.150735294117647
+    },
+    "verifiedClosing": "UNAVAILABLE",
+    "earliestTrustworthy": "UNAVAILABLE"
+  },
+  "incrementalMarket": {
+    "training": "2024 validation only",
+    "intercept": -1.1805980992771605,
+    "marketCoefficient": 0.934208354723501,
+    "modelCoefficient": 0.12433519143305966,
+    "trainingN": 272,
+    "trainingHash": "11c346c3221090b3fc13d1eadfaa128120001dc2912020d53fcb1bc9870b8950",
+    "holdout": {
+      "n": 272,
+      "mae": 10.406489927436498,
+      "rmse": 13.14548772721211,
+      "bias": -0.42077852105503977
+    },
+    "rmseImprovementVsRawMarket": 0.0031060740226750297
+  },
+  "ensemble": {
+    "selection": "2024 validation only",
+    "modelBWeight": 0.15,
+    "marketWeight": 0.85,
+    "validation": {
+      "weight": 0.15,
+      "rmse": 12.544290148335056,
+      "mae": 9.715518865953594
+    },
+    "holdout": {
+      "n": 272,
+      "mae": 10.398233167463307,
+      "rmse": 13.182651499843864,
+      "bias": 0.9999691121134147
+    }
+  },
+  "disagreement": {
+    "n": 272,
+    "buckets": [
+      {
+        "from": 0,
+        "to": 1.5,
+        "n": 104,
+        "mae": 9.353192635135473,
+        "rmse": 11.757486934245346,
+        "bias": 0.7907419324571403
+      },
+      {
+        "from": 1.5,
+        "to": 3,
+        "n": 84,
+        "mae": 10.7007374341411,
+        "rmse": 13.377406521473652,
+        "bias": -0.4884111856611492
+      },
+      {
+        "from": 3,
+        "to": 5,
+        "n": 55,
+        "mae": 11.400174468588448,
+        "rmse": 14.490439050632995,
+        "bias": 0.41308542885575666
+      },
+      {
+        "from": 5,
+        "to": 7,
+        "n": 16,
+        "mae": 13.780752388503574,
+        "rmse": 16.315757221902764,
+        "bias": 5.984466763950147
+      },
+      {
+        "from": 7,
+        "to": 10,
+        "n": 13,
+        "mae": 15.439723852346479,
+        "rmse": 17.785706702872986,
+        "bias": -9.23624088907337
+      },
+      {
+        "from": 10,
+        "to": null,
+        "n": 0,
+        "mae": null,
+        "rmse": null,
+        "bias": null
+      }
+    ],
+    "correlation": -0.22002814969409804,
+    "regressionSlope": -1.0122224914408726
+  },
+  "regimes": {
+    "weeks_1_4": {
+      "model": {
+        "n": 64,
+        "mae": 11.323021302209474,
+        "rmse": 13.756919604233985,
+        "bias": 1.0612881133209493
+      },
+      "market": {
+        "n": 64,
+        "mae": 11.40625,
+        "rmse": 13.828186793647243,
+        "bias": 1.4375
+      },
+      "warning": null
+    },
+    "weeks_5_9": {
+      "model": {
+        "n": 71,
+        "mae": 9.748507974120884,
+        "rmse": 12.919457835097228,
+        "bias": 0.8857741148175814
+      },
+      "market": {
+        "n": 71,
+        "mae": 9.669014084507042,
+        "rmse": 12.630027934798989,
+        "bias": 1.4577464788732395
+      },
+      "warning": null
+    },
+    "weeks_10_plus": {
+      "model": {
+        "n": 137,
+        "mae": 10.970763453188896,
+        "rmse": 13.60714147964002,
+        "bias": -0.6657061662209327
+      },
+      "market": {
+        "n": 137,
+        "mae": 10.295620437956204,
+        "rmse": 13.16161472577666,
+        "bias": 0.8576642335766423
+      },
+      "warning": null
+    },
+    "market_below_40": {
+      "model": {
+        "n": 31,
+        "mae": 13.518170639593835,
+        "rmse": 15.433310031460557,
+        "bias": -3.1897055153969744
+      },
+      "market": {
+        "n": 31,
+        "mae": 12.048387096774194,
+        "rmse": 15.31154950967069,
+        "bias": 2.435483870967742
+      },
+      "warning": null
+    },
+    "market_40_to_44_5": {
+      "model": {
+        "n": 118,
+        "mae": 10.073046252026192,
+        "rmse": 12.626697268533864,
+        "bias": -0.8548893136059945
+      },
+      "market": {
+        "n": 118,
+        "mae": 10.008474576271187,
+        "rmse": 12.443601582298554,
+        "bias": 0.9745762711864406
+      },
+      "warning": null
+    },
+    "market_45_to_49_5": {
+      "model": {
+        "n": 94,
+        "mae": 10.124526009367447,
+        "rmse": 12.786283996258408,
+        "bias": 0.8838576792990633
+      },
+      "market": {
+        "n": 94,
+        "mae": 9.797872340425531,
+        "rmse": 12.46847087486861,
+        "bias": 0.40425531914893614
+      },
+      "warning": null
+    },
+    "market_50_plus": {
+      "model": {
+        "n": 29,
+        "mae": 12.428407935994048,
+        "rmse": 16.36246640580368,
+        "bias": 5.389167060724921
+      },
+      "market": {
+        "n": 29,
+        "mae": 12.120689655172415,
+        "rmse": 15.69455209673858,
+        "bias": 2.913793103448276
+      },
+      "warning": "SMALL SAMPLE"
+    },
+    "indoor_dome_recorded": {
+      "model": {
+        "n": 92,
+        "mae": 9.595523048555327,
+        "rmse": 12.389147467258885,
+        "bias": 1.3070848578303407
+      },
+      "market": {
+        "n": 92,
+        "mae": 9.108695652173912,
+        "rmse": 12.09608272918569,
+        "bias": 1.5
+      },
+      "warning": null
+    },
+    "outdoor_or_open_recorded": {
+      "model": {
+        "n": 180,
+        "mae": 11.316799456243208,
+        "rmse": 13.985693207959496,
+        "bias": -0.4480063904892786
+      },
+      "market": {
+        "n": 180,
+        "mae": 11.05,
+        "rmse": 13.71029621205254,
+        "bias": 0.9722222222222222
+      },
+      "warning": null
+    },
+    "divisional": {
+      "model": {
+        "n": 96,
+        "mae": 11.050847781355186,
+        "rmse": 13.602755358120552,
+        "bias": -2.024143722106256
+      },
+      "market": {
+        "n": 96,
+        "mae": 10.666666666666666,
+        "rmse": 13.231118622399242,
+        "bias": -0.8125
+      },
+      "warning": null
+    },
+    "non_divisional": {
+      "model": {
+        "n": 176,
+        "mae": 10.56210588398165,
+        "rmse": 13.39219260091452,
+        "bias": 1.3291389429234186
+      },
+      "market": {
+        "n": 176,
+        "mae": 10.244318181818182,
+        "rmse": 13.16201490515933,
+        "bias": 2.221590909090909
+      },
+      "warning": null
+    },
+    "primetime": {
+      "model": {
+        "n": 56,
+        "mae": 11.698808853854612,
+        "rmse": 14.993090331112615,
+        "bias": -0.03947250070406115
+      },
+      "market": {
+        "n": 56,
+        "mae": 11.839285714285714,
+        "rmse": 15.24443692442778,
+        "bias": 0.5178571428571429
+      },
+      "warning": null
+    },
+    "neutral_or_international_designation": {
+      "model": {
+        "n": 7,
+        "mae": 8.773649124784976,
+        "rmse": 11.373671308207543,
+        "bias": -5.097689041839007
+      },
+      "market": {
+        "n": 7,
+        "mae": 7.785714285714286,
+        "rmse": 10.715476124345972,
+        "bias": -3.7857142857142856
+      },
+      "warning": "SMALL SAMPLE"
+    },
+    "overtime": {
+      "model": {
+        "n": 14,
+        "mae": 14.588122235093165,
+        "rmse": 17.753576699580375,
+        "bias": 9.349264522230442
+      },
+      "market": {
+        "n": 14,
+        "mae": 14.142857142857142,
+        "rmse": 17.674638812231983,
+        "bias": 9.285714285714286
+      },
+      "warning": "SMALL SAMPLE"
+    }
+  },
+  "weatherRegimes": {
+    "indoor": {
+      "model": {
+        "n": 92,
+        "mae": 9.595523048555327,
+        "rmse": 12.389147467258885,
+        "bias": 1.3070848578303407
+      },
+      "market": {
+        "n": 92,
+        "mae": 9.108695652173912,
+        "rmse": 12.09608272918569,
+        "bias": 1.5
+      },
+      "warning": null
+    },
+    "outdoor": {
+      "model": {
+        "n": 180,
+        "mae": 11.316799456243208,
+        "rmse": 13.985693207959496,
+        "bias": -0.4480063904892786
+      },
+      "market": {
+        "n": 180,
+        "mae": 11.05,
+        "rmse": 13.71029621205254,
+        "bias": 0.9722222222222222
+      },
+      "warning": null
+    },
+    "wind": "UNAVAILABLE_POINT_IN_TIME",
+    "cold": "UNAVAILABLE_POINT_IN_TIME",
+    "precipitation": "UNAVAILABLE_POINT_IN_TIME"
+  },
+  "overUnderDiagnostic": {
+    "priced": 272,
+    "wins": 133,
+    "losses": 139,
+    "pushes": 0,
+    "winRate": 0.4889705882352941,
+    "units": -17.509773521103877,
+    "roi": -0.06437416735699955,
+    "meanBreakEven": 0.5232086617773735,
+    "label": "RECONSTRUCTED NFLVERSE TOTAL-LINE/PRICE DIAGNOSTIC — NOT AN ACTIONABLE BACKTEST"
+  },
+  "ablations": {
+    "offense": {
+      "removed": [
+        "BLENDED_OFFENSE_SUM"
+      ],
+      "metrics": {
+        "n": 272,
+        "mae": 10.996200702405833,
+        "rmse": 13.823181849929997,
+        "bias": 0.42424845528598343
+      }
+    },
+    "defense": {
+      "removed": [
+        "BLENDED_DEFENSE_SUM"
+      ],
+      "metrics": {
+        "n": 272,
+        "mae": 10.74416325646022,
+        "rmse": 13.47631546895525,
+        "bias": 0.24955330869304754
+      }
+    },
+    "opponent_adjustment": {
+      "status": "NOT_PRESENT_IN_SELECTED_MODEL"
+    },
+    "recent_scoring": {
+      "status": "NOT_PRESENT_IN_SELECTED_MODEL"
+    },
+    "rest_schedule": {
+      "status": "NOT_PRESENT_IN_SELECTED_MODEL"
+    },
+    "venue": {
+      "status": "NOT_PRESENT_IN_SELECTED_MODEL"
+    },
+    "pace": {
+      "status": "UNAVAILABLE_POINT_IN_TIME"
+    },
+    "pass_run": {
+      "status": "UNAVAILABLE_POINT_IN_TIME"
+    },
+    "QB": {
+      "status": "UNAVAILABLE_POINT_IN_TIME"
+    },
+    "OL": {
+      "status": "UNAVAILABLE_POINT_IN_TIME"
+    },
+    "weather": {
+      "status": "UNAVAILABLE_POINT_IN_TIME"
+    }
+  },
+  "coefficientStability": [
+    {
+      "season": 2019,
+      "coefficients": {
+        "BLENDED_OFFENSE_SUM": 0.4494562016326849,
+        "BLENDED_DEFENSE_SUM": 0.13845878752374544
+      }
+    },
+    {
+      "season": 2020,
+      "coefficients": {
+        "BLENDED_OFFENSE_SUM": 0.3969545160805348,
+        "BLENDED_DEFENSE_SUM": 0.21388557663458913
+      }
+    },
+    {
+      "season": 2021,
+      "coefficients": {
+        "BLENDED_OFFENSE_SUM": 0.4201613451294666,
+        "BLENDED_DEFENSE_SUM": 0.24074128262919162
+      }
+    },
+    {
+      "season": 2022,
+      "coefficients": {
+        "BLENDED_OFFENSE_SUM": 0.4137434202055184,
+        "BLENDED_DEFENSE_SUM": 0.1996554001310224
+      }
+    },
+    {
+      "season": 2023,
+      "coefficients": {
+        "BLENDED_OFFENSE_SUM": 0.4075512774941903,
+        "BLENDED_DEFENSE_SUM": 0.19446936972160872
+      }
+    },
+    {
+      "season": 2024,
+      "coefficients": {
+        "BLENDED_OFFENSE_SUM": 0.42414477742623835,
+        "BLENDED_DEFENSE_SUM": 0.17995010252376228
+      }
+    },
+    {
+      "season": 2025,
+      "coefficients": {
+        "BLENDED_OFFENSE_SUM": 0.42628647682168747,
+        "BLENDED_DEFENSE_SUM": 0.1756037010233512
+      }
+    }
+  ],
+  "coverage": {
+    "offense": {
+      "state": "PASS",
+      "n": 2639,
+      "total": 2639,
+      "percent": 100
+    },
+    "defense": {
+      "state": "PASS",
+      "n": 2639,
+      "total": 2639,
+      "percent": 100
+    },
+    "pace": {
+      "state": "FAIL",
+      "n": 0,
+      "total": 2639,
+      "percent": 0
+    },
+    "pass_run": {
+      "state": "FAIL",
+      "n": 0,
+      "total": 2639,
+      "percent": 0
+    },
+    "QB": {
+      "state": "FAIL",
+      "n": 0,
+      "total": 2639,
+      "percent": 0
+    },
+    "OL": {
+      "state": "UNKNOWN",
+      "n": 0,
+      "total": 2639,
+      "percent": 0
+    },
+    "weather": {
+      "state": "FAIL",
+      "n": 0,
+      "total": 2639,
+      "percent": 0
+    },
+    "rest": {
+      "state": "PASS",
+      "n": 2639,
+      "total": 2639,
+      "percent": 100
+    },
+    "venue": {
+      "state": "PARTIAL",
+      "n": 2639,
+      "total": 2639,
+      "percent": 100,
+      "note": "Home/neutral safe; game-specific roof state excluded."
+    },
+    "market": {
+      "state": "PARTIAL",
+      "n": 2639,
+      "total": 2639,
+      "percent": 100,
+      "note": "Historical total exists without quote timestamp; verified close unavailable."
+    }
+  },
+  "gate": {
+    "minimumN": true,
+    "maeImprovement": false,
+    "rmseImprovement": false,
+    "bias": true,
+    "incrementalMarket": false,
+    "stableWalkForward": true,
+    "noCatastrophicMajorRegime": true,
+    "noLeakage": true,
+    "noMarketContamination": true
+  },
+  "improvements": {
+    "maeVsModelA": -0.007712084731824075,
+    "rmseVsModelA": -0.0010296211277340986,
+    "incrementalRmseBeyondMarket": 0.0031060740226750297
+  },
+  "forwardShadowIntegration": {
+    "status": "NOT_INTEGRATED",
+    "existingSnapshotsModified": false,
+    "protectedCutoff": "2026-09-08T02:19:07.588Z"
+  },
+  "apiImpact": {
+    "newProviderCalls": 0,
+    "newPaidCredits": 0,
+    "newCachedData": 0,
+    "reusedCache": "research/nfl-spread-phase3a/sources/games.csv.gz"
+  },
+  "productionImpact": {
+    "spreadModel": false,
+    "totalModel": false,
+    "propModels": false,
+    "recommendationThresholds": false,
+    "ranking": false,
+    "probabilityCalibration": false,
+    "kelly": false,
+    "staking": false,
+    "parlays": false,
+    "sgp": false,
+    "collectionMode": "MANUAL_ONLY",
+    "scheduledJobs": false
+  },
+  "decision": "NFL TOTAL MODEL B FAILS RESEARCH GATE"
+}

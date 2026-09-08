@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "nfl-total-phase3b-manifest-v1",
+  "protocolHash": "316460be31b99783c9cc718a0872cef973c942a0ad616f41ca28d87a4217f0e7",
+  "sourceHash": "a2a47ecc207b8d94628a2d0e1c4c1eaaf9417de98ce47ce342fd7a430e00c09b",
+  "parsedHash": "9e85134759fee5cfc61d48586adf16323f1eaef3e0a573a82805b6b0c2b64e51",
+  "datasetHash": "a34bf5cb69cafeb334804becb6cd0ba75348ce5ab952eefc06389f9850c62646",
+  "artifactHash": "a8f42dd4f0f747eb788a34ea4c76d5b8c212873f92062b85533a307f61c080fc",
+  "files": [
+    "artifact.json",
+    "report.md",
+    "manifest.json"
+  ],
+  "reusedSource": "research/nfl-spread-phase3a/sources/games.csv.gz"
+}
