@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "nfl-opportunity-phase3c-manifest-v1",
+  "protocolHash": "ec8d3c5e39a23e3d5a20183ee1fe39b64c88709b73cc6b8401c5d029a1f280e4",
+  "sourceHash": "58af6789033e9e3ce4a94cacbf21c719c26ad7f975203de10baaa3f187bb58fb",
+  "datasetHash": "f27773836f45de3ddaca67dc0bd82afbdb009469ba46cc0f529f556d9c2b0cde",
+  "artifactHash": "99fc1303b5951bced90b77c7ebad2faa3a1ae0d2115c8ed9f01b8cea3dddc5a1",
+  "files": [
+    "artifact.json",
+    "manifest.json",
+    "report.md"
+  ]
+}

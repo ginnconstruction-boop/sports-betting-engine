@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "nfl-opportunity-phase3c-protocol-v1",
+  "declaredAt": "2026-09-07T23:45:00.000Z",
+  "purpose": "Chronological player-opportunity accuracy research. No betting outcome, odds, price, ROI, probability calibration, threshold search, or production promotion.",
+  "sourceArtifact": "research/nfl-share-shadow-2026-08-31/report.json",
+  "developmentBefore": "2025-08-01T00:00:00.000Z",
+  "validationStart": "2025-08-01T00:00:00.000Z",
+  "lockedHoldoutStart": "2025-10-16T00:00:00.000Z",
+  "evaluationEnd": "2026-02-16T00:00:00.000Z",
+  "minimumHistory": 4,
+  "minimumEvaluationN": 200,
+  "minimumImprovement": 0.02,
+  "maximumAbsoluteBias": 1.5,
+  "requiredPositions": ["QB", "RB", "WR", "TE"],
+  "candidateOrder": ["WEIGHTED_RECENT_ROLE", "SHARE_TEAM_VOLUME", "EARLY_SEASON_PRIOR_BLEND"],
+  "simpleBaselines": ["LAST_GAME", "LAST_3_AVERAGE", "SEASON_AVERAGE", "PREVIOUS_SEASON_AVERAGE"],
+  "positionMap": {
+    "Lamar Jackson": "QB",
+    "Derrick Henry": "RB",
+    "Ja'Marr Chase": "WR",
+    "Amon-Ra St. Brown": "WR"
+  },
+  "advancementGate": "At least 200 locked-holdout player-games; at least 2% MAE and RMSE improvement over the validation-selected simple baseline; absolute bias at most 1.5 opportunities; QB, RB, WR and TE all represented; chronological integrity and zero market inputs. A missing major position blocks the gate.",
+  "minimumSampleLabels": {
+    "under50": "INSUFFICIENT FOR MODEL CONCLUSION",
+    "50to199": "PRELIMINARY",
+    "200plus": "RESEARCH-EVALUABLE"
+  },
+  "restrictions": [
+    "Final box-score attempts, carries and targets are targets only.",
+    "A target game and all later games are excluded from its features.",
+    "Routes, game-day availability, injuries, teammate status and historical depth are unavailable in the frozen source and cannot be backfilled as if known pregame.",
+    "Duplicate receiving-yard and reception records for the same player-game targets are reconciled only when their opportunity counts and team denominators agree exactly.",
+    "No market data may enter any opportunity candidate.",
+    "The locked holdout is evaluated once under this declared protocol and is not used for candidate selection."
+  ]
+}
