@@ -1,0 +1,19 @@
+{
+  "id": "0761879ccdc2d041148a2053b48ddf577f0550bc6f629dea858a5fd1325fcb79",
+  "kind": "player_identity",
+  "value": {
+    "canonicalPlayerId": "espn-player:4427095",
+    "providerPlayerIds": {
+      "ESPN": "4427095"
+    },
+    "name": "DeMario Douglas",
+    "teamId": "espn-team:17",
+    "position": "WR",
+    "season": 2026,
+    "effectiveAt": "2026-09-08T02:41:41.126Z",
+    "rookie": "NO",
+    "newTeam": "UNKNOWN",
+    "teamChange": "UNKNOWN",
+    "positionChange": "UNKNOWN"
+  }
+}

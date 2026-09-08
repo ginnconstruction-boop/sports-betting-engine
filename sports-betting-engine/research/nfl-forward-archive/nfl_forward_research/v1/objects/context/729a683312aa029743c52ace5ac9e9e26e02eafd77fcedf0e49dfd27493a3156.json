@@ -1,0 +1,25 @@
+{
+  "id": "729a683312aa029743c52ace5ac9e9e26e02eafd77fcedf0e49dfd27493a3156",
+  "kind": "context",
+  "value": {
+    "scope": "TEAM",
+    "entityId": "espn-team:17",
+    "category": "VENUE",
+    "field": "venue.context",
+    "value": {
+      "id": "3673",
+      "name": "Lumen Field",
+      "indoor": false
+    },
+    "source": {
+      "provider": "ESPN",
+      "url": "https://site.web.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard",
+      "providerRecordId": null,
+      "retrievedAt": "2026-09-08T02:41:41.126Z",
+      "effectiveAt": null,
+      "rawPayloadHash": "626c2c8a5bc6f496436ce4af1a8d314e723592d405006fc651dc91604a70d582"
+    },
+    "validity": "VALID",
+    "freshness": "FRESH"
+  }
+}

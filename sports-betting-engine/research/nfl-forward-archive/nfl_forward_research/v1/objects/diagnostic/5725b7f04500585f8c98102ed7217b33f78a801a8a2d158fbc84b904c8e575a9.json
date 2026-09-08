@@ -1,0 +1,23 @@
+{
+  "id": "5725b7f04500585f8c98102ed7217b33f78a801a8a2d158fbc84b904c8e575a9",
+  "kind": "diagnostic",
+  "value": {
+    "scope": "TEAM",
+    "category": "WEATHER",
+    "entityId": "espn-team:14",
+    "forecastAt": "2026-09-08T02:41:41.126Z",
+    "availableFields": 0,
+    "requiredFields": 1,
+    "notes": [
+      "WEATHER is unavailable at this forecast timestamp; no value was invented."
+    ],
+    "stages": {
+      "SOURCE_RETRIEVAL": "UNKNOWN",
+      "NORMALIZATION": "UNKNOWN",
+      "ENTITY_MATCHING": "UNKNOWN",
+      "CONTEXT_ATTACHMENT": "UNKNOWN",
+      "FIELD_VALIDITY": "UNKNOWN",
+      "FRESHNESS_AT_FORECAST_TIME": "UNKNOWN"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "ef91446ac327c70746d5b18ef4c820f41a6fbad31acb0e8337608c4323149ebe",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:4431452",
+    "participant": "Drake Maye",
+    "canonicalGameId": "espn:401872656",
+    "market": "player_pass_attempts",
+    "side": "Under",
+    "line": 32.5,
+    "price": -130,
+    "sportsbook": "BetOnline.ag",
+    "providerEventId": "8c94552d022acec4a0458d70c19d3da9",
+    "quoteTimestamp": "2026-09-08T02:40:38Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "f41d083f11311d6b10542d833584c3b7d18c9d0bb60084b7a0ec1adc0e3b9088",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

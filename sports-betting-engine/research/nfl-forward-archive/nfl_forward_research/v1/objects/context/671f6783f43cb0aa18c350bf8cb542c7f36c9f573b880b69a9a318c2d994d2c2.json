@@ -1,0 +1,25 @@
+{
+  "id": "671f6783f43cb0aa18c350bf8cb542c7f36c9f573b880b69a9a318c2d994d2c2",
+  "kind": "context",
+  "value": {
+    "scope": "TEAM",
+    "entityId": "espn-team:14",
+    "category": "VENUE",
+    "field": "venue.context",
+    "value": {
+      "id": "9119",
+      "name": "Melbourne Cricket Ground",
+      "indoor": false
+    },
+    "source": {
+      "provider": "ESPN",
+      "url": "https://site.web.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard",
+      "providerRecordId": null,
+      "retrievedAt": "2026-09-08T02:41:41.126Z",
+      "effectiveAt": null,
+      "rawPayloadHash": "05c2e0bbdc90868df157abfac336ffeed6374424a475864af65ec57fe78d040f"
+    },
+    "validity": "VALID",
+    "freshness": "FRESH"
+  }
+}

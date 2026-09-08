@@ -1,0 +1,20 @@
+{
+  "id": "33c1b9ed6377ef72d3b9c560b1d03a169e0c4e83908bac023593c1440a85caed",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:3117251",
+    "participant": "Christian McCaffrey",
+    "canonicalGameId": "espn:401872657",
+    "market": "player_reception_yds",
+    "side": "Under",
+    "line": 39.5,
+    "price": -109,
+    "sportsbook": "DraftKings",
+    "providerEventId": "acc580d74344ea3b31bbcdd057fe6a9c",
+    "quoteTimestamp": "2026-09-08T02:40:35Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "3b8fbde40f90fa86262d632d16af90fd77a28dac4c1236e83acc697ef8b5b17b",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

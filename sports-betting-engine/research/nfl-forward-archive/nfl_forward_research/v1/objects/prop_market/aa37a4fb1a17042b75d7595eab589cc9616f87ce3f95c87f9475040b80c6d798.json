@@ -1,0 +1,20 @@
+{
+  "id": "aa37a4fb1a17042b75d7595eab589cc9616f87ce3f95c87f9475040b80c6d798",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:16737",
+    "participant": "Mike Evans",
+    "canonicalGameId": "espn:401872657",
+    "market": "player_receptions",
+    "side": "Under",
+    "line": 3.5,
+    "price": 105,
+    "sportsbook": "Bovada",
+    "providerEventId": "acc580d74344ea3b31bbcdd057fe6a9c",
+    "quoteTimestamp": "2026-09-08T02:41:31Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "3b8fbde40f90fa86262d632d16af90fd77a28dac4c1236e83acc697ef8b5b17b",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

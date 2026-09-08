@@ -1,0 +1,19 @@
+{
+  "id": "0306695b516f24a73dc64ff3e3002e115f748fcdd2651755a60ea64014f166d6",
+  "kind": "player_identity",
+  "value": {
+    "canonicalPlayerId": "espn-player:3043116",
+    "providerPlayerIds": {
+      "ESPN": "3043116"
+    },
+    "name": "Demarcus Robinson",
+    "teamId": "espn-team:25",
+    "position": "WR",
+    "season": 2026,
+    "effectiveAt": "2026-09-08T02:41:41.126Z",
+    "rookie": "NO",
+    "newTeam": "UNKNOWN",
+    "teamChange": "UNKNOWN",
+    "positionChange": "UNKNOWN"
+  }
+}

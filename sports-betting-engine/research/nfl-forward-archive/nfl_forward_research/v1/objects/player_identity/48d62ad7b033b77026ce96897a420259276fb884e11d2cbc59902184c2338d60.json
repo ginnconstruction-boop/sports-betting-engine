@@ -1,0 +1,19 @@
+{
+  "id": "48d62ad7b033b77026ce96897a420259276fb884e11d2cbc59902184c2338d60",
+  "kind": "player_identity",
+  "value": {
+    "canonicalPlayerId": "espn-player:4430878",
+    "providerPlayerIds": {
+      "ESPN": "4430878"
+    },
+    "name": "Jaxon Smith-Njigba",
+    "teamId": "espn-team:26",
+    "position": "WR",
+    "season": 2026,
+    "effectiveAt": "2026-09-08T02:41:41.126Z",
+    "rookie": "NO",
+    "newTeam": "UNKNOWN",
+    "teamChange": "UNKNOWN",
+    "positionChange": "UNKNOWN"
+  }
+}

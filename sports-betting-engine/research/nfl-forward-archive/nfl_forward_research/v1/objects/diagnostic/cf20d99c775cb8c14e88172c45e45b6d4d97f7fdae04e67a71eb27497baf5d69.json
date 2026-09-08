@@ -1,0 +1,21 @@
+{
+  "id": "cf20d99c775cb8c14e88172c45e45b6d4d97f7fdae04e67a71eb27497baf5d69",
+  "kind": "diagnostic",
+  "value": {
+    "scope": "PLAYER",
+    "category": "STARTER_STATUS",
+    "entityId": "espn-player:3912547",
+    "forecastAt": "2026-09-08T02:41:41.126Z",
+    "availableFields": 1,
+    "requiredFields": 1,
+    "notes": [],
+    "stages": {
+      "SOURCE_RETRIEVAL": "PASS",
+      "NORMALIZATION": "PASS",
+      "ENTITY_MATCHING": "PASS",
+      "CONTEXT_ATTACHMENT": "PASS",
+      "FIELD_VALIDITY": "PASS",
+      "FRESHNESS_AT_FORECAST_TIME": "PASS"
+    }
+  }
+}

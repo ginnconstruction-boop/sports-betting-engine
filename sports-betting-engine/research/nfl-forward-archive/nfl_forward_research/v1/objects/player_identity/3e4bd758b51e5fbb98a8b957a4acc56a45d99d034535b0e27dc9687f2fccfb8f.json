@@ -1,0 +1,19 @@
+{
+  "id": "3e4bd758b51e5fbb98a8b957a4acc56a45d99d034535b0e27dc9687f2fccfb8f",
+  "kind": "player_identity",
+  "value": {
+    "canonicalPlayerId": "espn-player:4361741",
+    "providerPlayerIds": {
+      "ESPN": "4361741"
+    },
+    "name": "Brock Purdy",
+    "teamId": "espn-team:25",
+    "position": "QB",
+    "season": 2026,
+    "effectiveAt": "2026-09-08T02:41:41.126Z",
+    "rookie": "NO",
+    "newTeam": "UNKNOWN",
+    "teamChange": "UNKNOWN",
+    "positionChange": "UNKNOWN"
+  }
+}

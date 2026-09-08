@@ -1,0 +1,19 @@
+{
+  "id": "348bc90e1212f7232c9bb66ad9efab96cfa7e2ee400e8dfac7019225d5190d2f",
+  "kind": "player_identity",
+  "value": {
+    "canonicalPlayerId": "espn-player:4685512",
+    "providerPlayerIds": {
+      "ESPN": "4685512"
+    },
+    "name": "Jadarian Price",
+    "teamId": "espn-team:26",
+    "position": "RB",
+    "season": 2026,
+    "effectiveAt": "2026-09-08T02:41:41.126Z",
+    "rookie": "YES",
+    "newTeam": "UNKNOWN",
+    "teamChange": "UNKNOWN",
+    "positionChange": "UNKNOWN"
+  }
+}

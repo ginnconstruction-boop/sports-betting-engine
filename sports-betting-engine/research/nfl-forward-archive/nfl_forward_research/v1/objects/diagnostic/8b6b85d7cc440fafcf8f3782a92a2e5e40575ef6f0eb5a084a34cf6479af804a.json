@@ -1,0 +1,23 @@
+{
+  "id": "8b6b85d7cc440fafcf8f3782a92a2e5e40575ef6f0eb5a084a34cf6479af804a",
+  "kind": "diagnostic",
+  "value": {
+    "scope": "PLAYER",
+    "category": "ROUTE_PARTICIPATION",
+    "entityId": "espn-player:3126486",
+    "forecastAt": "2026-09-08T02:41:41.126Z",
+    "availableFields": 0,
+    "requiredFields": 1,
+    "notes": [
+      "ROUTE_PARTICIPATION remains UNKNOWN at forecast time."
+    ],
+    "stages": {
+      "SOURCE_RETRIEVAL": "UNKNOWN",
+      "NORMALIZATION": "UNKNOWN",
+      "ENTITY_MATCHING": "UNKNOWN",
+      "CONTEXT_ATTACHMENT": "UNKNOWN",
+      "FIELD_VALIDITY": "UNKNOWN",
+      "FRESHNESS_AT_FORECAST_TIME": "UNKNOWN"
+    }
+  }
+}

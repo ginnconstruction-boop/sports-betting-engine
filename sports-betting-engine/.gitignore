@@ -6,6 +6,8 @@ dist/
 snapshots/
 !research/forward-archive/college_forward_research/v1/snapshots/
 !research/forward-archive/college_forward_research/v1/snapshots/*.json
+!research/nfl-forward-archive/nfl_forward_research/v1/snapshots/
+!research/nfl-forward-archive/nfl_forward_research/v1/snapshots/*.json
 output/
 .claude/
 CODEX_CLAUDE_HANDOFF_PROMPT.md

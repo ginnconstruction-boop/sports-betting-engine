@@ -1,0 +1,23 @@
+{
+  "id": "9dc7518acb13b69c09ecff2fd710daccaefe88a966f0e592524b6d611c68ec1b",
+  "kind": "diagnostic",
+  "value": {
+    "scope": "TEAM",
+    "category": "QB_AVAILABILITY",
+    "entityId": "espn-team:25",
+    "forecastAt": "2026-09-08T02:41:41.126Z",
+    "availableFields": 0,
+    "requiredFields": 1,
+    "notes": [
+      "QB_AVAILABILITY is unavailable at this forecast timestamp; no value was invented."
+    ],
+    "stages": {
+      "SOURCE_RETRIEVAL": "UNKNOWN",
+      "NORMALIZATION": "UNKNOWN",
+      "ENTITY_MATCHING": "UNKNOWN",
+      "CONTEXT_ATTACHMENT": "UNKNOWN",
+      "FIELD_VALIDITY": "UNKNOWN",
+      "FRESHNESS_AT_FORECAST_TIME": "UNKNOWN"
+    }
+  }
+}

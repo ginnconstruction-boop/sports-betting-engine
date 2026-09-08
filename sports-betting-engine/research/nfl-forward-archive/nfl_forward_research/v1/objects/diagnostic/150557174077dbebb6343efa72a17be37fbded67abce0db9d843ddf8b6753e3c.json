@@ -1,0 +1,23 @@
+{
+  "id": "150557174077dbebb6343efa72a17be37fbded67abce0db9d843ddf8b6753e3c",
+  "kind": "diagnostic",
+  "value": {
+    "scope": "PLAYER",
+    "category": "QB_RELATIONSHIP",
+    "entityId": "espn-player:4576297",
+    "forecastAt": "2026-09-08T02:41:41.126Z",
+    "availableFields": 0,
+    "requiredFields": 1,
+    "notes": [
+      "QB_RELATIONSHIP remains UNKNOWN at forecast time."
+    ],
+    "stages": {
+      "SOURCE_RETRIEVAL": "UNKNOWN",
+      "NORMALIZATION": "UNKNOWN",
+      "ENTITY_MATCHING": "UNKNOWN",
+      "CONTEXT_ATTACHMENT": "UNKNOWN",
+      "FIELD_VALIDITY": "UNKNOWN",
+      "FRESHNESS_AT_FORECAST_TIME": "UNKNOWN"
+    }
+  }
+}

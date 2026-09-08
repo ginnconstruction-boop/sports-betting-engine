@@ -1,0 +1,88 @@
+{
+  "runId": "a83cb8144d0dfa92a3dedcfd9567d02e",
+  "captureEventId": "manual-7d35cdfd24f7566f3c76fd7f450df381",
+  "trigger": "MANUAL",
+  "startedAt": "2026-09-08T02:41:41.126Z",
+  "completedAt": "2026-09-08T02:41:44.670Z",
+  "scheduledFor": null,
+  "dryRun": false,
+  "status": "SUCCESS",
+  "eligibleGames": 2,
+  "plannedRequests": [
+    {
+      "provider": "ESPN",
+      "category": "ROSTER_DEPTH_SUMMARY",
+      "maximumRequests": 10,
+      "estimatedCredits": 0,
+      "priority": 1,
+      "scope": "Every eligible game; shared team payloads are cached per run."
+    },
+    {
+      "provider": "NFL.com",
+      "category": "OFFICIAL_GAME_DAY_INACTIVES",
+      "maximumRequests": 1,
+      "estimatedCredits": 0,
+      "priority": 2,
+      "scope": "One official-page observation for all eligible games."
+    },
+    {
+      "provider": "The Odds API",
+      "category": "CORE_GAME_AND_PROP_MARKETS",
+      "maximumRequests": 2,
+      "estimatedCredits": 20,
+      "priority": 3,
+      "scope": "One bounded no-retry request per matched event, nearest kickoff first."
+    }
+  ],
+  "observations": [
+    {
+      "gameId": "espn:401872656",
+      "status": "CAPTURED",
+      "snapshotId": "20696d6cfd4e0b9155cb7b776e9f693c0644159f2f599bbdaf7c0bc3c57c1193",
+      "message": "Immutable forward snapshot archived."
+    },
+    {
+      "gameId": "espn:401872657",
+      "status": "CAPTURED",
+      "snapshotId": "2c3bad0fa84721f746ab1939f6255a49b255cd407893e95af6e89376d9ea77c7",
+      "message": "Immutable forward snapshot archived."
+    }
+  ],
+  "apiUsage": [
+    {
+      "provider": "ESPN",
+      "requests": 10,
+      "estimatedCredits": 0,
+      "actualCredits": 0,
+      "cacheHits": 0,
+      "retries": 0,
+      "failures": 0,
+      "deferred": []
+    },
+    {
+      "provider": "NFL.com",
+      "requests": 1,
+      "estimatedCredits": 0,
+      "actualCredits": 0,
+      "cacheHits": 0,
+      "retries": 0,
+      "failures": 0,
+      "deferred": []
+    },
+    {
+      "provider": "The Odds API",
+      "requests": 2,
+      "estimatedCredits": 20,
+      "actualCredits": 20,
+      "cacheHits": 0,
+      "retries": 0,
+      "failures": 0,
+      "deferred": []
+    }
+  ],
+  "discoveryFailures": [],
+  "providerFailures": [],
+  "deferred": [
+    "54 existing-formula prop projections deferred by public-source request cap."
+  ]
+}

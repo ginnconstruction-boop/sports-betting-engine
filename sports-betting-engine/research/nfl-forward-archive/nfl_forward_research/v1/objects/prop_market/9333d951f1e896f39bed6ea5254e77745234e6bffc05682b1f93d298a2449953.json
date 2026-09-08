@@ -1,0 +1,20 @@
+{
+  "id": "9333d951f1e896f39bed6ea5254e77745234e6bffc05682b1f93d298a2449953",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:3046439",
+    "participant": "Hunter Henry",
+    "canonicalGameId": "espn:401872656",
+    "market": "player_receptions",
+    "side": "Over",
+    "line": 3.5,
+    "price": 134,
+    "sportsbook": "FanDuel",
+    "providerEventId": "8c94552d022acec4a0458d70c19d3da9",
+    "quoteTimestamp": "2026-09-08T02:40:56Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "f41d083f11311d6b10542d833584c3b7d18c9d0bb60084b7a0ec1adc0e3b9088",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

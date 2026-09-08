@@ -1,0 +1,20 @@
+{
+  "id": "345acdb16300a2c2cbb3d280ff1031b238fd3442f5b410038bae30aaf2979336",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:4569173",
+    "participant": "Rhamondre Stevenson",
+    "canonicalGameId": "espn:401872656",
+    "market": "player_receptions",
+    "side": "Under",
+    "line": 3.5,
+    "price": -154,
+    "sportsbook": "FanDuel",
+    "providerEventId": "8c94552d022acec4a0458d70c19d3da9",
+    "quoteTimestamp": "2026-09-08T02:40:56Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "f41d083f11311d6b10542d833584c3b7d18c9d0bb60084b7a0ec1adc0e3b9088",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

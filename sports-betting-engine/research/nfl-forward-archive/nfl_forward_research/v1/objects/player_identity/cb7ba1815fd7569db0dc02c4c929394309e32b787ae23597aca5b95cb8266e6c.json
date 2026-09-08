@@ -1,0 +1,19 @@
+{
+  "id": "cb7ba1815fd7569db0dc02c4c929394309e32b787ae23597aca5b95cb8266e6c",
+  "kind": "player_identity",
+  "value": {
+    "canonicalPlayerId": "espn-player:3046439",
+    "providerPlayerIds": {
+      "ESPN": "3046439"
+    },
+    "name": "Hunter Henry",
+    "teamId": "espn-team:17",
+    "position": "TE",
+    "season": 2026,
+    "effectiveAt": "2026-09-08T02:41:41.126Z",
+    "rookie": "NO",
+    "newTeam": "UNKNOWN",
+    "teamChange": "UNKNOWN",
+    "positionChange": "UNKNOWN"
+  }
+}

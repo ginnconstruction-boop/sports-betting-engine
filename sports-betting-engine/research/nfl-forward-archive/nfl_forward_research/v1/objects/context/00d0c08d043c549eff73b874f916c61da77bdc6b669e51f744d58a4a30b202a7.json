@@ -1,0 +1,21 @@
+{
+  "id": "00d0c08d043c549eff73b874f916c61da77bdc6b669e51f744d58a4a30b202a7",
+  "kind": "context",
+  "value": {
+    "scope": "TEAM",
+    "entityId": "espn-team:26",
+    "category": "SCHEDULE",
+    "field": "schedule.scheduled_kickoff",
+    "value": "2026-09-10T00:20Z",
+    "source": {
+      "provider": "ESPN",
+      "url": "https://site.web.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard",
+      "providerRecordId": null,
+      "retrievedAt": "2026-09-08T02:41:41.126Z",
+      "effectiveAt": null,
+      "rawPayloadHash": "626c2c8a5bc6f496436ce4af1a8d314e723592d405006fc651dc91604a70d582"
+    },
+    "validity": "VALID",
+    "freshness": "FRESH"
+  }
+}

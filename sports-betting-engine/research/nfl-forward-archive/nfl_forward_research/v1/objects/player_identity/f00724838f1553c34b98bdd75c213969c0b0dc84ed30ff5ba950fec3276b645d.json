@@ -1,0 +1,19 @@
+{
+  "id": "f00724838f1553c34b98bdd75c213969c0b0dc84ed30ff5ba950fec3276b645d",
+  "kind": "player_identity",
+  "value": {
+    "canonicalPlayerId": "espn-player:4570037",
+    "providerPlayerIds": {
+      "ESPN": "4570037"
+    },
+    "name": "Terrance Ferguson",
+    "teamId": "espn-team:14",
+    "position": "TE",
+    "season": 2026,
+    "effectiveAt": "2026-09-08T02:41:41.126Z",
+    "rookie": "NO",
+    "newTeam": "UNKNOWN",
+    "teamChange": "UNKNOWN",
+    "positionChange": "UNKNOWN"
+  }
+}

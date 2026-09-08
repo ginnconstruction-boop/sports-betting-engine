@@ -1,0 +1,27 @@
+{
+  "id": "bfedbf6ac6b4259080d9630b0ac2038427190585dce149b13a7fb952e3c96f94",
+  "kind": "context",
+  "value": {
+    "scope": "TEAM",
+    "entityId": "espn-team:17",
+    "category": "WEATHER",
+    "field": "weather.observation",
+    "value": {
+      "temperatureF": 74,
+      "windMph": null,
+      "gustMph": 15,
+      "precipitationProbability": 0,
+      "indoor": null
+    },
+    "source": {
+      "provider": "ESPN",
+      "url": "https://site.web.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=401872656",
+      "providerRecordId": null,
+      "retrievedAt": "2026-09-08T02:41:41.126Z",
+      "effectiveAt": null,
+      "rawPayloadHash": "a93b2f38d2754230067d423ec931d9257e3c7469e08450754b80741bcd96ad3e"
+    },
+    "validity": "VALID",
+    "freshness": "FRESH"
+  }
+}

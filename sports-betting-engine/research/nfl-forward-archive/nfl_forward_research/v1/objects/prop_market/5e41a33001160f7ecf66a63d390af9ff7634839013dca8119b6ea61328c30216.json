@@ -1,0 +1,20 @@
+{
+  "id": "5e41a33001160f7ecf66a63d390af9ff7634839013dca8119b6ea61328c30216",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:4242557",
+    "participant": "Colby Parkinson",
+    "canonicalGameId": "espn:401872657",
+    "market": "player_reception_yds",
+    "side": "Over",
+    "line": 20.5,
+    "price": -117,
+    "sportsbook": "BetRivers",
+    "providerEventId": "acc580d74344ea3b31bbcdd057fe6a9c",
+    "quoteTimestamp": "2026-09-08T02:41:10Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "3b8fbde40f90fa86262d632d16af90fd77a28dac4c1236e83acc697ef8b5b17b",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

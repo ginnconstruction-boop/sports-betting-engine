@@ -1,0 +1,20 @@
+{
+  "id": "75dae2626c4d6ad55904ae6f9b6fb4e722dbf97bd54ebb8f07c194455b78671c",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:16800",
+    "participant": "Davante Adams",
+    "canonicalGameId": "espn:401872657",
+    "market": "player_reception_yds",
+    "side": "Under",
+    "line": 51.5,
+    "price": -115,
+    "sportsbook": "Bovada",
+    "providerEventId": "acc580d74344ea3b31bbcdd057fe6a9c",
+    "quoteTimestamp": "2026-09-08T02:41:31Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "3b8fbde40f90fa86262d632d16af90fd77a28dac4c1236e83acc697ef8b5b17b",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

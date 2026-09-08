@@ -1,0 +1,82 @@
+{
+  "id": "47d3b9362a9f06306f822a79b7ffde17db1fd8e9067f5928255181c632c29b8a",
+  "kind": "inactive_evidence",
+  "value": {
+    "state": "SEASON_PENDING",
+    "source": {
+      "provider": "NFL.com",
+      "url": "https://www.nfl.com/inactives/",
+      "providerRecordId": null,
+      "retrievedAt": "2026-09-08T02:41:41.126Z",
+      "effectiveAt": null,
+      "rawPayloadHash": "c65eca9b63353a1df653f975bb8e5efe65928f48012fa0dc9a0b02d869b292cc"
+    },
+    "players": [
+      {
+        "canonicalPlayerId": "espn-player:4576297",
+        "state": "STATUS_PENDING",
+        "reason": "Official NFL page has not published game-day inactive lists; participation remains pending."
+      },
+      {
+        "canonicalPlayerId": "espn-player:3912547",
+        "state": "STATUS_PENDING",
+        "reason": "Official NFL page has not published game-day inactive lists; participation remains pending."
+      },
+      {
+        "canonicalPlayerId": "espn-player:4429835",
+        "state": "STATUS_PENDING",
+        "reason": "Official NFL page has not published game-day inactive lists; participation remains pending."
+      },
+      {
+        "canonicalPlayerId": "espn-player:2977187",
+        "state": "STATUS_PENDING",
+        "reason": "Official NFL page has not published game-day inactive lists; participation remains pending."
+      },
+      {
+        "canonicalPlayerId": "espn-player:4685512",
+        "state": "STATUS_PENDING",
+        "reason": "Official NFL page has not published game-day inactive lists; participation remains pending."
+      },
+      {
+        "canonicalPlayerId": "espn-player:4032473",
+        "state": "STATUS_PENDING",
+        "reason": "Official NFL page has not published game-day inactive lists; participation remains pending."
+      },
+      {
+        "canonicalPlayerId": "espn-player:4430878",
+        "state": "STATUS_PENDING",
+        "reason": "Official NFL page has not published game-day inactive lists; participation remains pending."
+      },
+      {
+        "canonicalPlayerId": "espn-player:4047646",
+        "state": "STATUS_PENDING",
+        "reason": "Official NFL page has not published game-day inactive lists; participation remains pending."
+      },
+      {
+        "canonicalPlayerId": "espn-player:4361432",
+        "state": "STATUS_PENDING",
+        "reason": "Official NFL page has not published game-day inactive lists; participation remains pending."
+      },
+      {
+        "canonicalPlayerId": "espn-player:4427095",
+        "state": "STATUS_PENDING",
+        "reason": "Official NFL page has not published game-day inactive lists; participation remains pending."
+      },
+      {
+        "canonicalPlayerId": "espn-player:3046439",
+        "state": "STATUS_PENDING",
+        "reason": "Official NFL page has not published game-day inactive lists; participation remains pending."
+      },
+      {
+        "canonicalPlayerId": "espn-player:4431452",
+        "state": "STATUS_PENDING",
+        "reason": "Official NFL page has not published game-day inactive lists; participation remains pending."
+      },
+      {
+        "canonicalPlayerId": "espn-player:4569173",
+        "state": "STATUS_PENDING",
+        "reason": "Official NFL page has not published game-day inactive lists; participation remains pending."
+      }
+    ]
+  }
+}

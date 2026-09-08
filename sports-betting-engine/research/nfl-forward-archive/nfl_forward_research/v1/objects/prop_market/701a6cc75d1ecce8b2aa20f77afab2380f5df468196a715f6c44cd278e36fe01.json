@@ -1,0 +1,20 @@
+{
+  "id": "701a6cc75d1ecce8b2aa20f77afab2380f5df468196a715f6c44cd278e36fe01",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:3912547",
+    "participant": "Sam Darnold",
+    "canonicalGameId": "espn:401872656",
+    "market": "player_pass_completions",
+    "side": "Under",
+    "line": 20.5,
+    "price": -110,
+    "sportsbook": "Fanatics",
+    "providerEventId": "8c94552d022acec4a0458d70c19d3da9",
+    "quoteTimestamp": "2026-09-08T02:41:18Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "f41d083f11311d6b10542d833584c3b7d18c9d0bb60084b7a0ec1adc0e3b9088",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

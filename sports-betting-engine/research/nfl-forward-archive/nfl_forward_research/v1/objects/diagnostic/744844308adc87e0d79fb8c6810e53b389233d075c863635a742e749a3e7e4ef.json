@@ -1,0 +1,23 @@
+{
+  "id": "744844308adc87e0d79fb8c6810e53b389233d075c863635a742e749a3e7e4ef",
+  "kind": "diagnostic",
+  "value": {
+    "scope": "TEAM",
+    "category": "RUSH_EFFICIENCY",
+    "entityId": "espn-team:26",
+    "forecastAt": "2026-09-08T02:41:41.126Z",
+    "availableFields": 0,
+    "requiredFields": 1,
+    "notes": [
+      "RUSH_EFFICIENCY is unavailable at this forecast timestamp; no value was invented."
+    ],
+    "stages": {
+      "SOURCE_RETRIEVAL": "UNKNOWN",
+      "NORMALIZATION": "UNKNOWN",
+      "ENTITY_MATCHING": "UNKNOWN",
+      "CONTEXT_ATTACHMENT": "UNKNOWN",
+      "FIELD_VALIDITY": "UNKNOWN",
+      "FRESHNESS_AT_FORECAST_TIME": "UNKNOWN"
+    }
+  }
+}

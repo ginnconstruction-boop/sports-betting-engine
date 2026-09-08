@@ -1,0 +1,20 @@
+{
+  "id": "1a4b36bbd26459148a6a3d31469dbe43f4a6355b4da6b088a35702e9c807ea84",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:4576297",
+    "participant": "AJ Barner",
+    "canonicalGameId": "espn:401872656",
+    "market": "player_reception_yds",
+    "side": "Under",
+    "line": 25.5,
+    "price": -115,
+    "sportsbook": "Bovada",
+    "providerEventId": "8c94552d022acec4a0458d70c19d3da9",
+    "quoteTimestamp": "2026-09-08T02:40:37Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "f41d083f11311d6b10542d833584c3b7d18c9d0bb60084b7a0ec1adc0e3b9088",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

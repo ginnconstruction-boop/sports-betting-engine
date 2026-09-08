@@ -1,0 +1,23 @@
+{
+  "id": "5e7c13a5cc95ae7e5b0cc95b3c8148e5f28801b4a200f1b03cbf987a88055e1f",
+  "kind": "diagnostic",
+  "value": {
+    "scope": "PLAYER",
+    "category": "TARGET_SHARE",
+    "entityId": "espn-player:2977187",
+    "forecastAt": "2026-09-08T02:41:41.126Z",
+    "availableFields": 0,
+    "requiredFields": 1,
+    "notes": [
+      "TARGET_SHARE remains UNKNOWN at forecast time."
+    ],
+    "stages": {
+      "SOURCE_RETRIEVAL": "UNKNOWN",
+      "NORMALIZATION": "UNKNOWN",
+      "ENTITY_MATCHING": "UNKNOWN",
+      "CONTEXT_ATTACHMENT": "UNKNOWN",
+      "FIELD_VALIDITY": "UNKNOWN",
+      "FRESHNESS_AT_FORECAST_TIME": "UNKNOWN"
+    }
+  }
+}

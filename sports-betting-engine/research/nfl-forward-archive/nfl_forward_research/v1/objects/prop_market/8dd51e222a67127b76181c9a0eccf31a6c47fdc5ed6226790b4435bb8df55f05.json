@@ -1,0 +1,20 @@
+{
+  "id": "8dd51e222a67127b76181c9a0eccf31a6c47fdc5ed6226790b4435bb8df55f05",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:4570037",
+    "participant": "Terrance Ferguson",
+    "canonicalGameId": "espn:401872657",
+    "market": "player_reception_yds",
+    "side": "Under",
+    "line": 23.5,
+    "price": -114,
+    "sportsbook": "BetRivers",
+    "providerEventId": "acc580d74344ea3b31bbcdd057fe6a9c",
+    "quoteTimestamp": "2026-09-08T02:41:10Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "3b8fbde40f90fa86262d632d16af90fd77a28dac4c1236e83acc697ef8b5b17b",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

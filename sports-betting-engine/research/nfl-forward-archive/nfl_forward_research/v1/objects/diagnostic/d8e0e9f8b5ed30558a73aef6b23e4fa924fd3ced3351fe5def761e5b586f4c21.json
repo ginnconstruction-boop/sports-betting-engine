@@ -1,0 +1,23 @@
+{
+  "id": "d8e0e9f8b5ed30558a73aef6b23e4fa924fd3ced3351fe5def761e5b586f4c21",
+  "kind": "diagnostic",
+  "value": {
+    "scope": "PLAYER",
+    "category": "TEAM_ROLE",
+    "entityId": "espn-player:16800",
+    "forecastAt": "2026-09-08T02:41:41.126Z",
+    "availableFields": 0,
+    "requiredFields": 1,
+    "notes": [
+      "TEAM_ROLE remains UNKNOWN at forecast time."
+    ],
+    "stages": {
+      "SOURCE_RETRIEVAL": "UNKNOWN",
+      "NORMALIZATION": "UNKNOWN",
+      "ENTITY_MATCHING": "UNKNOWN",
+      "CONTEXT_ATTACHMENT": "UNKNOWN",
+      "FIELD_VALIDITY": "UNKNOWN",
+      "FRESHNESS_AT_FORECAST_TIME": "UNKNOWN"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "ae258ebd4d2f410b02fd1bc75b3a2279dd61f026fa87e2d80dbe0f8dd5ec80db",
+  "kind": "diagnostic",
+  "value": {
+    "scope": "TEAM",
+    "category": "ROSTER",
+    "entityId": "espn-team:26",
+    "forecastAt": "2026-09-08T02:41:41.126Z",
+    "availableFields": 1,
+    "requiredFields": 1,
+    "notes": [],
+    "stages": {
+      "SOURCE_RETRIEVAL": "PASS",
+      "NORMALIZATION": "PASS",
+      "ENTITY_MATCHING": "PASS",
+      "CONTEXT_ATTACHMENT": "PASS",
+      "FIELD_VALIDITY": "PASS",
+      "FRESHNESS_AT_FORECAST_TIME": "PASS"
+    }
+  }
+}

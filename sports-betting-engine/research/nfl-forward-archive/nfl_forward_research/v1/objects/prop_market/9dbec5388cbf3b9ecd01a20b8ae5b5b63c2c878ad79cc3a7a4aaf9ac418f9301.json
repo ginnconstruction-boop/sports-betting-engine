@@ -1,0 +1,20 @@
+{
+  "id": "9dbec5388cbf3b9ecd01a20b8ae5b5b63c2c878ad79cc3a7a4aaf9ac418f9301",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:4570037",
+    "participant": "Terrance Ferguson",
+    "canonicalGameId": "espn:401872657",
+    "market": "player_receptions",
+    "side": "Under",
+    "line": 1.5,
+    "price": 125,
+    "sportsbook": "Bovada",
+    "providerEventId": "acc580d74344ea3b31bbcdd057fe6a9c",
+    "quoteTimestamp": "2026-09-08T02:41:31Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "3b8fbde40f90fa86262d632d16af90fd77a28dac4c1236e83acc697ef8b5b17b",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

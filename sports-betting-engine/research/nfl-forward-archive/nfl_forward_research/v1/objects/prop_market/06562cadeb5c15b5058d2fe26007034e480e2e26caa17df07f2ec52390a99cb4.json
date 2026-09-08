@@ -1,0 +1,20 @@
+{
+  "id": "06562cadeb5c15b5058d2fe26007034e480e2e26caa17df07f2ec52390a99cb4",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:3043116",
+    "participant": "Demarcus Robinson",
+    "canonicalGameId": "espn:401872657",
+    "market": "player_receptions",
+    "side": "Over",
+    "line": 1.5,
+    "price": 150,
+    "sportsbook": "Bovada",
+    "providerEventId": "acc580d74344ea3b31bbcdd057fe6a9c",
+    "quoteTimestamp": "2026-09-08T02:41:31Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "3b8fbde40f90fa86262d632d16af90fd77a28dac4c1236e83acc697ef8b5b17b",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

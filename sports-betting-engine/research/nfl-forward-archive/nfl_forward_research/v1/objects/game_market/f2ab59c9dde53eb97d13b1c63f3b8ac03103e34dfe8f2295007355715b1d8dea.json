@@ -1,0 +1,20 @@
+{
+  "id": "f2ab59c9dde53eb97d13b1c63f3b8ac03103e34dfe8f2295007355715b1d8dea",
+  "kind": "game_market",
+  "value": {
+    "kind": "GAME",
+    "canonicalPlayerId": null,
+    "participant": null,
+    "canonicalGameId": "espn:401872656",
+    "market": "totals",
+    "side": "Under",
+    "line": 44,
+    "price": -110,
+    "sportsbook": "MyBookie.ag",
+    "providerEventId": "8c94552d022acec4a0458d70c19d3da9",
+    "quoteTimestamp": "2026-09-08T02:39:49Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "f41d083f11311d6b10542d833584c3b7d18c9d0bb60084b7a0ec1adc0e3b9088",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

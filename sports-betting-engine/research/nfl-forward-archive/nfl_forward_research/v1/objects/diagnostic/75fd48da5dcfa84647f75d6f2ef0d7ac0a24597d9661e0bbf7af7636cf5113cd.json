@@ -1,0 +1,23 @@
+{
+  "id": "75fd48da5dcfa84647f75d6f2ef0d7ac0a24597d9661e0bbf7af7636cf5113cd",
+  "kind": "diagnostic",
+  "value": {
+    "scope": "PLAYER",
+    "category": "RECENT_OPPORTUNITY",
+    "entityId": "espn-player:4047646",
+    "forecastAt": "2026-09-08T02:41:41.126Z",
+    "availableFields": 0,
+    "requiredFields": 1,
+    "notes": [
+      "RECENT_OPPORTUNITY remains UNKNOWN at forecast time."
+    ],
+    "stages": {
+      "SOURCE_RETRIEVAL": "UNKNOWN",
+      "NORMALIZATION": "UNKNOWN",
+      "ENTITY_MATCHING": "UNKNOWN",
+      "CONTEXT_ATTACHMENT": "UNKNOWN",
+      "FIELD_VALIDITY": "UNKNOWN",
+      "FRESHNESS_AT_FORECAST_TIME": "UNKNOWN"
+    }
+  }
+}

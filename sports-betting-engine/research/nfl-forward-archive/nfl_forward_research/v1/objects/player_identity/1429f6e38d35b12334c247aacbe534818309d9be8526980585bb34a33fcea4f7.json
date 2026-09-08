@@ -1,0 +1,19 @@
+{
+  "id": "1429f6e38d35b12334c247aacbe534818309d9be8526980585bb34a33fcea4f7",
+  "kind": "player_identity",
+  "value": {
+    "canonicalPlayerId": "espn-player:4569173",
+    "providerPlayerIds": {
+      "ESPN": "4569173"
+    },
+    "name": "Rhamondre Stevenson",
+    "teamId": "espn-team:17",
+    "position": "RB",
+    "season": 2026,
+    "effectiveAt": "2026-09-08T02:41:41.126Z",
+    "rookie": "NO",
+    "newTeam": "UNKNOWN",
+    "teamChange": "UNKNOWN",
+    "positionChange": "UNKNOWN"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "id": "435f95bf3aad6d991258b8f1b3681ff79c56729b38a485019ea2149c66815bcc",
+  "kind": "diagnostic",
+  "value": {
+    "scope": "PLAYER",
+    "category": "INJURY_STATUS",
+    "entityId": "espn-player:2977187",
+    "forecastAt": "2026-09-08T02:41:41.126Z",
+    "availableFields": 0,
+    "requiredFields": 1,
+    "notes": [
+      "INJURY_STATUS remains UNKNOWN at forecast time."
+    ],
+    "stages": {
+      "SOURCE_RETRIEVAL": "UNKNOWN",
+      "NORMALIZATION": "UNKNOWN",
+      "ENTITY_MATCHING": "UNKNOWN",
+      "CONTEXT_ATTACHMENT": "UNKNOWN",
+      "FIELD_VALIDITY": "UNKNOWN",
+      "FRESHNESS_AT_FORECAST_TIME": "UNKNOWN"
+    }
+  }
+}

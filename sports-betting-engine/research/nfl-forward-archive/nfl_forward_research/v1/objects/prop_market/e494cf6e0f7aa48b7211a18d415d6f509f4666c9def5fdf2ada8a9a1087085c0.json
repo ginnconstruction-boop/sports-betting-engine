@@ -1,0 +1,20 @@
+{
+  "id": "e494cf6e0f7aa48b7211a18d415d6f509f4666c9def5fdf2ada8a9a1087085c0",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:4429835",
+    "participant": "George Holani",
+    "canonicalGameId": "espn:401872656",
+    "market": "player_receptions",
+    "side": "Under",
+    "line": 1.5,
+    "price": 112,
+    "sportsbook": "BetOnline.ag",
+    "providerEventId": "8c94552d022acec4a0458d70c19d3da9",
+    "quoteTimestamp": "2026-09-08T02:40:38Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "f41d083f11311d6b10542d833584c3b7d18c9d0bb60084b7a0ec1adc0e3b9088",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

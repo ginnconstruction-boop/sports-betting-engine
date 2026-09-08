@@ -1,0 +1,23 @@
+{
+  "id": "37faaa26709ad00260265c9ba48ba4eda89ffe7dc36b88ea8d8820f8b97e7b96",
+  "kind": "diagnostic",
+  "value": {
+    "scope": "TEAM",
+    "category": "OFFENSIVE_EFFICIENCY",
+    "entityId": "espn-team:14",
+    "forecastAt": "2026-09-08T02:41:41.126Z",
+    "availableFields": 0,
+    "requiredFields": 1,
+    "notes": [
+      "OFFENSIVE_EFFICIENCY is unavailable at this forecast timestamp; no value was invented."
+    ],
+    "stages": {
+      "SOURCE_RETRIEVAL": "UNKNOWN",
+      "NORMALIZATION": "UNKNOWN",
+      "ENTITY_MATCHING": "UNKNOWN",
+      "CONTEXT_ATTACHMENT": "UNKNOWN",
+      "FIELD_VALIDITY": "UNKNOWN",
+      "FRESHNESS_AT_FORECAST_TIME": "UNKNOWN"
+    }
+  }
+}

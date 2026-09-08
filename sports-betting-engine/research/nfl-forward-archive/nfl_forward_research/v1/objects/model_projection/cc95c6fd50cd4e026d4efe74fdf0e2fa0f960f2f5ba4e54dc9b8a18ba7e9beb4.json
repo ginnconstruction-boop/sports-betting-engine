@@ -1,0 +1,13 @@
+{
+  "id": "cc95c6fd50cd4e026d4efe74fdf0e2fa0f960f2f5ba4e54dc9b8a18ba7e9beb4",
+  "kind": "model_projection",
+  "value": {
+    "gameProjection": {
+      "status": "MODEL_UNAVAILABLE",
+      "homeScore": null,
+      "awayScore": null,
+      "homeMargin": null,
+      "version": "nfl-game-line-ridge-research-v2-audit-metrics"
+    }
+  }
+}

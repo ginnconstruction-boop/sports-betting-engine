@@ -1,0 +1,21 @@
+{
+  "id": "4837f8625eaafb601eacf19646caa3921bf301d9e042d57cd1c2dae18e63a4ba",
+  "kind": "diagnostic",
+  "value": {
+    "scope": "TEAM",
+    "category": "SCHEDULE",
+    "entityId": "espn-team:26",
+    "forecastAt": "2026-09-08T02:41:41.126Z",
+    "availableFields": 1,
+    "requiredFields": 1,
+    "notes": [],
+    "stages": {
+      "SOURCE_RETRIEVAL": "PASS",
+      "NORMALIZATION": "PASS",
+      "ENTITY_MATCHING": "PASS",
+      "CONTEXT_ATTACHMENT": "PASS",
+      "FIELD_VALIDITY": "PASS",
+      "FRESHNESS_AT_FORECAST_TIME": "PASS"
+    }
+  }
+}

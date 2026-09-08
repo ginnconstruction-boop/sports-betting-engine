@@ -1,0 +1,20 @@
+{
+  "id": "a41b2569d840d3eb5852013cb47a71e037db090ba8b9ac84b8954c2c510d0ff4",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:3126486",
+    "participant": "Deebo Samuel Sr.",
+    "canonicalGameId": "espn:401872657",
+    "market": "player_receptions",
+    "side": "Under",
+    "line": 2.5,
+    "price": 125,
+    "sportsbook": "Bovada",
+    "providerEventId": "acc580d74344ea3b31bbcdd057fe6a9c",
+    "quoteTimestamp": "2026-09-08T02:41:31Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "3b8fbde40f90fa86262d632d16af90fd77a28dac4c1236e83acc697ef8b5b17b",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

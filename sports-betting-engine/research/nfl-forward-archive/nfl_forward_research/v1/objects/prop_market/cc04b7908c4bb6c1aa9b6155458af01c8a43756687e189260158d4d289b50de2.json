@@ -1,0 +1,20 @@
+{
+  "id": "cc04b7908c4bb6c1aa9b6155458af01c8a43756687e189260158d4d289b50de2",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:16002",
+    "participant": "Kyle Juszczyk",
+    "canonicalGameId": "espn:401872657",
+    "market": "player_receptions",
+    "side": "Over",
+    "line": 1.5,
+    "price": 165,
+    "sportsbook": "Bovada",
+    "providerEventId": "acc580d74344ea3b31bbcdd057fe6a9c",
+    "quoteTimestamp": "2026-09-08T02:41:31Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "3b8fbde40f90fa86262d632d16af90fd77a28dac4c1236e83acc697ef8b5b17b",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

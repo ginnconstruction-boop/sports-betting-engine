@@ -1,0 +1,20 @@
+{
+  "id": "7a04df6a5df893c73ff9dfffd6141c9b7e2ebce3c8e3ad2e5d38e76a5b416659",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:4361432",
+    "participant": "Romeo Doubs",
+    "canonicalGameId": "espn:401872656",
+    "market": "player_reception_yds",
+    "side": "Over",
+    "line": 35.5,
+    "price": -117,
+    "sportsbook": "BetRivers",
+    "providerEventId": "8c94552d022acec4a0458d70c19d3da9",
+    "quoteTimestamp": "2026-09-08T02:40:36Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "f41d083f11311d6b10542d833584c3b7d18c9d0bb60084b7a0ec1adc0e3b9088",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

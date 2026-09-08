@@ -1,0 +1,20 @@
+{
+  "id": "326126c121596879b4720b84cb3a2534f46d047ca8f9264b9c380b1d6d129381",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:2977187",
+    "participant": "Cooper Kupp",
+    "canonicalGameId": "espn:401872656",
+    "market": "player_receptions",
+    "side": "Under",
+    "line": 2.5,
+    "price": 100,
+    "sportsbook": "FanDuel",
+    "providerEventId": "8c94552d022acec4a0458d70c19d3da9",
+    "quoteTimestamp": "2026-09-08T02:40:56Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "f41d083f11311d6b10542d833584c3b7d18c9d0bb60084b7a0ec1adc0e3b9088",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

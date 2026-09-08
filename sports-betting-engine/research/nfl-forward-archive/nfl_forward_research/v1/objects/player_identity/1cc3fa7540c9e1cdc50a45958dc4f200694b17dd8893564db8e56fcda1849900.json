@@ -1,0 +1,19 @@
+{
+  "id": "1cc3fa7540c9e1cdc50a45958dc4f200694b17dd8893564db8e56fcda1849900",
+  "kind": "player_identity",
+  "value": {
+    "canonicalPlayerId": "espn-player:4431452",
+    "providerPlayerIds": {
+      "ESPN": "4431452"
+    },
+    "name": "Drake Maye",
+    "teamId": "espn-team:17",
+    "position": "QB",
+    "season": 2026,
+    "effectiveAt": "2026-09-08T02:41:41.126Z",
+    "rookie": "NO",
+    "newTeam": "UNKNOWN",
+    "teamChange": "UNKNOWN",
+    "positionChange": "UNKNOWN"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "ab42cdf1567497baf20bf5f243241be042e81db83f18ded0e37978e9bd063aae",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:4426515",
+    "participant": "Puka Nacua",
+    "canonicalGameId": "espn:401872657",
+    "market": "player_reception_yds",
+    "side": "Over",
+    "line": 90.5,
+    "price": -115,
+    "sportsbook": "Fanatics",
+    "providerEventId": "acc580d74344ea3b31bbcdd057fe6a9c",
+    "quoteTimestamp": "2026-09-08T02:40:11Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "3b8fbde40f90fa86262d632d16af90fd77a28dac4c1236e83acc697ef8b5b17b",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

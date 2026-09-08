@@ -1,0 +1,21 @@
+{
+  "id": "1e2929c47f378481511d0c82bbac292b045711ed3d9942afc1260c9e4c5d71c2",
+  "kind": "diagnostic",
+  "value": {
+    "scope": "TEAM",
+    "category": "VENUE",
+    "entityId": "espn-team:14",
+    "forecastAt": "2026-09-08T02:41:41.126Z",
+    "availableFields": 1,
+    "requiredFields": 1,
+    "notes": [],
+    "stages": {
+      "SOURCE_RETRIEVAL": "PASS",
+      "NORMALIZATION": "PASS",
+      "ENTITY_MATCHING": "PASS",
+      "CONTEXT_ATTACHMENT": "PASS",
+      "FIELD_VALIDITY": "PASS",
+      "FRESHNESS_AT_FORECAST_TIME": "PASS"
+    }
+  }
+}

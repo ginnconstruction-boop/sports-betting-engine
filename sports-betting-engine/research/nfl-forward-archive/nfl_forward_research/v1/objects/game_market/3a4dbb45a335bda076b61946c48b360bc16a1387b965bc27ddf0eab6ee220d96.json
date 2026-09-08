@@ -1,0 +1,20 @@
+{
+  "id": "3a4dbb45a335bda076b61946c48b360bc16a1387b965bc27ddf0eab6ee220d96",
+  "kind": "game_market",
+  "value": {
+    "kind": "GAME",
+    "canonicalPlayerId": null,
+    "participant": null,
+    "canonicalGameId": "espn:401872656",
+    "market": "h2h",
+    "side": "Seattle Seahawks",
+    "line": null,
+    "price": -180,
+    "sportsbook": "Fanatics",
+    "providerEventId": "8c94552d022acec4a0458d70c19d3da9",
+    "quoteTimestamp": "2026-09-08T02:40:56Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "f41d083f11311d6b10542d833584c3b7d18c9d0bb60084b7a0ec1adc0e3b9088",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

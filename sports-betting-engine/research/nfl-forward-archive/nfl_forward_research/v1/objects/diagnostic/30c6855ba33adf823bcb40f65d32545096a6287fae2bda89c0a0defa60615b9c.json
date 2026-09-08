@@ -1,0 +1,23 @@
+{
+  "id": "30c6855ba33adf823bcb40f65d32545096a6287fae2bda89c0a0defa60615b9c",
+  "kind": "diagnostic",
+  "value": {
+    "scope": "TEAM",
+    "category": "CURRENT_SEASON_SAMPLE",
+    "entityId": "espn-team:17",
+    "forecastAt": "2026-09-08T02:41:41.126Z",
+    "availableFields": 0,
+    "requiredFields": 1,
+    "notes": [
+      "CURRENT_SEASON_SAMPLE is unavailable at this forecast timestamp; no value was invented."
+    ],
+    "stages": {
+      "SOURCE_RETRIEVAL": "UNKNOWN",
+      "NORMALIZATION": "UNKNOWN",
+      "ENTITY_MATCHING": "UNKNOWN",
+      "CONTEXT_ATTACHMENT": "UNKNOWN",
+      "FIELD_VALIDITY": "UNKNOWN",
+      "FRESHNESS_AT_FORECAST_TIME": "UNKNOWN"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "id": "93ffe3600f52b552244c6d6c894a0dd9f9d6717136df68ff32bdb3a8a6d80e3a",
+  "kind": "player_identity",
+  "value": {
+    "canonicalPlayerId": "espn-player:4430737",
+    "providerPlayerIds": {
+      "ESPN": "4430737"
+    },
+    "name": "Kyren Williams",
+    "teamId": "espn-team:14",
+    "position": "RB",
+    "season": 2026,
+    "effectiveAt": "2026-09-08T02:41:41.126Z",
+    "rookie": "NO",
+    "newTeam": "UNKNOWN",
+    "teamChange": "UNKNOWN",
+    "positionChange": "UNKNOWN"
+  }
+}

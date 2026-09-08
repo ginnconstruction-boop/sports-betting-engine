@@ -1,0 +1,19 @@
+{
+  "id": "8a5e922fc898e24728ac9edc66e863e54474eeae23895f90b57e1dee391f2fae",
+  "kind": "player_identity",
+  "value": {
+    "canonicalPlayerId": "espn-player:4047646",
+    "providerPlayerIds": {
+      "ESPN": "4047646"
+    },
+    "name": "A.J. Brown",
+    "teamId": "espn-team:17",
+    "position": "WR",
+    "season": 2026,
+    "effectiveAt": "2026-09-08T02:41:41.126Z",
+    "rookie": "NO",
+    "newTeam": "UNKNOWN",
+    "teamChange": "UNKNOWN",
+    "positionChange": "UNKNOWN"
+  }
+}

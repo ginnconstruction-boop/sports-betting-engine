@@ -1,0 +1,20 @@
+{
+  "id": "3af29e29ce97cb5ac8c9e77b6661ca0cd5febf132078ce1d97d300fc59e841f3",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:4685512",
+    "participant": "Jadarian Price",
+    "canonicalGameId": "espn:401872656",
+    "market": "player_rush_attempts",
+    "side": "Under",
+    "line": 13.5,
+    "price": -117,
+    "sportsbook": "DraftKings",
+    "providerEventId": "8c94552d022acec4a0458d70c19d3da9",
+    "quoteTimestamp": "2026-09-08T02:41:05Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "f41d083f11311d6b10542d833584c3b7d18c9d0bb60084b7a0ec1adc0e3b9088",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

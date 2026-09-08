@@ -1,0 +1,33 @@
+{
+  "id": "358549857d61c3c6efd1f7ee9fc94d4259bf7017d31f97152ca491f502afd687",
+  "kind": "game_identity",
+  "value": {
+    "canonicalGameId": "espn:401872656",
+    "providerGameIds": {
+      "ESPN": "401872656",
+      "ODDS_API": "8c94552d022acec4a0458d70c19d3da9"
+    },
+    "season": 2026,
+    "seasonType": "REG",
+    "week": 1,
+    "away": {
+      "canonicalTeamId": "espn-team:17",
+      "name": "New England Patriots",
+      "abbreviation": "NE"
+    },
+    "home": {
+      "canonicalTeamId": "espn-team:26",
+      "name": "Seattle Seahawks",
+      "abbreviation": "SEA"
+    },
+    "scheduledKickoff": "2026-09-10T00:20Z",
+    "venue": {
+      "id": "3673",
+      "name": "Lumen Field",
+      "indoor": false
+    },
+    "neutralSite": false,
+    "international": false,
+    "status": "SCHEDULED"
+  }
+}

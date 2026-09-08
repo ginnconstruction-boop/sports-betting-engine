@@ -1024,6 +1024,7 @@ export function printTopTen(bets: ScoredBet[], windowHours = 24): void {
 
   const lines: string[] = [];
   const p = (s: string) => { lines.push(s); };
+  const footballOnly = bets.length > 0 && bets.every(b => b.sportKey?.startsWith('americanfootball_'));
 
   p('\n');
   const betTierCount = bets.filter(b => b.tier === 'BET').length;
@@ -1033,8 +1034,12 @@ export function printTopTen(bets: ScoredBet[], windowHours = 24): void {
   p('+==============================================================+');
   p('|            RAW SIGNAL SCAN — analysis input only             |');
   p(`|  ${time.padEnd(60)}|`);
-  p(`|  [HOT] BET: ${String(betTierCount).padEnd(3)} | [OK] LEAN: ${String(leanTierCount).padEnd(3)} | ? MONITOR: ${String(monTierCount).padEnd(3)} | Next ${windowHours}hrs          |`);
-  p(`|  Min ${BET_FILTERS.MIN_SIGNALS_REQUIRED} signals | FanDuel+BetMGM | See FINAL CARD below      |`);
+  p(footballOnly
+    ? `|  RESEARCH ROWS: ${String(bets.length).padEnd(3)} | No validated edge or stake | Next ${windowHours}hrs          |`
+    : `|  [HOT] BET: ${String(betTierCount).padEnd(3)} | [OK] LEAN: ${String(leanTierCount).padEnd(3)} | ? MONITOR: ${String(monTierCount).padEnd(3)} | Next ${windowHours}hrs          |`);
+  p(footballOnly
+    ? '|  Football probabilities unapproved | Kelly/staking disabled        |'
+    : `|  Min ${BET_FILTERS.MIN_SIGNALS_REQUIRED} signals | FanDuel+BetMGM | See FINAL CARD below      |`);
   p('+==============================================================+');
 
   if (bets.length === 0) {
@@ -1057,6 +1062,7 @@ export function printTopTen(bets: ScoredBet[], windowHours = 24): void {
   }
 
   function printBet(bet: ScoredBet) {
+    const footballResearch = bet.sportKey?.startsWith('americanfootball_');
     const gradeBar =
       bet.grade === 'A+' ? '[##########]' : bet.grade === 'A'  ? '[#########-]' :
       bet.grade === 'B+' ? '[#######---]' : bet.grade === 'B'  ? '[######----]' :
@@ -1070,14 +1076,16 @@ export function printTopTen(bets: ScoredBet[], windowHours = 24): void {
 
     p(`\n  +---------------------------------------------------------`);
     p(`  |  #${String(bet.rank).padEnd(3)} ${bet.recommendation.padEnd(14)} ${bet.sport} -- ${bet.matchup}`);
-    p(`  |  [CLK] ${fmtHours(bet.hoursUntilGame).padEnd(14)} Grade: ${bet.grade}  ${gradeBar}  (${bet.score}/100)`);
+    p(footballResearch
+      ? `  |  [CLK] ${fmtHours(bet.hoursUntilGame).padEnd(14)} Research rank score: ${bet.score}/100 (not confidence)`
+      : `  |  [CLK] ${fmtHours(bet.hoursUntilGame).padEnd(14)} Grade: ${bet.grade}  ${gradeBar}  (${bet.score}/100)`);
     p(`  |  ${signalStr}  |  ${confIcon} ${bet.bookCount} books  |  Price:${bet.priceScore} Line:${bet.lineScore} Sharp:${bet.sharpScore}`);
     const scoreFactors = buildScoreExplanation(bet);
     if (scoreFactors.length > 0) {
       p(`  |  WHY: ${scoreFactors.slice(0,2).join('  +  ')}`);
     }
     p(`  +---------------------------------------------------------`);
-    p(`  |  ${bet.betType.padEnd(12)}  [OK] BET: ${bet.side}`);
+    p(`  |  ${bet.betType.padEnd(12)}  ${footballResearch?'SIDE UNDER REVIEW':'[OK] BET'}: ${bet.side}`);
     // Unit sizing: 1u = $UNIT_SIZE ($10). Kelly pct of bankroll → units + dollars.
     const bankroll = parseFloat(process.env.BANKROLL ?? '0');
     const kPct = bet.sportKey?.startsWith('americanfootball_') ? 0 : bet.kellyPct > 0 ? bet.kellyPct : 0.5;
@@ -1089,7 +1097,7 @@ export function printTopTen(bets: ScoredBet[], windowHours = 24): void {
     } else {
       bankrollLine = `  |  [$] Kelly: ${kPct.toFixed(1)}% of bankroll  |  1u = $${UNIT_SIZE}  (set BANKROLL in .env for unit sizing)`;
     }
-    p(bankrollLine);
+    p(footballResearch?'  |  No stake: probability calibration and Kelly are not approved.':bankrollLine);
     p(`  |  [PIN] Best   : ${bet.bestUserBook.padEnd(10)}  ${userPriceStr}${userLineStr}`);
     if (bet.altUserBook && bet.altUserPrice !== null) {
       // Show alt book's own line if it differs from best, otherwise same
@@ -1104,7 +1112,9 @@ export function printTopTen(bets: ScoredBet[], windowHours = 24): void {
     // Sanity check: would this be worth betting at consensus price?
     const worthAtConsensus = bet.bestUserPrice > bet.consensusPrice;
     p(`  |  [~] Market : Consensus ${fmtPrice(bet.consensusPrice)}${consensusLineStr}  |  ${bet.bookCount} books  |  Edge: ${fmtPrice(bet.priceDiff)}`);
-    p(`  |  [+]?  Worth at consensus? ${worthAtConsensus ? 'YES -- price advantage is real' : 'NO -- only value is the gap'}`);
+    p(footballResearch
+      ? '  |  Price comparison only; it is not evidence of a predictive betting edge.'
+      : `  |  [+]?  Worth at consensus? ${worthAtConsensus ? 'YES -- price advantage is real' : 'NO -- only value is the gap'}`);
     p(`  +---------------------------------------------------------`);
     for (const reason of bet.fullReasoning) p(`  |  ${reason}`);
     p(`  +---------------------------------------------------------`);
@@ -1129,8 +1139,12 @@ export function printTopTen(bets: ScoredBet[], windowHours = 24): void {
   }
 
   p(`\n  ---------------------------------------------------------`);
-  p(`  Score: 85+ = BET (rare) | 78-84 = LEAN | 72-77 = MONITOR | <72 = filtered`);
-  p(`  [HOT] BET = all signals aligned | MLB run lines excluded (ML preferred)`);
+  p(footballOnly
+    ? '  Football research scores rank market discrepancies only; they are not grades, probabilities, or recommendations.'
+    : `  Score: 85+ = BET (rare) | 78-84 = LEAN | 72-77 = MONITOR | <72 = filtered`);
+  p(footballOnly
+    ? '  Use the guarded NFL Market Board for exact-line paper forecasting.'
+    : `  [HOT] BET = all signals aligned | MLB run lines excluded (ML preferred)`);
   p(`  ? line shop | ? fade public | [^] line moved | [+]? passes consensus test`);
   p(`  FanDuel + BetMGM only | Contradicting signals = play dropped\n`);
 

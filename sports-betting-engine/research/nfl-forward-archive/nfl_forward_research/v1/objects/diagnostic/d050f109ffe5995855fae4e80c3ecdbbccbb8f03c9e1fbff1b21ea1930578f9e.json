@@ -1,0 +1,23 @@
+{
+  "id": "d050f109ffe5995855fae4e80c3ecdbbccbb8f03c9e1fbff1b21ea1930578f9e",
+  "kind": "diagnostic",
+  "value": {
+    "scope": "TEAM",
+    "category": "STARTING_QB",
+    "entityId": "espn-team:17",
+    "forecastAt": "2026-09-08T02:41:41.126Z",
+    "availableFields": 0,
+    "requiredFields": 1,
+    "notes": [
+      "STARTING_QB is unavailable at this forecast timestamp; no value was invented."
+    ],
+    "stages": {
+      "SOURCE_RETRIEVAL": "UNKNOWN",
+      "NORMALIZATION": "UNKNOWN",
+      "ENTITY_MATCHING": "UNKNOWN",
+      "CONTEXT_ATTACHMENT": "UNKNOWN",
+      "FIELD_VALIDITY": "UNKNOWN",
+      "FRESHNESS_AT_FORECAST_TIME": "UNKNOWN"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "782ea7ef6cdc98831ed5742ae2331b14b0877a368d464264aa71fd1a8d76541b",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:4361741",
+    "participant": "Brock Purdy",
+    "canonicalGameId": "espn:401872657",
+    "market": "player_rush_yds",
+    "side": "Over",
+    "line": 17.5,
+    "price": -114,
+    "sportsbook": "FanDuel",
+    "providerEventId": "acc580d74344ea3b31bbcdd057fe6a9c",
+    "quoteTimestamp": "2026-09-08T02:41:07Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "3b8fbde40f90fa86262d632d16af90fd77a28dac4c1236e83acc697ef8b5b17b",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

@@ -1,7 +1,7 @@
 import { gunzipSync } from 'zlib';
 import { CollegeModelConfig, CollegeResult, evaluateCollegeSeason } from './collegeScoreModel';
 
-export const NFL_GAME_LINE_RESEARCH_VERSION = 'nfl-game-line-ridge-research-v1';
+export const NFL_GAME_LINE_RESEARCH_VERSION = 'nfl-game-line-ridge-research-v2-audit-metrics';
 export const NFLVERSE_SCHEDULE_SOURCE = 'https://github.com/nflverse/nflverse-data/releases/download/schedules/games.csv.gz';
 
 export interface NflScheduleResult extends CollegeResult {
@@ -43,22 +43,28 @@ export function parseNflverseGameResults(text: string) {
   return games.sort((a,b) => Date.parse(a.date) - Date.parse(b.date) || a.id.localeCompare(b.id));
 }
 
-const metric = (values: number[]) => ({ count: values.length, mae: values.length ? values.reduce((n,v)=>n+Math.abs(v),0)/values.length : null,
-  rmse: values.length ? Math.sqrt(values.reduce((n,v)=>n+v*v,0)/values.length) : null });
+const metric = (values: number[]) => ({ count: values.length,
+  mae: values.length ? values.reduce((n,v)=>n+Math.abs(v),0)/values.length : null,
+  rmse: values.length ? Math.sqrt(values.reduce((n,v)=>n+v*v,0)/values.length) : null,
+  bias: values.length ? values.reduce((n,v)=>n+v,0)/values.length : null });
 
 export function evaluateNflGameLineSeason(games: NflScheduleResult[], season: number, config: CollegeModelConfig) {
   const result = evaluateCollegeSeason(games, season, config), byId = new Map(games.map(game => [game.id, game]));
   const rows = result.rows.map(row => {
     const game = byId.get(row.id)!, marketMargin = game.spreadLine;
+    const actualTotal = row.projection.total + row.totalError, marketTotal = game.totalLine;
     const disagreement = marketMargin === null ? null : row.projection.homeMargin - marketMargin;
     const ats = disagreement === null || Math.abs(disagreement) < 2 ? 'PASS'
       : row.margin === marketMargin ? 'PUSH'
       : (row.margin > marketMargin) === (disagreement > 0) ? 'WIN' : 'LOSS';
     return { id: row.id, date: row.date, actualMargin: row.margin, modelMargin: row.projection.homeMargin, naiveMargin: row.projection.naiveMargin,
       marketMargin, modelError: row.marginError, naiveError: row.naiveMarginError,
-      marketError: marketMargin === null ? null : row.margin - marketMargin, disagreement, ats };
+      marketError: marketMargin === null ? null : row.margin - marketMargin,
+      actualTotal, modelTotal: row.projection.total, naiveTotal: row.projection.naiveTotal, marketTotal,
+      modelTotalError: row.totalError, naiveTotalError: row.naiveTotalError,
+      marketTotalError: marketTotal === null ? null : actualTotal - marketTotal, disagreement, ats };
   });
-  const marketRows = rows.filter(row => row.marketError !== null), selections = rows.filter(row => row.ats !== 'PASS');
+  const marketRows = rows.filter(row => row.marketError !== null), marketTotalRows = rows.filter(row => row.marketTotalError !== null), selections = rows.filter(row => row.ats !== 'PASS');
   const buckets = [[0,3],[3,6],[6,10],[10,Infinity]].map(([from,to]) => {
     const selected = rows.filter(row => row.disagreement !== null && Math.abs(row.disagreement) >= from && Math.abs(row.disagreement) < to);
     return { from, to: Number.isFinite(to) ? to : null, games: selected.length, wins: selected.filter(row=>row.ats==='WIN').length,
@@ -66,6 +72,7 @@ export function evaluateNflGameLineSeason(games: NflScheduleResult[], season: nu
   });
   return { version: NFL_GAME_LINE_RESEARCH_VERSION, season, config, games: rows.length, excluded: result.excluded,
     modelMargin: metric(rows.map(row=>row.modelError)), naiveMargin: metric(rows.map(row=>row.naiveError)), marketMargin: metric(marketRows.map(row=>row.marketError!)),
+    modelTotal: metric(rows.map(row=>row.modelTotalError)), naiveTotal: metric(rows.map(row=>row.naiveTotalError)), marketTotal: metric(marketTotalRows.map(row=>row.marketTotalError!)),
     paperThresholdPoints: 2, paperAts: { selections: selections.length, wins: selections.filter(row=>row.ats==='WIN').length,
       losses: selections.filter(row=>row.ats==='LOSS').length, pushes: selections.filter(row=>row.ats==='PUSH').length }, disagreementBuckets: buckets, rows,
     recommendationEnabled: false, moneyBettingApproved: false,

@@ -1,0 +1,23 @@
+{
+  "id": "d3df816bc13bb1aa709184ee5a1cd5aa43c5c73c2f33cb44ae7a94a6cc352c9d",
+  "kind": "diagnostic",
+  "value": {
+    "scope": "PLAYER",
+    "category": "RED_ZONE_USAGE",
+    "entityId": "espn-player:2573401",
+    "forecastAt": "2026-09-08T02:41:41.126Z",
+    "availableFields": 0,
+    "requiredFields": 1,
+    "notes": [
+      "RED_ZONE_USAGE remains UNKNOWN at forecast time."
+    ],
+    "stages": {
+      "SOURCE_RETRIEVAL": "UNKNOWN",
+      "NORMALIZATION": "UNKNOWN",
+      "ENTITY_MATCHING": "UNKNOWN",
+      "CONTEXT_ATTACHMENT": "UNKNOWN",
+      "FIELD_VALIDITY": "UNKNOWN",
+      "FRESHNESS_AT_FORECAST_TIME": "UNKNOWN"
+    }
+  }
+}

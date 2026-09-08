@@ -1,0 +1,19 @@
+{
+  "id": "f02d47137f369a339984c80cdce87479098ee2ae2f6e4723d184255da37fd10c",
+  "kind": "player_identity",
+  "value": {
+    "canonicalPlayerId": "espn-player:3912547",
+    "providerPlayerIds": {
+      "ESPN": "3912547"
+    },
+    "name": "Sam Darnold",
+    "teamId": "espn-team:26",
+    "position": "QB",
+    "season": 2026,
+    "effectiveAt": "2026-09-08T02:41:41.126Z",
+    "rookie": "NO",
+    "newTeam": "UNKNOWN",
+    "teamChange": "UNKNOWN",
+    "positionChange": "UNKNOWN"
+  }
+}

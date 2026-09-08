@@ -1,0 +1,20 @@
+{
+  "id": "7ce04f40f2ea4b7b251ef86a2c396c88695ef5059949271dd08748d812a8ab9b",
+  "kind": "game_market",
+  "value": {
+    "kind": "GAME",
+    "canonicalPlayerId": null,
+    "participant": null,
+    "canonicalGameId": "espn:401872656",
+    "market": "h2h",
+    "side": "New England Patriots",
+    "line": null,
+    "price": 160,
+    "sportsbook": "BetRivers",
+    "providerEventId": "8c94552d022acec4a0458d70c19d3da9",
+    "quoteTimestamp": "2026-09-08T02:40:57Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "f41d083f11311d6b10542d833584c3b7d18c9d0bb60084b7a0ec1adc0e3b9088",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

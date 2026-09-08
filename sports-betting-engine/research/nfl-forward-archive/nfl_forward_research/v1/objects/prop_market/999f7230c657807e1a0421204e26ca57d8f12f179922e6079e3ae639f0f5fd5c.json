@@ -1,0 +1,20 @@
+{
+  "id": "999f7230c657807e1a0421204e26ca57d8f12f179922e6079e3ae639f0f5fd5c",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:4429096",
+    "participant": "Blake Corum",
+    "canonicalGameId": "espn:401872657",
+    "market": "player_rush_attempts",
+    "side": "Over",
+    "line": 9.5,
+    "price": -123,
+    "sportsbook": "DraftKings",
+    "providerEventId": "acc580d74344ea3b31bbcdd057fe6a9c",
+    "quoteTimestamp": "2026-09-08T02:40:35Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "3b8fbde40f90fa86262d632d16af90fd77a28dac4c1236e83acc697ef8b5b17b",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

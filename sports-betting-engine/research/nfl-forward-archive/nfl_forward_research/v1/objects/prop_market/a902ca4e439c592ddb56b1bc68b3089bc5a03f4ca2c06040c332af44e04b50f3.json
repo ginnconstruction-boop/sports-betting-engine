@@ -1,0 +1,20 @@
+{
+  "id": "a902ca4e439c592ddb56b1bc68b3089bc5a03f4ca2c06040c332af44e04b50f3",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:4047646",
+    "participant": "A.J. Brown",
+    "canonicalGameId": "espn:401872656",
+    "market": "player_reception_yds",
+    "side": "Over",
+    "line": 60.5,
+    "price": -115,
+    "sportsbook": "Bovada",
+    "providerEventId": "8c94552d022acec4a0458d70c19d3da9",
+    "quoteTimestamp": "2026-09-08T02:40:37Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "f41d083f11311d6b10542d833584c3b7d18c9d0bb60084b7a0ec1adc0e3b9088",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

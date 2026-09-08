@@ -1,0 +1,20 @@
+{
+  "id": "8d6940ca108a4ee00fc5bedff90cf9e9604e02046383ea598e3b119b9f697846",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:4430737",
+    "participant": "Kyren Williams",
+    "canonicalGameId": "espn:401872657",
+    "market": "player_rush_yds",
+    "side": "Under",
+    "line": 55.5,
+    "price": -130,
+    "sportsbook": "Bovada",
+    "providerEventId": "acc580d74344ea3b31bbcdd057fe6a9c",
+    "quoteTimestamp": "2026-09-08T02:41:31Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "3b8fbde40f90fa86262d632d16af90fd77a28dac4c1236e83acc697ef8b5b17b",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

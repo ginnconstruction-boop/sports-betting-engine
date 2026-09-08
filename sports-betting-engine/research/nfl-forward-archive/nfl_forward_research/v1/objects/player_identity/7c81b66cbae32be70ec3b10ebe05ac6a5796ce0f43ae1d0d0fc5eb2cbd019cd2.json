@@ -1,0 +1,19 @@
+{
+  "id": "7c81b66cbae32be70ec3b10ebe05ac6a5796ce0f43ae1d0d0fc5eb2cbd019cd2",
+  "kind": "player_identity",
+  "value": {
+    "canonicalPlayerId": "espn-player:4429835",
+    "providerPlayerIds": {
+      "ESPN": "4429835"
+    },
+    "name": "George Holani",
+    "teamId": "espn-team:26",
+    "position": "RB",
+    "season": 2026,
+    "effectiveAt": "2026-09-08T02:41:41.126Z",
+    "rookie": "NO",
+    "newTeam": "UNKNOWN",
+    "teamChange": "UNKNOWN",
+    "positionChange": "UNKNOWN"
+  }
+}

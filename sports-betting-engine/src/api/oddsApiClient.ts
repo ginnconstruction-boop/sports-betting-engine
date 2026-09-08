@@ -390,6 +390,26 @@ export async function getCollegeSlateOdds(): Promise<{events:RawEvent[];quota:Qu
   } catch { throw new Error('College slate odds unavailable. No retry or per-game odds purchases were made.'); }
 }
 
+/** Phase-2 NFL forward collector request. It is deliberately single-attempt:
+ * an uncertain charged response is never retried invisibly. The caller owns
+ * the per-run request/credit cap and records x-requests-last as evidence. */
+export async function getNflForwardEventMarkets(eventId:string,markets:MarketKey[]):Promise<{event:RawEvent|null;quota:QuotaUsage;creditsUsed:number|null;attempts:1}> {
+  if(!/^[A-Za-z0-9_-]{1,80}$/.test(eventId))throw Error('Invalid NFL provider event ID.');
+  const allowed=productionMarkets('americanfootball_nfl',markets);
+  if(!allowed.length||allowed.length!==markets.length)throw Error('Unsupported NFL forward market request.');
+  const client=createClient();
+  try{
+    const response=await client.get(`/sports/americanfootball_nfl/events/${eventId}/odds`,{params:{regions:'us',markets:allowed.join(','),oddsFormat:'american'}});
+    updateSessionQuota(parseQuotaHeaders(response.headers as Record<string,string>));
+    const cost=response.headers['x-requests-last'],event=response.data??null;
+    if(event!==null&&(event.id!==eventId||event.sport_key!=='americanfootball_nfl'))throw Error('Mismatched NFL event response.');
+    return{event,quota:{...sessionQuota},creditsUsed:cost==null?null:Number(cost),attempts:1};
+  }catch(error){
+    if(axios.isAxiosError(error)){const status=error.response?.status;if(status===401||status===403)throw Error('NFL forward odds authorization failed.');if(status===429)throw Error('NFL forward odds quota exhausted.');if(status===422)throw Error('NFL forward markets are unavailable or unsupported for this event.');}
+    throw Error(`NFL forward market request failed without retry: ${error instanceof Error?error.message:String(error)}`);
+  }
+}
+
 // ============================================================
 // Completed scores (2 credits per sport per call)
 // ============================================================

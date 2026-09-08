@@ -1,0 +1,19 @@
+{
+  "id": "1d988adc1f3868823569c3af70aff16805f14eb0000484d067cd407dfc826ceb",
+  "kind": "player_identity",
+  "value": {
+    "canonicalPlayerId": "espn-player:16002",
+    "providerPlayerIds": {
+      "ESPN": "16002"
+    },
+    "name": "Kyle Juszczyk",
+    "teamId": "espn-team:25",
+    "position": "FB",
+    "season": 2026,
+    "effectiveAt": "2026-09-08T02:41:41.126Z",
+    "rookie": "NO",
+    "newTeam": "UNKNOWN",
+    "teamChange": "UNKNOWN",
+    "positionChange": "UNKNOWN"
+  }
+}

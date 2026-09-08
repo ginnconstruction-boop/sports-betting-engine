@@ -1,0 +1,20 @@
+{
+  "id": "d122ee6a89682f15fc00f25562131013f56b66afce4f8e5df77d288896ae9c98",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:4429096",
+    "participant": "Blake Corum",
+    "canonicalGameId": "espn:401872657",
+    "market": "player_rush_yds",
+    "side": "Under",
+    "line": 39.5,
+    "price": -114,
+    "sportsbook": "BetOnline.ag",
+    "providerEventId": "acc580d74344ea3b31bbcdd057fe6a9c",
+    "quoteTimestamp": "2026-09-08T02:40:36Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "3b8fbde40f90fa86262d632d16af90fd77a28dac4c1236e83acc697ef8b5b17b",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

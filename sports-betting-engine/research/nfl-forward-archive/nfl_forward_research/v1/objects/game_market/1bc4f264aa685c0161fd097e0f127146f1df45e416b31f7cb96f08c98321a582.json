@@ -1,0 +1,20 @@
+{
+  "id": "1bc4f264aa685c0161fd097e0f127146f1df45e416b31f7cb96f08c98321a582",
+  "kind": "game_market",
+  "value": {
+    "kind": "GAME",
+    "canonicalPlayerId": null,
+    "participant": null,
+    "canonicalGameId": "espn:401872657",
+    "market": "spreads",
+    "side": "Los Angeles Rams",
+    "line": -3.5,
+    "price": -113,
+    "sportsbook": "BetRivers",
+    "providerEventId": "acc580d74344ea3b31bbcdd057fe6a9c",
+    "quoteTimestamp": "2026-09-08T02:40:57Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "3b8fbde40f90fa86262d632d16af90fd77a28dac4c1236e83acc697ef8b5b17b",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

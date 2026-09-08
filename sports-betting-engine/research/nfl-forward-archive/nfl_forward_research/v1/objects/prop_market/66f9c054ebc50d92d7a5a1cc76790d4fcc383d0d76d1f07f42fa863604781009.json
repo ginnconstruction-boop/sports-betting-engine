@@ -1,0 +1,20 @@
+{
+  "id": "66f9c054ebc50d92d7a5a1cc76790d4fcc383d0d76d1f07f42fa863604781009",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:3912547",
+    "participant": "Sam Darnold",
+    "canonicalGameId": "espn:401872656",
+    "market": "player_rush_yds",
+    "side": "Over",
+    "line": 5.5,
+    "price": -120,
+    "sportsbook": "Bovada",
+    "providerEventId": "8c94552d022acec4a0458d70c19d3da9",
+    "quoteTimestamp": "2026-09-08T02:40:37Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "f41d083f11311d6b10542d833584c3b7d18c9d0bb60084b7a0ec1adc0e3b9088",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

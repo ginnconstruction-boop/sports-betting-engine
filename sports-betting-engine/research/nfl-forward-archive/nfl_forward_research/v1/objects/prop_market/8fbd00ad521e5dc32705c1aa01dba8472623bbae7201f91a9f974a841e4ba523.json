@@ -1,0 +1,20 @@
+{
+  "id": "8fbd00ad521e5dc32705c1aa01dba8472623bbae7201f91a9f974a841e4ba523",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:3912547",
+    "participant": "Sam Darnold",
+    "canonicalGameId": "espn:401872656",
+    "market": "player_rush_yds",
+    "side": "Under",
+    "line": 5.5,
+    "price": -108,
+    "sportsbook": "DraftKings",
+    "providerEventId": "8c94552d022acec4a0458d70c19d3da9",
+    "quoteTimestamp": "2026-09-08T02:41:05Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "f41d083f11311d6b10542d833584c3b7d18c9d0bb60084b7a0ec1adc0e3b9088",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

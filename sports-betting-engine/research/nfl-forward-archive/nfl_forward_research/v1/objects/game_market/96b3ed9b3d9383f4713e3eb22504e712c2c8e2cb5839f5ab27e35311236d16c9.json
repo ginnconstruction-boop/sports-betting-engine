@@ -1,0 +1,20 @@
+{
+  "id": "96b3ed9b3d9383f4713e3eb22504e712c2c8e2cb5839f5ab27e35311236d16c9",
+  "kind": "game_market",
+  "value": {
+    "kind": "GAME",
+    "canonicalPlayerId": null,
+    "participant": null,
+    "canonicalGameId": "espn:401872656",
+    "market": "h2h",
+    "side": "Seattle Seahawks",
+    "line": null,
+    "price": -186,
+    "sportsbook": "MyBookie.ag",
+    "providerEventId": "8c94552d022acec4a0458d70c19d3da9",
+    "quoteTimestamp": "2026-09-08T02:39:49Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "f41d083f11311d6b10542d833584c3b7d18c9d0bb60084b7a0ec1adc0e3b9088",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "id": "08976cf3145dd251bd5135e560556664d273fbd568f6e9e0d050e3d31610370c",
+  "kind": "diagnostic",
+  "value": {
+    "scope": "PLAYER",
+    "category": "GAME_DAY_AVAILABILITY",
+    "entityId": "espn-player:16737",
+    "forecastAt": "2026-09-08T02:41:41.126Z",
+    "availableFields": 0,
+    "requiredFields": 1,
+    "notes": [
+      "GAME_DAY_AVAILABILITY remains UNKNOWN at forecast time."
+    ],
+    "stages": {
+      "SOURCE_RETRIEVAL": "UNKNOWN",
+      "NORMALIZATION": "UNKNOWN",
+      "ENTITY_MATCHING": "UNKNOWN",
+      "CONTEXT_ATTACHMENT": "UNKNOWN",
+      "FIELD_VALIDITY": "UNKNOWN",
+      "FRESHNESS_AT_FORECAST_TIME": "UNKNOWN"
+    }
+  }
+}

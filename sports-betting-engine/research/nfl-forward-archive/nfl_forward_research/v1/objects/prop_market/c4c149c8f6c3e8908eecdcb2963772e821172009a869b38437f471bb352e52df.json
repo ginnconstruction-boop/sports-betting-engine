@@ -1,0 +1,20 @@
+{
+  "id": "c4c149c8f6c3e8908eecdcb2963772e821172009a869b38437f471bb352e52df",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:4032473",
+    "participant": "Rashid Shaheed",
+    "canonicalGameId": "espn:401872656",
+    "market": "player_reception_yds",
+    "side": "Over",
+    "line": 31.5,
+    "price": -114,
+    "sportsbook": "FanDuel",
+    "providerEventId": "8c94552d022acec4a0458d70c19d3da9",
+    "quoteTimestamp": "2026-09-08T02:40:56Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "f41d083f11311d6b10542d833584c3b7d18c9d0bb60084b7a0ec1adc0e3b9088",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

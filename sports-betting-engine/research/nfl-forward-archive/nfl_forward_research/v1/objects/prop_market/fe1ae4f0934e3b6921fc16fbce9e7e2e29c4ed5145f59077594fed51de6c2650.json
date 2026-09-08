@@ -1,0 +1,20 @@
+{
+  "id": "fe1ae4f0934e3b6921fc16fbce9e7e2e29c4ed5145f59077594fed51de6c2650",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:4429835",
+    "participant": "George Holani",
+    "canonicalGameId": "espn:401872656",
+    "market": "player_reception_yds",
+    "side": "Over",
+    "line": 10.5,
+    "price": -113,
+    "sportsbook": "DraftKings",
+    "providerEventId": "8c94552d022acec4a0458d70c19d3da9",
+    "quoteTimestamp": "2026-09-08T02:41:05Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "f41d083f11311d6b10542d833584c3b7d18c9d0bb60084b7a0ec1adc0e3b9088",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

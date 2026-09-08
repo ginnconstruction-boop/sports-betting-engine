@@ -1,0 +1,20 @@
+{
+  "id": "76022e46998f9474dac40f6a1237a95ad82902462134d8618f37191746ba1939",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:16737",
+    "participant": "Mike Evans",
+    "canonicalGameId": "espn:401872657",
+    "market": "player_reception_yds",
+    "side": "Over",
+    "line": 48.5,
+    "price": -112,
+    "sportsbook": "BetOnline.ag",
+    "providerEventId": "acc580d74344ea3b31bbcdd057fe6a9c",
+    "quoteTimestamp": "2026-09-08T02:40:36Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "3b8fbde40f90fa86262d632d16af90fd77a28dac4c1236e83acc697ef8b5b17b",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

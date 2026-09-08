@@ -1,0 +1,20 @@
+{
+  "id": "2d37fcb705f96c07e0b6be0bb990659c69ada86c41a6e7615e82c8936a11b903",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:4430878",
+    "participant": "Jaxon Smith-Njigba",
+    "canonicalGameId": "espn:401872656",
+    "market": "player_reception_yds",
+    "side": "Under",
+    "line": 81.5,
+    "price": -114,
+    "sportsbook": "BetOnline.ag",
+    "providerEventId": "8c94552d022acec4a0458d70c19d3da9",
+    "quoteTimestamp": "2026-09-08T02:40:38Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "f41d083f11311d6b10542d833584c3b7d18c9d0bb60084b7a0ec1adc0e3b9088",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

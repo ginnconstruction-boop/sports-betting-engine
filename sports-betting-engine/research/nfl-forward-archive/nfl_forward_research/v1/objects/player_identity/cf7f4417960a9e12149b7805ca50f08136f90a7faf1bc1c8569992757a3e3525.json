@@ -1,0 +1,19 @@
+{
+  "id": "cf7f4417960a9e12149b7805ca50f08136f90a7faf1bc1c8569992757a3e3525",
+  "kind": "player_identity",
+  "value": {
+    "canonicalPlayerId": "espn-player:3117251",
+    "providerPlayerIds": {
+      "ESPN": "3117251"
+    },
+    "name": "Christian McCaffrey",
+    "teamId": "espn-team:25",
+    "position": "RB",
+    "season": 2026,
+    "effectiveAt": "2026-09-08T02:41:41.126Z",
+    "rookie": "NO",
+    "newTeam": "UNKNOWN",
+    "teamChange": "UNKNOWN",
+    "positionChange": "UNKNOWN"
+  }
+}

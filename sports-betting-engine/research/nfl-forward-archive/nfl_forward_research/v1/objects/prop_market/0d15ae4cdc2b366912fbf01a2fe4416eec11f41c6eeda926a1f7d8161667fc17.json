@@ -1,0 +1,20 @@
+{
+  "id": "0d15ae4cdc2b366912fbf01a2fe4416eec11f41c6eeda926a1f7d8161667fc17",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:12483",
+    "participant": "Matthew Stafford",
+    "canonicalGameId": "espn:401872657",
+    "market": "player_pass_completions",
+    "side": "Over",
+    "line": 23.5,
+    "price": -106,
+    "sportsbook": "DraftKings",
+    "providerEventId": "acc580d74344ea3b31bbcdd057fe6a9c",
+    "quoteTimestamp": "2026-09-08T02:40:35Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "3b8fbde40f90fa86262d632d16af90fd77a28dac4c1236e83acc697ef8b5b17b",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

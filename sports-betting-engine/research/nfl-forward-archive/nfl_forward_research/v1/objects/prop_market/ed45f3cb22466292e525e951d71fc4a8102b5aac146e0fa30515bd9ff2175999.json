@@ -1,0 +1,20 @@
+{
+  "id": "ed45f3cb22466292e525e951d71fc4a8102b5aac146e0fa30515bd9ff2175999",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:4427095",
+    "participant": "DeMario Douglas",
+    "canonicalGameId": "espn:401872656",
+    "market": "player_reception_yds",
+    "side": "Over",
+    "line": 19.5,
+    "price": -120,
+    "sportsbook": "Bovada",
+    "providerEventId": "8c94552d022acec4a0458d70c19d3da9",
+    "quoteTimestamp": "2026-09-08T02:40:37Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "f41d083f11311d6b10542d833584c3b7d18c9d0bb60084b7a0ec1adc0e3b9088",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

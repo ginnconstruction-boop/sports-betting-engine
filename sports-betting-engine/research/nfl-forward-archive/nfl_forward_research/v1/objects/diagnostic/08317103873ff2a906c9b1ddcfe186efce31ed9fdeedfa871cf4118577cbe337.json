@@ -1,0 +1,21 @@
+{
+  "id": "08317103873ff2a906c9b1ddcfe186efce31ed9fdeedfa871cf4118577cbe337",
+  "kind": "diagnostic",
+  "value": {
+    "scope": "TEAM",
+    "category": "WEATHER",
+    "entityId": "espn-team:26",
+    "forecastAt": "2026-09-08T02:41:41.126Z",
+    "availableFields": 1,
+    "requiredFields": 1,
+    "notes": [],
+    "stages": {
+      "SOURCE_RETRIEVAL": "PASS",
+      "NORMALIZATION": "PASS",
+      "ENTITY_MATCHING": "PASS",
+      "CONTEXT_ATTACHMENT": "PASS",
+      "FIELD_VALIDITY": "PASS",
+      "FRESHNESS_AT_FORECAST_TIME": "PASS"
+    }
+  }
+}

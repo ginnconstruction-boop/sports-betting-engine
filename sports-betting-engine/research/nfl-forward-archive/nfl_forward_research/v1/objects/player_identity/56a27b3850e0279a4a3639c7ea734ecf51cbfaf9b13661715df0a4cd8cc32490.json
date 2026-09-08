@@ -1,0 +1,19 @@
+{
+  "id": "56a27b3850e0279a4a3639c7ea734ecf51cbfaf9b13661715df0a4cd8cc32490",
+  "kind": "player_identity",
+  "value": {
+    "canonicalPlayerId": "espn-player:2573401",
+    "providerPlayerIds": {
+      "ESPN": "2573401"
+    },
+    "name": "Tyler Higbee",
+    "teamId": "espn-team:14",
+    "position": "TE",
+    "season": 2026,
+    "effectiveAt": "2026-09-08T02:41:41.126Z",
+    "rookie": "NO",
+    "newTeam": "UNKNOWN",
+    "teamChange": "UNKNOWN",
+    "positionChange": "UNKNOWN"
+  }
+}

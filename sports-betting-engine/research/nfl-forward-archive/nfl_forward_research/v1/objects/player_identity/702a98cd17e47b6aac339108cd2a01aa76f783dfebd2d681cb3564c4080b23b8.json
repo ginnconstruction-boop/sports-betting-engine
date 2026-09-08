@@ -1,0 +1,19 @@
+{
+  "id": "702a98cd17e47b6aac339108cd2a01aa76f783dfebd2d681cb3564c4080b23b8",
+  "kind": "player_identity",
+  "value": {
+    "canonicalPlayerId": "espn-player:4361432",
+    "providerPlayerIds": {
+      "ESPN": "4361432"
+    },
+    "name": "Romeo Doubs",
+    "teamId": "espn-team:17",
+    "position": "WR",
+    "season": 2026,
+    "effectiveAt": "2026-09-08T02:41:41.126Z",
+    "rookie": "NO",
+    "newTeam": "UNKNOWN",
+    "teamChange": "UNKNOWN",
+    "positionChange": "UNKNOWN"
+  }
+}

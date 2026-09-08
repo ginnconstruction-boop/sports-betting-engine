@@ -1,0 +1,19 @@
+{
+  "id": "05ece9a2356f5b3874f7bca828af5aaae5042276b8e9ae904b764151017d89ce",
+  "kind": "player_identity",
+  "value": {
+    "canonicalPlayerId": "espn-player:4242557",
+    "providerPlayerIds": {
+      "ESPN": "4242557"
+    },
+    "name": "Colby Parkinson",
+    "teamId": "espn-team:14",
+    "position": "TE",
+    "season": 2026,
+    "effectiveAt": "2026-09-08T02:41:41.126Z",
+    "rookie": "NO",
+    "newTeam": "UNKNOWN",
+    "teamChange": "UNKNOWN",
+    "positionChange": "UNKNOWN"
+  }
+}

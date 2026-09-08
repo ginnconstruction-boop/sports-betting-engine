@@ -1,0 +1,19 @@
+{
+  "id": "df18419a02bbf719627103c5069a68089657151ce8ecd2b1ad6203986ffa7cda",
+  "kind": "player_identity",
+  "value": {
+    "canonicalPlayerId": "espn-player:3040151",
+    "providerPlayerIds": {
+      "ESPN": "3040151"
+    },
+    "name": "George Kittle",
+    "teamId": "espn-team:25",
+    "position": "TE",
+    "season": 2026,
+    "effectiveAt": "2026-09-08T02:41:41.126Z",
+    "rookie": "NO",
+    "newTeam": "UNKNOWN",
+    "teamChange": "UNKNOWN",
+    "positionChange": "UNKNOWN"
+  }
+}

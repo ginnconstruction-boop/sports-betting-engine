@@ -1,0 +1,23 @@
+{
+  "id": "a0ee20bb3e385a66fe2c7b8c83d98d9b1731daef43251ce00a3211945a04f5d3",
+  "kind": "diagnostic",
+  "value": {
+    "scope": "PLAYER",
+    "category": "GOAL_LINE_USAGE",
+    "entityId": "espn-player:12483",
+    "forecastAt": "2026-09-08T02:41:41.126Z",
+    "availableFields": 0,
+    "requiredFields": 1,
+    "notes": [
+      "GOAL_LINE_USAGE remains UNKNOWN at forecast time."
+    ],
+    "stages": {
+      "SOURCE_RETRIEVAL": "UNKNOWN",
+      "NORMALIZATION": "UNKNOWN",
+      "ENTITY_MATCHING": "UNKNOWN",
+      "CONTEXT_ATTACHMENT": "UNKNOWN",
+      "FIELD_VALIDITY": "UNKNOWN",
+      "FRESHNESS_AT_FORECAST_TIME": "UNKNOWN"
+    }
+  }
+}

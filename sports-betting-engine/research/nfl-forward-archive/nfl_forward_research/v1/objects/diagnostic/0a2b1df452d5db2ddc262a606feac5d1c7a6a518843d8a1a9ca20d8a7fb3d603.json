@@ -1,0 +1,23 @@
+{
+  "id": "0a2b1df452d5db2ddc262a606feac5d1c7a6a518843d8a1a9ca20d8a7fb3d603",
+  "kind": "diagnostic",
+  "value": {
+    "scope": "TEAM",
+    "category": "INJURIES",
+    "entityId": "espn-team:14",
+    "forecastAt": "2026-09-08T02:41:41.126Z",
+    "availableFields": 0,
+    "requiredFields": 1,
+    "notes": [
+      "INJURIES is unavailable at this forecast timestamp; no value was invented."
+    ],
+    "stages": {
+      "SOURCE_RETRIEVAL": "UNKNOWN",
+      "NORMALIZATION": "UNKNOWN",
+      "ENTITY_MATCHING": "UNKNOWN",
+      "CONTEXT_ATTACHMENT": "UNKNOWN",
+      "FIELD_VALIDITY": "UNKNOWN",
+      "FRESHNESS_AT_FORECAST_TIME": "UNKNOWN"
+    }
+  }
+}

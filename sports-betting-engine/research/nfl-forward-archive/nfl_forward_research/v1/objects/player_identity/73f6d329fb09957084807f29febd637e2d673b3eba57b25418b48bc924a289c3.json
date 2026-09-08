@@ -1,0 +1,19 @@
+{
+  "id": "73f6d329fb09957084807f29febd637e2d673b3eba57b25418b48bc924a289c3",
+  "kind": "player_identity",
+  "value": {
+    "canonicalPlayerId": "espn-player:3126486",
+    "providerPlayerIds": {
+      "ESPN": "3126486"
+    },
+    "name": "Deebo Samuel Sr.",
+    "teamId": "espn-team:25",
+    "position": "WR",
+    "season": 2026,
+    "effectiveAt": "2026-09-08T02:41:41.126Z",
+    "rookie": "NO",
+    "newTeam": "UNKNOWN",
+    "teamChange": "UNKNOWN",
+    "positionChange": "UNKNOWN"
+  }
+}

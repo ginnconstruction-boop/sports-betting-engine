@@ -1,0 +1,23 @@
+{
+  "id": "64275a9e85c5eaa76f13a2d95524302fd9c38c499e30af4b4133107af8227355",
+  "kind": "diagnostic",
+  "value": {
+    "scope": "TEAM",
+    "category": "COACHING_PLAY_CALLER",
+    "entityId": "espn-team:14",
+    "forecastAt": "2026-09-08T02:41:41.126Z",
+    "availableFields": 0,
+    "requiredFields": 1,
+    "notes": [
+      "COACHING_PLAY_CALLER is unavailable at this forecast timestamp; no value was invented."
+    ],
+    "stages": {
+      "SOURCE_RETRIEVAL": "UNKNOWN",
+      "NORMALIZATION": "UNKNOWN",
+      "ENTITY_MATCHING": "UNKNOWN",
+      "CONTEXT_ATTACHMENT": "UNKNOWN",
+      "FIELD_VALIDITY": "UNKNOWN",
+      "FRESHNESS_AT_FORECAST_TIME": "UNKNOWN"
+    }
+  }
+}

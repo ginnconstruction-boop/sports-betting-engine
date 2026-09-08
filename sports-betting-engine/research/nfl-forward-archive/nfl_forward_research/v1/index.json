@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "version": "nfl-forward-research-v1",
+  "snapshots": [
+    {
+      "id": "20696d6cfd4e0b9155cb7b776e9f693c0644159f2f599bbdaf7c0bc3c57c1193",
+      "gameId": "espn:401872656",
+      "capturedAt": "2026-09-08T02:41:41.126Z",
+      "captureEventId": "manual-7d35cdfd24f7566f3c76fd7f450df381"
+    },
+    {
+      "id": "2c3bad0fa84721f746ab1939f6255a49b255cd407893e95af6e89376d9ea77c7",
+      "gameId": "espn:401872657",
+      "capturedAt": "2026-09-08T02:41:41.126Z",
+      "captureEventId": "manual-7d35cdfd24f7566f3c76fd7f450df381"
+    }
+  ],
+  "records": []
+}

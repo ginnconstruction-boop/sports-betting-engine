@@ -1,0 +1,19 @@
+{
+  "id": "71ac0b5bbf11237d7af8ce47a57c49e154b38bcff0e289cd8eb613a8fbe8709f",
+  "kind": "player_identity",
+  "value": {
+    "canonicalPlayerId": "espn-player:16737",
+    "providerPlayerIds": {
+      "ESPN": "16737"
+    },
+    "name": "Mike Evans",
+    "teamId": "espn-team:25",
+    "position": "WR",
+    "season": 2026,
+    "effectiveAt": "2026-09-08T02:41:41.126Z",
+    "rookie": "NO",
+    "newTeam": "UNKNOWN",
+    "teamChange": "UNKNOWN",
+    "positionChange": "UNKNOWN"
+  }
+}

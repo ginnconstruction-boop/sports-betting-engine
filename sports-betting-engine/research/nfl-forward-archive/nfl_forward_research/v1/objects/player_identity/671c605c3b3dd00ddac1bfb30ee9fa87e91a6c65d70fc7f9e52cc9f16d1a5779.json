@@ -1,0 +1,19 @@
+{
+  "id": "671c605c3b3dd00ddac1bfb30ee9fa87e91a6c65d70fc7f9e52cc9f16d1a5779",
+  "kind": "player_identity",
+  "value": {
+    "canonicalPlayerId": "espn-player:4576297",
+    "providerPlayerIds": {
+      "ESPN": "4576297"
+    },
+    "name": "AJ Barner",
+    "teamId": "espn-team:26",
+    "position": "TE",
+    "season": 2026,
+    "effectiveAt": "2026-09-08T02:41:41.126Z",
+    "rookie": "NO",
+    "newTeam": "UNKNOWN",
+    "teamChange": "UNKNOWN",
+    "positionChange": "UNKNOWN"
+  }
+}

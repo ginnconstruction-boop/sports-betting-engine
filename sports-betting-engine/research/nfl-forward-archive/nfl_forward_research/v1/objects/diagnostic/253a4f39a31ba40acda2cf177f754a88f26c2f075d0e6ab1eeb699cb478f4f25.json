@@ -1,0 +1,23 @@
+{
+  "id": "253a4f39a31ba40acda2cf177f754a88f26c2f075d0e6ab1eeb699cb478f4f25",
+  "kind": "diagnostic",
+  "value": {
+    "scope": "TEAM",
+    "category": "OFFENSIVE_LINE",
+    "entityId": "espn-team:25",
+    "forecastAt": "2026-09-08T02:41:41.126Z",
+    "availableFields": 0,
+    "requiredFields": 1,
+    "notes": [
+      "OFFENSIVE_LINE is unavailable at this forecast timestamp; no value was invented."
+    ],
+    "stages": {
+      "SOURCE_RETRIEVAL": "UNKNOWN",
+      "NORMALIZATION": "UNKNOWN",
+      "ENTITY_MATCHING": "UNKNOWN",
+      "CONTEXT_ATTACHMENT": "UNKNOWN",
+      "FIELD_VALIDITY": "UNKNOWN",
+      "FRESHNESS_AT_FORECAST_TIME": "UNKNOWN"
+    }
+  }
+}

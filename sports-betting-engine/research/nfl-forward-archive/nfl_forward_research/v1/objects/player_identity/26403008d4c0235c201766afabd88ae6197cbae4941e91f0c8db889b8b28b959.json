@@ -1,0 +1,19 @@
+{
+  "id": "26403008d4c0235c201766afabd88ae6197cbae4941e91f0c8db889b8b28b959",
+  "kind": "player_identity",
+  "value": {
+    "canonicalPlayerId": "espn-player:2977187",
+    "providerPlayerIds": {
+      "ESPN": "2977187"
+    },
+    "name": "Cooper Kupp",
+    "teamId": "espn-team:26",
+    "position": "WR",
+    "season": 2026,
+    "effectiveAt": "2026-09-08T02:41:41.126Z",
+    "rookie": "NO",
+    "newTeam": "UNKNOWN",
+    "teamChange": "UNKNOWN",
+    "positionChange": "UNKNOWN"
+  }
+}

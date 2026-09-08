@@ -1,0 +1,33 @@
+{
+  "id": "466c6ede3712dbd29a48f80a0171f01e2a38dedac4950775e0e953ed4062ed1c",
+  "kind": "game_identity",
+  "value": {
+    "canonicalGameId": "espn:401872657",
+    "providerGameIds": {
+      "ESPN": "401872657",
+      "ODDS_API": "acc580d74344ea3b31bbcdd057fe6a9c"
+    },
+    "season": 2026,
+    "seasonType": "REG",
+    "week": 1,
+    "away": {
+      "canonicalTeamId": "espn-team:25",
+      "name": "San Francisco 49ers",
+      "abbreviation": "SF"
+    },
+    "home": {
+      "canonicalTeamId": "espn-team:14",
+      "name": "Los Angeles Rams",
+      "abbreviation": "LAR"
+    },
+    "scheduledKickoff": "2026-09-11T00:35Z",
+    "venue": {
+      "id": "9119",
+      "name": "Melbourne Cricket Ground",
+      "indoor": false
+    },
+    "neutralSite": true,
+    "international": true,
+    "status": "SCHEDULED"
+  }
+}

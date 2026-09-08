@@ -1,0 +1,20 @@
+{
+  "id": "b4aedd8b2905e270eae22423e30e1a01578a30e8fb4a009380f9feee8db37ee8",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:4685512",
+    "participant": "Jadarian Price",
+    "canonicalGameId": "espn:401872656",
+    "market": "player_receptions",
+    "side": "Over",
+    "line": 1.5,
+    "price": 112,
+    "sportsbook": "FanDuel",
+    "providerEventId": "8c94552d022acec4a0458d70c19d3da9",
+    "quoteTimestamp": "2026-09-08T02:40:56Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "f41d083f11311d6b10542d833584c3b7d18c9d0bb60084b7a0ec1adc0e3b9088",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

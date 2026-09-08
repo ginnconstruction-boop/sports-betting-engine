@@ -1,0 +1,19 @@
+{
+  "id": "6e6e6f5f6461788058a3f47e81cbcdc6195b6544b5fab678e8255311bfdfcd5b",
+  "kind": "player_identity",
+  "value": {
+    "canonicalPlayerId": "espn-player:4429096",
+    "providerPlayerIds": {
+      "ESPN": "4429096"
+    },
+    "name": "Blake Corum",
+    "teamId": "espn-team:14",
+    "position": "RB",
+    "season": 2026,
+    "effectiveAt": "2026-09-08T02:41:41.126Z",
+    "rookie": "NO",
+    "newTeam": "UNKNOWN",
+    "teamChange": "UNKNOWN",
+    "positionChange": "UNKNOWN"
+  }
+}

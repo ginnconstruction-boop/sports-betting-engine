@@ -1,0 +1,20 @@
+{
+  "id": "d662d364eec0d1b758cd049d6b244481e0b452230bdb4a7d04ead029f233e842",
+  "kind": "prop_market",
+  "value": {
+    "kind": "PROP",
+    "canonicalPlayerId": "espn-player:4569173",
+    "participant": "Rhamondre Stevenson",
+    "canonicalGameId": "espn:401872656",
+    "market": "player_receptions",
+    "side": "Over",
+    "line": 3.5,
+    "price": 110,
+    "sportsbook": "BetOnline.ag",
+    "providerEventId": "8c94552d022acec4a0458d70c19d3da9",
+    "quoteTimestamp": "2026-09-08T02:40:38Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "f41d083f11311d6b10542d833584c3b7d18c9d0bb60084b7a0ec1adc0e3b9088",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

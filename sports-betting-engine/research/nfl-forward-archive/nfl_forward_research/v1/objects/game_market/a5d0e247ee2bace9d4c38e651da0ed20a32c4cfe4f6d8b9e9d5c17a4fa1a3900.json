@@ -1,0 +1,20 @@
+{
+  "id": "a5d0e247ee2bace9d4c38e651da0ed20a32c4cfe4f6d8b9e9d5c17a4fa1a3900",
+  "kind": "game_market",
+  "value": {
+    "kind": "GAME",
+    "canonicalPlayerId": null,
+    "participant": null,
+    "canonicalGameId": "espn:401872657",
+    "market": "h2h",
+    "side": "Los Angeles Rams",
+    "line": null,
+    "price": -205,
+    "sportsbook": "BetRivers",
+    "providerEventId": "acc580d74344ea3b31bbcdd057fe6a9c",
+    "quoteTimestamp": "2026-09-08T02:40:57Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "3b8fbde40f90fa86262d632d16af90fd77a28dac4c1236e83acc697ef8b5b17b",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

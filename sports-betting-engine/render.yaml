@@ -3,6 +3,11 @@ services:
     name: sports-betting-engine
     runtime: node
     rootDir: sports-betting-engine
+    buildFilter:
+      ignoredPaths:
+        - sports-betting-engine/research/nfl-forward-archive/**
+        - sports-betting-engine/research/forward-archive/**
+        - sports-betting-engine/research/results/**
     buildCommand: npm install && (npx tsc || true)
     startCommand: node -r ts-node/register/transpile-only server.ts
     envVars:

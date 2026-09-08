@@ -1,0 +1,21 @@
+{
+  "id": "08a685bf2fbdc46255bb1229b968388d3a6a60ccff782ff93795f3f27d7ed51c",
+  "kind": "context",
+  "value": {
+    "scope": "TEAM",
+    "entityId": "espn-team:14",
+    "category": "ROSTER",
+    "field": "roster.player_count",
+    "value": 78,
+    "source": {
+      "provider": "ESPN",
+      "url": "https://site.web.api.espn.com/apis/site/v2/sports/football/nfl/teams/14/roster",
+      "providerRecordId": null,
+      "retrievedAt": "2026-09-08T02:41:41.126Z",
+      "effectiveAt": null,
+      "rawPayloadHash": "244a508d40bf711adf6c7afb1f3a3e90aec9323c418e34d7f663390ee1439b0e"
+    },
+    "validity": "VALID",
+    "freshness": "FRESH"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "a21155a210cef89fb183e658fc530d04edb1c7e82d20490cac0b14322bd267a8",
+  "kind": "game_market",
+  "value": {
+    "kind": "GAME",
+    "canonicalPlayerId": null,
+    "participant": null,
+    "canonicalGameId": "espn:401872657",
+    "market": "h2h",
+    "side": "San Francisco 49ers",
+    "line": null,
+    "price": 165,
+    "sportsbook": "Fanatics",
+    "providerEventId": "acc580d74344ea3b31bbcdd057fe6a9c",
+    "quoteTimestamp": "2026-09-08T02:40:56Z",
+    "captureTimestamp": "2026-09-08T02:41:41.126Z",
+    "rawPayloadHash": "3b8fbde40f90fa86262d632d16af90fd77a28dac4c1236e83acc697ef8b5b17b",
+    "label": "CONTEMPORANEOUS_QUOTE"
+  }
+}

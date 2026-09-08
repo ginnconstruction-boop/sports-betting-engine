@@ -35,13 +35,16 @@ async function main() {
       // 2024 provides warm-up only; report the untouched chronological 2025 targets.
       const tests=full.tests.filter(t=>Date.parse(t.date)>=Date.parse('2025-08-01T00:00Z'));
       const avg=(xs:number[])=>xs.length?xs.reduce((a,b)=>a+b,0)/xs.length:null;
+      const rms=(xs:number[])=>xs.length?Math.sqrt(avg(xs.map(value=>value**2))!):null;
+      const errors=tests.map(t=>t.actual-t.prediction),baselineErrors=tests.map(t=>t.actual-t.baseline);
       const result={...player,status:tests.length?'evaluated':'insufficient_data',sources,observations:rows,excluded,tests,games:tests.length,
-        mae:avg(tests.map(t=>Math.abs(t.error))),baselineMae:avg(tests.map(t=>Math.abs(t.actual-t.baseline)))};
+        mae:avg(errors.map(Math.abs)),rmse:rms(errors),bias:avg(errors),baselineMae:avg(baselineErrors.map(Math.abs)),baselineRmse:rms(baselineErrors),baselineBias:avg(baselineErrors)};
       records.push(result);
-      console.log(JSON.stringify({name:player.name,market:player.market,games:result.games,mae:result.mae,baselineMae:result.baselineMae}));
+      console.log(JSON.stringify({name:player.name,market:player.market,games:result.games,mae:result.mae,rmse:result.rmse,bias:result.bias,
+        baselineMae:result.baselineMae,baselineRmse:result.baselineRmse,baselineBias:result.baselineBias}));
     }catch(e){records.push({...player,status:'source_unavailable',error:(e as Error).message});console.log(`${player.name} ${player.market}: source unavailable`);}
   }
-  const report={version:NFL_FORECAST_VERSION,generatedAt:new Date().toISOString(),
+  const report={version:'nfl-forecast-cohort-audit-v2-metrics',modelVersion:NFL_FORECAST_VERSION,generatedAt:new Date().toISOString(),
     note:'Illustrative fixed cohort, not league-wide or independent pre-registered validation. Frozen model parameters; 2024 warm-up, chronological 2025 stat forecasts. Data may include later corrections. No historical betting odds, archived availability, win rates, ROI or calibrated probability claims.',records};
   const index=process.argv.indexOf('--out');
   if(index>=0){

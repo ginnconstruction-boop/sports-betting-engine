@@ -1,0 +1,19 @@
+{
+  "id": "8889ec6e631e73f8ffdb925c099b614435106b4f409b707022c892e06d8ecd8c",
+  "kind": "player_identity",
+  "value": {
+    "canonicalPlayerId": "espn-player:16800",
+    "providerPlayerIds": {
+      "ESPN": "16800"
+    },
+    "name": "Davante Adams",
+    "teamId": "espn-team:14",
+    "position": "WR",
+    "season": 2026,
+    "effectiveAt": "2026-09-08T02:41:41.126Z",
+    "rookie": "NO",
+    "newTeam": "UNKNOWN",
+    "teamChange": "UNKNOWN",
+    "positionChange": "UNKNOWN"
+  }
+}
