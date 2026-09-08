@@ -28,19 +28,19 @@ Official source: https://www.nfl.com/inactives/
 
 The authority is `research/nfl-forward-archive/nfl_forward_research/v1`. Snapshots and component objects are content-addressed JSON. Game identities, player identities, model outputs, context, inactive evidence, diagnostics, game markets, prop markets, failures, schedule changes, corrections, finals, player final stats, and settlement evidence have separate append-only paths. A mutable index is only a locator; hashes remain authoritative.
 
-Both scheduled and authenticated manual GitHub workflow runs invoke the same collector and archive root. Archive-only commits use `[skip render]`; Render build filters ignore archive/report paths.
+Authenticated manual GitHub workflow runs invoke the same complete collector and archive root that the preserved scheduler implementation uses. Automatic triggering is currently disabled by configuration. Archive-only commits use `[skip render]`; Render build filters ignore archive/report paths.
 
 ## G. Durability verification
 
-PASS locally and remotely: the archive was closed, reopened through a new archive instance, and every snapshot/component hash verified. The authoritative first capture contains 1,407 files / 1,855,044 bytes and is persisted on remote `main` in commit `246172b`. Future component categories are bundled into one content-addressed object per category to avoid per-quote repository file growth. Scheduled write-back remains awaiting its first observed run.
+PASS locally and remotely: the archive was closed, reopened through a new archive instance, and every snapshot/component hash verified. The authoritative first capture contains 1,407 files / 1,855,044 bytes and is persisted on remote `main` in commit `246172b`. Future component categories are bundled into one content-addressed object per category to avoid per-quote repository file growth. Disabling automatic scheduling did not delete, reset, or rewrite any record.
 
 ## H. 7 AM / 2 PM Central scheduler status
 
-Implemented in `.github/workflows/nfl-forward-collector.yml` with `America/Chicago` scheduling at 07:00 and 14:00. DST tests cover CDT, CST, and the transition. No scheduled run has occurred since implementation. Status: `AWAITING FIRST SCHEDULED EXECUTION`.
+`DISABLED_BY_CONFIGURATION`. The active workflow contains only authenticated `workflow_dispatch`; neither 07:00 nor 14:00 has an active schedule trigger. The tested `America/Chicago` scheduler implementation, DST-safe instant calculation, exact 07:00/14:00 cron configuration, and scheduled trigger types remain preserved for later activation. No missed-run alert is created while collection mode is `MANUAL_ONLY`.
 
 ## I. Manual collection status
 
-PASS. Authenticated `workflow_dispatch` and the operator CLI use the same collector. Manual runs require a bounded idempotency key and are labeled `MANUAL`. Dry-run mode performs discovery/planning without writes.
+PASS. Authenticated `workflow_dispatch` and the operator CLI use the same full Phase 2 collector. Manual runs require a bounded idempotency key and are labeled `MANUAL`. Dry-run mode performs discovery/planning without writes. Collection mode is `MANUAL_ONLY`; manual collection is `AVAILABLE`.
 
 ## J. First live forward snapshot
 
@@ -93,15 +93,15 @@ Eligible prop players 28; active verified 0; inactive verified 0; pending 28; un
 
 ## U. Observability / health
 
-CLI status reports last 7 AM run, last 2 PM run, last manual run, next expected run, run status, eligible/captured games, prop counts, not-posted counts, player identity failures, inactive coverage, provider failures, deferred work, API counts, cache hits, and total snapshots. Current health is `STALE` only because no scheduled run has yet occurred; the manual run status is SUCCESS.
+CLI status reports collection mode, scheduled/manual availability, last runs, run status, eligible/captured games, prop counts, not-posted counts, player identity failures, inactive coverage, provider failures, deferred work, API counts, cache hits, and total snapshots. Current state is `COLLECTION MODE MANUAL_ONLY`, `SCHEDULED COLLECTION DISABLED_BY_CONFIGURATION`, `MANUAL COLLECTION AVAILABLE`, and health `HEALTHY`. The next expected scheduled run is null and missed scheduled runs are empty by design. The preserved last manual run remains `SUCCESS`.
 
 ## V. Tests added
 
-41 focused tests cover canonical identities, duplicate names, team/position changes, rookies, exact prop matching, six-stage diagnostics, incomplete/complete official inactive evidence, unknown/pending status, not-posted vs provider unavailable, immutable/durable archive, 7 AM/2 PM Central, DST, manual idempotency, dry run, actual timing, protected cutoff, post-kickoff rejection, leakage, contamination, retry/new snapshot distinction, schedule changes, game/prop preservation, API caps, health, deterministic export, and bounded late-quote labeling.
+45 focused tests pass. Coverage includes canonical identities, duplicate names, team/position changes, rookies, exact prop matching, six-stage diagnostics, official inactive semantics, not-posted vs provider unavailable, immutable/durable archive, preserved 7 AM/2 PM Central and DST behavior, manual idempotency, dry run, actual timing, protected cutoff, post-kickoff rejection, leakage, contamination, retry/new snapshot distinction, schedule changes, game/prop preservation, API caps/accounting, deterministic export, and bounded late-quote labeling. New manual-only regressions verify that no active cron remains, `workflow_dispatch` and the complete collector/archive steps remain active, the trigger is `MANUAL`, disabled schedules create no missed-run state, request/credit/cache/retry/failure/deferred accounting remains available, and the exact cutoff is unchanged.
 
 ## W. Full regression results
 
-360 passed, 0 failed in the final full regression. Focused final suite: 41 passed, 0 failed.
+364 passed, 0 failed in the final full regression. Focused final suite: 45 passed, 0 failed.
 
 ## X. Typecheck / lint
 
@@ -113,6 +113,8 @@ No NFL spread, total, or player-prop coefficients changed. No qualification thre
 
 ## Z. Final decision
 
-NFL FORWARD COLLECTION IMPLEMENTED — AWAITING SCHEDULED VERIFICATION
+NFL FORWARD COLLECTION HEALTHY — MANUAL-ONLY MODE
 
-The integrity implementation and first manual live capture work. Phase 2 must not be called operationally healthy until a real 7 AM or 2 PM scheduled workflow completes and its Git-backed archive commit is verified.
+The Phase 2 integrity implementation and first manual live capture remain valid. Provider/API credits are consumed only after an operator explicitly starts a non-dry-run manual workflow. Phase 3 has not begun.
+
+To re-enable automatic collection later, restore the commented `schedule` block beneath `on:` in `.github/workflows/nfl-forward-collector.yml`, set `NFL_FORWARD_COLLECTION_MODE` to `scheduled`, set `NFL_FORWARD_SCHEDULER_CONFIGURED` to `true`, and restore trigger selection so scheduled events map to `SCHEDULED_0700_CT` or `SCHEDULED_1400_CT`. Then run the focused and full regression suites before activation.

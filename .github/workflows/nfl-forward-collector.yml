@@ -1,11 +1,6 @@
 name: NFL forward research collector
 
 on:
-  schedule:
-    - cron: '0 7 * * *'
-      timezone: 'America/Chicago'
-    - cron: '0 14 * * *'
-      timezone: 'America/Chicago'
   workflow_dispatch:
     inputs:
       dry_run:
@@ -31,7 +26,8 @@ jobs:
     env:
       ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
       NFL_FORWARD_RESEARCH_ROOT: ${{ github.workspace }}/sports-betting-engine/research/nfl-forward-archive
-      NFL_FORWARD_SCHEDULER_CONFIGURED: 'true'
+      NFL_FORWARD_COLLECTION_MODE: 'manual_only'
+      NFL_FORWARD_SCHEDULER_CONFIGURED: 'false'
       NFL_FORWARD_DURABLE_STORAGE: 'git'
       NFL_FORWARD_IDEMPOTENCY_KEY: ${{ github.run_id }}
     steps:
@@ -55,13 +51,7 @@ jobs:
         id: protocol
         shell: bash
         run: |
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
-            echo "trigger=MANUAL" >> "$GITHUB_OUTPUT"
-          elif [[ "${{ github.event.schedule }}" == "0 7 * * *" ]]; then
-            echo "trigger=SCHEDULED_0700_CT" >> "$GITHUB_OUTPUT"
-          else
-            echo "trigger=SCHEDULED_1400_CT" >> "$GITHUB_OUTPUT"
-          fi
+          echo "trigger=MANUAL" >> "$GITHUB_OUTPUT"
 
       - name: Run shared bounded collector
         shell: bash
@@ -89,3 +79,14 @@ jobs:
             git commit -m "chore(research): archive NFL forward collection [skip render]"
             git push origin HEAD:${GITHUB_REF_NAME}
           fi
+
+# MANUAL-ONLY MODE. To re-enable the preserved Central-time protocol, add this
+# block beneath `on:` and set NFL_FORWARD_COLLECTION_MODE to `scheduled` and
+# NFL_FORWARD_SCHEDULER_CONFIGURED to `true`:
+#   schedule:
+#     - cron: '0 7 * * *'
+#       timezone: 'America/Chicago'
+#     - cron: '0 14 * * *'
+#       timezone: 'America/Chicago'
+# Then restore the schedule-to-trigger selection documented in
+# sports-betting-engine/research/NFL_PHASE2_FORWARD_INTEGRITY_2026_09_07.md.
