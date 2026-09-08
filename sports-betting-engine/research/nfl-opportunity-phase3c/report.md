@@ -692,7 +692,7 @@ Future manual snapshots accept one optional content-addressed opportunity-projec
 
 ## Y. Tests / regression / typecheck / lint
 
-PASS. Phase 3C focused tests: 26/26. Combined opportunity plus Phase 2 forward-integrity suite: 71/71. Full repository regression: 390/390. TypeScript: PASS. ESLint: PASS. Existing protected archive: 2 snapshots, hash verification PASS. Manual-only operational status remains HEALTHY with scheduled collection DISABLED_BY_CONFIGURATION.
+PASS. Phase 3C focused tests: 26/26. Combined opportunity plus Phase 2 forward-integrity suite: 74/74. Full repository regression: 390/390. TypeScript: PASS. ESLint: PASS. Existing protected archive: 2 snapshots, hash verification PASS. Manual-only operational status remains HEALTHY with scheduled collection DISABLED_BY_CONFIGURATION.
 
 ## Z. Final decision
 
