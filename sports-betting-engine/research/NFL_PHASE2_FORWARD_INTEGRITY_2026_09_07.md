@@ -32,7 +32,7 @@ Both scheduled and authenticated manual GitHub workflow runs invoke the same col
 
 ## G. Durability verification
 
-PASS locally: archive was closed, reopened through a new archive instance, and every snapshot hash verified. The authoritative archive contains 1,407 files / 1,855,044 bytes from the first capture. Repository persistence is configured in the workflow. Remote Git persistence still depends on committing/pushing this implementation and observing the workflow.
+PASS locally and remotely: the archive was closed, reopened through a new archive instance, and every snapshot/component hash verified. The authoritative first capture contains 1,407 files / 1,855,044 bytes and is persisted on remote `main` in commit `246172b`. Future component categories are bundled into one content-addressed object per category to avoid per-quote repository file growth. Scheduled write-back remains awaiting its first observed run.
 
 ## H. 7 AM / 2 PM Central scheduler status
 
