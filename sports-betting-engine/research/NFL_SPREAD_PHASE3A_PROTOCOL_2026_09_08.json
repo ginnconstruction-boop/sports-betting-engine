@@ -1,0 +1,67 @@
+{
+  "schemaVersion": "nfl-spread-phase3a-protocol-v1",
+  "declaredAt": "2026-09-08T11:45:00.000Z",
+  "protectedForwardCutoff": "2026-09-08T02:19:07.588Z",
+  "source": {
+    "provider": "nflverse",
+    "url": "https://github.com/nflverse/nflverse-data/releases/download/schedules/games.csv.gz",
+    "documentation": "https://nflreadr.nflverse.com/articles/dictionary_schedules.html",
+    "license": "CC-BY-4.0",
+    "archiveRawSource": true
+  },
+  "target": "FINAL_HOME_MARGIN",
+  "auditSeasons": { "from": 1999, "through": 2025 },
+  "featureConstructionSeasons": { "from": 2014, "through": 2025 },
+  "developmentSeasons": { "from": 2016, "through": 2023 },
+  "validationSeason": 2024,
+  "lockedHoldoutSeason": 2025,
+  "walkForwardSeasons": { "from": 2019, "through": 2025 },
+  "primaryGameType": "REG",
+  "postseasonTreatment": "AUDIT_SEPARATELY_NOT_FIT",
+  "modelA": {
+    "version": "nfl-game-line-ridge-research-v2-audit-metrics",
+    "ridge": 3,
+    "halfLifeDays": 180,
+    "frozen": true
+  },
+  "featurePolicy": {
+    "teamRatingRidge": 20,
+    "teamRatingHalfLifeDays": 365,
+    "priorSeasonShrinkGames": 8,
+    "currentSeasonBlendGames": 4,
+    "rollingGames": 4,
+    "candidateRidge": 10,
+    "minimumPriorGamesPerTeam": 8,
+    "sameCalendarDayResultsExcluded": true
+  },
+  "candidates": {
+    "B1_TEAM_STRENGTH": ["TEAM_STRENGTH_DIFF", "HOME_FIELD"],
+    "B2_TEAM_AND_EFFICIENCY": ["TEAM_STRENGTH_DIFF", "HOME_FIELD", "BLENDED_OFFENSE_DIFF", "BLENDED_DEFENSE_DIFF", "ROLLING_MARGIN_DIFF"],
+    "B3_PLUS_QB": "MODEL_UNAVAILABLE_HISTORICAL_POINT_IN_TIME_QB",
+    "B4_PLUS_SCHEDULE": ["TEAM_STRENGTH_DIFF", "HOME_FIELD", "BLENDED_OFFENSE_DIFF", "BLENDED_DEFENSE_DIFF", "ROLLING_MARGIN_DIFF", "REST_DIFF", "HOME_SHORT_WEEK", "AWAY_SHORT_WEEK", "DIVISIONAL_GAME", "NEUTRAL_SITE", "AWAY_ROAD_STREAK"],
+    "B5_PLUS_CONTEXT": "MODEL_UNAVAILABLE_HISTORICAL_POINT_IN_TIME_INJURY_CONTEXT"
+  },
+  "selection": "Lowest validation RMSE among evaluable predeclared candidates; candidate ridge and feature families are fixed before results.",
+  "ensembleWeights": { "from": 0, "through": 1, "step": 0.01, "selectedOn": "VALIDATION_ONLY" },
+  "advancementGate": {
+    "minimumLockedHoldoutN": 250,
+    "minimumMaeImprovementVsModelA": 0.01,
+    "minimumRmseImprovementVsModelA": 0.01,
+    "maximumAbsoluteBias": 1.5,
+    "minimumIncrementalRmseImprovementBeyondMarket": 0.005,
+    "requireStableWalkForward": true,
+    "requireNoLeakage": true,
+    "requireNoMarketContamination": true
+  },
+  "restrictions": {
+    "atsNotSelectionTarget": true,
+    "noProbabilityCalibration": true,
+    "noKelly": true,
+    "noStaking": true,
+    "noThresholdTuning": true,
+    "noProductionChanges": true,
+    "manualOnly": true,
+    "newPaidProviderCalls": 0,
+    "newPaidCredits": 0
+  }
+}
