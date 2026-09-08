@@ -1,0 +1,36 @@
+{
+  "runId": "6e387002da83961d9da82194bb074cac4483ff75223812c286c659bf8771c2c7",
+  "schemaVersion": "college-forward-operations-v1",
+  "captureEventId": "2026-09-08-0700-ct",
+  "trigger": "SCHEDULED_0700_CT",
+  "scheduledFor": "2026-09-08T12:00:00.000Z",
+  "startedAt": "2026-09-08T16:09:00.040Z",
+  "completedAt": "2026-09-08T16:09:00.610Z",
+  "dryRun": false,
+  "status": "SUCCESS",
+  "observations": [
+    {
+      "eventId": "401858212",
+      "originalScheduledKickoff": "2026-09-07T23:30Z",
+      "latestVerifiedKickoff": "2026-09-07T23:30Z",
+      "scheduleStatus": "FINAL",
+      "status": "SKIPPED_STARTED",
+      "snapshotId": null,
+      "minutesToKickoff": null,
+      "message": "Kickoff passed or game entered a started/final state.",
+      "homeSubdivision": "FBS",
+      "awaySubdivision": "FBS"
+    }
+  ],
+  "requestPlan": [],
+  "metrics": {
+    "apiRequests": 3,
+    "cacheHits": 0,
+    "cfbdRequests": 0,
+    "marketRequests": 0
+  },
+  "deferred": [],
+  "providerFailures": [],
+  "discoveryFailures": [],
+  "idempotentRetry": false
+}
