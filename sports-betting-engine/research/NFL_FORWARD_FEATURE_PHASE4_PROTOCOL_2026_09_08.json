@@ -1,0 +1,41 @@
+{
+  "protocolVersion": "nfl-forward-feature-phase4-protocol-v1",
+  "frozenAt": "2026-09-08T00:00:00.000Z",
+  "phase": "DATA_ONLY",
+  "collectionMode": "MANUAL_ONLY",
+  "scheduledCollection": "DISABLED_BY_CONFIGURATION",
+  "protectedForwardCutoff": "2026-09-08T02:19:07.588Z",
+  "newPaidProvidersEnabled": [],
+  "modelChangesAuthorized": false,
+  "productionChangesAuthorized": false,
+  "requiredFeatureIntegrityStages": [
+    "SOURCE_RETRIEVAL",
+    "NORMALIZATION",
+    "ENTITY_MATCHING",
+    "CONTEXT_ATTACHMENT",
+    "FIELD_VALIDITY",
+    "FRESHNESS"
+  ],
+  "coverageDecisionMethod": "deterministic category requirements and raw counts only",
+  "captureWindows": [">24H", "6-24H", "1-6H", "<1H", "LAST_VERIFIED_PREGAME"],
+  "gameModelGate": {
+    "minimumSettledGameForecasts": 200,
+    "startingQbCoverageMinimum": 0.9,
+    "criticalTeamFeatureCoverageMinimum": 0.85,
+    "marketIdentityMinimum": 0.95,
+    "maximumLeakageViolations": 0
+  },
+  "playerOpportunityGate": {
+    "minimumSettledPlayerGameRows": 200,
+    "positionsRequired": ["QB", "RB", "WR", "TE"],
+    "routesRequirement": "trustworthy routes or a predeclared route-unavailable strategy",
+    "availabilityCoverageMinimum": 0.9,
+    "identityCoverageMinimum": 0.98,
+    "maximumLeakageViolations": 0
+  },
+  "preservedResearchVerdicts": [
+    "NFL SPREAD MODEL B FAILS RESEARCH GATE",
+    "NFL TOTAL MODEL B FAILS RESEARCH GATE",
+    "PLAYER OPPORTUNITY ENGINE BLOCKED BY DATA QUALITY"
+  ]
+}

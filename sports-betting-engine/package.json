@@ -57,6 +57,8 @@
     "research:nfl-forward-collect": "node --require ts-node/register/transpile-only src/dev/nflForwardCollector.ts",
     "research:nfl-forward-status": "node --require ts-node/register/transpile-only src/dev/nflForwardCollector.ts --status",
     "research:nfl-forward-verify": "node --require ts-node/register/transpile-only src/dev/nflForwardCollector.ts --verify",
+    "research:nfl-forward-feature-rows": "node --require ts-node/register/transpile-only src/dev/nflForwardCollector.ts --feature-rows",
+    "research:nfl-forward-cost-audit": "node --require ts-node/register/transpile-only src/dev/nflForwardCollector.ts --cost-audit",
     "research:nfl-opportunity": "node --require ts-node/register/transpile-only src/dev/nflOpportunityResearch.ts",
     "research:nfl-spread-phase3a": "node --require ts-node/register/transpile-only src/dev/nflSpreadPhase3AResearch.ts",
     "research:nfl-total-phase3b": "node --require ts-node/register/transpile-only src/dev/nflTotalPhase3BResearch.ts",
