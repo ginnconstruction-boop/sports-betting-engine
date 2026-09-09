@@ -1,0 +1,55 @@
+{
+  "id": "25d79a217d5e582dbd2e820336b0dfafecad9d316ff707b1688d09503ea6c383",
+  "schema": 1,
+  "teamId": "2390",
+  "teamName": "Miami Hurricanes",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5110100",
+      "name": "Judd Anderson",
+      "status": "Active"
+    },
+    {
+      "id": "5168278",
+      "name": "Joe Borchers",
+      "status": "Active"
+    },
+    {
+      "id": "5161816",
+      "name": "Dereon Coleman",
+      "status": "Active"
+    },
+    {
+      "id": "5306780",
+      "name": "Vinny Gonzalez",
+      "status": "Active"
+    },
+    {
+      "id": "5121169",
+      "name": "Darian Mensah",
+      "status": "Active"
+    },
+    {
+      "id": "5141605",
+      "name": "Luke Nickel",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-09T16:03:42.049Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2390/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-09T16:03:42.049Z",
+    "retrievedAt": "2026-09-09T16:03:42.049Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "a3948bae1e61632ed5ca909264abeb79e841394cdcd5a1085a1b416de90f42f5"
+}

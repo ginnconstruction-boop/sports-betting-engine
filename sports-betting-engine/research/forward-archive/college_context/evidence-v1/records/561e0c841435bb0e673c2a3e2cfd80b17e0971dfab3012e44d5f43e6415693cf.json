@@ -1,0 +1,24 @@
+{
+  "id": "561e0c841435bb0e673c2a3e2cfd80b17e0971dfab3012e44d5f43e6415693cf",
+  "schema": 1,
+  "teamId": "2390",
+  "teamName": "Miami Hurricanes",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-09T16:03:42.075Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-09T16:03:42.075Z",
+    "retrievedAt": "2026-09-09T16:03:42.075Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "de1f0e711991a291573b6514572059d933092d1093baa3f89f19f0249de9856e"
+}

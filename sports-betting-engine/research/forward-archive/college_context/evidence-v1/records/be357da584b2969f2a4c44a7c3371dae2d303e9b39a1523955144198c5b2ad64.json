@@ -1,0 +1,24 @@
+{
+  "id": "be357da584b2969f2a4c44a7c3371dae2d303e9b39a1523955144198c5b2ad64",
+  "schema": 1,
+  "teamId": "2390",
+  "teamName": "Miami Hurricanes",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.ingestionStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-09T16:03:42.075Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-09T16:03:42.075Z",
+    "retrievedAt": "2026-09-09T16:03:42.075Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "244c50ea45a0ae539bbde3179ab34be6a5edb33666151e230313f862f93b954f"
+}

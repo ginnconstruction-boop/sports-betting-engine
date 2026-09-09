@@ -1,0 +1,24 @@
+{
+  "id": "599ca35ef5dbdfd187948e298b4576d961ec24fb0d70b9800c83899fb2a02791",
+  "schema": 1,
+  "teamId": "50",
+  "teamName": "Florida A&M Rattlers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.playerCount",
+  "value": 99,
+  "effectiveFrom": "2026-09-09T16:03:42.074Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/50/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-09T16:03:42.074Z",
+    "retrievedAt": "2026-09-09T16:03:42.074Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "6544fd0ee8f117059b480a053a5054b54b2c658ab6a477d11968c536df03d3dc"
+}

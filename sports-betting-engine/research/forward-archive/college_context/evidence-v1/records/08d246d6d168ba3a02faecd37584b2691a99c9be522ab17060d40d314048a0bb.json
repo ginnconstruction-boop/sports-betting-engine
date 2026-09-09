@@ -1,0 +1,50 @@
+{
+  "id": "08d246d6d168ba3a02faecd37584b2691a99c9be522ab17060d40d314048a0bb",
+  "schema": 1,
+  "teamId": "50",
+  "teamName": "Florida A&M Rattlers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "4431976",
+      "name": "Dustin Fletcher",
+      "status": "Active"
+    },
+    {
+      "id": "5227056",
+      "name": "James Hayes",
+      "status": "Active"
+    },
+    {
+      "id": "5442043",
+      "name": "Dante Howell",
+      "status": "Active"
+    },
+    {
+      "id": "4880668",
+      "name": "Isaiah Knowles",
+      "status": "Active"
+    },
+    {
+      "id": "5442040",
+      "name": "Armond Parker",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-09T16:03:42.074Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/50/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-09T16:03:42.074Z",
+    "retrievedAt": "2026-09-09T16:03:42.074Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "6544fd0ee8f117059b480a053a5054b54b2c658ab6a477d11968c536df03d3dc"
+}

@@ -1,0 +1,77 @@
+{
+  "runId": "161f98d47a39c4bf2f299d96576192212ca067e4665dc0696fd42c0cb333fcce",
+  "schemaVersion": "college-forward-operations-v1",
+  "captureEventId": "2026-09-09-0700-ct",
+  "trigger": "SCHEDULED_0700_CT",
+  "scheduledFor": "2026-09-09T12:00:00.000Z",
+  "startedAt": "2026-09-09T16:03:41.329Z",
+  "completedAt": "2026-09-09T16:03:44.000Z",
+  "dryRun": false,
+  "status": "SUCCESS",
+  "observations": [
+    {
+      "eventId": "401858213",
+      "originalScheduledKickoff": "2026-09-11T00:00Z",
+      "latestVerifiedKickoff": "2026-09-11T00:00Z",
+      "scheduleStatus": "SCHEDULED",
+      "status": "CAPTURED",
+      "snapshotId": "90b32a788d16f912b1906dd13dfd7d23414b9652d1969207b3a30a1f25927cbc",
+      "minutesToKickoff": 1916.2668666666666,
+      "message": "Immutable pregame snapshot captured.",
+      "homeSubdivision": "FBS",
+      "awaySubdivision": "FCS"
+    }
+  ],
+  "requestPlan": [
+    {
+      "provider": "ESPN",
+      "category": "GAME_CONTEXT",
+      "scope": "1 events; stale/missing summaries only",
+      "cache": "UNKNOWN",
+      "maximumRequests": 1,
+      "priority": 1
+    },
+    {
+      "provider": "ESPN",
+      "category": "ROSTER",
+      "scope": "unique stale/missing teams only",
+      "cache": "UNKNOWN",
+      "maximumRequests": 2,
+      "priority": 2
+    },
+    {
+      "provider": "CollegeFootballData",
+      "category": "SHARED_FORWARD_FACTS",
+      "scope": "whole-season shared payloads",
+      "cache": "UNKNOWN",
+      "maximumRequests": 4,
+      "priority": 3
+    },
+    {
+      "provider": "The Odds API",
+      "category": "EXTERNAL_MARKET_BENCHMARK",
+      "scope": "one bulk college spread/total request",
+      "cache": "UNKNOWN",
+      "maximumRequests": 1,
+      "priority": 4
+    },
+    {
+      "provider": "ESPN",
+      "category": "MODEL_A_CURRENT_RESULTS",
+      "scope": "season-to-date as of 2026-09-09T16:03:41.329Z",
+      "cache": "UNKNOWN",
+      "maximumRequests": 2,
+      "priority": 5
+    }
+  ],
+  "metrics": {
+    "apiRequests": 10,
+    "cacheHits": 0,
+    "cfbdRequests": 4,
+    "marketRequests": 1
+  },
+  "deferred": [],
+  "providerFailures": [],
+  "discoveryFailures": [],
+  "idempotentRetry": false
+}

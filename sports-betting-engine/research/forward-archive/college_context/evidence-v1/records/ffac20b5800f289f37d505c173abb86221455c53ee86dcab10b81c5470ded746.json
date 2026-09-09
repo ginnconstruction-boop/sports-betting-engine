@@ -1,0 +1,24 @@
+{
+  "id": "ffac20b5800f289f37d505c173abb86221455c53ee86dcab10b81c5470ded746",
+  "schema": 1,
+  "teamId": "2390",
+  "teamName": "Miami Hurricanes",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.defensiveCoordinator.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-09T16:03:42.049Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2390/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-09T16:03:42.049Z",
+    "retrievedAt": "2026-09-09T16:03:42.049Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "a3948bae1e61632ed5ca909264abeb79e841394cdcd5a1085a1b416de90f42f5"
+}

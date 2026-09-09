@@ -1,0 +1,24 @@
+{
+  "id": "1b79197bf947161f67bad95b4b660beacaf71a9039a1f92785ce1dbfa865dfd9",
+  "schema": 1,
+  "teamId": "2390",
+  "teamName": "Miami Hurricanes",
+  "season": 2026,
+  "eventId": "401858213",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.currentHomeSpread",
+  "value": -56.5,
+  "effectiveFrom": "2026-09-09T16:03:41.984Z",
+  "effectiveTo": "2026-09-11T06:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858213",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-09T16:03:41.984Z",
+    "retrievedAt": "2026-09-09T16:03:41.984Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8dcd2c212dc4703e7cc619095ba6105f28b040261ac2dc0da6637b894e31461c"
+}
