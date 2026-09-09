@@ -6,6 +6,7 @@
 // ============================================================
 
 import * as dotenv from 'dotenv';
+import * as path from 'path';
 dotenv.config();
 
 import { getOddsForAllSports, getSessionQuota } from '../api/oddsApiClient';
@@ -51,6 +52,7 @@ import { applySignalDiversity, printSignalDiversitySummary } from '../services/s
 import { applyOutcomeSignals, printOutcomeSummary, OutcomeContext } from '../services/outcomeSignalEngine';
 import { applySignalWeighting, printWeightingSummary } from '../services/signalWeightingEngine';
 import { applyNCAACalibrationWeighting } from '../services/calibrationEngine';
+import {buildNflPredictiveBoardFromSummaries,printNflPredictiveBoard} from '../services/nflPredictiveBoard';
 
 function withTimeout<T>(promise: Promise<T>, ms: number, label: string): Promise<T> {
   return new Promise<T>((resolve, reject) => {
@@ -93,6 +95,16 @@ export async function runSportScan(
   const allSummaries: EventSummary[] = [];
   for (const [key, events] of rawBySport) {
     allSummaries.push(...aggregateAllEvents(normalizeEvents(events, key)));
+  }
+
+  // NFL now exits through the dedicated two-layer predictive board. The
+  // independent locked football forecast is kept separate from the
+  // market-aware, non-probability grade. This reuses the same game-line pull
+  // above and deliberately skips the legacy Kelly/probability decision path.
+  if (sportKey === 'americanfootball_nfl') {
+    const predictiveBoard = buildNflPredictiveBoardFromSummaries(allSummaries, path.resolve(__dirname, '../..'));
+    printNflPredictiveBoard(predictiveBoard);
+    return predictiveBoard;
   }
 
   // -- Intelligence suite -----------------------------------

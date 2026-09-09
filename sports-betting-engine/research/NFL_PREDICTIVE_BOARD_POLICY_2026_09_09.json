@@ -1,0 +1,82 @@
+{
+  "schemaVersion": "nfl-predictive-board-policy-v1",
+  "declaredAt": "2026-09-09T16:00:00Z",
+  "purpose": "Transparent decision-support ranking. Grade is not a probability, calibrated forecast, staking signal, or guarantee.",
+  "layers": {
+    "footballForecast": "Locked independent Phase 3A spread and Phase 3B total models; no market inputs.",
+    "marketAwareDecision": "Compares independent projections with captured lines, price, consensus, data quality, availability, stability, and known research limitations."
+  },
+  "componentMaximums": {
+    "modelMarketDisagreement": 22,
+    "historicalReliability": 18,
+    "dataQuality": 15,
+    "availability": 10,
+    "roleCertainty": 5,
+    "projectionStability": 8,
+    "marketConsensus": 8,
+    "price": 6,
+    "matchupSupport": 5,
+    "currentSeasonSample": 4,
+    "timestampSafeMovement": 2,
+    "dependencyIntegrity": 2
+  },
+  "researchReliabilityPoints": {
+    "PASSED": 18,
+    "UNKNOWN": 9,
+    "FAILED": 6,
+    "BLOCKED": 4
+  },
+  "dataQualityPoints": {
+    "PASS": 15,
+    "PARTIAL": 9,
+    "UNKNOWN": 5,
+    "FAIL": 0
+  },
+  "availabilityPoints": {
+    "VERIFIED_ACTIVE": 10,
+    "PENDING_OR_QUESTIONABLE": 4,
+    "UNKNOWN": 3,
+    "INACTIVE": 0
+  },
+  "tiers": {
+    "90-100": "ELITE",
+    "85-89": "STRONG",
+    "78-84": "PLAYABLE",
+    "70-77": "LEAN",
+    "60-69": "WEAK / INFORMATIONAL",
+    "below60": "Not displayed as a recommended opportunity"
+  },
+  "caps": {
+    "extremeDisagreementWithUnpassedModel": 69,
+    "failedDataQuality": 49,
+    "verifiedInactive": 49,
+    "blockedResearch": 77
+  },
+  "keyNumbers": [3, 7],
+  "marketFreshMinutes": 15,
+  "sgp": {
+    "eligibleLegMinimum": 70,
+    "sizes": [2, 3],
+    "gradeIsSeparateFromAverage": true,
+    "negativeCorrelationRejected": true,
+    "minimumDisplayGrade": 60
+  },
+  "parlay": {
+    "eligibleLegMinimum": 70,
+    "sizes": [2, 3],
+    "oneLegPerGame": true,
+    "gradeIsSeparateFromAverage": true,
+    "minimumDisplayGrade": 60
+  },
+  "safeguards": {
+    "collectionMode": "MANUAL_ONLY",
+    "scheduledCollection": "DISABLED_BY_CONFIGURATION",
+    "protectedCutoff": "2026-09-08T02:19:07.588Z",
+    "newPaidProviderCalls": 0,
+    "newPaidCredits": 0,
+    "probabilityCalibrationEnabled": false,
+    "kellyEnabled": false,
+    "stakingEnabled": false,
+    "modelFittingEnabled": false
+  }
+}

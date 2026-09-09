@@ -68,6 +68,16 @@ body{background:var(--bg);color:var(--text);font-family:var(--font-mono);min-hei
 .nfl-forecast-card p:first-child{color:var(--yellow);font-size:1rem;font-weight:bold}
 .nfl-forecast-card details{border-top:1px solid var(--border);padding-top:.8rem;margin-top:1rem;font-size:.8rem}
 .nfl-forecast-card summary{font-size:.875rem}
+.nfl-predictive-board{margin:1rem 0;padding:1rem;border:1px solid var(--green-dim);border-radius:8px;background:#0b1510;color:var(--text)}
+.nfl-predictive-board h2{font-family:var(--font-ui);font-size:1.45rem;color:var(--green);letter-spacing:.04em}
+.nfl-predictive-board h3{font-family:var(--font-ui);font-size:1.05rem;color:var(--text);margin:.5rem 0}
+.nfl-predictive-board h4{font-family:var(--font-ui);font-size:.8rem;color:var(--blue);letter-spacing:.08em;margin-top:.8rem}
+.nfl-top-board{margin:.8rem 0;padding:.8rem;border-left:3px solid var(--green);background:var(--bg3)}
+.nfl-best-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.45rem;margin:.8rem 0}
+.nfl-game-prediction{margin:1rem 0;padding:1rem;border:1px solid var(--border);border-radius:7px;background:var(--bg2)}
+.nfl-game-prediction p{margin:.5rem 0;line-height:1.55}
+.nfl-predicted-score{font-family:var(--font-ui);font-weight:900;font-size:1.25rem;color:var(--green);margin:.65rem 0}
+.nfl-game-prediction details{margin-top:.8rem;border-top:1px solid var(--border);padding-top:.7rem}
 @media(max-width:600px){.market-controls{grid-template-columns:1fr}}
 .section-label{font-family:var(--font-ui);font-weight:600;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin:1.5rem 0 .6rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
 .btn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:.5rem;margin-bottom:.5rem}
@@ -292,7 +302,7 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
     <!-- SINGLE SPORT -->
     <div class="section-label">NFL first • college football second</div>
     <div class="btn-grid">
-      <button class="scan-btn prime" onclick="runCmd('nfl','NFL Game Lines')"><span class="num">NFL</span>NFL Game Lines</button>
+      <button class="scan-btn prime" onclick="runCmd('nfl','NFL Predictive Game Lines')"><span class="num">NFL</span>NFL Predictive Game Lines</button>
       <button class="scan-btn prime" id="nfl-today-open" onclick="runNflToday()"><span class="num">NFL</span>NFL daily preflight + grade</button>
       <button class="scan-btn prime" id="nfl-forecast-open" aria-controls="nfl-market-board" onclick="openNflForecast()"><span class="num">NFL</span>Forecast + track</button>
       <button class="scan-btn prime" id="college-open" aria-controls="college-market-board" onclick="runCollegeToday()"><span class="num">CFB</span>College football — scan + track + grade</button>
@@ -307,7 +317,7 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
         <li><strong>PARTIAL:</strong> the free official NFL weekly injury report loads; the game-day inactives page still needs live-format verification.</li>
         <li><strong>READY — DIAGNOSTIC:</strong> current rosters, depth charts and expected quarterbacks load without claiming confirmed availability.</li>
         <li><strong>READY:</strong> one click checks today’s full NFL slate and grades eligible paper records without buying odds.</li>
-        <li><strong>FAILED RESEARCH GATE:</strong> the free-data full-game model trailed the closing market and went 55–72–1 ATS on the untouched 2025 test; no spread, moneyline or total recommendations were enabled.</li>
+        <li><strong>FAILED RESEARCH GATE:</strong> the free-data full-game model trailed the closing market and went 55–72–1 ATS on the untouched 2025 test. Predictive-board grades inherit that penalty; no calibrated betting model or real-money recommendation was enabled.</li>
         <li><strong>PAPER TEST:</strong> passing yards, rushing yards, receiving yards and receptions have experimental forecasts.</li>
         <li><strong>PARTIAL:</strong> attempts, targets, team opportunity share and free snap diagnostics exist; routes and red-zone roles do not.</li>
         <li><strong>DIAGNOSTIC:</strong> free dated team/opponent EPA, efficiency, sack and QB-hit summaries load, but have no model weight.</li>
@@ -322,7 +332,7 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
     </details>
     <details class="market-board" id="nfl-market-board">
       <summary>NFL Forecast + track &amp; Market Board</summary>
-      <p class="focus-note">Start with the free NFL daily preflight. It checks every remaining game today, current rosters, expected depth-chart quarterbacks, available injury/weather context and existing paper results. It deliberately buys no odds and creates no recommendation. Load one game/category afterward only when you want prices or a core player forecast.</p>
+      <p class="focus-note">Start with the free NFL daily preflight. It checks every remaining game today, current context and existing paper results, then shows a predictive board from already captured evidence. It buys no odds, refits no model, places no bet and saves no new paper pick. A 0–100 predictability grade is relative evidence strength—not win probability.</p>
       <button class="scan-btn prime" id="nfl-today-btn" onclick="runNflToday()">Run NFL daily preflight + grade (free)</button>
       <div id="nfl-daily-status" class="market-status" role="status" aria-live="polite"></div>
       <div id="nfl-daily-results" class="focus-note"></div>
@@ -335,7 +345,7 @@ table.picks-tbl tr:nth-child(even) td{background:rgba(255,255,255,.02)}
         </ol>
         <p>Forecasts support passing yards, rushing yards, receiving yards and receptions only. Other markets do not have forecast buttons. This is paper testing, not a real bet.</p>
       </div>
-      <p class="focus-note">Select a game in the next 14 days and one category. Schedule discovery is free; loading odds uses API credits and is cached for five minutes. History is descriptive. Forecast + track evaluates both sides for one core player market and automatically logs an eligible experimental paper recommendation. No extra odds request, real wager or validated edge is implied. Specialty markets remain quote-only.</p>
+      <p class="focus-note">Select a game in the next 14 days and one category. Schedule discovery is free; loading odds uses API credits and is cached for five minutes. Predictions are shown first; price shopping and research diagnostics are supporting detail. Forecast + track evaluates both sides for one core player market and automatically logs only an eligible experimental paper recommendation. No real wager or validated edge is implied. Specialty markets remain quote-only.</p>
       <button class="scan-btn" id="nfl-events-btn" onclick="loadNflEvents()">Load / refresh NFL games (free)</button>
       <div class="market-controls">
         <label for="nfl-event">NFL game<select id="nfl-event"><option value="">Load games first</option></select></label>

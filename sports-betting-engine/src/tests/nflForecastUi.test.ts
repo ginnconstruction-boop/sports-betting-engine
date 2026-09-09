@@ -86,7 +86,14 @@ test('all 15 NFL readiness items and specialty restrictions remain visible and h
 test('one-click NFL preflight is prominent and states that it spends no odds credits',()=>{
   assert.match(html,/id="nfl-today-open"[^>]*onclick="runNflToday\(\)"/);
   assert.match(html,/id="nfl-today-btn"[^>]*onclick="runNflToday\(\)"[^>]*>Run NFL daily preflight \+ grade \(free\)/);
-  assert.match(source,/\/api\/nfl\/today/);assert.match(source,/Odds credits: 0/);assert.match(source,/No model adjustment or recommendation was created/);
+  assert.match(source,/\/api\/nfl\/today/);assert.match(source,/Odds credits: 0/);assert.match(source,/predictiveBoard/);assert.match(html,/predictability grade is relative evidence strength—not win probability/i);
   assert.match(source,/waiting for a reliable source/);assert.match(source,/not confirmed active/);
   assert.match(source,/team\/opponent research/);assert.match(source,/Snap-share context/);assert.match(source,/no forecast adjustment/);
+});
+
+test('NFL daily rendering puts predicted score and 60-plus ranking ahead of diagnostics',()=>{
+  const app=ui();app.run(`renderNflPredictiveBoard(document.getElementById('board'),{gradeMeaning:'Grade is not probability.',topOverall:[],bestByType:{},games:[{gameId:'g',matchup:'Away @ Home',kickoff:'2026-09-10T00:20:00Z',source:'FORWARD_ARCHIVE',capturedAt:'2026-09-09T03:00:00Z',forecast:{status:'PROJECTED',awayScore:20,homeScore:27,winner:'Home',homeMargin:7,total:47,version:'locked',reconciliation:'midpoint'},projectedWinnerStrength:'MODERATE',gameScript:'Home ahead.',bestGameAngle:null,spread:null,moneyline:null,total:null,teamTotals:[],playerProps:[],sgps:[],derivatives:[],dataQuality:'PARTIAL',keyRisks:['QB pending']}],gradeDistribution:{'60-69':0,'70-77':0,'78-84':0,'85-89':0,'90-100':0},below60:3,diagnostics:[],collection:{mode:'MANUAL_ONLY',scheduled:'DISABLED_BY_CONFIGURATION',newPaidProviderCalls:0,newPaidCredits:0}});`);
+  const board=app.document.getElementById('board').children[0];assert.equal(board.children[0].textContent,'NFL PREDICTIVE BOARD');
+  const card=board.children.find(child=>child.className==='nfl-game-prediction');assert.match(card.children.find(child=>child.className==='nfl-predicted-score').textContent,/Away 20 — Home 27/);
+  assert.match(board.children[1].textContent,/not probability/);
 });

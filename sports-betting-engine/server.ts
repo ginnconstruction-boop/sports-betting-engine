@@ -35,6 +35,7 @@ import { CollegeDailyRun } from './src/services/collegeDailyRun';
 import {collegeClvReport} from './src/services/collegeClv';
 import {PAPER_APPLICATION_RELEASE} from './src/services/footballSettlement';
 import {readNflForwardMonitoringReport} from './src/services/nflForwardMonitoring';
+import {readNflPredictiveBoard} from './src/services/nflPredictiveBoard';
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -359,7 +360,8 @@ const nflPaper = new NflPaperLedger(path.join(SNAPSHOT_DIR, 'nfl_paper_picks.jso
 const nflRecommendations = new NflRecommendations(nflMarketBoard, nflResearch, nflPaper, undefined, undefined,
   new NflEvidenceArchive(path.join(SNAPSHOT_DIR, 'nfl_forecast_evidence')));
 const nflContext = new NflContextIngestion(SNAPSHOT_DIR,nflResearch,undefined,Date.now,undefined,nflOfficialReports);
-const nflDailyRun = new NflDailyRun({events:()=>nflMarketBoard.events(),preflight:async events=>({...await nflContext.refresh(events),readiness:nflReadinessChecklist()}),read:()=>nflPaper.read(),
+const nflForwardRoot=()=>path.resolve(process.env.NFL_FORWARD_RESEARCH_ROOT??path.join(__dirname,'research','nfl-forward-archive'));
+const nflDailyRun = new NflDailyRun({events:()=>nflMarketBoard.events(),preflight:async events=>({...await nflContext.refresh(events),readiness:nflReadinessChecklist(),predictiveBoard:readNflPredictiveBoard(nflForwardRoot(),__dirname,Date.now(),events)}),read:()=>nflPaper.read(),
   gradeEvents:ids=>nflPaper.gradeEvents(ids),now:Date.now});
 app.post('/api/nfl/today',requireAuth,(req,res)=>{
   if(!req.body||Array.isArray(req.body)||Object.keys(req.body).length)return res.status(400).json({error:'One-click NFL preflight accepts no games, prices, results or model overrides.'});
@@ -367,7 +369,8 @@ app.post('/api/nfl/today',requireAuth,(req,res)=>{
 });
 app.get('/api/nfl/today/:id',requireAuth,(req,res)=>{try{res.setHeader('Cache-Control','no-store');res.json(nflDailyRun.get(req.params.id));}catch(error){nflError(res,error);}});
 app.get('/api/nfl/readiness',requireAuth,(_req,res)=>{res.setHeader('Cache-Control','no-store');res.json(nflReadinessChecklist());});
-app.get('/api/nfl/forward-readiness',requireAuth,(_req,res)=>{try{res.setHeader('Cache-Control','no-store');const root=path.resolve(process.env.NFL_FORWARD_RESEARCH_ROOT??path.join(__dirname,'research','nfl-forward-archive'));res.json(readNflForwardMonitoringReport(root));}catch(error){res.status(503).json({error:error instanceof Error?error.message:String(error)});}});
+app.get('/api/nfl/forward-readiness',requireAuth,(_req,res)=>{try{res.setHeader('Cache-Control','no-store');res.json(readNflForwardMonitoringReport(nflForwardRoot()));}catch(error){res.status(503).json({error:error instanceof Error?error.message:String(error)});}});
+app.get('/api/nfl/predictive-board',requireAuth,(_req,res)=>{try{res.setHeader('Cache-Control','no-store');res.json(readNflPredictiveBoard(nflForwardRoot(),__dirname));}catch(error){res.status(503).json({error:error instanceof Error?error.message:String(error)});}});
 app.get('/api/nfl/events', requireAuth, async (_req, res) => {
   try {
     res.json({ events: await nflMarketBoard.events(), windowDays: NFL_BOARD_WINDOW_DAYS,
