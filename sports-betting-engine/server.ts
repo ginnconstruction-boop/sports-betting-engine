@@ -34,6 +34,7 @@ import { CollegePredictions } from './src/services/collegePredictions';
 import { CollegeDailyRun } from './src/services/collegeDailyRun';
 import {collegeClvReport} from './src/services/collegeClv';
 import {PAPER_APPLICATION_RELEASE} from './src/services/footballSettlement';
+import {readNflForwardMonitoringReport} from './src/services/nflForwardMonitoring';
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
@@ -366,6 +367,7 @@ app.post('/api/nfl/today',requireAuth,(req,res)=>{
 });
 app.get('/api/nfl/today/:id',requireAuth,(req,res)=>{try{res.setHeader('Cache-Control','no-store');res.json(nflDailyRun.get(req.params.id));}catch(error){nflError(res,error);}});
 app.get('/api/nfl/readiness',requireAuth,(_req,res)=>{res.setHeader('Cache-Control','no-store');res.json(nflReadinessChecklist());});
+app.get('/api/nfl/forward-readiness',requireAuth,(_req,res)=>{try{res.setHeader('Cache-Control','no-store');const root=path.resolve(process.env.NFL_FORWARD_RESEARCH_ROOT??path.join(__dirname,'research','nfl-forward-archive'));res.json(readNflForwardMonitoringReport(root));}catch(error){res.status(503).json({error:error instanceof Error?error.message:String(error)});}});
 app.get('/api/nfl/events', requireAuth, async (_req, res) => {
   try {
     res.json({ events: await nflMarketBoard.events(), windowDays: NFL_BOARD_WINDOW_DAYS,
