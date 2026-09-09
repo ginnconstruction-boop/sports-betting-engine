@@ -1,0 +1,24 @@
+{
+  "id": "1e549830b40fc800ffffcba0eb99cf49f89e72bd008d6c682418b151489aeaea",
+  "schema": 1,
+  "teamId": "50",
+  "teamName": "Florida A&M Rattlers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.depthTier.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-09T21:35:58.762Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-09T21:35:58.762Z",
+    "retrievedAt": "2026-09-09T21:35:58.762Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "a0aaba452e818332333fe8742ecb4d47b274ecaacabd9f7d54e7bc177409e411"
+}

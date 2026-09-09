@@ -1,0 +1,87 @@
+{
+  "runId": "a7ec0ef7115b0d4da73a61b66f1b2881e427b478c55fd8abbf5841886de4a73d",
+  "schemaVersion": "college-forward-operations-v1",
+  "captureEventId": "2026-09-09-1400-ct",
+  "trigger": "SCHEDULED_1400_CT",
+  "scheduledFor": "2026-09-09T19:00:00.000Z",
+  "startedAt": "2026-09-09T21:35:57.967Z",
+  "completedAt": "2026-09-09T21:35:59.397Z",
+  "dryRun": false,
+  "status": "DEGRADED",
+  "observations": [
+    {
+      "eventId": "401858213",
+      "originalScheduledKickoff": "2026-09-11T00:00Z",
+      "latestVerifiedKickoff": "2026-09-11T00:00Z",
+      "scheduleStatus": "SCHEDULED",
+      "status": "CAPTURED",
+      "snapshotId": "43bf3bfa35803d8fdf83eb29276092d3570b43c5971819248f3cd6f004184638",
+      "minutesToKickoff": 1584.01025,
+      "message": "Immutable pregame snapshot captured.",
+      "homeSubdivision": "FBS",
+      "awaySubdivision": "FCS"
+    }
+  ],
+  "requestPlan": [
+    {
+      "provider": "ESPN",
+      "category": "GAME_CONTEXT",
+      "scope": "1 events; stale/missing summaries only",
+      "cache": "UNKNOWN",
+      "maximumRequests": 1,
+      "priority": 1
+    },
+    {
+      "provider": "ESPN",
+      "category": "ROSTER",
+      "scope": "unique stale/missing teams only",
+      "cache": "UNKNOWN",
+      "maximumRequests": 2,
+      "priority": 2
+    },
+    {
+      "provider": "CollegeFootballData",
+      "category": "SHARED_FORWARD_FACTS",
+      "scope": "whole-season shared payloads",
+      "cache": "UNKNOWN",
+      "maximumRequests": 4,
+      "priority": 3
+    },
+    {
+      "provider": "The Odds API",
+      "category": "EXTERNAL_MARKET_BENCHMARK",
+      "scope": "one bulk college spread/total request",
+      "cache": "UNKNOWN",
+      "maximumRequests": 1,
+      "priority": 4
+    },
+    {
+      "provider": "ESPN",
+      "category": "MODEL_A_CURRENT_RESULTS",
+      "scope": "season-to-date as of 2026-09-09T21:35:57.967Z",
+      "cache": "UNKNOWN",
+      "maximumRequests": 2,
+      "priority": 5
+    }
+  ],
+  "metrics": {
+    "apiRequests": 5,
+    "cacheHits": 4,
+    "cfbdRequests": 0,
+    "marketRequests": 0
+  },
+  "deferred": [],
+  "providerFailures": [
+    {
+      "provider": "The Odds API",
+      "type": "MARKET_UNAVAILABLE",
+      "retryable": true,
+      "nextEligibleAttempt": "2026-09-09T21:50:58.984Z",
+      "message": "College slate odds unavailable. No retry or per-game odds purchases were made."
+    }
+  ],
+  "discoveryFailures": [
+    "Odds-provider free event discovery failed: [getUpcomingEvents(americanfootball_ncaaf)] Invalid or unauthorized API key. Check ODDS_API_KEY."
+  ],
+  "idempotentRetry": false
+}

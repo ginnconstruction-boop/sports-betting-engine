@@ -1,0 +1,24 @@
+{
+  "id": "8a7bf18f7e9f97f44399dabde5ebd916c5db3d136f5cf310eea65511b8b842dc",
+  "schema": 1,
+  "teamId": "50",
+  "teamName": "Florida A&M Rattlers",
+  "season": 2026,
+  "eventId": "401858213",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.pointsPerGame",
+  "value": 16.5,
+  "effectiveFrom": "2026-09-09T21:35:58.760Z",
+  "effectiveTo": "2026-09-11T06:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858213",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-09T21:35:58.760Z",
+    "retrievedAt": "2026-09-09T21:35:58.760Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "b619d69d3630096a775f41de6134d564a0d0ccf72f2267a77f9eafd818a9ad6d"
+}
