@@ -1,0 +1,50 @@
+{
+  "id": "4dc74040e72bb95636e264c83ba031dc70601df4906ae9d508167dad1d4c6c62",
+  "schema": 1,
+  "teamId": "258",
+  "teamName": "Virginia Cavaliers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5145789",
+      "name": "Cole Geer",
+      "status": "Active"
+    },
+    {
+      "id": "5237318",
+      "name": "Ely Hamrick",
+      "status": "Active"
+    },
+    {
+      "id": "4870819",
+      "name": "Eli Holstein",
+      "status": "Active"
+    },
+    {
+      "id": "5219289",
+      "name": "Boone Lourd",
+      "status": "Active"
+    },
+    {
+      "id": "4685696",
+      "name": "Beau Pribula",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-10T15:57:43.431Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/258/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.431Z",
+    "retrievedAt": "2026-09-10T15:57:43.431Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d8ee5a4e6c2c50cd5c01a41b8e1ab51d95ff3595771dbacf3148bc3399e58d7c"
+}

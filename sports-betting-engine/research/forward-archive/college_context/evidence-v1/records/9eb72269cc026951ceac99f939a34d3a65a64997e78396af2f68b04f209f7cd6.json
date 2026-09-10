@@ -1,0 +1,24 @@
+{
+  "id": "9eb72269cc026951ceac99f939a34d3a65a64997e78396af2f68b04f209f7cd6",
+  "schema": 1,
+  "teamId": "2305",
+  "teamName": "Kansas Jayhawks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-10T15:57:43.772Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.772Z",
+    "retrievedAt": "2026-09-10T15:57:43.772Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "127bd73479800845190124ab9f0192199ab5c24bb3d46bd6015115635007e4d9"
+}

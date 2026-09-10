@@ -1,0 +1,24 @@
+{
+  "id": "1fa083b5abeea3c8444b674ff3ba6caf8336f699922f0304ff68118cfa522663",
+  "schema": 1,
+  "teamId": "222",
+  "teamName": "Villanova Wildcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.ingestionStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-10T15:57:43.772Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.772Z",
+    "retrievedAt": "2026-09-10T15:57:43.772Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "6eaabc69ceae18d957bbdf2fcf5fe253cf19b06b7a5e4d6c43e85b45ce79a761"
+}

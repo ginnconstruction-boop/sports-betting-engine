@@ -1,0 +1,24 @@
+{
+  "id": "39fb7c240c344ab41b193538dbff4c724b2f0d5976fc9d44f37e8299493f1c04",
+  "schema": 1,
+  "teamId": "142",
+  "teamName": "Missouri Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-10T15:57:43.362Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/142/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.362Z",
+    "retrievedAt": "2026-09-10T15:57:43.362Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ebdb6712d3a429069e5aa8297e7ad6ae0f14035de9d7f7e592ad276510b8e435"
+}

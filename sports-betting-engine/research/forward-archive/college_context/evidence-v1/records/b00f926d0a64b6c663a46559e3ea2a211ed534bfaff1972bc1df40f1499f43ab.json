@@ -1,0 +1,24 @@
+{
+  "id": "b00f926d0a64b6c663a46559e3ea2a211ed534bfaff1972bc1df40f1499f43ab",
+  "schema": 1,
+  "teamId": "258",
+  "teamName": "Virginia Cavaliers",
+  "season": 2026,
+  "eventId": "401858220",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.lastOpponent.diagnostic",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-10T15:57:43.188Z",
+  "effectiveTo": "2026-09-12T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858220",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.188Z",
+    "retrievedAt": "2026-09-10T15:57:43.188Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d708a2be18ea0cf28fdbe0c5865967440c4390e3257b2a598c0a4d8557a1a23a"
+}

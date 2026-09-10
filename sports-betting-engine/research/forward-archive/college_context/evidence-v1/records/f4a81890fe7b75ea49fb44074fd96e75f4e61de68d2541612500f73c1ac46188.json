@@ -1,0 +1,24 @@
+{
+  "id": "f4a81890fe7b75ea49fb44074fd96e75f4e61de68d2541612500f73c1ac46188",
+  "schema": 1,
+  "teamId": "258",
+  "teamName": "Virginia Cavaliers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-10T15:57:43.280Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/258/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.280Z",
+    "retrievedAt": "2026-09-10T15:57:43.280Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d8ee5a4e6c2c50cd5c01a41b8e1ab51d95ff3595771dbacf3148bc3399e58d7c"
+}

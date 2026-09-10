@@ -1,0 +1,50 @@
+{
+  "id": "a0f3c2a35ad6dd7d86cd389f73c96366429bd0d1771673e6cfaa9d804423263f",
+  "schema": 1,
+  "teamId": "257",
+  "teamName": "Richmond Spiders",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5299849",
+      "name": "Jack Callaghan",
+      "status": "Active"
+    },
+    {
+      "id": "5299851",
+      "name": "Jack Levin",
+      "status": "Active"
+    },
+    {
+      "id": "5226829",
+      "name": "Joe McCauley",
+      "status": "Active"
+    },
+    {
+      "id": "5402261",
+      "name": "Calum O'Shea",
+      "status": "Active"
+    },
+    {
+      "id": "5083373",
+      "name": "Ashten Snelsire",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-10T15:57:43.339Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/257/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.339Z",
+    "retrievedAt": "2026-09-10T15:57:43.339Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c5d0b93f811d1812b9aa241f010f2128e4f5793fd7d070fde46d2ded9bca3a39"
+}

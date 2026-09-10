@@ -1,0 +1,24 @@
+{
+  "id": "ddac07003d7b02cdb76476c0da5dac5f200552230dc57dc298d4a6f981ce518b",
+  "schema": 1,
+  "teamId": "97",
+  "teamName": "Louisville Cardinals",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Jeff Brohm",
+  "effectiveFrom": "2026-09-10T15:57:43.408Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/97/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.408Z",
+    "retrievedAt": "2026-09-10T15:57:43.408Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "4f08003db7aefda3e8e98e71f4a868a12a7146098efb0d2f646f0671b8e1eb80"
+}

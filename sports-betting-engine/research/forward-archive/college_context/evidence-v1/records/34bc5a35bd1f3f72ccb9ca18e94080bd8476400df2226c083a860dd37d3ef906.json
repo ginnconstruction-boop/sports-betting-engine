@@ -1,0 +1,24 @@
+{
+  "id": "34bc5a35bd1f3f72ccb9ca18e94080bd8476400df2226c083a860dd37d3ef906",
+  "schema": 1,
+  "teamId": "164",
+  "teamName": "Rutgers Scarlet Knights",
+  "season": 2026,
+  "eventId": "401858214",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-10T15:57:43.069Z",
+  "effectiveTo": "2026-09-12T05:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858214",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.069Z",
+    "retrievedAt": "2026-09-10T15:57:43.069Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "35f1c39d99e4c18c0abdf862bc2ac748a7bb39b44fe01ac4bc7dec66152f3f64"
+}

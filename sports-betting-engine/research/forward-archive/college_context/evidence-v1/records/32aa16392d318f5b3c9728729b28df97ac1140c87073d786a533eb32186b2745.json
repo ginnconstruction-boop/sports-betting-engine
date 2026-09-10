@@ -1,0 +1,24 @@
+{
+  "id": "32aa16392d318f5b3c9728729b28df97ac1140c87073d786a533eb32186b2745",
+  "schema": 1,
+  "teamId": "164",
+  "teamName": "Rutgers Scarlet Knights",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-10T15:57:43.772Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.772Z",
+    "retrievedAt": "2026-09-10T15:57:43.772Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "b9d9aa0b7559963c09c09c6bad74644b6cbc10f15de9acc19f2d900300ce61fd"
+}

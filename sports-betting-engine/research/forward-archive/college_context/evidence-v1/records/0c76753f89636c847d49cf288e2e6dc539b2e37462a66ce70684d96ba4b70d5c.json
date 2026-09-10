@@ -1,0 +1,24 @@
+{
+  "id": "0c76753f89636c847d49cf288e2e6dc539b2e37462a66ce70684d96ba4b70d5c",
+  "schema": 1,
+  "teamId": "152",
+  "teamName": "NC State Wolfpack",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-10T15:57:43.281Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/152/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.281Z",
+    "retrievedAt": "2026-09-10T15:57:43.281Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9419d2ebe29783896112f16e3f1c0dcb00c0015edbdd306fabdd49633066c69d"
+}

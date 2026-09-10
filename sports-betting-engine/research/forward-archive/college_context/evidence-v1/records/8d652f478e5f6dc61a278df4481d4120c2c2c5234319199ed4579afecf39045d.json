@@ -1,0 +1,24 @@
+{
+  "id": "8d652f478e5f6dc61a278df4481d4120c2c2c5234319199ed4579afecf39045d",
+  "schema": 1,
+  "teamId": "2450",
+  "teamName": "Norfolk State Spartans",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.ingestionStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-10T15:57:43.772Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.772Z",
+    "retrievedAt": "2026-09-10T15:57:43.772Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9ac3c22ca108a63f2094ba0f16bbf3a1a848bf9efe4c0a264f6ec9d45cf2826a"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "892d46d43fac88e790d99fbffe60e807d7aa259c4767f72b6dbaaf196170dd3e",
+  "schema": 1,
+  "teamId": "222",
+  "teamName": "Villanova Wildcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Mark Ferrante",
+  "effectiveFrom": "2026-09-10T15:57:43.362Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/222/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.362Z",
+    "retrievedAt": "2026-09-10T15:57:43.362Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e4035cd810e4a8b5163c3f10abdfd5e50ad7c68f37eafba0a5404ac3bb4ea1b3"
+}

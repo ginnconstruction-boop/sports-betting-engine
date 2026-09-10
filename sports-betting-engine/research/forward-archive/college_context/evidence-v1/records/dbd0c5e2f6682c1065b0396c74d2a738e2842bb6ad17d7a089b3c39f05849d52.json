@@ -1,0 +1,65 @@
+{
+  "id": "dbd0c5e2f6682c1065b0396c74d2a738e2842bb6ad17d7a089b3c39f05849d52",
+  "schema": 1,
+  "teamId": "222",
+  "teamName": "Villanova Wildcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5226945",
+      "name": "Michael Benincasa",
+      "status": "Active"
+    },
+    {
+      "id": "5402290",
+      "name": "Nolan DiLucia",
+      "status": "Active"
+    },
+    {
+      "id": "5301177",
+      "name": "Hudson Heinemann",
+      "status": "Active"
+    },
+    {
+      "id": "4875733",
+      "name": "Pat McQuaide",
+      "status": "Active"
+    },
+    {
+      "id": "5226946",
+      "name": "Dylan Mills",
+      "status": "Active"
+    },
+    {
+      "id": "5154015",
+      "name": "Robert Russo",
+      "status": "Active"
+    },
+    {
+      "id": "5402313",
+      "name": "John Welde",
+      "status": "Active"
+    },
+    {
+      "id": "5402315",
+      "name": "John Zohlman",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-10T15:57:43.362Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/222/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.362Z",
+    "retrievedAt": "2026-09-10T15:57:43.362Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e4035cd810e4a8b5163c3f10abdfd5e50ad7c68f37eafba0a5404ac3bb4ea1b3"
+}

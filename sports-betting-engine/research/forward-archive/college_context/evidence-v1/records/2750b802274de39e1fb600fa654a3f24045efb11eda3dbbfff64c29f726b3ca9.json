@@ -1,0 +1,24 @@
+{
+  "id": "2750b802274de39e1fb600fa654a3f24045efb11eda3dbbfff64c29f726b3ca9",
+  "schema": 1,
+  "teamId": "257",
+  "teamName": "Richmond Spiders",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.newDc.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-10T15:57:43.339Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/257/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.339Z",
+    "retrievedAt": "2026-09-10T15:57:43.339Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c5d0b93f811d1812b9aa241f010f2128e4f5793fd7d070fde46d2ded9bca3a39"
+}

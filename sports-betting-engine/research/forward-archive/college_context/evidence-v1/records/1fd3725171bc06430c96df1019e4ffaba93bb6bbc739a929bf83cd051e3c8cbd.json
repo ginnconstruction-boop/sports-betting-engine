@@ -1,0 +1,35 @@
+{
+  "id": "1fd3725171bc06430c96df1019e4ffaba93bb6bbc739a929bf83cd051e3c8cbd",
+  "schema": 1,
+  "teamId": "164",
+  "teamName": "Rutgers Scarlet Knights",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5172031",
+      "name": "Sean Ashenfelder",
+      "status": "Active"
+    },
+    {
+      "id": "4870900",
+      "name": "Dylan Lonergan",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-10T15:57:43.643Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/164/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.643Z",
+    "retrievedAt": "2026-09-10T15:57:43.643Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f2d60387fc93d9e8e8be56553901f79e6cc9d3409691b2bae423f9c631057b90"
+}

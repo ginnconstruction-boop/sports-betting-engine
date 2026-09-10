@@ -1,0 +1,45 @@
+{
+  "id": "2e6b603352e46277639326d4708e055ce644ce191e0094b245fdf99142897f7a",
+  "schema": 1,
+  "teamId": "142",
+  "teamName": "Missouri Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5081162",
+      "name": "Brett Brown",
+      "status": "Active"
+    },
+    {
+      "id": "4755664",
+      "name": "Nick Evers",
+      "status": "Active"
+    },
+    {
+      "id": "5217148",
+      "name": "Gavin Sidwar",
+      "status": "Active"
+    },
+    {
+      "id": "5141684",
+      "name": "Austin Simmons",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-10T15:57:43.595Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/142/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.595Z",
+    "retrievedAt": "2026-09-10T15:57:43.595Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ebdb6712d3a429069e5aa8297e7ad6ae0f14035de9d7f7e592ad276510b8e435"
+}

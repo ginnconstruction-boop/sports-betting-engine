@@ -1,0 +1,24 @@
+{
+  "id": "27a5cf07bddbd88131b8ba04f62327152f817ecff5cba021235f5134edcde7c8",
+  "schema": 1,
+  "teamId": "222",
+  "teamName": "Villanova Wildcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FCS",
+  "effectiveFrom": "2026-09-10T15:57:43.772Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.772Z",
+    "retrievedAt": "2026-09-10T15:57:43.772Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "ac472fe809b02755a6588aec94a73f304f911d4e1a8f1650016a4b8ed6fc6d35"
+}

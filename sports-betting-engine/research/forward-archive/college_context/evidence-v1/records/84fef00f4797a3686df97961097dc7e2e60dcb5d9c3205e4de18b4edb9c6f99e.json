@@ -1,0 +1,24 @@
+{
+  "id": "84fef00f4797a3686df97961097dc7e2e60dcb5d9c3205e4de18b4edb9c6f99e",
+  "schema": 1,
+  "teamId": "164",
+  "teamName": "Rutgers Scarlet Knights",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-10T15:57:43.643Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/164/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.643Z",
+    "retrievedAt": "2026-09-10T15:57:43.643Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f2d60387fc93d9e8e8be56553901f79e6cc9d3409691b2bae423f9c631057b90"
+}

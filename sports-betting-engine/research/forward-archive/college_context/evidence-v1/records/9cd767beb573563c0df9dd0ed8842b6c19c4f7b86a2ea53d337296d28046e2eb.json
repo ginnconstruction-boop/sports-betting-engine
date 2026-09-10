@@ -1,0 +1,24 @@
+{
+  "id": "9cd767beb573563c0df9dd0ed8842b6c19c4f7b86a2ea53d337296d28046e2eb",
+  "schema": 1,
+  "teamId": "103",
+  "teamName": "Boston College Eagles",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-10T15:57:43.281Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/103/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.281Z",
+    "retrievedAt": "2026-09-10T15:57:43.281Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9383702b1b02dc882ca06d546d7be8a3b00a834788cfcb7f2edfa0386712f1a1"
+}

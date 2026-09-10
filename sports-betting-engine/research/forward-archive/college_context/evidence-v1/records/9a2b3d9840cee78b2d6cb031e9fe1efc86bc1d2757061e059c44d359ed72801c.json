@@ -1,0 +1,24 @@
+{
+  "id": "9a2b3d9840cee78b2d6cb031e9fe1efc86bc1d2757061e059c44d359ed72801c",
+  "schema": 1,
+  "teamId": "222",
+  "teamName": "Villanova Wildcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-10T15:57:43.280Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/222/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.280Z",
+    "retrievedAt": "2026-09-10T15:57:43.280Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e4035cd810e4a8b5163c3f10abdfd5e50ad7c68f37eafba0a5404ac3bb4ea1b3"
+}

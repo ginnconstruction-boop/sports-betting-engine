@@ -1,0 +1,24 @@
+{
+  "id": "ed91465ad0a3d24b2354fed7fa61103ed8b661bf297d9f60e798d8cb5b68d02e",
+  "schema": 1,
+  "teamId": "164",
+  "teamName": "Rutgers Scarlet Knights",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "transfers",
+  "field": "transfers.sourceStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-10T15:57:43.772Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.772Z",
+    "retrievedAt": "2026-09-10T15:57:43.772Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "351bfdc6562d4fb7a2b9ee8579005714b211bbb3e4638afc3cef4289ee44ff24"
+}

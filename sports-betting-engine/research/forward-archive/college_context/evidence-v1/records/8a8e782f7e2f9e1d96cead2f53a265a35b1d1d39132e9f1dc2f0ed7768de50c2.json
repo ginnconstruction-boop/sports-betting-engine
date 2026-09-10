@@ -1,0 +1,24 @@
+{
+  "id": "8a8e782f7e2f9e1d96cead2f53a265a35b1d1d39132e9f1dc2f0ed7768de50c2",
+  "schema": 1,
+  "teamId": "97",
+  "teamName": "Louisville Cardinals",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-10T15:57:43.280Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/97/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.280Z",
+    "retrievedAt": "2026-09-10T15:57:43.280Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "4f08003db7aefda3e8e98e71f4a868a12a7146098efb0d2f646f0671b8e1eb80"
+}

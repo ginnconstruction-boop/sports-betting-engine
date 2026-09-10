@@ -1,0 +1,24 @@
+{
+  "id": "d541854f8eacb52d5c9dc85181b263cb3f9786e5b649be0184fed0ef4c662eac",
+  "schema": 1,
+  "teamId": "2450",
+  "teamName": "Norfolk State Spartans",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-10T15:57:43.281Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2450/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.281Z",
+    "retrievedAt": "2026-09-10T15:57:43.281Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "a314ce772187e710fc8c5a4b9666edaf6c685cae1ebb409dcefc74470014e4ab"
+}

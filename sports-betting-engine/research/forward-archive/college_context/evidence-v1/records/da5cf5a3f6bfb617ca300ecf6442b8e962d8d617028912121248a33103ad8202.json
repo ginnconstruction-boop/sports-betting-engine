@@ -1,0 +1,24 @@
+{
+  "id": "da5cf5a3f6bfb617ca300ecf6442b8e962d8d617028912121248a33103ad8202",
+  "schema": 1,
+  "teamId": "103",
+  "teamName": "Boston College Eagles",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-10T15:57:43.772Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.772Z",
+    "retrievedAt": "2026-09-10T15:57:43.772Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "f4cb0d1d7e719491ffd298848aca1d8338ec8c124f61976d8349d2915ac74ae7"
+}

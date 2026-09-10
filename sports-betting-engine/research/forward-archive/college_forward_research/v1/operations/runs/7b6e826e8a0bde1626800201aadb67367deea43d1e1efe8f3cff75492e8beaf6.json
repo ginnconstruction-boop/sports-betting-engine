@@ -1,0 +1,147 @@
+{
+  "runId": "7b6e826e8a0bde1626800201aadb67367deea43d1e1efe8f3cff75492e8beaf6",
+  "schemaVersion": "college-forward-operations-v1",
+  "captureEventId": "2026-09-10-0700-ct",
+  "trigger": "SCHEDULED_0700_CT",
+  "scheduledFor": "2026-09-10T12:00:00.000Z",
+  "startedAt": "2026-09-10T15:57:41.214Z",
+  "completedAt": "2026-09-10T15:57:46.622Z",
+  "dryRun": false,
+  "status": "DEGRADED",
+  "observations": [
+    {
+      "eventId": "401858213",
+      "originalScheduledKickoff": "2026-09-11T00:00Z",
+      "latestVerifiedKickoff": "2026-09-11T00:00Z",
+      "scheduleStatus": "SCHEDULED",
+      "status": "CAPTURED",
+      "snapshotId": "772b86073a5f1e3e2a15c482b522ef96925a7b01ca8d06c5ca93afa6559cf4b5",
+      "minutesToKickoff": 482.22406666666666,
+      "message": "Immutable pregame snapshot captured.",
+      "homeSubdivision": "FBS",
+      "awaySubdivision": "FCS"
+    },
+    {
+      "eventId": "401858215",
+      "originalScheduledKickoff": "2026-09-11T23:00Z",
+      "latestVerifiedKickoff": "2026-09-11T23:00Z",
+      "scheduleStatus": "SCHEDULED",
+      "status": "CAPTURED",
+      "snapshotId": "010c785c7c637cb88849aa05abcd997286776966da1cc5b9804c9d9f8130d85a",
+      "minutesToKickoff": 1862.2237666666667,
+      "message": "Immutable pregame snapshot captured.",
+      "homeSubdivision": "FBS",
+      "awaySubdivision": "FCS"
+    },
+    {
+      "eventId": "401858220",
+      "originalScheduledKickoff": "2026-09-11T23:00Z",
+      "latestVerifiedKickoff": "2026-09-11T23:00Z",
+      "scheduleStatus": "SCHEDULED",
+      "status": "CAPTURED",
+      "snapshotId": "d7bec2a7ff3d850b58b7d129e6e72586324613775297ab67456cbdd3bc5eac2b",
+      "minutesToKickoff": 1862.2236166666667,
+      "message": "Immutable pregame snapshot captured.",
+      "homeSubdivision": "FBS",
+      "awaySubdivision": "FCS"
+    },
+    {
+      "eventId": "401858222",
+      "originalScheduledKickoff": "2026-09-11T23:00Z",
+      "latestVerifiedKickoff": "2026-09-11T23:00Z",
+      "scheduleStatus": "SCHEDULED",
+      "status": "CAPTURED",
+      "snapshotId": "c9c0ed1c624f11c7ac2e230eee326fb9646ebe805804b2d74f49534c827a416b",
+      "minutesToKickoff": 1862.2234333333333,
+      "message": "Immutable pregame snapshot captured.",
+      "homeSubdivision": "FBS",
+      "awaySubdivision": "FCS"
+    },
+    {
+      "eventId": "401858214",
+      "originalScheduledKickoff": "2026-09-11T23:30Z",
+      "latestVerifiedKickoff": "2026-09-11T23:30Z",
+      "scheduleStatus": "SCHEDULED",
+      "status": "CAPTURED",
+      "snapshotId": "0b5f272e0e80021108a2231fd145366b97a5a395d26b40ea6bdc0cd7f179554a",
+      "minutesToKickoff": 1892.2232833333333,
+      "message": "Immutable pregame snapshot captured.",
+      "homeSubdivision": "FBS",
+      "awaySubdivision": "FBS"
+    },
+    {
+      "eventId": "401856678",
+      "originalScheduledKickoff": "2026-09-12T00:00Z",
+      "latestVerifiedKickoff": "2026-09-12T00:00Z",
+      "scheduleStatus": "SCHEDULED",
+      "status": "CAPTURED",
+      "snapshotId": "505959cfb99e11061f5ec551e4b161ea5ab67d1df42d274644b9c89a6f93e41c",
+      "minutesToKickoff": 1922.2231333333334,
+      "message": "Immutable pregame snapshot captured.",
+      "homeSubdivision": "FBS",
+      "awaySubdivision": "FBS"
+    }
+  ],
+  "requestPlan": [
+    {
+      "provider": "ESPN",
+      "category": "GAME_CONTEXT",
+      "scope": "6 events; stale/missing summaries only",
+      "cache": "UNKNOWN",
+      "maximumRequests": 6,
+      "priority": 1
+    },
+    {
+      "provider": "ESPN",
+      "category": "ROSTER",
+      "scope": "unique stale/missing teams only",
+      "cache": "UNKNOWN",
+      "maximumRequests": 12,
+      "priority": 2
+    },
+    {
+      "provider": "CollegeFootballData",
+      "category": "SHARED_FORWARD_FACTS",
+      "scope": "whole-season shared payloads",
+      "cache": "UNKNOWN",
+      "maximumRequests": 4,
+      "priority": 3
+    },
+    {
+      "provider": "The Odds API",
+      "category": "EXTERNAL_MARKET_BENCHMARK",
+      "scope": "one bulk college spread/total request",
+      "cache": "UNKNOWN",
+      "maximumRequests": 1,
+      "priority": 4
+    },
+    {
+      "provider": "ESPN",
+      "category": "MODEL_A_CURRENT_RESULTS",
+      "scope": "season-to-date as of 2026-09-10T15:57:41.214Z",
+      "cache": "UNKNOWN",
+      "maximumRequests": 2,
+      "priority": 5
+    }
+  ],
+  "metrics": {
+    "apiRequests": 8,
+    "cacheHits": 1,
+    "cfbdRequests": 3,
+    "marketRequests": 0
+  },
+  "deferred": [],
+  "providerFailures": [
+    {
+      "provider": "The Odds API",
+      "type": "MARKET_UNAVAILABLE",
+      "retryable": true,
+      "nextEligibleAttempt": "2026-09-10T16:12:44.954Z",
+      "message": "College slate odds unavailable. No retry or per-game odds purchases were made."
+    }
+  ],
+  "discoveryFailures": [
+    "Odds-provider free event discovery failed: [getUpcomingEvents(americanfootball_ncaaf)] Invalid or unauthorized API key. Check ODDS_API_KEY."
+  ],
+  "idempotentRetry": false
+}

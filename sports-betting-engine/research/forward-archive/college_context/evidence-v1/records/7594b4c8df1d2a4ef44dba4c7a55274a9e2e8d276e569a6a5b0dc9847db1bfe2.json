@@ -1,0 +1,55 @@
+{
+  "id": "7594b4c8df1d2a4ef44dba4c7a55274a9e2e8d276e569a6a5b0dc9847db1bfe2",
+  "schema": 1,
+  "teamId": "2305",
+  "teamName": "Kansas Jayhawks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5151060",
+      "name": "Cole Ballard",
+      "status": "Active"
+    },
+    {
+      "id": "5384623",
+      "name": "Connor Hanika",
+      "status": "Active"
+    },
+    {
+      "id": "4986096",
+      "name": "Chase Jenkins",
+      "status": "Active"
+    },
+    {
+      "id": "5079604",
+      "name": "Isaiah Marshall",
+      "status": "Active"
+    },
+    {
+      "id": "5244729",
+      "name": "Jaylen Mason",
+      "status": "Active"
+    },
+    {
+      "id": "5384622",
+      "name": "Braylen Rooney",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-10T15:57:43.473Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2305/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.473Z",
+    "retrievedAt": "2026-09-10T15:57:43.473Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "3f4cef729e66f01d433f30437b85bc3e8a2577e3fdcda1b96b1ae795b0643fb5"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "e5a4ce11df3a59806ebad2f5b99c3e6c05896f2f5d6abfd43a3939554d72dc2f",
+  "schema": 1,
+  "teamId": "142",
+  "teamName": "Missouri Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.offensiveCoordinator.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-10T15:57:43.595Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/142/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.595Z",
+    "retrievedAt": "2026-09-10T15:57:43.595Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ebdb6712d3a429069e5aa8297e7ad6ae0f14035de9d7f7e592ad276510b8e435"
+}

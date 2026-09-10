@@ -1,0 +1,24 @@
+{
+  "id": "6b936bd430c580190548cdecd0e8003c3dd5666e9613603c8dff458a881707c0",
+  "schema": 1,
+  "teamId": "258",
+  "teamName": "Virginia Cavaliers",
+  "season": 2026,
+  "eventId": "401858220",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.movementPoints",
+  "value": 0,
+  "effectiveFrom": "2026-09-10T15:57:43.188Z",
+  "effectiveTo": "2026-09-12T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858220",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.188Z",
+    "retrievedAt": "2026-09-10T15:57:43.188Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d708a2be18ea0cf28fdbe0c5865967440c4390e3257b2a598c0a4d8557a1a23a"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "5f4e8aa0b6329ddf436c20968a6600eb67ab12e688ab65d3a14a125ba2ecd5ad",
+  "schema": 1,
+  "teamId": "103",
+  "teamName": "Boston College Eagles",
+  "season": 2026,
+  "eventId": "401858214",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.yardsPerGame.diagnostic",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-10T15:57:43.159Z",
+  "effectiveTo": "2026-09-12T05:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858214",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.159Z",
+    "retrievedAt": "2026-09-10T15:57:43.159Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "35f1c39d99e4c18c0abdf862bc2ac748a7bb39b44fe01ac4bc7dec66152f3f64"
+}

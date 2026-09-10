@@ -1,0 +1,24 @@
+{
+  "id": "afa6c2c1dc2b74e022aa1dcda8c193c5eefec624df649e6399b47bfd0fbe8200",
+  "schema": 1,
+  "teamId": "2390",
+  "teamName": "Miami Hurricanes",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.rosterComposite.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-10T15:57:43.771Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.771Z",
+    "retrievedAt": "2026-09-10T15:57:43.771Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "7d7c16bc4e8601391bc5f5849e9408493d36c0580f3bff10f90516fe4ddaeeb6"
+}

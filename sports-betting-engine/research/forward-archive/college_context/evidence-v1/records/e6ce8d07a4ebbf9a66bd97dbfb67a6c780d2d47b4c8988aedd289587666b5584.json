@@ -1,0 +1,24 @@
+{
+  "id": "e6ce8d07a4ebbf9a66bd97dbfb67a6c780d2d47b4c8988aedd289587666b5584",
+  "schema": 1,
+  "teamId": "2305",
+  "teamName": "Kansas Jayhawks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-10T15:57:43.340Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2305/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.340Z",
+    "retrievedAt": "2026-09-10T15:57:43.340Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "3f4cef729e66f01d433f30437b85bc3e8a2577e3fdcda1b96b1ae795b0643fb5"
+}

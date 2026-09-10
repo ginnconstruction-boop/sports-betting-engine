@@ -1,0 +1,24 @@
+{
+  "id": "86824189f863879db2e3b696362b11298d9ca58f82e279f2c4575877be0ec1ea",
+  "schema": 1,
+  "teamId": "97",
+  "teamName": "Louisville Cardinals",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-10T15:57:43.772Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.772Z",
+    "retrievedAt": "2026-09-10T15:57:43.772Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "00813e1c2a119b0ac23cd82cf359ef41476814b5300af811835e9eddd2cc75ae"
+}

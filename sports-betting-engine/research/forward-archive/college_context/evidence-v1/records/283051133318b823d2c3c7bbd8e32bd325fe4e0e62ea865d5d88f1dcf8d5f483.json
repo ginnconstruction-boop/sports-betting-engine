@@ -1,0 +1,24 @@
+{
+  "id": "283051133318b823d2c3c7bbd8e32bd325fe4e0e62ea865d5d88f1dcf8d5f483",
+  "schema": 1,
+  "teamId": "50",
+  "teamName": "Florida A&M Rattlers",
+  "season": 2026,
+  "eventId": "401858213",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.feelsLikeF.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-10T15:57:43.135Z",
+  "effectiveTo": "2026-09-11T06:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858213",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T15:57:43.135Z",
+    "retrievedAt": "2026-09-10T15:57:43.135Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "b5ca75cc7130d719d1b9ca9d8cef3a134028492633165a068d59ce15dc3fadc3"
+}
