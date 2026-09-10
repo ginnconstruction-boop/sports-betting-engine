@@ -1,0 +1,24 @@
+{
+  "id": "6a564500742d5a863e64f02dfa6433a76b8379d94f92bbafc7a05e197cc94e57",
+  "schema": 1,
+  "teamId": "257",
+  "teamName": "Richmond Spiders",
+  "season": 2026,
+  "eventId": "401858222",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.ingestionStatus",
+  "value": "VALIDATION_FAILED",
+  "effectiveFrom": "2026-09-10T21:31:14.430Z",
+  "effectiveTo": "2026-09-12T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858222",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T21:31:14.430Z",
+    "retrievedAt": "2026-09-10T21:31:14.430Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f660c343e629eef039efb36f72aff231a5ca1d6f140114838ec93a090f6255ad"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "21853568e01b04476599dbefb2834b9ba3ecbfc149cc24a44005466a2763b6fb",
+  "schema": 1,
+  "teamId": "103",
+  "teamName": "Boston College Eagles",
+  "season": 2026,
+  "eventId": "401858214",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-10T21:31:14.423Z",
+  "effectiveTo": "2026-09-12T05:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858214",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T21:31:14.423Z",
+    "retrievedAt": "2026-09-10T21:31:14.423Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "b3dbff8c39ea1d4928f4eec5482bf5ef40c28e0282b7e46155bd912d216b1d6a"
+}

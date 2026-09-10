@@ -1,0 +1,24 @@
+{
+  "id": "8fcb57fc81b9a681d5f0f31e127fb3d74f6366943ee1e133429e7b6e3aaf33d4",
+  "schema": 1,
+  "teamId": "2450",
+  "teamName": "Norfolk State Spartans",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-10T21:31:14.504Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-10T21:31:14.504Z",
+    "retrievedAt": "2026-09-10T21:31:14.504Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c70d6f443fdba4f54c9e34dff49dab7173aed17b74d33c2c778d0b84aba7701d"
+}
