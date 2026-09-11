@@ -1,0 +1,24 @@
+{
+  "id": "6a36415d897997faf87fcc28d8d4d1be9b2d5ef2912ca4a8145389d8c28af99b",
+  "schema": 1,
+  "teamId": "2405",
+  "teamName": "Monmouth Hawks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FCS",
+  "effectiveFrom": "2026-09-11T21:38:26.507Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.507Z",
+    "retrievedAt": "2026-09-11T21:38:26.507Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "6740cd1b8b22cf3d5c75efc91fc4e806442b2604142e57a7d5074153389afc5a"
+}

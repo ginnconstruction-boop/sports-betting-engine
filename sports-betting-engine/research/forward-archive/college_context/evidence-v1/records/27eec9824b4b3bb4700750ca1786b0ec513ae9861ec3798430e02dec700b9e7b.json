@@ -1,0 +1,24 @@
+{
+  "id": "27eec9824b4b3bb4700750ca1786b0ec513ae9861ec3798430e02dec700b9e7b",
+  "schema": 1,
+  "teamId": "2449",
+  "teamName": "North Dakota State Bison",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T21:38:26.507Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.507Z",
+    "retrievedAt": "2026-09-11T21:38:26.507Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "a329eba8d2cbfdca32f221be605acf092c400b56ca99ff5c786459d58c9009a0"
+}

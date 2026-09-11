@@ -1,0 +1,24 @@
+{
+  "id": "34940f60c5eada5873943470a54d454465675c8d2c75e8f6ee4735d82e153203",
+  "schema": 1,
+  "teamId": "2050",
+  "teamName": "Ball State Cardinals",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.depthTier.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T21:38:26.506Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.506Z",
+    "retrievedAt": "2026-09-11T21:38:26.506Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ddc4b7ee016276a5a025708cd15803283315f648424248fa216ad9fbcba1671e"
+}

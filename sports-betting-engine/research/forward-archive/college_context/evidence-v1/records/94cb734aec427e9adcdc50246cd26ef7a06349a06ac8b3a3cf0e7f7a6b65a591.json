@@ -1,0 +1,24 @@
+{
+  "id": "94cb734aec427e9adcdc50246cd26ef7a06349a06ac8b3a3cf0e7f7a6b65a591",
+  "schema": 1,
+  "teamId": "309",
+  "teamName": "Louisiana Ragin' Cajuns",
+  "season": 2026,
+  "eventId": "401858445",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.yardsPerGame",
+  "value": 474,
+  "effectiveFrom": "2026-09-11T21:38:26.425Z",
+  "effectiveTo": "2026-09-13T09:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858445",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.425Z",
+    "retrievedAt": "2026-09-11T21:38:26.425Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "a3201804bdb37a9643b8d33bca7cf653e88a81ea2f146c53c60f3a99427c98a5"
+}

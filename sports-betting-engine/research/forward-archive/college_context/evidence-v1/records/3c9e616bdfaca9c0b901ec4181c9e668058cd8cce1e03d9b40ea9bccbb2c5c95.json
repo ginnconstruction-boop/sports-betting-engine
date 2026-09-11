@@ -1,0 +1,24 @@
+{
+  "id": "3c9e616bdfaca9c0b901ec4181c9e668058cd8cce1e03d9b40ea9bccbb2c5c95",
+  "schema": 1,
+  "teamId": "61",
+  "teamName": "Georgia Bulldogs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-11T21:38:26.505Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.505Z",
+    "retrievedAt": "2026-09-11T21:38:26.505Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "59271ea975299bfe40978f23fbbcd3c72ede530341b312a707baf956f3776fc7"
+}

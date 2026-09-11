@@ -1,0 +1,24 @@
+{
+  "id": "001670cc369c09c76666034bd6fff41827a6d0230810ea987123b5c450facea2",
+  "schema": 1,
+  "teamId": "235",
+  "teamName": "Memphis Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.rosterComposite.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T21:38:26.506Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.506Z",
+    "retrievedAt": "2026-09-11T21:38:26.506Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8224c9536ea21a1371b201d595c23b46900c676767b8fbe482125be8fb789536"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "d65ee6189a178b1782c6dcd8bda3e24e215a59712342c6ad03c5ff8e3128f6b2",
+  "schema": 1,
+  "teamId": "13",
+  "teamName": "Cal Poly Mustangs",
+  "season": 2026,
+  "eventId": "401864504",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.yardsAllowedPerGame",
+  "value": 456,
+  "effectiveFrom": "2026-09-11T21:38:26.309Z",
+  "effectiveTo": "2026-09-13T07:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864504",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.309Z",
+    "retrievedAt": "2026-09-11T21:38:26.309Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "555b810808b0094161cf84956ebaf46d704ad789762ffef2b9a9415328ab64d7"
+}

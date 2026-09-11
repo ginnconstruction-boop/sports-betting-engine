@@ -1,0 +1,24 @@
+{
+  "id": "0c4165860b8d7ccd8513a0736c932b5eb90bb19aa8c99e4335527b0267c26725",
+  "schema": 1,
+  "teamId": "2483",
+  "teamName": "Oregon Ducks",
+  "season": 2026,
+  "eventId": "401856782",
+  "playerId": null,
+  "domain": "qb",
+  "field": "qb.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T21:38:25.534Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856782",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.534Z",
+    "retrievedAt": "2026-09-11T21:38:25.534Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d510ec1a627f1e60e715c3cc27237967432a82cdf2b90f151c98bb2e4ac12e6c"
+}

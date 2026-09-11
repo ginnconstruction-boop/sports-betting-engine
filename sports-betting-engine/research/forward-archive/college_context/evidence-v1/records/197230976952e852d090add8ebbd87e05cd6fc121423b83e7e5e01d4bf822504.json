@@ -1,0 +1,24 @@
+{
+  "id": "197230976952e852d090add8ebbd87e05cd6fc121423b83e7e5e01d4bf822504",
+  "schema": 1,
+  "teamId": "278",
+  "teamName": "Fresno State Bulldogs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-11T21:38:26.508Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.508Z",
+    "retrievedAt": "2026-09-11T21:38:26.508Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "df8d6ed947951a9c57abe11e0f5b914b56483ed53873e5d6bae9207a1b57740b"
+}

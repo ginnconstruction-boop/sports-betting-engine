@@ -1,0 +1,24 @@
+{
+  "id": "d0f89eb21e6a8973a861351c32679bbca073c53cbc7dbf7721dcbc5a2c856028",
+  "schema": 1,
+  "teamId": "2458",
+  "teamName": "Northern Colorado Bears",
+  "season": 2026,
+  "eventId": "401864506",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T21:38:25.901Z",
+  "effectiveTo": "2026-09-13T02:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864506",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.901Z",
+    "retrievedAt": "2026-09-11T21:38:25.901Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "dc987a4a129766beccfc7e76b474537999cd6d33c4555366456ad285beecd627"
+}

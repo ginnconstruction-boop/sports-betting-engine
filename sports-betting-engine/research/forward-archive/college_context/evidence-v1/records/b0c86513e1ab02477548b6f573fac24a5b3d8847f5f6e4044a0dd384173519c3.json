@@ -1,0 +1,24 @@
+{
+  "id": "b0c86513e1ab02477548b6f573fac24a5b3d8847f5f6e4044a0dd384173519c3",
+  "schema": 1,
+  "teamId": "2698",
+  "teamName": "West Georgia Wolves",
+  "season": 2026,
+  "eventId": "401868241",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.precipitationMm.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T21:38:26.143Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401868241",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.143Z",
+    "retrievedAt": "2026-09-11T21:38:26.143Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "47c90cd9fd1bd8b73475a31399bbb73821e6dd6edad3d19ab63f14099822d58c"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "aae1d499f57bcb910f165d900d765ec20fed00101e25bfd8caa8307af3b3eea6",
+  "schema": 1,
+  "teamId": "2450",
+  "teamName": "Norfolk State Spartans",
+  "season": 2026,
+  "eventId": "401858220",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T21:38:25.462Z",
+  "effectiveTo": "2026-09-12T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858220",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.462Z",
+    "retrievedAt": "2026-09-11T21:38:25.462Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "33e2ceb8a21b288ba06f67f1700cb289c1796b0389798c584373766148418ca5"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "d55f9d006a47652afedf94f9a342b037f195f5009dffe1ebcb7f6381d6645d38",
+  "schema": 1,
+  "teamId": "66",
+  "teamName": "Iowa State Cyclones",
+  "season": 2026,
+  "eventId": "401856788",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.provider",
+  "value": "DraftKings",
+  "effectiveFrom": "2026-09-11T21:38:26.251Z",
+  "effectiveTo": "2026-09-13T05:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856788",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.251Z",
+    "retrievedAt": "2026-09-11T21:38:26.251Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "b2771f2158abfb35431fa41164427601ad19659b850a28f8dece625b91fc6429"
+}

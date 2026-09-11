@@ -1,0 +1,24 @@
+{
+  "id": "d0a64d10d7d5e6f7b25a722df9c70a55788e88afc54bf1744dd6ec5fb4a24934",
+  "schema": 1,
+  "teamId": "2440",
+  "teamName": "Nevada Wolf Pack",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.rosterComposite.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T21:38:26.508Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.508Z",
+    "retrievedAt": "2026-09-11T21:38:26.508Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "6af28a6e2c3180306ed360e52269ed07069c9975f67f5702faadf0b1c09a944e"
+}

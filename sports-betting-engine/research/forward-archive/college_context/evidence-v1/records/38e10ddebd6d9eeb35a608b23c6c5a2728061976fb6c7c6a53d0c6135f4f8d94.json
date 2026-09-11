@@ -1,0 +1,24 @@
+{
+  "id": "38e10ddebd6d9eeb35a608b23c6c5a2728061976fb6c7c6a53d0c6135f4f8d94",
+  "schema": 1,
+  "teamId": "158",
+  "teamName": "Nebraska Cornhuskers",
+  "season": 2026,
+  "eventId": "401858441",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.yardsPerGame",
+  "value": 523,
+  "effectiveFrom": "2026-09-11T21:38:26.081Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858441",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.081Z",
+    "retrievedAt": "2026-09-11T21:38:26.081Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "81b39a8d4f46eb83b2af7717ca4c38bd9f336480dd34f4ea7ae79a7bc7979972"
+}

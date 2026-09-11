@@ -1,0 +1,24 @@
+{
+  "id": "1b799cc8ac8960cd5539fe123cbec22257bb44e867ad8266a22a35f56aceaa2b",
+  "schema": 1,
+  "teamId": "2623",
+  "teamName": "Missouri State Bears",
+  "season": 2026,
+  "eventId": "401871046",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.gamesPlayed.diagnostic",
+  "value": "VALIDATION_FAILED",
+  "effectiveFrom": "2026-09-11T21:38:26.188Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401871046",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.188Z",
+    "retrievedAt": "2026-09-11T21:38:26.188Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "365201efcb95d1184c921b69d0c89de1994b248c07ae1ef2a2e52c4365b1c0d1"
+}

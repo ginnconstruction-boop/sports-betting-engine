@@ -1,0 +1,24 @@
+{
+  "id": "3e78f77a4d39dd714dbc2abcf78b5571420a28e8ede11bbf77502c0dbd46463e",
+  "schema": 1,
+  "teamId": "23",
+  "teamName": "San José State Spartans",
+  "season": 2026,
+  "eventId": "401864504",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T21:38:26.309Z",
+  "effectiveTo": "2026-09-13T07:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864504",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.309Z",
+    "retrievedAt": "2026-09-11T21:38:26.309Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "555b810808b0094161cf84956ebaf46d704ad789762ffef2b9a9415328ab64d7"
+}

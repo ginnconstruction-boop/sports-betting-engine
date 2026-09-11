@@ -1,0 +1,24 @@
+{
+  "id": "07b2439d0268c2e9d16554b60e3cbe646c10df33fc3f053108c7e84265c22500",
+  "schema": 1,
+  "teamId": "2193",
+  "teamName": "East Tennessee State Buccaneers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FCS",
+  "effectiveFrom": "2026-09-11T21:38:26.505Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.505Z",
+    "retrievedAt": "2026-09-11T21:38:26.505Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "4d0bb186cb6e10d8c979dca5851cdf44cb1296fdb3204cee63a86acb4b5dbc54"
+}

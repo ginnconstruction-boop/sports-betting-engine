@@ -1,0 +1,24 @@
+{
+  "id": "d9de62e0b8c7c4dda11a4eea149f078e43e6f61a0e3ee5245b13bfaac6d21e5f",
+  "schema": 1,
+  "teamId": "2534",
+  "teamName": "Sam Houston Bearkats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-11T21:38:26.507Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.507Z",
+    "retrievedAt": "2026-09-11T21:38:26.507Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "504cecdc6645548859b31566b709ecbdfcbb66adc2f0f7a90a57f5d2a1023e05"
+}

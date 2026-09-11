@@ -1,0 +1,24 @@
+{
+  "id": "9c5b3d78ee83e6ece23383da4dcd0a77a5830705cb2fdc920ca0d4b32f13e6bb",
+  "schema": 1,
+  "teamId": "275",
+  "teamName": "Wisconsin Badgers",
+  "season": 2026,
+  "eventId": "401858447",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.lastOpponent.diagnostic",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T21:38:26.214Z",
+  "effectiveTo": "2026-09-13T05:15:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858447",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.214Z",
+    "retrievedAt": "2026-09-11T21:38:26.214Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "7b798aabee70eeadeb61f1158a7390d8aa85d0f349e7155da0217e168d2c9cf2"
+}

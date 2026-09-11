@@ -1,0 +1,1339 @@
+{
+  "snapshotId": "19c24d7291d17cc394968fcac1904fd8799eb7214a77f6afb0e5f2d0b83e6207",
+  "schemaVersion": "college-forward-research-v1",
+  "partition": "FORWARD_VALIDATION_2026",
+  "window": "ACTUAL_PREKICK",
+  "capturedAt": "2026-09-11T21:38:35.165Z",
+  "forecastAt": "2026-09-11T21:38:35.165Z",
+  "identity": {
+    "canonicalEventId": "401858440",
+    "providerEventIds": {
+      "ESPN": "401858440"
+    },
+    "season": 2026,
+    "week": 2,
+    "kickoff": "2026-09-12T19:30Z",
+    "home": {
+      "canonicalId": "127",
+      "name": "Michigan State Spartans",
+      "subdivision": "FBS",
+      "conference": "5"
+    },
+    "away": {
+      "canonicalId": "2199",
+      "name": "Eastern Michigan Eagles",
+      "subdivision": "FBS",
+      "conference": "15"
+    },
+    "neutralSite": false,
+    "conferenceGame": false,
+    "venue": {
+      "id": "3936",
+      "name": "Spartan Stadium",
+      "indoor": false
+    }
+  },
+  "applicationRelease": "college-phase2-settlement-15",
+  "featureSchemaVersion": "college-context-evidence-v1",
+  "modelA": {
+    "status": "PROJECTED",
+    "forecastAt": "2026-09-11T21:38:30.777Z",
+    "modelVersion": "college-score-ridge-v1",
+    "dataVersion": "4b30c269515f545f0eea031deb24ba1fa6083a77d3377029c1cb664acc83c6c4",
+    "homeScore": 36.29730941743709,
+    "awayScore": 17.674671594587004,
+    "homeMargin": 18.622637822850088,
+    "historyHash": "8329e062a0f6d846063c9915fe5a9aebb5e64e72ef686b3df73ad4ddc6d7ff5d"
+  },
+  "shadowModels": [],
+  "footballEvidence": [
+    {
+      "category": "TALENT",
+      "teamId": "127",
+      "field": "talent.classification",
+      "value": "FBS",
+      "definition": "Raw normalized talent fact; no point adjustment.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T21:38:26.506Z",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH",
+      "source": {
+        "provider": "ESPN",
+        "providerRecordId": null,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+        "retrievedAt": "2026-09-11T21:38:26.506Z",
+        "publishedAt": "2026-09-11T21:38:26.506Z",
+        "rawPayloadHash": "b9d7324a24c9b98033801b91f57a65458f09ba3a2f939ee1ca11ce9b2ebd0b7e"
+      }
+    },
+    {
+      "category": "OPPONENT_HISTORY",
+      "teamId": "127",
+      "field": "current.pointsPerGame",
+      "value": 30,
+      "definition": "Raw normalized current_season fact; no point adjustment.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T21:38:25.857Z",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH",
+      "source": {
+        "provider": "ESPN",
+        "providerRecordId": null,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858440",
+        "retrievedAt": "2026-09-11T21:38:25.857Z",
+        "publishedAt": "2026-09-11T21:38:25.857Z",
+        "rawPayloadHash": "4e0f4429c230b0dfd66aaea2b9ff2238f7d4af19ec7aeb657e9d0df43d758842"
+      }
+    },
+    {
+      "category": "OPPONENT_HISTORY",
+      "teamId": "127",
+      "field": "current.yardsAllowedPerGame",
+      "value": 273,
+      "definition": "Raw normalized current_season fact; no point adjustment.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T21:38:25.857Z",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH",
+      "source": {
+        "provider": "ESPN",
+        "providerRecordId": null,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858440",
+        "retrievedAt": "2026-09-11T21:38:25.857Z",
+        "publishedAt": "2026-09-11T21:38:25.857Z",
+        "rawPayloadHash": "4e0f4429c230b0dfd66aaea2b9ff2238f7d4af19ec7aeb657e9d0df43d758842"
+      }
+    },
+    {
+      "category": "WEATHER",
+      "teamId": "127",
+      "field": "weather.precipitationProbability",
+      "value": 0,
+      "definition": "Raw normalized weather fact; no point adjustment.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T21:38:25.857Z",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH",
+      "source": {
+        "provider": "ESPN",
+        "providerRecordId": null,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858440",
+        "retrievedAt": "2026-09-11T21:38:25.857Z",
+        "publishedAt": "2026-09-11T21:38:25.857Z",
+        "rawPayloadHash": "4e0f4429c230b0dfd66aaea2b9ff2238f7d4af19ec7aeb657e9d0df43d758842"
+      }
+    },
+    {
+      "category": "WEATHER",
+      "teamId": "127",
+      "field": "weather.temperatureF",
+      "value": 82,
+      "definition": "Raw normalized weather fact; no point adjustment.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T21:38:25.857Z",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH",
+      "source": {
+        "provider": "ESPN",
+        "providerRecordId": null,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858440",
+        "retrievedAt": "2026-09-11T21:38:25.857Z",
+        "publishedAt": "2026-09-11T21:38:25.857Z",
+        "rawPayloadHash": "4e0f4429c230b0dfd66aaea2b9ff2238f7d4af19ec7aeb657e9d0df43d758842"
+      }
+    },
+    {
+      "category": "WEATHER",
+      "teamId": "127",
+      "field": "weather.indoor",
+      "value": false,
+      "definition": "Raw normalized weather fact; no point adjustment.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T21:38:25.857Z",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH",
+      "source": {
+        "provider": "ESPN",
+        "providerRecordId": null,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858440",
+        "retrievedAt": "2026-09-11T21:38:25.857Z",
+        "publishedAt": "2026-09-11T21:38:25.857Z",
+        "rawPayloadHash": "4e0f4429c230b0dfd66aaea2b9ff2238f7d4af19ec7aeb657e9d0df43d758842"
+      }
+    },
+    {
+      "category": "WEATHER",
+      "teamId": "127",
+      "field": "weather.flags",
+      "value": [
+        "GUST_20_PLUS"
+      ],
+      "definition": "Raw normalized weather fact; no point adjustment.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T21:38:25.857Z",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH",
+      "source": {
+        "provider": "ESPN",
+        "providerRecordId": null,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858440",
+        "retrievedAt": "2026-09-11T21:38:25.857Z",
+        "publishedAt": "2026-09-11T21:38:25.857Z",
+        "rawPayloadHash": "4e0f4429c230b0dfd66aaea2b9ff2238f7d4af19ec7aeb657e9d0df43d758842"
+      }
+    },
+    {
+      "category": "OPPONENT_HISTORY",
+      "teamId": "127",
+      "field": "current.pointsAllowedPerGame",
+      "value": 20,
+      "definition": "Raw normalized current_season fact; no point adjustment.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T21:38:25.857Z",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH",
+      "source": {
+        "provider": "ESPN",
+        "providerRecordId": null,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858440",
+        "retrievedAt": "2026-09-11T21:38:25.857Z",
+        "publishedAt": "2026-09-11T21:38:25.857Z",
+        "rawPayloadHash": "4e0f4429c230b0dfd66aaea2b9ff2238f7d4af19ec7aeb657e9d0df43d758842"
+      }
+    },
+    {
+      "category": "OPPONENT_HISTORY",
+      "teamId": "127",
+      "field": "current.yardsPerGame",
+      "value": 397,
+      "definition": "Raw normalized current_season fact; no point adjustment.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T21:38:25.857Z",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH",
+      "source": {
+        "provider": "ESPN",
+        "providerRecordId": null,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858440",
+        "retrievedAt": "2026-09-11T21:38:25.857Z",
+        "publishedAt": "2026-09-11T21:38:25.857Z",
+        "rawPayloadHash": "4e0f4429c230b0dfd66aaea2b9ff2238f7d4af19ec7aeb657e9d0df43d758842"
+      }
+    },
+    {
+      "category": "WEATHER",
+      "teamId": "127",
+      "field": "weather.gustMph",
+      "value": 21,
+      "definition": "Raw normalized weather fact; no point adjustment.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T21:38:25.857Z",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH",
+      "source": {
+        "provider": "ESPN",
+        "providerRecordId": null,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858440",
+        "retrievedAt": "2026-09-11T21:38:25.857Z",
+        "publishedAt": "2026-09-11T21:38:25.857Z",
+        "rawPayloadHash": "4e0f4429c230b0dfd66aaea2b9ff2238f7d4af19ec7aeb657e9d0df43d758842"
+      }
+    },
+    {
+      "category": "ROSTER",
+      "teamId": "127",
+      "field": "roster.playerCount",
+      "value": 100,
+      "definition": "Raw normalized roster fact; no point adjustment.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T16:00:41.490Z",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH",
+      "source": {
+        "provider": "ESPN",
+        "providerRecordId": null,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/127/roster",
+        "retrievedAt": "2026-09-11T16:00:41.490Z",
+        "publishedAt": "2026-09-11T16:00:41.490Z",
+        "rawPayloadHash": "4f7b7211e931bfc204ef8b73b771ce67854e9871f2dbcab209ac51e1bc51199b"
+      }
+    },
+    {
+      "category": "COACHING",
+      "teamId": "127",
+      "field": "coaching.headCoach",
+      "value": "Pat Fitzgerald",
+      "definition": "Raw normalized coaching fact; no point adjustment.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T16:00:41.490Z",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH",
+      "source": {
+        "provider": "ESPN",
+        "providerRecordId": null,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/127/roster",
+        "retrievedAt": "2026-09-11T16:00:41.490Z",
+        "publishedAt": "2026-09-11T16:00:41.490Z",
+        "rawPayloadHash": "4f7b7211e931bfc204ef8b73b771ce67854e9871f2dbcab209ac51e1bc51199b"
+      }
+    },
+    {
+      "category": "ROSTER",
+      "teamId": "127",
+      "field": "roster.currentSeasonAvailable",
+      "value": true,
+      "definition": "Raw normalized roster fact; no point adjustment.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T16:00:41.490Z",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH",
+      "source": {
+        "provider": "ESPN",
+        "providerRecordId": null,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/127/roster",
+        "retrievedAt": "2026-09-11T16:00:41.490Z",
+        "publishedAt": "2026-09-11T16:00:41.490Z",
+        "rawPayloadHash": "4f7b7211e931bfc204ef8b73b771ce67854e9871f2dbcab209ac51e1bc51199b"
+      }
+    },
+    {
+      "category": "ROSTER",
+      "teamId": "127",
+      "field": "roster.qbCandidates",
+      "value": [
+        {
+          "id": "5385844",
+          "name": "Peyton Babbitt",
+          "status": "Active"
+        },
+        {
+          "id": "5266583",
+          "name": "Kayd Coffman",
+          "status": "Active"
+        },
+        {
+          "id": "4700135",
+          "name": "Cam Fancher",
+          "status": "Active"
+        },
+        {
+          "id": "5164308",
+          "name": "Leo Hannan",
+          "status": "Active"
+        },
+        {
+          "id": "5146670",
+          "name": "Alessio Milivojevic",
+          "status": "Active"
+        }
+      ],
+      "definition": "Raw normalized roster fact; no point adjustment.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T16:00:41.490Z",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH",
+      "source": {
+        "provider": "ESPN",
+        "providerRecordId": null,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/127/roster",
+        "retrievedAt": "2026-09-11T16:00:41.490Z",
+        "publishedAt": "2026-09-11T16:00:41.490Z",
+        "rawPayloadHash": "4f7b7211e931bfc204ef8b73b771ce67854e9871f2dbcab209ac51e1bc51199b"
+      }
+    },
+    {
+      "category": "TALENT",
+      "teamId": "2199",
+      "field": "talent.classification",
+      "value": "FBS",
+      "definition": "Raw normalized talent fact; no point adjustment.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T21:38:26.506Z",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH",
+      "source": {
+        "provider": "ESPN",
+        "providerRecordId": null,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+        "retrievedAt": "2026-09-11T21:38:26.506Z",
+        "publishedAt": "2026-09-11T21:38:26.506Z",
+        "rawPayloadHash": "0299b9052016781ec9fb958a8973af0f8efc8a37cb0821ab3452db46ae1f13a4"
+      }
+    },
+    {
+      "category": "OPPONENT_HISTORY",
+      "teamId": "2199",
+      "field": "current.yardsAllowedPerGame",
+      "value": 362,
+      "definition": "Raw normalized current_season fact; no point adjustment.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T21:38:25.857Z",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH",
+      "source": {
+        "provider": "ESPN",
+        "providerRecordId": null,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858440",
+        "retrievedAt": "2026-09-11T21:38:25.857Z",
+        "publishedAt": "2026-09-11T21:38:25.857Z",
+        "rawPayloadHash": "4e0f4429c230b0dfd66aaea2b9ff2238f7d4af19ec7aeb657e9d0df43d758842"
+      }
+    },
+    {
+      "category": "OPPONENT_HISTORY",
+      "teamId": "2199",
+      "field": "current.pointsAllowedPerGame",
+      "value": 22,
+      "definition": "Raw normalized current_season fact; no point adjustment.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T21:38:25.857Z",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH",
+      "source": {
+        "provider": "ESPN",
+        "providerRecordId": null,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858440",
+        "retrievedAt": "2026-09-11T21:38:25.857Z",
+        "publishedAt": "2026-09-11T21:38:25.857Z",
+        "rawPayloadHash": "4e0f4429c230b0dfd66aaea2b9ff2238f7d4af19ec7aeb657e9d0df43d758842"
+      }
+    },
+    {
+      "category": "WEATHER",
+      "teamId": "2199",
+      "field": "weather.temperatureF",
+      "value": 82,
+      "definition": "Raw normalized weather fact; no point adjustment.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T21:38:25.857Z",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH",
+      "source": {
+        "provider": "ESPN",
+        "providerRecordId": null,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858440",
+        "retrievedAt": "2026-09-11T21:38:25.857Z",
+        "publishedAt": "2026-09-11T21:38:25.857Z",
+        "rawPayloadHash": "4e0f4429c230b0dfd66aaea2b9ff2238f7d4af19ec7aeb657e9d0df43d758842"
+      }
+    },
+    {
+      "category": "WEATHER",
+      "teamId": "2199",
+      "field": "weather.gustMph",
+      "value": 21,
+      "definition": "Raw normalized weather fact; no point adjustment.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T21:38:25.857Z",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH",
+      "source": {
+        "provider": "ESPN",
+        "providerRecordId": null,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858440",
+        "retrievedAt": "2026-09-11T21:38:25.857Z",
+        "publishedAt": "2026-09-11T21:38:25.857Z",
+        "rawPayloadHash": "4e0f4429c230b0dfd66aaea2b9ff2238f7d4af19ec7aeb657e9d0df43d758842"
+      }
+    },
+    {
+      "category": "WEATHER",
+      "teamId": "2199",
+      "field": "weather.flags",
+      "value": [
+        "GUST_20_PLUS"
+      ],
+      "definition": "Raw normalized weather fact; no point adjustment.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T21:38:25.857Z",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH",
+      "source": {
+        "provider": "ESPN",
+        "providerRecordId": null,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858440",
+        "retrievedAt": "2026-09-11T21:38:25.857Z",
+        "publishedAt": "2026-09-11T21:38:25.857Z",
+        "rawPayloadHash": "4e0f4429c230b0dfd66aaea2b9ff2238f7d4af19ec7aeb657e9d0df43d758842"
+      }
+    },
+    {
+      "category": "OPPONENT_HISTORY",
+      "teamId": "2199",
+      "field": "current.pointsPerGame",
+      "value": 24.5,
+      "definition": "Raw normalized current_season fact; no point adjustment.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T21:38:25.857Z",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH",
+      "source": {
+        "provider": "ESPN",
+        "providerRecordId": null,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858440",
+        "retrievedAt": "2026-09-11T21:38:25.857Z",
+        "publishedAt": "2026-09-11T21:38:25.857Z",
+        "rawPayloadHash": "4e0f4429c230b0dfd66aaea2b9ff2238f7d4af19ec7aeb657e9d0df43d758842"
+      }
+    },
+    {
+      "category": "WEATHER",
+      "teamId": "2199",
+      "field": "weather.indoor",
+      "value": false,
+      "definition": "Raw normalized weather fact; no point adjustment.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T21:38:25.857Z",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH",
+      "source": {
+        "provider": "ESPN",
+        "providerRecordId": null,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858440",
+        "retrievedAt": "2026-09-11T21:38:25.857Z",
+        "publishedAt": "2026-09-11T21:38:25.857Z",
+        "rawPayloadHash": "4e0f4429c230b0dfd66aaea2b9ff2238f7d4af19ec7aeb657e9d0df43d758842"
+      }
+    },
+    {
+      "category": "OPPONENT_HISTORY",
+      "teamId": "2199",
+      "field": "current.yardsPerGame",
+      "value": 314.5,
+      "definition": "Raw normalized current_season fact; no point adjustment.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T21:38:25.857Z",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH",
+      "source": {
+        "provider": "ESPN",
+        "providerRecordId": null,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858440",
+        "retrievedAt": "2026-09-11T21:38:25.857Z",
+        "publishedAt": "2026-09-11T21:38:25.857Z",
+        "rawPayloadHash": "4e0f4429c230b0dfd66aaea2b9ff2238f7d4af19ec7aeb657e9d0df43d758842"
+      }
+    },
+    {
+      "category": "WEATHER",
+      "teamId": "2199",
+      "field": "weather.precipitationProbability",
+      "value": 0,
+      "definition": "Raw normalized weather fact; no point adjustment.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T21:38:25.857Z",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH",
+      "source": {
+        "provider": "ESPN",
+        "providerRecordId": null,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858440",
+        "retrievedAt": "2026-09-11T21:38:25.857Z",
+        "publishedAt": "2026-09-11T21:38:25.857Z",
+        "rawPayloadHash": "4e0f4429c230b0dfd66aaea2b9ff2238f7d4af19ec7aeb657e9d0df43d758842"
+      }
+    },
+    {
+      "category": "ROSTER",
+      "teamId": "2199",
+      "field": "roster.qbCandidates",
+      "value": [
+        {
+          "id": "5215696",
+          "name": "Bryce Button",
+          "status": "Active"
+        },
+        {
+          "id": "4690158",
+          "name": "Noah Kim",
+          "status": "Active"
+        },
+        {
+          "id": "5161955",
+          "name": "Nick Kinsey",
+          "status": "Active"
+        },
+        {
+          "id": "5094040",
+          "name": "Brogan McCaughey",
+          "status": "Active"
+        },
+        {
+          "id": "5144207",
+          "name": "Jace Stuckey",
+          "status": "Active"
+        }
+      ],
+      "definition": "Raw normalized roster fact; no point adjustment.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T16:00:41.468Z",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH",
+      "source": {
+        "provider": "ESPN",
+        "providerRecordId": null,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2199/roster",
+        "retrievedAt": "2026-09-11T16:00:41.468Z",
+        "publishedAt": "2026-09-11T16:00:41.468Z",
+        "rawPayloadHash": "b109d7cc9b502f2c116c0cf4930644086bb6188f4cccec4cf81534d1956b4a04"
+      }
+    },
+    {
+      "category": "ROSTER",
+      "teamId": "2199",
+      "field": "roster.playerCount",
+      "value": 100,
+      "definition": "Raw normalized roster fact; no point adjustment.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T16:00:41.468Z",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH",
+      "source": {
+        "provider": "ESPN",
+        "providerRecordId": null,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2199/roster",
+        "retrievedAt": "2026-09-11T16:00:41.468Z",
+        "publishedAt": "2026-09-11T16:00:41.468Z",
+        "rawPayloadHash": "b109d7cc9b502f2c116c0cf4930644086bb6188f4cccec4cf81534d1956b4a04"
+      }
+    },
+    {
+      "category": "ROSTER",
+      "teamId": "2199",
+      "field": "roster.currentSeasonAvailable",
+      "value": true,
+      "definition": "Raw normalized roster fact; no point adjustment.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T16:00:41.468Z",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH",
+      "source": {
+        "provider": "ESPN",
+        "providerRecordId": null,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2199/roster",
+        "retrievedAt": "2026-09-11T16:00:41.468Z",
+        "publishedAt": "2026-09-11T16:00:41.468Z",
+        "rawPayloadHash": "b109d7cc9b502f2c116c0cf4930644086bb6188f4cccec4cf81534d1956b4a04"
+      }
+    },
+    {
+      "category": "COACHING",
+      "teamId": "2199",
+      "field": "coaching.headCoach",
+      "value": "Chris Creighton",
+      "definition": "Raw normalized coaching fact; no point adjustment.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T16:00:41.468Z",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH",
+      "source": {
+        "provider": "ESPN",
+        "providerRecordId": null,
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2199/roster",
+        "retrievedAt": "2026-09-11T16:00:41.468Z",
+        "publishedAt": "2026-09-11T16:00:41.468Z",
+        "rawPayloadHash": "b109d7cc9b502f2c116c0cf4930644086bb6188f4cccec4cf81534d1956b4a04"
+      }
+    },
+    {
+      "category": "TEAM_EFFICIENCY",
+      "teamId": "127",
+      "field": "efficiency.core",
+      "value": {
+        "overall": -2.44,
+        "offense": -1.12,
+        "defense": 1.32,
+        "throughSeasonType": "regular",
+        "throughWeek": 1,
+        "modelVersion": "core-preseason-v1"
+      },
+      "definition": "CFBD CORE opponent-relative efficiency; higher offense/overall and lower defense are better.",
+      "units": "points above average per 100 qualifying plays",
+      "sampleSize": 124,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T16:00:49.644Z",
+      "source": {
+        "provider": "CollegeFootballData",
+        "providerRecordId": "Michigan State",
+        "url": "https://api.collegefootballdata.com/ratings/core?year=2026",
+        "retrievedAt": "2026-09-11T16:00:49.644Z",
+        "publishedAt": null,
+        "rawPayloadHash": "189d3642b6d48fec82da26d6460d31fd2c184d00523d13bf89fe94cfe41fcb60"
+      },
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH"
+    },
+    {
+      "category": "OPPONENT_HISTORY",
+      "teamId": "127",
+      "field": "opponent.completedGames",
+      "value": [
+        {
+          "providerGameId": "401858429",
+          "playedAt": "2026-09-05T00:00:00.000Z",
+          "opponent": "Toledo",
+          "opponentProviderId": "2649",
+          "teamPoints": 30,
+          "opponentPoints": 20,
+          "homeAway": "HOME",
+          "neutralSite": false,
+          "conferenceGame": false,
+          "classification": "fbs"
+        }
+      ],
+      "definition": "Provider games explicitly completed before forecast; raw game identities and scores retained.",
+      "units": null,
+      "sampleSize": 1,
+      "season": 2026,
+      "gamesIncluded": [
+        "401858429"
+      ],
+      "effectiveAt": "2026-09-11T16:00:50.944Z",
+      "source": {
+        "provider": "CollegeFootballData",
+        "providerRecordId": "Michigan State Spartans",
+        "url": "https://api.collegefootballdata.com/games?year=2026&seasonType=regular&classification=fbs",
+        "retrievedAt": "2026-09-11T16:00:50.944Z",
+        "publishedAt": null,
+        "rawPayloadHash": "174fc99e2dcdb638a312b719455566b233cafb6f53c223b9514af145f3f352c8"
+      },
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH"
+    },
+    {
+      "category": "FBS_FCS",
+      "teamId": "127",
+      "field": "classification.forwardEvidence",
+      "value": {
+        "subdivision": "FBS",
+        "conference": "5"
+      },
+      "definition": "Schedule subdivision/conference plus prior FCS SRS only when one exact provider team match exists.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T21:38:27.512Z",
+      "source": {
+        "provider": "Verified schedule identity",
+        "providerRecordId": "127",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+        "retrievedAt": "2026-09-11T21:38:27.512Z",
+        "publishedAt": null,
+        "rawPayloadHash": "1809c2a03b10961a80bc8a1c1196c560b73e8e2f0f1f36854558157c12575d31"
+      },
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH"
+    },
+    {
+      "category": "TEAM_EFFICIENCY",
+      "teamId": "2199",
+      "field": "efficiency.core",
+      "value": {
+        "overall": -7.47,
+        "offense": -3.81,
+        "defense": 3.65,
+        "throughSeasonType": "regular",
+        "throughWeek": 1,
+        "modelVersion": "core-preseason-v1"
+      },
+      "definition": "CFBD CORE opponent-relative efficiency; higher offense/overall and lower defense are better.",
+      "units": "points above average per 100 qualifying plays",
+      "sampleSize": 274,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T16:00:49.644Z",
+      "source": {
+        "provider": "CollegeFootballData",
+        "providerRecordId": "Eastern Michigan",
+        "url": "https://api.collegefootballdata.com/ratings/core?year=2026",
+        "retrievedAt": "2026-09-11T16:00:49.644Z",
+        "publishedAt": null,
+        "rawPayloadHash": "189d3642b6d48fec82da26d6460d31fd2c184d00523d13bf89fe94cfe41fcb60"
+      },
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH"
+    },
+    {
+      "category": "OPPONENT_HISTORY",
+      "teamId": "2199",
+      "field": "opponent.completedGames",
+      "value": [
+        {
+          "providerGameId": "401866408",
+          "playedAt": "2026-08-29T22:30:00.000Z",
+          "opponent": "Sacramento State",
+          "opponentProviderId": "16",
+          "teamPoints": 28,
+          "opponentPoints": 17,
+          "homeAway": "HOME",
+          "neutralSite": false,
+          "conferenceGame": true,
+          "classification": "fbs"
+        },
+        {
+          "providerGameId": "401864495",
+          "playedAt": "2026-09-04T22:30:00.000Z",
+          "opponent": "San José State",
+          "opponentProviderId": "23",
+          "teamPoints": 21,
+          "opponentPoints": 27,
+          "homeAway": "HOME",
+          "neutralSite": false,
+          "conferenceGame": false,
+          "classification": "fbs"
+        }
+      ],
+      "definition": "Provider games explicitly completed before forecast; raw game identities and scores retained.",
+      "units": null,
+      "sampleSize": 2,
+      "season": 2026,
+      "gamesIncluded": [
+        "401866408",
+        "401864495"
+      ],
+      "effectiveAt": "2026-09-11T16:00:50.944Z",
+      "source": {
+        "provider": "CollegeFootballData",
+        "providerRecordId": "Eastern Michigan Eagles",
+        "url": "https://api.collegefootballdata.com/games?year=2026&seasonType=regular&classification=fbs",
+        "retrievedAt": "2026-09-11T16:00:50.944Z",
+        "publishedAt": null,
+        "rawPayloadHash": "174fc99e2dcdb638a312b719455566b233cafb6f53c223b9514af145f3f352c8"
+      },
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH"
+    },
+    {
+      "category": "FBS_FCS",
+      "teamId": "2199",
+      "field": "classification.forwardEvidence",
+      "value": {
+        "subdivision": "FBS",
+        "conference": "15"
+      },
+      "definition": "Schedule subdivision/conference plus prior FCS SRS only when one exact provider team match exists.",
+      "units": null,
+      "sampleSize": null,
+      "season": 2026,
+      "gamesIncluded": [],
+      "effectiveAt": "2026-09-11T21:38:27.512Z",
+      "source": {
+        "provider": "Verified schedule identity",
+        "providerRecordId": "2199",
+        "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+        "retrievedAt": "2026-09-11T21:38:27.512Z",
+        "publishedAt": null,
+        "rawPayloadHash": "0c907cd9751475a700609a386ae1f77948f9f949443703e19484a63d9b225fe8"
+      },
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "validity": "VALID",
+      "freshness": "FRESH"
+    }
+  ],
+  "diagnostics": [
+    {
+      "category": "COACHING",
+      "teamId": "127",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "stages": {
+        "SOURCE_RETRIEVAL": "PASS",
+        "NORMALIZATION": "PASS",
+        "ENTITY_MATCH": "PASS",
+        "ATTACHMENT": "PARTIAL",
+        "FIELD_VALIDITY": "PARTIAL",
+        "FORECAST_TIME_FRESHNESS": "PARTIAL"
+      },
+      "availableFields": 1,
+      "expectedFields": 7,
+      "notes": [
+        "SUCCESS"
+      ]
+    },
+    {
+      "category": "COACHING",
+      "teamId": "2199",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "stages": {
+        "SOURCE_RETRIEVAL": "PASS",
+        "NORMALIZATION": "PASS",
+        "ENTITY_MATCH": "PASS",
+        "ATTACHMENT": "PARTIAL",
+        "FIELD_VALIDITY": "PARTIAL",
+        "FORECAST_TIME_FRESHNESS": "PARTIAL"
+      },
+      "availableFields": 1,
+      "expectedFields": 7,
+      "notes": [
+        "SUCCESS"
+      ]
+    },
+    {
+      "category": "FBS_FCS",
+      "teamId": "127",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "stages": {
+        "SOURCE_RETRIEVAL": "PASS",
+        "NORMALIZATION": "PASS",
+        "ENTITY_MATCH": "PASS",
+        "ATTACHMENT": "PASS",
+        "FIELD_VALIDITY": "PASS",
+        "FORECAST_TIME_FRESHNESS": "PASS"
+      },
+      "availableFields": 1,
+      "expectedFields": 1,
+      "notes": []
+    },
+    {
+      "category": "FBS_FCS",
+      "teamId": "2199",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "stages": {
+        "SOURCE_RETRIEVAL": "PASS",
+        "NORMALIZATION": "PASS",
+        "ENTITY_MATCH": "PASS",
+        "ATTACHMENT": "PASS",
+        "FIELD_VALIDITY": "PASS",
+        "FORECAST_TIME_FRESHNESS": "PASS"
+      },
+      "availableFields": 1,
+      "expectedFields": 1,
+      "notes": []
+    },
+    {
+      "category": "INJURIES",
+      "teamId": "127",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "stages": {
+        "SOURCE_RETRIEVAL": "PASS",
+        "NORMALIZATION": "FAIL",
+        "ENTITY_MATCH": "UNKNOWN",
+        "ATTACHMENT": "FAIL",
+        "FIELD_VALIDITY": "FAIL",
+        "FORECAST_TIME_FRESHNESS": "FAIL"
+      },
+      "availableFields": 0,
+      "expectedFields": 1,
+      "notes": [
+        "SUCCESS"
+      ]
+    },
+    {
+      "category": "INJURIES",
+      "teamId": "2199",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "stages": {
+        "SOURCE_RETRIEVAL": "PASS",
+        "NORMALIZATION": "FAIL",
+        "ENTITY_MATCH": "UNKNOWN",
+        "ATTACHMENT": "FAIL",
+        "FIELD_VALIDITY": "FAIL",
+        "FORECAST_TIME_FRESHNESS": "FAIL"
+      },
+      "availableFields": 0,
+      "expectedFields": 1,
+      "notes": [
+        "SUCCESS"
+      ]
+    },
+    {
+      "category": "OPPONENT_HISTORY",
+      "teamId": "127",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "stages": {
+        "SOURCE_RETRIEVAL": "PASS",
+        "NORMALIZATION": "PASS",
+        "ENTITY_MATCH": "PASS",
+        "ATTACHMENT": "PASS",
+        "FIELD_VALIDITY": "PASS",
+        "FORECAST_TIME_FRESHNESS": "PASS"
+      },
+      "availableFields": 1,
+      "expectedFields": 1,
+      "notes": []
+    },
+    {
+      "category": "OPPONENT_HISTORY",
+      "teamId": "2199",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "stages": {
+        "SOURCE_RETRIEVAL": "PASS",
+        "NORMALIZATION": "PASS",
+        "ENTITY_MATCH": "PASS",
+        "ATTACHMENT": "PASS",
+        "FIELD_VALIDITY": "PASS",
+        "FORECAST_TIME_FRESHNESS": "PASS"
+      },
+      "availableFields": 1,
+      "expectedFields": 1,
+      "notes": []
+    },
+    {
+      "category": "QB",
+      "teamId": "127",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "stages": {
+        "SOURCE_RETRIEVAL": "PASS",
+        "NORMALIZATION": "FAIL",
+        "ENTITY_MATCH": "UNKNOWN",
+        "ATTACHMENT": "FAIL",
+        "FIELD_VALIDITY": "FAIL",
+        "FORECAST_TIME_FRESHNESS": "FAIL"
+      },
+      "availableFields": 0,
+      "expectedFields": 2,
+      "notes": [
+        "SUCCESS"
+      ]
+    },
+    {
+      "category": "QB",
+      "teamId": "2199",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "stages": {
+        "SOURCE_RETRIEVAL": "PASS",
+        "NORMALIZATION": "FAIL",
+        "ENTITY_MATCH": "UNKNOWN",
+        "ATTACHMENT": "FAIL",
+        "FIELD_VALIDITY": "FAIL",
+        "FORECAST_TIME_FRESHNESS": "FAIL"
+      },
+      "availableFields": 0,
+      "expectedFields": 2,
+      "notes": [
+        "SUCCESS"
+      ]
+    },
+    {
+      "category": "ROSTER",
+      "teamId": "127",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "stages": {
+        "SOURCE_RETRIEVAL": "UNKNOWN",
+        "NORMALIZATION": "UNKNOWN",
+        "ENTITY_MATCH": "UNKNOWN",
+        "ATTACHMENT": "UNKNOWN",
+        "FIELD_VALIDITY": "FAIL",
+        "FORECAST_TIME_FRESHNESS": "FAIL"
+      },
+      "availableFields": 0,
+      "expectedFields": 3,
+      "notes": [
+        "NO_SOURCE_ATTEMPTED"
+      ]
+    },
+    {
+      "category": "ROSTER",
+      "teamId": "2199",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "stages": {
+        "SOURCE_RETRIEVAL": "UNKNOWN",
+        "NORMALIZATION": "UNKNOWN",
+        "ENTITY_MATCH": "UNKNOWN",
+        "ATTACHMENT": "UNKNOWN",
+        "FIELD_VALIDITY": "FAIL",
+        "FORECAST_TIME_FRESHNESS": "FAIL"
+      },
+      "availableFields": 0,
+      "expectedFields": 3,
+      "notes": [
+        "NO_SOURCE_ATTEMPTED"
+      ]
+    },
+    {
+      "category": "TALENT",
+      "teamId": "127",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "stages": {
+        "SOURCE_RETRIEVAL": "PASS",
+        "NORMALIZATION": "PASS",
+        "ENTITY_MATCH": "PASS",
+        "ATTACHMENT": "PARTIAL",
+        "FIELD_VALIDITY": "PARTIAL",
+        "FORECAST_TIME_FRESHNESS": "PARTIAL"
+      },
+      "availableFields": 1,
+      "expectedFields": 3,
+      "notes": [
+        "SUCCESS"
+      ]
+    },
+    {
+      "category": "TALENT",
+      "teamId": "2199",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "stages": {
+        "SOURCE_RETRIEVAL": "PASS",
+        "NORMALIZATION": "PASS",
+        "ENTITY_MATCH": "PASS",
+        "ATTACHMENT": "PARTIAL",
+        "FIELD_VALIDITY": "PARTIAL",
+        "FORECAST_TIME_FRESHNESS": "PARTIAL"
+      },
+      "availableFields": 1,
+      "expectedFields": 3,
+      "notes": [
+        "SUCCESS"
+      ]
+    },
+    {
+      "category": "TEAM_EFFICIENCY",
+      "teamId": "127",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "stages": {
+        "SOURCE_RETRIEVAL": "PASS",
+        "NORMALIZATION": "PASS",
+        "ENTITY_MATCH": "PASS",
+        "ATTACHMENT": "PASS",
+        "FIELD_VALIDITY": "PASS",
+        "FORECAST_TIME_FRESHNESS": "PASS"
+      },
+      "availableFields": 1,
+      "expectedFields": 1,
+      "notes": []
+    },
+    {
+      "category": "TEAM_EFFICIENCY",
+      "teamId": "2199",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "stages": {
+        "SOURCE_RETRIEVAL": "PASS",
+        "NORMALIZATION": "PASS",
+        "ENTITY_MATCH": "PASS",
+        "ATTACHMENT": "PASS",
+        "FIELD_VALIDITY": "PASS",
+        "FORECAST_TIME_FRESHNESS": "PASS"
+      },
+      "availableFields": 1,
+      "expectedFields": 1,
+      "notes": []
+    },
+    {
+      "category": "TRANSFERS",
+      "teamId": "127",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "stages": {
+        "SOURCE_RETRIEVAL": "UNKNOWN",
+        "NORMALIZATION": "UNKNOWN",
+        "ENTITY_MATCH": "UNKNOWN",
+        "ATTACHMENT": "UNKNOWN",
+        "FIELD_VALIDITY": "FAIL",
+        "FORECAST_TIME_FRESHNESS": "FAIL"
+      },
+      "availableFields": 0,
+      "expectedFields": 3,
+      "notes": [
+        "NO_SOURCE_ATTEMPTED"
+      ]
+    },
+    {
+      "category": "TRANSFERS",
+      "teamId": "2199",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "stages": {
+        "SOURCE_RETRIEVAL": "UNKNOWN",
+        "NORMALIZATION": "UNKNOWN",
+        "ENTITY_MATCH": "UNKNOWN",
+        "ATTACHMENT": "UNKNOWN",
+        "FIELD_VALIDITY": "FAIL",
+        "FORECAST_TIME_FRESHNESS": "FAIL"
+      },
+      "availableFields": 0,
+      "expectedFields": 3,
+      "notes": [
+        "NO_SOURCE_ATTEMPTED"
+      ]
+    },
+    {
+      "category": "WEATHER",
+      "teamId": "127",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "stages": {
+        "SOURCE_RETRIEVAL": "PASS",
+        "NORMALIZATION": "PASS",
+        "ENTITY_MATCH": "PASS",
+        "ATTACHMENT": "PARTIAL",
+        "FIELD_VALIDITY": "PARTIAL",
+        "FORECAST_TIME_FRESHNESS": "PARTIAL"
+      },
+      "availableFields": 4,
+      "expectedFields": 8,
+      "notes": [
+        "SUCCESS"
+      ]
+    },
+    {
+      "category": "WEATHER",
+      "teamId": "2199",
+      "forecastAt": "2026-09-11T21:38:35.165Z",
+      "stages": {
+        "SOURCE_RETRIEVAL": "PASS",
+        "NORMALIZATION": "PASS",
+        "ENTITY_MATCH": "PASS",
+        "ATTACHMENT": "PARTIAL",
+        "FIELD_VALIDITY": "PARTIAL",
+        "FORECAST_TIME_FRESHNESS": "PARTIAL"
+      },
+      "availableFields": 4,
+      "expectedFields": 8,
+      "notes": [
+        "SUCCESS"
+      ]
+    }
+  ],
+  "failures": [
+    {
+      "provider": "The Odds API",
+      "requestCategory": "EXTERNAL_MARKET_BENCHMARK",
+      "canonicalEventId": "401858440",
+      "teamId": null,
+      "failedAt": "2026-09-11T21:38:35.165Z",
+      "errorClass": "SOURCE_DOWN",
+      "attempts": 1,
+      "retryState": "NOT_RETRIED",
+      "finalAvailability": "UNAVAILABLE",
+      "message": "College slate odds unavailable. No retry or per-game odds purchases were made."
+    }
+  ],
+  "market": null,
+  "operational": {
+    "trigger": "SCHEDULED_1400_CT",
+    "captureEventId": "2026-09-11-1400-ct",
+    "captureTimestamp": "2026-09-11T21:38:35.165Z",
+    "scheduledFor": "2026-09-11T19:00:00.000Z",
+    "originalScheduledKickoff": "2026-09-12T19:30Z",
+    "latestVerifiedKickoff": "2026-09-12T19:30Z",
+    "minutesToKickoff": 1311.4139166666666,
+    "hoursToKickoff": 21.85689861111111,
+    "scheduleStatus": "SCHEDULED",
+    "scheduleSource": {
+      "provider": "ESPN",
+      "retrievedAt": "2026-09-11T21:38:22.010Z",
+      "rawPayloadHash": "5dbf57553ac55aa715de5258c178f884311a343422543f6104a340a106a40804"
+    },
+    "conceptualWindows": {
+      "T24H": "CAPTURED",
+      "T6H": "NOT_SCHEDULED_FOR_CAPTURE",
+      "T1H": "NOT_SCHEDULED_FOR_CAPTURE",
+      "LATEST_PREKICK": "NOT_SCHEDULED_FOR_CAPTURE"
+    }
+  }
+}

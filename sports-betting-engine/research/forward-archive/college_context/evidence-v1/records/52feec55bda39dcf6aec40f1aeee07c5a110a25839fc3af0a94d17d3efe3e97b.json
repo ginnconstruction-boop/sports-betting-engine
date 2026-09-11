@@ -1,0 +1,24 @@
+{
+  "id": "52feec55bda39dcf6aec40f1aeee07c5a110a25839fc3af0a94d17d3efe3e97b",
+  "schema": 1,
+  "teamId": "197",
+  "teamName": "Oklahoma State Cowboys",
+  "season": 2026,
+  "eventId": "401856782",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.feelsLikeF.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T21:38:25.606Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856782",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.606Z",
+    "retrievedAt": "2026-09-11T21:38:25.606Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d510ec1a627f1e60e715c3cc27237967432a82cdf2b90f151c98bb2e4ac12e6c"
+}

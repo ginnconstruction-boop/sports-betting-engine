@@ -1,0 +1,24 @@
+{
+  "id": "ac8da40d10a9a855a40b0a4d55f9e28a0b9d4dce60d2210596bfb9b216a1341d",
+  "schema": 1,
+  "teamId": "252",
+  "teamName": "BYU Cougars",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.depthTier.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T21:38:26.506Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.506Z",
+    "retrievedAt": "2026-09-11T21:38:26.506Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "3c0895e42647f4d7adbd2ced6b710ffca1112ad9fd080c54c8a06a2aed87784d"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "6d956da2963bab1ffe305d87aee337c9183bc4792f59d29a57f227f271d1dca8",
+  "schema": 1,
+  "teamId": "302",
+  "teamName": "UC Davis Aggies",
+  "season": 2026,
+  "eventId": "401858223",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.movementPoints",
+  "value": -5,
+  "effectiveFrom": "2026-09-11T21:38:25.937Z",
+  "effectiveTo": "2026-09-13T02:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858223",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.937Z",
+    "retrievedAt": "2026-09-11T21:38:25.937Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c34ccb0f1406f808de13fe476fffb15fb51cb896d24380452b62c82b3b7dad4e"
+}

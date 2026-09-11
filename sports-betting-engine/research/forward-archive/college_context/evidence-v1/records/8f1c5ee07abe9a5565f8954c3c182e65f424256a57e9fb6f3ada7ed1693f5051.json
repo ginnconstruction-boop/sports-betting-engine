@@ -1,0 +1,24 @@
+{
+  "id": "8f1c5ee07abe9a5565f8954c3c182e65f424256a57e9fb6f3ada7ed1693f5051",
+  "schema": 1,
+  "teamId": "2226",
+  "teamName": "Florida Atlantic Owls",
+  "season": 2026,
+  "eventId": "401862703",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T21:38:26.188Z",
+  "effectiveTo": "2026-09-13T05:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401862703",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.188Z",
+    "retrievedAt": "2026-09-11T21:38:26.188Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9531621d5d8595493916ec19efd84275eb835f11ee49dda3e802ac359b5126f6"
+}

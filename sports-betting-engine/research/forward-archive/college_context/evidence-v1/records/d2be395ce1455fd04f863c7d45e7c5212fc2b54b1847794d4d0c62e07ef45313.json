@@ -1,0 +1,24 @@
+{
+  "id": "d2be395ce1455fd04f863c7d45e7c5212fc2b54b1847794d4d0c62e07ef45313",
+  "schema": 1,
+  "teamId": "2011",
+  "teamName": "Alabama State Hornets",
+  "season": 2026,
+  "eventId": "401868326",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T21:38:26.013Z",
+  "effectiveTo": "2026-09-13T02:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401868326",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.013Z",
+    "retrievedAt": "2026-09-11T21:38:26.013Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "3984d74899b044aa44254e4829668ce4228fc85f454bd55d44a46ce660ad2e43"
+}

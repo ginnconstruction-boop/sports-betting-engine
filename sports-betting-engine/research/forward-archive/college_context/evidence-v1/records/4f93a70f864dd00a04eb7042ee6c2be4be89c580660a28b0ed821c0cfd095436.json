@@ -1,0 +1,24 @@
+{
+  "id": "4f93a70f864dd00a04eb7042ee6c2be4be89c580660a28b0ed821c0cfd095436",
+  "schema": 1,
+  "teamId": "259",
+  "teamName": "Virginia Tech Hokies",
+  "season": 2026,
+  "eventId": "401858221",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.ingestionStatus",
+  "value": "AVAILABLE",
+  "effectiveFrom": "2026-09-11T21:38:25.652Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858221",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.652Z",
+    "retrievedAt": "2026-09-11T21:38:25.652Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c66fa3d7dfc9b167980e1bdefaeacdeb960237b05c4fd8fc387c34b90b0364fb"
+}

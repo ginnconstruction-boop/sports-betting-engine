@@ -1,0 +1,24 @@
+{
+  "id": "62f5fc49985c5eb9df7f2efc675fb4a75f1ce918269737503876c4f0a11f6f4a",
+  "schema": 1,
+  "teamId": "249",
+  "teamName": "North Texas Mean Green",
+  "season": 2026,
+  "eventId": "401862705",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.humidityPct.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T21:38:25.996Z",
+  "effectiveTo": "2026-09-13T01:45:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401862705",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.996Z",
+    "retrievedAt": "2026-09-11T21:38:25.996Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "76d63dd863a9edbf47b767594319a18ab8570554c69a269f40aa013ec3c5088c"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "537e3def8e7d3ec0e942955ec27aa8b1e7c3116df0402e321b13d0fa7ceec0df",
+  "schema": 1,
+  "teamId": "251",
+  "teamName": "Texas Longhorns",
+  "season": 2026,
+  "eventId": "401856682",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.indoor",
+  "value": false,
+  "effectiveFrom": "2026-09-11T21:38:26.202Z",
+  "effectiveTo": "2026-09-13T05:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856682",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.202Z",
+    "retrievedAt": "2026-09-11T21:38:26.202Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ab7eedcd3bbd45a2489f660fd6f4a320a2c1d98340e14b63c0ef05b0c2728bf0"
+}

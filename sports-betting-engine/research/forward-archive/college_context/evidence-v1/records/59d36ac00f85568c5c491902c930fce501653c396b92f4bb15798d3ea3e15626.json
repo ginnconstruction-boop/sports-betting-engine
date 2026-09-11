@@ -1,0 +1,24 @@
+{
+  "id": "59d36ac00f85568c5c491902c930fce501653c396b92f4bb15798d3ea3e15626",
+  "schema": 1,
+  "teamId": "213",
+  "teamName": "Penn State Nittany Lions",
+  "season": 2026,
+  "eventId": "401858442",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.movementPoints",
+  "value": 3,
+  "effectiveFrom": "2026-09-11T21:38:25.686Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858442",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.686Z",
+    "retrievedAt": "2026-09-11T21:38:25.686Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "85f242f492f732433f7c269a8384c98c101cb5c502bdbac7a97c456d7b010e27"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "599dd25f8af483ea09f2c45f8ab233eb85cc41b15c18ae43eb6cff4b63e6d24f",
+  "schema": 1,
+  "teamId": "2",
+  "teamName": "Auburn Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-11T21:38:26.507Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.507Z",
+    "retrievedAt": "2026-09-11T21:38:26.507Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "116260c56e377b4f20f4203bfefeb3947166292a58d273e6bd83d94528714dac"
+}

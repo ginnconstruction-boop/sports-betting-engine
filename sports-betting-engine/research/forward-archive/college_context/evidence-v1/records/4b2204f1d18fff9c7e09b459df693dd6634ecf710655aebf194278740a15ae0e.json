@@ -1,0 +1,24 @@
+{
+  "id": "4b2204f1d18fff9c7e09b459df693dd6634ecf710655aebf194278740a15ae0e",
+  "schema": 1,
+  "teamId": "254",
+  "teamName": "Utah Utes",
+  "season": 2026,
+  "eventId": "401856670",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.primaryQb.diagnostic",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T21:38:26.325Z",
+  "effectiveTo": "2026-09-13T08:15:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856670",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.325Z",
+    "retrievedAt": "2026-09-11T21:38:26.325Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "02e79bd12eb9f88694dfe78c3c4c54fb965a626caffa594680110829f9be03db"
+}

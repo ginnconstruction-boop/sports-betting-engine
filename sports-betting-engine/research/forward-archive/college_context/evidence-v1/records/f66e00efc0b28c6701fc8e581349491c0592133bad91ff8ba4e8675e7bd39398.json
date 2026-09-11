@@ -1,0 +1,24 @@
+{
+  "id": "f66e00efc0b28c6701fc8e581349491c0592133bad91ff8ba4e8675e7bd39398",
+  "schema": 1,
+  "teamId": "68",
+  "teamName": "Boise State Broncos",
+  "season": 2026,
+  "eventId": "401860881",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.yardsPerGame",
+  "value": 274,
+  "effectiveFrom": "2026-09-11T21:38:26.002Z",
+  "effectiveTo": "2026-09-13T04:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401860881",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.002Z",
+    "retrievedAt": "2026-09-11T21:38:26.002Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9e32fcfdd5f05615cbdae8d3679a98e3dc33627ba662e304f510fbdf989d88fc"
+}

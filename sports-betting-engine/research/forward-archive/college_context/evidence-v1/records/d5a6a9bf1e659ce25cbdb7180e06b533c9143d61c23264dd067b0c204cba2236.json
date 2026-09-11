@@ -1,0 +1,24 @@
+{
+  "id": "d5a6a9bf1e659ce25cbdb7180e06b533c9143d61c23264dd067b0c204cba2236",
+  "schema": 1,
+  "teamId": "2653",
+  "teamName": "Troy Trojans",
+  "season": 2026,
+  "eventId": "401868326",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.temperatureF",
+  "value": 87,
+  "effectiveFrom": "2026-09-11T21:38:26.013Z",
+  "effectiveTo": "2026-09-13T02:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401868326",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.013Z",
+    "retrievedAt": "2026-09-11T21:38:26.013Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "3984d74899b044aa44254e4829668ce4228fc85f454bd55d44a46ce660ad2e43"
+}

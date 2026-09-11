@@ -1,0 +1,24 @@
+{
+  "id": "7abf20bc5716e5040b5f323e92f1177947ed7748dd1f050524f229ca413c1493",
+  "schema": 1,
+  "teamId": "2385",
+  "teamName": "Mercyhurst Lakers",
+  "season": 2026,
+  "eventId": "401865252",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.openingHomeSpread",
+  "value": -40.5,
+  "effectiveFrom": "2026-09-11T21:38:25.961Z",
+  "effectiveTo": "2026-09-13T02:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401865252",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.961Z",
+    "retrievedAt": "2026-09-11T21:38:25.961Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "4f2bd911d88997af85d73dd6df9875c3befcaf292716e4c9c33e24fb57561785"
+}

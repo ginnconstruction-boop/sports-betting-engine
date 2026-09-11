@@ -1,0 +1,24 @@
+{
+  "id": "f3510b319cc59c3219ca9fa3cd43c053014f78b3301ab759daa8e896423bde94",
+  "schema": 1,
+  "teamId": "2084",
+  "teamName": "Buffalo Bulls",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-11T21:38:26.506Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.506Z",
+    "retrievedAt": "2026-09-11T21:38:26.506Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "f3b8a16576bae2813818a417096116d9de9c6e8575b6edb03d1900009455df2e"
+}

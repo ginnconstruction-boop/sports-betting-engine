@@ -1,0 +1,24 @@
+{
+  "id": "f9950395672c898154ec217275e91c40f4760bf27103fc0dbd9ec4b05747c051",
+  "schema": 1,
+  "teamId": "238",
+  "teamName": "Vanderbilt Commodores",
+  "season": 2026,
+  "eventId": "401856684",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T21:38:25.923Z",
+  "effectiveTo": "2026-09-13T02:15:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856684",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.923Z",
+    "retrievedAt": "2026-09-11T21:38:25.923Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "44b02d01c7792b94afaa098bb2e4301af693bf36ec382905f9d9748023b825fb"
+}

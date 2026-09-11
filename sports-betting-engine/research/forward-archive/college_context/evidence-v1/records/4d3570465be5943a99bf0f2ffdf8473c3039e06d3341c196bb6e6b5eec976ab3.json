@@ -1,0 +1,24 @@
+{
+  "id": "4d3570465be5943a99bf0f2ffdf8473c3039e06d3341c196bb6e6b5eec976ab3",
+  "schema": 1,
+  "teamId": "2306",
+  "teamName": "Kansas State Wildcats",
+  "season": 2026,
+  "eventId": "401856781",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-11T21:38:25.745Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856781",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.745Z",
+    "retrievedAt": "2026-09-11T21:38:25.745Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f13a0f225835826cdf10e6adfaae9b10cd0922be5ca54897ee838c1a74d76aa4"
+}

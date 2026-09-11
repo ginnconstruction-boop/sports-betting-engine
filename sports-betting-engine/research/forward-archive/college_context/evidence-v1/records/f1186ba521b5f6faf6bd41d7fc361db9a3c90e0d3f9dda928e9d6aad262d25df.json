@@ -1,0 +1,24 @@
+{
+  "id": "f1186ba521b5f6faf6bd41d7fc361db9a3c90e0d3f9dda928e9d6aad262d25df",
+  "schema": 1,
+  "teamId": "218",
+  "teamName": "Temple Owls",
+  "season": 2026,
+  "eventId": "401858442",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.yardsPerGame",
+  "value": 369,
+  "effectiveFrom": "2026-09-11T21:38:25.686Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858442",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.686Z",
+    "retrievedAt": "2026-09-11T21:38:25.686Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "85f242f492f732433f7c269a8384c98c101cb5c502bdbac7a97c456d7b010e27"
+}

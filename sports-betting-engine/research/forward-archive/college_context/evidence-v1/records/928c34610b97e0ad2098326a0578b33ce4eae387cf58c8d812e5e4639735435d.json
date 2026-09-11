@@ -1,0 +1,24 @@
+{
+  "id": "928c34610b97e0ad2098326a0578b33ce4eae387cf58c8d812e5e4639735435d",
+  "schema": 1,
+  "teamId": "2084",
+  "teamName": "Buffalo Bulls",
+  "season": 2026,
+  "eventId": "401866414",
+  "playerId": null,
+  "domain": "qb",
+  "field": "qb.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T21:38:26.099Z",
+  "effectiveTo": "2026-09-13T04:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401866414",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.099Z",
+    "retrievedAt": "2026-09-11T21:38:26.099Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "b752fe8954de2ba4cff382ebd5e6483739e8932d1cd6f46902118c19a08c852f"
+}

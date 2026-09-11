@@ -1,0 +1,24 @@
+{
+  "id": "4e1e96538998786f80f0f551e2474fc6133ddb47b023cc8c8252c37a0a0f12af",
+  "schema": 1,
+  "teamId": "2247",
+  "teamName": "Georgia State Panthers",
+  "season": 2026,
+  "eventId": "401869955",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.providerChecked",
+  "value": true,
+  "effectiveFrom": "2026-09-11T21:38:26.166Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401869955",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.166Z",
+    "retrievedAt": "2026-09-11T21:38:26.166Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "5e6c1da8ae25daf0e1cbd6e62c533ca1c8fb282ba3091f94a8492d4009f43f13"
+}

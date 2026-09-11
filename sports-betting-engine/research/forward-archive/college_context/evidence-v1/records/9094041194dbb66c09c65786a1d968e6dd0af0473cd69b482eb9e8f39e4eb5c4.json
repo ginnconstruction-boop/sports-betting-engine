@@ -1,0 +1,24 @@
+{
+  "id": "9094041194dbb66c09c65786a1d968e6dd0af0473cd69b482eb9e8f39e4eb5c4",
+  "schema": 1,
+  "teamId": "12",
+  "teamName": "Arizona Wildcats",
+  "season": 2026,
+  "eventId": "401856810",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T21:38:25.745Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856810",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.745Z",
+    "retrievedAt": "2026-09-11T21:38:25.745Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "6cab123a0d0c1d66fa1036e5b10cf3436d66edb86eb488f256af28ad5599ef85"
+}

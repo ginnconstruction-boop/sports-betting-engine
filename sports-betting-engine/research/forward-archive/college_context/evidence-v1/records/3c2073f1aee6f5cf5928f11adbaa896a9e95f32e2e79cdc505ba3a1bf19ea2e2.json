@@ -1,0 +1,24 @@
+{
+  "id": "3c2073f1aee6f5cf5928f11adbaa896a9e95f32e2e79cdc505ba3a1bf19ea2e2",
+  "schema": 1,
+  "teamId": "295",
+  "teamName": "Old Dominion Monarchs",
+  "season": 2026,
+  "eventId": "401858221",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.precipitationProbability",
+  "value": 51,
+  "effectiveFrom": "2026-09-11T21:38:25.652Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858221",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.652Z",
+    "retrievedAt": "2026-09-11T21:38:25.652Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c66fa3d7dfc9b167980e1bdefaeacdeb960237b05c4fd8fc387c34b90b0364fb"
+}

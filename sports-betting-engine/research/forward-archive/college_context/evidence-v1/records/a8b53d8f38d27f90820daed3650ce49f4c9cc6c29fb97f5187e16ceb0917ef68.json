@@ -1,0 +1,24 @@
+{
+  "id": "a8b53d8f38d27f90820daed3650ce49f4c9cc6c29fb97f5187e16ceb0917ef68",
+  "schema": 1,
+  "teamId": "147",
+  "teamName": "Montana State Bobcats",
+  "season": 2026,
+  "eventId": "401864500",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.humidityPct.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T21:38:26.357Z",
+  "effectiveTo": "2026-09-13T08:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864500",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.357Z",
+    "retrievedAt": "2026-09-11T21:38:26.357Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ba0b0117dc1ed9b42e380e892fce350ed9cf9f4b07c5fa06a3bda994e6a6e5e6"
+}

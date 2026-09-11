@@ -1,0 +1,24 @@
+{
+  "id": "328921674de84bc6d0f56d092868aaec639931cce94f5ac0a1e08e41a48f69de",
+  "schema": 1,
+  "teamId": "119",
+  "teamName": "Towson Tigers",
+  "season": 2026,
+  "eventId": "401856680",
+  "playerId": null,
+  "domain": "qb",
+  "field": "qb.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T21:38:26.094Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856680",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.094Z",
+    "retrievedAt": "2026-09-11T21:38:26.094Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "3515128f1fd4861440af849c64f4ea2a22265462a94799acc6d1e8f56c013f7f"
+}

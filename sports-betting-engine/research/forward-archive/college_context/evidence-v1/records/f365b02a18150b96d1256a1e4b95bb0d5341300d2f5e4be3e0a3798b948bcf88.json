@@ -1,0 +1,24 @@
+{
+  "id": "f365b02a18150b96d1256a1e4b95bb0d5341300d2f5e4be3e0a3798b948bcf88",
+  "schema": 1,
+  "teamId": "326",
+  "teamName": "Texas State Bobcats",
+  "season": 2026,
+  "eventId": "401860884",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.gamesPlayed.diagnostic",
+  "value": "VALIDATION_FAILED",
+  "effectiveFrom": "2026-09-11T21:38:25.895Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401860884",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.895Z",
+    "retrievedAt": "2026-09-11T21:38:25.895Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "2d21413d64c5e73e17c87915b219c5dd8d2fd0f72b6a06ced4ca865bc19d68a6"
+}

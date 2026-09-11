@@ -1,0 +1,24 @@
+{
+  "id": "641b2eb93bc0a8bf66b60f8f8aebbcc995f57a79294a2d21e241cb7caa596043",
+  "schema": 1,
+  "teamId": "147",
+  "teamName": "Montana State Bobcats",
+  "season": 2026,
+  "eventId": "401864500",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T21:38:26.291Z",
+  "effectiveTo": "2026-09-13T08:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864500",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.291Z",
+    "retrievedAt": "2026-09-11T21:38:26.291Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ba0b0117dc1ed9b42e380e892fce350ed9cf9f4b07c5fa06a3bda994e6a6e5e6"
+}

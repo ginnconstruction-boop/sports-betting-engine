@@ -1,0 +1,24 @@
+{
+  "id": "f68f1b1cfa1cc1fe77d621436685710798c42e8312520ee914b253e34212f0d3",
+  "schema": 1,
+  "teamId": "221",
+  "teamName": "Pittsburgh Panthers",
+  "season": 2026,
+  "eventId": "401856790",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T21:38:25.734Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856790",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.734Z",
+    "retrievedAt": "2026-09-11T21:38:25.734Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "fb18f3f79e1dfff3c2fe9ba6d5a4052845ac28517c8ca6a27cf2aceb8d9636ee"
+}

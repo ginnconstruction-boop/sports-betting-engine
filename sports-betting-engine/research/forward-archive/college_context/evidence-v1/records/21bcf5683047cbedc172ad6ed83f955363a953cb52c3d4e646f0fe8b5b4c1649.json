@@ -1,0 +1,24 @@
+{
+  "id": "21bcf5683047cbedc172ad6ed83f955363a953cb52c3d4e646f0fe8b5b4c1649",
+  "schema": 1,
+  "teamId": "154",
+  "teamName": "Wake Forest Demon Deacons",
+  "season": 2026,
+  "eventId": "401858224",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.temperatureF",
+  "value": 79,
+  "effectiveFrom": "2026-09-11T21:38:25.666Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858224",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.666Z",
+    "retrievedAt": "2026-09-11T21:38:25.666Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "76c967cb8b657c7fc5fcf16e8870389325678df25a599ab6d6150279fa44c495"
+}

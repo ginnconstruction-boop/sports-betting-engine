@@ -1,0 +1,24 @@
+{
+  "id": "75caa735abc20b3d0055940eff7d1555074c2ae008f17d04dc5d8c334d2aa41a",
+  "schema": 1,
+  "teamId": "2638",
+  "teamName": "UTEP Miners",
+  "season": 2026,
+  "eventId": "401864505",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.feelsLikeF.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T21:38:26.350Z",
+  "effectiveTo": "2026-09-13T07:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864505",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.350Z",
+    "retrievedAt": "2026-09-11T21:38:26.350Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d013d565fd53599680fd5db5b52c5972089c567a600e085b56b8dc1e36008315"
+}

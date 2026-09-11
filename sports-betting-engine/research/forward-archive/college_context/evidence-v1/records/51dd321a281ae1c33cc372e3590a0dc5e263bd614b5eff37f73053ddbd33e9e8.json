@@ -1,0 +1,24 @@
+{
+  "id": "51dd321a281ae1c33cc372e3590a0dc5e263bd614b5eff37f73053ddbd33e9e8",
+  "schema": 1,
+  "teamId": "167",
+  "teamName": "New Mexico Lobos",
+  "season": 2026,
+  "eventId": "401865252",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.qbAttempts.diagnostic",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T21:38:25.961Z",
+  "effectiveTo": "2026-09-13T02:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401865252",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.961Z",
+    "retrievedAt": "2026-09-11T21:38:25.961Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "4f2bd911d88997af85d73dd6df9875c3befcaf292716e4c9c33e24fb57561785"
+}

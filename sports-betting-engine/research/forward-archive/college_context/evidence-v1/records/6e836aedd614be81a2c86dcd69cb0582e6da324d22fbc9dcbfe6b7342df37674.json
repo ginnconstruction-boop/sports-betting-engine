@@ -1,0 +1,24 @@
+{
+  "id": "6e836aedd614be81a2c86dcd69cb0582e6da324d22fbc9dcbfe6b7342df37674",
+  "schema": 1,
+  "teamId": "193",
+  "teamName": "Miami (OH) RedHawks",
+  "season": 2026,
+  "eventId": "401866417",
+  "playerId": null,
+  "domain": "qb",
+  "field": "qb.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T21:38:25.789Z",
+  "effectiveTo": "2026-09-12T23:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401866417",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.789Z",
+    "retrievedAt": "2026-09-11T21:38:25.789Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8469284420f64cd7f86c3a5c01bfacb42974c688120d0eb57890cae2e164dc44"
+}

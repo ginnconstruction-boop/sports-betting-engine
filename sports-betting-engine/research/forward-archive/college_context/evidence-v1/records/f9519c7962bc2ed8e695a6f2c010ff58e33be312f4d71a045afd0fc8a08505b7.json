@@ -1,0 +1,24 @@
+{
+  "id": "f9519c7962bc2ed8e695a6f2c010ff58e33be312f4d71a045afd0fc8a08505b7",
+  "schema": 1,
+  "teamId": "189",
+  "teamName": "Bowling Green Falcons",
+  "season": 2026,
+  "eventId": "401858441",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.humidityPct.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T21:38:26.081Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858441",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.081Z",
+    "retrievedAt": "2026-09-11T21:38:26.081Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "81b39a8d4f46eb83b2af7717ca4c38bd9f336480dd34f4ea7ae79a7bc7979972"
+}

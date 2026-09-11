@@ -1,0 +1,24 @@
+{
+  "id": "de0374398190ec9f698d3bf8d3bf732266c3860c8f88087e9e01de80f53ac927",
+  "schema": 1,
+  "teamId": "84",
+  "teamName": "Indiana Hoosiers",
+  "season": 2026,
+  "eventId": "401858439",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.lastScore.diagnostic",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T21:38:25.679Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858439",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.679Z",
+    "retrievedAt": "2026-09-11T21:38:25.679Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f7e8f1ecb591649962b67d09a7c582cc1a2bc63884a60524b5bfe3f681d7e45a"
+}

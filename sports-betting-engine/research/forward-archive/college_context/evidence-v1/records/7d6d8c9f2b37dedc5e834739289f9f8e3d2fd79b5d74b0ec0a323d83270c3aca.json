@@ -1,0 +1,24 @@
+{
+  "id": "7d6d8c9f2b37dedc5e834739289f9f8e3d2fd79b5d74b0ec0a323d83270c3aca",
+  "schema": 1,
+  "teamId": "26",
+  "teamName": "UCLA Bruins",
+  "season": 2026,
+  "eventId": "401858443",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T21:38:26.128Z",
+  "effectiveTo": "2026-09-13T05:15:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858443",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.128Z",
+    "retrievedAt": "2026-09-11T21:38:26.128Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "649519b43c665b8306264af976ad4cfe9253deda371bad71b15b885d81b97cd3"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "807a188e2b023873eaec6214589ca96df66e2e99cf580db3cde2cd15073c8bb5",
+  "schema": 1,
+  "teamId": "2747",
+  "teamName": "Wofford Terriers",
+  "season": 2026,
+  "eventId": "401866416",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T21:38:25.723Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401866416",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.723Z",
+    "retrievedAt": "2026-09-11T21:38:25.723Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d00acaa182edbdf722170e15a012813f3468d6d7e8a5a71020cca5b4e99c5c9a"
+}

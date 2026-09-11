@@ -1,0 +1,24 @@
+{
+  "id": "a4d415f569090e2d2d6261b3823b25a9afb19a855999819e973a76847f5d2922",
+  "schema": 1,
+  "teamId": "264",
+  "teamName": "Washington Huskies",
+  "season": 2026,
+  "eventId": "401858446",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.providerChecked",
+  "value": true,
+  "effectiveFrom": "2026-09-11T21:38:25.863Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858446",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.863Z",
+    "retrievedAt": "2026-09-11T21:38:25.863Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "25d974cf31733c967ec1f641aeb402fba7e468e2a56ae380cd04158ace3f0db7"
+}

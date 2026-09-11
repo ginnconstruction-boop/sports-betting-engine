@@ -1,0 +1,24 @@
+{
+  "id": "b8a941c8d62888e565d040e476e486d1c91a5c68099c8fdf21c99cc57ab8f771",
+  "schema": 1,
+  "teamId": "145",
+  "teamName": "Ole Miss Rebels",
+  "season": 2026,
+  "eventId": "401856676",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.pointsAllowedPerGame",
+  "value": 38,
+  "effectiveFrom": "2026-09-11T21:38:26.282Z",
+  "effectiveTo": "2026-09-13T05:45:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856676",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.282Z",
+    "retrievedAt": "2026-09-11T21:38:26.282Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "da5585b2032789c579b0ed67adee410ca70e108e1af64b9f84c042f5aa4c0d8c"
+}

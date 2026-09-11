@@ -1,0 +1,24 @@
+{
+  "id": "c844ed8aa7238048cde8852ae4ca10ff4c361b6c92eecd5d7ac9875ecc331a91",
+  "schema": 1,
+  "teamId": "6",
+  "teamName": "South Alabama Jaguars",
+  "season": 2026,
+  "eventId": "401864575",
+  "playerId": null,
+  "domain": "qb",
+  "field": "qb.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T21:38:26.081Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864575",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.081Z",
+    "retrievedAt": "2026-09-11T21:38:26.081Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "bedd9158c9951c4608d663f26b9d04095ef08ed68c91bedc77cfa485bf3245cc"
+}

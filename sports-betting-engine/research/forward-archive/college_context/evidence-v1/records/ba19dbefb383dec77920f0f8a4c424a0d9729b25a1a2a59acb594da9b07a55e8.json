@@ -1,0 +1,24 @@
+{
+  "id": "ba19dbefb383dec77920f0f8a4c424a0d9729b25a1a2a59acb594da9b07a55e8",
+  "schema": 1,
+  "teamId": "25",
+  "teamName": "California Golden Bears",
+  "season": 2026,
+  "eventId": "401858216",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.yardsPerGame",
+  "value": 410,
+  "effectiveFrom": "2026-09-11T21:38:25.879Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858216",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.879Z",
+    "retrievedAt": "2026-09-11T21:38:25.879Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d9fa385847417d6fcdd0903afcbb312e1b8ca86030edfe7c74407886ac9faf38"
+}

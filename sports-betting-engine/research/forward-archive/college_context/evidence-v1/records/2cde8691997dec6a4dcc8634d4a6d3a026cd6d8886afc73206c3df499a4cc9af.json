@@ -1,0 +1,24 @@
+{
+  "id": "2cde8691997dec6a4dcc8634d4a6d3a026cd6d8886afc73206c3df499a4cc9af",
+  "schema": 1,
+  "teamId": "309",
+  "teamName": "Louisiana Ragin' Cajuns",
+  "season": 2026,
+  "eventId": "401858445",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T21:38:26.310Z",
+  "effectiveTo": "2026-09-13T09:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858445",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.310Z",
+    "retrievedAt": "2026-09-11T21:38:26.310Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "a3201804bdb37a9643b8d33bca7cf653e88a81ea2f146c53c60f3a99427c98a5"
+}

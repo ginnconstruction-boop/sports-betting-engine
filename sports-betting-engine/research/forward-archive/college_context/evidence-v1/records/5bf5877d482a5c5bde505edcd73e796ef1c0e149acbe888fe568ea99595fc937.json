@@ -1,0 +1,24 @@
+{
+  "id": "5bf5877d482a5c5bde505edcd73e796ef1c0e149acbe888fe568ea99595fc937",
+  "schema": 1,
+  "teamId": "2572",
+  "teamName": "Southern Miss Golden Eagles",
+  "season": 2026,
+  "eventId": "401856671",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.movementPoints",
+  "value": -3,
+  "effectiveFrom": "2026-09-11T21:38:26.272Z",
+  "effectiveTo": "2026-09-13T05:45:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856671",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.272Z",
+    "retrievedAt": "2026-09-11T21:38:26.272Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "08d10a2482e9007c990a992d4f8004ed991242c725360d601be7e1c0d0d3031d"
+}

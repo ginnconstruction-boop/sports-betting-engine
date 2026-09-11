@@ -1,0 +1,24 @@
+{
+  "id": "1c29f2499882ae24a9aa65a6195d36de0ec7737df5ce925e23850e007ac0aea5",
+  "schema": 1,
+  "teamId": "142",
+  "teamName": "Missouri Tigers",
+  "season": 2026,
+  "eventId": "401856678",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T21:38:25.466Z",
+  "effectiveTo": "2026-09-12T06:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856678",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.466Z",
+    "retrievedAt": "2026-09-11T21:38:25.466Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e8a525dd87d8f0dfd6e1961a571885e97c02df3c53c9ca5e4ed0b099847828af"
+}

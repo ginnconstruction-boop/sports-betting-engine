@@ -1,0 +1,24 @@
+{
+  "id": "cecd4f19726985244cc91d343c0396ef4595f61f1419524f79d2ef12e59d6a8b",
+  "schema": 1,
+  "teamId": "2117",
+  "teamName": "Central Michigan Chippewas",
+  "season": 2026,
+  "eventId": "401866415",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.precipitationProbability",
+  "value": 5,
+  "effectiveFrom": "2026-09-11T21:38:25.778Z",
+  "effectiveTo": "2026-09-12T23:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401866415",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.778Z",
+    "retrievedAt": "2026-09-11T21:38:25.778Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c1be92afe1404c7a1df8a0ac0f83ce97aef71b7f3fa9df8761b9477553aa101d"
+}

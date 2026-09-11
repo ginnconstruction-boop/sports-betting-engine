@@ -1,0 +1,24 @@
+{
+  "id": "c7f4e14ee845ada0336b9e0fb926fc9aa974ac210948f0b1e8d5f2d9c601648a",
+  "schema": 1,
+  "teamId": "202",
+  "teamName": "Tulsa Golden Hurricane",
+  "season": 2026,
+  "eventId": "401862707",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T21:38:26.051Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401862707",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.051Z",
+    "retrievedAt": "2026-09-11T21:38:26.051Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "87715424b3b247d611654b24e9ebeba1d7308bb80f569898a0d3e6c0bb04fbef"
+}

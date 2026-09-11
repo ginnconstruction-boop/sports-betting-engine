@@ -1,0 +1,24 @@
+{
+  "id": "590177461261c7965997ee351cde731b30a19dc3c77bd8374d5a2be63f479e2f",
+  "schema": 1,
+  "teamId": "253",
+  "teamName": "Southern Utah Thunderbirds",
+  "season": 2026,
+  "eventId": "401860882",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.providerChecked",
+  "value": true,
+  "effectiveFrom": "2026-09-11T21:38:26.155Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401860882",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.155Z",
+    "retrievedAt": "2026-09-11T21:38:26.155Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "00d69766a9168583abd1f905a6d9db7406c26729d2b74367b28fa1f2c1724fc8"
+}

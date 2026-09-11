@@ -1,0 +1,24 @@
+{
+  "id": "5c53fbbb8974b6408eb0d015703e47fb5167dcfe46505a13985b53a3ddda2fa7",
+  "schema": 1,
+  "teamId": "166",
+  "teamName": "New Mexico State Aggies",
+  "season": 2026,
+  "eventId": "401864578",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T21:38:26.373Z",
+  "effectiveTo": "2026-09-13T09:59:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864578",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.373Z",
+    "retrievedAt": "2026-09-11T21:38:26.373Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "55d4ef1c3f7789051141e3cafecc5c2941040f094e9146657c12c35c10d45243"
+}

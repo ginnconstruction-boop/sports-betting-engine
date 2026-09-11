@@ -1,0 +1,24 @@
+{
+  "id": "3afe4e300bb0281178a67a24b1bb26202d127d4079c5856efd51c09bb47ad4b3",
+  "schema": 1,
+  "teamId": "328",
+  "teamName": "Utah State Aggies",
+  "season": 2026,
+  "eventId": "401858446",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.windMph.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T21:38:25.863Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858446",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.863Z",
+    "retrievedAt": "2026-09-11T21:38:25.863Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "25d974cf31733c967ec1f641aeb402fba7e468e2a56ae380cd04158ace3f0db7"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "83cb2e8ba763935572f43c96719d8bbc5e8c548baeaa87ffdd091b573411c692",
+  "schema": 1,
+  "teamId": "151",
+  "teamName": "East Carolina Pirates",
+  "season": 2026,
+  "eventId": "401864571",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.currentHomeSpread",
+  "value": -6.5,
+  "effectiveFrom": "2026-09-11T21:38:25.705Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864571",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.705Z",
+    "retrievedAt": "2026-09-11T21:38:25.705Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8dc404298377f4a874803c9876982ac498af129063f0c06b635a0361ba9881b1"
+}

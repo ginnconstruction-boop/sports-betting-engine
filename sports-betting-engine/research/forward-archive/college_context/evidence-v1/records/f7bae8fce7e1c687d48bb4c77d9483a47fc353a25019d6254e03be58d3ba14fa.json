@@ -1,0 +1,24 @@
+{
+  "id": "f7bae8fce7e1c687d48bb4c77d9483a47fc353a25019d6254e03be58d3ba14fa",
+  "schema": 1,
+  "teamId": "68",
+  "teamName": "Boise State Broncos",
+  "season": 2026,
+  "eventId": "401860881",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T21:38:25.938Z",
+  "effectiveTo": "2026-09-13T04:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401860881",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.938Z",
+    "retrievedAt": "2026-09-11T21:38:25.938Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9e32fcfdd5f05615cbdae8d3679a98e3dc33627ba662e304f510fbdf989d88fc"
+}

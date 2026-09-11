@@ -1,0 +1,24 @@
+{
+  "id": "8ac4c85eb448fb4bd947c86b2a0640c06522c008eb83bd14572ee71e651836a6",
+  "schema": 1,
+  "teamId": "113",
+  "teamName": "Massachusetts Minutemen",
+  "season": 2026,
+  "eventId": "401866420",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.windMph.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T21:38:26.032Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401866420",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.032Z",
+    "retrievedAt": "2026-09-11T21:38:26.032Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "39cf5bb90b3805b6827d98dcdbd0cf68cda884f0117952587441a75c0edd4154"
+}

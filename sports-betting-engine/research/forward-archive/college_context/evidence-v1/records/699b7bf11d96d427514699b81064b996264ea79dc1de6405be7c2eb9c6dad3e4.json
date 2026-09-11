@@ -1,0 +1,24 @@
+{
+  "id": "699b7bf11d96d427514699b81064b996264ea79dc1de6405be7c2eb9c6dad3e4",
+  "schema": 1,
+  "teamId": "2429",
+  "teamName": "Charlotte 49ers",
+  "season": 2026,
+  "eventId": "401856676",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.indoor",
+  "value": false,
+  "effectiveFrom": "2026-09-11T21:38:26.282Z",
+  "effectiveTo": "2026-09-13T05:45:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856676",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.282Z",
+    "retrievedAt": "2026-09-11T21:38:26.282Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "da5585b2032789c579b0ed67adee410ca70e108e1af64b9f84c042f5aa4c0d8c"
+}

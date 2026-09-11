@@ -1,0 +1,24 @@
+{
+  "id": "14a37d73e7f9238900e3b72f2d7398ecb6872b006bed3aac2fcd234972a2a443",
+  "schema": 1,
+  "teamId": "2681",
+  "teamName": "Wagner Seahawks",
+  "season": 2026,
+  "eventId": "401867929",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.precipitationProbability",
+  "value": 34,
+  "effectiveFrom": "2026-09-11T21:38:25.699Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401867929",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.699Z",
+    "retrievedAt": "2026-09-11T21:38:25.699Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9439533a9dc80d4d4b92d2948d4e49fd77575406673eacb18b953756d98ee8bb"
+}

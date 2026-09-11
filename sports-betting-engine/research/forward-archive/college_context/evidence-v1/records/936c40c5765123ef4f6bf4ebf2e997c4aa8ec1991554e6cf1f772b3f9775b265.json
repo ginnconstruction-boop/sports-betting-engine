@@ -1,0 +1,24 @@
+{
+  "id": "936c40c5765123ef4f6bf4ebf2e997c4aa8ec1991554e6cf1f772b3f9775b265",
+  "schema": 1,
+  "teamId": "2193",
+  "teamName": "East Tennessee State Buccaneers",
+  "season": 2026,
+  "eventId": "401858218",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.movementPoints",
+  "value": -1,
+  "effectiveFrom": "2026-09-11T21:38:25.620Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858218",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.620Z",
+    "retrievedAt": "2026-09-11T21:38:25.620Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d88647a760942413cd85b8709a76c39a87a018fbffac8706ae253972258f9121"
+}

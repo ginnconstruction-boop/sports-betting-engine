@@ -1,0 +1,24 @@
+{
+  "id": "73804134743d65e23519213d71f497a09ebdf77a30be37061afb1fcd14cb85a0",
+  "schema": 1,
+  "teamId": "2006",
+  "teamName": "Akron Zips",
+  "season": 2026,
+  "eventId": "401866412",
+  "playerId": null,
+  "domain": "qb",
+  "field": "qb.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T21:38:25.911Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401866412",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.911Z",
+    "retrievedAt": "2026-09-11T21:38:25.911Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "eb5cb67ab1dee403099d65d3e16a3e3b7bd8d98a10e8737c9748aac3d7908e14"
+}

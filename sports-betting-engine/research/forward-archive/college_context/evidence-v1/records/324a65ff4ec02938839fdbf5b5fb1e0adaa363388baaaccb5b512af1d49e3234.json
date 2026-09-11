@@ -1,0 +1,24 @@
+{
+  "id": "324a65ff4ec02938839fdbf5b5fb1e0adaa363388baaaccb5b512af1d49e3234",
+  "schema": 1,
+  "teamId": "150",
+  "teamName": "Duke Blue Devils",
+  "season": 2026,
+  "eventId": "401858217",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.humidityPct.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T21:38:25.916Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858217",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.916Z",
+    "retrievedAt": "2026-09-11T21:38:25.916Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "60996a580467c17b87629973269228bbfe48f6e794dc1e281a2fc5bd296d9fc4"
+}

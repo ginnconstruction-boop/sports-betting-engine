@@ -1,0 +1,24 @@
+{
+  "id": "f4134ba009f280a5ed480082a00049a0f307ecdb88dd280051a4f9171fad9862",
+  "schema": 1,
+  "teamId": "2751",
+  "teamName": "Wyoming Cowboys",
+  "season": 2026,
+  "eventId": "401864506",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.openingHomeSpread",
+  "value": -22.5,
+  "effectiveFrom": "2026-09-11T21:38:25.955Z",
+  "effectiveTo": "2026-09-13T02:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864506",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.955Z",
+    "retrievedAt": "2026-09-11T21:38:25.955Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "dc987a4a129766beccfc7e76b474537999cd6d33c4555366456ad285beecd627"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "ce8c75b9c1ec760c6f5ba5cf676682df8a488c03b69c07c04b92e22dbbad0ae3",
+  "schema": 1,
+  "teamId": "2199",
+  "teamName": "Eastern Michigan Eagles",
+  "season": 2026,
+  "eventId": "401858440",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.pointsAllowedPerGame",
+  "value": 22,
+  "effectiveFrom": "2026-09-11T21:38:25.857Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858440",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.857Z",
+    "retrievedAt": "2026-09-11T21:38:25.857Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "4e0f4429c230b0dfd66aaea2b9ff2238f7d4af19ec7aeb657e9d0df43d758842"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "c9ee1ca8e6ad9b3e686c208b527a7661e290266b759dd3849172f441c6a58383",
+  "schema": 1,
+  "teamId": "2",
+  "teamName": "Auburn Tigers",
+  "season": 2026,
+  "eventId": "401856671",
+  "playerId": null,
+  "domain": "qb",
+  "field": "qb.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T21:38:26.208Z",
+  "effectiveTo": "2026-09-13T05:45:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856671",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.208Z",
+    "retrievedAt": "2026-09-11T21:38:26.208Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "08d10a2482e9007c990a992d4f8004ed991242c725360d601be7e1c0d0d3031d"
+}

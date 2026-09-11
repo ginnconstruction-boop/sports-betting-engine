@@ -1,0 +1,24 @@
+{
+  "id": "3ca1cd39194ab19161a78f6de3df6c70ac7040813a11d8cb56e117a9906576e9",
+  "schema": 1,
+  "teamId": "2309",
+  "teamName": "Kent State Golden Flashes",
+  "season": 2026,
+  "eventId": "401866416",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.providerChecked",
+  "value": true,
+  "effectiveFrom": "2026-09-11T21:38:25.723Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401866416",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.723Z",
+    "retrievedAt": "2026-09-11T21:38:25.723Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d00acaa182edbdf722170e15a012813f3468d6d7e8a5a71020cca5b4e99c5c9a"
+}

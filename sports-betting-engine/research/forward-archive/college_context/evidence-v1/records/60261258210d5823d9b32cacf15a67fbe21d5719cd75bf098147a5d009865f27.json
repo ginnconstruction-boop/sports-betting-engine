@@ -1,0 +1,24 @@
+{
+  "id": "60261258210d5823d9b32cacf15a67fbe21d5719cd75bf098147a5d009865f27",
+  "schema": 1,
+  "teamId": "147",
+  "teamName": "Montana State Bobcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FCS",
+  "effectiveFrom": "2026-09-11T21:38:26.508Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.508Z",
+    "retrievedAt": "2026-09-11T21:38:26.508Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "2da23bd764da1fb2d083ac67d4cea2153a7fab76ff210d4e66c68213eb6369fb"
+}

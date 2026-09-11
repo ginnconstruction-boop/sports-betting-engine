@@ -1,0 +1,24 @@
+{
+  "id": "61da83ecc7b8c880aaa961769e9476ddae16870e88ccb3952829bf08dfe7a52a",
+  "schema": 1,
+  "teamId": "2509",
+  "teamName": "Purdue Boilermakers",
+  "season": 2026,
+  "eventId": "401858224",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.gamesPlayed.diagnostic",
+  "value": "VALIDATION_FAILED",
+  "effectiveFrom": "2026-09-11T21:38:25.666Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858224",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.666Z",
+    "retrievedAt": "2026-09-11T21:38:25.666Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "76c967cb8b657c7fc5fcf16e8870389325678df25a599ab6d6150279fa44c495"
+}

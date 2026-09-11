@@ -1,0 +1,24 @@
+{
+  "id": "9d6e2188b829b5affba052057b2b0e46999e9b8e4e2abccc359f17c30eab1d79",
+  "schema": 1,
+  "teamId": "2640",
+  "teamName": "Texas Southern Tigers",
+  "season": 2026,
+  "eventId": "401864505",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.pointsAllowedPerGame",
+  "value": 41,
+  "effectiveFrom": "2026-09-11T21:38:26.350Z",
+  "effectiveTo": "2026-09-13T07:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864505",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.350Z",
+    "retrievedAt": "2026-09-11T21:38:26.350Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d013d565fd53599680fd5db5b52c5972089c567a600e085b56b8dc1e36008315"
+}

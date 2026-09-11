@@ -1,0 +1,24 @@
+{
+  "id": "a5e074ff39992ed578828f81f2ec6927335bae70dcdd9746f3d926c7623cb577",
+  "schema": 1,
+  "teamId": "2655",
+  "teamName": "Tulane Green Wave",
+  "season": 2026,
+  "eventId": "401864575",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.providerChecked",
+  "value": true,
+  "effectiveFrom": "2026-09-11T21:38:26.139Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864575",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.139Z",
+    "retrievedAt": "2026-09-11T21:38:26.139Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "bedd9158c9951c4608d663f26b9d04095ef08ed68c91bedc77cfa485bf3245cc"
+}

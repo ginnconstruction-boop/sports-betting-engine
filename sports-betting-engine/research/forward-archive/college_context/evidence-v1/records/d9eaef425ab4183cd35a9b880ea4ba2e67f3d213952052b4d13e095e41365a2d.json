@@ -1,0 +1,24 @@
+{
+  "id": "d9eaef425ab4183cd35a9b880ea4ba2e67f3d213952052b4d13e095e41365a2d",
+  "schema": 1,
+  "teamId": "338",
+  "teamName": "Kennesaw State Owls",
+  "season": 2026,
+  "eventId": "401869955",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.provider",
+  "value": "DraftKings",
+  "effectiveFrom": "2026-09-11T21:38:26.166Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401869955",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:26.166Z",
+    "retrievedAt": "2026-09-11T21:38:26.166Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "5e6c1da8ae25daf0e1cbd6e62c533ca1c8fb282ba3091f94a8492d4009f43f13"
+}

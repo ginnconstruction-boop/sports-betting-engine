@@ -1,0 +1,24 @@
+{
+  "id": "ea4e251be7a44b396aaaf0a59e0dab031b8267c1f4dfe42594d927f0eb2ca2b6",
+  "schema": 1,
+  "teamId": "356",
+  "teamName": "Illinois Fighting Illini",
+  "season": 2026,
+  "eventId": "401858217",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.ingestionStatus",
+  "value": "VALIDATION_FAILED",
+  "effectiveFrom": "2026-09-11T21:38:25.916Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858217",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T21:38:25.916Z",
+    "retrievedAt": "2026-09-11T21:38:25.916Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "60996a580467c17b87629973269228bbfe48f6e794dc1e281a2fc5bd296d9fc4"
+}
