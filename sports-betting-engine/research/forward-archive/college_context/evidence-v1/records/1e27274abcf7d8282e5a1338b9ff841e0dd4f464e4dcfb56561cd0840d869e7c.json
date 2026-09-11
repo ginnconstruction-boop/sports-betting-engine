@@ -1,0 +1,24 @@
+{
+  "id": "1e27274abcf7d8282e5a1338b9ff841e0dd4f464e4dcfb56561cd0840d869e7c",
+  "schema": 1,
+  "teamId": "356",
+  "teamName": "Illinois Fighting Illini",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.currentSeasonAvailable",
+  "value": true,
+  "effectiveFrom": "2026-09-11T16:00:41.421Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/356/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.421Z",
+    "retrievedAt": "2026-09-11T16:00:41.421Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9fef03fcd887bdd4a4c5e77e7c7807c62d53dbfe5eb3982281b217095aec3099"
+}

@@ -1,0 +1,50 @@
+{
+  "id": "e469ee5de7a6c706ef6ea839ddf13e67d30196b3ad26c636e9dcfd9c7e0572de",
+  "schema": 1,
+  "teamId": "2630",
+  "teamName": "UT Martin Skyhawks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5438968",
+      "name": "Kannon Burroughs",
+      "status": "Active"
+    },
+    {
+      "id": "4801302",
+      "name": "Julian Calvez",
+      "status": "Active"
+    },
+    {
+      "id": "5299228",
+      "name": "Luke Dyer",
+      "status": "Active"
+    },
+    {
+      "id": "5147475",
+      "name": "Aidan Glover",
+      "status": "Active"
+    },
+    {
+      "id": "5109487",
+      "name": "Justin Kowalak",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:40.969Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2630/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.969Z",
+    "retrievedAt": "2026-09-11T16:00:40.969Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "18a55cced84906235956a41a94752702b293f1d49bd8d13cda24aeeb76c7140e"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "1168fb5c099588bb576f327ebf1d6a66478a720fe33cba858e5800fcced7d880",
+  "schema": 1,
+  "teamId": "2710",
+  "teamName": "Western Illinois Leathernecks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:42.969Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2710/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.969Z",
+    "retrievedAt": "2026-09-11T16:00:42.969Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ff765f5311fd900eb5fab33e8e6ac40bc9df551ee35db75a4aa8c2b5f5e21e5e"
+}

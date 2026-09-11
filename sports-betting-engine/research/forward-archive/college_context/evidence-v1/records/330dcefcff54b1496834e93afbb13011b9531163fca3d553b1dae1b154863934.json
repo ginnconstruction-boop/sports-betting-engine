@@ -1,0 +1,24 @@
+{
+  "id": "330dcefcff54b1496834e93afbb13011b9531163fca3d553b1dae1b154863934",
+  "schema": 1,
+  "teamId": "62",
+  "teamName": "Hawai'i Rainbow Warriors",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:44.025Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/62/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.025Z",
+    "retrievedAt": "2026-09-11T16:00:44.025Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "91e3af61c0ccd6fec652e8f7f176a8e2338375e352391fcf551123e7b842bfa8"
+}

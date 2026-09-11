@@ -1,0 +1,24 @@
+{
+  "id": "6d3590d63b81a435f0b20f1956383817da71c4c747eb8a0fe8cb5fef04b91b57",
+  "schema": 1,
+  "teamId": "57",
+  "teamName": "Florida Gators",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Jon Sumrall",
+  "effectiveFrom": "2026-09-11T16:00:42.222Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/57/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.222Z",
+    "retrievedAt": "2026-09-11T16:00:42.222Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "a743a63f7bc348edd2102f0ea6bdab85c9bdba6d5fcc81003c171cb11f9cc4c8"
+}

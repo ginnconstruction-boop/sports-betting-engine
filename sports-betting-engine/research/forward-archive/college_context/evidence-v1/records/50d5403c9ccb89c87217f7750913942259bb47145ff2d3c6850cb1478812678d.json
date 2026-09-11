@@ -1,0 +1,24 @@
+{
+  "id": "50d5403c9ccb89c87217f7750913942259bb47145ff2d3c6850cb1478812678d",
+  "schema": 1,
+  "teamId": "36",
+  "teamName": "Colorado State Rams",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.newHeadCoach.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:42.715Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/36/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.715Z",
+    "retrievedAt": "2026-09-11T16:00:42.715Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "61a8fc093b0553ab036e5cd63af7026142849eda195f8cb7db2dc9a3467cee7f"
+}

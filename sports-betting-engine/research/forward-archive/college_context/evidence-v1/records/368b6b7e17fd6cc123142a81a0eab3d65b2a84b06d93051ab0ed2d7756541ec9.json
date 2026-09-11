@@ -1,0 +1,55 @@
+{
+  "id": "368b6b7e17fd6cc123142a81a0eab3d65b2a84b06d93051ab0ed2d7756541ec9",
+  "schema": 1,
+  "teamId": "145",
+  "teamName": "Ole Miss Rebels",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "4911529",
+      "name": "Trinidad Chambliss",
+      "status": "Active"
+    },
+    {
+      "id": "5081127",
+      "name": "George Hamsley",
+      "status": "Active"
+    },
+    {
+      "id": "4685391",
+      "name": "Walker Howard",
+      "status": "Active"
+    },
+    {
+      "id": "5141506",
+      "name": "Deuce Knight",
+      "status": "Active"
+    },
+    {
+      "id": "5084295",
+      "name": "AJ Maddox",
+      "status": "Active"
+    },
+    {
+      "id": "5224144",
+      "name": "Jack Patterson",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:43.534Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/145/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.534Z",
+    "retrievedAt": "2026-09-11T16:00:43.534Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "79a8d5f65142dc5b9c9d1f11b0637f1fa8d4c04fb2cb71f6e80a2eec312fddc2"
+}

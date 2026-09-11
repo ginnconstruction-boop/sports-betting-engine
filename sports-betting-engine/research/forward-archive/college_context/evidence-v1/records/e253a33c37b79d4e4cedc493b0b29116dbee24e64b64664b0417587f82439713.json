@@ -1,0 +1,24 @@
+{
+  "id": "e253a33c37b79d4e4cedc493b0b29116dbee24e64b64664b0417587f82439713",
+  "schema": 1,
+  "teamId": "9",
+  "teamName": "Arizona State Sun Devils",
+  "season": 2026,
+  "eventId": "401856683",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.precipitationProbability",
+  "value": 6,
+  "effectiveFrom": "2026-09-11T16:00:39.708Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856683",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.708Z",
+    "retrievedAt": "2026-09-11T16:00:39.708Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d3241fcfc0134f8019be91f4391c4d97293330d5aebe282cec75a77b6ebcbe4a"
+}

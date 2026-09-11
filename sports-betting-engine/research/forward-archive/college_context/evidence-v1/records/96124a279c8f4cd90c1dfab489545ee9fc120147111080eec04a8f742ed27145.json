@@ -1,0 +1,24 @@
+{
+  "id": "96124a279c8f4cd90c1dfab489545ee9fc120147111080eec04a8f742ed27145",
+  "schema": 1,
+  "teamId": "2717",
+  "teamName": "Western Carolina Catamounts",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:42.406Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2717/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.406Z",
+    "retrievedAt": "2026-09-11T16:00:42.406Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "903a33b229cab90343cd0a8ea2efb44d48177fbd1195c0ba7166c229651ed0c4"
+}

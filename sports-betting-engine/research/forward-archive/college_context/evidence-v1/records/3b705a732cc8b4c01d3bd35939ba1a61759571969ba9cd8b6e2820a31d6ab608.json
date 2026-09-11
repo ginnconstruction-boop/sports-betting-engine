@@ -1,0 +1,55 @@
+{
+  "id": "3b705a732cc8b4c01d3bd35939ba1a61759571969ba9cd8b6e2820a31d6ab608",
+  "schema": 1,
+  "teamId": "2582",
+  "teamName": "Southern Jaguars",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5298023",
+      "name": "Dillon Compton",
+      "status": "Active"
+    },
+    {
+      "id": "5442199",
+      "name": "Vashaun Coulon",
+      "status": "Active"
+    },
+    {
+      "id": "5442202",
+      "name": "Christian Johnson",
+      "status": "Active"
+    },
+    {
+      "id": "5442200",
+      "name": "Mario Litmer",
+      "status": "Active"
+    },
+    {
+      "id": "5442201",
+      "name": "Wyatt McCauley",
+      "status": "Active"
+    },
+    {
+      "id": "5308438",
+      "name": "Ashton Strother",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.663Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2582/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.663Z",
+    "retrievedAt": "2026-09-11T16:00:42.663Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ce4364ef14c37b13e8a7ac121b1866130f592b99295570bbbc65650bd44f9f10"
+}

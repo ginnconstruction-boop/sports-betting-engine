@@ -1,0 +1,24 @@
+{
+  "id": "9211c1b719cb2b8e0305c2a16af9ac9cae10e8e9f8846c2b8c0e9f61439bbab9",
+  "schema": 1,
+  "teamId": "204",
+  "teamName": "Oregon State Beavers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.currentSeasonAvailable",
+  "value": true,
+  "effectiveFrom": "2026-09-11T16:00:43.221Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/204/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.221Z",
+    "retrievedAt": "2026-09-11T16:00:43.221Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "efb868c158cbaafcc8dc7b5f63cc2ef2bbc51d0fce32543c33536fdc94cd5a3a"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "a87ee2b2c8c7a5d8bbd026e267f0499ae8e4aa9928efe17a35d350355103632b",
+  "schema": 1,
+  "teamId": "265",
+  "teamName": "Washington State Cougars",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "returning_production",
+  "field": "returning.ingestionStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.100Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.100Z",
+    "retrievedAt": "2026-09-11T16:00:44.100Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "0b6d87ec8efd224d1a1235e04ad74e451496b0530ae0775849dd1ed984522155"
+}

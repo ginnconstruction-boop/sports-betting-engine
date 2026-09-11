@@ -1,0 +1,24 @@
+{
+  "id": "e2fd7bc5aa8c3b223b108da36fede8e6fa622d3edea97f2ae256fa8f30013a46",
+  "schema": 1,
+  "teamId": "197",
+  "teamName": "Oklahoma State Cowboys",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "returning_production",
+  "field": "returning.sourceStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.100Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.100Z",
+    "retrievedAt": "2026-09-11T16:00:44.100Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "0b6d87ec8efd224d1a1235e04ad74e451496b0530ae0775849dd1ed984522155"
+}

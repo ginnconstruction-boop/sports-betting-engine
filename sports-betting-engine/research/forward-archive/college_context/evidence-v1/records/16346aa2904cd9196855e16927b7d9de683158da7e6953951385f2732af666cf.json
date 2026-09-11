@@ -1,0 +1,24 @@
+{
+  "id": "16346aa2904cd9196855e16927b7d9de683158da7e6953951385f2732af666cf",
+  "schema": 1,
+  "teamId": "2241",
+  "teamName": "Gardner-Webb Runnin' Bulldogs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "returning_production",
+  "field": "returning.ingestionStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.100Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.100Z",
+    "retrievedAt": "2026-09-11T16:00:44.100Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "0b6d87ec8efd224d1a1235e04ad74e451496b0530ae0775849dd1ed984522155"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "67d32d6e73e5f78988bfcc1aa6a0f71cf38c094c8a2c0ba891346eed03ee5630",
+  "schema": 1,
+  "teamId": "2032",
+  "teamName": "Arkansas State Red Wolves",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.rosterComposite.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.099Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.099Z",
+    "retrievedAt": "2026-09-11T16:00:44.099Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "a0fee96d9cf9b9921b90a79e7c8beb8d3233f36db31fdbddc9cd05c9f46d8e2d"
+}

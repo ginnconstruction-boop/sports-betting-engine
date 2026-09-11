@@ -1,0 +1,24 @@
+{
+  "id": "20d8c30963cccb96b64fa33f9dc5a4e7aa69b68547738bb762349bd47bf906c8",
+  "schema": 1,
+  "teamId": "2630",
+  "teamName": "UT Martin Skyhawks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.providerChecked",
+  "value": "MATCHED",
+  "effectiveFrom": "2026-09-11T16:00:40.969Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2630/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.969Z",
+    "retrievedAt": "2026-09-11T16:00:40.969Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "18a55cced84906235956a41a94752702b293f1d49bd8d13cda24aeeb76c7140e"
+}

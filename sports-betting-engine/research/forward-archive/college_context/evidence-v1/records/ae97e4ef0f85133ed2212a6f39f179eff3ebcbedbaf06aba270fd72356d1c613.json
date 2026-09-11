@@ -1,0 +1,24 @@
+{
+  "id": "ae97e4ef0f85133ed2212a6f39f179eff3ebcbedbaf06aba270fd72356d1c613",
+  "schema": 1,
+  "teamId": "242",
+  "teamName": "Rice Owls",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Scott Abell",
+  "effectiveFrom": "2026-09-11T16:00:41.632Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/242/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.632Z",
+    "retrievedAt": "2026-09-11T16:00:41.632Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "0031f8ef97f9fbcd09a0366ab04660bbb619517cb0e530f07479dc3ba533a95f"
+}

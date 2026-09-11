@@ -1,0 +1,55 @@
+{
+  "id": "6809b6fe57a0b9af4da9c71a12675e611ac2191d22799ba627ad24f3a8627f80",
+  "schema": 1,
+  "teamId": "2755",
+  "teamName": "Grambling Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5306457",
+      "name": "Hayden Benoit",
+      "status": "Active"
+    },
+    {
+      "id": "5306461",
+      "name": "Isaiah Coleman",
+      "status": "Active"
+    },
+    {
+      "id": "5085259",
+      "name": "Ashton Frye",
+      "status": "Active"
+    },
+    {
+      "id": "5151696",
+      "name": "Reginald Johnson",
+      "status": "Active"
+    },
+    {
+      "id": "4949488",
+      "name": "Jacobe Robinson",
+      "status": "Active"
+    },
+    {
+      "id": "5439961",
+      "name": "Schuylar Turnbull",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:43.678Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2755/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.678Z",
+    "retrievedAt": "2026-09-11T16:00:43.678Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d360e67594e4ea8186719282f2eeeb75ee0f16c6b1251cf08aa2b63af405236f"
+}

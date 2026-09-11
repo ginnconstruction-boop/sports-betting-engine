@@ -1,0 +1,24 @@
+{
+  "id": "acf820fb765548655746695e643ebe84ac1bb6f8aacfba9f398b647a27243559",
+  "schema": 1,
+  "teamId": "278",
+  "teamName": "Fresno State Bulldogs",
+  "season": 2026,
+  "eventId": "401860883",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.indoor",
+  "value": false,
+  "effectiveFrom": "2026-09-11T16:00:40.228Z",
+  "effectiveTo": "2026-09-13T08:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401860883",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.228Z",
+    "retrievedAt": "2026-09-11T16:00:40.228Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "7080248009d76f62f8dfc5241c41772779dafcb2e044e2e77fb378b5fef4ef74"
+}

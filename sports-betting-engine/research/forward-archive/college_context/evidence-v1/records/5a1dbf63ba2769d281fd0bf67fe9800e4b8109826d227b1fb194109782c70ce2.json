@@ -1,0 +1,50 @@
+{
+  "id": "5a1dbf63ba2769d281fd0bf67fe9800e4b8109826d227b1fb194109782c70ce2",
+  "schema": 1,
+  "teamId": "2097",
+  "teamName": "Campbell Fighting Camels",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5299304",
+      "name": "Grayson Harvey",
+      "status": "Active"
+    },
+    {
+      "id": "5405468",
+      "name": "Alan Hinson",
+      "status": "Active"
+    },
+    {
+      "id": "5216674",
+      "name": "Zach Lawrence",
+      "status": "Active"
+    },
+    {
+      "id": "5405470",
+      "name": "Quinn Mahoney",
+      "status": "Active"
+    },
+    {
+      "id": "5154962",
+      "name": "Kamden Sixkiller",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.244Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2097/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.244Z",
+    "retrievedAt": "2026-09-11T16:00:42.244Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "fd22fb64dff99a6e715d4beb599596772adee57b70f3a08a25b7c017fbf540d5"
+}

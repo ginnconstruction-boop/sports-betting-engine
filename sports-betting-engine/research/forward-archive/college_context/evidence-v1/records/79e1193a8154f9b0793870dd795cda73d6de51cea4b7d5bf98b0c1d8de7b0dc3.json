@@ -1,0 +1,24 @@
+{
+  "id": "79e1193a8154f9b0793870dd795cda73d6de51cea4b7d5bf98b0c1d8de7b0dc3",
+  "schema": 1,
+  "teamId": "290",
+  "teamName": "Georgia Southern Eagles",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.rosterComposite.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.099Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.099Z",
+    "retrievedAt": "2026-09-11T16:00:44.099Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "0d998c7112ab8f46194d04cdc5dfdaae4f3a4e0c234d38c1bcc4d7d25a2ad91d"
+}

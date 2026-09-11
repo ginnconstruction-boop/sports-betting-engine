@@ -1,0 +1,50 @@
+{
+  "id": "8423bb652eb67d7798549275b35fa9dd2899b5b2f0244291edea9d52948f511b",
+  "schema": 1,
+  "teamId": "204",
+  "teamName": "Oregon State Beavers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5327264",
+      "name": "Isaiah Arriaza",
+      "status": "Active"
+    },
+    {
+      "id": "5212654",
+      "name": "Braden Atkinson",
+      "status": "Active"
+    },
+    {
+      "id": "5296163",
+      "name": "Brady Jones",
+      "status": "Active"
+    },
+    {
+      "id": "5393657",
+      "name": "Danny Leary",
+      "status": "Active"
+    },
+    {
+      "id": "4685497",
+      "name": "Maalik Murphy",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:43.221Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/204/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.221Z",
+    "retrievedAt": "2026-09-11T16:00:43.221Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "efb868c158cbaafcc8dc7b5f63cc2ef2bbc51d0fce32543c33536fdc94cd5a3a"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "e28ad65e1c9ea7ba25ff183ea021d3fdf3a2d62e0998667006d1198bd9b1b4a5",
+  "schema": 1,
+  "teamId": "193",
+  "teamName": "Miami (OH) RedHawks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.playCallerContinuity.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:41.083Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/193/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.083Z",
+    "retrievedAt": "2026-09-11T16:00:41.083Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "aac9fd0de0f4b2cd5833aa60c0d4516386dbb73f02485d440268f1aba89ae90c"
+}

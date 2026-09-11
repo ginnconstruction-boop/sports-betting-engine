@@ -1,0 +1,24 @@
+{
+  "id": "c3a80669aec1e3dfc9227fb2afd4a3b8eff28cf0508d9637dfe77f3d0d52bb64",
+  "schema": 1,
+  "teamId": "58",
+  "teamName": "South Florida Bulls",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:44.097Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.097Z",
+    "retrievedAt": "2026-09-11T16:00:44.097Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "5b840311d8f820787438034f3831a09375649c998107ee5bd91cd39f5834e1b7"
+}

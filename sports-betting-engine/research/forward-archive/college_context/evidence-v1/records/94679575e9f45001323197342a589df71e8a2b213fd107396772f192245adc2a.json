@@ -1,0 +1,24 @@
+{
+  "id": "94679575e9f45001323197342a589df71e8a2b213fd107396772f192245adc2a",
+  "schema": 1,
+  "teamId": "25",
+  "teamName": "California Golden Bears",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "transfers",
+  "field": "transfers.ingestionStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.100Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.100Z",
+    "retrievedAt": "2026-09-11T16:00:44.100Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e610f8c8a7da9893bae2147d6915421b8bb33993b5481786574918bc6e9cac0c"
+}

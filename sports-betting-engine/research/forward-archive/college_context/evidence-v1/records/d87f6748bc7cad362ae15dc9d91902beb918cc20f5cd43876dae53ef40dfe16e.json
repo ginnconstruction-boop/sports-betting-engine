@@ -1,0 +1,24 @@
+{
+  "id": "d87f6748bc7cad362ae15dc9d91902beb918cc20f5cd43876dae53ef40dfe16e",
+  "schema": 1,
+  "teamId": "2199",
+  "teamName": "Eastern Michigan Eagles",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "returning_production",
+  "field": "returning.sourceStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.100Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.100Z",
+    "retrievedAt": "2026-09-11T16:00:44.100Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "0b6d87ec8efd224d1a1235e04ad74e451496b0530ae0775849dd1ed984522155"
+}

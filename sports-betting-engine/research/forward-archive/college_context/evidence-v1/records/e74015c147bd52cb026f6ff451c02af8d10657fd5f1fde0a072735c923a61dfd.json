@@ -1,0 +1,24 @@
+{
+  "id": "e74015c147bd52cb026f6ff451c02af8d10657fd5f1fde0a072735c923a61dfd",
+  "schema": 1,
+  "teamId": "2681",
+  "teamName": "Wagner Seahawks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.newOc.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:41.927Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2681/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.927Z",
+    "retrievedAt": "2026-09-11T16:00:41.927Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ae2ea1ef6ffd66fb022253812ef1fb126c5c2b03d716fcf491b80c1afdf7b81c"
+}

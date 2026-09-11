@@ -1,0 +1,24 @@
+{
+  "id": "0d1ec70d40ec69df588c69ba54c5c8f052b3e7f7d929f9c6ef33100952b7dce4",
+  "schema": 1,
+  "teamId": "259",
+  "teamName": "Virginia Tech Hokies",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.newOc.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:40.579Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/259/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.579Z",
+    "retrievedAt": "2026-09-11T16:00:40.579Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "6f508152a2f91dc6116e0f4f3971c6752ad9180d3e21a767756823626205d269"
+}

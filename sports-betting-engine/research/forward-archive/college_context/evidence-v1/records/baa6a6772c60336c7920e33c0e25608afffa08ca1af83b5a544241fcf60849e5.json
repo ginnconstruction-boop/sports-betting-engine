@@ -1,0 +1,50 @@
+{
+  "id": "baa6a6772c60336c7920e33c0e25608afffa08ca1af83b5a544241fcf60849e5",
+  "schema": 1,
+  "teamId": "30",
+  "teamName": "USC Trojans",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5386509",
+      "name": "Will Doherty",
+      "status": "Active"
+    },
+    {
+      "id": "4567748",
+      "name": "Sam Huard",
+      "status": "Active"
+    },
+    {
+      "id": "5386508",
+      "name": "James Johnson",
+      "status": "Active"
+    },
+    {
+      "id": "4685454",
+      "name": "Jayden Maiava",
+      "status": "Active"
+    },
+    {
+      "id": "5161841",
+      "name": "Alex Medyn",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:43.992Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/30/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.992Z",
+    "retrievedAt": "2026-09-11T16:00:43.992Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "3e9b52bfc72ad97e68117e11a5fd14f9ff3499409a99feb570178a54b13fbab5"
+}

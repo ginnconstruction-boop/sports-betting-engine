@@ -1,0 +1,24 @@
+{
+  "id": "9ef288ef00ee48024518b83ad4ad7bdbe50d0519d4c93c70dfb6d5fc8c31f4e3",
+  "schema": 1,
+  "teamId": "2241",
+  "teamName": "Gardner-Webb Runnin' Bulldogs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T16:00:40.876Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2241/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.876Z",
+    "retrievedAt": "2026-09-11T16:00:40.876Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "83247724daa993ed13a75dca4255baf82d3fbfafc90357b3eb2e2b52b046f2ea"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "f698543258beef5575dd2c15bfff4af29673b38dbe8217403bef4123803f9ea9",
+  "schema": 1,
+  "teamId": "2640",
+  "teamName": "Texas Southern Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "returning_production",
+  "field": "returning.ingestionStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.100Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.100Z",
+    "retrievedAt": "2026-09-11T16:00:44.100Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "0b6d87ec8efd224d1a1235e04ad74e451496b0530ae0775849dd1ed984522155"
+}

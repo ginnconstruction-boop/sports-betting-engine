@@ -1,0 +1,50 @@
+{
+  "id": "95108125ff7a255f7fa450756bad21dcc0e752b7ac7a5e56a2aa9589bfcce4ad",
+  "schema": 1,
+  "teamId": "47",
+  "teamName": "Howard Bison",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5098448",
+      "name": "Isaiah Freeman",
+      "status": "Active"
+    },
+    {
+      "id": "5301193",
+      "name": "Terrell Russell Jr.",
+      "status": "Active"
+    },
+    {
+      "id": "5087297",
+      "name": "Ja'Shawn Scroggins",
+      "status": "Active"
+    },
+    {
+      "id": "5405550",
+      "name": "Ryan Umphrey",
+      "status": "Active"
+    },
+    {
+      "id": "5405548",
+      "name": "Preston Wright",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:40.648Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/47/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.648Z",
+    "retrievedAt": "2026-09-11T16:00:40.648Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "069bc063385e27f67257ade2668afc0b391c2df81df1afdacb76bf0c2ec958f7"
+}

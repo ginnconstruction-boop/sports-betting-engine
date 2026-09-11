@@ -1,0 +1,24 @@
+{
+  "id": "d9861fa98b267285062b87e20dbe19f41acc93a40e677c9c00c56b1a59866800",
+  "schema": 1,
+  "teamId": "36",
+  "teamName": "Colorado State Rams",
+  "season": 2026,
+  "eventId": "401860882",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T16:00:40.031Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401860882",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.031Z",
+    "retrievedAt": "2026-09-11T16:00:40.031Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "a73175d6a95ad68d4966b51b5421900e302509b7b881de29b2e4ac4224d88bcc"
+}

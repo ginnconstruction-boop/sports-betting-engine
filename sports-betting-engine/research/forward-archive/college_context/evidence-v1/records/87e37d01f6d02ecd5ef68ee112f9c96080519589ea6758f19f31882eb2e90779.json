@@ -1,0 +1,24 @@
+{
+  "id": "87e37d01f6d02ecd5ef68ee112f9c96080519589ea6758f19f31882eb2e90779",
+  "schema": 1,
+  "teamId": "202",
+  "teamName": "Tulsa Golden Hurricane",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-11T16:00:44.099Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.099Z",
+    "retrievedAt": "2026-09-11T16:00:44.099Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "c5b8c5b82e209babe6f79e57ce2dbe5cea1de49fa98ff26d75e3acd4d4c77edf"
+}

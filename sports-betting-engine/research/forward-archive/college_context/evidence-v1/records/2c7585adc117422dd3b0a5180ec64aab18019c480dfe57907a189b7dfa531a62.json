@@ -1,0 +1,24 @@
+{
+  "id": "2c7585adc117422dd3b0a5180ec64aab18019c480dfe57907a189b7dfa531a62",
+  "schema": 1,
+  "teamId": "2619",
+  "teamName": "Stony Brook Seawolves",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.newOc.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:41.299Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2619/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.299Z",
+    "retrievedAt": "2026-09-11T16:00:41.299Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "bfc9f67238ee97f9a4257189ffdc7cd6414749d22d8511ddb7f9879f00d80249"
+}

@@ -1,0 +1,50 @@
+{
+  "id": "ce6f6ab36ec10e1af1fbfd2789aefce883f04fbe5603dc0dbbbd2da6158919e9",
+  "schema": 1,
+  "teamId": "2026",
+  "teamName": "App State Mountaineers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5278135",
+      "name": "Bronzden Chaffin",
+      "status": "Active"
+    },
+    {
+      "id": "5294315",
+      "name": "Gregory Fee",
+      "status": "Active"
+    },
+    {
+      "id": "5146664",
+      "name": "Henry Hasselbeck",
+      "status": "Active"
+    },
+    {
+      "id": "4870999",
+      "name": "Malachi Singleton",
+      "status": "Active"
+    },
+    {
+      "id": "5082965",
+      "name": "Tommy Ulatowski",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:40.787Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2026/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.787Z",
+    "retrievedAt": "2026-09-11T16:00:40.787Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "7f830adcc914bb9dcfe0bd3e37237f28fd067f98aacbeaa0a409d0e2572cb211"
+}

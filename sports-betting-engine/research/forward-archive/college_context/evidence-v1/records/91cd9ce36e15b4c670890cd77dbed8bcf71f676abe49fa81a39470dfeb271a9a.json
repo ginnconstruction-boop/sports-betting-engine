@@ -1,0 +1,24 @@
+{
+  "id": "91cd9ce36e15b4c670890cd77dbed8bcf71f676abe49fa81a39470dfeb271a9a",
+  "schema": 1,
+  "teamId": "213",
+  "teamName": "Penn State Nittany Lions",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-11T16:00:44.097Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.097Z",
+    "retrievedAt": "2026-09-11T16:00:44.097Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "6b5a9a0980f4732f69bd181436465c01c89ecf1b5480d8cd2c044a1cd6148af3"
+}

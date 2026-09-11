@@ -1,0 +1,60 @@
+{
+  "id": "bccec1fa3ad0a03054dbb864de9c45e1230613a252e24bbd150a6811f1b1a949",
+  "schema": 1,
+  "teamId": "183",
+  "teamName": "Syracuse Orange",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "4685694",
+      "name": "Steve Angeli",
+      "status": "Active"
+    },
+    {
+      "id": "5216837",
+      "name": "Rich Belin",
+      "status": "Active"
+    },
+    {
+      "id": "5297026",
+      "name": "Joseph Filardi",
+      "status": "Active"
+    },
+    {
+      "id": "5086156",
+      "name": "Danny Lauter",
+      "status": "Active"
+    },
+    {
+      "id": "5216708",
+      "name": "Zaid Lott",
+      "status": "Active"
+    },
+    {
+      "id": "4870928",
+      "name": "Malachi Nelson",
+      "status": "Active"
+    },
+    {
+      "id": "5153782",
+      "name": "Amari Odom",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:41.347Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/183/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.347Z",
+    "retrievedAt": "2026-09-11T16:00:41.347Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e0bc1a65bbdb46e919a75afa7be23a9ca955aee505be1296efffc51ef691a84c"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "ea8a6ee434d2bc8ad12e9c7123c1f8782fb598f2327dc1648f3be2f29d4322e4",
+  "schema": 1,
+  "teamId": "2459",
+  "teamName": "Northern Illinois Huskies",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.playCallerContinuity.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:42.805Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2459/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.805Z",
+    "retrievedAt": "2026-09-11T16:00:42.805Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e8d0fe55d05a8af68a25e749ef1924aa51522b940a129540d224cc85e7466ced"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "99c00d15a720ed25aae953ee760b364b8fc8cc82530bee8d5ba7daebb5f5e406",
+  "schema": 1,
+  "teamId": "356",
+  "teamName": "Illinois Fighting Illini",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5196352",
+      "name": "Carson Boyd",
+      "status": "Active"
+    },
+    {
+      "id": "5198286",
+      "name": "Michael Clayton II",
+      "status": "Active"
+    },
+    {
+      "id": "5369892",
+      "name": "Dane Eisenmenger",
+      "status": "Active"
+    },
+    {
+      "id": "4795295",
+      "name": "Katin Houser",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:41.421Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/356/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.421Z",
+    "retrievedAt": "2026-09-11T16:00:41.421Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9fef03fcd887bdd4a4c5e77e7c7807c62d53dbfe5eb3982281b217095aec3099"
+}

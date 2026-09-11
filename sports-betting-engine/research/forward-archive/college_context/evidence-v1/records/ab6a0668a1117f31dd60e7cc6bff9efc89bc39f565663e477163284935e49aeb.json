@@ -1,0 +1,24 @@
+{
+  "id": "ab6a0668a1117f31dd60e7cc6bff9efc89bc39f565663e477163284935e49aeb",
+  "schema": 1,
+  "teamId": "201",
+  "teamName": "Oklahoma Sooners",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.defensiveCoordinator.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:40.349Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/201/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.349Z",
+    "retrievedAt": "2026-09-11T16:00:40.349Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "de5dec2ce6c561f1ee23c3498765d37c80401f8a9347cfcb6d1685a5207de49d"
+}

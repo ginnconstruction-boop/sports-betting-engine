@@ -1,0 +1,24 @@
+{
+  "id": "d7c60f0673f6b60cfb044b5ce670dadd3ae4667d02de7a04888317a1af274be7",
+  "schema": 1,
+  "teamId": "2692",
+  "teamName": "Weber State Wildcats",
+  "season": 2026,
+  "eventId": "401856785",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.gamesPlayed.diagnostic",
+  "value": "VALIDATION_FAILED",
+  "effectiveFrom": "2026-09-11T16:00:39.813Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856785",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.813Z",
+    "retrievedAt": "2026-09-11T16:00:39.813Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "51f0f7bb1de2c170d179342411abc8b4066cc8490213b8aa22a68e48ed7a82c7"
+}

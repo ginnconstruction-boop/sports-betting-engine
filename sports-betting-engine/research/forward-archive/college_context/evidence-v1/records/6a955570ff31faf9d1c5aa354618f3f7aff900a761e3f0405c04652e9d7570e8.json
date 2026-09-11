@@ -1,0 +1,24 @@
+{
+  "id": "6a955570ff31faf9d1c5aa354618f3f7aff900a761e3f0405c04652e9d7570e8",
+  "schema": 1,
+  "teamId": "120",
+  "teamName": "Maryland Terrapins",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:44.098Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.098Z",
+    "retrievedAt": "2026-09-11T16:00:44.098Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "a6a49b2f10eaca3eba135d73e365d554e598953f043e4f08499620aa1129467c"
+}

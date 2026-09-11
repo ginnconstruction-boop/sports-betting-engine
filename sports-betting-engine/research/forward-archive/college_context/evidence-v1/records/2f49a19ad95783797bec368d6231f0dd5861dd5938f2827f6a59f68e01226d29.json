@@ -1,0 +1,24 @@
+{
+  "id": "2f49a19ad95783797bec368d6231f0dd5861dd5938f2827f6a59f68e01226d29",
+  "schema": 1,
+  "teamId": "349",
+  "teamName": "Army Black Knights",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-11T16:00:44.097Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.097Z",
+    "retrievedAt": "2026-09-11T16:00:44.097Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "a4a2b30e33f7693b91e9bc509b7e95f555c529992433a8554d947471a5cc955a"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "e444d70d05d5f2573132eb1b3a4204bbfce457ccb20ebc29f8f11300220165ca",
+  "schema": 1,
+  "teamId": "130",
+  "teamName": "Michigan Wolverines",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5269403",
+      "name": "Tommy Carr",
+      "status": "Active"
+    },
+    {
+      "id": "4833597",
+      "name": "Brayden Fowler-Nicolosi",
+      "status": "Active"
+    },
+    {
+      "id": "5258803",
+      "name": "Chase Herbstreit",
+      "status": "Active"
+    },
+    {
+      "id": "5159073",
+      "name": "Brady Smigiel",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:40.370Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/130/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.370Z",
+    "retrievedAt": "2026-09-11T16:00:40.370Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "b26c6deedfba5d1dc619c05048b18f53973d23b368fb3bb55eb092642bcf8b11"
+}

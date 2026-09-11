@@ -1,0 +1,45 @@
+{
+  "id": "647d932a67d5486fe8b2d148350d8ad3f94611d7d14bb782f8a3c4794e71dc70",
+  "schema": 1,
+  "teamId": "309",
+  "teamName": "Louisiana Ragin' Cajuns",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5221102",
+      "name": "Sam Altmann",
+      "status": "Active"
+    },
+    {
+      "id": "5146661",
+      "name": "Daniel Beale",
+      "status": "Active"
+    },
+    {
+      "id": "5222653",
+      "name": "Coleman Carter",
+      "status": "Active"
+    },
+    {
+      "id": "5394417",
+      "name": "Alex Munoz",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:44.097Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/309/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.097Z",
+    "retrievedAt": "2026-09-11T16:00:44.097Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ed752a26274cf81aa16aee941a45c44c31d89f4d9cbc1b250d313432916b6cab"
+}

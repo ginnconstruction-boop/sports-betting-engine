@@ -1,0 +1,24 @@
+{
+  "id": "70fa4dfb3ac5b48840b8b83730a343bf516377683a77ab25f09f950830041db3",
+  "schema": 1,
+  "teamId": "135",
+  "teamName": "Minnesota Golden Gophers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.defensiveCoordinator.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:41.159Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/135/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.159Z",
+    "retrievedAt": "2026-09-11T16:00:41.159Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f298e1a5af2b07b07e38b783f0eec2056830f60e5b5a96c5551560a29e70c0c6"
+}

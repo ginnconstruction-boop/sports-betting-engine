@@ -1,0 +1,24 @@
+{
+  "id": "f4e67c62028eba426f2bcbed043be3d9083b222ef26c96ed95d2848884d1b33c",
+  "schema": 1,
+  "teamId": "222",
+  "teamName": "Villanova Wildcats",
+  "season": 2026,
+  "eventId": "401858215",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.primaryQb.diagnostic",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T16:00:39.641Z",
+  "effectiveTo": "2026-09-12T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858215",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.641Z",
+    "retrievedAt": "2026-09-11T16:00:39.641Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "bdcfd4e4ab3104dd000a0b489494072920fa37306adb49da6bd9fea63e9bf4f9"
+}

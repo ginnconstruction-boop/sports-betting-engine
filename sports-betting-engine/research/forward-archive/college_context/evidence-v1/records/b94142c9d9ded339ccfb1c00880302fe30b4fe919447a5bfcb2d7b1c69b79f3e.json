@@ -1,0 +1,50 @@
+{
+  "id": "b94142c9d9ded339ccfb1c00880302fe30b4fe919447a5bfcb2d7b1c69b79f3e",
+  "schema": 1,
+  "teamId": "251",
+  "teamName": "Texas Longhorns",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5159112",
+      "name": "Dia Bell",
+      "status": "Active"
+    },
+    {
+      "id": "5293822",
+      "name": "Luke Dunham",
+      "status": "Active"
+    },
+    {
+      "id": "5141509",
+      "name": "Karle Lacey Jr.",
+      "status": "Active"
+    },
+    {
+      "id": "4870906",
+      "name": "Arch Manning",
+      "status": "Active"
+    },
+    {
+      "id": "4685488",
+      "name": "MJ Morris",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:43.151Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/251/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.151Z",
+    "retrievedAt": "2026-09-11T16:00:43.151Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "450339280c5c3adb73b73fcb7cff1dbb5d05a4aa5be25c26c2149024a5bc19df"
+}

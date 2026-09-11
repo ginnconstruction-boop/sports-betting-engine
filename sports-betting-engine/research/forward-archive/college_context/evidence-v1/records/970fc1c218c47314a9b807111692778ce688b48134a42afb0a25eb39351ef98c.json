@@ -1,0 +1,60 @@
+{
+  "id": "970fc1c218c47314a9b807111692778ce688b48134a42afb0a25eb39351ef98c",
+  "schema": 1,
+  "teamId": "2193",
+  "teamName": "East Tennessee State Buccaneers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5301875",
+      "name": "Jackson Byrd",
+      "status": "Active"
+    },
+    {
+      "id": "5079367",
+      "name": "Jadyn Davis",
+      "status": "Active"
+    },
+    {
+      "id": "5301881",
+      "name": "Weston Edmondson",
+      "status": "Active"
+    },
+    {
+      "id": "5441517",
+      "name": "Jack McKissock",
+      "status": "Active"
+    },
+    {
+      "id": "4868460",
+      "name": "Jake McNamara",
+      "status": "Active"
+    },
+    {
+      "id": "5164309",
+      "name": "Mason Mims",
+      "status": "Active"
+    },
+    {
+      "id": "5441510",
+      "name": "Kaleb Narcisse",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:40.508Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2193/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.508Z",
+    "retrievedAt": "2026-09-11T16:00:40.508Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8278cc22398188b2e30b02309ff53bfca4f074af9082070f8cdd80bcb88a59a3"
+}

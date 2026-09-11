@@ -1,0 +1,24 @@
+{
+  "id": "5413645fc029fea99b8a64c2d77a70a433480f4fae7de2509777eb06d9dc30f7",
+  "schema": 1,
+  "teamId": "2393",
+  "teamName": "Middle Tennessee Blue Raiders",
+  "season": 2026,
+  "eventId": "401871045",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.providerChecked",
+  "value": true,
+  "effectiveFrom": "2026-09-11T16:00:40.072Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401871045",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.072Z",
+    "retrievedAt": "2026-09-11T16:00:40.072Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "0e87a51b65964184d403717878d900ca7a356027d0ab9a54015097431744d1ac"
+}

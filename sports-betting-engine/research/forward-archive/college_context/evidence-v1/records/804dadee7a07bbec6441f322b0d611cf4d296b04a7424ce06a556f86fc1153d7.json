@@ -1,0 +1,24 @@
+{
+  "id": "804dadee7a07bbec6441f322b0d611cf4d296b04a7424ce06a556f86fc1153d7",
+  "schema": 1,
+  "teamId": "2050",
+  "teamName": "Ball State Cardinals",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Mike Uremovich",
+  "effectiveFrom": "2026-09-11T16:00:41.060Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2050/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.060Z",
+    "retrievedAt": "2026-09-11T16:00:41.060Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "84b995d2ca8d6ba40ff28896aaafc8673f867ebcdf67518fb0e92ad5828af45a"
+}

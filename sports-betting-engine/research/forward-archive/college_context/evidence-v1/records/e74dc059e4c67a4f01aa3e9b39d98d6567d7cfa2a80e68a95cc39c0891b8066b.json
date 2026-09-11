@@ -1,0 +1,24 @@
+{
+  "id": "e74dc059e4c67a4f01aa3e9b39d98d6567d7cfa2a80e68a95cc39c0891b8066b",
+  "schema": 1,
+  "teamId": "2653",
+  "teamName": "Troy Trojans",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:41.927Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2653/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.927Z",
+    "retrievedAt": "2026-09-11T16:00:41.927Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "1dfa2ffea52573b19a2b8fcb5ec08800640b740f2415abe3dc3c9823b0442789"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "02da546d2dbc5630555daca0a896794b75d9a27490647c288de8554dd76ea609",
+  "schema": 1,
+  "teamId": "2747",
+  "teamName": "Wofford Terriers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.playerCount",
+  "value": 100,
+  "effectiveFrom": "2026-09-11T16:00:40.811Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2747/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.811Z",
+    "retrievedAt": "2026-09-11T16:00:40.811Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "6a51f034b2ac10618ea39d53b48f114be90c3bc985336750acf90743da7f414b"
+}

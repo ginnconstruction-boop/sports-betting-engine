@@ -1,0 +1,24 @@
+{
+  "id": "eb6cf0b84a1f863e2cf4a8957d2995ace197c9751a1c751c3f8487dcaab8c009",
+  "schema": 1,
+  "teamId": "302",
+  "teamName": "UC Davis Aggies",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:41.804Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/302/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.804Z",
+    "retrievedAt": "2026-09-11T16:00:41.804Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "1ea25801ddeb58371d9bb403b3ffa41cf5d9ba2eeffdd8d10cad3ef3fd65867e"
+}

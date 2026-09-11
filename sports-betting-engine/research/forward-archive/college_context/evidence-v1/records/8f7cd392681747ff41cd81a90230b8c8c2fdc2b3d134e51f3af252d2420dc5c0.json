@@ -1,0 +1,24 @@
+{
+  "id": "8f7cd392681747ff41cd81a90230b8c8c2fdc2b3d134e51f3af252d2420dc5c0",
+  "schema": 1,
+  "teamId": "2193",
+  "teamName": "East Tennessee State Buccaneers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.currentSeasonAvailable",
+  "value": true,
+  "effectiveFrom": "2026-09-11T16:00:40.508Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2193/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.508Z",
+    "retrievedAt": "2026-09-11T16:00:40.508Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8278cc22398188b2e30b02309ff53bfca4f074af9082070f8cdd80bcb88a59a3"
+}

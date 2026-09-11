@@ -1,0 +1,24 @@
+{
+  "id": "a3c9365055ab2769dbd79448598173d45c7972308f7c24391db461a08f2d5611",
+  "schema": 1,
+  "teamId": "2032",
+  "teamName": "Arkansas State Red Wolves",
+  "season": 2026,
+  "eventId": "401868241",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.lastOpponent.diagnostic",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T16:00:40.066Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401868241",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.066Z",
+    "retrievedAt": "2026-09-11T16:00:40.066Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "594f2d4f45c01fad67f67684e7b1286bfd25cf71d6f791429bb2954ee2af0cef"
+}

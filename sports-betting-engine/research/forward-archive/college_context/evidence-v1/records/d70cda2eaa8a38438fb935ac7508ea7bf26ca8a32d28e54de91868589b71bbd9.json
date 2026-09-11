@@ -1,0 +1,24 @@
+{
+  "id": "d70cda2eaa8a38438fb935ac7508ea7bf26ca8a32d28e54de91868589b71bbd9",
+  "schema": 1,
+  "teamId": "127",
+  "teamName": "Michigan State Spartans",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.newHeadCoach.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:41.490Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/127/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.490Z",
+    "retrievedAt": "2026-09-11T16:00:41.490Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "4f7b7211e931bfc204ef8b73b771ce67854e9871f2dbcab209ac51e1bc51199b"
+}

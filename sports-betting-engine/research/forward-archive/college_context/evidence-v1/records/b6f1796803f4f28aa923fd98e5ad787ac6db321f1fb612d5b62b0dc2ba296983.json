@@ -1,0 +1,24 @@
+{
+  "id": "b6f1796803f4f28aa923fd98e5ad787ac6db321f1fb612d5b62b0dc2ba296983",
+  "schema": 1,
+  "teamId": "194",
+  "teamName": "Ohio State Buckeyes",
+  "season": 2026,
+  "eventId": "401856682",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.qbAttempts.diagnostic",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T16:00:40.111Z",
+  "effectiveTo": "2026-09-13T05:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856682",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.111Z",
+    "retrievedAt": "2026-09-11T16:00:40.111Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "0dd1c14cc29a5db6b4dc886556fd25c55ddd7e8cf1fe7c564485780085057ccc"
+}

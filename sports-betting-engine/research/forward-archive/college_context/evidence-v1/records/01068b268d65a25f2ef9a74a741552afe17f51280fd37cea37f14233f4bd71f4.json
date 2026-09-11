@@ -1,0 +1,24 @@
+{
+  "id": "01068b268d65a25f2ef9a74a741552afe17f51280fd37cea37f14233f4bd71f4",
+  "schema": 1,
+  "teamId": "23",
+  "teamName": "San José State Spartans",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.providerChecked",
+  "value": "MATCHED",
+  "effectiveFrom": "2026-09-11T16:00:43.704Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/23/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.704Z",
+    "retrievedAt": "2026-09-11T16:00:43.704Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "95785f93d05d33a0e6be0267b34d4a573db90afc233a3619a4247af2cbcbc625"
+}

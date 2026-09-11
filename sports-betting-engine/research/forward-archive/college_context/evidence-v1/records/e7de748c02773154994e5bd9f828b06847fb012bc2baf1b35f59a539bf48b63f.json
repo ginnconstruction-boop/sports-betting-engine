@@ -1,0 +1,24 @@
+{
+  "id": "e7de748c02773154994e5bd9f828b06847fb012bc2baf1b35f59a539bf48b63f",
+  "schema": 1,
+  "teamId": "242",
+  "teamName": "Rice Owls",
+  "season": 2026,
+  "eventId": "401859184",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.gamesPlayed.diagnostic",
+  "value": "VALIDATION_FAILED",
+  "effectiveFrom": "2026-09-11T16:00:39.883Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401859184",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.883Z",
+    "retrievedAt": "2026-09-11T16:00:39.883Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "54ef9a812d55dc907fad2bab2a5a2ce5e06633fc6c64a8e99c1b9298516cf96e"
+}

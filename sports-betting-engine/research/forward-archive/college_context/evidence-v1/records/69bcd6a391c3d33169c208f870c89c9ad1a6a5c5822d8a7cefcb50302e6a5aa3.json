@@ -1,0 +1,24 @@
+{
+  "id": "69bcd6a391c3d33169c208f870c89c9ad1a6a5c5822d8a7cefcb50302e6a5aa3",
+  "schema": 1,
+  "teamId": "99",
+  "teamName": "LSU Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "transfers",
+  "field": "transfers.ingestionStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.100Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.100Z",
+    "retrievedAt": "2026-09-11T16:00:44.100Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e610f8c8a7da9893bae2147d6915421b8bb33993b5481786574918bc6e9cac0c"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "c60558e155b9eb184add7087a079d293ef0ff5834a3c8798ba5c737429aa72f0",
+  "schema": 1,
+  "teamId": "328",
+  "teamName": "Utah State Aggies",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:41.395Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/328/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.395Z",
+    "retrievedAt": "2026-09-11T16:00:41.395Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "caed107ea3f7e4f11815a705535d05954556bdf12aaff95d4eaa42ed7510bc7c"
+}

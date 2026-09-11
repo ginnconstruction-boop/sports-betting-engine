@@ -1,0 +1,24 @@
+{
+  "id": "61a01e40d5ebeddfa642e82d8d2248156af501361fbd3eba5c4ad0b9911f3f5e",
+  "schema": 1,
+  "teamId": "2641",
+  "teamName": "Texas Tech Red Raiders",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:43.061Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2641/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.061Z",
+    "retrievedAt": "2026-09-11T16:00:43.061Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "6bd21ae6e4e38a9df0a481d04d43acfddfd7ba4be0747bd29ca791c00f06ac64"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "74a27f6f51fb48659814f054bab22d648ff7a5306c898d26b08f7288a987876d",
+  "schema": 1,
+  "teamId": "248",
+  "teamName": "Houston Cougars",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.newHeadCoach.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:42.619Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/248/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.619Z",
+    "retrievedAt": "2026-09-11T16:00:42.619Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e0690673782e6036a278ec16e39e383482aa749069b4cd2f19fde7f6a8573e6d"
+}

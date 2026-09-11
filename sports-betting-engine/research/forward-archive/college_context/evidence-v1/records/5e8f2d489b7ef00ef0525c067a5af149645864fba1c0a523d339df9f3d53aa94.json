@@ -1,0 +1,24 @@
+{
+  "id": "5e8f2d489b7ef00ef0525c067a5af149645864fba1c0a523d339df9f3d53aa94",
+  "schema": 1,
+  "teamId": "256",
+  "teamName": "James Madison Dukes",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.offensiveCoordinator.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:41.905Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/256/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.905Z",
+    "retrievedAt": "2026-09-11T16:00:41.905Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "1ec1f5c2d3f5cf8cc1c8ce264b317bf30baa296cd77423e2299745931e7b68e2"
+}

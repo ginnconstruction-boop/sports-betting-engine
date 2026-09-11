@@ -1,0 +1,24 @@
+{
+  "id": "9ccd21782450dd988c6a50fd31a2a69767b3d8c04d9bdc9f6efaea562a86f70b",
+  "schema": 1,
+  "teamId": "2755",
+  "teamName": "Grambling Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:44.100Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.100Z",
+    "retrievedAt": "2026-09-11T16:00:44.100Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "5c9a74239b5c7282e4ae6912a6eac675fabca4ac6dfaeb2ced17ef71b72c725b"
+}

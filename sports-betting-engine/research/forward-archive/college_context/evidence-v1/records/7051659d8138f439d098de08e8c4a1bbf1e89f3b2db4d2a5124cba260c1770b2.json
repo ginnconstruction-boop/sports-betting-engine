@@ -1,0 +1,24 @@
+{
+  "id": "7051659d8138f439d098de08e8c4a1bbf1e89f3b2db4d2a5124cba260c1770b2",
+  "schema": 1,
+  "teamId": "61",
+  "teamName": "Georgia Bulldogs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.playerCount",
+  "value": 100,
+  "effectiveFrom": "2026-09-11T16:00:40.855Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/61/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.855Z",
+    "retrievedAt": "2026-09-11T16:00:40.855Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "2ee4f0e5cab4b90e4e2d9a6bbbe3b449d42844a1a8ec2c92ff0292eca2321910"
+}

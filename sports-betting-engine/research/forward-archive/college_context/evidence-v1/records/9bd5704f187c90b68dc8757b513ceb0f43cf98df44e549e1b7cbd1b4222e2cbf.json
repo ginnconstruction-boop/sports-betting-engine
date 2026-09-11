@@ -1,0 +1,24 @@
+{
+  "id": "9bd5704f187c90b68dc8757b513ceb0f43cf98df44e549e1b7cbd1b4222e2cbf",
+  "schema": 1,
+  "teamId": "147",
+  "teamName": "Montana State Bobcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.newHeadCoach.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:44.053Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/147/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.053Z",
+    "retrievedAt": "2026-09-11T16:00:44.053Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "dedaee99cf9e72ffc24c0cc57d9cce9aac322e6a02a6c2caac117d37fb6ee083"
+}

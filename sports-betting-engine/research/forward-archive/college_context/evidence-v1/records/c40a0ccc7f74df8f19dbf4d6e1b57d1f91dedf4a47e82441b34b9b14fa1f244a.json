@@ -1,0 +1,24 @@
+{
+  "id": "c40a0ccc7f74df8f19dbf4d6e1b57d1f91dedf4a47e82441b34b9b14fa1f244a",
+  "schema": 1,
+  "teamId": "2199",
+  "teamName": "Eastern Michigan Eagles",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-11T16:00:44.098Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.098Z",
+    "retrievedAt": "2026-09-11T16:00:44.098Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "3e8f73da9a98f8361c4e76209af8619749651af73d6ddd552875063cba8fa45a"
+}

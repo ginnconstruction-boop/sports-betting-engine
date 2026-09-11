@@ -1,0 +1,45 @@
+{
+  "id": "6682192783fb5d6838f7e5053e704acc3c73d65d7fd9111e8f593a70328bc804",
+  "schema": 1,
+  "teamId": "326",
+  "teamName": "Texas State Bobcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5148803",
+      "name": "Brad Jackson",
+      "status": "Active"
+    },
+    {
+      "id": "5202460",
+      "name": "Gavin Parkhurst",
+      "status": "Active"
+    },
+    {
+      "id": "5164317",
+      "name": "Shaker Reisig",
+      "status": "Active"
+    },
+    {
+      "id": "5383805",
+      "name": "Stone Walker",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:41.654Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/326/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.654Z",
+    "retrievedAt": "2026-09-11T16:00:41.654Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "fcc3241ecc6d6d606046b534f7a3370b30c00d7a00c38708a9924185a8af9fec"
+}

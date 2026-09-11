@@ -1,0 +1,24 @@
+{
+  "id": "c955214b8321071192b60854256d062afc6b1c34ad8e3eb7b15520ab9fe66f32",
+  "schema": 1,
+  "teamId": "25",
+  "teamName": "California Golden Bears",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.playerCount",
+  "value": 100,
+  "effectiveFrom": "2026-09-11T16:00:41.395Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/25/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.395Z",
+    "retrievedAt": "2026-09-11T16:00:41.395Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e9cda0971f1c7faeb9d2a359cbb35e2d8cfab1aba164a9c82f3657231de9987b"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "97d012de2848e144fa2055d8f3166baad967e122b64a56bea339cfa022375a7e",
+  "schema": 1,
+  "teamId": "328",
+  "teamName": "Utah State Aggies",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-11T16:00:44.098Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.098Z",
+    "retrievedAt": "2026-09-11T16:00:44.098Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "d1244776ffbe3fa66ab34b24035051e511d2c10718fb2bba8fb1071d46ace26b"
+}

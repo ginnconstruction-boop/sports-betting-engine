@@ -1,0 +1,50 @@
+{
+  "id": "d11b565e1f7d69a47fe96bf16fe4708755ecdbbd5812773639f8027ab3684d60",
+  "schema": 1,
+  "teamId": "26",
+  "teamName": "UCLA Bruins",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5209395",
+      "name": "DJ Bordeaux",
+      "status": "Active"
+    },
+    {
+      "id": "5092275",
+      "name": "Ty Dieffenbach",
+      "status": "Active"
+    },
+    {
+      "id": "5216847",
+      "name": "Colton Gumino",
+      "status": "Active"
+    },
+    {
+      "id": "5142594",
+      "name": "Madden Iamaleava",
+      "status": "Active"
+    },
+    {
+      "id": "4870799",
+      "name": "Nico Iamaleava",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:43.083Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/26/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.083Z",
+    "retrievedAt": "2026-09-11T16:00:43.083Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "a38c24f967592eefe4fc469b87e24c90dc572cf9b9117c85a23145af31567582"
+}

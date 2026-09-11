@@ -1,0 +1,24 @@
+{
+  "id": "1bae9cd6048ae2882fda3a8cd1dcf41d2a1895b70eefaf079bd96e1c87d7d905",
+  "schema": 1,
+  "teamId": "107",
+  "teamName": "Holy Cross Crusaders",
+  "season": 2026,
+  "eventId": "401866417",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.ingestionStatus",
+  "value": "AVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:39.840Z",
+  "effectiveTo": "2026-09-12T23:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401866417",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.840Z",
+    "retrievedAt": "2026-09-11T16:00:39.840Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c9156e0ca55902ffb9bb3daedf41e98faf54104fe5544513fe66bb94d54f7804"
+}

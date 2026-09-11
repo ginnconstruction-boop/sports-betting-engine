@@ -1,0 +1,45 @@
+{
+  "id": "62d435cbd3baaeb26b99d2110695ca061073d0a33bccdf10e741882cb3b910f1",
+  "schema": 1,
+  "teamId": "21",
+  "teamName": "San Diego State Aztecs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5302791",
+      "name": "Brady Campbell",
+      "status": "Active"
+    },
+    {
+      "id": "4685311",
+      "name": "Jayden Denegal",
+      "status": "Active"
+    },
+    {
+      "id": "5141664",
+      "name": "Stone Saunders",
+      "status": "Active"
+    },
+    {
+      "id": "5302259",
+      "name": "Draiden Trudeau",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:43.105Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/21/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.105Z",
+    "retrievedAt": "2026-09-11T16:00:43.105Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9bfcd19d031d6fa9560d8d0733ce6c5891582ade84d48aa323407a3e8a5ac64d"
+}

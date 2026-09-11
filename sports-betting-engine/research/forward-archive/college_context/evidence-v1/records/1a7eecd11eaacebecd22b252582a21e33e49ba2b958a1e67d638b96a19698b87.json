@@ -1,0 +1,24 @@
+{
+  "id": "1a7eecd11eaacebecd22b252582a21e33e49ba2b958a1e67d638b96a19698b87",
+  "schema": 1,
+  "teamId": "13",
+  "teamName": "Cal Poly Mustangs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "transfers",
+  "field": "transfers.ingestionStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.100Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.100Z",
+    "retrievedAt": "2026-09-11T16:00:44.100Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e610f8c8a7da9893bae2147d6915421b8bb33993b5481786574918bc6e9cac0c"
+}

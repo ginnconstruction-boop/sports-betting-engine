@@ -1,0 +1,55 @@
+{
+  "id": "d0e2de28b9b1ca2cfe313dfd29667139e59bebbb1baa31341bbae82ad4768826",
+  "schema": 1,
+  "teamId": "2",
+  "teamName": "Auburn Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "4880272",
+      "name": "Byrum Brown",
+      "status": "Active"
+    },
+    {
+      "id": "5269110",
+      "name": "Rhys Brush",
+      "status": "Active"
+    },
+    {
+      "id": "5150283",
+      "name": "John Colvin",
+      "status": "Active"
+    },
+    {
+      "id": "5146713",
+      "name": "Locklan Hewlett",
+      "status": "Active"
+    },
+    {
+      "id": "5294027",
+      "name": "Will Myers",
+      "status": "Active"
+    },
+    {
+      "id": "5210501",
+      "name": "Tristan Ti'a",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:43.487Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.487Z",
+    "retrievedAt": "2026-09-11T16:00:43.487Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "dda00fefd089ca50cb7fc58a6bb50c20dfeba21af4b89dc180f2944c600ecb22"
+}

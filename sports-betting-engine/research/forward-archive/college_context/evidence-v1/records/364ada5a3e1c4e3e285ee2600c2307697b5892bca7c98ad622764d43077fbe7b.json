@@ -1,0 +1,24 @@
+{
+  "id": "364ada5a3e1c4e3e285ee2600c2307697b5892bca7c98ad622764d43077fbe7b",
+  "schema": 1,
+  "teamId": "2572",
+  "teamName": "Southern Miss Golden Eagles",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:44.099Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.099Z",
+    "retrievedAt": "2026-09-11T16:00:44.099Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "2396d084d5555c454ad1a884953aefbbfb01dfe921f044eed4fee38717eed857"
+}

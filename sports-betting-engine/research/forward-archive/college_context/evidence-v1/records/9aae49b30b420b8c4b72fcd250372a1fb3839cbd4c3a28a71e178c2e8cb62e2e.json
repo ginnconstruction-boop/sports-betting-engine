@@ -1,0 +1,24 @@
+{
+  "id": "9aae49b30b420b8c4b72fcd250372a1fb3839cbd4c3a28a71e178c2e8cb62e2e",
+  "schema": 1,
+  "teamId": "183",
+  "teamName": "Syracuse Orange",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.playCallerContinuity.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:41.347Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/183/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.347Z",
+    "retrievedAt": "2026-09-11T16:00:41.347Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e0bc1a65bbdb46e919a75afa7be23a9ca955aee505be1296efffc51ef691a84c"
+}

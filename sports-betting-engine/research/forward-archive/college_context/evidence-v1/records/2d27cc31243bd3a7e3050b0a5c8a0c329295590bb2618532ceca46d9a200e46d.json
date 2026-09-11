@@ -1,0 +1,24 @@
+{
+  "id": "2d27cc31243bd3a7e3050b0a5c8a0c329295590bb2618532ceca46d9a200e46d",
+  "schema": 1,
+  "teamId": "259",
+  "teamName": "Virginia Tech Hokies",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:44.097Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.097Z",
+    "retrievedAt": "2026-09-11T16:00:44.097Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "2afeeacb717f7a7b9869a3e213b1e14adae1775a6c21485badec577f31a4a754"
+}

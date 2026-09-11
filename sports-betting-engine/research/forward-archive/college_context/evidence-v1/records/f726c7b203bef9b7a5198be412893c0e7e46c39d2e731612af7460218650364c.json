@@ -1,0 +1,24 @@
+{
+  "id": "f726c7b203bef9b7a5198be412893c0e7e46c39d2e731612af7460218650364c",
+  "schema": 1,
+  "teamId": "2011",
+  "teamName": "Alabama State Hornets",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.ingestionStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:42.265Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2011/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.265Z",
+    "retrievedAt": "2026-09-11T16:00:42.265Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "36d7c7c156984dc814f949b8aa0618576ae7832171616972f6f6138ca43f9fe2"
+}

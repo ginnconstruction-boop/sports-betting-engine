@@ -1,0 +1,24 @@
+{
+  "id": "5a55c783b9c71bc40cd58efafaa47046b1200da972ff290569c71c70167bbae6",
+  "schema": 1,
+  "teamId": "150",
+  "teamName": "Duke Blue Devils",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.defensiveCoordinator.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:41.445Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/150/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.445Z",
+    "retrievedAt": "2026-09-11T16:00:41.445Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ae1c86d7751da84a6466ee2c0ddb7d0910964f29f20bf82afbcd1be658379d71"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "a1358a965bf02f2a8db71ff04558f68cf68ec20fa5df09e00cdd6ea62ab1d21a",
+  "schema": 1,
+  "teamId": "253",
+  "teamName": "Southern Utah Thunderbirds",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "DeLane Fitzgerald",
+  "effectiveFrom": "2026-09-11T16:00:42.760Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/253/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.760Z",
+    "retrievedAt": "2026-09-11T16:00:42.760Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d237f0a587541732432d5388e580c28b191c76955123380cfbfeb40a3d119e5e"
+}

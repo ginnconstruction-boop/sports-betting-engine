@@ -1,0 +1,24 @@
+{
+  "id": "d3dd9907d9d555491d48b3f334e4af66f4d3d5bd71b53ff0e54e35d15555f500",
+  "schema": 1,
+  "teamId": "5",
+  "teamName": "UAB Blazers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-11T16:00:44.098Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.098Z",
+    "retrievedAt": "2026-09-11T16:00:44.098Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "bb99e891355b7b1b5d7362ab1401b76eda2d40af1444cb2acc05b9d531cd2886"
+}

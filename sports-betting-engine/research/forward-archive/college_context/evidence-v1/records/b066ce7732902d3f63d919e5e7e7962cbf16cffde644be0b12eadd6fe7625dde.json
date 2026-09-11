@@ -1,0 +1,24 @@
+{
+  "id": "b066ce7732902d3f63d919e5e7e7962cbf16cffde644be0b12eadd6fe7625dde",
+  "schema": 1,
+  "teamId": "2117",
+  "teamName": "Central Michigan Chippewas",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.rosterComposite.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.098Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.098Z",
+    "retrievedAt": "2026-09-11T16:00:44.098Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "cb4d21803ec4fa1e7ae707b835c2c32094b3e10ff21e225fe900b47d7e3061aa"
+}

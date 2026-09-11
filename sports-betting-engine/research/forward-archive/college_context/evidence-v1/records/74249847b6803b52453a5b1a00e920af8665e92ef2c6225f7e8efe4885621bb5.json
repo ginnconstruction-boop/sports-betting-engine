@@ -1,0 +1,24 @@
+{
+  "id": "74249847b6803b52453a5b1a00e920af8665e92ef2c6225f7e8efe4885621bb5",
+  "schema": 1,
+  "teamId": "2579",
+  "teamName": "South Carolina Gamecocks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.offensiveCoordinator.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:42.497Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2579/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.497Z",
+    "retrievedAt": "2026-09-11T16:00:42.497Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "3f0ac515a5f193fab6186e1b12e9361d04c94cd2bb1c35b25eba1ca9956e56cd"
+}

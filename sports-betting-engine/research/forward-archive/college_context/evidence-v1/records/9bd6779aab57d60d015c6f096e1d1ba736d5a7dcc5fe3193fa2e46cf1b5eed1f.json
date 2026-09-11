@@ -1,0 +1,24 @@
+{
+  "id": "9bd6779aab57d60d015c6f096e1d1ba736d5a7dcc5fe3193fa2e46cf1b5eed1f",
+  "schema": 1,
+  "teamId": "2630",
+  "teamName": "UT Martin Skyhawks",
+  "season": 2026,
+  "eventId": "401856791",
+  "playerId": null,
+  "domain": "qb",
+  "field": "qb.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:39.739Z",
+  "effectiveTo": "2026-09-12T23:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856791",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.739Z",
+    "retrievedAt": "2026-09-11T16:00:39.739Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "cafc479ec88eea8908db9d1357175a09434810750811bdf0b5f7ca6988661e52"
+}

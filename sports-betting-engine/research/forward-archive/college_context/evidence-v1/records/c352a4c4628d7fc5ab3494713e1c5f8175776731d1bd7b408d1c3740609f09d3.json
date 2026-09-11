@@ -1,0 +1,24 @@
+{
+  "id": "c352a4c4628d7fc5ab3494713e1c5f8175776731d1bd7b408d1c3740609f09d3",
+  "schema": 1,
+  "teamId": "238",
+  "teamName": "Vanderbilt Commodores",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Clark Lea",
+  "effectiveFrom": "2026-09-11T16:00:42.174Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/238/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.174Z",
+    "retrievedAt": "2026-09-11T16:00:42.174Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "023831a6ca90e1d157ae799768c238174b68fa3822cfbecb8b63b191b55ad145"
+}

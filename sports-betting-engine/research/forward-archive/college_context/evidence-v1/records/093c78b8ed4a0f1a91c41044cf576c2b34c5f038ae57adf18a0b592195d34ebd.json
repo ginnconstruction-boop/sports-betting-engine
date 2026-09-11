@@ -1,0 +1,24 @@
+{
+  "id": "093c78b8ed4a0f1a91c41044cf576c2b34c5f038ae57adf18a0b592195d34ebd",
+  "schema": 1,
+  "teamId": "84",
+  "teamName": "Indiana Hoosiers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.ingestionStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.100Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.100Z",
+    "retrievedAt": "2026-09-11T16:00:44.100Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f8261497a053b9d2d15eff8d1821ba1a8dab5b0b2864ba8c1ace08cf4e2fd5ac"
+}

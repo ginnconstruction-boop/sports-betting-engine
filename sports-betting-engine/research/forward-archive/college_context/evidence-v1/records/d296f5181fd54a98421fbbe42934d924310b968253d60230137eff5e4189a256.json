@@ -1,0 +1,24 @@
+{
+  "id": "d296f5181fd54a98421fbbe42934d924310b968253d60230137eff5e4189a256",
+  "schema": 1,
+  "teamId": "239",
+  "teamName": "Baylor Bears",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.defensiveCoordinator.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:43.647Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/239/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.647Z",
+    "retrievedAt": "2026-09-11T16:00:43.647Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9d0894f4e3d09ad9408e559663791d6e2927a6d6e1affe4abbd1deb5ae22711c"
+}

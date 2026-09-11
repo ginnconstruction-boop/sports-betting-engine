@@ -1,0 +1,24 @@
+{
+  "id": "d0142f5aa88bf1443038384373db31b36252253847c9a238393e86f284c06388",
+  "schema": 1,
+  "teamId": "189",
+  "teamName": "Bowling Green Falcons",
+  "season": 2026,
+  "eventId": "401858441",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:39.984Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858441",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.984Z",
+    "retrievedAt": "2026-09-11T16:00:39.984Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "475950f082a8da086685fa5b19e540d25a08222d062d29a9a5121cc429d431b5"
+}

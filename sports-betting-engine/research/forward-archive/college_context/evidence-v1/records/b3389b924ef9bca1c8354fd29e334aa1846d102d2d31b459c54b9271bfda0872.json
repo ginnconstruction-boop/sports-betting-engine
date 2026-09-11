@@ -1,0 +1,24 @@
+{
+  "id": "b3389b924ef9bca1c8354fd29e334aa1846d102d2d31b459c54b9271bfda0872",
+  "schema": 1,
+  "teamId": "2429",
+  "teamName": "Charlotte 49ers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Tim Albin",
+  "effectiveFrom": "2026-09-11T16:00:43.602Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2429/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.602Z",
+    "retrievedAt": "2026-09-11T16:00:43.602Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9f0eae7d87a8c1c66f9bba3d71c35fcf6ed9546eb8582ef3c1faa20dc5748139"
+}

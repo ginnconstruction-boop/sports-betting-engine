@@ -1,0 +1,50 @@
+{
+  "id": "4c508aebf36cba44c4372085bd9b93f9ecb4dd8fb580482a1c3e72b8ad5c5057",
+  "schema": 1,
+  "teamId": "193",
+  "teamName": "Miami (OH) RedHawks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5280838",
+      "name": "Drew Bellisari",
+      "status": "Active"
+    },
+    {
+      "id": "5388436",
+      "name": "Luke Berry",
+      "status": "Active"
+    },
+    {
+      "id": "5142146",
+      "name": "Thomas Gotkowski",
+      "status": "Active"
+    },
+    {
+      "id": "5388435",
+      "name": "Caleb Heavner",
+      "status": "Active"
+    },
+    {
+      "id": "5141549",
+      "name": "David McComb",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:41.083Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/193/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.083Z",
+    "retrievedAt": "2026-09-11T16:00:41.083Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "aac9fd0de0f4b2cd5833aa60c0d4516386dbb73f02485d440268f1aba89ae90c"
+}

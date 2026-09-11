@@ -1,0 +1,24 @@
+{
+  "id": "d172162d2ff7748952b24fb77418e22e59ec8e40fe5596f3b3a1c18c57b6c565",
+  "schema": 1,
+  "teamId": "193",
+  "teamName": "Miami (OH) RedHawks",
+  "season": 2026,
+  "eventId": "401866417",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.pointsPerGame.diagnostic",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T16:00:39.840Z",
+  "effectiveTo": "2026-09-12T23:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401866417",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.840Z",
+    "retrievedAt": "2026-09-11T16:00:39.840Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c9156e0ca55902ffb9bb3daedf41e98faf54104fe5544513fe66bb94d54f7804"
+}

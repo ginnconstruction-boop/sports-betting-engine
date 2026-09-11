@@ -1,0 +1,24 @@
+{
+  "id": "ba64d4f981917d2f19d3f429e39131f417cf7d80ee671b468134fb412962bf60",
+  "schema": 1,
+  "teamId": "26",
+  "teamName": "UCLA Bruins",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.playerCount",
+  "value": 100,
+  "effectiveFrom": "2026-09-11T16:00:43.083Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/26/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.083Z",
+    "retrievedAt": "2026-09-11T16:00:43.083Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "a38c24f967592eefe4fc469b87e24c90dc572cf9b9117c85a23145af31567582"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "e184f514c3363fab6082b3a32c0e898b897389868b0367919896a51174c790f2",
+  "schema": 1,
+  "teamId": "254",
+  "teamName": "Utah Utes",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "transfers",
+  "field": "transfers.ingestionStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.100Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.100Z",
+    "retrievedAt": "2026-09-11T16:00:44.100Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e610f8c8a7da9893bae2147d6915421b8bb33993b5481786574918bc6e9cac0c"
+}

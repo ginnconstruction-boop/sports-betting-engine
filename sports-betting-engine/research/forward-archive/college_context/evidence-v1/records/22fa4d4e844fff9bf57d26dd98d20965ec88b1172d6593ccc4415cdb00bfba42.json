@@ -1,0 +1,45 @@
+{
+  "id": "22fa4d4e844fff9bf57d26dd98d20965ec88b1172d6593ccc4415cdb00bfba42",
+  "schema": 1,
+  "teamId": "2529",
+  "teamName": "Sacred Heart Pioneers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5298400",
+      "name": "Dameon Crosby",
+      "status": "Active"
+    },
+    {
+      "id": "5442381",
+      "name": "Johnny Hobgood",
+      "status": "Active"
+    },
+    {
+      "id": "5298405",
+      "name": "Todd Lambertson",
+      "status": "Active"
+    },
+    {
+      "id": "5165911",
+      "name": "John Michalski",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:41.881Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2529/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.881Z",
+    "retrievedAt": "2026-09-11T16:00:41.881Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8009ed88c9d494ab3cfed16b5f4d83160aea9be3e3ebf37be14a96d782265db2"
+}

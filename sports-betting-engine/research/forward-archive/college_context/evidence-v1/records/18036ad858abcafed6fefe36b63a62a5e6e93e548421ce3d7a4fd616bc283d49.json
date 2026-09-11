@@ -1,0 +1,24 @@
+{
+  "id": "18036ad858abcafed6fefe36b63a62a5e6e93e548421ce3d7a4fd616bc283d49",
+  "schema": 1,
+  "teamId": "16",
+  "teamName": "Sacramento State Hornets",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Alonzo Carter",
+  "effectiveFrom": "2026-09-11T16:00:43.938Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/16/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.938Z",
+    "retrievedAt": "2026-09-11T16:00:43.938Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "55b1eb62a9bd989c2dd70a26846fe2e8b7200c0d4df90d4aaf06e1afd30b5c9d"
+}

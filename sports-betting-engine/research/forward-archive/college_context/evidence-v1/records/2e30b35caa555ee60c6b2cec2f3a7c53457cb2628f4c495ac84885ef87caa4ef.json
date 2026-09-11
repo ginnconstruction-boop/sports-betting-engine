@@ -1,0 +1,24 @@
+{
+  "id": "2e30b35caa555ee60c6b2cec2f3a7c53457cb2628f4c495ac84885ef87caa4ef",
+  "schema": 1,
+  "teamId": "228",
+  "teamName": "Clemson Tigers",
+  "season": 2026,
+  "eventId": "401858219",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.indoor",
+  "value": false,
+  "effectiveFrom": "2026-09-11T16:00:40.120Z",
+  "effectiveTo": "2026-09-13T05:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858219",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.120Z",
+    "retrievedAt": "2026-09-11T16:00:40.120Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "7c523a6adc1a64bf432398627bf94521ea0dc11820459200c2b01d4f55b8704b"
+}

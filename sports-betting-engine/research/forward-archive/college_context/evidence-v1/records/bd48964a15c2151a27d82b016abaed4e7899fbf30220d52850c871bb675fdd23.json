@@ -1,0 +1,24 @@
+{
+  "id": "bd48964a15c2151a27d82b016abaed4e7899fbf30220d52850c871bb675fdd23",
+  "schema": 1,
+  "teamId": "2653",
+  "teamName": "Troy Trojans",
+  "season": 2026,
+  "eventId": "401868326",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.yardsPerGame.diagnostic",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T16:00:39.972Z",
+  "effectiveTo": "2026-09-13T02:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401868326",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.972Z",
+    "retrievedAt": "2026-09-11T16:00:39.972Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "66d9952465ce66056212ad4a5bed5263a42bb6f0a802da119d3da22047d401f4"
+}

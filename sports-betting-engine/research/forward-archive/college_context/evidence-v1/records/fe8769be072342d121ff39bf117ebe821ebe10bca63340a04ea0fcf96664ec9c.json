@@ -1,0 +1,24 @@
+{
+  "id": "fe8769be072342d121ff39bf117ebe821ebe10bca63340a04ea0fcf96664ec9c",
+  "schema": 1,
+  "teamId": "2335",
+  "teamName": "Liberty Flames",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:40.897Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2335/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.897Z",
+    "retrievedAt": "2026-09-11T16:00:40.897Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "a613052aeca6125319281407e586afcf0efe828e68565a8ab2225ebaef35b948"
+}

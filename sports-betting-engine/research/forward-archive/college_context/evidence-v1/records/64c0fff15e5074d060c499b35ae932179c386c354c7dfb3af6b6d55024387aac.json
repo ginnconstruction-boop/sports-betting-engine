@@ -1,0 +1,50 @@
+{
+  "id": "64c0fff15e5074d060c499b35ae932179c386c354c7dfb3af6b6d55024387aac",
+  "schema": 1,
+  "teamId": "113",
+  "teamName": "Massachusetts Minutemen",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5298739",
+      "name": "Logan Inagawa",
+      "status": "Active"
+    },
+    {
+      "id": "5327585",
+      "name": "Aedan McCarthy",
+      "status": "Active"
+    },
+    {
+      "id": "5146669",
+      "name": "Ty McCutcheon",
+      "status": "Active"
+    },
+    {
+      "id": "5218971",
+      "name": "Will Perry",
+      "status": "Active"
+    },
+    {
+      "id": "4920153",
+      "name": "William Watson III",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:41.856Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/113/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.856Z",
+    "retrievedAt": "2026-09-11T16:00:41.856Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "764a2f0d8cec1a38ebbd3569b8ff6ff87cde216fb80cf70fd919942cb04245de"
+}

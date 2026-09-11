@@ -1,0 +1,60 @@
+{
+  "id": "f5d508e8aa1adebaa3de98eac7ed924fee5848c5f5800f14c63a169b276bec57",
+  "schema": 1,
+  "teamId": "328",
+  "teamName": "Utah State Aggies",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "4695600",
+      "name": "Bryson Barnes",
+      "status": "Active"
+    },
+    {
+      "id": "5081197",
+      "name": "Grady Brosterhous",
+      "status": "Active"
+    },
+    {
+      "id": "5447714",
+      "name": "Crew Cacciacarne",
+      "status": "Active"
+    },
+    {
+      "id": "4696561",
+      "name": "Jacob Conover",
+      "status": "Active"
+    },
+    {
+      "id": "5290547",
+      "name": "Brady Goodman",
+      "status": "Active"
+    },
+    {
+      "id": "4923285",
+      "name": "McCae Hillstead",
+      "status": "Active"
+    },
+    {
+      "id": "5280787",
+      "name": "Kaleb Maryland",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:41.583Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/328/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.583Z",
+    "retrievedAt": "2026-09-11T16:00:41.583Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "caed107ea3f7e4f11815a705535d05954556bdf12aaff95d4eaa42ed7510bc7c"
+}

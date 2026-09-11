@@ -1,0 +1,24 @@
+{
+  "id": "a6907d504d9f8868b2c78a96f5aa1c8e71becb501eeb3aa64012dfcfeeb97655",
+  "schema": 1,
+  "teamId": "344",
+  "teamName": "Mississippi State Bulldogs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.depthTier.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.098Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.098Z",
+    "retrievedAt": "2026-09-11T16:00:44.098Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "0f25ad6daddd5ad7ec95f07186a7d4bff7afd5a5f8bedd750e07aaff392dea43"
+}

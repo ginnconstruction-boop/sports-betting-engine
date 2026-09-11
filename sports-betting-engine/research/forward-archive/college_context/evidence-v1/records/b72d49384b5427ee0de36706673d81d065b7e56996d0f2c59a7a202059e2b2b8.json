@@ -1,0 +1,45 @@
+{
+  "id": "b72d49384b5427ee0de36706673d81d065b7e56996d0f2c59a7a202059e2b2b8",
+  "schema": 1,
+  "teamId": "2619",
+  "teamName": "Stony Brook Seawolves",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5171075",
+      "name": "Christopher Arfanis",
+      "status": "Active"
+    },
+    {
+      "id": "5226896",
+      "name": "Quinn Boyd",
+      "status": "Active"
+    },
+    {
+      "id": "5091564",
+      "name": "Aidan Leffler",
+      "status": "Active"
+    },
+    {
+      "id": "5405801",
+      "name": "Brittin Poffenbarger",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:41.299Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2619/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.299Z",
+    "retrievedAt": "2026-09-11T16:00:41.299Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "bfc9f67238ee97f9a4257189ffdc7cd6414749d22d8511ddb7f9879f00d80249"
+}

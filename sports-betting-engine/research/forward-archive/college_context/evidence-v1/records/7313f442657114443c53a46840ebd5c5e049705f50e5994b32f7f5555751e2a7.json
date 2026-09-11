@@ -1,0 +1,24 @@
+{
+  "id": "7313f442657114443c53a46840ebd5c5e049705f50e5994b32f7f5555751e2a7",
+  "schema": 1,
+  "teamId": "201",
+  "teamName": "Oklahoma Sooners",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.rosterComposite.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.097Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.097Z",
+    "retrievedAt": "2026-09-11T16:00:44.097Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f5e6ceba2a981239fb9d19184502e0890295418761a1ba9c1639d6d97836a87f"
+}

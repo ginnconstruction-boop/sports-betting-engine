@@ -1,0 +1,24 @@
+{
+  "id": "54bc519d90323ed5bc44079464ffd45518aecb4e1bbc423c3c7b218024a95b9d",
+  "schema": 1,
+  "teamId": "2640",
+  "teamName": "Texas Southern Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Cris Dishman",
+  "effectiveFrom": "2026-09-11T16:00:43.796Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2640/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.796Z",
+    "retrievedAt": "2026-09-11T16:00:43.796Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8a6fb6f5efd664c54c21e268df483778da964c06fc18e2b2ef00be3764936f5f"
+}

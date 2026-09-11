@@ -1,0 +1,24 @@
+{
+  "id": "da7489a1e7d7a19e6a721e1ee796a7060fdf5a78847918fb7335dc36a95fc0e6",
+  "schema": 1,
+  "teamId": "2011",
+  "teamName": "Alabama State Hornets",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:41.969Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2011/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.969Z",
+    "retrievedAt": "2026-09-11T16:00:41.969Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "36d7c7c156984dc814f949b8aa0618576ae7832171616972f6f6138ca43f9fe2"
+}

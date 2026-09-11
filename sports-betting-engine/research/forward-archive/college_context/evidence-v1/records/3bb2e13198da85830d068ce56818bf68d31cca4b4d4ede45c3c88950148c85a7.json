@@ -1,0 +1,55 @@
+{
+  "id": "3bb2e13198da85830d068ce56818bf68d31cca4b4d4ede45c3c88950148c85a7",
+  "schema": 1,
+  "teamId": "13",
+  "teamName": "Cal Poly Mustangs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5148935",
+      "name": "Demaricus Davis",
+      "status": "Active"
+    },
+    {
+      "id": "5219586",
+      "name": "Anthony Grigsby Jr.",
+      "status": "Active"
+    },
+    {
+      "id": "5083145",
+      "name": "Bo Kelly",
+      "status": "Active"
+    },
+    {
+      "id": "5223906",
+      "name": "Lucas Razore",
+      "status": "Active"
+    },
+    {
+      "id": "5405085",
+      "name": "Berell Staples",
+      "status": "Active"
+    },
+    {
+      "id": "5405081",
+      "name": "Sam Whelan",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:43.750Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/13/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.750Z",
+    "retrievedAt": "2026-09-11T16:00:43.750Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d8441fdcc3c96cfb371ad7ef35b2413d6f7ab3f52dbe2c935980d17b321548cd"
+}

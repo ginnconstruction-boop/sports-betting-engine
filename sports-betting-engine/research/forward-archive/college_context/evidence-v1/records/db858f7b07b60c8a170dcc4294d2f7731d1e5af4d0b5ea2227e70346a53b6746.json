@@ -1,0 +1,50 @@
+{
+  "id": "db858f7b07b60c8a170dcc4294d2f7731d1e5af4d0b5ea2227e70346a53b6746",
+  "schema": 1,
+  "teamId": "6",
+  "teamName": "South Alabama Jaguars",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "4869553",
+      "name": "Bishop Davenport",
+      "status": "Active"
+    },
+    {
+      "id": "5148858",
+      "name": "Jared Hollins",
+      "status": "Active"
+    },
+    {
+      "id": "5294516",
+      "name": "Jerry Horne",
+      "status": "Active"
+    },
+    {
+      "id": "5289802",
+      "name": "Taylor Jacobs Jr.",
+      "status": "Active"
+    },
+    {
+      "id": "5290347",
+      "name": "Aaden Shamburger",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.877Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/6/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.877Z",
+    "retrievedAt": "2026-09-11T16:00:42.877Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "dfe482cdbb35e706054d7778cb19fe565dcca873e929224a4df4e62fcc75854d"
+}

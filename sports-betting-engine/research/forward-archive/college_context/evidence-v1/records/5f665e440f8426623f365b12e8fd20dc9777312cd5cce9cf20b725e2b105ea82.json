@@ -1,0 +1,24 @@
+{
+  "id": "5f665e440f8426623f365b12e8fd20dc9777312cd5cce9cf20b725e2b105ea82",
+  "schema": 1,
+  "teamId": "258",
+  "teamName": "Virginia Cavaliers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.depthTier.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.097Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.097Z",
+    "retrievedAt": "2026-09-11T16:00:44.097Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "1ece1a12804b835b86f37c7e23db24a9e77a872ee63f4a6739017d13e58a0a94"
+}

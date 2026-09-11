@@ -1,0 +1,55 @@
+{
+  "id": "d000dfbd485c6998c63e7b561dd1ca42486d59b78c550b6f6326bcf6fcfd6231",
+  "schema": 1,
+  "teamId": "221",
+  "teamName": "Pittsburgh Panthers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5207640",
+      "name": "Corey Dailey",
+      "status": "Active"
+    },
+    {
+      "id": "5379955",
+      "name": "Davin Friedman",
+      "status": "Active"
+    },
+    {
+      "id": "4714300",
+      "name": "Holden Geriner",
+      "status": "Active"
+    },
+    {
+      "id": "5208095",
+      "name": "Mason Heintschel",
+      "status": "Active"
+    },
+    {
+      "id": "5296230",
+      "name": "Beau Jackson",
+      "status": "Active"
+    },
+    {
+      "id": "5264498",
+      "name": "Angelo Renda",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:41.253Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/221/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.253Z",
+    "retrievedAt": "2026-09-11T16:00:41.253Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "80ba138c21bf39faf0df73c17d543ba09fa16ab7c6b126b9acc163bc1673efb3"
+}

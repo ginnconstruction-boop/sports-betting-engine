@@ -1,0 +1,24 @@
+{
+  "id": "a65b4dbb90f3d57b2983a62906000e2e0590126fd93a6428aeae1e18a4914d73",
+  "schema": 1,
+  "teamId": "2116",
+  "teamName": "UCF Knights",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.newOc.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:41.275Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2116/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.275Z",
+    "retrievedAt": "2026-09-11T16:00:41.275Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "3d04279d2e2f4f5d01b52d21a6b6038ed257064184323e92d379473e7293bc0e"
+}

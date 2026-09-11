@@ -1,0 +1,45 @@
+{
+  "id": "3ad94c33a947183c0162cd7f84e602682ea6c725c88e898539404047dccea853",
+  "schema": 1,
+  "teamId": "62",
+  "teamName": "Hawai'i Rainbow Warriors",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5101124",
+      "name": "Micah Alejado",
+      "status": "Active"
+    },
+    {
+      "id": "5388742",
+      "name": "Hazyn Botelho",
+      "status": "Active"
+    },
+    {
+      "id": "5308694",
+      "name": "Isaac Jaramilla-Phe",
+      "status": "Active"
+    },
+    {
+      "id": "5211117",
+      "name": "Bjorn Jurgensen",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:44.025Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/62/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.025Z",
+    "retrievedAt": "2026-09-11T16:00:44.025Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "91e3af61c0ccd6fec652e8f7f176a8e2338375e352391fcf551123e7b842bfa8"
+}

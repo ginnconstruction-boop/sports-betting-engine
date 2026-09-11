@@ -1,0 +1,24 @@
+{
+  "id": "d964daac897bb01f8842b7f3291c3d28e7356775c19bb8470e5f839ae0ad503e",
+  "schema": 1,
+  "teamId": "2084",
+  "teamName": "Buffalo Bulls",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.defensiveCoordinator.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:42.335Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2084/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.335Z",
+    "retrievedAt": "2026-09-11T16:00:42.335Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "7b7c4616cc609656ed4bc95dad861cabb0c13fe8d912793dafa559134a651bc4"
+}

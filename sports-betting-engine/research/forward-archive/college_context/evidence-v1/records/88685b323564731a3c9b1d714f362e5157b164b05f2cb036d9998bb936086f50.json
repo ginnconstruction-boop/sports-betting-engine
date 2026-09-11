@@ -1,0 +1,24 @@
+{
+  "id": "88685b323564731a3c9b1d714f362e5157b164b05f2cb036d9998bb936086f50",
+  "schema": 1,
+  "teamId": "2230",
+  "teamName": "Fordham Rams",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:43.295Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2230/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.295Z",
+    "retrievedAt": "2026-09-11T16:00:43.295Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "02855c91d8fb6a4481fdd555115a5ca19ef857fee2d22d42b8b479720ac00a31"
+}

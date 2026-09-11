@@ -1,0 +1,24 @@
+{
+  "id": "f0d0dc5adcf457aaacc7ac57d96181e85d5a58f74061b93b807a732be3be2780",
+  "schema": 1,
+  "teamId": "328",
+  "teamName": "Utah State Aggies",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Bronco Mendenhall",
+  "effectiveFrom": "2026-09-11T16:00:41.583Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/328/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.583Z",
+    "retrievedAt": "2026-09-11T16:00:41.583Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "caed107ea3f7e4f11815a705535d05954556bdf12aaff95d4eaa42ed7510bc7c"
+}

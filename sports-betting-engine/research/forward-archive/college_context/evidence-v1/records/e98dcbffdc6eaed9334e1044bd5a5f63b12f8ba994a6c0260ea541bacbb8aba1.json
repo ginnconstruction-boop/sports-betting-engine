@@ -1,0 +1,24 @@
+{
+  "id": "e98dcbffdc6eaed9334e1044bd5a5f63b12f8ba994a6c0260ea541bacbb8aba1",
+  "schema": 1,
+  "teamId": "2649",
+  "teamName": "Toledo Rockets",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Mike Jacobs",
+  "effectiveFrom": "2026-09-11T16:00:41.761Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2649/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.761Z",
+    "retrievedAt": "2026-09-11T16:00:41.761Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "aaa3f219dd9a62cb04c25a81c0f17271ff082aa3ea7c58579363396db8296344"
+}

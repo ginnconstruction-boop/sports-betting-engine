@@ -1,0 +1,45 @@
+{
+  "id": "4cf2c1434f1176b75fb1ba2fc81520cf2968d8f46b1816995f0ea49be8d7ff69",
+  "schema": 1,
+  "teamId": "252",
+  "teamName": "BYU Cougars",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5141367",
+      "name": "Bear Bachmeier",
+      "status": "Active"
+    },
+    {
+      "id": "4688540",
+      "name": "Treyson Bourguet",
+      "status": "Active"
+    },
+    {
+      "id": "5393156",
+      "name": "Owen Geilman",
+      "status": "Active"
+    },
+    {
+      "id": "5393155",
+      "name": "John Sanders",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:41.321Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/252/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.321Z",
+    "retrievedAt": "2026-09-11T16:00:41.321Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "0f4bd17e8b5e2c183482034e29be7ec212059219addfd9e525369f25c1ff7458"
+}

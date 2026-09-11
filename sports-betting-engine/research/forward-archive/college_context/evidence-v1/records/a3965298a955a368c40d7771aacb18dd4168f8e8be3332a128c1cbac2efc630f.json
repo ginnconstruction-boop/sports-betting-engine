@@ -1,0 +1,55 @@
+{
+  "id": "a3965298a955a368c40d7771aacb18dd4168f8e8be3332a128c1cbac2efc630f",
+  "schema": 1,
+  "teamId": "213",
+  "teamName": "Penn State Nittany Lions",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5082407",
+      "name": "Connor Barry",
+      "status": "Active"
+    },
+    {
+      "id": "4801299",
+      "name": "Rocco Becht",
+      "status": "Active"
+    },
+    {
+      "id": "5290514",
+      "name": "Kase Evans",
+      "status": "Active"
+    },
+    {
+      "id": "5216958",
+      "name": "Peyton Falzone",
+      "status": "Active"
+    },
+    {
+      "id": "5160157",
+      "name": "Jack Lambert",
+      "status": "Active"
+    },
+    {
+      "id": "5164316",
+      "name": "Alex Manske",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:40.693Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/213/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.693Z",
+    "retrievedAt": "2026-09-11T16:00:40.693Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "7bd1b48a1900d854878964f20c3b82d9add8954ee17ed0cd96e2fdbdff312fb3"
+}

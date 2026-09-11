@@ -1,0 +1,40 @@
+{
+  "id": "9c38f16cadd9d507162cc544f250a18e04ae6a66125fbb4f3ab2aa63f9480e8a",
+  "schema": 1,
+  "teamId": "57",
+  "teamName": "Florida Gators",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5159000",
+      "name": "Will Griffin",
+      "status": "Active"
+    },
+    {
+      "id": "5295814",
+      "name": "Tramell Jones Jr.",
+      "status": "Active"
+    },
+    {
+      "id": "5132812",
+      "name": "Aaron Philo",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.222Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/57/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.222Z",
+    "retrievedAt": "2026-09-11T16:00:42.222Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "a743a63f7bc348edd2102f0ea6bdab85c9bdba6d5fcc81003c171cb11f9cc4c8"
+}

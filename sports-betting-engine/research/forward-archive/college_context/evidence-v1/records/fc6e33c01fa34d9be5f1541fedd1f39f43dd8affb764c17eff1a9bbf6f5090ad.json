@@ -1,0 +1,24 @@
+{
+  "id": "fc6e33c01fa34d9be5f1541fedd1f39f43dd8affb764c17eff1a9bbf6f5090ad",
+  "schema": 1,
+  "teamId": "145",
+  "teamName": "Ole Miss Rebels",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Pete Golding",
+  "effectiveFrom": "2026-09-11T16:00:43.534Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/145/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.534Z",
+    "retrievedAt": "2026-09-11T16:00:43.534Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "79a8d5f65142dc5b9c9d1f11b0637f1fa8d4c04fb2cb71f6e80a2eec312fddc2"
+}

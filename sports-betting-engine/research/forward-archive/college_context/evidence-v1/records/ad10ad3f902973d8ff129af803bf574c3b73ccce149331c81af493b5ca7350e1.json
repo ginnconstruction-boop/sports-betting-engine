@@ -1,0 +1,24 @@
+{
+  "id": "ad10ad3f902973d8ff129af803bf574c3b73ccce149331c81af493b5ca7350e1",
+  "schema": 1,
+  "teamId": "2116",
+  "teamName": "UCF Knights",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.ingestionStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.100Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.100Z",
+    "retrievedAt": "2026-09-11T16:00:44.100Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f8261497a053b9d2d15eff8d1821ba1a8dab5b0b2864ba8c1ace08cf4e2fd5ac"
+}

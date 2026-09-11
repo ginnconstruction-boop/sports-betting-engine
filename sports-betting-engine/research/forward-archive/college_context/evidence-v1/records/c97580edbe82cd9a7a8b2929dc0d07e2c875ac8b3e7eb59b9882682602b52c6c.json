@@ -1,0 +1,24 @@
+{
+  "id": "c97580edbe82cd9a7a8b2929dc0d07e2c875ac8b3e7eb59b9882682602b52c6c",
+  "schema": 1,
+  "teamId": "2026",
+  "teamName": "App State Mountaineers",
+  "season": 2026,
+  "eventId": "401864571",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.movementPoints",
+  "value": 5,
+  "effectiveFrom": "2026-09-11T16:00:39.767Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864571",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.767Z",
+    "retrievedAt": "2026-09-11T16:00:39.767Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d6214d663e9c207ae98f247bc3d70604e17cfb3a1487fbe49611d27868cef8f6"
+}

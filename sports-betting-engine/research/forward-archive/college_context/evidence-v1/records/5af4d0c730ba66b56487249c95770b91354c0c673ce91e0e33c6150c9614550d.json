@@ -1,0 +1,24 @@
+{
+  "id": "5af4d0c730ba66b56487249c95770b91354c0c673ce91e0e33c6150c9614550d",
+  "schema": 1,
+  "teamId": "154",
+  "teamName": "Wake Forest Demon Deacons",
+  "season": 2026,
+  "eventId": "401858224",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T16:00:39.738Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858224",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.738Z",
+    "retrievedAt": "2026-09-11T16:00:39.738Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "628ac73b600d7459ecae8c694c793be56ad40fb7f679b1d4be70feba83423bce"
+}

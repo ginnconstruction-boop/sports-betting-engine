@@ -1,0 +1,50 @@
+{
+  "id": "d824a2acb41251f98b9ee8443145929a47dffd3132feabe81c21fa7ac2f5904c",
+  "schema": 1,
+  "teamId": "154",
+  "teamName": "Wake Forest Demon Deacons",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5160619",
+      "name": "Billy Johnson",
+      "status": "Active"
+    },
+    {
+      "id": "5289364",
+      "name": "Gannon Jones",
+      "status": "Active"
+    },
+    {
+      "id": "5290250",
+      "name": "Grant Lawless",
+      "status": "Active"
+    },
+    {
+      "id": "4920227",
+      "name": "Gio Lopez",
+      "status": "Active"
+    },
+    {
+      "id": "5141634",
+      "name": "Steele Pizzella",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:40.604Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/154/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.604Z",
+    "retrievedAt": "2026-09-11T16:00:40.604Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d349d74c6f7b75e8d32676c6e6af165003afa506508d4411deaea77c2373c975"
+}

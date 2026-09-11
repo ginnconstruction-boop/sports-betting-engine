@@ -1,0 +1,24 @@
+{
+  "id": "9a5f57d907fd4737ea13ee1e1d2a428847567a9f160056a0239ac8101d4e5038",
+  "schema": 1,
+  "teamId": "21",
+  "teamName": "San Diego State Aztecs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.ingestionStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:43.105Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/21/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.105Z",
+    "retrievedAt": "2026-09-11T16:00:43.105Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9bfcd19d031d6fa9560d8d0733ce6c5891582ade84d48aa323407a3e8a5ac64d"
+}

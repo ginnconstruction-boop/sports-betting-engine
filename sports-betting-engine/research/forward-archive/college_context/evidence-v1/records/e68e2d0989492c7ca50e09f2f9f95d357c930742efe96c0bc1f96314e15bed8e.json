@@ -1,0 +1,24 @@
+{
+  "id": "e68e2d0989492c7ca50e09f2f9f95d357c930742efe96c0bc1f96314e15bed8e",
+  "schema": 1,
+  "teamId": "130",
+  "teamName": "Michigan Wolverines",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.ingestionStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.100Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.100Z",
+    "retrievedAt": "2026-09-11T16:00:44.100Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f8261497a053b9d2d15eff8d1821ba1a8dab5b0b2864ba8c1ace08cf4e2fd5ac"
+}

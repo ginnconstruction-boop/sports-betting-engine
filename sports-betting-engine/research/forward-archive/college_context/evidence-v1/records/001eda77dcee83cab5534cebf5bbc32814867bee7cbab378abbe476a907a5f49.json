@@ -1,0 +1,24 @@
+{
+  "id": "001eda77dcee83cab5534cebf5bbc32814867bee7cbab378abbe476a907a5f49",
+  "schema": 1,
+  "teamId": "2579",
+  "teamName": "South Carolina Gamecocks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:42.290Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2579/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.290Z",
+    "retrievedAt": "2026-09-11T16:00:42.290Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "3f0ac515a5f193fab6186e1b12e9361d04c94cd2bb1c35b25eba1ca9956e56cd"
+}

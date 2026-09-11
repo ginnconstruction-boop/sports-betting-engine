@@ -1,0 +1,24 @@
+{
+  "id": "36a68286031e4149e50bbedd0bf7b96df8f7918b3a84ea3f02ad48912e3d4a9b",
+  "schema": 1,
+  "teamId": "30",
+  "teamName": "USC Trojans",
+  "season": 2026,
+  "eventId": "401858445",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.currentHomeSpread",
+  "value": -31.5,
+  "effectiveFrom": "2026-09-11T16:00:40.233Z",
+  "effectiveTo": "2026-09-13T09:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858445",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.233Z",
+    "retrievedAt": "2026-09-11T16:00:40.233Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "41a87a45d6df49e70bc9533718ab68a4cb3b24f0a33b4f481eca073d92d221c2"
+}

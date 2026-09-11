@@ -1,0 +1,24 @@
+{
+  "id": "644efebc70677b0338a792085f273c5f07216959be40ce774645b9ef5dd125b7",
+  "schema": 1,
+  "teamId": "2115",
+  "teamName": "Central Connecticut Blue Devils",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.newDc.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:41.825Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2115/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.825Z",
+    "retrievedAt": "2026-09-11T16:00:41.825Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "51e9f566fc8f140658bc1112458d2982c6061ad2f52f3a798f7f5788803ef9a7"
+}

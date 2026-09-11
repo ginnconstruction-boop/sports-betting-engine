@@ -1,0 +1,24 @@
+{
+  "id": "07429380e08a54dd32e0a48975eed74e3231c4abff0aa428c07c8b56277e8c0b",
+  "schema": 1,
+  "teamId": "275",
+  "teamName": "Wisconsin Badgers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.newOc.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:43.128Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/275/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.128Z",
+    "retrievedAt": "2026-09-11T16:00:43.128Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c0fa7c4158e9bed2d2bbc65218d4d2469b7003db9ea32728ecc2a4dbc5eeb22e"
+}

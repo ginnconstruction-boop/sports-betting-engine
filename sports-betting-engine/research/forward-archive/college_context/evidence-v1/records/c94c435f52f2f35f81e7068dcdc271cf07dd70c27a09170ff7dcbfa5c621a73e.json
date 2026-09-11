@@ -1,0 +1,24 @@
+{
+  "id": "c94c435f52f2f35f81e7068dcdc271cf07dd70c27a09170ff7dcbfa5c621a73e",
+  "schema": 1,
+  "teamId": "2755",
+  "teamName": "Grambling Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:43.439Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2755/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.439Z",
+    "retrievedAt": "2026-09-11T16:00:43.439Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d360e67594e4ea8186719282f2eeeb75ee0f16c6b1251cf08aa2b63af405236f"
+}

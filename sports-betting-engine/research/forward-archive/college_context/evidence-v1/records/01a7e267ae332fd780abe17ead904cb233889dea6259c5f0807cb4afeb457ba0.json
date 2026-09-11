@@ -1,0 +1,24 @@
+{
+  "id": "01a7e267ae332fd780abe17ead904cb233889dea6259c5f0807cb4afeb457ba0",
+  "schema": 1,
+  "teamId": "235",
+  "teamName": "Memphis Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.providerChecked",
+  "value": "MATCHED",
+  "effectiveFrom": "2026-09-11T16:00:42.290Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/235/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.290Z",
+    "retrievedAt": "2026-09-11T16:00:42.290Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "740efea9b5f19bc05ad2d41b3bc27bb0169015fc5967c9d9ce9ff646fc90e603"
+}

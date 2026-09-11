@@ -1,0 +1,24 @@
+{
+  "id": "eee8a999310d5a5c3a77d8d29ac89ef7a7c00d79551b01b0fd75655a97631b14",
+  "schema": 1,
+  "teamId": "254",
+  "teamName": "Utah Utes",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.newDc.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:43.865Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/254/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.865Z",
+    "retrievedAt": "2026-09-11T16:00:43.865Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c9ccbceec3b782f1b54ece23dfff0213ce6d5cb64d4a1e3da0dc3b7b711963b4"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "ed0272aa0359786c39c936e34545a760ea9f699b27f83363599c23d94b2ecdbc",
+  "schema": 1,
+  "teamId": "2529",
+  "teamName": "Sacred Heart Pioneers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.defensiveCoordinator.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:41.881Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2529/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.881Z",
+    "retrievedAt": "2026-09-11T16:00:41.881Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8009ed88c9d494ab3cfed16b5f4d83160aea9be3e3ebf37be14a96d782265db2"
+}

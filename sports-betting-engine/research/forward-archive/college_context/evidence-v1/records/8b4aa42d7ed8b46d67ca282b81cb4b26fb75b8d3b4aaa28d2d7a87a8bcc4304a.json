@@ -1,0 +1,24 @@
+{
+  "id": "8b4aa42d7ed8b46d67ca282b81cb4b26fb75b8d3b4aaa28d2d7a87a8bcc4304a",
+  "schema": 1,
+  "teamId": "197",
+  "teamName": "Oklahoma State Cowboys",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-11T16:00:44.097Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.097Z",
+    "retrievedAt": "2026-09-11T16:00:44.097Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "7a4201373d26bdeccfe34cb22f8e88754e0e96c71a773f7898da28b7fae810f5"
+}

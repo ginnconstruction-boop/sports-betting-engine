@@ -1,0 +1,24 @@
+{
+  "id": "462f92dc7414ce4107c9295e6d898f4f78ce970288d2c1acc40e3e0d1440f111",
+  "schema": 1,
+  "teamId": "152",
+  "teamName": "NC State Wolfpack",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.100Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.100Z",
+    "retrievedAt": "2026-09-11T16:00:44.100Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f8261497a053b9d2d15eff8d1821ba1a8dab5b0b2864ba8c1ace08cf4e2fd5ac"
+}

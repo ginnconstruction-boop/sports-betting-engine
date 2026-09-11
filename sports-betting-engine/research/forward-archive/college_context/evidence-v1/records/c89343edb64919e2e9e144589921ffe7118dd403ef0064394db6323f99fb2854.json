@@ -1,0 +1,24 @@
+{
+  "id": "c89343edb64919e2e9e144589921ffe7118dd403ef0064394db6323f99fb2854",
+  "schema": 1,
+  "teamId": "2572",
+  "teamName": "Southern Miss Golden Eagles",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.ingestionStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:43.556Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2572/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.556Z",
+    "retrievedAt": "2026-09-11T16:00:43.556Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9b30ad367b662ade7b2dce1f73742421f864774e003f83b2db71572088cc67a8"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "66a3cae53514574e6ad9d185352f0987f73cde49e9b63e49969014a84b28736d",
+  "schema": 1,
+  "teamId": "333",
+  "teamName": "Alabama Crimson Tide",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.newDc.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:41.134Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/333/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.134Z",
+    "retrievedAt": "2026-09-11T16:00:41.134Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "bc6a49b8859d6bc183b18109e9368c142e6c25a4c30ad31922799f8fbbeb1f14"
+}

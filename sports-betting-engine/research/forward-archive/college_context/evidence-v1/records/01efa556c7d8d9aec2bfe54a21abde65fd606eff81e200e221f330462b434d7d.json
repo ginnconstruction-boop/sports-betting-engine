@@ -1,0 +1,24 @@
+{
+  "id": "01efa556c7d8d9aec2bfe54a21abde65fd606eff81e200e221f330462b434d7d",
+  "schema": 1,
+  "teamId": "2193",
+  "teamName": "East Tennessee State Buccaneers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.ingestionStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.100Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.100Z",
+    "retrievedAt": "2026-09-11T16:00:44.100Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "07e974bfc9aebc4dc15e7f4f1e55964719e832673085ae87a28aed6da404ad3c"
+}

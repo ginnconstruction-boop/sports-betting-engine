@@ -1,0 +1,24 @@
+{
+  "id": "d8984b21a86daec7ec6874a3120d59443711f7e4a3b67ac2433d55ad73ef7db8",
+  "schema": 1,
+  "teamId": "2523",
+  "teamName": "Robert Morris Colonials",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:41.583Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2523/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.583Z",
+    "retrievedAt": "2026-09-11T16:00:41.583Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "aded371a78c1d38736581be12b502184cc5a29699f8d288efca3e20d56b59791"
+}

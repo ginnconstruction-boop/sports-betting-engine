@@ -1,0 +1,24 @@
+{
+  "id": "0fa68194dc55cd961235efbc0640fce591ecae9c13deedc961eb3e8c62ac231f",
+  "schema": 1,
+  "teamId": "2440",
+  "teamName": "Nevada Wolf Pack",
+  "season": 2026,
+  "eventId": "401864500",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:40.160Z",
+  "effectiveTo": "2026-09-13T08:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864500",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.160Z",
+    "retrievedAt": "2026-09-11T16:00:40.160Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d764c03464274148d570698a3364cd0c829cc93ad17b2fb681df2f4fc434a52f"
+}

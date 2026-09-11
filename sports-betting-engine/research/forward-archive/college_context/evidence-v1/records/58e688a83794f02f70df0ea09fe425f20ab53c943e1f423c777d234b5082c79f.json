@@ -1,0 +1,24 @@
+{
+  "id": "58e688a83794f02f70df0ea09fe425f20ab53c943e1f423c777d234b5082c79f",
+  "schema": 1,
+  "teamId": "228",
+  "teamName": "Clemson Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:43.128Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/228/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.128Z",
+    "retrievedAt": "2026-09-11T16:00:43.128Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d475e79a6f2fead29ec46c6dbdc71efd10498f07f8970f707144b0e743998552"
+}

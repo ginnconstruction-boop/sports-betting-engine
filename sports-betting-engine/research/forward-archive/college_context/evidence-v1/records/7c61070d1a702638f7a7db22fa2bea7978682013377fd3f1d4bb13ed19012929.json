@@ -1,0 +1,24 @@
+{
+  "id": "7c61070d1a702638f7a7db22fa2bea7978682013377fd3f1d4bb13ed19012929",
+  "schema": 1,
+  "teamId": "2638",
+  "teamName": "UTEP Miners",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:43.556Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2638/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.556Z",
+    "retrievedAt": "2026-09-11T16:00:43.556Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "1b6c44dc3012fb7586c9a86355284b8236e67bd43e426254cd2ea5c59b89abe4"
+}

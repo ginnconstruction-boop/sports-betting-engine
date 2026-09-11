@@ -1,0 +1,24 @@
+{
+  "id": "9a8362d67b657144714a3fcacc1b35e6b9cf982cd1defa98e514adb1967f0638",
+  "schema": 1,
+  "teamId": "68",
+  "teamName": "Boise State Broncos",
+  "season": 2026,
+  "eventId": "401860881",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:39.927Z",
+  "effectiveTo": "2026-09-13T04:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401860881",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.927Z",
+    "retrievedAt": "2026-09-11T16:00:39.927Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "47bbf73bd0e4ffc788e20c3e0dac4b0c80028c711f592c9e40edbce4fd021b96"
+}

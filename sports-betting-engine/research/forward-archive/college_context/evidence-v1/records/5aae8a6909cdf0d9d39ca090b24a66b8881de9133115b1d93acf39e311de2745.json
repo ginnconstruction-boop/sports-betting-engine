@@ -1,0 +1,24 @@
+{
+  "id": "5aae8a6909cdf0d9d39ca090b24a66b8881de9133115b1d93acf39e311de2745",
+  "schema": 1,
+  "teamId": "48",
+  "teamName": "Delaware Blue Hens",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Ryan Carty",
+  "effectiveFrom": "2026-09-11T16:00:42.196Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/48/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.196Z",
+    "retrievedAt": "2026-09-11T16:00:42.196Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8aca373dea4dcac3eb16fa7d8c04fd4bfcf318099dfcbcf2243c4bcf090c8129"
+}

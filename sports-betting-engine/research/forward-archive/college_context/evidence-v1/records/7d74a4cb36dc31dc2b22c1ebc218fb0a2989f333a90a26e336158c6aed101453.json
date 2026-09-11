@@ -1,0 +1,24 @@
+{
+  "id": "7d74a4cb36dc31dc2b22c1ebc218fb0a2989f333a90a26e336158c6aed101453",
+  "schema": 1,
+  "teamId": "152",
+  "teamName": "NC State Wolfpack",
+  "season": 2026,
+  "eventId": "401858222",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:39.605Z",
+  "effectiveTo": "2026-09-12T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858222",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.605Z",
+    "retrievedAt": "2026-09-11T16:00:39.605Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8ed934db9c6796da8564066fb96d567e7d110885b328f742942f8234a031edfb"
+}

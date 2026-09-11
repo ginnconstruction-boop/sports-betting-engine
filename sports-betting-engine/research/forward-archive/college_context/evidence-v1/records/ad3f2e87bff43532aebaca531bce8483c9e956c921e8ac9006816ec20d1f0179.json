@@ -1,0 +1,50 @@
+{
+  "id": "ad3f2e87bff43532aebaca531bce8483c9e956c921e8ac9006816ec20d1f0179",
+  "schema": 1,
+  "teamId": "2628",
+  "teamName": "TCU Horned Frogs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5083569",
+      "name": "Jaden Craig",
+      "status": "Active"
+    },
+    {
+      "id": "5265297",
+      "name": "Jack Daulton",
+      "status": "Active"
+    },
+    {
+      "id": "5391226",
+      "name": "Jayden Maples",
+      "status": "Active"
+    },
+    {
+      "id": "5296125",
+      "name": "David Potter",
+      "status": "Active"
+    },
+    {
+      "id": "5141643",
+      "name": "Adam Schobel",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:43.579Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2628/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.579Z",
+    "retrievedAt": "2026-09-11T16:00:43.579Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "a3952fa6fc533f21be44456994476df4ea9e1a0518b75eb4779df927b3ce63f7"
+}

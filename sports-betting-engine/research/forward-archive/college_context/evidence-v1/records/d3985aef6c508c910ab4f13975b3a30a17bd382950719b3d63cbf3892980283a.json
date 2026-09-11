@@ -1,0 +1,24 @@
+{
+  "id": "d3985aef6c508c910ab4f13975b3a30a17bd382950719b3d63cbf3892980283a",
+  "schema": 1,
+  "teamId": "2649",
+  "teamName": "Toledo Rockets",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:41.761Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2649/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.761Z",
+    "retrievedAt": "2026-09-11T16:00:41.761Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "aaa3f219dd9a62cb04c25a81c0f17271ff082aa3ea7c58579363396db8296344"
+}

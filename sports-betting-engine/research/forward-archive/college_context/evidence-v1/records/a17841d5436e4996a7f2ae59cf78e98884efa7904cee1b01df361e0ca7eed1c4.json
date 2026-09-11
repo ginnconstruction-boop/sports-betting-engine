@@ -1,0 +1,24 @@
+{
+  "id": "a17841d5436e4996a7f2ae59cf78e98884efa7904cee1b01df361e0ca7eed1c4",
+  "schema": 1,
+  "teamId": "2348",
+  "teamName": "Louisiana Tech Bulldogs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.playerCount",
+  "value": 100,
+  "effectiveFrom": "2026-09-11T16:00:43.460Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2348/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.460Z",
+    "retrievedAt": "2026-09-11T16:00:43.460Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "cfdc9d0509308e3f7290690fa77ba660eda7a3269ae2e1cdcf859a5d340e583c"
+}

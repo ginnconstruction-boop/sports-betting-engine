@@ -1,0 +1,24 @@
+{
+  "id": "14b71b22b650b918e1672fb96e4ee0adb6ff17470f251ba6a5a8f09e6a2c904d",
+  "schema": 1,
+  "teamId": "197",
+  "teamName": "Oklahoma State Cowboys",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.offensiveCoordinator.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:40.297Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/197/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.297Z",
+    "retrievedAt": "2026-09-11T16:00:40.297Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8178830a43a8178aa0aaaffb25fd5f596b15f330d00825781e88534afa50b6c2"
+}

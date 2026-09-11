@@ -1,0 +1,24 @@
+{
+  "id": "4f9eebe9ada9f3033cb62e2315e508fa67be106fcd985912370765d09386bd2d",
+  "schema": 1,
+  "teamId": "245",
+  "teamName": "Texas A&M Aggies",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.depthTier.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.097Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.097Z",
+    "retrievedAt": "2026-09-11T16:00:44.097Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "397ad74de5940ee052b671fc7c17fb8fa543a799f21b35e0d2b85f564df28b7f"
+}

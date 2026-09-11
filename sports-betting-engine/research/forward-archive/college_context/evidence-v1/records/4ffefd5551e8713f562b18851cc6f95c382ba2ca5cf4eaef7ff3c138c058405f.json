@@ -1,0 +1,55 @@
+{
+  "id": "4ffefd5551e8713f562b18851cc6f95c382ba2ca5cf4eaef7ff3c138c058405f",
+  "schema": 1,
+  "teamId": "2655",
+  "teamName": "Tulane Green Wave",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5294291",
+      "name": "Jay Beamon",
+      "status": "Active"
+    },
+    {
+      "id": "5219709",
+      "name": "Dagan Bruno",
+      "status": "Active"
+    },
+    {
+      "id": "4870518",
+      "name": "Zeon Chriss-Gremillion",
+      "status": "Active"
+    },
+    {
+      "id": "5291713",
+      "name": "Trace Johnson",
+      "status": "Active"
+    },
+    {
+      "id": "5294300",
+      "name": "Cade Scott",
+      "status": "Active"
+    },
+    {
+      "id": "5091890",
+      "name": "Kadin Semonza",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.831Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2655/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.831Z",
+    "retrievedAt": "2026-09-11T16:00:42.831Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e2d169f637eec0693e622605b82d84cc7e37569259accd133f29159376298630"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "76e2cbfaff2983c27fda73f36ecf4474103a03e806c40922c66b69835cdb55ec",
+  "schema": 1,
+  "teamId": "2348",
+  "teamName": "Louisiana Tech Bulldogs",
+  "season": 2026,
+  "eventId": "401867796",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.movementDirection",
+  "value": "TOWARD_HOME",
+  "effectiveFrom": "2026-09-11T16:00:40.141Z",
+  "effectiveTo": "2026-09-13T05:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401867796",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.141Z",
+    "retrievedAt": "2026-09-11T16:00:40.141Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d4a3fc265fe739eaf81b61393acf3a339a15f213b515e512c9a11fcd2e4c27ff"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "44aa381ced456afb30f95843f97b5b69830ac916ac4c01e26ac93c61da72a339",
+  "schema": 1,
+  "teamId": "2440",
+  "teamName": "Nevada Wolf Pack",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:43.773Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2440/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.773Z",
+    "retrievedAt": "2026-09-11T16:00:43.773Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "0434b6e427ad2e6208a75a65c8882c321ec354087b88360ef5a38cc349f4f8a5"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "d9a9dce3461774a332bf389371babffe8834b3ccd59b8b4deb9b257849ba6f05",
+  "schema": 1,
+  "teamId": "147",
+  "teamName": "Montana State Bobcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.currentSeasonAvailable",
+  "value": true,
+  "effectiveFrom": "2026-09-11T16:00:44.053Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/147/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.053Z",
+    "retrievedAt": "2026-09-11T16:00:44.053Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "dedaee99cf9e72ffc24c0cc57d9cce9aac322e6a02a6c2caac117d37fb6ee083"
+}

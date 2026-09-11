@@ -1,0 +1,24 @@
+{
+  "id": "4d9f81c301b970505ca51e589ed73d3152950bf23f1b3bb06200cc51be283d3a",
+  "schema": 1,
+  "teamId": "47",
+  "teamName": "Howard Bison",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.depthTier.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.097Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.097Z",
+    "retrievedAt": "2026-09-11T16:00:44.097Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "16bc61547e4f48741f609431bddbbccfa47d92ce3887d5b6770d0eba1194808c"
+}

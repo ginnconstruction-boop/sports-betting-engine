@@ -1,0 +1,24 @@
+{
+  "id": "79228aa07b45d3370b2416254195ef30f8523c1331ada3ab8560a87028b9128b",
+  "schema": 1,
+  "teamId": "62",
+  "teamName": "Hawai'i Rainbow Warriors",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Timmy Chang",
+  "effectiveFrom": "2026-09-11T16:00:44.025Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/62/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.025Z",
+    "retrievedAt": "2026-09-11T16:00:44.025Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "91e3af61c0ccd6fec652e8f7f176a8e2338375e352391fcf551123e7b842bfa8"
+}

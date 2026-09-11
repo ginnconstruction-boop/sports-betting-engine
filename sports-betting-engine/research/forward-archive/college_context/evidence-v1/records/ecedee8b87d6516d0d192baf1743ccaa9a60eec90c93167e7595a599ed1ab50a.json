@@ -1,0 +1,24 @@
+{
+  "id": "ecedee8b87d6516d0d192baf1743ccaa9a60eec90c93167e7595a599ed1ab50a",
+  "schema": 1,
+  "teamId": "2006",
+  "teamName": "Akron Zips",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-11T16:00:44.098Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.098Z",
+    "retrievedAt": "2026-09-11T16:00:44.098Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "4728a988dcbd1ea2d6b5771f2ab77c221518c052635a269bb7f1fabb00397e8b"
+}

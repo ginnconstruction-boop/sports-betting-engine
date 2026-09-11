@@ -1,0 +1,24 @@
+{
+  "id": "d399123e44f4a49422d41c57126eef21ddf30eb8d3f5a33ba9f3d2f73f972e6c",
+  "schema": 1,
+  "teamId": "2287",
+  "teamName": "Illinois State Redbirds",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:42.642Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2287/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.642Z",
+    "retrievedAt": "2026-09-11T16:00:42.642Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d51c7b2772937fde040a61c6100de1e33bb2c18cc1f1395917cbdc52c1102857"
+}

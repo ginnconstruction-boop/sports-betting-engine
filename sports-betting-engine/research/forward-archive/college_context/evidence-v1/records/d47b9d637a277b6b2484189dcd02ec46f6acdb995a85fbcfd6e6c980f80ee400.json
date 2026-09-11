@@ -1,0 +1,24 @@
+{
+  "id": "d47b9d637a277b6b2484189dcd02ec46f6acdb995a85fbcfd6e6c980f80ee400",
+  "schema": 1,
+  "teamId": "257",
+  "teamName": "Richmond Spiders",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FCS",
+  "effectiveFrom": "2026-09-11T16:00:44.097Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.097Z",
+    "retrievedAt": "2026-09-11T16:00:44.097Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "75a4b613c9c198737a37e8522de0fcbab912ea4ff1f090a8204103404713cca4"
+}

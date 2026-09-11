@@ -1,0 +1,50 @@
+{
+  "id": "a40ea3f64bc878701b0e46d3e9adf3dde7f3d8e1a48ad363e973f1c464d8e549",
+  "schema": 1,
+  "teamId": "119",
+  "teamName": "Towson Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5405934",
+      "name": "Thomas Adams",
+      "status": "Active"
+    },
+    {
+      "id": "5405931",
+      "name": "Jacob Davis",
+      "status": "Active"
+    },
+    {
+      "id": "5225092",
+      "name": "Myles Fulton",
+      "status": "Active"
+    },
+    {
+      "id": "5301657",
+      "name": "Andrew Indorf",
+      "status": "Active"
+    },
+    {
+      "id": "5405932",
+      "name": "Nick Nassib",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.474Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/119/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.474Z",
+    "retrievedAt": "2026-09-11T16:00:42.474Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "a97c8090992857f7c1fc43ad21f98975b399cc7a5e2098b3886d4838579205a5"
+}

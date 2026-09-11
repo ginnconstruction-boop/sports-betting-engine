@@ -1,0 +1,50 @@
+{
+  "id": "42c6e3693c957987a60d9b64ec26a403cad14cf09ff7addcd99c8a67c29882b5",
+  "schema": 1,
+  "teamId": "344",
+  "teamName": "Mississippi State Bulldogs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5161838",
+      "name": "Brodie McWhorter",
+      "status": "Active"
+    },
+    {
+      "id": "5294646",
+      "name": "Parker Puckett",
+      "status": "Active"
+    },
+    {
+      "id": "4870909",
+      "name": "Jaden Rashada",
+      "status": "Active"
+    },
+    {
+      "id": "5081405",
+      "name": "AJ Swann",
+      "status": "Active"
+    },
+    {
+      "id": "5177084",
+      "name": "Kamario Taylor",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:41.180Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/344/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.180Z",
+    "retrievedAt": "2026-09-11T16:00:41.180Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "216d570aa4b2051c18865428f27c3be27ee50a77c0a7efa50f28486bae2bfb64"
+}

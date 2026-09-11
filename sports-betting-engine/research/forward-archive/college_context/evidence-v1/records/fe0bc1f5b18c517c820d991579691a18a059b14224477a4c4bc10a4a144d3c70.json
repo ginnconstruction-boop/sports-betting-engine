@@ -1,0 +1,24 @@
+{
+  "id": "fe0bc1f5b18c517c820d991579691a18a059b14224477a4c4bc10a4a144d3c70",
+  "schema": 1,
+  "teamId": "2640",
+  "teamName": "Texas Southern Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.playerCount",
+  "value": 100,
+  "effectiveFrom": "2026-09-11T16:00:43.796Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2640/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.796Z",
+    "retrievedAt": "2026-09-11T16:00:43.796Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8a6fb6f5efd664c54c21e268df483778da964c06fc18e2b2ef00be3764936f5f"
+}

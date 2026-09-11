@@ -1,0 +1,50 @@
+{
+  "id": "6ce251a8661946f76fde4bf049e2eaf1c65f525dc11d8c614ccf89d1739eb879",
+  "schema": 1,
+  "teamId": "238",
+  "teamName": "Vanderbilt Commodores",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5121691",
+      "name": "Blaze Berlowitz",
+      "status": "Active"
+    },
+    {
+      "id": "5294261",
+      "name": "Drew Cowart",
+      "status": "Active"
+    },
+    {
+      "id": "5158948",
+      "name": "Jared Curtis",
+      "status": "Active"
+    },
+    {
+      "id": "5209910",
+      "name": "Jack Elliott",
+      "status": "Active"
+    },
+    {
+      "id": "5126473",
+      "name": "Whit Muschamp",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.174Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/238/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.174Z",
+    "retrievedAt": "2026-09-11T16:00:42.174Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "023831a6ca90e1d157ae799768c238174b68fa3822cfbecb8b63b191b55ad145"
+}

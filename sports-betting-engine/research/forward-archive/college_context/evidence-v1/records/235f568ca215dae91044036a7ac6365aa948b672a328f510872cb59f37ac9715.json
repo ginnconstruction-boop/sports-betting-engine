@@ -1,0 +1,24 @@
+{
+  "id": "235f568ca215dae91044036a7ac6365aa948b672a328f510872cb59f37ac9715",
+  "schema": 1,
+  "teamId": "295",
+  "teamName": "Old Dominion Monarchs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:44.097Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.097Z",
+    "retrievedAt": "2026-09-11T16:00:44.097Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f284eab81c93452603249141467b90fa372768defb54ea6fc5a919812b5cc63f"
+}

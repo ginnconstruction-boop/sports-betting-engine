@@ -1,0 +1,24 @@
+{
+  "id": "2b1068ded28e313c3743e50576039499284e1a8cf67c9bc1dbc0d70ce0f7513d",
+  "schema": 1,
+  "teamId": "242",
+  "teamName": "Rice Owls",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.offensiveCoordinator.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:41.632Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/242/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.632Z",
+    "retrievedAt": "2026-09-11T16:00:41.632Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "0031f8ef97f9fbcd09a0366ab04660bbb619517cb0e530f07479dc3ba533a95f"
+}

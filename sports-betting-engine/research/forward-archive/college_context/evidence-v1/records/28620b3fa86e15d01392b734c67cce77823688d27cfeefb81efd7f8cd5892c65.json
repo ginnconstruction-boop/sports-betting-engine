@@ -1,0 +1,24 @@
+{
+  "id": "28620b3fa86e15d01392b734c67cce77823688d27cfeefb81efd7f8cd5892c65",
+  "schema": 1,
+  "teamId": "98",
+  "teamName": "Western Kentucky Hilltoppers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.depthTier.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.097Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.097Z",
+    "retrievedAt": "2026-09-11T16:00:44.097Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "50d6b68c2cbd4192374fea5183b76f4182396dcd480e771ef2dc9dba87a3d656"
+}

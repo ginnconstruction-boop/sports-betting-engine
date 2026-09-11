@@ -1,0 +1,24 @@
+{
+  "id": "314b47e8fd3cf7cad46c968351d0f988d8824476a7fd2b01d6ad8dfc8135b014",
+  "schema": 1,
+  "teamId": "2006",
+  "teamName": "Akron Zips",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:41.563Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2006/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.563Z",
+    "retrievedAt": "2026-09-11T16:00:41.563Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "278c18b2b3fdcc5e6e6f2673ed6d0ed804030f338d62a366894bbe710f181913"
+}

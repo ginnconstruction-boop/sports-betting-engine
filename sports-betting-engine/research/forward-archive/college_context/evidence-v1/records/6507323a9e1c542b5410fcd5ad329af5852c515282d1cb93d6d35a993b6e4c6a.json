@@ -1,0 +1,24 @@
+{
+  "id": "6507323a9e1c542b5410fcd5ad329af5852c515282d1cb93d6d35a993b6e4c6a",
+  "schema": 1,
+  "teamId": "2529",
+  "teamName": "Sacred Heart Pioneers",
+  "season": 2026,
+  "eventId": "401866420",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.precipitationProbability",
+  "value": 0,
+  "effectiveFrom": "2026-09-11T16:00:39.926Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401866420",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.926Z",
+    "retrievedAt": "2026-09-11T16:00:39.926Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f2e748b33328a8df1a63fc7c75b79468dfa46f4515d2abbc6e3dfec2a3ffa692"
+}

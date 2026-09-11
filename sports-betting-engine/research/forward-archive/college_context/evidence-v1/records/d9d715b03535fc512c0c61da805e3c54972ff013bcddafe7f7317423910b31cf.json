@@ -1,0 +1,24 @@
+{
+  "id": "d9d715b03535fc512c0c61da805e3c54972ff013bcddafe7f7317423910b31cf",
+  "schema": 1,
+  "teamId": "152",
+  "teamName": "NC State Wolfpack",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.rosterComposite.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.097Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.097Z",
+    "retrievedAt": "2026-09-11T16:00:44.097Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "63ddc577de2c6610731f84b9b56d12983f5d3f75202a9c4d9720c45a65f4b6d5"
+}

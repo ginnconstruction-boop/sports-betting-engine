@@ -1,0 +1,60 @@
+{
+  "id": "724a6e0ffb3bdaa3c89a83d16b07d32eb8ca8c5517cb6a92e1b730f95f253906",
+  "schema": 1,
+  "teamId": "2241",
+  "teamName": "Gardner-Webb Runnin' Bulldogs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5425408",
+      "name": "Kane Donovan",
+      "status": "Active"
+    },
+    {
+      "id": "5439733",
+      "name": "Jared Doolittle",
+      "status": "Active"
+    },
+    {
+      "id": "5439737",
+      "name": "Lan Farmer",
+      "status": "Active"
+    },
+    {
+      "id": "5439752",
+      "name": "Joey Gaston",
+      "status": "Active"
+    },
+    {
+      "id": "4869817",
+      "name": "Cole Pennington",
+      "status": "Active"
+    },
+    {
+      "id": "5299465",
+      "name": "Finley Polk",
+      "status": "Active"
+    },
+    {
+      "id": "5439735",
+      "name": "Ty Powell",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:40.876Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2241/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.876Z",
+    "retrievedAt": "2026-09-11T16:00:40.876Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "83247724daa993ed13a75dca4255baf82d3fbfafc90357b3eb2e2b52b046f2ea"
+}

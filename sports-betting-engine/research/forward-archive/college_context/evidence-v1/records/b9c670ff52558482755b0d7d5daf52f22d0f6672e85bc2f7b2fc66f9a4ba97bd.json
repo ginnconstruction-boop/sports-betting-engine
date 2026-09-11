@@ -1,0 +1,24 @@
+{
+  "id": "b9c670ff52558482755b0d7d5daf52f22d0f6672e85bc2f7b2fc66f9a4ba97bd",
+  "schema": 1,
+  "teamId": "2247",
+  "teamName": "Georgia State Panthers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:42.947Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2247/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.947Z",
+    "retrievedAt": "2026-09-11T16:00:42.947Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f557ff85d3506efe90a52aae20c0d3e90f328539b5a377c181aff83ebc571f93"
+}

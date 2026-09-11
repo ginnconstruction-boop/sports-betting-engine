@@ -1,0 +1,55 @@
+{
+  "id": "386b158a4146d508f711d3d6533c19d39932c96cd1e5d1e020d8c2464026b72b",
+  "schema": 1,
+  "teamId": "153",
+  "teamName": "North Carolina Tar Heels",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5199937",
+      "name": "Travis Burgess",
+      "status": "Active"
+    },
+    {
+      "id": "4592532",
+      "name": "Billy Edwards Jr.",
+      "status": "Active"
+    },
+    {
+      "id": "5219165",
+      "name": "DJ Mazzone",
+      "status": "Active"
+    },
+    {
+      "id": "5219167",
+      "name": "Andres Miyares Jr.",
+      "status": "Active"
+    },
+    {
+      "id": "5213239",
+      "name": "Au'Tori Newkirk",
+      "status": "Active"
+    },
+    {
+      "id": "5145396",
+      "name": "Miles O'Neill",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:40.462Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/153/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.462Z",
+    "retrievedAt": "2026-09-11T16:00:40.462Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9c5051e34077d41d4be6b98c46b8b92b67a5e373a9375dd96f666e3f29e38f10"
+}

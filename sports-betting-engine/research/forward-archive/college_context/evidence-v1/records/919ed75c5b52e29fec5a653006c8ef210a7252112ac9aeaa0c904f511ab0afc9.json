@@ -1,0 +1,50 @@
+{
+  "id": "919ed75c5b52e29fec5a653006c8ef210a7252112ac9aeaa0c904f511ab0afc9",
+  "schema": 1,
+  "teamId": "242",
+  "teamName": "Rice Owls",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "4685291",
+      "name": "Jacurri Brown",
+      "status": "Active"
+    },
+    {
+      "id": "5265447",
+      "name": "Patrick Crayton Jr.",
+      "status": "Active"
+    },
+    {
+      "id": "5145788",
+      "name": "Gael Ochoa",
+      "status": "Active"
+    },
+    {
+      "id": "5221569",
+      "name": "Lucas Scheerhorn",
+      "status": "Active"
+    },
+    {
+      "id": "5302749",
+      "name": "Ayden Wilhelm",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:41.632Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/242/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.632Z",
+    "retrievedAt": "2026-09-11T16:00:41.632Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "0031f8ef97f9fbcd09a0366ab04660bbb619517cb0e530f07479dc3ba533a95f"
+}

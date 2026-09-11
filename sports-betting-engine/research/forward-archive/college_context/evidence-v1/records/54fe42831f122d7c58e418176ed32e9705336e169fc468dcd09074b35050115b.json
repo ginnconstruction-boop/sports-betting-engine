@@ -1,0 +1,24 @@
+{
+  "id": "54fe42831f122d7c58e418176ed32e9705336e169fc468dcd09074b35050115b",
+  "schema": 1,
+  "teamId": "2026",
+  "teamName": "App State Mountaineers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.rosterComposite.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.097Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.097Z",
+    "retrievedAt": "2026-09-11T16:00:44.097Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "230360cf1d9ea16bd4ae45a0c21be43e7663d6be361e214a9ece9ea41b227710"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "b7203308ce585b80ed87605a1d31f53659c98650fd9a53be150ba9393054bcb2",
+  "schema": 1,
+  "teamId": "2050",
+  "teamName": "Ball State Cardinals",
+  "season": 2026,
+  "eventId": "401866413",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.ingestionStatus",
+  "value": "VALIDATION_FAILED",
+  "effectiveFrom": "2026-09-11T16:00:39.806Z",
+  "effectiveTo": "2026-09-13T00:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401866413",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.806Z",
+    "retrievedAt": "2026-09-11T16:00:39.806Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "794eea419544a9874a0b4328fd7f55bf2ace94ab2eb7a1e9f6f9381ad0d92335"
+}

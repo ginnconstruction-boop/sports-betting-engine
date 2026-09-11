@@ -1,0 +1,24 @@
+{
+  "id": "bf046d80d89c58de61c3c194069a8fdb1ea0a9496a43ae56b4f0352a31ac77a1",
+  "schema": 1,
+  "teamId": "264",
+  "teamName": "Washington Huskies",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.ingestionStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:41.540Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/264/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.540Z",
+    "retrievedAt": "2026-09-11T16:00:41.540Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "330436dfb188c7ccb1a993c0b7949be73763d2be7e1a932b1b5a8ab811a619e1"
+}

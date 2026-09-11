@@ -1,0 +1,24 @@
+{
+  "id": "9ac71b1d88fa37675131ab5d3d1d8fc54cd0d012e7dc77ff48a12b0f11db8d35",
+  "schema": 1,
+  "teamId": "8",
+  "teamName": "Arkansas Razorbacks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:43.895Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/8/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.895Z",
+    "retrievedAt": "2026-09-11T16:00:43.895Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "dd7eb5ea7f3e03d61f71d51baa31f595d5548f6429c0567d439def6c1be93f11"
+}

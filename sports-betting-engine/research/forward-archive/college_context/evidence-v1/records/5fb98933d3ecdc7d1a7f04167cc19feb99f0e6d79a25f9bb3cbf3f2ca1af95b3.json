@@ -1,0 +1,24 @@
+{
+  "id": "5fb98933d3ecdc7d1a7f04167cc19feb99f0e6d79a25f9bb3cbf3f2ca1af95b3",
+  "schema": 1,
+  "teamId": "333",
+  "teamName": "Alabama Crimson Tide",
+  "season": 2026,
+  "eventId": "401856674",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T16:00:39.819Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856674",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.819Z",
+    "retrievedAt": "2026-09-11T16:00:39.819Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "65eb92252fb85a2e0ab656d10303a20fd2513a7ce7dae8c65d099bce83fb64d6"
+}

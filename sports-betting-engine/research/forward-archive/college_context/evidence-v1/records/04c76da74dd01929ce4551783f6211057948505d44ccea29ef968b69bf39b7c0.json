@@ -1,0 +1,24 @@
+{
+  "id": "04c76da74dd01929ce4551783f6211057948505d44ccea29ef968b69bf39b7c0",
+  "schema": 1,
+  "teamId": "2509",
+  "teamName": "Purdue Boilermakers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Barry Odom",
+  "effectiveFrom": "2026-09-11T16:00:40.555Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2509/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.555Z",
+    "retrievedAt": "2026-09-11T16:00:40.555Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "7b0a45e8cf8cd80e539c636072807380f85feaee1f5f518d60432c3ee03569b0"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "1e22ec1ed5586a06c3a5e2e3d9b123d816294ef4fbda4a98b9feb9b37295cc3a",
+  "schema": 1,
+  "teamId": "2385",
+  "teamName": "Mercyhurst Lakers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:41.905Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2385/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.905Z",
+    "retrievedAt": "2026-09-11T16:00:41.905Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "496efb90da15bcfa75d18183c3281ab6e200081c06d625ba4ceaf19369738c55"
+}

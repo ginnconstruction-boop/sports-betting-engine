@@ -1,0 +1,24 @@
+{
+  "id": "f008db21f806e9f25f955606e1a6f8fe64d5e9de6a5240941b8e1c59ff1eaf69",
+  "schema": 1,
+  "teamId": "113",
+  "teamName": "Massachusetts Minutemen",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.newDc.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:41.856Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/113/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.856Z",
+    "retrievedAt": "2026-09-11T16:00:41.856Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "764a2f0d8cec1a38ebbd3569b8ff6ff87cde216fb80cf70fd919942cb04245de"
+}

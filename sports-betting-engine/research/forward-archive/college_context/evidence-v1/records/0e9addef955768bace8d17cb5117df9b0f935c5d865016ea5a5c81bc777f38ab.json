@@ -1,0 +1,24 @@
+{
+  "id": "0e9addef955768bace8d17cb5117df9b0f935c5d865016ea5a5c81bc777f38ab",
+  "schema": 1,
+  "teamId": "107",
+  "teamName": "Holy Cross Crusaders",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.currentSeasonAvailable",
+  "value": true,
+  "effectiveFrom": "2026-09-11T16:00:41.036Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/107/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.036Z",
+    "retrievedAt": "2026-09-11T16:00:41.036Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "fed2e6e4860ad5deac5599133048e713a1d498ec7becb7718386f611142585c3"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "8879738d0eaf9ece22ec751e35640d30d46e06e834375b779c337de176c58336",
+  "schema": 1,
+  "teamId": "158",
+  "teamName": "Nebraska Cornhuskers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:42.474Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/158/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.474Z",
+    "retrievedAt": "2026-09-11T16:00:42.474Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "fa0570325c3110eb1179a59af46c3d9768449227585deb2ae871a93b26cc1170"
+}

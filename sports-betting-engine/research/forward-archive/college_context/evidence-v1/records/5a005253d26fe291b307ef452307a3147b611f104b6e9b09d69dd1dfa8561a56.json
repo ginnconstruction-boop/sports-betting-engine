@@ -1,0 +1,24 @@
+{
+  "id": "5a005253d26fe291b307ef452307a3147b611f104b6e9b09d69dd1dfa8561a56",
+  "schema": 1,
+  "teamId": "66",
+  "teamName": "Iowa State Cyclones",
+  "season": 2026,
+  "eventId": "401856788",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T16:00:40.155Z",
+  "effectiveTo": "2026-09-13T05:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856788",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.155Z",
+    "retrievedAt": "2026-09-11T16:00:40.155Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "7204e64a5c4dcf7ee077761cf74a2c249596ba4f21fe9ec06c4b7a3439db2191"
+}

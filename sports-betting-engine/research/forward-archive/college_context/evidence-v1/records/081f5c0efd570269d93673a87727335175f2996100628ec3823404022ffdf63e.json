@@ -1,0 +1,24 @@
+{
+  "id": "081f5c0efd570269d93673a87727335175f2996100628ec3823404022ffdf63e",
+  "schema": 1,
+  "teamId": "2097",
+  "teamName": "Campbell Fighting Camels",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:42.076Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2097/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.076Z",
+    "retrievedAt": "2026-09-11T16:00:42.076Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "fd22fb64dff99a6e715d4beb599596772adee57b70f3a08a25b7c017fbf540d5"
+}

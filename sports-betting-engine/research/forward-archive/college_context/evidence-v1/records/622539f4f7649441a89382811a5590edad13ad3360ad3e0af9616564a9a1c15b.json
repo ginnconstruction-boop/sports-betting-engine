@@ -1,0 +1,50 @@
+{
+  "id": "622539f4f7649441a89382811a5590edad13ad3360ad3e0af9616564a9a1c15b",
+  "schema": 1,
+  "teamId": "2751",
+  "teamName": "Wyoming Cowboys",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5214402",
+      "name": "Mason Drube",
+      "status": "Active"
+    },
+    {
+      "id": "5446584",
+      "name": "Tyler Franklin",
+      "status": "Active"
+    },
+    {
+      "id": "5289291",
+      "name": "Taylor Hasselbeck",
+      "status": "Active"
+    },
+    {
+      "id": "4838536",
+      "name": "Tyler Hughes",
+      "status": "Active"
+    },
+    {
+      "id": "5296625",
+      "name": "Landon Sims",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.150Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2751/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.150Z",
+    "retrievedAt": "2026-09-11T16:00:42.150Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ac2fc641a158591bd1071858cd9f31b5436e29b496a099a72936b3ac88b7d365"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "7f9d63f94172fce6d3a848c22363a2c657675ae292bf63441e75c42c9e23fbb3",
+  "schema": 1,
+  "teamId": "194",
+  "teamName": "Ohio State Buckeyes",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:43.014Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/194/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.014Z",
+    "retrievedAt": "2026-09-11T16:00:43.014Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "29640a89787cb86252f735fd06a6082b5ac70213309396de644f6742b662015a"
+}

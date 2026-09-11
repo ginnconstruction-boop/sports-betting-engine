@@ -1,0 +1,24 @@
+{
+  "id": "2e56ba44c8c7cad3c83e9b560959938058a45d363e567c0dff5ae4db699b70dc",
+  "schema": 1,
+  "teamId": "97",
+  "teamName": "Louisville Cardinals",
+  "season": 2026,
+  "eventId": "401858215",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.provider",
+  "value": "DraftKings",
+  "effectiveFrom": "2026-09-11T16:00:39.641Z",
+  "effectiveTo": "2026-09-12T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858215",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.641Z",
+    "retrievedAt": "2026-09-11T16:00:39.641Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "bdcfd4e4ab3104dd000a0b489494072920fa37306adb49da6bd9fea63e9bf4f9"
+}

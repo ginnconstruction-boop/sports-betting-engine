@@ -1,0 +1,24 @@
+{
+  "id": "f7f1eae135db45c87d2dd690fe59a3756e56f746a2bc89ce11d02ba7aed89322",
+  "schema": 1,
+  "teamId": "204",
+  "teamName": "Oregon State Beavers",
+  "season": 2026,
+  "eventId": "401856783",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.qbAttempts.diagnostic",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T16:00:40.102Z",
+  "effectiveTo": "2026-09-13T05:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856783",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.102Z",
+    "retrievedAt": "2026-09-11T16:00:40.102Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8be8b2d379242bbe301227457d8da05ba216dee67da2ca23a0d16c06100db3f4"
+}

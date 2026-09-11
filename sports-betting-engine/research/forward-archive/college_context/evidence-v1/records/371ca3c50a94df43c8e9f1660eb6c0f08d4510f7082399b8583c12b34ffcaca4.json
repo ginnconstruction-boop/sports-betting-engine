@@ -1,0 +1,24 @@
+{
+  "id": "371ca3c50a94df43c8e9f1660eb6c0f08d4510f7082399b8583c12b34ffcaca4",
+  "schema": 1,
+  "teamId": "2523",
+  "teamName": "Robert Morris Colonials",
+  "season": 2026,
+  "eventId": "401866412",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T16:00:39.905Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401866412",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.905Z",
+    "retrievedAt": "2026-09-11T16:00:39.905Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d2c7974c5b347d1a6e353e022004350d9331844ab215fb44c66ab49699e72b8b"
+}

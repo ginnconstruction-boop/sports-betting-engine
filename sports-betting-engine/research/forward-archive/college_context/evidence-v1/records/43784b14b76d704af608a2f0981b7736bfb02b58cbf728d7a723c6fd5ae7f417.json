@@ -1,0 +1,50 @@
+{
+  "id": "43784b14b76d704af608a2f0981b7736bfb02b58cbf728d7a723c6fd5ae7f417",
+  "schema": 1,
+  "teamId": "195",
+  "teamName": "Ohio Bobcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5244755",
+      "name": "Levi Davis",
+      "status": "Active"
+    },
+    {
+      "id": "5141472",
+      "name": "Hype Grand",
+      "status": "Active"
+    },
+    {
+      "id": "5228763",
+      "name": "Matthew Papas",
+      "status": "Active"
+    },
+    {
+      "id": "5228762",
+      "name": "Nick Poulos",
+      "status": "Active"
+    },
+    {
+      "id": "5171031",
+      "name": "Matt Vezza",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.362Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/195/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.362Z",
+    "retrievedAt": "2026-09-11T16:00:42.362Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d095a8def0b2e394b6b9bec5641434289d756748377a00bed9dad87f44480475"
+}

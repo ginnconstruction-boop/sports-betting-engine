@@ -1,0 +1,24 @@
+{
+  "id": "3c79a350d225b8bac278641cce8fca2a8fcb5cd6e0d9905e0b40ddb34747d9ff",
+  "schema": 1,
+  "teamId": "2294",
+  "teamName": "Iowa Hawkeyes",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:43.083Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2294/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.083Z",
+    "retrievedAt": "2026-09-11T16:00:43.083Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "980eff5a194c2ad1a43f382ed95dfcbc71e9ddb6b23dba67f628a52ff064edce"
+}

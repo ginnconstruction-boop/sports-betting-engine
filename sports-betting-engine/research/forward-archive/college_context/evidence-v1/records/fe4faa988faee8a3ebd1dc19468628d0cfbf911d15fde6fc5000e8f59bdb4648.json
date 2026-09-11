@@ -1,0 +1,24 @@
+{
+  "id": "fe4faa988faee8a3ebd1dc19468628d0cfbf911d15fde6fc5000e8f59bdb4648",
+  "schema": 1,
+  "teamId": "213",
+  "teamName": "Penn State Nittany Lions",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:40.508Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/213/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.508Z",
+    "retrievedAt": "2026-09-11T16:00:40.508Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "7bd1b48a1900d854878964f20c3b82d9add8954ee17ed0cd96e2fdbdff312fb3"
+}

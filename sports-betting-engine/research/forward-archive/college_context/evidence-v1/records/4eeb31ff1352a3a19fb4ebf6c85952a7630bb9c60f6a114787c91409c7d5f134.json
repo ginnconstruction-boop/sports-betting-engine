@@ -1,0 +1,24 @@
+{
+  "id": "4eeb31ff1352a3a19fb4ebf6c85952a7630bb9c60f6a114787c91409c7d5f134",
+  "schema": 1,
+  "teamId": "151",
+  "teamName": "East Carolina Pirates",
+  "season": 2026,
+  "eventId": "401864571",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.temperatureF",
+  "value": 87,
+  "effectiveFrom": "2026-09-11T16:00:39.767Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864571",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.767Z",
+    "retrievedAt": "2026-09-11T16:00:39.767Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d6214d663e9c207ae98f247bc3d70604e17cfb3a1487fbe49611d27868cef8f6"
+}

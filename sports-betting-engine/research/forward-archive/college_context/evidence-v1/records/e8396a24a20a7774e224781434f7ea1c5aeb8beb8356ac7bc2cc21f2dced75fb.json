@@ -1,0 +1,45 @@
+{
+  "id": "e8396a24a20a7774e224781434f7ea1c5aeb8beb8356ac7bc2cc21f2dced75fb",
+  "schema": 1,
+  "teamId": "2348",
+  "teamName": "Louisiana Tech Bulldogs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5150998",
+      "name": "Blake Baker",
+      "status": "Active"
+    },
+    {
+      "id": "5184630",
+      "name": "Jackson Bradley",
+      "status": "Active"
+    },
+    {
+      "id": "5382989",
+      "name": "Michael Kirby",
+      "status": "Active"
+    },
+    {
+      "id": "5296376",
+      "name": "Trey Kukuk",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:43.460Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2348/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.460Z",
+    "retrievedAt": "2026-09-11T16:00:43.460Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "cfdc9d0509308e3f7290690fa77ba660eda7a3269ae2e1cdcf859a5d340e583c"
+}

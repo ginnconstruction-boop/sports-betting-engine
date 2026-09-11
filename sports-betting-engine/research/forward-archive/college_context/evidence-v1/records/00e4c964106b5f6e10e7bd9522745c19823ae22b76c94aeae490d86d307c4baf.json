@@ -1,0 +1,24 @@
+{
+  "id": "00e4c964106b5f6e10e7bd9522745c19823ae22b76c94aeae490d86d307c4baf",
+  "schema": 1,
+  "teamId": "2393",
+  "teamName": "Middle Tennessee Blue Raiders",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.defensiveCoordinator.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:43.014Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2393/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.014Z",
+    "retrievedAt": "2026-09-11T16:00:43.014Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "1eba4e1dd5cc59eda0bcfed6baaaa3f656240fabee4e736e35af3319db6f8195"
+}

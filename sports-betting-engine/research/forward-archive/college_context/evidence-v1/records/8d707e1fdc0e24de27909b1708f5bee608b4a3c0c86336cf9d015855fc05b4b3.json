@@ -1,0 +1,24 @@
+{
+  "id": "8d707e1fdc0e24de27909b1708f5bee608b4a3c0c86336cf9d015855fc05b4b3",
+  "schema": 1,
+  "teamId": "2504",
+  "teamName": "Prairie View A&M Panthers",
+  "season": 2026,
+  "eventId": "401856784",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.provider",
+  "value": "DraftKings",
+  "effectiveFrom": "2026-09-11T16:00:40.160Z",
+  "effectiveTo": "2026-09-13T06:08:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856784",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.160Z",
+    "retrievedAt": "2026-09-11T16:00:40.160Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ae7bd06f1f60e87dac48d409171688218c55d61079112cf3dfd315760f612d80"
+}

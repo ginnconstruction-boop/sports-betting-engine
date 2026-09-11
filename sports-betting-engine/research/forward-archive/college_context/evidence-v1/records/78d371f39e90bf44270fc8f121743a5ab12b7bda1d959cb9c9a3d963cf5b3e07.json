@@ -1,0 +1,24 @@
+{
+  "id": "78d371f39e90bf44270fc8f121743a5ab12b7bda1d959cb9c9a3d963cf5b3e07",
+  "schema": 1,
+  "teamId": "119",
+  "teamName": "Towson Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:44.099Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.099Z",
+    "retrievedAt": "2026-09-11T16:00:44.099Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "2c74c23e71910ceeac59bc2151afc1c21540b64783c9d4121639b2144fc66b4a"
+}

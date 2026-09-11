@@ -1,0 +1,50 @@
+{
+  "id": "7c4dfab1fbd467fae8f5d8b2b8e721ee549187847d266ca6ae92191d6f288359",
+  "schema": 1,
+  "teamId": "12",
+  "teamName": "Arizona Wildcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5158407",
+      "name": "Sawyer Anderson",
+      "status": "Active"
+    },
+    {
+      "id": "5230240",
+      "name": "Mason Bray",
+      "status": "Active"
+    },
+    {
+      "id": "4801717",
+      "name": "Noah Fifita",
+      "status": "Active"
+    },
+    {
+      "id": "5164312",
+      "name": "Luke Haugo",
+      "status": "Active"
+    },
+    {
+      "id": "5209133",
+      "name": "Oscar Rios",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:41.369Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/12/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.369Z",
+    "retrievedAt": "2026-09-11T16:00:41.369Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9ca7c64e0e255af2fb805402f23c0e04b8ac88c92349b839de835f971a5bde3a"
+}

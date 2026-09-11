@@ -1,0 +1,24 @@
+{
+  "id": "37d447f8f2442cd3269acb57fc0fb5f7589265ce1ea54efc9e1c61cec28247e7",
+  "schema": 1,
+  "teamId": "249",
+  "teamName": "North Texas Mean Green",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:41.761Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/249/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.761Z",
+    "retrievedAt": "2026-09-11T16:00:41.761Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "059a6188f92a218628dde2ff304b3b30f7e5145d18428bae0471d1122aac71d8"
+}

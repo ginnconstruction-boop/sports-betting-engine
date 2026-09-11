@@ -1,0 +1,45 @@
+{
+  "id": "48ab929b1995a356189292d4f5299b22b1a40c29999ac8ff6419be6ebd7e4f57",
+  "schema": 1,
+  "teamId": "2050",
+  "teamName": "Ball State Cardinals",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5282041",
+      "name": "Mason Atkins",
+      "status": "Active"
+    },
+    {
+      "id": "5222760",
+      "name": "Bodie Derrer",
+      "status": "Active"
+    },
+    {
+      "id": "5075392",
+      "name": "Keldric Luster",
+      "status": "Active"
+    },
+    {
+      "id": "5152153",
+      "name": "Tyler Mizzell",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:41.060Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2050/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.060Z",
+    "retrievedAt": "2026-09-11T16:00:41.060Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "84b995d2ca8d6ba40ff28896aaafc8673f867ebcdf67518fb0e92ad5828af45a"
+}

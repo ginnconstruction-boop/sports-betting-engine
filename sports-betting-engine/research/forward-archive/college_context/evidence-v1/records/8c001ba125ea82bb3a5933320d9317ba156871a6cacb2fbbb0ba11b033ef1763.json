@@ -1,0 +1,24 @@
+{
+  "id": "8c001ba125ea82bb3a5933320d9317ba156871a6cacb2fbbb0ba11b033ef1763",
+  "schema": 1,
+  "teamId": "2711",
+  "teamName": "Western Michigan Broncos",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:42.406Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2711/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.406Z",
+    "retrievedAt": "2026-09-11T16:00:42.406Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f46bd8776d08efd3063f234c79306aa877b518bf72b48a8c51e8cc272554a681"
+}

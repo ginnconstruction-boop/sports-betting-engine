@@ -1,0 +1,24 @@
+{
+  "id": "2b79db4f920bb77ecf67b1a395b1483eb48774a0335a7c21f4cd52db04fd6c6b",
+  "schema": 1,
+  "teamId": "201",
+  "teamName": "Oklahoma Sooners",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Brent Venables",
+  "effectiveFrom": "2026-09-11T16:00:40.349Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/201/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.349Z",
+    "retrievedAt": "2026-09-11T16:00:40.349Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "de5dec2ce6c561f1ee23c3498765d37c80401f8a9347cfcb6d1685a5207de49d"
+}

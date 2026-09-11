@@ -1,0 +1,24 @@
+{
+  "id": "97c6fad1bed4c3f180daa9d9b011fe833599e16539f1493e1ea46e2fb1740081",
+  "schema": 1,
+  "teamId": "2",
+  "teamName": "Auburn Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.playerCount",
+  "value": 100,
+  "effectiveFrom": "2026-09-11T16:00:43.487Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.487Z",
+    "retrievedAt": "2026-09-11T16:00:43.487Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "dda00fefd089ca50cb7fc58a6bb50c20dfeba21af4b89dc180f2944c600ecb22"
+}

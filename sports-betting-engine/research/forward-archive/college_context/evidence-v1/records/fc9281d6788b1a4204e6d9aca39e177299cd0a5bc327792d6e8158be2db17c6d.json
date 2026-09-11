@@ -1,0 +1,24 @@
+{
+  "id": "fc9281d6788b1a4204e6d9aca39e177299cd0a5bc327792d6e8158be2db17c6d",
+  "schema": 1,
+  "teamId": "2429",
+  "teamName": "Charlotte 49ers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-11T16:00:44.100Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.100Z",
+    "retrievedAt": "2026-09-11T16:00:44.100Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "86c222a0ff8c9812b6224bb8833924253d69611d3bb654a18061f44b3e1662f0"
+}

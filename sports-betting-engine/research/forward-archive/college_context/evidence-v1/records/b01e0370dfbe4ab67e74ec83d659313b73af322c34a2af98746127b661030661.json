@@ -1,0 +1,50 @@
+{
+  "id": "b01e0370dfbe4ab67e74ec83d659313b73af322c34a2af98746127b661030661",
+  "schema": 1,
+  "teamId": "2640",
+  "teamName": "Texas Southern Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5232130",
+      "name": "Carter Barnes",
+      "status": "Active"
+    },
+    {
+      "id": "5442346",
+      "name": "Jeremiah Harrell",
+      "status": "Active"
+    },
+    {
+      "id": "5442345",
+      "name": "Randy Hymes II",
+      "status": "Active"
+    },
+    {
+      "id": "4917305",
+      "name": "Cam'Ron McCoy",
+      "status": "Active"
+    },
+    {
+      "id": "5442341",
+      "name": "Nelson Peterson Jr.",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:43.796Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2640/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.796Z",
+    "retrievedAt": "2026-09-11T16:00:43.796Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8a6fb6f5efd664c54c21e268df483778da964c06fc18e2b2ef00be3764936f5f"
+}

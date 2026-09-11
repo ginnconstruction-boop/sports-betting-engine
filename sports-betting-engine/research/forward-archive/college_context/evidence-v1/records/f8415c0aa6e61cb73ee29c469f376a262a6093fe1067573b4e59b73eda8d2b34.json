@@ -1,0 +1,24 @@
+{
+  "id": "f8415c0aa6e61cb73ee29c469f376a262a6093fe1067573b4e59b73eda8d2b34",
+  "schema": 1,
+  "teamId": "2115",
+  "teamName": "Central Connecticut Blue Devils",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FCS",
+  "effectiveFrom": "2026-09-11T16:00:44.099Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.099Z",
+    "retrievedAt": "2026-09-11T16:00:44.099Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "871835e078bcd033b9058f75696bd4361d4765d811854aa8ff81e4e54000a242"
+}

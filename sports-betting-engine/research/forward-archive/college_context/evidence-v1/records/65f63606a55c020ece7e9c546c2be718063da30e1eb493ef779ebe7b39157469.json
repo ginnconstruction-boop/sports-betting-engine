@@ -1,0 +1,24 @@
+{
+  "id": "65f63606a55c020ece7e9c546c2be718063da30e1eb493ef779ebe7b39157469",
+  "schema": 1,
+  "teamId": "119",
+  "teamName": "Towson Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:42.312Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/119/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.312Z",
+    "retrievedAt": "2026-09-11T16:00:42.312Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "a97c8090992857f7c1fc43ad21f98975b399cc7a5e2098b3886d4838579205a5"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "59f6a22f2383289ad28300fee7d4c9f141c10a90bf7f0c6cf7917b63cc5c7271",
+  "schema": 1,
+  "teamId": "9",
+  "teamName": "Arizona State Sun Devils",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:44.097Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.097Z",
+    "retrievedAt": "2026-09-11T16:00:44.097Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ce98ff818811ab6e9fc337c79f6c4dae391f10947d6ae3d97c2ec19fe587b123"
+}

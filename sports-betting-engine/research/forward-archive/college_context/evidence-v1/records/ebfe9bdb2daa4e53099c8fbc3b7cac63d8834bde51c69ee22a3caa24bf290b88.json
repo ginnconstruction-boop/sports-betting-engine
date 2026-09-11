@@ -1,0 +1,24 @@
+{
+  "id": "ebfe9bdb2daa4e53099c8fbc3b7cac63d8834bde51c69ee22a3caa24bf290b88",
+  "schema": 1,
+  "teamId": "41",
+  "teamName": "UConn Huskies",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.rosterComposite.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.098Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.098Z",
+    "retrievedAt": "2026-09-11T16:00:44.098Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "de9727670b1b67eaf5c6daf52f17e4c205be56037c5284dbc40f80adc7f7c903"
+}

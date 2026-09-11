@@ -1,0 +1,24 @@
+{
+  "id": "2c3f1867b4886b1ed3f61a1ffa609fda6d112a64835ae3fb9dcfa5724e3a957d",
+  "schema": 1,
+  "teamId": "2623",
+  "teamName": "Missouri State Bears",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:42.854Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2623/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.854Z",
+    "retrievedAt": "2026-09-11T16:00:42.854Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d2490cd92ebe64e26e7aa4d6f17439db7a679916dad355f4319198da3043447f"
+}

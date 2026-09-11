@@ -1,0 +1,24 @@
+{
+  "id": "2f7e4bbeebb59ff394e61634bd86bfca559a158d0b6f8403b9ebb3e0c350440c",
+  "schema": 1,
+  "teamId": "48",
+  "teamName": "Delaware Blue Hens",
+  "season": 2026,
+  "eventId": "401856684",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T16:00:39.984Z",
+  "effectiveTo": "2026-09-13T02:15:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856684",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.984Z",
+    "retrievedAt": "2026-09-11T16:00:39.984Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "5a24b1f394c531badde95b3836ef5c1e9e50468b1f68b6a7701be23a78ebf2cf"
+}

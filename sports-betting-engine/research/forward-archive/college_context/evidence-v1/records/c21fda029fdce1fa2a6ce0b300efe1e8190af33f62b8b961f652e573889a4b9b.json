@@ -1,0 +1,24 @@
+{
+  "id": "c21fda029fdce1fa2a6ce0b300efe1e8190af33f62b8b961f652e573889a4b9b",
+  "schema": 1,
+  "teamId": "98",
+  "teamName": "Western Kentucky Hilltoppers",
+  "season": 2026,
+  "eventId": "401856673",
+  "playerId": null,
+  "domain": "qb",
+  "field": "qb.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T16:00:39.785Z",
+  "effectiveTo": "2026-09-12T22:45:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856673",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.785Z",
+    "retrievedAt": "2026-09-11T16:00:39.785Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c5bcdd420f8276679f168fe1e6e3f3daf53e243fa574065908430a054043d1bf"
+}

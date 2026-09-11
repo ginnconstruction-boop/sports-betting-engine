@@ -1,0 +1,24 @@
+{
+  "id": "89003a57e2eebc4575eeff209e2fb8ae57751a9ad15c9b06e7c12dc03256f778",
+  "schema": 1,
+  "teamId": "84",
+  "teamName": "Indiana Hoosiers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.defensiveCoordinator.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:40.625Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/84/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.625Z",
+    "retrievedAt": "2026-09-11T16:00:40.625Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "4b17a67d85dac3e24aa875977246e525090cbe998f74c36c830e6145e763bb49"
+}

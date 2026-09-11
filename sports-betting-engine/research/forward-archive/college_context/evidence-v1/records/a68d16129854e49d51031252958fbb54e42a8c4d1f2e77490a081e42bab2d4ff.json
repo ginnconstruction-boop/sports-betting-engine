@@ -1,0 +1,24 @@
+{
+  "id": "a68d16129854e49d51031252958fbb54e42a8c4d1f2e77490a081e42bab2d4ff",
+  "schema": 1,
+  "teamId": "2309",
+  "teamName": "Kent State Golden Flashes",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Mark Carney",
+  "effectiveFrom": "2026-09-11T16:00:40.832Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2309/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.832Z",
+    "retrievedAt": "2026-09-11T16:00:40.832Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "1b40edfaf9a909f1e0ae75fce6ac04285684411747a11bc376ac4d14ba6b5f83"
+}

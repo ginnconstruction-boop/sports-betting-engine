@@ -1,0 +1,24 @@
+{
+  "id": "f57edcae41b01dc6a7c8e99b0133c48b704efda6cbd5aff396ae16f063d584c8",
+  "schema": 1,
+  "teamId": "2050",
+  "teamName": "Ball State Cardinals",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:40.897Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2050/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.897Z",
+    "retrievedAt": "2026-09-11T16:00:40.897Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "84b995d2ca8d6ba40ff28896aaafc8673f867ebcdf67518fb0e92ad5828af45a"
+}

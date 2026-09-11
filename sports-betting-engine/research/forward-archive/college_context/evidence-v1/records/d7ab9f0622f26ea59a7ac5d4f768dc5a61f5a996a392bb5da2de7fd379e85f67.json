@@ -1,0 +1,24 @@
+{
+  "id": "d7ab9f0622f26ea59a7ac5d4f768dc5a61f5a996a392bb5da2de7fd379e85f67",
+  "schema": 1,
+  "teamId": "2751",
+  "teamName": "Wyoming Cowboys",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:41.825Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2751/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.825Z",
+    "retrievedAt": "2026-09-11T16:00:41.825Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ac2fc641a158591bd1071858cd9f31b5436e29b496a099a72936b3ac88b7d365"
+}

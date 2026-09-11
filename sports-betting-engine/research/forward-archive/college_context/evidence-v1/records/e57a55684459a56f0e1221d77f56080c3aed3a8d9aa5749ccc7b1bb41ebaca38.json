@@ -1,0 +1,24 @@
+{
+  "id": "e57a55684459a56f0e1221d77f56080c3aed3a8d9aa5749ccc7b1bb41ebaca38",
+  "schema": 1,
+  "teamId": "278",
+  "teamName": "Fresno State Bulldogs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.currentSeasonAvailable",
+  "value": true,
+  "effectiveFrom": "2026-09-11T16:00:43.916Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/278/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.916Z",
+    "retrievedAt": "2026-09-11T16:00:43.916Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "436db2311fdeb73dfa2c460422db8aebb654e4c8e4f56e8457fe510a9c513f6a"
+}

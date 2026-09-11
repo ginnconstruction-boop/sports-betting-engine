@@ -1,0 +1,24 @@
+{
+  "id": "abe24a743d1e2b5fe53ac1f077e5fe3de830f3f939cd2614c22b14256eae874f",
+  "schema": 1,
+  "teamId": "2405",
+  "teamName": "Monmouth Hawks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.currentSeasonAvailable",
+  "value": true,
+  "effectiveFrom": "2026-09-11T16:00:42.428Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2405/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.428Z",
+    "retrievedAt": "2026-09-11T16:00:42.428Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "cb49978b4a799582fc370b5a99510eb23f944f6dd70fc0f91bcfb198dfa8e1b8"
+}

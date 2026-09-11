@@ -1,0 +1,24 @@
+{
+  "id": "7722180c1651b32a053a4b75240a860be8ff0d6cc1a5ecc91bda1afb817ffba7",
+  "schema": 1,
+  "teamId": "2815",
+  "teamName": "Lindenwood Lions",
+  "season": 2026,
+  "eventId": "401871046",
+  "playerId": null,
+  "domain": "qb",
+  "field": "qb.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T16:00:40.083Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401871046",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.083Z",
+    "retrievedAt": "2026-09-11T16:00:40.083Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "b58486d5e6e1a0533f2eb77498d1531f31e190450c29f7246d5e1e83f93da66e"
+}

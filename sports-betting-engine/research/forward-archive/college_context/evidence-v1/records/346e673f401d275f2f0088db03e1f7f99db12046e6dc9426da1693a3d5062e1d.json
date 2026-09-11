@@ -1,0 +1,55 @@
+{
+  "id": "346e673f401d275f2f0088db03e1f7f99db12046e6dc9426da1693a3d5062e1d",
+  "schema": 1,
+  "teamId": "189",
+  "teamName": "Bowling Green Falcons",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5385752",
+      "name": "Dylan Dreasky",
+      "status": "Active"
+    },
+    {
+      "id": "5385753",
+      "name": "Jay Kastantin",
+      "status": "Active"
+    },
+    {
+      "id": "5221234",
+      "name": "Jarin Mock",
+      "status": "Active"
+    },
+    {
+      "id": "5385751",
+      "name": "Caleb Moyer",
+      "status": "Active"
+    },
+    {
+      "id": "5221382",
+      "name": "Hunter Najm",
+      "status": "Active"
+    },
+    {
+      "id": "4912647",
+      "name": "Austin Novosad",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.692Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/189/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.692Z",
+    "retrievedAt": "2026-09-11T16:00:42.692Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "dbbe99f155180203f89126a99694a77fefe67b5d5ac6a53395e7237931ac815d"
+}

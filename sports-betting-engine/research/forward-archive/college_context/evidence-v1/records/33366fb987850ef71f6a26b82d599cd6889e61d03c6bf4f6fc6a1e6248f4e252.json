@@ -1,0 +1,50 @@
+{
+  "id": "33366fb987850ef71f6a26b82d599cd6889e61d03c6bf4f6fc6a1e6248f4e252",
+  "schema": 1,
+  "teamId": "290",
+  "teamName": "Georgia Southern Eagles",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5212641",
+      "name": "Weston Bryan",
+      "status": "Active"
+    },
+    {
+      "id": "5275663",
+      "name": "Harrison Faulkner Jr.",
+      "status": "Active"
+    },
+    {
+      "id": "4912238",
+      "name": "Turner Helton",
+      "status": "Active"
+    },
+    {
+      "id": "4685740",
+      "name": "Max Johnson",
+      "status": "Active"
+    },
+    {
+      "id": "5199949",
+      "name": "Charlie Johnston",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:43.342Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/290/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.342Z",
+    "retrievedAt": "2026-09-11T16:00:43.342Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e68b24e07562b791e414b49523e787a87acb2f6fd25678da40a64ace4a25d5a0"
+}

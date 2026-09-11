@@ -1,0 +1,24 @@
+{
+  "id": "2763d73d8505b68ded83d33c9417af30ebcfb9937e656925a4fe845d5e142cb3",
+  "schema": 1,
+  "teamId": "2572",
+  "teamName": "Southern Miss Golden Eagles",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Blake Anderson",
+  "effectiveFrom": "2026-09-11T16:00:43.556Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2572/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.556Z",
+    "retrievedAt": "2026-09-11T16:00:43.556Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9b30ad367b662ade7b2dce1f73742421f864774e003f83b2db71572088cc67a8"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "cf24d7a0b9b095190e26249a6f615b17b603218cb7b2968c56e75d152f5a3879",
+  "schema": 1,
+  "teamId": "239",
+  "teamName": "Baylor Bears",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-11T16:00:44.100Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.100Z",
+    "retrievedAt": "2026-09-11T16:00:44.100Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "c0c8302e6e184478df58a87ea2520a110189e39871c4b3029fd5beaa2fbc1388"
+}

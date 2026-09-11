@@ -1,0 +1,24 @@
+{
+  "id": "7b9168c34d42064a9926f456545eba4e64027ab8a4c94533581dfed793b1ca76",
+  "schema": 1,
+  "teamId": "153",
+  "teamName": "North Carolina Tar Heels",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.defensiveCoordinator.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:40.462Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/153/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.462Z",
+    "retrievedAt": "2026-09-11T16:00:40.462Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9c5051e34077d41d4be6b98c46b8b92b67a5e373a9375dd96f666e3f29e38f10"
+}

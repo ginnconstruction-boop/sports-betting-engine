@@ -1,0 +1,24 @@
+{
+  "id": "c0a8dc03cdf119ed4c456acedb88df15be09daed71073f859ce38d58870cd649",
+  "schema": 1,
+  "teamId": "12",
+  "teamName": "Arizona Wildcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:44.098Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.098Z",
+    "retrievedAt": "2026-09-11T16:00:44.098Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f57f8946e7a4a49743439b195b1b194a327ce7eb96bd3de609609601573fcce9"
+}

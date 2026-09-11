@@ -1,0 +1,24 @@
+{
+  "id": "8a89e8072616d7a101f9fa696857942d0656c2493ff823f50a6c91a341df06bf",
+  "schema": 1,
+  "teamId": "344",
+  "teamName": "Mississippi State Bulldogs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.playCallerContinuity.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:41.180Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/344/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.180Z",
+    "retrievedAt": "2026-09-11T16:00:41.180Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "216d570aa4b2051c18865428f27c3be27ee50a77c0a7efa50f28486bae2bfb64"
+}

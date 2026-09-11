@@ -1,0 +1,50 @@
+{
+  "id": "5d4fe7ec343a44d309349e945d72c8d55ec51180a666edeeecfcaffd5765d78d",
+  "schema": 1,
+  "teamId": "99",
+  "teamName": "LSU Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5224789",
+      "name": "Landen Clark",
+      "status": "Active"
+    },
+    {
+      "id": "5447030",
+      "name": "Cayden Jones",
+      "status": "Active"
+    },
+    {
+      "id": "5078810",
+      "name": "Sam Leavitt",
+      "status": "Active"
+    },
+    {
+      "id": "5141563",
+      "name": "Husan Longstreet",
+      "status": "Active"
+    },
+    {
+      "id": "5129623",
+      "name": "Kaden Martin",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:43.416Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/99/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.416Z",
+    "retrievedAt": "2026-09-11T16:00:43.416Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "0fe2b8fc31f36d3d0e9174dbbbeee3c58171237b45f91cd9f89012df13d4533d"
+}

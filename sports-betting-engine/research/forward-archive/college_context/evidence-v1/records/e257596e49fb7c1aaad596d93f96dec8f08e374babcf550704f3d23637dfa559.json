@@ -1,0 +1,45 @@
+{
+  "id": "e257596e49fb7c1aaad596d93f96dec8f08e374babcf550704f3d23637dfa559",
+  "schema": 1,
+  "teamId": "2698",
+  "teamName": "West Georgia Wolves",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5438885",
+      "name": "Jaevion Elliott",
+      "status": "Active"
+    },
+    {
+      "id": "4880196",
+      "name": "Colton Fitzgerald",
+      "status": "Active"
+    },
+    {
+      "id": "5157481",
+      "name": "Collin Hurst",
+      "status": "Active"
+    },
+    {
+      "id": "5194695",
+      "name": "Luke Marble",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.921Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2698/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.921Z",
+    "retrievedAt": "2026-09-11T16:00:42.921Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "3d4334a6d393043e1a67f634b6d6440b58e6762a4a9f4afb1347f6909069f0ae"
+}

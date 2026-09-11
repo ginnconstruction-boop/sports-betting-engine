@@ -1,0 +1,24 @@
+{
+  "id": "c3a12803cd6a0ed46ec331c46f9f0be209a21740695bc0d566d109fbe8c6d386",
+  "schema": 1,
+  "teamId": "195",
+  "teamName": "Ohio Bobcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:42.196Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/195/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.196Z",
+    "retrievedAt": "2026-09-11T16:00:42.196Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d095a8def0b2e394b6b9bec5641434289d756748377a00bed9dad87f44480475"
+}

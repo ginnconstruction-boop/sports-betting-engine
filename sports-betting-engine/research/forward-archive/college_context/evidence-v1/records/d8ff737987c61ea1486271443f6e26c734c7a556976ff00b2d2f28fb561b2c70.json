@@ -1,0 +1,24 @@
+{
+  "id": "d8ff737987c61ea1486271443f6e26c734c7a556976ff00b2d2f28fb561b2c70",
+  "schema": 1,
+  "teamId": "130",
+  "teamName": "Michigan Wolverines",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Kyle Whittingham",
+  "effectiveFrom": "2026-09-11T16:00:40.370Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/130/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.370Z",
+    "retrievedAt": "2026-09-11T16:00:40.370Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "b26c6deedfba5d1dc619c05048b18f53973d23b368fb3bb55eb092642bcf8b11"
+}

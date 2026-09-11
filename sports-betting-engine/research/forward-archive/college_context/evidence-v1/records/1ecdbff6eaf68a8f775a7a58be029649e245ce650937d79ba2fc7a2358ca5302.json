@@ -1,0 +1,45 @@
+{
+  "id": "1ecdbff6eaf68a8f775a7a58be029649e245ce650937d79ba2fc7a2358ca5302",
+  "schema": 1,
+  "teamId": "151",
+  "teamName": "East Carolina Pirates",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5291709",
+      "name": "Trey Burke",
+      "status": "Active"
+    },
+    {
+      "id": "4433829",
+      "name": "Mitch Griffis",
+      "status": "Active"
+    },
+    {
+      "id": "5258470",
+      "name": "Cole Hodge",
+      "status": "Active"
+    },
+    {
+      "id": "5382334",
+      "name": "Daulton Phalines",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:40.763Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/151/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.763Z",
+    "retrievedAt": "2026-09-11T16:00:40.763Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "61fdad13d90720b3555a0fff20cd311aa550771523dde4f7ebc096bd78019d75"
+}

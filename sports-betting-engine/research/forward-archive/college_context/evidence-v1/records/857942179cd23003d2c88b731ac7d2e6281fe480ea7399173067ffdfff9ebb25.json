@@ -1,0 +1,24 @@
+{
+  "id": "857942179cd23003d2c88b731ac7d2e6281fe480ea7399173067ffdfff9ebb25",
+  "schema": 1,
+  "teamId": "2582",
+  "teamName": "Southern Jaguars",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:42.450Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2582/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.450Z",
+    "retrievedAt": "2026-09-11T16:00:42.450Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ce4364ef14c37b13e8a7ac121b1866130f592b99295570bbbc65650bd44f9f10"
+}

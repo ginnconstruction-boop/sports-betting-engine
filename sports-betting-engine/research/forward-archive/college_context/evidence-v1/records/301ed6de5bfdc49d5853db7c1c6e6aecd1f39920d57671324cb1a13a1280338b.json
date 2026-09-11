@@ -1,0 +1,24 @@
+{
+  "id": "301ed6de5bfdc49d5853db7c1c6e6aecd1f39920d57671324cb1a13a1280338b",
+  "schema": 1,
+  "teamId": "2",
+  "teamName": "Auburn Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:43.318Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.318Z",
+    "retrievedAt": "2026-09-11T16:00:43.318Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "dda00fefd089ca50cb7fc58a6bb50c20dfeba21af4b89dc180f2944c600ecb22"
+}

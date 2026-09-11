@@ -1,0 +1,24 @@
+{
+  "id": "ea35e711d59734d33fe2fbebe200f5fc029881026ca5f933a8aca931c16d063f",
+  "schema": 1,
+  "teamId": "2439",
+  "teamName": "UNLV Rebels",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.depthTier.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.099Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.099Z",
+    "retrievedAt": "2026-09-11T16:00:44.099Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "394c36e16668dd54ed58651f6b5682134b76501495ffd6937111d07a92a78ed6"
+}

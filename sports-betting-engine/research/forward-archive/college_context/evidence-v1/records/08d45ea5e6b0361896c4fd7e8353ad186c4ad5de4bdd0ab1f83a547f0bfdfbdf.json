@@ -1,0 +1,55 @@
+{
+  "id": "08d45ea5e6b0361896c4fd7e8353ad186c4ad5de4bdd0ab1f83a547f0bfdfbdf",
+  "schema": 1,
+  "teamId": "61",
+  "teamName": "Georgia Bulldogs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5279260",
+      "name": "Bryson Beaver",
+      "status": "Active"
+    },
+    {
+      "id": "5300518",
+      "name": "Jake Bobo",
+      "status": "Active"
+    },
+    {
+      "id": "5218581",
+      "name": "Colter Ginn",
+      "status": "Active"
+    },
+    {
+      "id": "5229348",
+      "name": "Hezekiah Millender",
+      "status": "Active"
+    },
+    {
+      "id": "5141602",
+      "name": "Ryan Montgomery",
+      "status": "Active"
+    },
+    {
+      "id": "5079679",
+      "name": "Ryan Puglisi",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:40.855Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/61/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.855Z",
+    "retrievedAt": "2026-09-11T16:00:40.855Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "2ee4f0e5cab4b90e4e2d9a6bbbe3b449d42844a1a8ec2c92ff0292eca2321910"
+}

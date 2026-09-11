@@ -1,0 +1,45 @@
+{
+  "id": "c651b7780e8d92677ace6aaa1a203232ac85f2d5b4ff9952b4dbc07aaf74f788",
+  "schema": 1,
+  "teamId": "2115",
+  "teamName": "Central Connecticut Blue Devils",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "4711410",
+      "name": "Brett Griffis",
+      "status": "Active"
+    },
+    {
+      "id": "5105336",
+      "name": "Conner Kenyon",
+      "status": "Active"
+    },
+    {
+      "id": "5442247",
+      "name": "AJ Robinson",
+      "status": "Active"
+    },
+    {
+      "id": "5298000",
+      "name": "Romelo Tables",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:41.825Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2115/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.825Z",
+    "retrievedAt": "2026-09-11T16:00:41.825Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "51e9f566fc8f140658bc1112458d2982c6061ad2f52f3a798f7f5788803ef9a7"
+}

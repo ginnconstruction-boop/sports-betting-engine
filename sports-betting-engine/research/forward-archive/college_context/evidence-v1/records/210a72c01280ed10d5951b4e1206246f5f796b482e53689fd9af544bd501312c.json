@@ -1,0 +1,24 @@
+{
+  "id": "210a72c01280ed10d5951b4e1206246f5f796b482e53689fd9af544bd501312c",
+  "schema": 1,
+  "teamId": "2247",
+  "teamName": "Georgia State Panthers",
+  "season": 2026,
+  "eventId": "401869955",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.provider",
+  "value": "DraftKings",
+  "effectiveFrom": "2026-09-11T16:00:40.078Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401869955",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.078Z",
+    "retrievedAt": "2026-09-11T16:00:40.078Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e455bce929a4a5bbe20cbba9d16fe77362e02759e4204594aa497447aa4588fb"
+}

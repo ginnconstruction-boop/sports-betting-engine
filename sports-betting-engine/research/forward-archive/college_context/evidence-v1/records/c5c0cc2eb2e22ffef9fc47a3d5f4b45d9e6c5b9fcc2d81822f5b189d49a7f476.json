@@ -1,0 +1,50 @@
+{
+  "id": "c5c0cc2eb2e22ffef9fc47a3d5f4b45d9e6c5b9fcc2d81822f5b189d49a7f476",
+  "schema": 1,
+  "teamId": "245",
+  "teamName": "Texas A&M Aggies",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5158957",
+      "name": "Helaman Casuga",
+      "status": "Active"
+    },
+    {
+      "id": "5295969",
+      "name": "Brady Hart",
+      "status": "Active"
+    },
+    {
+      "id": "5218671",
+      "name": "Paxton Land",
+      "status": "Active"
+    },
+    {
+      "id": "5222556",
+      "name": "Eli Morcos",
+      "status": "Active"
+    },
+    {
+      "id": "4870971",
+      "name": "Marcel Reed",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:40.326Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/245/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.326Z",
+    "retrievedAt": "2026-09-11T16:00:40.326Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "7b6eef86f94cd11494e6879fb9c03460fb4a2c7008c39414ec1d638cc399d383"
+}

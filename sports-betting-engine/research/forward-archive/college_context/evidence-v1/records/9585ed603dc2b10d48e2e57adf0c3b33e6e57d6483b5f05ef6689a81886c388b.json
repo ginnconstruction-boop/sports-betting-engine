@@ -1,0 +1,24 @@
+{
+  "id": "9585ed603dc2b10d48e2e57adf0c3b33e6e57d6483b5f05ef6689a81886c388b",
+  "schema": 1,
+  "teamId": "41",
+  "teamName": "UConn Huskies",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:41.514Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/41/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.514Z",
+    "retrievedAt": "2026-09-11T16:00:41.514Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "59c89d8d4029e668a13321c922832e90fe62b4482b1b6aa57165022755b1dcd5"
+}

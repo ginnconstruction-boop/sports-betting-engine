@@ -1,0 +1,24 @@
+{
+  "id": "095c5e8666d0d33f3933d035da79dc5dd064995c44c58d1e2d9bdf56783ec88d",
+  "schema": 1,
+  "teamId": "2241",
+  "teamName": "Gardner-Webb Runnin' Bulldogs",
+  "season": 2026,
+  "eventId": "401868187",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.currentHomeSpread",
+  "value": -27.5,
+  "effectiveFrom": "2026-09-11T16:00:39.798Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401868187",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.798Z",
+    "retrievedAt": "2026-09-11T16:00:39.798Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "6dcba6c6ab2c208096aff01c7b6c5f43bd0ed286a7bc7b701612cf1761fc7b72"
+}

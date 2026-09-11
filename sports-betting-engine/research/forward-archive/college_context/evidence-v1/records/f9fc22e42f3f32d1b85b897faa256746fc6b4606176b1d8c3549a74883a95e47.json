@@ -1,0 +1,24 @@
+{
+  "id": "f9fc22e42f3f32d1b85b897faa256746fc6b4606176b1d8c3549a74883a95e47",
+  "schema": 1,
+  "teamId": "2751",
+  "teamName": "Wyoming Cowboys",
+  "season": 2026,
+  "eventId": "401864506",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.pointsAllowedPerGame.diagnostic",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T16:00:39.948Z",
+  "effectiveTo": "2026-09-13T02:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864506",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.948Z",
+    "retrievedAt": "2026-09-11T16:00:39.948Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ec8fa2cd25cc57577f2a07985eea148a7b827fd7c353a3b0bfe0039cb473fd14"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "3dc06e6ea52471a977e2e080c152e0fc1ab5b5284592dd25e614708119007856",
+  "schema": 1,
+  "teamId": "194",
+  "teamName": "Ohio State Buckeyes",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5214646",
+      "name": "Luke Fahey",
+      "status": "Active"
+    },
+    {
+      "id": "5300483",
+      "name": "Brady Geibel",
+      "status": "Active"
+    },
+    {
+      "id": "4685435",
+      "name": "Justyn Martin",
+      "status": "Active"
+    },
+    {
+      "id": "5079712",
+      "name": "Julian Sayin",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:43.199Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/194/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.199Z",
+    "retrievedAt": "2026-09-11T16:00:43.199Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "29640a89787cb86252f735fd06a6082b5ac70213309396de644f6742b662015a"
+}

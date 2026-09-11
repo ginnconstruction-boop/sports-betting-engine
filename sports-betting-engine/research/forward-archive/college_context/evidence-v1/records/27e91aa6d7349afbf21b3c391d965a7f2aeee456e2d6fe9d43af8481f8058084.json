@@ -1,0 +1,24 @@
+{
+  "id": "27e91aa6d7349afbf21b3c391d965a7f2aeee456e2d6fe9d43af8481f8058084",
+  "schema": 1,
+  "teamId": "194",
+  "teamName": "Ohio State Buckeyes",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.ingestionStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:43.199Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/194/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.199Z",
+    "retrievedAt": "2026-09-11T16:00:43.199Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "29640a89787cb86252f735fd06a6082b5ac70213309396de644f6742b662015a"
+}

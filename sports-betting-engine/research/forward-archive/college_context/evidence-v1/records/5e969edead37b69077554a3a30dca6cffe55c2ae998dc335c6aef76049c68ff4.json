@@ -1,0 +1,24 @@
+{
+  "id": "5e969edead37b69077554a3a30dca6cffe55c2ae998dc335c6aef76049c68ff4",
+  "schema": 1,
+  "teamId": "127",
+  "teamName": "Michigan State Spartans",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.rosterComposite.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.098Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.098Z",
+    "retrievedAt": "2026-09-11T16:00:44.098Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "14cfca18d874f22d57ce6da7dae27c65f5c5d6d27220d9d61234237ad2be0f19"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "4e72a8430d09a7f7252b4c6b0702a06c6ec0eda32b16a1d57d580e7fc9b05e20",
+  "schema": 1,
+  "teamId": "218",
+  "teamName": "Temple Owls",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:40.487Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/218/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.487Z",
+    "retrievedAt": "2026-09-11T16:00:40.487Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "5850fc4023094e34b82c52619f75969de2cbe653a5d27d060b28e6cad2905056"
+}

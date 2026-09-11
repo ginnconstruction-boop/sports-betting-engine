@@ -1,0 +1,24 @@
+{
+  "id": "b68fd0c932242564ab1038620a1d509624de7db405b790a50c362a018653de12",
+  "schema": 1,
+  "teamId": "2529",
+  "teamName": "Sacred Heart Pioneers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.currentSeasonAvailable",
+  "value": true,
+  "effectiveFrom": "2026-09-11T16:00:41.881Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2529/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.881Z",
+    "retrievedAt": "2026-09-11T16:00:41.881Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8009ed88c9d494ab3cfed16b5f4d83160aea9be3e3ebf37be14a96d782265db2"
+}

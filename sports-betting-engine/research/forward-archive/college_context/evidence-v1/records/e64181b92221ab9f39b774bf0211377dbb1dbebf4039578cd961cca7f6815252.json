@@ -1,0 +1,40 @@
+{
+  "id": "e64181b92221ab9f39b774bf0211377dbb1dbebf4039578cd961cca7f6815252",
+  "schema": 1,
+  "teamId": "158",
+  "teamName": "Nebraska Cornhuskers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5044387",
+      "name": "Anthony Colandrea",
+      "status": "Active"
+    },
+    {
+      "id": "5126471",
+      "name": "Daniel Kaelin",
+      "status": "Active"
+    },
+    {
+      "id": "5141556",
+      "name": "TJ Lateef",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.642Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/158/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.642Z",
+    "retrievedAt": "2026-09-11T16:00:42.642Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "fa0570325c3110eb1179a59af46c3d9768449227585deb2ae871a93b26cc1170"
+}

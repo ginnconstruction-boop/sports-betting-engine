@@ -1,0 +1,24 @@
+{
+  "id": "fd85f2b94a7560edccd056771f74a24f66c6b0477c78c1b598f2517d6d7c0851",
+  "schema": 1,
+  "teamId": "59",
+  "teamName": "Georgia Tech Yellow Jackets",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.playerCount",
+  "value": 100,
+  "effectiveFrom": "2026-09-11T16:00:42.525Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/59/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.525Z",
+    "retrievedAt": "2026-09-11T16:00:42.525Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f82d156e9002fd6f2e336ffa14ad43c028485a0c0029e7a7b538a0e0ab0e53e5"
+}

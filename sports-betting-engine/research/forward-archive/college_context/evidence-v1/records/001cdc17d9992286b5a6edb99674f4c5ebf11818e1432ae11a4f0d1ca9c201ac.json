@@ -1,0 +1,60 @@
+{
+  "id": "001cdc17d9992286b5a6edb99674f4c5ebf11818e1432ae11a4f0d1ca9c201ac",
+  "schema": 1,
+  "teamId": "2459",
+  "teamName": "Northern Illinois Huskies",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5290891",
+      "name": "Bryshawn Brown",
+      "status": "Active"
+    },
+    {
+      "id": "5210128",
+      "name": "Brady Davidson",
+      "status": "Active"
+    },
+    {
+      "id": "4881032",
+      "name": "Taron Dickens",
+      "status": "Active"
+    },
+    {
+      "id": "5388919",
+      "name": "Ean Hamric",
+      "status": "Active"
+    },
+    {
+      "id": "5327573",
+      "name": "Asa Johnson",
+      "status": "Active"
+    },
+    {
+      "id": "5388926",
+      "name": "Cole Latimer",
+      "status": "Active"
+    },
+    {
+      "id": "4884086",
+      "name": "Jalen Macon",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.805Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2459/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.805Z",
+    "retrievedAt": "2026-09-11T16:00:42.805Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e8d0fe55d05a8af68a25e749ef1924aa51522b940a129540d224cc85e7466ced"
+}

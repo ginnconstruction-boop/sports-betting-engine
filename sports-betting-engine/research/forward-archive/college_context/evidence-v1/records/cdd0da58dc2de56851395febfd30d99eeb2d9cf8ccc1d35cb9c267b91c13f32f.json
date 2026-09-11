@@ -1,0 +1,24 @@
+{
+  "id": "cdd0da58dc2de56851395febfd30d99eeb2d9cf8ccc1d35cb9c267b91c13f32f",
+  "schema": 1,
+  "teamId": "2717",
+  "teamName": "Western Carolina Catamounts",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:42.406Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2717/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.406Z",
+    "retrievedAt": "2026-09-11T16:00:42.406Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "903a33b229cab90343cd0a8ea2efb44d48177fbd1195c0ba7166c229651ed0c4"
+}

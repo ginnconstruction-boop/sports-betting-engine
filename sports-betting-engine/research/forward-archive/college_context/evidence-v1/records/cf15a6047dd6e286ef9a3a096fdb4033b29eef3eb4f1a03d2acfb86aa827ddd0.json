@@ -1,0 +1,24 @@
+{
+  "id": "cf15a6047dd6e286ef9a3a096fdb4033b29eef3eb4f1a03d2acfb86aa827ddd0",
+  "schema": 1,
+  "teamId": "2509",
+  "teamName": "Purdue Boilermakers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.ingestionStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:40.555Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2509/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.555Z",
+    "retrievedAt": "2026-09-11T16:00:40.555Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "7b0a45e8cf8cd80e539c636072807380f85feaee1f5f518d60432c3ee03569b0"
+}

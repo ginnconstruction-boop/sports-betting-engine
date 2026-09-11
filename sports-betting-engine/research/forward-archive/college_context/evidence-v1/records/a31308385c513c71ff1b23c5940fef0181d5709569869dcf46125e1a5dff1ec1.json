@@ -1,0 +1,24 @@
+{
+  "id": "a31308385c513c71ff1b23c5940fef0181d5709569869dcf46125e1a5dff1ec1",
+  "schema": 1,
+  "teamId": "235",
+  "teamName": "Memphis Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:42.125Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/235/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.125Z",
+    "retrievedAt": "2026-09-11T16:00:42.125Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "740efea9b5f19bc05ad2d41b3bc27bb0169015fc5967c9d9ce9ff646fc90e603"
+}

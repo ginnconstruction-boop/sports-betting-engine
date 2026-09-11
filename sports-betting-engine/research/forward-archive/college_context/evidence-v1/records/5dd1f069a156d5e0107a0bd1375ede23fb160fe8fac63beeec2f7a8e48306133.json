@@ -1,0 +1,24 @@
+{
+  "id": "5dd1f069a156d5e0107a0bd1375ede23fb160fe8fac63beeec2f7a8e48306133",
+  "schema": 1,
+  "teamId": "48",
+  "teamName": "Delaware Blue Hens",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:42.027Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/48/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.027Z",
+    "retrievedAt": "2026-09-11T16:00:42.027Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8aca373dea4dcac3eb16fa7d8c04fd4bfcf318099dfcbcf2243c4bcf090c8129"
+}

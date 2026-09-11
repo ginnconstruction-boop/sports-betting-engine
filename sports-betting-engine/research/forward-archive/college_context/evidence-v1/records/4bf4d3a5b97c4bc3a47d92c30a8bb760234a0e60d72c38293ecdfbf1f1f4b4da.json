@@ -1,0 +1,24 @@
+{
+  "id": "4bf4d3a5b97c4bc3a47d92c30a8bb760234a0e60d72c38293ecdfbf1f1f4b4da",
+  "schema": 1,
+  "teamId": "2433",
+  "teamName": "UL Monroe Warhawks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.depthTier.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.098Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.098Z",
+    "retrievedAt": "2026-09-11T16:00:44.098Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "2f86b23c522be8ba82410cb590adcd1296a7403f2acd0d9f3dcd60c819c524c4"
+}

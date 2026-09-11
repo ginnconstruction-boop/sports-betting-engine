@@ -1,0 +1,24 @@
+{
+  "id": "57df57445ba7ab082ac15c0ddc9d1817a3bf95d16c9c0e94801cea431c4a8c96",
+  "schema": 1,
+  "teamId": "349",
+  "teamName": "Army Black Knights",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.playerCount",
+  "value": 100,
+  "effectiveFrom": "2026-09-11T16:00:40.738Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/349/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.738Z",
+    "retrievedAt": "2026-09-11T16:00:40.738Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "5852a91ab048471cacf1882fd7b2dc50585db2e75ca8e87ddfe7952ca1dfa333"
+}

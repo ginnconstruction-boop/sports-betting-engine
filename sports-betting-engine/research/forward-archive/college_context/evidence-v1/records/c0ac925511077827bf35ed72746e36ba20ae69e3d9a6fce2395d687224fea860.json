@@ -1,0 +1,60 @@
+{
+  "id": "c0ac925511077827bf35ed72746e36ba20ae69e3d9a6fce2395d687224fea860",
+  "schema": 1,
+  "teamId": "96",
+  "teamName": "Kentucky Wildcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5125301",
+      "name": "Carson Cruver",
+      "status": "Active"
+    },
+    {
+      "id": "5446995",
+      "name": "William Drakeford Jr.",
+      "status": "Active"
+    },
+    {
+      "id": "5126472",
+      "name": "JacQai Long",
+      "status": "Active"
+    },
+    {
+      "id": "4918099",
+      "name": "Kenny Minchey",
+      "status": "Active"
+    },
+    {
+      "id": "5244730",
+      "name": "Matt Ponatoski",
+      "status": "Active"
+    },
+    {
+      "id": "5369964",
+      "name": "Kendall Tambling",
+      "status": "Active"
+    },
+    {
+      "id": "5164333",
+      "name": "Brennen Ward",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:41.109Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/96/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.109Z",
+    "retrievedAt": "2026-09-11T16:00:41.109Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "188843b93ce613d4fd0dc7c46569873eb2f4cbe6a31f854f0e70145f5d5f9f51"
+}

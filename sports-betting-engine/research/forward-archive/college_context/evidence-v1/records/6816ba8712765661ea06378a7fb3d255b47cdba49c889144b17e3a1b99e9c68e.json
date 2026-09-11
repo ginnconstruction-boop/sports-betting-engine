@@ -1,0 +1,24 @@
+{
+  "id": "6816ba8712765661ea06378a7fb3d255b47cdba49c889144b17e3a1b99e9c68e",
+  "schema": 1,
+  "teamId": "265",
+  "teamName": "Washington State Cougars",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Kirby Moore",
+  "effectiveFrom": "2026-09-11T16:00:40.436Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/265/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.436Z",
+    "retrievedAt": "2026-09-11T16:00:40.436Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "b9d891c969e6d5ae900361e57cebec766999800b7c28f8468336b91d4bb3ea9b"
+}

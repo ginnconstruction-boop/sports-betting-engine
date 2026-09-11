@@ -1,0 +1,45 @@
+{
+  "id": "2986cd055d6f9c37dc8ec1e465d872cc5a663d13864c98fe68ca0992576cb7ba",
+  "schema": 1,
+  "teamId": "2142",
+  "teamName": "Colgate Raiders",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5155751",
+      "name": "Jackson Kilburg",
+      "status": "Active"
+    },
+    {
+      "id": "5089309",
+      "name": "Jake Stearney",
+      "status": "Active"
+    },
+    {
+      "id": "5402093",
+      "name": "Jadon Sultz",
+      "status": "Active"
+    },
+    {
+      "id": "5226989",
+      "name": "Joey Tomasso",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:41.013Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2142/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.013Z",
+    "retrievedAt": "2026-09-11T16:00:41.013Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "2b582b5bc9f70df5f16b35d3536b5122282d2d09b66e74e096da684805469f3a"
+}

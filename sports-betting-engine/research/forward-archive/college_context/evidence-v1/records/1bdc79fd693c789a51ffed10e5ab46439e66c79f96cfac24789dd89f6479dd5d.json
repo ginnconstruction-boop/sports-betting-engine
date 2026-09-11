@@ -1,0 +1,24 @@
+{
+  "id": "1bdc79fd693c789a51ffed10e5ab46439e66c79f96cfac24789dd89f6479dd5d",
+  "schema": 1,
+  "teamId": "153",
+  "teamName": "North Carolina Tar Heels",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.rosterComposite.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.097Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.097Z",
+    "retrievedAt": "2026-09-11T16:00:44.097Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "0c8a991aa39b2dbad55cf0d6a7518495de0c8e9fedcd7af948a449e5fda11de5"
+}

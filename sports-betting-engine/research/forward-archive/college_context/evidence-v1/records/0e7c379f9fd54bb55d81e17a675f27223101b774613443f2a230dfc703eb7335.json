@@ -1,0 +1,24 @@
+{
+  "id": "0e7c379f9fd54bb55d81e17a675f27223101b774613443f2a230dfc703eb7335",
+  "schema": 1,
+  "teamId": "221",
+  "teamName": "Pittsburgh Panthers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.depthTier.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.098Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.098Z",
+    "retrievedAt": "2026-09-11T16:00:44.098Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ac8ff029cc4f81f8eb756057d5faf27307e5f76e9a9d0d896b531160257831ce"
+}

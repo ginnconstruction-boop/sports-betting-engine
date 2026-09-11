@@ -1,0 +1,24 @@
+{
+  "id": "4fc8c18c1bbd28f21ea0a1fac30ce46b993484e05e33a7d7cd925afc22d6c5ec",
+  "schema": 1,
+  "teamId": "57",
+  "teamName": "Florida Gators",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.ingestionStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:42.222Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/57/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.222Z",
+    "retrievedAt": "2026-09-11T16:00:42.222Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "a743a63f7bc348edd2102f0ea6bdab85c9bdba6d5fcc81003c171cb11f9cc4c8"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "5e88d5b6c1234cb75fa638d893cb55e01fd599587fdf3b431e563f9845e4743b",
+  "schema": 1,
+  "teamId": "2628",
+  "teamName": "TCU Horned Frogs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.defensiveCoordinator.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:43.579Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2628/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.579Z",
+    "retrievedAt": "2026-09-11T16:00:43.579Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "a3952fa6fc533f21be44456994476df4ea9e1a0518b75eb4779df927b3ce63f7"
+}

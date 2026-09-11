@@ -1,0 +1,24 @@
+{
+  "id": "a34e636f8a62c4c39d956f38abfb56e1d77c171ef17da44185ed170dc0dddd6c",
+  "schema": 1,
+  "teamId": "2306",
+  "teamName": "Kansas State Wildcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.rosterComposite.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.097Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.097Z",
+    "retrievedAt": "2026-09-11T16:00:44.097Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "0eed46fcbbca3a8da83cd90b6f0ecd2e11d8743b0227d925684aed93e9b061f9"
+}

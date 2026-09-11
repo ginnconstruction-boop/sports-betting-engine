@@ -1,0 +1,24 @@
+{
+  "id": "2cb8e78fc87b7f4948f0d0821a56053c0c985b27658b1dbb2c4856909b677ff9",
+  "schema": 1,
+  "teamId": "2199",
+  "teamName": "Eastern Michigan Eagles",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:41.468Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2199/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.468Z",
+    "retrievedAt": "2026-09-11T16:00:41.468Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "b109d7cc9b502f2c116c0cf4930644086bb6188f4cccec4cf81534d1956b4a04"
+}

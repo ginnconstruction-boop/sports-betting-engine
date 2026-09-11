@@ -1,0 +1,24 @@
+{
+  "id": "b422679c36275e21f36af34ee5033609f226c6fa8c3e1833c30faf28ec628277",
+  "schema": 1,
+  "teamId": "264",
+  "teamName": "Washington Huskies",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:44.098Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.098Z",
+    "retrievedAt": "2026-09-11T16:00:44.098Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "a7e99b9a6dba5baaf3ec5e803d5fb76afcf2da75925ce69bc45ba6898b050d69"
+}

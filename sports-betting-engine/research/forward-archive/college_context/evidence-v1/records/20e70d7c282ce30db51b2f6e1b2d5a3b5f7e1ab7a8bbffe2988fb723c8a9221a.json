@@ -1,0 +1,24 @@
+{
+  "id": "20e70d7c282ce30db51b2f6e1b2d5a3b5f7e1ab7a8bbffe2988fb723c8a9221a",
+  "schema": 1,
+  "teamId": "96",
+  "teamName": "Kentucky Wildcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:44.098Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.098Z",
+    "retrievedAt": "2026-09-11T16:00:44.098Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "caa98d5de4c7ee1667c2329d8269765606b0263853531bff3ecb69b5dfdc977a"
+}

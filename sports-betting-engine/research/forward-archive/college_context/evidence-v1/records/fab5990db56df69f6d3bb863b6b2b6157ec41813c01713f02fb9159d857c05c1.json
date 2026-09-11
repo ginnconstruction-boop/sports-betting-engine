@@ -1,0 +1,24 @@
+{
+  "id": "fab5990db56df69f6d3bb863b6b2b6157ec41813c01713f02fb9159d857c05c1",
+  "schema": 1,
+  "teamId": "2026",
+  "teamName": "App State Mountaineers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.offensiveCoordinator.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:40.787Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2026/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.787Z",
+    "retrievedAt": "2026-09-11T16:00:40.787Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "7f830adcc914bb9dcfe0bd3e37237f28fd067f98aacbeaa0a409d0e2572cb211"
+}

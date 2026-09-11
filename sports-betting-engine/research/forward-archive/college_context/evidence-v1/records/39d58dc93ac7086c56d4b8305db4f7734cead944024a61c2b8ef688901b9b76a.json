@@ -1,0 +1,50 @@
+{
+  "id": "39d58dc93ac7086c56d4b8305db4f7734cead944024a61c2b8ef688901b9b76a",
+  "schema": 1,
+  "teamId": "295",
+  "teamName": "Old Dominion Monarchs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5394556",
+      "name": "Landen Abernathy",
+      "status": "Active"
+    },
+    {
+      "id": "5193346",
+      "name": "Quinn Henicle",
+      "status": "Active"
+    },
+    {
+      "id": "5295919",
+      "name": "Ryan Huff",
+      "status": "Active"
+    },
+    {
+      "id": "5283062",
+      "name": "Brooklyn Nace",
+      "status": "Active"
+    },
+    {
+      "id": "5091836",
+      "name": "Jaxon Potter",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:40.533Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/295/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.533Z",
+    "retrievedAt": "2026-09-11T16:00:40.533Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "6a4b79271538e6a4fb38b52feaece1b73bf429f01771b0ce3873806a39ec995d"
+}

@@ -1,0 +1,40 @@
+{
+  "id": "75f8fdbf0d45111cd9aa54e2e02b2f67946a302dfbc0b5194e153e4cc0a7895a",
+  "schema": 1,
+  "teamId": "2226",
+  "teamName": "Florida Atlantic Owls",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5302741",
+      "name": "Jeremiah Daoud",
+      "status": "Active"
+    },
+    {
+      "id": "5219898",
+      "name": "Drew Devillier",
+      "status": "Active"
+    },
+    {
+      "id": "5215248",
+      "name": "Jordan Magwood",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:43.369Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2226/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.369Z",
+    "retrievedAt": "2026-09-11T16:00:43.369Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "795ff807da010909cfe4d9cc4be0f602d9965d3cc7880e2afea1334491f62bff"
+}

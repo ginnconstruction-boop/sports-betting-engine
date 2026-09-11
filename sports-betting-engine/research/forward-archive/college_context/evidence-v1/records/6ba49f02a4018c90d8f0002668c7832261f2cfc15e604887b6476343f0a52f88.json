@@ -1,0 +1,24 @@
+{
+  "id": "6ba49f02a4018c90d8f0002668c7832261f2cfc15e604887b6476343f0a52f88",
+  "schema": 1,
+  "teamId": "145",
+  "teamName": "Ole Miss Rebels",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:43.369Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/145/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.369Z",
+    "retrievedAt": "2026-09-11T16:00:43.369Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "79a8d5f65142dc5b9c9d1f11b0637f1fa8d4c04fb2cb71f6e80a2eec312fddc2"
+}

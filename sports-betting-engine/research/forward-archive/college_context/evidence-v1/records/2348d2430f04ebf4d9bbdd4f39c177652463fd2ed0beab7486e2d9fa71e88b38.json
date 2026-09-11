@@ -1,0 +1,24 @@
+{
+  "id": "2348d2430f04ebf4d9bbdd4f39c177652463fd2ed0beab7486e2d9fa71e88b38",
+  "schema": 1,
+  "teamId": "30",
+  "teamName": "USC Trojans",
+  "season": 2026,
+  "eventId": "401858445",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:40.169Z",
+  "effectiveTo": "2026-09-13T09:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858445",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.169Z",
+    "retrievedAt": "2026-09-11T16:00:40.169Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "41a87a45d6df49e70bc9533718ab68a4cb3b24f0a33b4f481eca073d92d221c2"
+}

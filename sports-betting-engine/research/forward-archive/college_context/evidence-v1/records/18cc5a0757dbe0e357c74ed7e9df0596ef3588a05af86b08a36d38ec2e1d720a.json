@@ -1,0 +1,24 @@
+{
+  "id": "18cc5a0757dbe0e357c74ed7e9df0596ef3588a05af86b08a36d38ec2e1d720a",
+  "schema": 1,
+  "teamId": "107",
+  "teamName": "Holy Cross Crusaders",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:44.098Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.098Z",
+    "retrievedAt": "2026-09-11T16:00:44.098Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "3d5d1012cc113d1b25d86bc69f547e8572b7b096d4ee668400a99452facd2f7a"
+}

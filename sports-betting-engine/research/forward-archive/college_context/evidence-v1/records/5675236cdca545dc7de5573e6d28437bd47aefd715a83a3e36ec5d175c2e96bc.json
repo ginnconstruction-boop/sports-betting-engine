@@ -1,0 +1,24 @@
+{
+  "id": "5675236cdca545dc7de5573e6d28437bd47aefd715a83a3e36ec5d175c2e96bc",
+  "schema": 1,
+  "teamId": "113",
+  "teamName": "Massachusetts Minutemen",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.providerChecked",
+  "value": "MATCHED",
+  "effectiveFrom": "2026-09-11T16:00:41.856Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/113/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.856Z",
+    "retrievedAt": "2026-09-11T16:00:41.856Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "764a2f0d8cec1a38ebbd3569b8ff6ff87cde216fb80cf70fd919942cb04245de"
+}

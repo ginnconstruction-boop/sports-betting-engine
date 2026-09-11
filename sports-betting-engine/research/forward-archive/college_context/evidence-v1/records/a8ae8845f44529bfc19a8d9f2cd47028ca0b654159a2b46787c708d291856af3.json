@@ -1,0 +1,24 @@
+{
+  "id": "a8ae8845f44529bfc19a8d9f2cd47028ca0b654159a2b46787c708d291856af3",
+  "schema": 1,
+  "teamId": "12",
+  "teamName": "Arizona Wildcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:41.369Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/12/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.369Z",
+    "retrievedAt": "2026-09-11T16:00:41.369Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9ca7c64e0e255af2fb805402f23c0e04b8ac88c92349b839de835f971a5bde3a"
+}

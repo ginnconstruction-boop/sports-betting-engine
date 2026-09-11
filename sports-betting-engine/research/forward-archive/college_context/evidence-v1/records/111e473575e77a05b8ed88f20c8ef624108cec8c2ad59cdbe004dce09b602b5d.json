@@ -1,0 +1,24 @@
+{
+  "id": "111e473575e77a05b8ed88f20c8ef624108cec8c2ad59cdbe004dce09b602b5d",
+  "schema": 1,
+  "teamId": "324",
+  "teamName": "Coastal Carolina Chanticleers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.rosterComposite.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.099Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.099Z",
+    "retrievedAt": "2026-09-11T16:00:44.099Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9c873683104edc8165268b6d9c8a13612279935756423c5adf6283c9028a4356"
+}

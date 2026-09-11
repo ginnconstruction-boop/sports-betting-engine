@@ -1,0 +1,24 @@
+{
+  "id": "7866b68ae37039f958cc965816b0fde94c023935e06de7280cb5ca87c1ccc07b",
+  "schema": 1,
+  "teamId": "152",
+  "teamName": "NC State Wolfpack",
+  "season": 2026,
+  "eventId": "401858222",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.precipitationMm.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:39.662Z",
+  "effectiveTo": "2026-09-12T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858222",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.662Z",
+    "retrievedAt": "2026-09-11T16:00:39.662Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8ed934db9c6796da8564066fb96d567e7d110885b328f742942f8234a031edfb"
+}

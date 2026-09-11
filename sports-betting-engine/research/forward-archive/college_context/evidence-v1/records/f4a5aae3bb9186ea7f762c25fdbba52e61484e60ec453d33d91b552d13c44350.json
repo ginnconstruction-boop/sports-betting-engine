@@ -1,0 +1,24 @@
+{
+  "id": "f4a5aae3bb9186ea7f762c25fdbba52e61484e60ec453d33d91b552d13c44350",
+  "schema": 1,
+  "teamId": "2655",
+  "teamName": "Tulane Green Wave",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.playerCount",
+  "value": 100,
+  "effectiveFrom": "2026-09-11T16:00:42.831Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2655/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.831Z",
+    "retrievedAt": "2026-09-11T16:00:42.831Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e2d169f637eec0693e622605b82d84cc7e37569259accd133f29159376298630"
+}

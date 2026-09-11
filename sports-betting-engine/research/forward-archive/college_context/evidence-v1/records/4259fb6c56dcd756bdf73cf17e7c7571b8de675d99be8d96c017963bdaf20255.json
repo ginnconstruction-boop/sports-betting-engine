@@ -1,0 +1,24 @@
+{
+  "id": "4259fb6c56dcd756bdf73cf17e7c7571b8de675d99be8d96c017963bdaf20255",
+  "schema": 1,
+  "teamId": "277",
+  "teamName": "West Virginia Mountaineers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-11T16:00:44.097Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.097Z",
+    "retrievedAt": "2026-09-11T16:00:44.097Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "4b924b433cfd87a7f2a27f41eb5b5dd89f488c6dc971277086159937e16f224a"
+}

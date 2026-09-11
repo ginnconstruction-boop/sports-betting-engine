@@ -1,0 +1,24 @@
+{
+  "id": "82597263bf1e75fe1d15441024903395c93c58f3993943041e924d995ca61433",
+  "schema": 1,
+  "teamId": "68",
+  "teamName": "Boise State Broncos",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:42.104Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/68/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.104Z",
+    "retrievedAt": "2026-09-11T16:00:42.104Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "52f010b0b65922379f44ab3f85d80278efef18fdcd25c1a1f8766a58e73b626e"
+}

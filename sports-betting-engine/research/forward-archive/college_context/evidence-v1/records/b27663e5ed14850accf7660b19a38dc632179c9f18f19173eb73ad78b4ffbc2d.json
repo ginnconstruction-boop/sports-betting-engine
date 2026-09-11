@@ -1,0 +1,45 @@
+{
+  "id": "b27663e5ed14850accf7660b19a38dc632179c9f18f19173eb73ad78b4ffbc2d",
+  "schema": 1,
+  "teamId": "98",
+  "teamName": "Western Kentucky Hilltoppers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "4920158",
+      "name": "Brock Glenn",
+      "status": "Active"
+    },
+    {
+      "id": "5077114",
+      "name": "Caleb McMickle",
+      "status": "Active"
+    },
+    {
+      "id": "5209963",
+      "name": "Cam O'Hara",
+      "status": "Active"
+    },
+    {
+      "id": "5196864",
+      "name": "Rodney Tisdale Jr.",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:40.921Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/98/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.921Z",
+    "retrievedAt": "2026-09-11T16:00:40.921Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c57c1d5aba56282f598381ab70ae7197983910c3d7cef6710bca70e1921ee747"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "69cfaf2873e2f071e2942f5f67b8b09b129d93e2cae8444f94481f4ba63441ed",
+  "schema": 1,
+  "teamId": "2458",
+  "teamName": "Northern Colorado Bears",
+  "season": 2026,
+  "eventId": "401864506",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.provider",
+  "value": "DraftKings",
+  "effectiveFrom": "2026-09-11T16:00:39.948Z",
+  "effectiveTo": "2026-09-13T02:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864506",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.948Z",
+    "retrievedAt": "2026-09-11T16:00:39.948Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ec8fa2cd25cc57577f2a07985eea148a7b827fd7c353a3b0bfe0039cb473fd14"
+}

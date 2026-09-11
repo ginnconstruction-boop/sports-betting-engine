@@ -1,0 +1,45 @@
+{
+  "id": "6ae2e4f4d5c7da4efe130e12b2854b843ab59e07559c8a71be68cea61203c0e4",
+  "schema": 1,
+  "teamId": "201",
+  "teamName": "Oklahoma Sooners",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5245123",
+      "name": "Bowe Bentley",
+      "status": "Active"
+    },
+    {
+      "id": "4915980",
+      "name": "John Mateer",
+      "status": "Active"
+    },
+    {
+      "id": "5224237",
+      "name": "Whitt Newbauer",
+      "status": "Active"
+    },
+    {
+      "id": "5213355",
+      "name": "Jett Niu",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:40.349Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/201/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.349Z",
+    "retrievedAt": "2026-09-11T16:00:40.349Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "de5dec2ce6c561f1ee23c3498765d37c80401f8a9347cfcb6d1685a5207de49d"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "e5adb40d77e70e4efe550c23dc71298fb971b710d84d69201b415395d4d50cb6",
+  "schema": 1,
+  "teamId": "2142",
+  "teamName": "Colgate Raiders",
+  "season": 2026,
+  "eventId": "401866415",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.movementPoints",
+  "value": -1,
+  "effectiveFrom": "2026-09-11T16:00:39.791Z",
+  "effectiveTo": "2026-09-12T23:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401866415",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.791Z",
+    "retrievedAt": "2026-09-11T16:00:39.791Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c1299983bb014742331a2d17aa921a40e6b173bcc69d6276e8bc4af5f6af1e93"
+}

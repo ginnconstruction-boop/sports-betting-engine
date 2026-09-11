@@ -1,0 +1,24 @@
+{
+  "id": "6a9e560f3a43b3085d46f022a6db5d2522453394df3c129b0a40ac0e43c0b685",
+  "schema": 1,
+  "teamId": "202",
+  "teamName": "Tulsa Golden Hurricane",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.ingestionStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:42.738Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/202/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.738Z",
+    "retrievedAt": "2026-09-11T16:00:42.738Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "2eb8572310cf99e7379defe5f155f92d95d1311ca166e523320e61432398f282"
+}

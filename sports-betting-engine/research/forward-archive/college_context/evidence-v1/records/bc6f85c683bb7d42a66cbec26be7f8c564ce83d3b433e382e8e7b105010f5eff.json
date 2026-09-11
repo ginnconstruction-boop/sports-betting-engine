@@ -1,0 +1,24 @@
+{
+  "id": "bc6f85c683bb7d42a66cbec26be7f8c564ce83d3b433e382e8e7b105010f5eff",
+  "schema": 1,
+  "teamId": "189",
+  "teamName": "Bowling Green Falcons",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:42.497Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/189/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.497Z",
+    "retrievedAt": "2026-09-11T16:00:42.497Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "dbbe99f155180203f89126a99694a77fefe67b5d5ac6a53395e7237931ac815d"
+}

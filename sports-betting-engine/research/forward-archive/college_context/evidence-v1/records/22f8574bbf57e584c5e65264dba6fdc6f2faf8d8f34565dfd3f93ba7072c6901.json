@@ -1,0 +1,50 @@
+{
+  "id": "22f8574bbf57e584c5e65264dba6fdc6f2faf8d8f34565dfd3f93ba7072c6901",
+  "schema": 1,
+  "teamId": "59",
+  "teamName": "Georgia Tech Yellow Jackets",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5207610",
+      "name": "Grady Adamson",
+      "status": "Active"
+    },
+    {
+      "id": "5274277",
+      "name": "Cole Bergeron",
+      "status": "Active"
+    },
+    {
+      "id": "5159873",
+      "name": "Ben Guthrie",
+      "status": "Active"
+    },
+    {
+      "id": "5146575",
+      "name": "Graham Knowles",
+      "status": "Active"
+    },
+    {
+      "id": "5191162",
+      "name": "Alberto Mendoza",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.525Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/59/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.525Z",
+    "retrievedAt": "2026-09-11T16:00:42.525Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f82d156e9002fd6f2e336ffa14ad43c028485a0c0029e7a7b538a0e0ab0e53e5"
+}

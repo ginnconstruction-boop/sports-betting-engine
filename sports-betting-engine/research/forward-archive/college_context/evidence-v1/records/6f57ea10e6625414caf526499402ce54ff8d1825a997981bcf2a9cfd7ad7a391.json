@@ -1,0 +1,24 @@
+{
+  "id": "6f57ea10e6625414caf526499402ce54ff8d1825a997981bcf2a9cfd7ad7a391",
+  "schema": 1,
+  "teamId": "167",
+  "teamName": "New Mexico Lobos",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:41.881Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/167/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.881Z",
+    "retrievedAt": "2026-09-11T16:00:41.881Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "0c017216249c30391fd0892b9657242f2c7b84dc1740e59638efd012a24f2c46"
+}

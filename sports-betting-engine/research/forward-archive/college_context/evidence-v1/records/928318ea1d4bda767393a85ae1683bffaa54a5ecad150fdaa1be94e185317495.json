@@ -1,0 +1,24 @@
+{
+  "id": "928318ea1d4bda767393a85ae1683bffaa54a5ecad150fdaa1be94e185317495",
+  "schema": 1,
+  "teamId": "8",
+  "teamName": "Arkansas Razorbacks",
+  "season": 2026,
+  "eventId": "401856670",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.pointsPerGame.diagnostic",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T16:00:40.215Z",
+  "effectiveTo": "2026-09-13T08:15:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856670",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.215Z",
+    "retrievedAt": "2026-09-11T16:00:40.215Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "184039ec74fa0843480ec4fb84577f155e146468f9adfc4e10a14391f2db4360"
+}

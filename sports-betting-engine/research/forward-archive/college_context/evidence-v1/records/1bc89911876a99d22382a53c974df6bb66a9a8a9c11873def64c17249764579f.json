@@ -1,0 +1,24 @@
+{
+  "id": "1bc89911876a99d22382a53c974df6bb66a9a8a9c11873def64c17249764579f",
+  "schema": 1,
+  "teamId": "87",
+  "teamName": "Notre Dame Fighting Irish",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.rosterComposite.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.098Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.098Z",
+    "retrievedAt": "2026-09-11T16:00:44.098Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "b5e559d8d4e1e4581a0b477cecd37af388d7f93ebea24e490e490dd37f49c3d2"
+}

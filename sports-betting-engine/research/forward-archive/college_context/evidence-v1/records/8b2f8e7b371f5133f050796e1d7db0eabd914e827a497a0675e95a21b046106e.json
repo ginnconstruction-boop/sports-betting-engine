@@ -1,0 +1,50 @@
+{
+  "id": "8b2f8e7b371f5133f050796e1d7db0eabd914e827a497a0675e95a21b046106e",
+  "schema": 1,
+  "teamId": "2523",
+  "teamName": "Robert Morris Colonials",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5405831",
+      "name": "Jackson Frey",
+      "status": "Active"
+    },
+    {
+      "id": "4832789",
+      "name": "Carson Haggard",
+      "status": "Active"
+    },
+    {
+      "id": "5226101",
+      "name": "Dylan Hassid",
+      "status": "Active"
+    },
+    {
+      "id": "5405828",
+      "name": "Dillon Mohammed",
+      "status": "Active"
+    },
+    {
+      "id": "5298328",
+      "name": "Cooper Panteck",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:41.782Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2523/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.782Z",
+    "retrievedAt": "2026-09-11T16:00:41.782Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "aded371a78c1d38736581be12b502184cc5a29699f8d288efca3e20d56b59791"
+}

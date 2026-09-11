@@ -1,0 +1,24 @@
+{
+  "id": "06ef2add393e8d5655c82744533d554688466f7f31ae538940bb79454efba431",
+  "schema": 1,
+  "teamId": "38",
+  "teamName": "Colorado Buffaloes",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.newOc.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:41.203Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/38/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.203Z",
+    "retrievedAt": "2026-09-11T16:00:41.203Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "52ea2c5ff3c152b1ad80c3f0f13914a05311afc1408ee632deb1150c721e5345"
+}

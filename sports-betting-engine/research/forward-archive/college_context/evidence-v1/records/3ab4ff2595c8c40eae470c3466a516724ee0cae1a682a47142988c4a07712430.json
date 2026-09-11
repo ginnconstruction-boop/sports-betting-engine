@@ -1,0 +1,24 @@
+{
+  "id": "3ab4ff2595c8c40eae470c3466a516724ee0cae1a682a47142988c4a07712430",
+  "schema": 1,
+  "teamId": "2229",
+  "teamName": "Florida International Panthers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.ingestionStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:42.450Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2229/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.450Z",
+    "retrievedAt": "2026-09-11T16:00:42.450Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "7b12eaa72d28edd42e6862028efcea45d067549853cae4a5d7bfe5799e7453d0"
+}

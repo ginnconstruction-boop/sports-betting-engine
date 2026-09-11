@@ -1,0 +1,45 @@
+{
+  "id": "6202eba29fa23d9d556d8b40d0795f04c46f708478517473f2bce6f292eaebee",
+  "schema": 1,
+  "teamId": "2572",
+  "teamName": "Southern Miss Golden Eagles",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "4618083",
+      "name": "Ethan Hampton",
+      "status": "Active"
+    },
+    {
+      "id": "4833635",
+      "name": "Landry Lyddy",
+      "status": "Active"
+    },
+    {
+      "id": "5394597",
+      "name": "Maddox McCrory",
+      "status": "Active"
+    },
+    {
+      "id": "5159059",
+      "name": "Hugh Price",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:43.556Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2572/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.556Z",
+    "retrievedAt": "2026-09-11T16:00:43.556Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9b30ad367b662ade7b2dce1f73742421f864774e003f83b2db71572088cc67a8"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "053867fee6f836ec7e2dcf9071a83bd9e6fa4517ada72a132f011327cd3dc4a8",
+  "schema": 1,
+  "teamId": "2623",
+  "teamName": "Missouri State Bears",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.playerCount",
+  "value": 100,
+  "effectiveFrom": "2026-09-11T16:00:43.061Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2623/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.061Z",
+    "retrievedAt": "2026-09-11T16:00:43.061Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d2490cd92ebe64e26e7aa4d6f17439db7a679916dad355f4319198da3043447f"
+}

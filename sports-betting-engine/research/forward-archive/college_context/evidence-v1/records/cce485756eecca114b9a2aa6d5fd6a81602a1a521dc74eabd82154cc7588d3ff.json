@@ -1,0 +1,24 @@
+{
+  "id": "cce485756eecca114b9a2aa6d5fd6a81602a1a521dc74eabd82154cc7588d3ff",
+  "schema": 1,
+  "teamId": "66",
+  "teamName": "Iowa State Cyclones",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.newHeadCoach.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:43.295Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/66/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.295Z",
+    "retrievedAt": "2026-09-11T16:00:43.295Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "2c21d0bbbf598634da51bfcac6c305402062f902752c33a7d84f6a4dbfb2c012"
+}

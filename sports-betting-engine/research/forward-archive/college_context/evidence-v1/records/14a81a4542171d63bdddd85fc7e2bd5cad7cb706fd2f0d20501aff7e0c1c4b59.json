@@ -1,0 +1,24 @@
+{
+  "id": "14a81a4542171d63bdddd85fc7e2bd5cad7cb706fd2f0d20501aff7e0c1c4b59",
+  "schema": 1,
+  "teamId": "47",
+  "teamName": "Howard Bison",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:40.462Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/47/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.462Z",
+    "retrievedAt": "2026-09-11T16:00:40.462Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "069bc063385e27f67257ade2668afc0b391c2df81df1afdacb76bf0c2ec958f7"
+}

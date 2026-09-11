@@ -1,0 +1,24 @@
+{
+  "id": "a2a376ddb21dcd32127809fe59cc5931067f3c6ac7818c2a55cc3e3966bf78e7",
+  "schema": 1,
+  "teamId": "193",
+  "teamName": "Miami (OH) RedHawks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:44.098Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.098Z",
+    "retrievedAt": "2026-09-11T16:00:44.098Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "bc993716e2f9f66a7714b0cfb2fc1f74d7d09e2b2854f1ac8b014e3576107df2"
+}

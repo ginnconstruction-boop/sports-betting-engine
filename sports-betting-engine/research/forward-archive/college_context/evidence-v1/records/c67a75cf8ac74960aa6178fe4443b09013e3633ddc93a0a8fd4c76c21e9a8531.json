@@ -1,0 +1,24 @@
+{
+  "id": "c67a75cf8ac74960aa6178fe4443b09013e3633ddc93a0a8fd4c76c21e9a8531",
+  "schema": 1,
+  "teamId": "2439",
+  "teamName": "UNLV Rebels",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.offensiveCoordinator.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:42.027Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2439/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.027Z",
+    "retrievedAt": "2026-09-11T16:00:42.027Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ff387e8970023c4f1843cbba926c90a12d85ea58cbf98bfeaecd4c560084eac6"
+}

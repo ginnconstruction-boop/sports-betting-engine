@@ -1,0 +1,60 @@
+{
+  "id": "fb610c1e63652d2301cdc967de8c0147b289caea348b6d9eb384507d7a115b78",
+  "schema": 1,
+  "teamId": "277",
+  "teamName": "West Virginia Mountaineers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5264725",
+      "name": "Max Anderson",
+      "status": "Active"
+    },
+    {
+      "id": "4875125",
+      "name": "Max Brown",
+      "status": "Active"
+    },
+    {
+      "id": "5200371",
+      "name": "Wyatt Walker Brown",
+      "status": "Active"
+    },
+    {
+      "id": "5164314",
+      "name": "Scotty Fox Jr.",
+      "status": "Active"
+    },
+    {
+      "id": "5079465",
+      "name": "Michael Hawkins Jr.",
+      "status": "Active"
+    },
+    {
+      "id": "5161828",
+      "name": "Jyron Hughley",
+      "status": "Active"
+    },
+    {
+      "id": "5274377",
+      "name": "John Johnson III",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:40.945Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/277/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.945Z",
+    "retrievedAt": "2026-09-11T16:00:40.945Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "49d1b5a2940c5a46674ba000f08246caf96d96bafdb914a55e0b93f80269c495"
+}

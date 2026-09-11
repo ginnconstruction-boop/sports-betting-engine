@@ -1,0 +1,24 @@
+{
+  "id": "01e783431bb2fffd062856c2b49a329385e2f1b7ead695e0c4d4682e8ad18784",
+  "schema": 1,
+  "teamId": "151",
+  "teamName": "East Carolina Pirates",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.ingestionStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:40.763Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/151/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.763Z",
+    "retrievedAt": "2026-09-11T16:00:40.763Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "61fdad13d90720b3555a0fff20cd311aa550771523dde4f7ebc096bd78019d75"
+}

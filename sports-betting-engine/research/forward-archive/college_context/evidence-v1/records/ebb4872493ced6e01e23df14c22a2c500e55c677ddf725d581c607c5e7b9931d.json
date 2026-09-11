@@ -1,0 +1,50 @@
+{
+  "id": "ebb4872493ced6e01e23df14c22a2c500e55c677ddf725d581c607c5e7b9931d",
+  "schema": 1,
+  "teamId": "2509",
+  "teamName": "Purdue Boilermakers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5216562",
+      "name": "Corin Berry",
+      "status": "Active"
+    },
+    {
+      "id": "5104738",
+      "name": "Ryan Browne",
+      "status": "Active"
+    },
+    {
+      "id": "5149006",
+      "name": "Evans Chuba",
+      "status": "Active"
+    },
+    {
+      "id": "4899880",
+      "name": "Bennett Meredith",
+      "status": "Active"
+    },
+    {
+      "id": "5188792",
+      "name": "Garyt Odom",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:40.555Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2509/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.555Z",
+    "retrievedAt": "2026-09-11T16:00:40.555Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "7b0a45e8cf8cd80e539c636072807380f85feaee1f5f518d60432c3ee03569b0"
+}

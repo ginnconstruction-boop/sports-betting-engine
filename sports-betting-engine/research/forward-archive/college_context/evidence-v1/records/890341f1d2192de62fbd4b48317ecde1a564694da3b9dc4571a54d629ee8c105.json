@@ -1,0 +1,24 @@
+{
+  "id": "890341f1d2192de62fbd4b48317ecde1a564694da3b9dc4571a54d629ee8c105",
+  "schema": 1,
+  "teamId": "2226",
+  "teamName": "Florida Atlantic Owls",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:43.369Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2226/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.369Z",
+    "retrievedAt": "2026-09-11T16:00:43.369Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "795ff807da010909cfe4d9cc4be0f602d9965d3cc7880e2afea1334491f62bff"
+}

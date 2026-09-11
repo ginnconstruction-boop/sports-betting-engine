@@ -1,0 +1,24 @@
+{
+  "id": "9fc4d6b6e16f871a8d745bb41ef0a7d93031c94ad3304eb97522a25a4873c447",
+  "schema": 1,
+  "teamId": "2815",
+  "teamName": "Lindenwood Lions",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Jed Stugart",
+  "effectiveFrom": "2026-09-11T16:00:43.036Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2815/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.036Z",
+    "retrievedAt": "2026-09-11T16:00:43.036Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "03581f9aec359c6eba423c959818f87af47427a2852c314440b508d54966a7bc"
+}

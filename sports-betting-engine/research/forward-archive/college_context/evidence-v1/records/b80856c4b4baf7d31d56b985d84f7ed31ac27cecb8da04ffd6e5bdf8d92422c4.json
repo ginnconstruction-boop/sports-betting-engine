@@ -1,0 +1,50 @@
+{
+  "id": "b80856c4b4baf7d31d56b985d84f7ed31ac27cecb8da04ffd6e5bdf8d92422c4",
+  "schema": 1,
+  "teamId": "2309",
+  "teamName": "Kent State Golden Flashes",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5119841",
+      "name": "Dru DeShields",
+      "status": "Active"
+    },
+    {
+      "id": "5222633",
+      "name": "Nolan Good",
+      "status": "Active"
+    },
+    {
+      "id": "5388311",
+      "name": "Cole Miller",
+      "status": "Active"
+    },
+    {
+      "id": "5327609",
+      "name": "Gavin Peeps",
+      "status": "Active"
+    },
+    {
+      "id": "5141625",
+      "name": "Deante Ruffin",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:40.832Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2309/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.832Z",
+    "retrievedAt": "2026-09-11T16:00:40.832Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "1b40edfaf9a909f1e0ae75fce6ac04285684411747a11bc376ac4d14ba6b5f83"
+}

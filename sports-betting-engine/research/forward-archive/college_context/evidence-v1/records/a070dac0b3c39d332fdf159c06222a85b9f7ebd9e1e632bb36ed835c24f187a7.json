@@ -1,0 +1,40 @@
+{
+  "id": "a070dac0b3c39d332fdf159c06222a85b9f7ebd9e1e632bb36ed835c24f187a7",
+  "schema": 1,
+  "teamId": "38",
+  "teamName": "Colorado Buffaloes",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5159016",
+      "name": "Julian Lewis",
+      "status": "Active"
+    },
+    {
+      "id": "5163532",
+      "name": "Dominiq Ponder",
+      "status": "Active"
+    },
+    {
+      "id": "5214655",
+      "name": "Kaneal Sweetwyne",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:41.203Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/38/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.203Z",
+    "retrievedAt": "2026-09-11T16:00:41.203Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "52ea2c5ff3c152b1ad80c3f0f13914a05311afc1408ee632deb1150c721e5345"
+}

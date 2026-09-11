@@ -1,0 +1,24 @@
+{
+  "id": "a9814d099a33f597417554392c6e80fece9219e88d8e212965807273334d0ffc",
+  "schema": 1,
+  "teamId": "96",
+  "teamName": "Kentucky Wildcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Will Stein",
+  "effectiveFrom": "2026-09-11T16:00:41.109Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/96/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.109Z",
+    "retrievedAt": "2026-09-11T16:00:41.109Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "188843b93ce613d4fd0dc7c46569873eb2f4cbe6a31f854f0e70145f5d5f9f51"
+}

@@ -1,0 +1,50 @@
+{
+  "id": "509c3c388f8f48e654b5f3897ca7ffe97e68e43a77a9d2e6c44b575e42d5c5f8",
+  "schema": 1,
+  "teamId": "2287",
+  "teamName": "Illinois State Redbirds",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5298096",
+      "name": "Cooper Kmet",
+      "status": "Active"
+    },
+    {
+      "id": "5405728",
+      "name": "Andrew Knight II",
+      "status": "Active"
+    },
+    {
+      "id": "5298094",
+      "name": "Chase Kwiatkowski",
+      "status": "Active"
+    },
+    {
+      "id": "5227699",
+      "name": "Beckham Pellant",
+      "status": "Active"
+    },
+    {
+      "id": "4833241",
+      "name": "Gage Roy",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.854Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2287/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.854Z",
+    "retrievedAt": "2026-09-11T16:00:42.854Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d51c7b2772937fde040a61c6100de1e33bb2c18cc1f1395917cbdc52c1102857"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "1ac837fbeabc56a6abf0d95f44d3be2b54bc70f6e2022fa9cb2dafd5d43a20ad",
+  "schema": 1,
+  "teamId": "167",
+  "teamName": "New Mexico Lobos",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Jason Eck",
+  "effectiveFrom": "2026-09-11T16:00:42.076Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/167/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.076Z",
+    "retrievedAt": "2026-09-11T16:00:42.076Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "0c017216249c30391fd0892b9657242f2c7b84dc1740e59638efd012a24f2c46"
+}

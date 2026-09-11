@@ -1,0 +1,24 @@
+{
+  "id": "fada5916ba101e8df98a36f8ed10695da97d0ab49196abf3618b6e4de9bbe1a1",
+  "schema": 1,
+  "teamId": "2011",
+  "teamName": "Alabama State Hornets",
+  "season": 2026,
+  "eventId": "401868326",
+  "playerId": null,
+  "domain": "qb",
+  "field": "qb.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:39.910Z",
+  "effectiveTo": "2026-09-13T02:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401868326",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.910Z",
+    "retrievedAt": "2026-09-11T16:00:39.910Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "66d9952465ce66056212ad4a5bed5263a42bb6f0a802da119d3da22047d401f4"
+}

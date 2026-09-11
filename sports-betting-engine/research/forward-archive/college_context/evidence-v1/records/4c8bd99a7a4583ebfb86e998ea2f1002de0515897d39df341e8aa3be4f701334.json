@@ -1,0 +1,45 @@
+{
+  "id": "4c8bd99a7a4583ebfb86e998ea2f1002de0515897d39df341e8aa3be4f701334",
+  "schema": 1,
+  "teamId": "107",
+  "teamName": "Holy Cross Crusaders",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5299278",
+      "name": "Dominic Campanile",
+      "status": "Active"
+    },
+    {
+      "id": "5154302",
+      "name": "David Lynch",
+      "status": "Active"
+    },
+    {
+      "id": "5075592",
+      "name": "Cal Swanson",
+      "status": "Active"
+    },
+    {
+      "id": "5402188",
+      "name": "Liam Zelman",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:41.036Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/107/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.036Z",
+    "retrievedAt": "2026-09-11T16:00:41.036Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "fed2e6e4860ad5deac5599133048e713a1d498ec7becb7718386f611142585c3"
+}

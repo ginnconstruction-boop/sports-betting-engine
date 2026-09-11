@@ -1,0 +1,24 @@
+{
+  "id": "4b88bd8970d816f346a23b3be39bb667e262e5bdad5be82541f1212588fc714d",
+  "schema": 1,
+  "teamId": "2633",
+  "teamName": "Tennessee Volunteers",
+  "season": 2026,
+  "eventId": "401856681",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.pointsAllowedPerGame.diagnostic",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T16:00:40.013Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856681",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.013Z",
+    "retrievedAt": "2026-09-11T16:00:40.013Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "6065917f3b2ec208cd2650d7d551e546d2164c20c73c6d6fc03e00965dc0e925"
+}

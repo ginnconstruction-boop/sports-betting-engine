@@ -1,0 +1,24 @@
+{
+  "id": "5e171bd2c1f9bc95c1a1585d1c137173e89105599ac1f688a32a3170b63e2104",
+  "schema": 1,
+  "teamId": "2653",
+  "teamName": "Troy Trojans",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Gerad Parker",
+  "effectiveFrom": "2026-09-11T16:00:42.103Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2653/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.103Z",
+    "retrievedAt": "2026-09-11T16:00:42.103Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "1dfa2ffea52573b19a2b8fcb5ec08800640b740f2415abe3dc3c9823b0442789"
+}

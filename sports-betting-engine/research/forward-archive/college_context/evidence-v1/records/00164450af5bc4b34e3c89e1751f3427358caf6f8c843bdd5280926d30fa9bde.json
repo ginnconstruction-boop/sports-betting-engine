@@ -1,0 +1,50 @@
+{
+  "id": "00164450af5bc4b34e3c89e1751f3427358caf6f8c843bdd5280926d30fa9bde",
+  "schema": 1,
+  "teamId": "2433",
+  "teamName": "UL Monroe Warhawks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5122054",
+      "name": "Aidan Armenta",
+      "status": "Active"
+    },
+    {
+      "id": "5207934",
+      "name": "Austin Carlisle",
+      "status": "Active"
+    },
+    {
+      "id": "5158127",
+      "name": "Landon Graves",
+      "status": "Active"
+    },
+    {
+      "id": "5215545",
+      "name": "Bryson Kimbrough",
+      "status": "Active"
+    },
+    {
+      "id": "5382847",
+      "name": "Ty Purdy",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:41.715Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2433/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.715Z",
+    "retrievedAt": "2026-09-11T16:00:41.715Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "962bca340dec16ea3dd1e27f0723d9db09d5f5f7589ddccd5b5adc444958f840"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "d9d810fe7e997ca2e525367814e4014f5274b9767a3bcc514bb3e9c976e08c52",
+  "schema": 1,
+  "teamId": "2747",
+  "teamName": "Wofford Terriers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FCS",
+  "effectiveFrom": "2026-09-11T16:00:44.097Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.097Z",
+    "retrievedAt": "2026-09-11T16:00:44.097Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "184458a4d0a7eea690d5d37ec99f55be43af14a0328aa383d7f4f2bf343c082a"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "df4bb9cb9507cd2161c82f168b532915fbf6dadc057031e28f51ef029abba3f0",
+  "schema": 1,
+  "teamId": "9",
+  "teamName": "Arizona State Sun Devils",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5141378",
+      "name": "Cutter Boley",
+      "status": "Active"
+    },
+    {
+      "id": "5215045",
+      "name": "Cameron Dyer",
+      "status": "Active"
+    },
+    {
+      "id": "5209295",
+      "name": "Jake Fette",
+      "status": "Active"
+    },
+    {
+      "id": "4597499",
+      "name": "Mikey Keene",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:40.412Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/9/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.412Z",
+    "retrievedAt": "2026-09-11T16:00:40.412Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "1a19841e55ae196d7b74c91ac261423193f74d98c14ee4ef841850668549e377"
+}

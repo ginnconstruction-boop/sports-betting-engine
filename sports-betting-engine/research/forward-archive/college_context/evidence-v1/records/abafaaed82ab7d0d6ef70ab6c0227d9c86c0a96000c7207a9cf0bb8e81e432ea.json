@@ -1,0 +1,24 @@
+{
+  "id": "abafaaed82ab7d0d6ef70ab6c0227d9c86c0a96000c7207a9cf0bb8e81e432ea",
+  "schema": 1,
+  "teamId": "130",
+  "teamName": "Michigan Wolverines",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-11T16:00:44.097Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.097Z",
+    "retrievedAt": "2026-09-11T16:00:44.097Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "26691e719db0ed10ddd0acba3626efcfa643a183731e8d017c7d069eab69311e"
+}

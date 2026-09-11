@@ -1,0 +1,55 @@
+{
+  "id": "c0ef39c065c4f796105d3aa6d95cd9ec6bdc47e2b29b6a470dabf0a0e43b440f",
+  "schema": 1,
+  "teamId": "2426",
+  "teamName": "Navy Midshipmen",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5391331",
+      "name": "Evan Blouir",
+      "status": "Active"
+    },
+    {
+      "id": "5295377",
+      "name": "Ryan Brass",
+      "status": "Active"
+    },
+    {
+      "id": "5391319",
+      "name": "Brady Carmical",
+      "status": "Active"
+    },
+    {
+      "id": "5391322",
+      "name": "Maverick Chance",
+      "status": "Active"
+    },
+    {
+      "id": "5295382",
+      "name": "Michael Dove",
+      "status": "Active"
+    },
+    {
+      "id": "5220473",
+      "name": "Jackson Gutierrez",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:43.395Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2426/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.395Z",
+    "retrievedAt": "2026-09-11T16:00:43.395Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "44bd39a31cfd3fc8697083fa82c75b93c8f37f591aeddd81504b400f7e33ad24"
+}

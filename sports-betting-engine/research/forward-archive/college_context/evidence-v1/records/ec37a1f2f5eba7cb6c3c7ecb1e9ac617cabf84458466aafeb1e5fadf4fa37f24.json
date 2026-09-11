@@ -1,0 +1,24 @@
+{
+  "id": "ec37a1f2f5eba7cb6c3c7ecb1e9ac617cabf84458466aafeb1e5fadf4fa37f24",
+  "schema": 1,
+  "teamId": "154",
+  "teamName": "Wake Forest Demon Deacons",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:40.412Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/154/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.412Z",
+    "retrievedAt": "2026-09-11T16:00:40.412Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d349d74c6f7b75e8d32676c6e6af165003afa506508d4411deaea77c2373c975"
+}

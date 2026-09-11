@@ -1,0 +1,50 @@
+{
+  "id": "7ff6916b02ba7682011b561bccc9c2be49ce492ee64c83ef29710219f9081e49",
+  "schema": 1,
+  "teamId": "333",
+  "teamName": "Alabama Crimson Tide",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5225235",
+      "name": "John Cooper",
+      "status": "Active"
+    },
+    {
+      "id": "5293574",
+      "name": "John Gazzaniga",
+      "status": "Active"
+    },
+    {
+      "id": "5160495",
+      "name": "Tayden-Evan Kaawa",
+      "status": "Active"
+    },
+    {
+      "id": "5079508",
+      "name": "Austin Mack",
+      "status": "Active"
+    },
+    {
+      "id": "5141629",
+      "name": "Keelon Russell",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:41.134Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/333/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.134Z",
+    "retrievedAt": "2026-09-11T16:00:41.134Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "bc6a49b8859d6bc183b18109e9368c142e6c25a4c30ad31922799f8fbbeb1f14"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "f63b6542c6dcb13b05c1710b62d0f019c0ff3a5a1f833aea45d6ca836b5235d7",
+  "schema": 1,
+  "teamId": "13",
+  "teamName": "Cal Poly Mustangs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FCS",
+  "effectiveFrom": "2026-09-11T16:00:44.100Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.100Z",
+    "retrievedAt": "2026-09-11T16:00:44.100Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "cb404fe123653ec98c835c81b718ab3d7f2c0d880c1d98e3ff0c9a7ab7253e22"
+}

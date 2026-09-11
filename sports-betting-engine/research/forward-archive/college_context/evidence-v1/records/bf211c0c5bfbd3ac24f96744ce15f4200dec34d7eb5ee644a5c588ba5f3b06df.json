@@ -1,0 +1,24 @@
+{
+  "id": "bf211c0c5bfbd3ac24f96744ce15f4200dec34d7eb5ee644a5c588ba5f3b06df",
+  "schema": 1,
+  "teamId": "96",
+  "teamName": "Kentucky Wildcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.currentSeasonAvailable",
+  "value": true,
+  "effectiveFrom": "2026-09-11T16:00:41.109Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/96/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.109Z",
+    "retrievedAt": "2026-09-11T16:00:41.109Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "188843b93ce613d4fd0dc7c46569873eb2f4cbe6a31f854f0e70145f5d5f9f51"
+}

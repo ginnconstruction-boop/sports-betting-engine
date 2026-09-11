@@ -1,0 +1,24 @@
+{
+  "id": "9f65a426bc82147c781e32057cc922c135e2b8633bc93e5b2cfeab3d6e510d07",
+  "schema": 1,
+  "teamId": "2619",
+  "teamName": "Stony Brook Seawolves",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:44.098Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.098Z",
+    "retrievedAt": "2026-09-11T16:00:44.098Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "a03cc3552979818b9fd0e63f3db498115d33ec4ab99acbc05d851642c0c4a673"
+}

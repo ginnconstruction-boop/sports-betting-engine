@@ -1,0 +1,45 @@
+{
+  "id": "fa428fb3e2af4a3c17d7d2b98e1cddfde400cc4a20b1ba1088e5aa62fa7869ef",
+  "schema": 1,
+  "teamId": "2711",
+  "teamName": "Western Michigan Broncos",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5257811",
+      "name": "Jaxson Dosh",
+      "status": "Active"
+    },
+    {
+      "id": "5074245",
+      "name": "Broc Lowry",
+      "status": "Active"
+    },
+    {
+      "id": "5126475",
+      "name": "Trey Petty",
+      "status": "Active"
+    },
+    {
+      "id": "5145473",
+      "name": "Mason Reynolds",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.406Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2711/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.406Z",
+    "retrievedAt": "2026-09-11T16:00:42.406Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f46bd8776d08efd3063f234c79306aa877b518bf72b48a8c51e8cc272554a681"
+}

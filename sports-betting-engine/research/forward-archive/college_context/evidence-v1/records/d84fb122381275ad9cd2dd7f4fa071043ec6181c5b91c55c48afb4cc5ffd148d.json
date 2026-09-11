@@ -1,0 +1,24 @@
+{
+  "id": "d84fb122381275ad9cd2dd7f4fa071043ec6181c5b91c55c48afb4cc5ffd148d",
+  "schema": 1,
+  "teamId": "2142",
+  "teamName": "Colgate Raiders",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:44.098Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.098Z",
+    "retrievedAt": "2026-09-11T16:00:44.098Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "2ad6fda62f20608939d6563cbe22d0ee41b98fcb7d4f87d366e7c61fd0d5ac24"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "7e4b60dce03767a4d1c7024b380d0d3b603ee0cdb6f3f209fe718ffe1b40c746",
+  "schema": 1,
+  "teamId": "252",
+  "teamName": "BYU Cougars",
+  "season": 2026,
+  "eventId": "401856810",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.movementPoints",
+  "value": -1,
+  "effectiveFrom": "2026-09-11T16:00:39.847Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856810",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.847Z",
+    "retrievedAt": "2026-09-11T16:00:39.847Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "328c1e66e4b1843936c61795d3b35b63b030f840523f214baf5b04dec4f75512"
+}

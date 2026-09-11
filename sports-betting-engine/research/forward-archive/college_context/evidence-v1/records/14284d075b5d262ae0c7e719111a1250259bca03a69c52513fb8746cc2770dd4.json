@@ -1,0 +1,24 @@
+{
+  "id": "14284d075b5d262ae0c7e719111a1250259bca03a69c52513fb8746cc2770dd4",
+  "schema": 1,
+  "teamId": "2433",
+  "teamName": "UL Monroe Warhawks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.currentSeasonAvailable",
+  "value": true,
+  "effectiveFrom": "2026-09-11T16:00:41.715Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2433/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.715Z",
+    "retrievedAt": "2026-09-11T16:00:41.715Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "962bca340dec16ea3dd1e27f0723d9db09d5f5f7589ddccd5b5adc444958f840"
+}

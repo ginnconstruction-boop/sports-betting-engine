@@ -1,0 +1,24 @@
+{
+  "id": "a8f208831fd234c078baa1d90fb4b5b1071068b7ad4f5f1516108e29410b1438",
+  "schema": 1,
+  "teamId": "5",
+  "teamName": "UAB Blazers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:41.514Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/5/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.514Z",
+    "retrievedAt": "2026-09-11T16:00:41.514Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ac71b84a90f7eb804d993187c93983e2ce83fa9583a225fc8c2dd6ba9c1aa6ce"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "b945d74bab65f05480bebd66f1caaa6558ddb91058a8ea56762e926da820b616",
+  "schema": 1,
+  "teamId": "2458",
+  "teamName": "Northern Colorado Bears",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:41.856Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2458/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.856Z",
+    "retrievedAt": "2026-09-11T16:00:41.856Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "6ac63b92403050657df97b00badb69e714f1f160e91f881f2c6d74fc2d0c4f2e"
+}

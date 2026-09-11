@@ -1,0 +1,24 @@
+{
+  "id": "ff38ecbb2f546c38206030de7d1439e12fc9e22518397f0ac8c2c7c133f7f74d",
+  "schema": 1,
+  "teamId": "338",
+  "teamName": "Kennesaw State Owls",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.newHeadCoach.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:42.969Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/338/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.969Z",
+    "retrievedAt": "2026-09-11T16:00:42.969Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c5ace8ab74a4ccdb98e9b0d8974914b89f76cd7ac0e6b91846cacffb8daea789"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "b893715c9b47eb1ce9e8e7015bc8225d547773dec7afd879ccb8e2144053b726",
+  "schema": 1,
+  "teamId": "2309",
+  "teamName": "Kent State Golden Flashes",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.playerCount",
+  "value": 100,
+  "effectiveFrom": "2026-09-11T16:00:40.832Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2309/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.832Z",
+    "retrievedAt": "2026-09-11T16:00:40.832Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "1b40edfaf9a909f1e0ae75fce6ac04285684411747a11bc376ac4d14ba6b5f83"
+}

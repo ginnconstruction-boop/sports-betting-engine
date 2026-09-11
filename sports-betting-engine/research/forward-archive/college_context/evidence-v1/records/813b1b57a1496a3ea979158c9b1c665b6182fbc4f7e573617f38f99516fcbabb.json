@@ -1,0 +1,24 @@
+{
+  "id": "813b1b57a1496a3ea979158c9b1c665b6182fbc4f7e573617f38f99516fcbabb",
+  "schema": 1,
+  "teamId": "356",
+  "teamName": "Illinois Fighting Illini",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.defensiveCoordinator.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:41.421Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/356/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.421Z",
+    "retrievedAt": "2026-09-11T16:00:41.421Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9fef03fcd887bdd4a4c5e77e7c7807c62d53dbfe5eb3982281b217095aec3099"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "e14ae0fcef01db772f18dc47ea78f90e2d7242c406bfbad2ed8d68982bac26e6",
+  "schema": 1,
+  "teamId": "103",
+  "teamName": "Boston College Eagles",
+  "season": 2026,
+  "eventId": "401858214",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.temperatureF",
+  "value": 71,
+  "effectiveFrom": "2026-09-11T16:00:39.682Z",
+  "effectiveTo": "2026-09-12T05:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858214",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.682Z",
+    "retrievedAt": "2026-09-11T16:00:39.682Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "452a2e278cffaa88e709f4f683160f80cda77a9d9d832970b1044b7e7b3e2ffe"
+}

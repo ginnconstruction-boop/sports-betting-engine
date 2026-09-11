@@ -1,0 +1,24 @@
+{
+  "id": "4b2fb5f015fda508a9a43d379fddc9796bbdee84ef9e0ee69250753c1f9e4d67",
+  "schema": 1,
+  "teamId": "221",
+  "teamName": "Pittsburgh Panthers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Pat Narduzzi",
+  "effectiveFrom": "2026-09-11T16:00:41.253Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/221/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.253Z",
+    "retrievedAt": "2026-09-11T16:00:41.253Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "80ba138c21bf39faf0df73c17d543ba09fa16ab7c6b126b9acc163bc1673efb3"
+}

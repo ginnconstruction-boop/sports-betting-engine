@@ -1,0 +1,45 @@
+{
+  "id": "07beaaec4cbcffd13ef81ca9d97a89ea70404892c77bece0b4f9356a937d6344",
+  "schema": 1,
+  "teamId": "2439",
+  "teamName": "UNLV Rebels",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "4870607",
+      "name": "Jackson Arnold",
+      "status": "Active"
+    },
+    {
+      "id": "5164307",
+      "name": "Sebastian Circo",
+      "status": "Active"
+    },
+    {
+      "id": "5209180",
+      "name": "Derek Garcia",
+      "status": "Active"
+    },
+    {
+      "id": "4685495",
+      "name": "Alex Orji",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.027Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2439/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.027Z",
+    "retrievedAt": "2026-09-11T16:00:42.027Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ff387e8970023c4f1843cbba926c90a12d85ea58cbf98bfeaecd4c560084eac6"
+}

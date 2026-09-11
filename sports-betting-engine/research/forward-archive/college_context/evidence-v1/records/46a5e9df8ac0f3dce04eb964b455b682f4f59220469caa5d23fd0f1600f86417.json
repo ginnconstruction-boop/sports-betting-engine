@@ -1,0 +1,50 @@
+{
+  "id": "46a5e9df8ac0f3dce04eb964b455b682f4f59220469caa5d23fd0f1600f86417",
+  "schema": 1,
+  "teamId": "2006",
+  "teamName": "Akron Zips",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5209397",
+      "name": "Semaj Beals",
+      "status": "Active"
+    },
+    {
+      "id": "5157312",
+      "name": "Johnny Brookhart",
+      "status": "Active"
+    },
+    {
+      "id": "5198324",
+      "name": "Cibastian Broughton",
+      "status": "Active"
+    },
+    {
+      "id": "4875866",
+      "name": "Reese Poffenbarger",
+      "status": "Active"
+    },
+    {
+      "id": "5146903",
+      "name": "Brayden Roggow",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:41.737Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2006/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.737Z",
+    "retrievedAt": "2026-09-11T16:00:41.737Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "278c18b2b3fdcc5e6e6f2673ed6d0ed804030f338d62a366894bbe710f181913"
+}

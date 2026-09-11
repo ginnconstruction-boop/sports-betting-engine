@@ -1,0 +1,24 @@
+{
+  "id": "d6756b036a9df9cdec591cacb5b4cd544c6f361d48a60a545014014f7d6df2ae",
+  "schema": 1,
+  "teamId": "99",
+  "teamName": "LSU Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:43.416Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/99/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.416Z",
+    "retrievedAt": "2026-09-11T16:00:43.416Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "0fe2b8fc31f36d3d0e9174dbbbeee3c58171237b45f91cd9f89012df13d4533d"
+}

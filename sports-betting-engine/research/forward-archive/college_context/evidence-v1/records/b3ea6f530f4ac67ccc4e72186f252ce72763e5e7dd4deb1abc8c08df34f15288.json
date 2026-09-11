@@ -1,0 +1,24 @@
+{
+  "id": "b3ea6f530f4ac67ccc4e72186f252ce72763e5e7dd4deb1abc8c08df34f15288",
+  "schema": 1,
+  "teamId": "167",
+  "teamName": "New Mexico Lobos",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.depthTier.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.099Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.099Z",
+    "retrievedAt": "2026-09-11T16:00:44.099Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "6ebfd4fe6c43195373098077151faf6d0a42e0ffb8630d225fc313af6e53d167"
+}

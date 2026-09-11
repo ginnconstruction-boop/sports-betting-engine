@@ -1,0 +1,24 @@
+{
+  "id": "60717d67663d31ca9aae4171fc99361d1c43a57072167853e1a09e24be828110",
+  "schema": 1,
+  "teamId": "2579",
+  "teamName": "South Carolina Gamecocks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Shane Beamer",
+  "effectiveFrom": "2026-09-11T16:00:42.497Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2579/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.497Z",
+    "retrievedAt": "2026-09-11T16:00:42.497Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "3f0ac515a5f193fab6186e1b12e9361d04c94cd2bb1c35b25eba1ca9956e56cd"
+}

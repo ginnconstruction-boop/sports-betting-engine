@@ -1,0 +1,24 @@
+{
+  "id": "d24e48eb193597b7b98f6298f0d44ad719f49771e1f99f98db4741ff9ca56355",
+  "schema": 1,
+  "teamId": "135",
+  "teamName": "Minnesota Golden Gophers",
+  "season": 2026,
+  "eventId": "401856677",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.temperatureF",
+  "value": 73,
+  "effectiveFrom": "2026-09-11T16:00:39.832Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856677",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.832Z",
+    "retrievedAt": "2026-09-11T16:00:39.832Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "85955075f9d65ae0080fe183805170902a40b9aa18889f60fbd23f7fc290e918"
+}

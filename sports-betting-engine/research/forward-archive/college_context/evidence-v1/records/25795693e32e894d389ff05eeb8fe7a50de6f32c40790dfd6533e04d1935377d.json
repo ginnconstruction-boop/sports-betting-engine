@@ -1,0 +1,24 @@
+{
+  "id": "25795693e32e894d389ff05eeb8fe7a50de6f32c40790dfd6533e04d1935377d",
+  "schema": 1,
+  "teamId": "326",
+  "teamName": "Texas State Bobcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-11T16:00:44.098Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.098Z",
+    "retrievedAt": "2026-09-11T16:00:44.098Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "3b7efad3195d1fde225c8373aedb3e24ccc88e9ead7a81ba74f1bbc0cd693ccb"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "da098aaa8b10a30c5481d518bea93111e8f38026cf8b5962eee4c81539c919e3",
+  "schema": 1,
+  "teamId": "251",
+  "teamName": "Texas Longhorns",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.currentSeasonAvailable",
+  "value": true,
+  "effectiveFrom": "2026-09-11T16:00:43.151Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/251/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.151Z",
+    "retrievedAt": "2026-09-11T16:00:43.151Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "450339280c5c3adb73b73fcb7cff1dbb5d05a4aa5be25c26c2149024a5bc19df"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "c0ed8b59d283c0b45e81dcb8700645c7d850dcc74802fe30c9c1c021e3924194",
+  "schema": 1,
+  "teamId": "2633",
+  "teamName": "Tennessee Volunteers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5158973",
+      "name": "Faizon Brandon",
+      "status": "Active"
+    },
+    {
+      "id": "5141571",
+      "name": "George MacIntyre",
+      "status": "Active"
+    },
+    {
+      "id": "5293958",
+      "name": "Mason Phillips",
+      "status": "Active"
+    },
+    {
+      "id": "4917093",
+      "name": "Ryan Staub",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.550Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2633/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.550Z",
+    "retrievedAt": "2026-09-11T16:00:42.550Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "bad580cf31da9e4e16366e8a2341f6a29f8ca64cda4b98b06dc664db649b5266"
+}

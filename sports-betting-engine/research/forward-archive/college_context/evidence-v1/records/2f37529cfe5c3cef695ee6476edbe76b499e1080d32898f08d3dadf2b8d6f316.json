@@ -1,0 +1,45 @@
+{
+  "id": "2f37529cfe5c3cef695ee6476edbe76b499e1080d32898f08d3dadf2b8d6f316",
+  "schema": 1,
+  "teamId": "2636",
+  "teamName": "UTSA Roadrunners",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5290975",
+      "name": "Maguire Gasperson",
+      "status": "Active"
+    },
+    {
+      "id": "5207798",
+      "name": "Max Gerlich",
+      "status": "Active"
+    },
+    {
+      "id": "4775136",
+      "name": "Owen McCown",
+      "status": "Active"
+    },
+    {
+      "id": "5151316",
+      "name": "Brandon Tennison",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:41.691Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2636/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.691Z",
+    "retrievedAt": "2026-09-11T16:00:41.691Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8e328e9a842e15b3c443ab874ae1fcb7a23d23ed08a4457dbd6ce182f61e1d3e"
+}

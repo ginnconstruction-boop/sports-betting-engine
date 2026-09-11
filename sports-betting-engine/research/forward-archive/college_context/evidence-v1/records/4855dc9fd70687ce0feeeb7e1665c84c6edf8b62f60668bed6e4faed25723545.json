@@ -1,0 +1,24 @@
+{
+  "id": "4855dc9fd70687ce0feeeb7e1665c84c6edf8b62f60668bed6e4faed25723545",
+  "schema": 1,
+  "teamId": "2582",
+  "teamName": "Southern Jaguars",
+  "season": 2026,
+  "eventId": "401856787",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:39.972Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856787",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.972Z",
+    "retrievedAt": "2026-09-11T16:00:39.972Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ca051d0b174c5028e33e853d076bbd611ccb97b436da0de5acba588a29dca72b"
+}

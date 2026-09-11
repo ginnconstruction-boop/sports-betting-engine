@@ -1,0 +1,24 @@
+{
+  "id": "4d6709fcba0abaa192e281ed36c7b8330eccb266223f740b0fa0fadfeab8cb0a",
+  "schema": 1,
+  "teamId": "2005",
+  "teamName": "Air Force Falcons",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.defensiveCoordinator.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:43.820Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2005/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.820Z",
+    "retrievedAt": "2026-09-11T16:00:43.820Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "1fcbe4c7b1898d9574561487daca1af529b7989ed6df75d3e5aae15616d32810"
+}

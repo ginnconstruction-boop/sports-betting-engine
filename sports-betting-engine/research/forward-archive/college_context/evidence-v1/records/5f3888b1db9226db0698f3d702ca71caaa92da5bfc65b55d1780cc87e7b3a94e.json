@@ -1,0 +1,24 @@
+{
+  "id": "5f3888b1db9226db0698f3d702ca71caaa92da5bfc65b55d1780cc87e7b3a94e",
+  "schema": 1,
+  "teamId": "58",
+  "teamName": "South Florida Bulls",
+  "season": 2026,
+  "eventId": "401862702",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.precipitationProbability",
+  "value": 0,
+  "effectiveFrom": "2026-09-11T16:00:39.758Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401862702",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.758Z",
+    "retrievedAt": "2026-09-11T16:00:39.758Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c937151a3afb43a8d40531faa58218c241df36cf08c5007e6e6da76172871e0b"
+}

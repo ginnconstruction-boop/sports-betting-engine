@@ -1,0 +1,24 @@
+{
+  "id": "367bb0527f76c7f300c727e1ee13c0ee97986e55a17b662a428563f13612c8ff",
+  "schema": 1,
+  "teamId": "2523",
+  "teamName": "Robert Morris Colonials",
+  "season": 2026,
+  "eventId": "401866412",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.providerChecked",
+  "value": true,
+  "effectiveFrom": "2026-09-11T16:00:39.905Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401866412",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.905Z",
+    "retrievedAt": "2026-09-11T16:00:39.905Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d2c7974c5b347d1a6e353e022004350d9331844ab215fb44c66ab49699e72b8b"
+}

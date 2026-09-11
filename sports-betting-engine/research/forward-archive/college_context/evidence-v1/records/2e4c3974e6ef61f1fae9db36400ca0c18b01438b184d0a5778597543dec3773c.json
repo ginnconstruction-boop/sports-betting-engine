@@ -1,0 +1,50 @@
+{
+  "id": "2e4c3974e6ef61f1fae9db36400ca0c18b01438b184d0a5778597543dec3773c",
+  "schema": 1,
+  "teamId": "324",
+  "teamName": "Coastal Carolina Chanticleers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5296439",
+      "name": "Deuce Bailey",
+      "status": "Active"
+    },
+    {
+      "id": "5152029",
+      "name": "Tre Guerra",
+      "status": "Active"
+    },
+    {
+      "id": "5126470",
+      "name": "Trever Jackson",
+      "status": "Active"
+    },
+    {
+      "id": "5211952",
+      "name": "Osiris Lopez",
+      "status": "Active"
+    },
+    {
+      "id": "5379836",
+      "name": "Luke McBride",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:43.439Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/324/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.439Z",
+    "retrievedAt": "2026-09-11T16:00:43.439Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "68c8553dd13d7fd793958b2f45ba7844e2a3bf0dc463885d9ff2bb8b7103de2c"
+}

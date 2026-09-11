@@ -1,0 +1,24 @@
+{
+  "id": "dea241e26cb223ef3eb0b6d154f0a30b131054c0f79d20b98803cd973ebcb525",
+  "schema": 1,
+  "teamId": "265",
+  "teamName": "Washington State Cougars",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.ingestionStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:40.436Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/265/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.436Z",
+    "retrievedAt": "2026-09-11T16:00:40.436Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "b9d891c969e6d5ae900361e57cebec766999800b7c28f8468336b91d4bb3ea9b"
+}

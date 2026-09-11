@@ -1,0 +1,24 @@
+{
+  "id": "141df99f51ea084ad0d4588b92c459d715e4b8df9834f00d6a5629f8870df892",
+  "schema": 1,
+  "teamId": "120",
+  "teamName": "Maryland Terrapins",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.providerChecked",
+  "value": "MATCHED",
+  "effectiveFrom": "2026-09-11T16:00:41.562Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/120/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.562Z",
+    "retrievedAt": "2026-09-11T16:00:41.562Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "2b44d0bd39a928395a0d8db2fde3afaea77d0d260e863542edf58b6dc7dcc9a3"
+}

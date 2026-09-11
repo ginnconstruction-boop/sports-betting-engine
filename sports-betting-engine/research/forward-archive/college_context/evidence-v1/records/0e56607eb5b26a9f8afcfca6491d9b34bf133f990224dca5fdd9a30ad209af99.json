@@ -1,0 +1,24 @@
+{
+  "id": "0e56607eb5b26a9f8afcfca6491d9b34bf133f990224dca5fdd9a30ad209af99",
+  "schema": 1,
+  "teamId": "2306",
+  "teamName": "Kansas State Wildcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Collin Klein",
+  "effectiveFrom": "2026-09-11T16:00:40.487Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2306/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.487Z",
+    "retrievedAt": "2026-09-11T16:00:40.487Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e5ade5b82450c31ff06d4e9cca4ee58e955c8a884a621ac58da354ab486e56f4"
+}

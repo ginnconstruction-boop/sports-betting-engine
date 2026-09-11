@@ -1,0 +1,24 @@
+{
+  "id": "d7784e7097ca956b82e4c3cc3eb8b88570aa3acfb46effa028eb03494bd2c7a2",
+  "schema": 1,
+  "teamId": "98",
+  "teamName": "Western Kentucky Hilltoppers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.playCallerContinuity.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:40.921Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/98/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.921Z",
+    "retrievedAt": "2026-09-11T16:00:40.921Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c57c1d5aba56282f598381ab70ae7197983910c3d7cef6710bca70e1921ee747"
+}

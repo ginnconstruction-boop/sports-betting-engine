@@ -1,0 +1,24 @@
+{
+  "id": "e803688e7228040e4863635835480dbb618e69470ff368d3d2d3ab8f4a1bbad6",
+  "schema": 1,
+  "teamId": "201",
+  "teamName": "Oklahoma Sooners",
+  "season": 2026,
+  "eventId": "401856679",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.feelsLikeF.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:39.732Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856679",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.732Z",
+    "retrievedAt": "2026-09-11T16:00:39.732Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "352f0e122939b4f3d250adcb9256e04d2637f5ae0492dc804d9ffa487d029771"
+}

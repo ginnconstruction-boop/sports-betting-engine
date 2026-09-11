@@ -1,0 +1,24 @@
+{
+  "id": "9290879fd894c41fc4fd1dc6c8e425eacc8f8a82e23c6eaa89cf617926383e55",
+  "schema": 1,
+  "teamId": "245",
+  "teamName": "Texas A&M Aggies",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.newHeadCoach.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:40.326Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/245/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.326Z",
+    "retrievedAt": "2026-09-11T16:00:40.326Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "7b6eef86f94cd11494e6879fb9c03460fb4a2c7008c39414ec1d638cc399d383"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "1696339fe289eb6a7e6432da102affd70ffc5a6d4873401f1443c4e3970e41bd",
+  "schema": 1,
+  "teamId": "2815",
+  "teamName": "Lindenwood Lions",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:42.878Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2815/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.878Z",
+    "retrievedAt": "2026-09-11T16:00:42.878Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "03581f9aec359c6eba423c959818f87af47427a2852c314440b508d54966a7bc"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "35cb0704a99dac1a9d4dba2a71a462fc2371f68e1cfe59d1eae8d2b3a738bf57",
+  "schema": 1,
+  "teamId": "2426",
+  "teamName": "Navy Midshipmen",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.ingestionStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:43.395Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2426/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.395Z",
+    "retrievedAt": "2026-09-11T16:00:43.395Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "44bd39a31cfd3fc8697083fa82c75b93c8f37f591aeddd81504b400f7e33ad24"
+}

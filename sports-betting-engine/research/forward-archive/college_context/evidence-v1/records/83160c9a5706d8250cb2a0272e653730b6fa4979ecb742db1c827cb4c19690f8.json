@@ -1,0 +1,55 @@
+{
+  "id": "83160c9a5706d8250cb2a0272e653730b6fa4979ecb742db1c827cb4c19690f8",
+  "schema": 1,
+  "teamId": "36",
+  "teamName": "Colorado State Rams",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5122401",
+      "name": "Darius Curry",
+      "status": "Active"
+    },
+    {
+      "id": "5198306",
+      "name": "Carter Emanuel",
+      "status": "Active"
+    },
+    {
+      "id": "5212610",
+      "name": "K'saan Farrar",
+      "status": "Active"
+    },
+    {
+      "id": "5079443",
+      "name": "Hauss Hejny",
+      "status": "Active"
+    },
+    {
+      "id": "5158986",
+      "name": "Darnell Kelly",
+      "status": "Active"
+    },
+    {
+      "id": "5150651",
+      "name": "Tommy Poholsky",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.715Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/36/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.715Z",
+    "retrievedAt": "2026-09-11T16:00:42.715Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "61a8fc093b0553ab036e5cd63af7026142849eda195f8cb7db2dc9a3467cee7f"
+}

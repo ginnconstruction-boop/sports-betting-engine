@@ -1,0 +1,45 @@
+{
+  "id": "a2b80e0f676714909845463128f67ed364dd30af9d81a7e43db65e979ccbf837",
+  "schema": 1,
+  "teamId": "2230",
+  "teamName": "Fordham Rams",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5402131",
+      "name": "Crew Colon",
+      "status": "Active"
+    },
+    {
+      "id": "5225538",
+      "name": "Tripp Holley",
+      "status": "Active"
+    },
+    {
+      "id": "5225541",
+      "name": "Thomas Rosso",
+      "status": "Active"
+    },
+    {
+      "id": "4812381",
+      "name": "Gunnar Smith",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:43.510Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2230/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.510Z",
+    "retrievedAt": "2026-09-11T16:00:43.510Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "02855c91d8fb6a4481fdd555115a5ca19ef857fee2d22d42b8b479720ac00a31"
+}

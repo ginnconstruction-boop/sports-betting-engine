@@ -1,0 +1,24 @@
+{
+  "id": "e5e147e54ea63af52c75ee77b28c95748744e20c7b489f963cfec6b8c6633fef",
+  "schema": 1,
+  "teamId": "30",
+  "teamName": "USC Trojans",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.newHeadCoach.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:43.992Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/30/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.992Z",
+    "retrievedAt": "2026-09-11T16:00:43.992Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "3e9b52bfc72ad97e68117e11a5fd14f9ff3499409a99feb570178a54b13fbab5"
+}

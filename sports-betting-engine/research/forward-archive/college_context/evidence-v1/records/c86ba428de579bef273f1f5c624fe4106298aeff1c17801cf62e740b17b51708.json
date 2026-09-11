@@ -1,0 +1,24 @@
+{
+  "id": "c86ba428de579bef273f1f5c624fe4106298aeff1c17801cf62e740b17b51708",
+  "schema": 1,
+  "teamId": "277",
+  "teamName": "West Virginia Mountaineers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.newDc.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:40.945Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/277/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.945Z",
+    "retrievedAt": "2026-09-11T16:00:40.945Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "49d1b5a2940c5a46674ba000f08246caf96d96bafdb914a55e0b93f80269c495"
+}

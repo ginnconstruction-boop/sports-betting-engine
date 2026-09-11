@@ -1,0 +1,45 @@
+{
+  "id": "02879adb2ee5c7fda30fb414099cdd29424da7c5ac0b2b5faba9614de030f4fe",
+  "schema": 1,
+  "teamId": "338",
+  "teamName": "Kennesaw State Owls",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "4870645",
+      "name": "Rickie Collins",
+      "status": "Active"
+    },
+    {
+      "id": "5291181",
+      "name": "Jamarcus Harrison",
+      "status": "Active"
+    },
+    {
+      "id": "5382899",
+      "name": "Julian Lapene",
+      "status": "Active"
+    },
+    {
+      "id": "5382898",
+      "name": "Landon Varnes",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.969Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/338/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.969Z",
+    "retrievedAt": "2026-09-11T16:00:42.969Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c5ace8ab74a4ccdb98e9b0d8974914b89f76cd7ac0e6b91846cacffb8daea789"
+}

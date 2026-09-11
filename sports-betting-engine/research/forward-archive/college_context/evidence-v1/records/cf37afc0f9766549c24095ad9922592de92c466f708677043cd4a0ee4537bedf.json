@@ -1,0 +1,40 @@
+{
+  "id": "cf37afc0f9766549c24095ad9922592de92c466f708677043cd4a0ee4537bedf",
+  "schema": 1,
+  "teamId": "197",
+  "teamName": "Oklahoma State Cowboys",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "4883110",
+      "name": "Grant Jordan",
+      "status": "Active"
+    },
+    {
+      "id": "5219834",
+      "name": "Drew Mestemaker",
+      "status": "Active"
+    },
+    {
+      "id": "5328787",
+      "name": "Luke Tepas",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:40.297Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/197/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.297Z",
+    "retrievedAt": "2026-09-11T16:00:40.297Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8178830a43a8178aa0aaaffb25fd5f596b15f330d00825781e88534afa50b6c2"
+}

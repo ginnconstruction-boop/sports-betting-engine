@@ -1,0 +1,24 @@
+{
+  "id": "b2f2fd82c1db3f77afd6be1116daee5e5047a16b6cd0c4257febcea4688dae19",
+  "schema": 1,
+  "teamId": "153",
+  "teamName": "North Carolina Tar Heels",
+  "season": 2026,
+  "eventId": "401858218",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.indoor",
+  "value": false,
+  "effectiveFrom": "2026-09-11T16:00:39.697Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858218",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.697Z",
+    "retrievedAt": "2026-09-11T16:00:39.697Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ac5aaa1a816f6128cb59634bd2c96bfbaf0286236ffaa727cc8311604523c15e"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "21f7f11c11bcdd8bb40dda99c3c9f1e74033f5dbdd2d0c4ce9029060fd8b85f6",
+  "schema": 1,
+  "teamId": "158",
+  "teamName": "Nebraska Cornhuskers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.offensiveCoordinator.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:42.642Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/158/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.642Z",
+    "retrievedAt": "2026-09-11T16:00:42.642Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "fa0570325c3110eb1179a59af46c3d9768449227585deb2ae871a93b26cc1170"
+}

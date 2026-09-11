@@ -1,0 +1,45 @@
+{
+  "id": "01c20bf6a9d82848d40792a53ce9b82ac04c5c46a108da6509ddbabadd5dc94d",
+  "schema": 1,
+  "teamId": "235",
+  "teamName": "Memphis Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5178086",
+      "name": "Denzel Gardner",
+      "status": "Active"
+    },
+    {
+      "id": "5079548",
+      "name": "Air Noland",
+      "status": "Active"
+    },
+    {
+      "id": "5212633",
+      "name": "Gavin Owens",
+      "status": "Active"
+    },
+    {
+      "id": "5165807",
+      "name": "Marcus Stokes",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.290Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/235/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.290Z",
+    "retrievedAt": "2026-09-11T16:00:42.290Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "740efea9b5f19bc05ad2d41b3bc27bb0169015fc5967c9d9ce9ff646fc90e603"
+}

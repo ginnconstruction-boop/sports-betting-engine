@@ -1,0 +1,24 @@
+{
+  "id": "d8bce1bdb1c68480706e9af07954002b98315090e343b9c12075dfe317db9d65",
+  "schema": 1,
+  "teamId": "47",
+  "teamName": "Howard Bison",
+  "season": 2026,
+  "eventId": "401858439",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.precipitationMm.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:39.748Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858439",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.748Z",
+    "retrievedAt": "2026-09-11T16:00:39.748Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "52aa2e8bed667cc4fc5f5ba3a7df412cb1b27ffb48faab3ce515261cab7b1013"
+}

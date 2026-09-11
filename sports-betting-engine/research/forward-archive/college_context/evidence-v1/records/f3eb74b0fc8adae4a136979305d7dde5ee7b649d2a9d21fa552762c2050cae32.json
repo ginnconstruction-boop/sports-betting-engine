@@ -1,0 +1,50 @@
+{
+  "id": "f3eb74b0fc8adae4a136979305d7dde5ee7b649d2a9d21fa552762c2050cae32",
+  "schema": 1,
+  "teamId": "254",
+  "teamName": "Utah Utes",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5161802",
+      "name": "Kane Archer",
+      "status": "Active"
+    },
+    {
+      "id": "5105849",
+      "name": "Devon Dampier",
+      "status": "Active"
+    },
+    {
+      "id": "5294263",
+      "name": "Byrd Ficklin",
+      "status": "Active"
+    },
+    {
+      "id": "5209335",
+      "name": "Michael Johnson",
+      "status": "Active"
+    },
+    {
+      "id": "4804885",
+      "name": "Brandon Rose",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:43.865Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/254/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.865Z",
+    "retrievedAt": "2026-09-11T16:00:43.865Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c9ccbceec3b782f1b54ece23dfff0213ce6d5cb64d4a1e3da0dc3b7b711963b4"
+}

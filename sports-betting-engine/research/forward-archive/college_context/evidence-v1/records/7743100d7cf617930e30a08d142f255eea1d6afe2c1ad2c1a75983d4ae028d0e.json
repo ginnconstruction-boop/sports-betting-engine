@@ -1,0 +1,24 @@
+{
+  "id": "7743100d7cf617930e30a08d142f255eea1d6afe2c1ad2c1a75983d4ae028d0e",
+  "schema": 1,
+  "teamId": "2636",
+  "teamName": "UTSA Roadrunners",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.playCallerContinuity.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:41.691Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2636/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.691Z",
+    "retrievedAt": "2026-09-11T16:00:41.691Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8e328e9a842e15b3c443ab874ae1fcb7a23d23ed08a4457dbd6ce182f61e1d3e"
+}

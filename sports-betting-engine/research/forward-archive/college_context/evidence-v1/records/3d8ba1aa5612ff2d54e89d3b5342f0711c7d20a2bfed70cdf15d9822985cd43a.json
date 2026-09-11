@@ -1,0 +1,24 @@
+{
+  "id": "3d8ba1aa5612ff2d54e89d3b5342f0711c7d20a2bfed70cdf15d9822985cd43a",
+  "schema": 1,
+  "teamId": "2681",
+  "teamName": "Wagner Seahawks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FCS",
+  "effectiveFrom": "2026-09-11T16:00:44.099Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.099Z",
+    "retrievedAt": "2026-09-11T16:00:44.099Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "1933ee8a2807a5cc403313494b206cd6160f33279d3892c910bb550329cc4c71"
+}

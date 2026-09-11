@@ -1,0 +1,24 @@
+{
+  "id": "f716cfaaf0a364a765d19bd99bf07dd84dd86745506dc4e646479f1fd0cab479",
+  "schema": 1,
+  "teamId": "2483",
+  "teamName": "Oregon Ducks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.providerChecked",
+  "value": "MATCHED",
+  "effectiveFrom": "2026-09-11T16:00:40.391Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2483/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.391Z",
+    "retrievedAt": "2026-09-11T16:00:40.391Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "69c6254868794a920a9b7895cf57a9cd6bb335e867c1b9eee3a0399cefbd82f3"
+}

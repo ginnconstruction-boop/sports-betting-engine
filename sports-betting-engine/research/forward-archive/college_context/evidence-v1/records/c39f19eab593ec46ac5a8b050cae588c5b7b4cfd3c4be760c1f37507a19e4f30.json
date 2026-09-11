@@ -1,0 +1,45 @@
+{
+  "id": "c39f19eab593ec46ac5a8b050cae588c5b7b4cfd3c4be760c1f37507a19e4f30",
+  "schema": 1,
+  "teamId": "349",
+  "teamName": "Army Black Knights",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5390351",
+      "name": "Santiago Fernandez",
+      "status": "Active"
+    },
+    {
+      "id": "5390357",
+      "name": "Andrew Heidel",
+      "status": "Active"
+    },
+    {
+      "id": "5150297",
+      "name": "Cale Hellums",
+      "status": "Active"
+    },
+    {
+      "id": "5293684",
+      "name": "Bryson Luter",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:40.738Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/349/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.738Z",
+    "retrievedAt": "2026-09-11T16:00:40.738Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "5852a91ab048471cacf1882fd7b2dc50585db2e75ca8e87ddfe7952ca1dfa333"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "ae9e6fc043cdf005fd085e522a985aa0987afdd33c051bc9359354586d0c68a5",
+  "schema": 1,
+  "teamId": "2483",
+  "teamName": "Oregon Ducks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Dan Lanning",
+  "effectiveFrom": "2026-09-11T16:00:40.391Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2483/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.391Z",
+    "retrievedAt": "2026-09-11T16:00:40.391Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "69c6254868794a920a9b7895cf57a9cd6bb335e867c1b9eee3a0399cefbd82f3"
+}

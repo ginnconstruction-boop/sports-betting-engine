@@ -1,0 +1,24 @@
+{
+  "id": "89a842fbd4948d8cc7c11e6905a104f4d02580ca87d05b3f1506175ca5cc70ba",
+  "schema": 1,
+  "teamId": "2132",
+  "teamName": "Cincinnati Bearcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.playCallerContinuity.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:42.596Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2132/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.596Z",
+    "retrievedAt": "2026-09-11T16:00:42.596Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d7e2bb33bf9ef7dcb88b69c0b040db78ecc80033ec7992395e2c1898bab8b6cc"
+}

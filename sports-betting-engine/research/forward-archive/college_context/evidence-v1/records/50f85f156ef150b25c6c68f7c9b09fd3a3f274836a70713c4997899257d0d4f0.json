@@ -1,0 +1,45 @@
+{
+  "id": "50f85f156ef150b25c6c68f7c9b09fd3a3f274836a70713c4997899257d0d4f0",
+  "schema": 1,
+  "teamId": "302",
+  "teamName": "UC Davis Aggies",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5298853",
+      "name": "Treynor Cleeland",
+      "status": "Active"
+    },
+    {
+      "id": "5298857",
+      "name": "Axel Eason",
+      "status": "Active"
+    },
+    {
+      "id": "5164325",
+      "name": "Jackson Kollock",
+      "status": "Active"
+    },
+    {
+      "id": "5441593",
+      "name": "Trevor Taumoepeau",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:41.968Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/302/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.968Z",
+    "retrievedAt": "2026-09-11T16:00:41.968Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "1ea25801ddeb58371d9bb403b3ffa41cf5d9ba2eeffdd8d10cad3ef3fd65867e"
+}

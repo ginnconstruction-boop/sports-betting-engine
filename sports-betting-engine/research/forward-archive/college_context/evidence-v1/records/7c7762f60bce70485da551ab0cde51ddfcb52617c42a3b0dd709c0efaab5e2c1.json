@@ -1,0 +1,24 @@
+{
+  "id": "7c7762f60bce70485da551ab0cde51ddfcb52617c42a3b0dd709c0efaab5e2c1",
+  "schema": 1,
+  "teamId": "221",
+  "teamName": "Pittsburgh Panthers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:41.083Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/221/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.083Z",
+    "retrievedAt": "2026-09-11T16:00:41.083Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "80ba138c21bf39faf0df73c17d543ba09fa16ab7c6b126b9acc163bc1673efb3"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "11422026332ab689ecf57dc1af1aad171c2a17d221308636a114e057cbb94e37",
+  "schema": 1,
+  "teamId": "21",
+  "teamName": "San Diego State Aztecs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Sean Lewis",
+  "effectiveFrom": "2026-09-11T16:00:43.105Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/21/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.105Z",
+    "retrievedAt": "2026-09-11T16:00:43.105Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9bfcd19d031d6fa9560d8d0733ce6c5891582ade84d48aa323407a3e8a5ac64d"
+}

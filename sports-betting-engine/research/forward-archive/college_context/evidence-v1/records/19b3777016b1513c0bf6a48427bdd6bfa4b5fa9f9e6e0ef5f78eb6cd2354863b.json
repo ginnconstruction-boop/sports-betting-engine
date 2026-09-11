@@ -1,0 +1,24 @@
+{
+  "id": "19b3777016b1513c0bf6a48427bdd6bfa4b5fa9f9e6e0ef5f78eb6cd2354863b",
+  "schema": 1,
+  "teamId": "256",
+  "teamName": "James Madison Dukes",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.depthTier.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.099Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.099Z",
+    "retrievedAt": "2026-09-11T16:00:44.099Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8904815e70d7de3a6e82a4fe59138de9f46e794b2196b39d95dbf5ec27efc38f"
+}

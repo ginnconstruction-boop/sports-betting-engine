@@ -1,0 +1,24 @@
+{
+  "id": "5500fba0a9e6d03f31fb63069a3fa645c0900cf8990d91730dccf6b23e4a992c",
+  "schema": 1,
+  "teamId": "290",
+  "teamName": "Georgia Southern Eagles",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.newOc.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:43.342Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/290/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.342Z",
+    "retrievedAt": "2026-09-11T16:00:43.342Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e68b24e07562b791e414b49523e787a87acb2f6fd25678da40a64ace4a25d5a0"
+}

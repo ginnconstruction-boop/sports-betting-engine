@@ -1,0 +1,24 @@
+{
+  "id": "36163870f72450f3b0f4c6fb6ffc70f84f3e017025de6fff8cb5fb68ac1c6411",
+  "schema": 1,
+  "teamId": "302",
+  "teamName": "UC Davis Aggies",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FCS",
+  "effectiveFrom": "2026-09-11T16:00:44.099Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.099Z",
+    "retrievedAt": "2026-09-11T16:00:44.099Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "f2ee6cc701c80c4e036f782f58fb5631ef6b4653f968565d72f4b77ad45f4ac2"
+}

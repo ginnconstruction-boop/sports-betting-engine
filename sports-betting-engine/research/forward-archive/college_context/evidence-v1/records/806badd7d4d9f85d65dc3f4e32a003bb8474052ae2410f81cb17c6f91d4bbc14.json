@@ -1,0 +1,24 @@
+{
+  "id": "806badd7d4d9f85d65dc3f4e32a003bb8474052ae2410f81cb17c6f91d4bbc14",
+  "schema": 1,
+  "teamId": "253",
+  "teamName": "Southern Utah Thunderbirds",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.defensiveCoordinator.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:42.760Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/253/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.760Z",
+    "retrievedAt": "2026-09-11T16:00:42.760Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d237f0a587541732432d5388e580c28b191c76955123380cfbfeb40a3d119e5e"
+}

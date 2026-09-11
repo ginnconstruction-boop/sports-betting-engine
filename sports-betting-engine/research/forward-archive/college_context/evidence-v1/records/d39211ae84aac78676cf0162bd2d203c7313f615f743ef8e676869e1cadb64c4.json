@@ -1,0 +1,24 @@
+{
+  "id": "d39211ae84aac78676cf0162bd2d203c7313f615f743ef8e676869e1cadb64c4",
+  "schema": 1,
+  "teamId": "2579",
+  "teamName": "South Carolina Gamecocks",
+  "season": 2026,
+  "eventId": "401856680",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T16:00:39.994Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856680",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.994Z",
+    "retrievedAt": "2026-09-11T16:00:39.994Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "889181b8f0e06a185ceb5a7510ed2025f5122fed80e8a1542c1b758a8ebf0d1a"
+}

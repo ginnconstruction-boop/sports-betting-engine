@@ -1,0 +1,24 @@
+{
+  "id": "7b9caba4021db0c3b79fa67b282391fa89f390f9fa0a5d3bf702e735c2263f2e",
+  "schema": 1,
+  "teamId": "153",
+  "teamName": "North Carolina Tar Heels",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.currentSeasonAvailable",
+  "value": true,
+  "effectiveFrom": "2026-09-11T16:00:40.462Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/153/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.462Z",
+    "retrievedAt": "2026-09-11T16:00:40.462Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9c5051e34077d41d4be6b98c46b8b92b67a5e373a9375dd96f666e3f29e38f10"
+}

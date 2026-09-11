@@ -1,0 +1,50 @@
+{
+  "id": "a9a4a09d96b8dd2090f220116ba34bd28fe3314fe5dd05ff5e8c28a2f55cefc8",
+  "schema": 1,
+  "teamId": "2294",
+  "teamName": "Iowa Hawkeyes",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5282580",
+      "name": "Tradon Bessinger",
+      "status": "Active"
+    },
+    {
+      "id": "5089314",
+      "name": "Hank Brown",
+      "status": "Active"
+    },
+    {
+      "id": "5295537",
+      "name": "Ryan Fitzgerald",
+      "status": "Active"
+    },
+    {
+      "id": "5121030",
+      "name": "Jeremy Hecklinski",
+      "status": "Active"
+    },
+    {
+      "id": "5192909",
+      "name": "Jimmy Sullivan",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:43.266Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2294/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.266Z",
+    "retrievedAt": "2026-09-11T16:00:43.266Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "980eff5a194c2ad1a43f382ed95dfcbc71e9ddb6b23dba67f628a52ff064edce"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "2a351adde86c416f7298a9db146daf387cb50bb5c6a62988c7c7694119671f17",
+  "schema": 1,
+  "teamId": "2385",
+  "teamName": "Mercyhurst Lakers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:44.099Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.099Z",
+    "retrievedAt": "2026-09-11T16:00:44.099Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e697ad336be6d7183d32afb337b2261e2dfd7b321a19f6fa3e8cd10da3d58f9b"
+}

@@ -1,0 +1,50 @@
+{
+  "id": "4eae687f92a997c43791cc20b5fcece4c891bf3e3d798462ddef34aa7dd6e653",
+  "schema": 1,
+  "teamId": "278",
+  "teamName": "Fresno State Bulldogs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5265647",
+      "name": "Jacob Chambers",
+      "status": "Active"
+    },
+    {
+      "id": "5216310",
+      "name": "Jonathan Craft",
+      "status": "Active"
+    },
+    {
+      "id": "5010409",
+      "name": "Jayden Mandal",
+      "status": "Active"
+    },
+    {
+      "id": "5146667",
+      "name": "Khristian Martin",
+      "status": "Active"
+    },
+    {
+      "id": "5209338",
+      "name": "Deagan Rose",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:43.916Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/278/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.916Z",
+    "retrievedAt": "2026-09-11T16:00:43.916Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "436db2311fdeb73dfa2c460422db8aebb654e4c8e4f56e8457fe510a9c513f6a"
+}

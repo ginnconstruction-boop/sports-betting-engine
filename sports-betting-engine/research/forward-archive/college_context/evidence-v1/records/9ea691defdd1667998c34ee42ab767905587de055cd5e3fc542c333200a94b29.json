@@ -1,0 +1,24 @@
+{
+  "id": "9ea691defdd1667998c34ee42ab767905587de055cd5e3fc542c333200a94b29",
+  "schema": 1,
+  "teamId": "326",
+  "teamName": "Texas State Bobcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.playerCount",
+  "value": 100,
+  "effectiveFrom": "2026-09-11T16:00:41.654Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/326/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.654Z",
+    "retrievedAt": "2026-09-11T16:00:41.654Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "fcc3241ecc6d6d606046b534f7a3370b30c00d7a00c38708a9924185a8af9fec"
+}

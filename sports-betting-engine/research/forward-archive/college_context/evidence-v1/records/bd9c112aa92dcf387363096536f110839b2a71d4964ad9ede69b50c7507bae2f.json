@@ -1,0 +1,24 @@
+{
+  "id": "bd9c112aa92dcf387363096536f110839b2a71d4964ad9ede69b50c7507bae2f",
+  "schema": 1,
+  "teamId": "326",
+  "teamName": "Texas State Bobcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:41.468Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/326/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.468Z",
+    "retrievedAt": "2026-09-11T16:00:41.468Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "fcc3241ecc6d6d606046b534f7a3370b30c00d7a00c38708a9924185a8af9fec"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "fa83575396e1c9f26ce37265e0b6d19e2a11031001b7d391810e9543e1007fe0",
+  "schema": 1,
+  "teamId": "2142",
+  "teamName": "Colgate Raiders",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.offensiveCoordinator.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:41.013Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2142/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.013Z",
+    "retrievedAt": "2026-09-11T16:00:41.013Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "2b582b5bc9f70df5f16b35d3536b5122282d2d09b66e74e096da684805469f3a"
+}

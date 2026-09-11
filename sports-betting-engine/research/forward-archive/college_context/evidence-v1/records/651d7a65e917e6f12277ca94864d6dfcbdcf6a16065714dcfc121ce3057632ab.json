@@ -1,0 +1,24 @@
+{
+  "id": "651d7a65e917e6f12277ca94864d6dfcbdcf6a16065714dcfc121ce3057632ab",
+  "schema": 1,
+  "teamId": "2633",
+  "teamName": "Tennessee Volunteers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:42.362Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2633/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.362Z",
+    "retrievedAt": "2026-09-11T16:00:42.362Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "bad580cf31da9e4e16366e8a2341f6a29f8ca64cda4b98b06dc664db649b5266"
+}

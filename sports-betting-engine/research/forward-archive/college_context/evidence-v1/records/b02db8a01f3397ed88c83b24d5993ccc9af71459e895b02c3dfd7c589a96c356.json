@@ -1,0 +1,24 @@
+{
+  "id": "b02db8a01f3397ed88c83b24d5993ccc9af71459e895b02c3dfd7c589a96c356",
+  "schema": 1,
+  "teamId": "2084",
+  "teamName": "Buffalo Bulls",
+  "season": 2026,
+  "eventId": "401866414",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:39.935Z",
+  "effectiveTo": "2026-09-13T04:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401866414",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.935Z",
+    "retrievedAt": "2026-09-11T16:00:39.935Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c0137f51a3d6c909efa31750b618637884586d3868e89ae8e2936a2a4ce05d2a"
+}

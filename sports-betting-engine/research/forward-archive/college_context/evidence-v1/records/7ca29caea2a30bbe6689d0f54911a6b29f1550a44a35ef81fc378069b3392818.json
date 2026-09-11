@@ -1,0 +1,45 @@
+{
+  "id": "7ca29caea2a30bbe6689d0f54911a6b29f1550a44a35ef81fc378069b3392818",
+  "schema": 1,
+  "teamId": "276",
+  "teamName": "Marshall Thundering Herd",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5329822",
+      "name": "Dylan Barber",
+      "status": "Active"
+    },
+    {
+      "id": "4432691",
+      "name": "Carlos Del Rio-Wilson",
+      "status": "Active"
+    },
+    {
+      "id": "5265562",
+      "name": "Koi Fagan",
+      "status": "Active"
+    },
+    {
+      "id": "4685697",
+      "name": "Zion Turner",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.991Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/276/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.991Z",
+    "retrievedAt": "2026-09-11T16:00:42.991Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "4626dc34ba32adcd457a05bcc1a47a64c7927bae250b6c9085f0f1e681f1e285"
+}

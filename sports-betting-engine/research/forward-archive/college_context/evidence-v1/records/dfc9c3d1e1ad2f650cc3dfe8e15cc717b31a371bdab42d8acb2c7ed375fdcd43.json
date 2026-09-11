@@ -1,0 +1,50 @@
+{
+  "id": "dfc9c3d1e1ad2f650cc3dfe8e15cc717b31a371bdab42d8acb2c7ed375fdcd43",
+  "schema": 1,
+  "teamId": "2032",
+  "teamName": "Arkansas State Red Wolves",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "4920193",
+      "name": "Ethan Crawford",
+      "status": "Active"
+    },
+    {
+      "id": "4713649",
+      "name": "Drew Dickey",
+      "status": "Active"
+    },
+    {
+      "id": "5123665",
+      "name": "Trey Owens",
+      "status": "Active"
+    },
+    {
+      "id": "5296209",
+      "name": "Mason Schubert",
+      "status": "Active"
+    },
+    {
+      "id": "5218650",
+      "name": "Jeremy St-Hilaire",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.899Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2032/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.899Z",
+    "retrievedAt": "2026-09-11T16:00:42.899Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "cb62c4a2c1c025d9d85ef1bb437aecc12e39fdd5310b21008a6c3781dc85dade"
+}

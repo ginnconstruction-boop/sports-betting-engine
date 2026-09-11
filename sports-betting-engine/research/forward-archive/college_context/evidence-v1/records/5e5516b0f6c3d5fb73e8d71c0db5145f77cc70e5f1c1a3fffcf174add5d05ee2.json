@@ -1,0 +1,24 @@
+{
+  "id": "5e5516b0f6c3d5fb73e8d71c0db5145f77cc70e5f1c1a3fffcf174add5d05ee2",
+  "schema": 1,
+  "teamId": "2717",
+  "teamName": "Western Carolina Catamounts",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Kerwin Bell",
+  "effectiveFrom": "2026-09-11T16:00:42.573Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2717/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.573Z",
+    "retrievedAt": "2026-09-11T16:00:42.573Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "903a33b229cab90343cd0a8ea2efb44d48177fbd1195c0ba7166c229651ed0c4"
+}

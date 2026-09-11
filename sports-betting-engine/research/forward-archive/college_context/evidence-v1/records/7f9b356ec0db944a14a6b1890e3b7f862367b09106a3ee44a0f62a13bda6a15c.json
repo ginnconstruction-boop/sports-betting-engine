@@ -1,0 +1,45 @@
+{
+  "id": "7f9b356ec0db944a14a6b1890e3b7f862367b09106a3ee44a0f62a13bda6a15c",
+  "schema": 1,
+  "teamId": "68",
+  "teamName": "Boise State Broncos",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5160730",
+      "name": "Max Cutforth",
+      "status": "Active"
+    },
+    {
+      "id": "5239556",
+      "name": "Cash Herrera",
+      "status": "Active"
+    },
+    {
+      "id": "4870513",
+      "name": "Maddux Madsen",
+      "status": "Active"
+    },
+    {
+      "id": "5161007",
+      "name": "Jackson Taylor",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.312Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/68/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.312Z",
+    "retrievedAt": "2026-09-11T16:00:42.312Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "52f010b0b65922379f44ab3f85d80278efef18fdcd25c1a1f8766a58e73b626e"
+}

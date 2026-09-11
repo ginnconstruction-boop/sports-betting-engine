@@ -1,0 +1,24 @@
+{
+  "id": "4bc6a156a56b862197d05a06c41a0038eaa9782eba37b940547cbca4d6c97b6d",
+  "schema": 1,
+  "teamId": "239",
+  "teamName": "Baylor Bears",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.playerCount",
+  "value": 100,
+  "effectiveFrom": "2026-09-11T16:00:43.647Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/239/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.647Z",
+    "retrievedAt": "2026-09-11T16:00:43.647Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9d0894f4e3d09ad9408e559663791d6e2927a6d6e1affe4abbd1deb5ae22711c"
+}

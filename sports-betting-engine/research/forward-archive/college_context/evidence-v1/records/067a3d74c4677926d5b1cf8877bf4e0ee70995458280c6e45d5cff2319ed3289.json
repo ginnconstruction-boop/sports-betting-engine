@@ -1,0 +1,24 @@
+{
+  "id": "067a3d74c4677926d5b1cf8877bf4e0ee70995458280c6e45d5cff2319ed3289",
+  "schema": 1,
+  "teamId": "2306",
+  "teamName": "Kansas State Wildcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:40.487Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2306/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.487Z",
+    "retrievedAt": "2026-09-11T16:00:40.487Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e5ade5b82450c31ff06d4e9cca4ee58e955c8a884a621ac58da354ab486e56f4"
+}

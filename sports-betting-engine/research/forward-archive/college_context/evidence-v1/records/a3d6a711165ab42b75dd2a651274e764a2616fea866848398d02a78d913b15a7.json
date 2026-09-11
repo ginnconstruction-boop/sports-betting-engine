@@ -1,0 +1,24 @@
+{
+  "id": "a3d6a711165ab42b75dd2a651274e764a2616fea866848398d02a78d913b15a7",
+  "schema": 1,
+  "teamId": "2692",
+  "teamName": "Weber State Wildcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.rosterComposite.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.098Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.098Z",
+    "retrievedAt": "2026-09-11T16:00:44.098Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "7dc50192d8477e3f1d11cf92c9f58e6e418f6842232a17d8493ffd464fd98407"
+}

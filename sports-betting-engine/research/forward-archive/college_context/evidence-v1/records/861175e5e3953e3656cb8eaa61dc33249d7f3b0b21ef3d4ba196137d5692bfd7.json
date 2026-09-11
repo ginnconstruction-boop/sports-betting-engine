@@ -1,0 +1,24 @@
+{
+  "id": "861175e5e3953e3656cb8eaa61dc33249d7f3b0b21ef3d4ba196137d5692bfd7",
+  "schema": 1,
+  "teamId": "13",
+  "teamName": "Cal Poly Mustangs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Tim Skipper",
+  "effectiveFrom": "2026-09-11T16:00:43.750Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/13/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.750Z",
+    "retrievedAt": "2026-09-11T16:00:43.750Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d8441fdcc3c96cfb371ad7ef35b2413d6f7ab3f52dbe2c935980d17b321548cd"
+}

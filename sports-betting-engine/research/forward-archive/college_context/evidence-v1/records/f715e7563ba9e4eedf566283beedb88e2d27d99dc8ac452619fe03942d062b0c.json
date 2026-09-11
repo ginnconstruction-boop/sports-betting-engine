@@ -1,0 +1,24 @@
+{
+  "id": "f715e7563ba9e4eedf566283beedb88e2d27d99dc8ac452619fe03942d062b0c",
+  "schema": 1,
+  "teamId": "2747",
+  "teamName": "Wofford Terriers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:40.648Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2747/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.648Z",
+    "retrievedAt": "2026-09-11T16:00:40.648Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "6a51f034b2ac10618ea39d53b48f114be90c3bc985336750acf90743da7f414b"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "5b45662493e1e79459a0b362b222fba11c56ce709b6d2d1080b8138b34df5d70",
+  "schema": 1,
+  "teamId": "13",
+  "teamName": "Cal Poly Mustangs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.playerCount",
+  "value": 100,
+  "effectiveFrom": "2026-09-11T16:00:43.750Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/13/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.750Z",
+    "retrievedAt": "2026-09-11T16:00:43.750Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d8441fdcc3c96cfb371ad7ef35b2413d6f7ab3f52dbe2c935980d17b321548cd"
+}

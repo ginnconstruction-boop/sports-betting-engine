@@ -1,0 +1,55 @@
+{
+  "id": "bcc62bd8c7fc9d51ceadf125bbe997cc82072219e60f774483320ce6d2722f1a",
+  "schema": 1,
+  "teamId": "2458",
+  "teamName": "Northern Colorado Bears",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5326062",
+      "name": "Zeke Andrews",
+      "status": "Active"
+    },
+    {
+      "id": "5300800",
+      "name": "Levi Durrell",
+      "status": "Active"
+    },
+    {
+      "id": "5219929",
+      "name": "Kenny Lueth",
+      "status": "Active"
+    },
+    {
+      "id": "5085026",
+      "name": "Keegan Patterson",
+      "status": "Active"
+    },
+    {
+      "id": "5439611",
+      "name": "Caeden Reeder",
+      "status": "Active"
+    },
+    {
+      "id": "4873077",
+      "name": "Brayten Silbor",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.050Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2458/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.050Z",
+    "retrievedAt": "2026-09-11T16:00:42.050Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "6ac63b92403050657df97b00badb69e714f1f160e91f881f2c6d74fc2d0c4f2e"
+}

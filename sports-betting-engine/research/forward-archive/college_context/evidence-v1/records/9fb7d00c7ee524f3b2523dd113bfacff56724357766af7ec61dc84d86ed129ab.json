@@ -1,0 +1,24 @@
+{
+  "id": "9fb7d00c7ee524f3b2523dd113bfacff56724357766af7ec61dc84d86ed129ab",
+  "schema": 1,
+  "teamId": "55",
+  "teamName": "Jacksonville State Gamecocks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.providerChecked",
+  "value": "MATCHED",
+  "effectiveFrom": "2026-09-11T16:00:42.384Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/55/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.384Z",
+    "retrievedAt": "2026-09-11T16:00:42.384Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "5d3a18d46425ef4cadd646240be82fa00afac165b24a2b1a4542a2e7df732853"
+}

@@ -1,0 +1,55 @@
+{
+  "id": "0e0fcef92d7d2f515f86ce59bd0756c114bacd07ff854606a46ad9913f0855c4",
+  "schema": 1,
+  "teamId": "202",
+  "teamName": "Tulsa Golden Hurricane",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5265441",
+      "name": "Andrew Alford",
+      "status": "Active"
+    },
+    {
+      "id": "5280595",
+      "name": "Kyden Barker",
+      "status": "Active"
+    },
+    {
+      "id": "5390294",
+      "name": "Connor Dantzler",
+      "status": "Active"
+    },
+    {
+      "id": "5390295",
+      "name": "Kincayde Eng",
+      "status": "Active"
+    },
+    {
+      "id": "5224011",
+      "name": "Baylor Hayes",
+      "status": "Active"
+    },
+    {
+      "id": "5390296",
+      "name": "Barrett Mullen",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.738Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/202/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.738Z",
+    "retrievedAt": "2026-09-11T16:00:42.738Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "2eb8572310cf99e7379defe5f155f92d95d1311ca166e523320e61432398f282"
+}

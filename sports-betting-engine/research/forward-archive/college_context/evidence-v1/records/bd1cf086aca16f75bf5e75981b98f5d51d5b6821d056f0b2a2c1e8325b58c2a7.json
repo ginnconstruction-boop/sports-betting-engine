@@ -1,0 +1,24 @@
+{
+  "id": "bd1cf086aca16f75bf5e75981b98f5d51d5b6821d056f0b2a2c1e8325b58c2a7",
+  "schema": 1,
+  "teamId": "295",
+  "teamName": "Old Dominion Monarchs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:40.370Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/295/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.370Z",
+    "retrievedAt": "2026-09-11T16:00:40.370Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "6a4b79271538e6a4fb38b52feaece1b73bf429f01771b0ce3873806a39ec995d"
+}

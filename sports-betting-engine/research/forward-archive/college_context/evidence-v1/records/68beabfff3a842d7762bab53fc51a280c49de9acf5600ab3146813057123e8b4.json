@@ -1,0 +1,24 @@
+{
+  "id": "68beabfff3a842d7762bab53fc51a280c49de9acf5600ab3146813057123e8b4",
+  "schema": 1,
+  "teamId": "166",
+  "teamName": "New Mexico State Aggies",
+  "season": 2026,
+  "eventId": "401864578",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.pointsPerGame",
+  "value": 34,
+  "effectiveFrom": "2026-09-11T16:00:40.239Z",
+  "effectiveTo": "2026-09-13T09:59:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864578",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.239Z",
+    "retrievedAt": "2026-09-11T16:00:40.239Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "fbe630dc2470b0b9619a54a9acbba946331e3990002bfbc754ee34ae3b05928d"
+}

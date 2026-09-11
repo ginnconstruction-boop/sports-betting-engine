@@ -1,0 +1,50 @@
+{
+  "id": "34fbaadd493a1c0d0605b9c7d463f875b1483af1e21b9044139742d3b9965ef6",
+  "schema": 1,
+  "teamId": "166",
+  "teamName": "New Mexico State Aggies",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5384720",
+      "name": "Trey Arnold",
+      "status": "Active"
+    },
+    {
+      "id": "5152503",
+      "name": "Adam Damante",
+      "status": "Active"
+    },
+    {
+      "id": "5224084",
+      "name": "Trey Hedden",
+      "status": "Active"
+    },
+    {
+      "id": "5384718",
+      "name": "Kalani McLeod",
+      "status": "Active"
+    },
+    {
+      "id": "5227425",
+      "name": "Parker Stofa",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:44.074Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/166/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.074Z",
+    "retrievedAt": "2026-09-11T16:00:44.074Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "75d5d9b804de8a62ebb40008f9654f9a68ff760e3e2c929d09337e110b79cc55"
+}

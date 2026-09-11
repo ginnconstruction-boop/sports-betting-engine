@@ -1,0 +1,24 @@
+{
+  "id": "9f088a8c741b7d868be314cd43e851446dd11dfd53c8f2246107dfc7a193bb58",
+  "schema": 1,
+  "teamId": "99",
+  "teamName": "LSU Tigers",
+  "season": 2026,
+  "eventId": "401867796",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.precipitationProbability",
+  "value": 15,
+  "effectiveFrom": "2026-09-11T16:00:40.141Z",
+  "effectiveTo": "2026-09-13T05:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401867796",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.141Z",
+    "retrievedAt": "2026-09-11T16:00:40.141Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d4a3fc265fe739eaf81b61393acf3a339a15f213b515e512c9a11fcd2e4c27ff"
+}

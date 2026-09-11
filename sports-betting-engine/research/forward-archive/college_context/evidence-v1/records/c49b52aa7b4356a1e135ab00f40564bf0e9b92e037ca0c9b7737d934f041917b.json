@@ -1,0 +1,24 @@
+{
+  "id": "c49b52aa7b4356a1e135ab00f40564bf0e9b92e037ca0c9b7737d934f041917b",
+  "schema": 1,
+  "teamId": "142",
+  "teamName": "Missouri Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.depthTier.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-11T16:00:44.097Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.097Z",
+    "retrievedAt": "2026-09-11T16:00:44.097Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "17e68b741fa6b2bd58b5128732ca5a46813df84f0cdaa885588c936c098ba259"
+}

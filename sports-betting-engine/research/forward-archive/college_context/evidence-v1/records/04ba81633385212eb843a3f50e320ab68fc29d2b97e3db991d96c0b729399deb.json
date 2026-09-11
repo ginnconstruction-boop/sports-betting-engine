@@ -1,0 +1,50 @@
+{
+  "id": "04ba81633385212eb843a3f50e320ab68fc29d2b97e3db991d96c0b729399deb",
+  "schema": 1,
+  "teamId": "275",
+  "teamName": "Wisconsin Badgers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5126464",
+      "name": "Deuce Adams",
+      "status": "Active"
+    },
+    {
+      "id": "5210475",
+      "name": "Ryan Hopkins",
+      "status": "Active"
+    },
+    {
+      "id": "5125715",
+      "name": "Colton Joseph",
+      "status": "Active"
+    },
+    {
+      "id": "5126474",
+      "name": "Danny O'Neil",
+      "status": "Active"
+    },
+    {
+      "id": "5141687",
+      "name": "Carter Smith",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:43.128Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/275/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.128Z",
+    "retrievedAt": "2026-09-11T16:00:43.128Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c0fa7c4158e9bed2d2bbc65218d4d2469b7003db9ea32728ecc2a4dbc5eeb22e"
+}

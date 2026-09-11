@@ -1,0 +1,50 @@
+{
+  "id": "7b73b714c8c2599e3f275540ad8bb75123079f18f8597cfd8c5bb4d99163e646",
+  "schema": 1,
+  "teamId": "16",
+  "teamName": "Sacramento State Hornets",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "4920192",
+      "name": "Carson Conklin",
+      "status": "Active"
+    },
+    {
+      "id": "5401462",
+      "name": "Liam Meeker",
+      "status": "Active"
+    },
+    {
+      "id": "5148654",
+      "name": "Jaylen Patterson",
+      "status": "Active"
+    },
+    {
+      "id": "5401458",
+      "name": "Brian Salazar",
+      "status": "Active"
+    },
+    {
+      "id": "5158748",
+      "name": "Jackson Sharman",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:43.938Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/16/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.938Z",
+    "retrievedAt": "2026-09-11T16:00:43.938Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "55b1eb62a9bd989c2dd70a26846fe2e8b7200c0d4df90d4aaf06e1afd30b5c9d"
+}

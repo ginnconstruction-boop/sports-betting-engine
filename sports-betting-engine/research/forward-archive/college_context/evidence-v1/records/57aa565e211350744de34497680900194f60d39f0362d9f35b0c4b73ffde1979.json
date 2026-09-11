@@ -1,0 +1,24 @@
+{
+  "id": "57aa565e211350744de34497680900194f60d39f0362d9f35b0c4b73ffde1979",
+  "schema": 1,
+  "teamId": "38",
+  "teamName": "Colorado Buffaloes",
+  "season": 2026,
+  "eventId": "401856785",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.feelsLikeF.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:39.813Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856785",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.813Z",
+    "retrievedAt": "2026-09-11T16:00:39.813Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "51f0f7bb1de2c170d179342411abc8b4066cc8490213b8aa22a68e48ed7a82c7"
+}

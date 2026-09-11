@@ -1,0 +1,24 @@
+{
+  "id": "100a8b18e8fd77e464cd4f4b3ad57f9a089e1e952763039865eb15fe0f2bc02a",
+  "schema": 1,
+  "teamId": "265",
+  "teamName": "Washington State Cougars",
+  "season": 2026,
+  "eventId": "401856781",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.qbAttempts.diagnostic",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T16:00:39.715Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856781",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.715Z",
+    "retrievedAt": "2026-09-11T16:00:39.715Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "647bbc31604b1e9816a3d50b12c5c418703b625140e75350cf13d26dbf21bf99"
+}

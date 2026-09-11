@@ -1,0 +1,24 @@
+{
+  "id": "70a56b5aff3a231b14202d0a702f4f5976bf22e1030b98ca83f5e8b33d24f0db",
+  "schema": 1,
+  "teamId": "2199",
+  "teamName": "Eastern Michigan Eagles",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.playerCount",
+  "value": 100,
+  "effectiveFrom": "2026-09-11T16:00:41.468Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2199/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.468Z",
+    "retrievedAt": "2026-09-11T16:00:41.468Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "b109d7cc9b502f2c116c0cf4930644086bb6188f4cccec4cf81534d1956b4a04"
+}

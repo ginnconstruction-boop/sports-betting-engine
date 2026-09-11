@@ -1,0 +1,24 @@
+{
+  "id": "b85beebee70c6f6560a2a9a7a125d4006ea6876aaf746665faef08f6b613d8c4",
+  "schema": 1,
+  "teamId": "276",
+  "teamName": "Marshall Thundering Herd",
+  "season": 2026,
+  "eventId": "401871045",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.precipitationMm.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:40.072Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401871045",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.072Z",
+    "retrievedAt": "2026-09-11T16:00:40.072Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "0e87a51b65964184d403717878d900ca7a356027d0ab9a54015097431744d1ac"
+}

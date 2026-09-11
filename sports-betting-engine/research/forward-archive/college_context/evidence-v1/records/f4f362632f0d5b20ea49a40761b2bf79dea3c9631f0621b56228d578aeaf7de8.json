@@ -1,0 +1,24 @@
+{
+  "id": "f4f362632f0d5b20ea49a40761b2bf79dea3c9631f0621b56228d578aeaf7de8",
+  "schema": 1,
+  "teamId": "135",
+  "teamName": "Minnesota Golden Gophers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.providerChecked",
+  "value": "MATCHED",
+  "effectiveFrom": "2026-09-11T16:00:41.159Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/135/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.159Z",
+    "retrievedAt": "2026-09-11T16:00:41.159Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f298e1a5af2b07b07e38b783f0eec2056830f60e5b5a96c5551560a29e70c0c6"
+}

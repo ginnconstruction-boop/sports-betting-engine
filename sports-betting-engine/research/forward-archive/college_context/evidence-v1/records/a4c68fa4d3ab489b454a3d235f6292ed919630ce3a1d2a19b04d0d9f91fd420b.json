@@ -1,0 +1,55 @@
+{
+  "id": "a4c68fa4d3ab489b454a3d235f6292ed919630ce3a1d2a19b04d0d9f91fd420b",
+  "schema": 1,
+  "teamId": "2483",
+  "teamName": "Oregon Ducks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5221315",
+      "name": "Ryder Hayes",
+      "status": "Active"
+    },
+    {
+      "id": "5391525",
+      "name": "TC Manumaleuna",
+      "status": "Active"
+    },
+    {
+      "id": "4870921",
+      "name": "Dante Moore",
+      "status": "Active"
+    },
+    {
+      "id": "5079572",
+      "name": "Dylan Raiola",
+      "status": "Active"
+    },
+    {
+      "id": "5141659",
+      "name": "Akili Smith Jr.",
+      "status": "Active"
+    },
+    {
+      "id": "5158446",
+      "name": "Brock Thomas",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:40.391Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2483/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.391Z",
+    "retrievedAt": "2026-09-11T16:00:40.391Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "69c6254868794a920a9b7895cf57a9cd6bb335e867c1b9eee3a0399cefbd82f3"
+}

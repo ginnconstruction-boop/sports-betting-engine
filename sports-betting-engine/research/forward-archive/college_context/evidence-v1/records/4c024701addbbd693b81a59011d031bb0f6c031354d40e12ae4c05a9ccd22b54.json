@@ -1,0 +1,24 @@
+{
+  "id": "4c024701addbbd693b81a59011d031bb0f6c031354d40e12ae4c05a9ccd22b54",
+  "schema": 1,
+  "teamId": "2483",
+  "teamName": "Oregon Ducks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:44.097Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:44.097Z",
+    "retrievedAt": "2026-09-11T16:00:44.097Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "1b6981b501e6bc60e18b620bd344154fac61ea75ba118ee2d33be93cfd557a2e"
+}

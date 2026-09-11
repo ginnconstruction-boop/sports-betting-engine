@@ -1,0 +1,24 @@
+{
+  "id": "fce0beef95edc0788459726647aad6d36b9e238e054378232cca8a7c90a41b0e",
+  "schema": 1,
+  "teamId": "96",
+  "teamName": "Kentucky Wildcats",
+  "season": 2026,
+  "eventId": "401856674",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.currentHomeSpread",
+  "value": 10,
+  "effectiveFrom": "2026-09-11T16:00:39.819Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856674",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.819Z",
+    "retrievedAt": "2026-09-11T16:00:39.819Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "65eb92252fb85a2e0ab656d10303a20fd2513a7ce7dae8c65d099bce83fb64d6"
+}

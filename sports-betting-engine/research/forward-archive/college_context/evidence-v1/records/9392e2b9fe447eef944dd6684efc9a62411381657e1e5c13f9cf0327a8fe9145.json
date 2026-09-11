@@ -1,0 +1,55 @@
+{
+  "id": "9392e2b9fe447eef944dd6684efc9a62411381657e1e5c13f9cf0327a8fe9145",
+  "schema": 1,
+  "teamId": "2005",
+  "teamName": "Air Force Falcons",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5449066",
+      "name": "Howard Fisher IV",
+      "status": "Active"
+    },
+    {
+      "id": "5223112",
+      "name": "Kemper Hodges",
+      "status": "Active"
+    },
+    {
+      "id": "5223108",
+      "name": "Josh Johnson",
+      "status": "Active"
+    },
+    {
+      "id": "5223110",
+      "name": "Maguire Martin",
+      "status": "Active"
+    },
+    {
+      "id": "5306440",
+      "name": "Evan Medders",
+      "status": "Active"
+    },
+    {
+      "id": "5309670",
+      "name": "Cade Spradling",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:43.820Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2005/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.820Z",
+    "retrievedAt": "2026-09-11T16:00:43.820Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "1fcbe4c7b1898d9574561487daca1af529b7989ed6df75d3e5aae15616d32810"
+}

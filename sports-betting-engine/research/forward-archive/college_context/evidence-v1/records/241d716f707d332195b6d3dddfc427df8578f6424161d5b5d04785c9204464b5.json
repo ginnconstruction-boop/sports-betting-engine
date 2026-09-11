@@ -1,0 +1,24 @@
+{
+  "id": "241d716f707d332195b6d3dddfc427df8578f6424161d5b5d04785c9204464b5",
+  "schema": 1,
+  "teamId": "130",
+  "teamName": "Michigan Wolverines",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.currentSeasonAvailable",
+  "value": true,
+  "effectiveFrom": "2026-09-11T16:00:40.370Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/130/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.370Z",
+    "retrievedAt": "2026-09-11T16:00:40.370Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "b26c6deedfba5d1dc619c05048b18f53973d23b368fb3bb55eb092642bcf8b11"
+}

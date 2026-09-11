@@ -1,0 +1,24 @@
+{
+  "id": "93584c6331af490b42dc170b970aa87f6e839ce56b6bc5ce21b85114280b30e4",
+  "schema": 1,
+  "teamId": "202",
+  "teamName": "Tulsa Golden Hurricane",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Tre Lamb",
+  "effectiveFrom": "2026-09-11T16:00:42.738Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/202/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.738Z",
+    "retrievedAt": "2026-09-11T16:00:42.738Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "2eb8572310cf99e7379defe5f155f92d95d1311ca166e523320e61432398f282"
+}

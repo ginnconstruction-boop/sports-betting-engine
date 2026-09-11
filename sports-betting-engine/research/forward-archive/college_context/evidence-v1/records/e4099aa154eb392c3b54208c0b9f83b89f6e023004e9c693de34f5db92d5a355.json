@@ -1,0 +1,24 @@
+{
+  "id": "e4099aa154eb392c3b54208c0b9f83b89f6e023004e9c693de34f5db92d5a355",
+  "schema": 1,
+  "teamId": "2619",
+  "teamName": "Stony Brook Seawolves",
+  "season": 2026,
+  "eventId": "401866413",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.windMph.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:39.806Z",
+  "effectiveTo": "2026-09-13T00:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401866413",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.806Z",
+    "retrievedAt": "2026-09-11T16:00:39.806Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "794eea419544a9874a0b4328fd7f55bf2ace94ab2eb7a1e9f6f9381ad0d92335"
+}

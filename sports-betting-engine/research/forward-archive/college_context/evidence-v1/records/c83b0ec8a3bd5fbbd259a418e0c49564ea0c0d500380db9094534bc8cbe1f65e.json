@@ -1,0 +1,24 @@
+{
+  "id": "c83b0ec8a3bd5fbbd259a418e0c49564ea0c0d500380db9094534bc8cbe1f65e",
+  "schema": 1,
+  "teamId": "2633",
+  "teamName": "Tennessee Volunteers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.newOc.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:42.550Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2633/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.550Z",
+    "retrievedAt": "2026-09-11T16:00:42.550Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "bad580cf31da9e4e16366e8a2341f6a29f8ca64cda4b98b06dc664db649b5266"
+}

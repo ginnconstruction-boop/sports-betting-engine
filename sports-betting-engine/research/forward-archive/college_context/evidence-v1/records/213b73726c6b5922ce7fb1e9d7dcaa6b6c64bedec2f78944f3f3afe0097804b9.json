@@ -1,0 +1,24 @@
+{
+  "id": "213b73726c6b5922ce7fb1e9d7dcaa6b6c64bedec2f78944f3f3afe0097804b9",
+  "schema": 1,
+  "teamId": "87",
+  "teamName": "Notre Dame Fighting Irish",
+  "season": 2026,
+  "eventId": "401859184",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T16:00:39.883Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401859184",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.883Z",
+    "retrievedAt": "2026-09-11T16:00:39.883Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "54ef9a812d55dc907fad2bab2a5a2ce5e06633fc6c64a8e99c1b9298516cf96e"
+}

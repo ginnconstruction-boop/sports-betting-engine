@@ -1,0 +1,45 @@
+{
+  "id": "b4843dbd98008ab4feb3a627636d295d4883691d2a24f386f892ead10e24e9ff",
+  "schema": 1,
+  "teamId": "84",
+  "teamName": "Indiana Hoosiers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5211476",
+      "name": "Jacob Bell",
+      "status": "Active"
+    },
+    {
+      "id": "5145553",
+      "name": "Tyler Cherry",
+      "status": "Active"
+    },
+    {
+      "id": "5295266",
+      "name": "Maverick Geske",
+      "status": "Active"
+    },
+    {
+      "id": "4685401",
+      "name": "Josh Hoover",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:40.625Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/84/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.625Z",
+    "retrievedAt": "2026-09-11T16:00:40.625Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "4b17a67d85dac3e24aa875977246e525090cbe998f74c36c830e6145e763bb49"
+}

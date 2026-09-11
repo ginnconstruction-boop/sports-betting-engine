@@ -1,0 +1,55 @@
+{
+  "id": "31990f9f5f3a4378008e609d0a05b4d868003081565b3ccb0e484854d24174c4",
+  "schema": 1,
+  "teamId": "150",
+  "teamName": "Duke Blue Devils",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "4694149",
+      "name": "Walker Eget",
+      "status": "Active"
+    },
+    {
+      "id": "5297369",
+      "name": "Lawrence Gardner",
+      "status": "Active"
+    },
+    {
+      "id": "4816095",
+      "name": "Blaine Hipa",
+      "status": "Active"
+    },
+    {
+      "id": "5185699",
+      "name": "Dan Mahan",
+      "status": "Active"
+    },
+    {
+      "id": "4592531",
+      "name": "Ari Patu",
+      "status": "Active"
+    },
+    {
+      "id": "5211205",
+      "name": "Terry Walker III",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:41.445Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/150/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.445Z",
+    "retrievedAt": "2026-09-11T16:00:41.445Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ae1c86d7751da84a6466ee2c0ddb7d0910964f29f20bf82afbcd1be658379d71"
+}

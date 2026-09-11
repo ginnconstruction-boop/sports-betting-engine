@@ -1,0 +1,24 @@
+{
+  "id": "6b6f0748d326ed292ed5a1211afdc6777d5ba446a753370f72494fcf67e360e6",
+  "schema": 1,
+  "teamId": "135",
+  "teamName": "Minnesota Golden Gophers",
+  "season": 2026,
+  "eventId": "401856677",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.gamesPlayed.diagnostic",
+  "value": "VALIDATION_FAILED",
+  "effectiveFrom": "2026-09-11T16:00:39.832Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856677",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.832Z",
+    "retrievedAt": "2026-09-11T16:00:39.832Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "85955075f9d65ae0080fe183805170902a40b9aa18889f60fbd23f7fc290e918"
+}

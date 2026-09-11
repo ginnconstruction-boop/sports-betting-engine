@@ -1,0 +1,45 @@
+{
+  "id": "538690e4a92e2720731b0d153337af3a0236c21d5104a06e712787fbc257ddd3",
+  "schema": 1,
+  "teamId": "5",
+  "teamName": "UAB Blazers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5057381",
+      "name": "Ryder Burton",
+      "status": "Active"
+    },
+    {
+      "id": "5219690",
+      "name": "Cam Jennings",
+      "status": "Active"
+    },
+    {
+      "id": "5079568",
+      "name": "Adrian Posse",
+      "status": "Active"
+    },
+    {
+      "id": "5197123",
+      "name": "Nate Rogers",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:41.804Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/5/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.804Z",
+    "retrievedAt": "2026-09-11T16:00:41.804Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ac71b84a90f7eb804d993187c93983e2ce83fa9583a225fc8c2dd6ba9c1aa6ce"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "e0708f690f404caf345b17c29288eb3b8e38e1dc728d8560b6baf7ccf2fb2bef",
+  "schema": 1,
+  "teamId": "2628",
+  "teamName": "TCU Horned Frogs",
+  "season": 2026,
+  "eventId": "401856789",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.precipitationProbability",
+  "value": 0,
+  "effectiveFrom": "2026-09-11T16:00:40.148Z",
+  "effectiveTo": "2026-09-13T06:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856789",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.148Z",
+    "retrievedAt": "2026-09-11T16:00:40.148Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "992c03566d1d2e4e22c113871ef2c50f94b25329e45da0644dbc007bc590851b"
+}

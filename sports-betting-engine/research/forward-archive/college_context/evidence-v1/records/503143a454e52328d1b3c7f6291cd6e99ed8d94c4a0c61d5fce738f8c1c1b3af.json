@@ -1,0 +1,55 @@
+{
+  "id": "503143a454e52328d1b3c7f6291cd6e99ed8d94c4a0c61d5fce738f8c1c1b3af",
+  "schema": 1,
+  "teamId": "48",
+  "teamName": "Delaware Blue Hens",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5296312",
+      "name": "EJ Archield Jr.",
+      "status": "Active"
+    },
+    {
+      "id": "5289314",
+      "name": "Tyler Bell",
+      "status": "Active"
+    },
+    {
+      "id": "5153846",
+      "name": "Nick Minicucci",
+      "status": "Active"
+    },
+    {
+      "id": "5224762",
+      "name": "Braden Streeter",
+      "status": "Active"
+    },
+    {
+      "id": "5401929",
+      "name": "Sean Sutherland",
+      "status": "Active"
+    },
+    {
+      "id": "5079614",
+      "name": "Riley Trujillo",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.196Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/48/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.196Z",
+    "retrievedAt": "2026-09-11T16:00:42.196Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8aca373dea4dcac3eb16fa7d8c04fd4bfcf318099dfcbcf2243c4bcf090c8129"
+}

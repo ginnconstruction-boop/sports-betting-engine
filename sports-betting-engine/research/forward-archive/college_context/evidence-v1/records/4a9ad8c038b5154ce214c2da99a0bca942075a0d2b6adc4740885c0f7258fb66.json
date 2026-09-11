@@ -1,0 +1,24 @@
+{
+  "id": "4a9ad8c038b5154ce214c2da99a0bca942075a0d2b6adc4740885c0f7258fb66",
+  "schema": 1,
+  "teamId": "248",
+  "teamName": "Houston Cougars",
+  "season": 2026,
+  "eventId": "401856787",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.humidityPct.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:40.025Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856787",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.025Z",
+    "retrievedAt": "2026-09-11T16:00:40.025Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ca051d0b174c5028e33e853d076bbd611ccb97b436da0de5acba588a29dca72b"
+}

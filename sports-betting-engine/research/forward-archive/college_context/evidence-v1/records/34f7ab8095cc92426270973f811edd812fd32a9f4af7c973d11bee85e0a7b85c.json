@@ -1,0 +1,24 @@
+{
+  "id": "34f7ab8095cc92426270973f811edd812fd32a9f4af7c973d11bee85e0a7b85c",
+  "schema": 1,
+  "teamId": "2229",
+  "teamName": "Florida International Panthers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Willie Simmons",
+  "effectiveFrom": "2026-09-11T16:00:42.450Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2229/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.450Z",
+    "retrievedAt": "2026-09-11T16:00:42.450Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "7b12eaa72d28edd42e6862028efcea45d067549853cae4a5d7bfe5799e7453d0"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "3eb3768978f76d8a655213721834898344960dd59d0706c6f2fd4664b57f2153",
+  "schema": 1,
+  "teamId": "259",
+  "teamName": "Virginia Tech Hokies",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5141366",
+      "name": "Bryce Baker",
+      "status": "Active"
+    },
+    {
+      "id": "5144078",
+      "name": "Ethan Grunkemeyer",
+      "status": "Active"
+    },
+    {
+      "id": "5159100",
+      "name": "Troy Huhn",
+      "status": "Active"
+    },
+    {
+      "id": "5141631",
+      "name": "Kelden Ryan",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:40.579Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/259/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.579Z",
+    "retrievedAt": "2026-09-11T16:00:40.579Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "6f508152a2f91dc6116e0f4f3971c6752ad9180d3e21a767756823626205d269"
+}

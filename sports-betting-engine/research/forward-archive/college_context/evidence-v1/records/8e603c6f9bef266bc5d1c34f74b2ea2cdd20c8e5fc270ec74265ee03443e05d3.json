@@ -1,0 +1,24 @@
+{
+  "id": "8e603c6f9bef266bc5d1c34f74b2ea2cdd20c8e5fc270ec74265ee03443e05d3",
+  "schema": 1,
+  "teamId": "2006",
+  "teamName": "Akron Zips",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Joe Moorhead",
+  "effectiveFrom": "2026-09-11T16:00:41.737Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2006/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.737Z",
+    "retrievedAt": "2026-09-11T16:00:41.737Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "278c18b2b3fdcc5e6e6f2673ed6d0ed804030f338d62a366894bbe710f181913"
+}

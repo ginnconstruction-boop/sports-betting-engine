@@ -1,0 +1,24 @@
+{
+  "id": "8ada037ad7b508a0f6d3be0fab64f5aa522ef022c9e861d809cc4d630f9fdf1d",
+  "schema": 1,
+  "teamId": "58",
+  "teamName": "South Florida Bulls",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.currentSeasonAvailable",
+  "value": true,
+  "effectiveFrom": "2026-09-11T16:00:40.716Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/58/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.716Z",
+    "retrievedAt": "2026-09-11T16:00:40.716Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c96be00d0eb9858656f6d954a3035679ff2f34b78abc11e5eab1dd6966d60afa"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "1b5dcf10f32aaaaf775e40ffd8789fb23c1df9b189c324102b1dd46faef58320",
+  "schema": 1,
+  "teamId": "2132",
+  "teamName": "Cincinnati Bearcats",
+  "season": 2026,
+  "eventId": "401856786",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.movementDirection",
+  "value": "NONE",
+  "effectiveFrom": "2026-09-11T16:00:40.018Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856786",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.018Z",
+    "retrievedAt": "2026-09-11T16:00:40.018Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "b1a4761e03fcb15a066455a1814c211698864f4b774524550723b01f8608f3f2"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "a5619805d345380d42276a054b942cd63f94322eb6b52c427726d327f7f30cf9",
+  "schema": 1,
+  "teamId": "6",
+  "teamName": "South Alabama Jaguars",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.newHeadCoach.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:42.877Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/6/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.877Z",
+    "retrievedAt": "2026-09-11T16:00:42.877Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "dfe482cdbb35e706054d7778cb19fe565dcca873e929224a4df4e62fcc75854d"
+}

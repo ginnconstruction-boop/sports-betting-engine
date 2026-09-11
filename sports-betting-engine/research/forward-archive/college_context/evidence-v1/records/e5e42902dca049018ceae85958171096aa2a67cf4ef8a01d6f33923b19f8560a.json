@@ -1,0 +1,24 @@
+{
+  "id": "e5e42902dca049018ceae85958171096aa2a67cf4ef8a01d6f33923b19f8560a",
+  "schema": 1,
+  "teamId": "154",
+  "teamName": "Wake Forest Demon Deacons",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Jake Dickert",
+  "effectiveFrom": "2026-09-11T16:00:40.604Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/154/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.604Z",
+    "retrievedAt": "2026-09-11T16:00:40.604Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d349d74c6f7b75e8d32676c6e6af165003afa506508d4411deaea77c2373c975"
+}

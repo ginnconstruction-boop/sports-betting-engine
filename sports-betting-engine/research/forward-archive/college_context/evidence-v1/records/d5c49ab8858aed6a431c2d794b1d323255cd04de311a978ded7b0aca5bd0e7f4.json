@@ -1,0 +1,24 @@
+{
+  "id": "d5c49ab8858aed6a431c2d794b1d323255cd04de311a978ded7b0aca5bd0e7f4",
+  "schema": 1,
+  "teamId": "26",
+  "teamName": "UCLA Bruins",
+  "season": 2026,
+  "eventId": "401858443",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:40.037Z",
+  "effectiveTo": "2026-09-13T05:15:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858443",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.037Z",
+    "retrievedAt": "2026-09-11T16:00:40.037Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "4f8d969d5fb0b29a05f472adbc825d62ef665701fe140230666ebe3662850599"
+}

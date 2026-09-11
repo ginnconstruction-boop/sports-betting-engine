@@ -1,0 +1,24 @@
+{
+  "id": "d68ea8c3e73233e3fb2515c37a332510e42a2f4e2aaacf8bfb68cbeddd6fc17d",
+  "schema": 1,
+  "teamId": "235",
+  "teamName": "Memphis Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.headCoach",
+  "value": "Charles Huff",
+  "effectiveFrom": "2026-09-11T16:00:42.290Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/235/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.290Z",
+    "retrievedAt": "2026-09-11T16:00:42.290Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "740efea9b5f19bc05ad2d41b3bc27bb0169015fc5967c9d9ce9ff646fc90e603"
+}

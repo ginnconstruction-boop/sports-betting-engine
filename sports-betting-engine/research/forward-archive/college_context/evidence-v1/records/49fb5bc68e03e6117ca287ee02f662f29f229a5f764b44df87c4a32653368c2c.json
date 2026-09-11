@@ -1,0 +1,24 @@
+{
+  "id": "49fb5bc68e03e6117ca287ee02f662f29f229a5f764b44df87c4a32653368c2c",
+  "schema": 1,
+  "teamId": "2115",
+  "teamName": "Central Connecticut Blue Devils",
+  "season": 2026,
+  "eventId": "401866419",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.lastOpponent.diagnostic",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T16:00:39.910Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401866419",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.910Z",
+    "retrievedAt": "2026-09-11T16:00:39.910Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "db844dbce531717d4ca9a3ca8323329f9864a973189a01c235bed0e76af3fde0"
+}

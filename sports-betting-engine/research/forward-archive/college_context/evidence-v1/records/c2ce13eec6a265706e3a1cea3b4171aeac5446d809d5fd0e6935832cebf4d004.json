@@ -1,0 +1,40 @@
+{
+  "id": "c2ce13eec6a265706e3a1cea3b4171aeac5446d809d5fd0e6935832cebf4d004",
+  "schema": 1,
+  "teamId": "2815",
+  "teamName": "Lindenwood Lions",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5225648",
+      "name": "Pops Battle",
+      "status": "Active"
+    },
+    {
+      "id": "5298518",
+      "name": "Hoyt Gregory",
+      "status": "Active"
+    },
+    {
+      "id": "5402595",
+      "name": "Collin Sinclair",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:43.036Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2815/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.036Z",
+    "retrievedAt": "2026-09-11T16:00:43.036Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "03581f9aec359c6eba423c959818f87af47427a2852c314440b508d54966a7bc"
+}

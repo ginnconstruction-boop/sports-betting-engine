@@ -1,0 +1,24 @@
+{
+  "id": "62b989bef8766d14f11309a02b453440ab3b0173d5197e775e83d9b7b6fe8209",
+  "schema": 1,
+  "teamId": "2636",
+  "teamName": "UTSA Roadrunners",
+  "season": 2026,
+  "eventId": "401860884",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T16:00:39.894Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401860884",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.894Z",
+    "retrievedAt": "2026-09-11T16:00:39.894Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "16f73c4a56b761e5abb7fb8fc58bec5ea1460802c122f2d6dc8f6d86011791d9"
+}

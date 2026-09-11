@@ -1,0 +1,24 @@
+{
+  "id": "959d2caa89312f653cc998ed7de0416942928aea85daf5061f34fde6e8620d96",
+  "schema": 1,
+  "teamId": "2449",
+  "teamName": "North Dakota State Bison",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.currentSeasonAvailable",
+  "value": true,
+  "effectiveFrom": "2026-09-11T16:00:43.843Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2449/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.843Z",
+    "retrievedAt": "2026-09-11T16:00:43.843Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8a80820be890c23a22378ab4233f3bba1817d412480383c545950f9ea16e8f1f"
+}

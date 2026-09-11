@@ -1,0 +1,24 @@
+{
+  "id": "9176f9e393cf37aa47b9cc2befafd1365042464aa65467988e41d3489f81b6a6",
+  "schema": 1,
+  "teamId": "87",
+  "teamName": "Notre Dame Fighting Irish",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.ingestionStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:41.608Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/87/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.608Z",
+    "retrievedAt": "2026-09-11T16:00:41.608Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d5a85678a84040789c75ea0fa9e5243d5498fabf8bb2962a2fd2c2326a9bd523"
+}

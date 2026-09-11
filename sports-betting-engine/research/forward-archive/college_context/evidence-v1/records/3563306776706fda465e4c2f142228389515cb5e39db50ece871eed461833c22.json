@@ -1,0 +1,24 @@
+{
+  "id": "3563306776706fda465e4c2f142228389515cb5e39db50ece871eed461833c22",
+  "schema": 1,
+  "teamId": "2529",
+  "teamName": "Sacred Heart Pioneers",
+  "season": 2026,
+  "eventId": "401866420",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.ingestionStatus",
+  "value": "AVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:39.926Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401866420",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.926Z",
+    "retrievedAt": "2026-09-11T16:00:39.926Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f2e748b33328a8df1a63fc7c75b79468dfa46f4515d2abbc6e3dfec2a3ffa692"
+}

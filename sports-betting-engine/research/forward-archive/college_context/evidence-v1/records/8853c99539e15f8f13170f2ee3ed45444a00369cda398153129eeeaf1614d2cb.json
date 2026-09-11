@@ -1,0 +1,40 @@
+{
+  "id": "8853c99539e15f8f13170f2ee3ed45444a00369cda398153129eeeaf1614d2cb",
+  "schema": 1,
+  "teamId": "2385",
+  "teamName": "Mercyhurst Lakers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5405628",
+      "name": "Turner Dolata",
+      "status": "Active"
+    },
+    {
+      "id": "5227557",
+      "name": "Alex Gevaudan",
+      "status": "Active"
+    },
+    {
+      "id": "5227651",
+      "name": "Kolten Ruark",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.125Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2385/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.125Z",
+    "retrievedAt": "2026-09-11T16:00:42.125Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "496efb90da15bcfa75d18183c3281ab6e200081c06d625ba4ceaf19369738c55"
+}

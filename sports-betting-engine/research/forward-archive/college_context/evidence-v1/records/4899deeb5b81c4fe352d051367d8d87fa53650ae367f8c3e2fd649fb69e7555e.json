@@ -1,0 +1,24 @@
+{
+  "id": "4899deeb5b81c4fe352d051367d8d87fa53650ae367f8c3e2fd649fb69e7555e",
+  "schema": 1,
+  "teamId": "130",
+  "teamName": "Michigan Wolverines",
+  "season": 2026,
+  "eventId": "401856679",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.yardsPerGame.diagnostic",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T16:00:39.732Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856679",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.732Z",
+    "retrievedAt": "2026-09-11T16:00:39.732Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "352f0e122939b4f3d250adcb9256e04d2637f5ae0492dc804d9ffa487d029771"
+}

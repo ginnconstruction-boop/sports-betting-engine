@@ -1,0 +1,24 @@
+{
+  "id": "a17a0507cd3ec44946167917e7f4ccd81a6e93f10c29bc1f57d9810588f03b4c",
+  "schema": 1,
+  "teamId": "2305",
+  "teamName": "Kansas Jayhawks",
+  "season": 2026,
+  "eventId": "401856678",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.indoor",
+  "value": false,
+  "effectiveFrom": "2026-09-11T16:00:39.671Z",
+  "effectiveTo": "2026-09-12T06:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856678",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.671Z",
+    "retrievedAt": "2026-09-11T16:00:39.671Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "4e8a0e90a2209c0a4d1ad9349ced0f04fd5b812b1061eb527535b658baf80cbd"
+}

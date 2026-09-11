@@ -1,0 +1,24 @@
+{
+  "id": "da35b9cdfc56d9601ba8128c0eaa19bec9dfaeca2df2afbcc19ebe8237615d26",
+  "schema": 1,
+  "teamId": "48",
+  "teamName": "Delaware Blue Hens",
+  "season": 2026,
+  "eventId": "401856684",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.yardsAllowedPerGame.diagnostic",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T16:00:39.984Z",
+  "effectiveTo": "2026-09-13T02:15:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856684",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.984Z",
+    "retrievedAt": "2026-09-11T16:00:39.984Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "5a24b1f394c531badde95b3836ef5c1e9e50468b1f68b6a7701be23a78ebf2cf"
+}

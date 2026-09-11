@@ -1,0 +1,55 @@
+{
+  "id": "8c9a625802334e51d844d8ecd5e35e3dae3235f1e12e7b10e78fc8789af4dd0c",
+  "schema": 1,
+  "teamId": "218",
+  "teamName": "Temple Owls",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5211736",
+      "name": "Lamar Best",
+      "status": "Active"
+    },
+    {
+      "id": "5216572",
+      "name": "Camren Boykin",
+      "status": "Active"
+    },
+    {
+      "id": "5290544",
+      "name": "Brody Norman",
+      "status": "Active"
+    },
+    {
+      "id": "5290553",
+      "name": "Brady Palmer",
+      "status": "Active"
+    },
+    {
+      "id": "5078166",
+      "name": "Ajani Sheppard",
+      "status": "Active"
+    },
+    {
+      "id": "5077787",
+      "name": "Jaxon Smolik",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:40.672Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/218/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:40.672Z",
+    "retrievedAt": "2026-09-11T16:00:40.672Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "5850fc4023094e34b82c52619f75969de2cbe653a5d27d060b28e6cad2905056"
+}

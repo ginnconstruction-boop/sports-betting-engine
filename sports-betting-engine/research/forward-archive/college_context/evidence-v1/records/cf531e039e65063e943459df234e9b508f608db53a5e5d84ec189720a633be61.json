@@ -1,0 +1,24 @@
+{
+  "id": "cf531e039e65063e943459df234e9b508f608db53a5e5d84ec189720a633be61",
+  "schema": 1,
+  "teamId": "264",
+  "teamName": "Washington Huskies",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.defensiveCoordinator.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-11T16:00:41.540Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/264/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.540Z",
+    "retrievedAt": "2026-09-11T16:00:41.540Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "330436dfb188c7ccb1a993c0b7949be73763d2be7e1a932b1b5a8ab811a619e1"
+}

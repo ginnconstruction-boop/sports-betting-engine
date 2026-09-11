@@ -1,0 +1,50 @@
+{
+  "id": "2fa77c999ed5829aaa94b19f16c3f6b2e367b5ceeb58d974ea41fa457fdcf981",
+  "schema": 1,
+  "teamId": "135",
+  "teamName": "Minnesota Golden Gophers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5221244",
+      "name": "Owen Lansu",
+      "status": "Active"
+    },
+    {
+      "id": "5144959",
+      "name": "Drake Lindsey",
+      "status": "Active"
+    },
+    {
+      "id": "5144313",
+      "name": "Michael Merdinger",
+      "status": "Active"
+    },
+    {
+      "id": "5214645",
+      "name": "Brady Palmer",
+      "status": "Active"
+    },
+    {
+      "id": "5150680",
+      "name": "Max Shikenjanski",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:41.159Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/135/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:41.159Z",
+    "retrievedAt": "2026-09-11T16:00:41.159Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f298e1a5af2b07b07e38b783f0eec2056830f60e5b5a96c5551560a29e70c0c6"
+}

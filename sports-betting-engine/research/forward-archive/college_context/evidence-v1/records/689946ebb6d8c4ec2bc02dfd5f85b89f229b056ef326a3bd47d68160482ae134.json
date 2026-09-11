@@ -1,0 +1,50 @@
+{
+  "id": "689946ebb6d8c4ec2bc02dfd5f85b89f229b056ef326a3bd47d68160482ae134",
+  "schema": 1,
+  "teamId": "2229",
+  "teamName": "Florida International Panthers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5302764",
+      "name": "DJ Alexander",
+      "status": "Active"
+    },
+    {
+      "id": "5299092",
+      "name": "Matt Ivaldi",
+      "status": "Active"
+    },
+    {
+      "id": "4870883",
+      "name": "JJ Kohl",
+      "status": "Active"
+    },
+    {
+      "id": "5153845",
+      "name": "Zach Marker",
+      "status": "Active"
+    },
+    {
+      "id": "5158421",
+      "name": "Zachary Waters",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.450Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2229/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.450Z",
+    "retrievedAt": "2026-09-11T16:00:42.450Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "7b12eaa72d28edd42e6862028efcea45d067549853cae4a5d7bfe5799e7453d0"
+}

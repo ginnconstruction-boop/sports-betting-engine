@@ -1,0 +1,24 @@
+{
+  "id": "c7c2e2d8b07ae017577a5e506eaa38623ffb7bdfd0ef628474e1d1dc31f0ac08",
+  "schema": 1,
+  "teamId": "2747",
+  "teamName": "Wofford Terriers",
+  "season": 2026,
+  "eventId": "401866416",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.indoor",
+  "value": false,
+  "effectiveFrom": "2026-09-11T16:00:39.772Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401866416",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.772Z",
+    "retrievedAt": "2026-09-11T16:00:39.772Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e510ec711156ca5797ebd80f3b4c7654d143cfd46ee79478dd1d8d13bffa2c22"
+}

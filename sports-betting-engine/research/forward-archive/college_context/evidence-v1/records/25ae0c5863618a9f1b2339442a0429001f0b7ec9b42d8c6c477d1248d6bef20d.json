@@ -1,0 +1,24 @@
+{
+  "id": "25ae0c5863618a9f1b2339442a0429001f0b7ec9b42d8c6c477d1248d6bef20d",
+  "schema": 1,
+  "teamId": "183",
+  "teamName": "Syracuse Orange",
+  "season": 2026,
+  "eventId": "401858216",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.yardsAllowedPerGame.diagnostic",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-11T16:00:39.851Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858216",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:39.851Z",
+    "retrievedAt": "2026-09-11T16:00:39.851Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c278acf5d3e1864e583ca21647ef1838ed259c2c9ca0332070dd7c4d692179c5"
+}

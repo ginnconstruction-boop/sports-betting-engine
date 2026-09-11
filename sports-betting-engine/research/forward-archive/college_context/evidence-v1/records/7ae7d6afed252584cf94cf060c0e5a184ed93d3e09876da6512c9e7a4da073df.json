@@ -1,0 +1,24 @@
+{
+  "id": "7ae7d6afed252584cf94cf060c0e5a184ed93d3e09876da6512c9e7a4da073df",
+  "schema": 1,
+  "teamId": "238",
+  "teamName": "Vanderbilt Commodores",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:42.174Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/238/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.174Z",
+    "retrievedAt": "2026-09-11T16:00:42.174Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "023831a6ca90e1d157ae799768c238174b68fa3822cfbecb8b63b191b55ad145"
+}

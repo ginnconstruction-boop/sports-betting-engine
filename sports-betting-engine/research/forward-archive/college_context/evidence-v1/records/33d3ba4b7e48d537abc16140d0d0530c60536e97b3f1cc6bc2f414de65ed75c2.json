@@ -1,0 +1,45 @@
+{
+  "id": "33d3ba4b7e48d537abc16140d0d0530c60536e97b3f1cc6bc2f414de65ed75c2",
+  "schema": 1,
+  "teamId": "2084",
+  "teamName": "Buffalo Bulls",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5085066",
+      "name": "Mason Cumbie",
+      "status": "Active"
+    },
+    {
+      "id": "5387615",
+      "name": "Jake Forburger",
+      "status": "Active"
+    },
+    {
+      "id": "5328086",
+      "name": "Elijah Holmes",
+      "status": "Active"
+    },
+    {
+      "id": "5211776",
+      "name": "Qur'An McNeill",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.335Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2084/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.335Z",
+    "retrievedAt": "2026-09-11T16:00:42.335Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "7b7c4616cc609656ed4bc95dad861cabb0c13fe8d912793dafa559134a651bc4"
+}

@@ -1,0 +1,55 @@
+{
+  "id": "902e485666dd546ba6bf1ead81c82e70dfd9018c2a791c8b9e14868344f6c2b7",
+  "schema": 1,
+  "teamId": "2132",
+  "teamName": "Cincinnati Bearcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "4685345",
+      "name": "JC French IV",
+      "status": "Active"
+    },
+    {
+      "id": "5266902",
+      "name": "Brooks Goodman",
+      "status": "Active"
+    },
+    {
+      "id": "5089327",
+      "name": "Samaj Jones",
+      "status": "Active"
+    },
+    {
+      "id": "5161679",
+      "name": "Will Kocher",
+      "status": "Active"
+    },
+    {
+      "id": "5381525",
+      "name": "JJ Miller",
+      "status": "Active"
+    },
+    {
+      "id": "5084404",
+      "name": "Liam O'Brien",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.596Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2132/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.596Z",
+    "retrievedAt": "2026-09-11T16:00:42.596Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d7e2bb33bf9ef7dcb88b69c0b040db78ecc80033ec7992395e2c1898bab8b6cc"
+}

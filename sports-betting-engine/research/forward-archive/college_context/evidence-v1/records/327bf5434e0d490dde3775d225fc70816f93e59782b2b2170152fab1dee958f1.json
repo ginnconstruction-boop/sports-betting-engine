@@ -1,0 +1,24 @@
+{
+  "id": "327bf5434e0d490dde3775d225fc70816f93e59782b2b2170152fab1dee958f1",
+  "schema": 1,
+  "teamId": "166",
+  "teamName": "New Mexico State Aggies",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:43.895Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/166/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.895Z",
+    "retrievedAt": "2026-09-11T16:00:43.895Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "75d5d9b804de8a62ebb40008f9654f9a68ff760e3e2c929d09337e110b79cc55"
+}

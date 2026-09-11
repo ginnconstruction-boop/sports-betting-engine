@@ -1,0 +1,35 @@
+{
+  "id": "72dd7fd52390497f1b7ca0f82e4df62b7f5b70163295e1913e71121611e4d2e1",
+  "schema": 1,
+  "teamId": "2405",
+  "teamName": "Monmouth Hawks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.qbCandidates",
+  "value": [
+    {
+      "id": "5405661",
+      "name": "Evan Budinger",
+      "status": "Active"
+    },
+    {
+      "id": "5300969",
+      "name": "Brad Seiss",
+      "status": "Active"
+    }
+  ],
+  "effectiveFrom": "2026-09-11T16:00:42.428Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2405/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:42.428Z",
+    "retrievedAt": "2026-09-11T16:00:42.428Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "cb49978b4a799582fc370b5a99510eb23f944f6dd70fc0f91bcfb198dfa8e1b8"
+}

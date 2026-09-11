@@ -1,0 +1,24 @@
+{
+  "id": "3c8ab439098b5d42d7ae328ff9d09a00c49cff9cfcb70dc162f7eb75fa610b7c",
+  "schema": 1,
+  "teamId": "2429",
+  "teamName": "Charlotte 49ers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "roster",
+  "field": "roster.ingestionStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-11T16:00:43.602Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/teams/2429/roster",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-11T16:00:43.602Z",
+    "retrievedAt": "2026-09-11T16:00:43.602Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9f0eae7d87a8c1c66f9bba3d71c35fcf6ed9546eb8582ef3c1faa20dc5748139"
+}
