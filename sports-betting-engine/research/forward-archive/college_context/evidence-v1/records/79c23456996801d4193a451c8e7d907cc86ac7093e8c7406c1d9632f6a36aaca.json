@@ -1,0 +1,24 @@
+{
+  "id": "79c23456996801d4193a451c8e7d907cc86ac7093e8c7406c1d9632f6a36aaca",
+  "schema": 1,
+  "teamId": "2655",
+  "teamName": "Tulane Green Wave",
+  "season": 2026,
+  "eventId": "401864575",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T15:08:54.961Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864575",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.961Z",
+    "retrievedAt": "2026-09-12T15:08:54.961Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "6d96e012ac70697f501db7c8b46b4455c8a3204dfb27e0e93f32693d7be81051"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "9cda41cdd899ac7da7e193790ec391a3c89a7c339d453a7212c3c3a2b2ca217a",
+  "schema": 1,
+  "teamId": "194",
+  "teamName": "Ohio State Buckeyes",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.depthTier.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T15:08:55.554Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.554Z",
+    "retrievedAt": "2026-09-12T15:08:55.554Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f51afdfe634ccab6b2d664ccfe393c6a8cbc703c8a4067de0f7de0c7ebae8c6b"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "42015f1a2882875b202b8200fe90db79145aafcb56ac25ac8748ef68b8cb717a",
+  "schema": 1,
+  "teamId": "2755",
+  "teamName": "Grambling Tigers",
+  "season": 2026,
+  "eventId": "401856789",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.lastScore.diagnostic",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-12T15:08:55.422Z",
+  "effectiveTo": "2026-09-13T06:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856789",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.422Z",
+    "retrievedAt": "2026-09-12T15:08:55.422Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "975908a7a0e0698ac3b6a8b421731e374fc59147ef565d019536d98594a45eeb"
+}

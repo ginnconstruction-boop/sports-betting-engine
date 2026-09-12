@@ -1,0 +1,24 @@
+{
+  "id": "3ff8f4e74401d3958a7a62c733521ef90d9068b3275446442204370bbb95f903",
+  "schema": 1,
+  "teamId": "204",
+  "teamName": "Oregon State Beavers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-12T15:08:55.554Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.554Z",
+    "retrievedAt": "2026-09-12T15:08:55.554Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "4e464483c01095bba6bbcc08365146cae630e619a239d4857f995ea70374a28c"
+}

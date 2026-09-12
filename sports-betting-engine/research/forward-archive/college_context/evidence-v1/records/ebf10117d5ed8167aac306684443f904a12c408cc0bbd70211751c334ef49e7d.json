@@ -1,0 +1,24 @@
+{
+  "id": "ebf10117d5ed8167aac306684443f904a12c408cc0bbd70211751c334ef49e7d",
+  "schema": 1,
+  "teamId": "38",
+  "teamName": "Colorado Buffaloes",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-12T15:08:55.551Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.551Z",
+    "retrievedAt": "2026-09-12T15:08:55.551Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e5498946621b36f3e48ccf720da7142dfb53f2bf0b84521aecc25f4069e42077"
+}

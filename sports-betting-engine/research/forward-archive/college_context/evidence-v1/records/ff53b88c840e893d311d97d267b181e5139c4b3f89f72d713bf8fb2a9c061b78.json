@@ -1,0 +1,26 @@
+{
+  "id": "ff53b88c840e893d311d97d267b181e5139c4b3f89f72d713bf8fb2a9c061b78",
+  "schema": 1,
+  "teamId": "2459",
+  "teamName": "Northern Illinois Huskies",
+  "season": 2026,
+  "eventId": "401864503",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.flags",
+  "value": [
+    "GUST_15_PLUS"
+  ],
+  "effectiveFrom": "2026-09-12T15:08:55.044Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864503",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.044Z",
+    "retrievedAt": "2026-09-12T15:08:55.044Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "5b3b6bcb439a7b5e420019b674134bcd46674925f39e36b2192db6743b46b794"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "cb44493ce7ae379e4394c40756775a3a7a438cbc50ba3a045b078caa6d73f571",
+  "schema": 1,
+  "teamId": "189",
+  "teamName": "Bowling Green Falcons",
+  "season": 2026,
+  "eventId": "401858441",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.provider",
+  "value": "Draft Kings",
+  "effectiveFrom": "2026-09-12T15:08:54.940Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858441",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.940Z",
+    "retrievedAt": "2026-09-12T15:08:54.940Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "fe3914e43146a9c7532ae1042f46fa0a08c94bdc191b52dd9eac6cf967c7b697"
+}

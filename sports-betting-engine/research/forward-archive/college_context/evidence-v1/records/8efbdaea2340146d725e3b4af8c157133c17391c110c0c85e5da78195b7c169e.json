@@ -1,0 +1,24 @@
+{
+  "id": "8efbdaea2340146d725e3b4af8c157133c17391c110c0c85e5da78195b7c169e",
+  "schema": 1,
+  "teamId": "309",
+  "teamName": "Louisiana Ragin' Cajuns",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.rosterComposite.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T15:08:55.555Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.555Z",
+    "retrievedAt": "2026-09-12T15:08:55.555Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f098a36ae80adf23d0e5471110c2795f91217f54be598883745608e3d1146862"
+}

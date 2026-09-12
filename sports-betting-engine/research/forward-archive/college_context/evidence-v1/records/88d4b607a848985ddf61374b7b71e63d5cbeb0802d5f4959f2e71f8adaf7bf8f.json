@@ -1,0 +1,24 @@
+{
+  "id": "88d4b607a848985ddf61374b7b71e63d5cbeb0802d5f4959f2e71f8adaf7bf8f",
+  "schema": 1,
+  "teamId": "8",
+  "teamName": "Arkansas Razorbacks",
+  "season": 2026,
+  "eventId": "401856670",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T15:08:55.226Z",
+  "effectiveTo": "2026-09-13T08:15:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856670",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.226Z",
+    "retrievedAt": "2026-09-12T15:08:55.226Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "847c2ef28c772752266a1f7587cb23b5a99716ec92494c33ac5659c0f72d095a"
+}

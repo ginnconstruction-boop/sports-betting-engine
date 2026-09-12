@@ -1,0 +1,24 @@
+{
+  "id": "2476c00b81a09d6152b84854102741e379f9b9c6a5aa231fefbc0519b149d13d",
+  "schema": 1,
+  "teamId": "256",
+  "teamName": "James Madison Dukes",
+  "season": 2026,
+  "eventId": "401867929",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.humidityPct.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-12T15:08:54.590Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401867929",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.590Z",
+    "retrievedAt": "2026-09-12T15:08:54.590Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "76b42e8e25d55b37661e0771e14d558ca8b54ddc02744007ba23e8a54e2b893e"
+}

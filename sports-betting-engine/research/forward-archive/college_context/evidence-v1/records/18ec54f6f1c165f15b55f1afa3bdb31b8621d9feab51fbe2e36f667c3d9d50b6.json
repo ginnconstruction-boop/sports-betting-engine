@@ -1,0 +1,24 @@
+{
+  "id": "18ec54f6f1c165f15b55f1afa3bdb31b8621d9feab51fbe2e36f667c3d9d50b6",
+  "schema": 1,
+  "teamId": "349",
+  "teamName": "Army Black Knights",
+  "season": 2026,
+  "eventId": "401862702",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.indoor",
+  "value": false,
+  "effectiveFrom": "2026-09-12T15:08:54.649Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401862702",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.649Z",
+    "retrievedAt": "2026-09-12T15:08:54.649Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "09bf8f703202a811b4cc3f1cded5fffef10f2be965c471fd7932ebde12a7831e"
+}

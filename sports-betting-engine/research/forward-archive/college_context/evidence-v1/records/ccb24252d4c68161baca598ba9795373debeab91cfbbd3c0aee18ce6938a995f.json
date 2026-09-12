@@ -1,0 +1,24 @@
+{
+  "id": "ccb24252d4c68161baca598ba9795373debeab91cfbbd3c0aee18ce6938a995f",
+  "schema": 1,
+  "teamId": "2649",
+  "teamName": "Toledo Rockets",
+  "season": 2026,
+  "eventId": "401866419",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.precipitationMm.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-12T15:08:54.792Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401866419",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.792Z",
+    "retrievedAt": "2026-09-12T15:08:54.792Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "622123a101a99621e30f9fd8b2f33eb827d48a5b30953070ad3cabfa69e53808"
+}

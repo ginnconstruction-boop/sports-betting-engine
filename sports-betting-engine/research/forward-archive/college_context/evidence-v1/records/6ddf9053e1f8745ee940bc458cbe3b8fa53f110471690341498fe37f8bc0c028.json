@@ -1,0 +1,24 @@
+{
+  "id": "6ddf9053e1f8745ee940bc458cbe3b8fa53f110471690341498fe37f8bc0c028",
+  "schema": 1,
+  "teamId": "127",
+  "teamName": "Michigan State Spartans",
+  "season": 2026,
+  "eventId": "401858440",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.indoor",
+  "value": false,
+  "effectiveFrom": "2026-09-12T15:08:54.867Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858440",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.867Z",
+    "retrievedAt": "2026-09-12T15:08:54.867Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d21f4d8939f7685aac0f70d38419290b8f42b7d8163179a8f5ec488507dc26f9"
+}

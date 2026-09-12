@@ -1,0 +1,24 @@
+{
+  "id": "81cc103402fd52a8533debfefe9270a2b6d51ded503a30a50551bbdba6373190",
+  "schema": 1,
+  "teamId": "2649",
+  "teamName": "Toledo Rockets",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.depthTier.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T15:08:55.553Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.553Z",
+    "retrievedAt": "2026-09-12T15:08:55.553Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "11825fccddbb162f53ba71ee63488f7f2fc42c742ec6491c0a3317860de6c7c2"
+}

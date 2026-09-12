@@ -1,0 +1,24 @@
+{
+  "id": "aebf26e2ec59c8a9e0987701b622b83290b6fbc2ff4583b7ffd5f9b201e74fe0",
+  "schema": 1,
+  "teamId": "2717",
+  "teamName": "Western Carolina Catamounts",
+  "season": 2026,
+  "eventId": "401856786",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.currentHomeSpread",
+  "value": -36.5,
+  "effectiveFrom": "2026-09-12T15:08:54.961Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856786",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.961Z",
+    "retrievedAt": "2026-09-12T15:08:54.961Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "290e730bde6f59f20a578181dfb50e6e01bd899e15260b1d9ab87f5e50ef5a9a"
+}

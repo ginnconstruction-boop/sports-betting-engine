@@ -1,0 +1,24 @@
+{
+  "id": "099f4e0b87246a9535ad1908a8d993c78653cfa24435d3eee02059bfaedf2640",
+  "schema": 1,
+  "teamId": "2032",
+  "teamName": "Arkansas State Red Wolves",
+  "season": 2026,
+  "eventId": "401868241",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-12T15:08:55.079Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401868241",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.079Z",
+    "retrievedAt": "2026-09-12T15:08:55.079Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "6790b01796080d81911197ef10e1f6814b22cfc2fd157215736143eab6bf7e41"
+}

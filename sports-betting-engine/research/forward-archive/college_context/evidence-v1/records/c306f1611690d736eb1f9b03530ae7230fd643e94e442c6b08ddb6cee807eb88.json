@@ -1,0 +1,24 @@
+{
+  "id": "c306f1611690d736eb1f9b03530ae7230fd643e94e442c6b08ddb6cee807eb88",
+  "schema": 1,
+  "teamId": "183",
+  "teamName": "Syracuse Orange",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.depthTier.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T15:08:55.552Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.552Z",
+    "retrievedAt": "2026-09-12T15:08:55.552Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "19ffb924694cb5391f9aa340a4b80b54f324bdf7dc929e08b1abc0ad3f201376"
+}

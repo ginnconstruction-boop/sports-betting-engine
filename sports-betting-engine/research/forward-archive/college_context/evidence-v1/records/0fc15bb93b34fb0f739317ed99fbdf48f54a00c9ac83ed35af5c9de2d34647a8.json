@@ -1,0 +1,24 @@
+{
+  "id": "0fc15bb93b34fb0f739317ed99fbdf48f54a00c9ac83ed35af5c9de2d34647a8",
+  "schema": 1,
+  "teamId": "193",
+  "teamName": "Miami (OH) RedHawks",
+  "season": 2026,
+  "eventId": "401866417",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T15:08:54.615Z",
+  "effectiveTo": "2026-09-12T23:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401866417",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.615Z",
+    "retrievedAt": "2026-09-12T15:08:54.615Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c9ac36b2944d61fd0cf7fc9946d70da004785202f9779db47eb74d9bde7df068"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "8e0c4a2321f0fb80b472c710297da5e15a9e377a8d1b9ddba9392f579b4a4f0b",
+  "schema": 1,
+  "teamId": "36",
+  "teamName": "Colorado State Rams",
+  "season": 2026,
+  "eventId": "401860882",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T15:08:54.914Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401860882",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.914Z",
+    "retrievedAt": "2026-09-12T15:08:54.914Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "850997e1c6118810c12a7475b2d78e5a7cb2918bcb9a1484bcfb5831b3dbeea7"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "16c152dfc4608fe97f449e9cbaefcc1202ca77e6b07ca7cdafc54bd5cb577110",
+  "schema": 1,
+  "teamId": "48",
+  "teamName": "Delaware Blue Hens",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-12T15:08:55.554Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.554Z",
+    "retrievedAt": "2026-09-12T15:08:55.554Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "0abe1fbbd23efa6786e69e3be8483e70c093be13f6530e9c45aed7a44b70be19"
+}

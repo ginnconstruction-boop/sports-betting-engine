@@ -1,0 +1,24 @@
+{
+  "id": "55cb75e81f11c45ecb078201b965f4b86b644651981b9d52c8fe7cce38cd32fd",
+  "schema": 1,
+  "teamId": "113",
+  "teamName": "Massachusetts Minutemen",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.rosterComposite.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T15:08:55.553Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.553Z",
+    "retrievedAt": "2026-09-12T15:08:55.553Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "7256c0776f7915b3adb0bbf4a13d0bcc28ebcd148e4a4f173bcc20b129769f3c"
+}

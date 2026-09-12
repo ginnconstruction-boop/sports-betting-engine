@@ -1,0 +1,24 @@
+{
+  "id": "05e1b852bd8892c54708f0799d35d50ec16807872b03d9e7ae0b7cbba67f92d7",
+  "schema": 1,
+  "teamId": "2751",
+  "teamName": "Wyoming Cowboys",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-12T15:08:55.553Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.553Z",
+    "retrievedAt": "2026-09-12T15:08:55.553Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "a47c0df982e5860a80881293df72cea573373fb7173119c665aa88ca89e565cd"
+}

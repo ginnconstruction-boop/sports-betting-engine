@@ -1,0 +1,24 @@
+{
+  "id": "08aeba8e61f4de9e11472aa0bbaf76fcec8b48dc609d0a5b7d457c9d9a3ba8a6",
+  "schema": 1,
+  "teamId": "145",
+  "teamName": "Ole Miss Rebels",
+  "season": 2026,
+  "eventId": "401856676",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T15:08:55.136Z",
+  "effectiveTo": "2026-09-13T05:45:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856676",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.136Z",
+    "retrievedAt": "2026-09-12T15:08:55.136Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "7311eec787bff7a5dced58b9794585e38a50811535990c375d85613d5f8fc303"
+}

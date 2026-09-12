@@ -1,0 +1,24 @@
+{
+  "id": "fcda8d73dc1c0c0144a477114154c561d13e9de8dc8500905445b37619fc803c",
+  "schema": 1,
+  "teamId": "99",
+  "teamName": "LSU Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-12T15:08:55.555Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.555Z",
+    "retrievedAt": "2026-09-12T15:08:55.555Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "76a7292cd4df7b2635b98a9a60c9cf7a064db1734236f9d0f26f4b32addf80aa"
+}

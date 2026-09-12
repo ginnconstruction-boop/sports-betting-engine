@@ -1,0 +1,24 @@
+{
+  "id": "fb2a0af8a032a57ce3ced7e0be9653c35d540e0df4615e11e178b03857e22a4c",
+  "schema": 1,
+  "teamId": "2815",
+  "teamName": "Lindenwood Lions",
+  "season": 2026,
+  "eventId": "401871046",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-12T15:08:55.051Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401871046",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.051Z",
+    "retrievedAt": "2026-09-12T15:08:55.051Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "675d261fb605274ee914db0a81ca796a9d0b83efc500d8196dadaa3a3e22adb7"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "dbc7780c69530ccd5cdf83e1cd258328d4bf19ff77cef17731fee97c1e2f79ad",
+  "schema": 1,
+  "teamId": "55",
+  "teamName": "Jacksonville State Gamecocks",
+  "season": 2026,
+  "eventId": "401866418",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.pointsPerGame",
+  "value": 28,
+  "effectiveFrom": "2026-09-12T15:08:54.914Z",
+  "effectiveTo": "2026-09-13T04:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401866418",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.914Z",
+    "retrievedAt": "2026-09-12T15:08:54.914Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "2c89be5a4ae9b8997f313230f772ce8a52d1e2c5aff8d260b5b4e09ba915360e"
+}

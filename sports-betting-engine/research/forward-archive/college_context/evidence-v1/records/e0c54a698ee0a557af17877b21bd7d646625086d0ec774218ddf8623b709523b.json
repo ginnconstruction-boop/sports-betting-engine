@@ -1,0 +1,24 @@
+{
+  "id": "e0c54a698ee0a557af17877b21bd7d646625086d0ec774218ddf8623b709523b",
+  "schema": 1,
+  "teamId": "2653",
+  "teamName": "Troy Trojans",
+  "season": 2026,
+  "eventId": "401868326",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-12T15:08:54.880Z",
+  "effectiveTo": "2026-09-13T02:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401868326",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.880Z",
+    "retrievedAt": "2026-09-12T15:08:54.880Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "31cc03d7970b86b9d54277c7725ca2ea89d87f5f54bb2ee8f7942eae12eb8f52"
+}

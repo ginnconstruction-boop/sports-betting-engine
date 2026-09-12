@@ -1,0 +1,24 @@
+{
+  "id": "4b630f475a47b24d942dd5e0e5bed3d8556def4a02a81a245fc0398117413aec",
+  "schema": 1,
+  "teamId": "2582",
+  "teamName": "Southern Jaguars",
+  "season": 2026,
+  "eventId": "401856787",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.provider",
+  "value": "Draft Kings",
+  "effectiveFrom": "2026-09-12T15:08:54.930Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856787",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.930Z",
+    "retrievedAt": "2026-09-12T15:08:54.930Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "fe4fb9a1b14f7678a9b37395aaede033c0df3cdd0f388f6f1cd2dafaabdc9fad"
+}

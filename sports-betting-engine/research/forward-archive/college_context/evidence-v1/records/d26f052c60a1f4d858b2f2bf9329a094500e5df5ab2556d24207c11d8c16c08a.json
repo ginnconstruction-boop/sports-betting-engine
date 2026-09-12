@@ -1,0 +1,24 @@
+{
+  "id": "d26f052c60a1f4d858b2f2bf9329a094500e5df5ab2556d24207c11d8c16c08a",
+  "schema": 1,
+  "teamId": "324",
+  "teamName": "Coastal Carolina Chanticleers",
+  "season": 2026,
+  "eventId": "401868008",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.ingestionStatus",
+  "value": "VALIDATION_FAILED",
+  "effectiveFrom": "2026-09-12T15:08:55.191Z",
+  "effectiveTo": "2026-09-13T05:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401868008",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.191Z",
+    "retrievedAt": "2026-09-12T15:08:55.191Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "907abdbbca5161b6d6ed64191fc0acb540545b16edae8024acf7fc8e61ab2d69"
+}

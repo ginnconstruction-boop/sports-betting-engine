@@ -1,0 +1,24 @@
+{
+  "id": "c275ab50ae3de98ef0aeb693a1f53ac807024c07a7902b3051923180c805fd67",
+  "schema": 1,
+  "teamId": "84",
+  "teamName": "Indiana Hoosiers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-12T15:08:55.551Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.551Z",
+    "retrievedAt": "2026-09-12T15:08:55.551Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "ce823fa1ad686e221a4170c03bd0a3a2fdbc9a6ed2eebe57a02b002cda8c739b"
+}

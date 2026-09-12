@@ -1,0 +1,24 @@
+{
+  "id": "c370fac1e763ca3c380e61e8d625e77f24cca74a922d72ada0bfe130327afdfb",
+  "schema": 1,
+  "teamId": "62",
+  "teamName": "Hawai'i Rainbow Warriors",
+  "season": 2026,
+  "eventId": "401864578",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.provider",
+  "value": "Draft Kings",
+  "effectiveFrom": "2026-09-12T15:08:55.333Z",
+  "effectiveTo": "2026-09-13T09:59:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864578",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.333Z",
+    "retrievedAt": "2026-09-12T15:08:55.333Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "a47ae3ac70121034fc1e9b9796a7d0fb6317d12f4dbb354a30dda7348b5086f6"
+}

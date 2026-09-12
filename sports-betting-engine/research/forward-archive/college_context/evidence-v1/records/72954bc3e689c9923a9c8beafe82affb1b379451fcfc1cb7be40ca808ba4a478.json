@@ -1,0 +1,24 @@
+{
+  "id": "72954bc3e689c9923a9c8beafe82affb1b379451fcfc1cb7be40ca808ba4a478",
+  "schema": 1,
+  "teamId": "151",
+  "teamName": "East Carolina Pirates",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-12T15:08:55.551Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.551Z",
+    "retrievedAt": "2026-09-12T15:08:55.551Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "115aeae737a05a0f040ec0d7c05c242d3fd064b011d3b64d4a4a55d29e4066c2"
+}

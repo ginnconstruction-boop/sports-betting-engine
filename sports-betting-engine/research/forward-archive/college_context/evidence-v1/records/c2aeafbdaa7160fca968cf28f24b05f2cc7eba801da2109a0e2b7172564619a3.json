@@ -1,0 +1,24 @@
+{
+  "id": "c2aeafbdaa7160fca968cf28f24b05f2cc7eba801da2109a0e2b7172564619a3",
+  "schema": 1,
+  "teamId": "2509",
+  "teamName": "Purdue Boilermakers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-12T15:08:55.550Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.550Z",
+    "retrievedAt": "2026-09-12T15:08:55.550Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "55aca8762512b56ec0aed8170ed856aafba19b961be4b664a257c361984c8efb"
+}

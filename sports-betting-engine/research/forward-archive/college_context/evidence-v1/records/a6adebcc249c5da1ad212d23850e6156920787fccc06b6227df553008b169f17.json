@@ -1,0 +1,24 @@
+{
+  "id": "a6adebcc249c5da1ad212d23850e6156920787fccc06b6227df553008b169f17",
+  "schema": 1,
+  "teamId": "2385",
+  "teamName": "Mercyhurst Lakers",
+  "season": 2026,
+  "eventId": "401865252",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-12T15:08:54.849Z",
+  "effectiveTo": "2026-09-13T02:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401865252",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.849Z",
+    "retrievedAt": "2026-09-12T15:08:54.849Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "bde7e36027930c204a639e8bb23b98eacfa5c4c8b795d413d7a8c9d8e5617db9"
+}

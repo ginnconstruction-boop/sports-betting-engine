@@ -1,0 +1,24 @@
+{
+  "id": "d46685cceb04047a2e04edd407e8587f82d0f4fd728794c4d8b9a7ec37b3a85e",
+  "schema": 1,
+  "teamId": "2633",
+  "teamName": "Tennessee Volunteers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-12T15:08:55.554Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.554Z",
+    "retrievedAt": "2026-09-12T15:08:55.554Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "53f492b44bb48cf1920f322b63ba98566c2725b2b7725727fd1e09cac4e56e72"
+}

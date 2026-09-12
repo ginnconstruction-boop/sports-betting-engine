@@ -1,0 +1,24 @@
+{
+  "id": "2d07a0ce637179b52002c0157a714fb8a2126be4df89b152d5732626adb10888",
+  "schema": 1,
+  "teamId": "2005",
+  "teamName": "Air Force Falcons",
+  "season": 2026,
+  "eventId": "401864502",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.movementPoints",
+  "value": -5,
+  "effectiveFrom": "2026-09-12T15:08:55.281Z",
+  "effectiveTo": "2026-09-13T08:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864502",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.281Z",
+    "retrievedAt": "2026-09-12T15:08:55.281Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d763993ed4671e98d206049a07c800d822655c149775062beca9e33ad255e22b"
+}

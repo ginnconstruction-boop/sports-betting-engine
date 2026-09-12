@@ -1,0 +1,24 @@
+{
+  "id": "89d84b5650d3f8a1cd2b0a54414a8dd0ebb7a1ae15c6e11cdd5ea84a34dccc82",
+  "schema": 1,
+  "teamId": "23",
+  "teamName": "San José State Spartans",
+  "season": 2026,
+  "eventId": "401864504",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.pointsAllowedPerGame",
+  "value": 31.5,
+  "effectiveFrom": "2026-09-12T15:08:55.312Z",
+  "effectiveTo": "2026-09-13T07:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864504",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.312Z",
+    "retrievedAt": "2026-09-12T15:08:55.312Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "6674888fd2ce21f8802518dc652d6b7d29eb85366e572de97c81a7fd5e373a42"
+}

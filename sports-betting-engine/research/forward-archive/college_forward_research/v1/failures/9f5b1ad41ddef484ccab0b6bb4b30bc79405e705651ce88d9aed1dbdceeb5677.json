@@ -1,0 +1,13 @@
+{
+  "id": "9f5b1ad41ddef484ccab0b6bb4b30bc79405e705651ce88d9aed1dbdceeb5677",
+  "provider": "The Odds API",
+  "requestCategory": "EXTERNAL_MARKET_BENCHMARK",
+  "canonicalEventId": "401868326",
+  "teamId": null,
+  "failedAt": "2026-09-12T15:09:08.907Z",
+  "errorClass": "SOURCE_DOWN",
+  "attempts": 1,
+  "retryState": "NOT_RETRIED",
+  "finalAvailability": "UNAVAILABLE",
+  "message": "College slate odds unavailable. No retry or per-game odds purchases were made."
+}

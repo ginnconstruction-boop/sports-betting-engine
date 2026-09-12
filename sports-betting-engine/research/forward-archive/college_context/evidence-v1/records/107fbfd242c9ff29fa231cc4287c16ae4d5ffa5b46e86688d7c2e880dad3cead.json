@@ -1,0 +1,24 @@
+{
+  "id": "107fbfd242c9ff29fa231cc4287c16ae4d5ffa5b46e86688d7c2e880dad3cead",
+  "schema": 1,
+  "teamId": "2309",
+  "teamName": "Kent State Golden Flashes",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-12T15:08:55.551Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.551Z",
+    "retrievedAt": "2026-09-12T15:08:55.551Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "29c0b2333ed1aa1c260da00004d843d9edd23e414c65348f7df236d137bcc0d8"
+}

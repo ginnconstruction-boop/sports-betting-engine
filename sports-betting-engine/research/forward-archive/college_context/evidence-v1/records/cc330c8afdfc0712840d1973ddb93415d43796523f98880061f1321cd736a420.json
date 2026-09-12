@@ -1,0 +1,24 @@
+{
+  "id": "cc330c8afdfc0712840d1973ddb93415d43796523f98880061f1321cd736a420",
+  "schema": 1,
+  "teamId": "61",
+  "teamName": "Georgia Bulldogs",
+  "season": 2026,
+  "eventId": "401856673",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.ingestionStatus",
+  "value": "VALIDATION_FAILED",
+  "effectiveFrom": "2026-09-12T15:08:54.607Z",
+  "effectiveTo": "2026-09-12T22:45:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856673",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.607Z",
+    "retrievedAt": "2026-09-12T15:08:54.607Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "5ac30cab4ae6573c24b811fb588acee42b5756f6dc62bef90b6434cf0f4b1e06"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "bab8f2794db56b1c68cf807ec53dbd3335320468f737ef3f963899919393f4e3",
+  "schema": 1,
+  "teamId": "2534",
+  "teamName": "Sam Houston Bearkats",
+  "season": 2026,
+  "eventId": "401862707",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.yardsPerGame",
+  "value": 373,
+  "effectiveFrom": "2026-09-12T15:08:55.068Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401862707",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.068Z",
+    "retrievedAt": "2026-09-12T15:08:55.068Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "33d2917071ddf36993f8a140ee5ec65ccd56a57fefcddd8487ef74dc610890d9"
+}

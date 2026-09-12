@@ -1,0 +1,24 @@
+{
+  "id": "99787f3075b6e4b255816294e793f591bae1a077dbf82d1fef450df20430ade1",
+  "schema": 1,
+  "teamId": "2116",
+  "teamName": "UCF Knights",
+  "season": 2026,
+  "eventId": "401856790",
+  "playerId": null,
+  "domain": "qb",
+  "field": "qb.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-12T15:08:54.724Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856790",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.724Z",
+    "retrievedAt": "2026-09-12T15:08:54.724Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "066e3f5807ea14e4526e85a2cd3c14bfcf14e2c61ae6e9e457a6cee0d2361755"
+}

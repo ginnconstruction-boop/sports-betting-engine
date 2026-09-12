@@ -1,0 +1,24 @@
+{
+  "id": "95f554a963ac5af47c6929c68cbd1c25a0bc73ad069f491452ba5101d741cfe4",
+  "schema": 1,
+  "teamId": "356",
+  "teamName": "Illinois Fighting Illini",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-12T15:08:55.552Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.552Z",
+    "retrievedAt": "2026-09-12T15:08:55.552Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "3058edf15155dae670cf3981f81d6e6ba68b62f325956eff7564021f3164bb72"
+}

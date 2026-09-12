@@ -1,0 +1,24 @@
+{
+  "id": "0d8ed1d1eaa88d47a50a672f7259d368b61929b70ba8c4b68f972e9a9622b3fa",
+  "schema": 1,
+  "teamId": "8",
+  "teamName": "Arkansas Razorbacks",
+  "season": 2026,
+  "eventId": "401856670",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.windMph.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-12T15:08:55.305Z",
+  "effectiveTo": "2026-09-13T08:15:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856670",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.305Z",
+    "retrievedAt": "2026-09-12T15:08:55.305Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "847c2ef28c772752266a1f7587cb23b5a99716ec92494c33ac5659c0f72d095a"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "8bf0d5bb17651c1e521c13a75707149750a411127af5dd4717b99cc4e0eddd93",
+  "schema": 1,
+  "teamId": "2294",
+  "teamName": "Iowa Hawkeyes",
+  "season": 2026,
+  "eventId": "401856788",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.gamesPlayed.diagnostic",
+  "value": "VALIDATION_FAILED",
+  "effectiveFrom": "2026-09-12T15:08:55.121Z",
+  "effectiveTo": "2026-09-13T05:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856788",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.121Z",
+    "retrievedAt": "2026-09-12T15:08:55.121Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c37fcf240d775d612f0a5d1e4cd9556698e5146be9e783880866d541a5744e61"
+}

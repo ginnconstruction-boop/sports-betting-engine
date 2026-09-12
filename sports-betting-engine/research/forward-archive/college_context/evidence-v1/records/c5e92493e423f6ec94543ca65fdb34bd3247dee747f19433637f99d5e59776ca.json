@@ -1,0 +1,24 @@
+{
+  "id": "c5e92493e423f6ec94543ca65fdb34bd3247dee747f19433637f99d5e59776ca",
+  "schema": 1,
+  "teamId": "2439",
+  "teamName": "UNLV Rebels",
+  "season": 2026,
+  "eventId": "401862705",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.ingestionStatus",
+  "value": "VALIDATION_FAILED",
+  "effectiveFrom": "2026-09-12T15:08:54.843Z",
+  "effectiveTo": "2026-09-13T01:45:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401862705",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.843Z",
+    "retrievedAt": "2026-09-12T15:08:54.843Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "b93f6b26e957f7adab7e2ad0a9ec6bdac5cef8598a59fc32b39e056506c80a84"
+}

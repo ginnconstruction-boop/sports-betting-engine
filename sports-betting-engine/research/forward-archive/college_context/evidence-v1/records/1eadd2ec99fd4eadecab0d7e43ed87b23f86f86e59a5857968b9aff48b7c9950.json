@@ -1,0 +1,24 @@
+{
+  "id": "1eadd2ec99fd4eadecab0d7e43ed87b23f86f86e59a5857968b9aff48b7c9950",
+  "schema": 1,
+  "teamId": "127",
+  "teamName": "Michigan State Spartans",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-12T15:08:55.552Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.552Z",
+    "retrievedAt": "2026-09-12T15:08:55.552Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "0fbf10310a793bbae04db4b1080b8cb18ff2781ce2e83243e4b868310855783e"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "2e998683d30af9acdbb6a9852de64993d88a48d8e0090da37c963ee77ba216ef",
+  "schema": 1,
+  "teamId": "242",
+  "teamName": "Rice Owls",
+  "season": 2026,
+  "eventId": "401859184",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.currentHomeSpread",
+  "value": -45.5,
+  "effectiveFrom": "2026-09-12T15:08:54.774Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401859184",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.774Z",
+    "retrievedAt": "2026-09-12T15:08:54.774Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "80ea0459dd1db3013cc4d80cd73d5ad99ff89f913ea54e4375d32e48d3e028bf"
+}

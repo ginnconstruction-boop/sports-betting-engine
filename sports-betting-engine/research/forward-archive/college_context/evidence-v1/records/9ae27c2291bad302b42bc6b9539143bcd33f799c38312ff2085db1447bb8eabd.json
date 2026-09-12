@@ -1,0 +1,24 @@
+{
+  "id": "9ae27c2291bad302b42bc6b9539143bcd33f799c38312ff2085db1447bb8eabd",
+  "schema": 1,
+  "teamId": "2458",
+  "teamName": "Northern Colorado Bears",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FCS",
+  "effectiveFrom": "2026-09-12T15:08:55.553Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.553Z",
+    "retrievedAt": "2026-09-12T15:08:55.553Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "7a7ed93e7977ee64a9fa54c869ac3c14fde6efb9604465e1df4d40d37085ea59"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "c343657c13e1d9d9fc9c666ef945e6341a92337becb4175a60b9db1f2d39b7d5",
+  "schema": 1,
+  "teamId": "324",
+  "teamName": "Coastal Carolina Chanticleers",
+  "season": 2026,
+  "eventId": "401868008",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-12T15:08:55.191Z",
+  "effectiveTo": "2026-09-13T05:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401868008",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.191Z",
+    "retrievedAt": "2026-09-12T15:08:55.191Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "907abdbbca5161b6d6ed64191fc0acb540545b16edae8024acf7fc8e61ab2d69"
+}

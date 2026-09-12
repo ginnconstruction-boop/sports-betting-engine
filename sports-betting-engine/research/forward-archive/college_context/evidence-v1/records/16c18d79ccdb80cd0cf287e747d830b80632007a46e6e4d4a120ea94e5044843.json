@@ -1,0 +1,24 @@
+{
+  "id": "16c18d79ccdb80cd0cf287e747d830b80632007a46e6e4d4a120ea94e5044843",
+  "schema": 1,
+  "teamId": "242",
+  "teamName": "Rice Owls",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-12T15:08:55.553Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.553Z",
+    "retrievedAt": "2026-09-12T15:08:55.553Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "c651ff8a6de7dc13524107e5db953260d889000ac030de10b17c4eee7985c1f7"
+}

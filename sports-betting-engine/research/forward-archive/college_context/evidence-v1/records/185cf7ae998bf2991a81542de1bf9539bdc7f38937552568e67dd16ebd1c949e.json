@@ -1,0 +1,24 @@
+{
+  "id": "185cf7ae998bf2991a81542de1bf9539bdc7f38937552568e67dd16ebd1c949e",
+  "schema": 1,
+  "teamId": "2572",
+  "teamName": "Southern Miss Golden Eagles",
+  "season": 2026,
+  "eventId": "401856671",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T15:08:55.121Z",
+  "effectiveTo": "2026-09-13T05:45:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856671",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.121Z",
+    "retrievedAt": "2026-09-12T15:08:55.121Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "6d855aace8dcb18826e98e0d169b86546426cba723a54275b77fe844315362d2"
+}

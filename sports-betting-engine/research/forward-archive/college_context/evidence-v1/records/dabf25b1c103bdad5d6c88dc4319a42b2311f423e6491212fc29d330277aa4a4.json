@@ -1,0 +1,24 @@
+{
+  "id": "dabf25b1c103bdad5d6c88dc4319a42b2311f423e6491212fc29d330277aa4a4",
+  "schema": 1,
+  "teamId": "221",
+  "teamName": "Pittsburgh Panthers",
+  "season": 2026,
+  "eventId": "401856790",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-12T15:08:54.724Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856790",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.724Z",
+    "retrievedAt": "2026-09-12T15:08:54.724Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "066e3f5807ea14e4526e85a2cd3c14bfcf14e2c61ae6e9e457a6cee0d2361755"
+}

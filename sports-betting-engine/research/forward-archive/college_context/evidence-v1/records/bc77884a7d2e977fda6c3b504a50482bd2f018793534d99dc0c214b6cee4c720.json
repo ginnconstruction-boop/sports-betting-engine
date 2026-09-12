@@ -1,0 +1,24 @@
+{
+  "id": "bc77884a7d2e977fda6c3b504a50482bd2f018793534d99dc0c214b6cee4c720",
+  "schema": 1,
+  "teamId": "2116",
+  "teamName": "UCF Knights",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-12T15:08:55.551Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.551Z",
+    "retrievedAt": "2026-09-12T15:08:55.551Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "24cde58ee09d2a20a084dcf004e2b9e05b042e0e4437b4b0c649cacc8a68c72c"
+}

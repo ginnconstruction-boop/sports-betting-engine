@@ -1,0 +1,24 @@
+{
+  "id": "72790d78ebc36278ed27506ceb2a7e933e527b2dda6c5f36f98105ac7806fb93",
+  "schema": 1,
+  "teamId": "2449",
+  "teamName": "North Dakota State Bison",
+  "season": 2026,
+  "eventId": "401864502",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.precipitationProbability",
+  "value": 20,
+  "effectiveFrom": "2026-09-12T15:08:55.281Z",
+  "effectiveTo": "2026-09-13T08:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864502",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.281Z",
+    "retrievedAt": "2026-09-12T15:08:55.281Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d763993ed4671e98d206049a07c800d822655c149775062beca9e33ad255e22b"
+}

@@ -1,0 +1,26 @@
+{
+  "id": "9d4e34e2b39794e461c1943b79924468967de8940822ca600ec9871215572eaa",
+  "schema": 1,
+  "teamId": "344",
+  "teamName": "Mississippi State Bulldogs",
+  "season": 2026,
+  "eventId": "401856677",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.flags",
+  "value": [
+    "GUST_20_PLUS"
+  ],
+  "effectiveFrom": "2026-09-12T15:08:54.688Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856677",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.688Z",
+    "retrievedAt": "2026-09-12T15:08:54.688Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "6afe303000d06de2d485648a90f4793fff0ac4abac0b1f00c59f21fd33329f61"
+}

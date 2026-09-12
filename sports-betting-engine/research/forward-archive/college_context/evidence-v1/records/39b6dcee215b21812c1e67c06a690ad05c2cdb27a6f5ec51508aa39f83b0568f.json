@@ -1,0 +1,24 @@
+{
+  "id": "39b6dcee215b21812c1e67c06a690ad05c2cdb27a6f5ec51508aa39f83b0568f",
+  "schema": 1,
+  "teamId": "264",
+  "teamName": "Washington Huskies",
+  "season": 2026,
+  "eventId": "401858446",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-12T15:08:54.741Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858446",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.741Z",
+    "retrievedAt": "2026-09-12T15:08:54.741Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d39c9fc0eaad4c8e524a0ba46c50aea7a6bc763ac7f8db4372b290537edaa27f"
+}

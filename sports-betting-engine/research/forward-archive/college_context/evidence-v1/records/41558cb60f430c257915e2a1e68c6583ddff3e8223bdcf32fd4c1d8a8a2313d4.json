@@ -1,0 +1,24 @@
+{
+  "id": "41558cb60f430c257915e2a1e68c6583ddff3e8223bdcf32fd4c1d8a8a2313d4",
+  "schema": 1,
+  "teamId": "2132",
+  "teamName": "Cincinnati Bearcats",
+  "season": 2026,
+  "eventId": "401856786",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.yardsAllowedPerGame",
+  "value": 388,
+  "effectiveFrom": "2026-09-12T15:08:54.961Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856786",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.961Z",
+    "retrievedAt": "2026-09-12T15:08:54.961Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "290e730bde6f59f20a578181dfb50e6e01bd899e15260b1d9ab87f5e50ef5a9a"
+}

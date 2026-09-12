@@ -1,0 +1,24 @@
+{
+  "id": "d8f513299a83cbe845d86ab973efdb4d99c413e2655f7f4d86e57d5ad8519772",
+  "schema": 1,
+  "teamId": "25",
+  "teamName": "California Golden Bears",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-12T15:08:55.552Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.552Z",
+    "retrievedAt": "2026-09-12T15:08:55.552Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "ca124b7013971c5030764a9e6919f8c8a7af9e8560de1266fa4e6ac200742c59"
+}

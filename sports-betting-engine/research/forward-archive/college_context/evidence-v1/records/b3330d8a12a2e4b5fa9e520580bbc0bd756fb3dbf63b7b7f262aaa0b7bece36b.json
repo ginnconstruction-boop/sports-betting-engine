@@ -1,0 +1,24 @@
+{
+  "id": "b3330d8a12a2e4b5fa9e520580bbc0bd756fb3dbf63b7b7f262aaa0b7bece36b",
+  "schema": 1,
+  "teamId": "2026",
+  "teamName": "App State Mountaineers",
+  "season": 2026,
+  "eventId": "401864571",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.precipitationMm.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-12T15:08:54.547Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864571",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.547Z",
+    "retrievedAt": "2026-09-12T15:08:54.547Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "cd52b7bc0f608ab25454f4248ab05f4896a27a6686f89f9a62b529aa351b8166"
+}

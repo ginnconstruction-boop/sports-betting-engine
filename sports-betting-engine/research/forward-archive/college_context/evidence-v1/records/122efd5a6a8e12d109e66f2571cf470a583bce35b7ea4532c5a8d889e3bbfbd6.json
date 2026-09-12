@@ -1,0 +1,24 @@
+{
+  "id": "122efd5a6a8e12d109e66f2571cf470a583bce35b7ea4532c5a8d889e3bbfbd6",
+  "schema": 1,
+  "teamId": "48",
+  "teamName": "Delaware Blue Hens",
+  "season": 2026,
+  "eventId": "401856684",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.gustMph",
+  "value": 8,
+  "effectiveFrom": "2026-09-12T15:08:54.901Z",
+  "effectiveTo": "2026-09-13T02:15:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856684",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.901Z",
+    "retrievedAt": "2026-09-12T15:08:54.901Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "a3d55e3094a84cca65c4dcaf872a4261723935d395eda0003d55116689e11a46"
+}

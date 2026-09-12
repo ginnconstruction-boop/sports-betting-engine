@@ -1,0 +1,24 @@
+{
+  "id": "87ccbcf2db984eec3e94a3960f46c9fce09fdfd9f1a1bf8e5d4bd3afed9bc00b",
+  "schema": 1,
+  "teamId": "158",
+  "teamName": "Nebraska Cornhuskers",
+  "season": 2026,
+  "eventId": "401858441",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.providerChecked",
+  "value": true,
+  "effectiveFrom": "2026-09-12T15:08:54.940Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858441",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.940Z",
+    "retrievedAt": "2026-09-12T15:08:54.940Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "fe3914e43146a9c7532ae1042f46fa0a08c94bdc191b52dd9eac6cf967c7b697"
+}

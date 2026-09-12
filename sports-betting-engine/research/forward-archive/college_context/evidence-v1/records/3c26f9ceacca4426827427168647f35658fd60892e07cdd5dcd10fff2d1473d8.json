@@ -1,0 +1,24 @@
+{
+  "id": "3c26f9ceacca4426827427168647f35658fd60892e07cdd5dcd10fff2d1473d8",
+  "schema": 1,
+  "teamId": "254",
+  "teamName": "Utah Utes",
+  "season": 2026,
+  "eventId": "401856670",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.provider",
+  "value": "Draft Kings",
+  "effectiveFrom": "2026-09-12T15:08:55.305Z",
+  "effectiveTo": "2026-09-13T08:15:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856670",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.305Z",
+    "retrievedAt": "2026-09-12T15:08:55.305Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "847c2ef28c772752266a1f7587cb23b5a99716ec92494c33ac5659c0f72d095a"
+}

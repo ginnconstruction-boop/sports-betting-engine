@@ -1,0 +1,24 @@
+{
+  "id": "2625c7a55bf2b6a9894c3d91cfb31c311af853b5d99ff66de8ef8f0f07970dc5",
+  "schema": 1,
+  "teamId": "238",
+  "teamName": "Vanderbilt Commodores",
+  "season": 2026,
+  "eventId": "401856684",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T15:08:54.828Z",
+  "effectiveTo": "2026-09-13T02:15:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856684",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.828Z",
+    "retrievedAt": "2026-09-12T15:08:54.828Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "a3d55e3094a84cca65c4dcaf872a4261723935d395eda0003d55116689e11a46"
+}

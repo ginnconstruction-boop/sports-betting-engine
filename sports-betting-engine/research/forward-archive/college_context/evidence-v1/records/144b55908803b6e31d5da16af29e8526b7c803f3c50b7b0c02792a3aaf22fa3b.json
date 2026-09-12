@@ -1,0 +1,24 @@
+{
+  "id": "144b55908803b6e31d5da16af29e8526b7c803f3c50b7b0c02792a3aaf22fa3b",
+  "schema": 1,
+  "teamId": "16",
+  "teamName": "Sacramento State Hornets",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-12T15:08:55.555Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.555Z",
+    "retrievedAt": "2026-09-12T15:08:55.555Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "1841fbadfb2e6401f37f88816e79778f5002b555ff3038c786589ef95ec0c4a4"
+}

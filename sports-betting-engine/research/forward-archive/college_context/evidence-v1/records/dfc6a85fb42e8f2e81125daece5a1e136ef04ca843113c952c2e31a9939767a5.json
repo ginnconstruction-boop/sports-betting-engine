@@ -1,0 +1,24 @@
+{
+  "id": "dfc6a85fb42e8f2e81125daece5a1e136ef04ca843113c952c2e31a9939767a5",
+  "schema": 1,
+  "teamId": "245",
+  "teamName": "Texas A&M Aggies",
+  "season": 2026,
+  "eventId": "401856683",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.movementPoints",
+  "value": 0,
+  "effectiveFrom": "2026-09-12T15:08:54.536Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856683",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.536Z",
+    "retrievedAt": "2026-09-12T15:08:54.536Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d54a87d2c9debcc0dc0b79edb524d0e7d5baeebae223cd1b385bf8720f708aab"
+}

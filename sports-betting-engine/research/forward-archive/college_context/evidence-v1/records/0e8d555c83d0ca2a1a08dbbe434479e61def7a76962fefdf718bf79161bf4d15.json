@@ -1,0 +1,24 @@
+{
+  "id": "0e8d555c83d0ca2a1a08dbbe434479e61def7a76962fefdf718bf79161bf4d15",
+  "schema": 1,
+  "teamId": "38",
+  "teamName": "Colorado Buffaloes",
+  "season": 2026,
+  "eventId": "401856785",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.yardsPerGame",
+  "value": 307,
+  "effectiveFrom": "2026-09-12T15:08:54.682Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856785",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.682Z",
+    "retrievedAt": "2026-09-12T15:08:54.682Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e5ab97ee0728af3e083d1111197ad54b18929387fb76abc7ab7066e15848df2b"
+}

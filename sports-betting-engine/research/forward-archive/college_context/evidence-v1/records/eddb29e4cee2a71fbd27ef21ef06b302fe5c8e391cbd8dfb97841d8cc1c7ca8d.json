@@ -1,0 +1,24 @@
+{
+  "id": "eddb29e4cee2a71fbd27ef21ef06b302fe5c8e391cbd8dfb97841d8cc1c7ca8d",
+  "schema": 1,
+  "teamId": "120",
+  "teamName": "Maryland Terrapins",
+  "season": 2026,
+  "eventId": "401858444",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.ingestionStatus",
+  "value": "VALIDATION_FAILED",
+  "effectiveFrom": "2026-09-12T15:08:54.837Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858444",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.837Z",
+    "retrievedAt": "2026-09-12T15:08:54.837Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "98f07e880d30f9aa4a64c5922f7bc572aedd42e003a69a392a65ceda4034055a"
+}

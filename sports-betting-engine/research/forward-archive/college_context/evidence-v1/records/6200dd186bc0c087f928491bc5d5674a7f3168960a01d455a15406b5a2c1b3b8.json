@@ -1,0 +1,24 @@
+{
+  "id": "6200dd186bc0c087f928491bc5d5674a7f3168960a01d455a15406b5a2c1b3b8",
+  "schema": 1,
+  "teamId": "2287",
+  "teamName": "Illinois State Redbirds",
+  "season": 2026,
+  "eventId": "401864503",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.windMph.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-12T15:08:55.044Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864503",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.044Z",
+    "retrievedAt": "2026-09-12T15:08:55.044Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "5b3b6bcb439a7b5e420019b674134bcd46674925f39e36b2192db6743b46b794"
+}

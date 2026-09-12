@@ -1,0 +1,24 @@
+{
+  "id": "77743d8ab5ff0460125762ca9e9980b98c471a8958a5d8c6a76351264e4c6748",
+  "schema": 1,
+  "teamId": "218",
+  "teamName": "Temple Owls",
+  "season": 2026,
+  "eventId": "401858442",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.provider",
+  "value": "Draft Kings",
+  "effectiveFrom": "2026-09-12T15:08:54.520Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858442",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.520Z",
+    "retrievedAt": "2026-09-12T15:08:54.520Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "4b46f916e759d71cbb7f65a0f9ed42217158610971380568da4f3328c2117d76"
+}

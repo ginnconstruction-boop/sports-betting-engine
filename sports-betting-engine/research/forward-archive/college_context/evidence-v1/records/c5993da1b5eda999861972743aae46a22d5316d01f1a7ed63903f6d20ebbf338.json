@@ -1,0 +1,24 @@
+{
+  "id": "c5993da1b5eda999861972743aae46a22d5316d01f1a7ed63903f6d20ebbf338",
+  "schema": 1,
+  "teamId": "228",
+  "teamName": "Clemson Tigers",
+  "season": 2026,
+  "eventId": "401858219",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-12T15:08:55.183Z",
+  "effectiveTo": "2026-09-13T05:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858219",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.183Z",
+    "retrievedAt": "2026-09-12T15:08:55.183Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8abdbc4e4b2df5bd362bae47261fa432275ac39cd2366416cd1b53caf849d239"
+}

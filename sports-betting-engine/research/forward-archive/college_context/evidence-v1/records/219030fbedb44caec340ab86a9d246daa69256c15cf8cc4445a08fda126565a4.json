@@ -1,0 +1,24 @@
+{
+  "id": "219030fbedb44caec340ab86a9d246daa69256c15cf8cc4445a08fda126565a4",
+  "schema": 1,
+  "teamId": "2",
+  "teamName": "Auburn Tigers",
+  "season": 2026,
+  "eventId": "401856671",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T15:08:55.121Z",
+  "effectiveTo": "2026-09-13T05:45:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856671",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.121Z",
+    "retrievedAt": "2026-09-12T15:08:55.121Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "6d855aace8dcb18826e98e0d169b86546426cba723a54275b77fe844315362d2"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "d73faac0a1b9e596ee3830a647faafc5a94f8f35eb6f4b90270b26823873b195",
+  "schema": 1,
+  "teamId": "277",
+  "teamName": "West Virginia Mountaineers",
+  "season": 2026,
+  "eventId": "401856791",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.qbAttempts.diagnostic",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-12T15:08:54.635Z",
+  "effectiveTo": "2026-09-12T23:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856791",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.635Z",
+    "retrievedAt": "2026-09-12T15:08:54.635Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "5c8fe5d8924505c7fdb9c5b6631f0484a847102b903d3a9fa19306144b328802"
+}

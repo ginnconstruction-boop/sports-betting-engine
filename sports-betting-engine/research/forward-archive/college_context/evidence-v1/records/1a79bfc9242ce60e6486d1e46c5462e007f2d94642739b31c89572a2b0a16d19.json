@@ -1,0 +1,24 @@
+{
+  "id": "1a79bfc9242ce60e6486d1e46c5462e007f2d94642739b31c89572a2b0a16d19",
+  "schema": 1,
+  "teamId": "2335",
+  "teamName": "Liberty Flames",
+  "season": 2026,
+  "eventId": "401868187",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.precipitationProbability",
+  "value": 75,
+  "effectiveFrom": "2026-09-12T15:08:54.575Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401868187",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.575Z",
+    "retrievedAt": "2026-09-12T15:08:54.575Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "a42bffb1344276f0ff10fe9324ae1dc20630fb27c9006d4bf4e5e3b2385c3a5a"
+}

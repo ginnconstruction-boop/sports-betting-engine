@@ -1,0 +1,24 @@
+{
+  "id": "2b533ff504b70fd445b3bff597c6131d757c320ae46997b2a63a411d42a7b092",
+  "schema": 1,
+  "teamId": "239",
+  "teamName": "Baylor Bears",
+  "season": 2026,
+  "eventId": "401856784",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.pointsAllowedPerGame",
+  "value": 17,
+  "effectiveFrom": "2026-09-12T15:08:55.262Z",
+  "effectiveTo": "2026-09-13T06:08:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856784",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.262Z",
+    "retrievedAt": "2026-09-12T15:08:55.262Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "97cffd21418fad526ae24a7fa107a70051b050af068716b7ea41a538e72657e4"
+}

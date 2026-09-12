@@ -1,0 +1,24 @@
+{
+  "id": "6339b562ecd6bd8737bd1daf97424fca942cf0a73a2b67df0f5d6d066d88c420",
+  "schema": 1,
+  "teamId": "2005",
+  "teamName": "Air Force Falcons",
+  "season": 2026,
+  "eventId": "401864502",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.pointsPerGame",
+  "value": 34,
+  "effectiveFrom": "2026-09-12T15:08:55.281Z",
+  "effectiveTo": "2026-09-13T08:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864502",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.281Z",
+    "retrievedAt": "2026-09-12T15:08:55.281Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d763993ed4671e98d206049a07c800d822655c149775062beca9e33ad255e22b"
+}

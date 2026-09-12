@@ -1,0 +1,24 @@
+{
+  "id": "42fa47d8f35fefda8f1b6923048efa0284c6db9abd91068e927e181905919e14",
+  "schema": 1,
+  "teamId": "2504",
+  "teamName": "Prairie View A&M Panthers",
+  "season": 2026,
+  "eventId": "401856784",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T15:08:55.184Z",
+  "effectiveTo": "2026-09-13T06:08:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856784",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.184Z",
+    "retrievedAt": "2026-09-12T15:08:55.184Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "97cffd21418fad526ae24a7fa107a70051b050af068716b7ea41a538e72657e4"
+}

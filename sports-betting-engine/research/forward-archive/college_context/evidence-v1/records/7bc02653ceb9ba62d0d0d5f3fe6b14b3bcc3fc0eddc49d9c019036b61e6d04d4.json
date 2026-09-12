@@ -1,0 +1,24 @@
+{
+  "id": "7bc02653ceb9ba62d0d0d5f3fe6b14b3bcc3fc0eddc49d9c019036b61e6d04d4",
+  "schema": 1,
+  "teamId": "235",
+  "teamName": "Memphis Tigers",
+  "season": 2026,
+  "eventId": "401860881",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.yardsPerGame",
+  "value": 470.5,
+  "effectiveFrom": "2026-09-12T15:08:55.199Z",
+  "effectiveTo": "2026-09-13T04:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401860881",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.199Z",
+    "retrievedAt": "2026-09-12T15:08:55.199Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "032aff7b740dd2ef4a2c542aed055c564bc67aecfac4d69c6b252c77259f1e5b"
+}

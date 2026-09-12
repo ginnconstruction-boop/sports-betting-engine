@@ -1,0 +1,24 @@
+{
+  "id": "4d5b2ae8969588b686e6511540758d57a7554f441709324fd2edb74d5c7bae00",
+  "schema": 1,
+  "teamId": "2649",
+  "teamName": "Toledo Rockets",
+  "season": 2026,
+  "eventId": "401866419",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.yardsAllowedPerGame",
+  "value": 397,
+  "effectiveFrom": "2026-09-12T15:08:54.792Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401866419",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.792Z",
+    "retrievedAt": "2026-09-12T15:08:54.792Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "622123a101a99621e30f9fd8b2f33eb827d48a5b30953070ad3cabfa69e53808"
+}

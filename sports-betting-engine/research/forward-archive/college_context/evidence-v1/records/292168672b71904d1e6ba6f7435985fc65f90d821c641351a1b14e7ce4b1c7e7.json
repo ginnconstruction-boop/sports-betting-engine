@@ -1,0 +1,24 @@
+{
+  "id": "292168672b71904d1e6ba6f7435985fc65f90d821c641351a1b14e7ce4b1c7e7",
+  "schema": 1,
+  "teamId": "62",
+  "teamName": "Hawai'i Rainbow Warriors",
+  "season": 2026,
+  "eventId": "401864578",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.primaryQb.diagnostic",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-12T15:08:55.333Z",
+  "effectiveTo": "2026-09-13T09:59:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864578",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.333Z",
+    "retrievedAt": "2026-09-12T15:08:55.333Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "a47ae3ac70121034fc1e9b9796a7d0fb6317d12f4dbb354a30dda7348b5086f6"
+}

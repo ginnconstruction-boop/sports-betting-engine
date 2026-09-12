@@ -1,0 +1,24 @@
+{
+  "id": "7e82ff657b6141f7425270dfd8db1b1b90d33545f5d931301e8960d1fb4abe5a",
+  "schema": 1,
+  "teamId": "2026",
+  "teamName": "App State Mountaineers",
+  "season": 2026,
+  "eventId": "401864571",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T15:08:54.521Z",
+  "effectiveTo": "2026-09-12T22:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864571",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.521Z",
+    "retrievedAt": "2026-09-12T15:08:54.521Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "cd52b7bc0f608ab25454f4248ab05f4896a27a6686f89f9a62b529aa351b8166"
+}

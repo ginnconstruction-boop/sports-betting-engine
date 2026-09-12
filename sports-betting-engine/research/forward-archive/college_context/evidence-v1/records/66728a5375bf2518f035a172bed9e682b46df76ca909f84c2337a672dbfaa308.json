@@ -1,0 +1,24 @@
+{
+  "id": "66728a5375bf2518f035a172bed9e682b46df76ca909f84c2337a672dbfaa308",
+  "schema": 1,
+  "teamId": "87",
+  "teamName": "Notre Dame Fighting Irish",
+  "season": 2026,
+  "eventId": "401859184",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.ingestionStatus",
+  "value": "VALIDATION_FAILED",
+  "effectiveFrom": "2026-09-12T15:08:54.774Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401859184",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.774Z",
+    "retrievedAt": "2026-09-12T15:08:54.774Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "80ea0459dd1db3013cc4d80cd73d5ad99ff89f913ea54e4375d32e48d3e028bf"
+}

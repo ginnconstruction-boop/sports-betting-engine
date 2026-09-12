@@ -1,0 +1,24 @@
+{
+  "id": "43e3c6604552d1d5f631ffa73a71e376ec741c863b9b08e472a4052c8dc918a2",
+  "schema": 1,
+  "teamId": "21",
+  "teamName": "San Diego State Aztecs",
+  "season": 2026,
+  "eventId": "401858443",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T15:08:55.014Z",
+  "effectiveTo": "2026-09-13T05:15:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858443",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.014Z",
+    "retrievedAt": "2026-09-12T15:08:55.014Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8f9cbce83e7fa9016f01547aa601b45663646c3d9e5a9e6c38649f4af2536142"
+}

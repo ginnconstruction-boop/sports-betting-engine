@@ -1,0 +1,24 @@
+{
+  "id": "4983910371d2a0cc5a2484c4db244fa9e1bf4f5ed0ca6736d4c7258376dacd84",
+  "schema": 1,
+  "teamId": "290",
+  "teamName": "Georgia Southern Eagles",
+  "season": 2026,
+  "eventId": "401858219",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T15:08:55.094Z",
+  "effectiveTo": "2026-09-13T05:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858219",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:55.094Z",
+    "retrievedAt": "2026-09-12T15:08:55.094Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8abdbc4e4b2df5bd362bae47261fa432275ac39cd2366416cd1b53caf849d239"
+}

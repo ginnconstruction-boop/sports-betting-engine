@@ -1,0 +1,13 @@
+{
+  "id": "ea0dfae83d55ae8cd53964268f2481ab5ffc2207b226ffb30280c75f5be170f5",
+  "provider": "CollegeFootballData",
+  "requestCategory": "TEAM_EFFICIENCY",
+  "canonicalEventId": "401866413",
+  "teamId": "2619",
+  "failedAt": "2026-09-12T15:08:57.342Z",
+  "errorClass": "NO_RECORD",
+  "attempts": 1,
+  "retryState": "NOT_RETRIED",
+  "finalAvailability": "UNAVAILABLE",
+  "message": "No CORE row attached to team."
+}

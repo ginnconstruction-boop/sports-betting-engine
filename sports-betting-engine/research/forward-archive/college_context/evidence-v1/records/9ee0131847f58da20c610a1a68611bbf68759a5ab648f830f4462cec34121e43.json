@@ -1,0 +1,24 @@
+{
+  "id": "9ee0131847f58da20c610a1a68611bbf68759a5ab648f830f4462cec34121e43",
+  "schema": 1,
+  "teamId": "333",
+  "teamName": "Alabama Crimson Tide",
+  "season": 2026,
+  "eventId": "401856674",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.lastOpponent.diagnostic",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-12T15:08:54.659Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856674",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.659Z",
+    "retrievedAt": "2026-09-12T15:08:54.659Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "4b880ddd0138262fc4e4a5025ab58ac3fc3e84ca0b35a7615d6e5b219e6e9829"
+}

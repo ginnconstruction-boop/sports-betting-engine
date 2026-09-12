@@ -1,0 +1,24 @@
+{
+  "id": "7cea9b8d446941356b31600b31fedf02fef171dca286aabaf5058baef8964206",
+  "schema": 1,
+  "teamId": "2097",
+  "teamName": "Campbell Fighting Camels",
+  "season": 2026,
+  "eventId": "401856672",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.pointsAllowedPerGame",
+  "value": 28,
+  "effectiveFrom": "2026-09-12T15:08:54.968Z",
+  "effectiveTo": "2026-09-13T03:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856672",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.968Z",
+    "retrievedAt": "2026-09-12T15:08:54.968Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f4b271bf63f46ec75d1e88b5bac5cc44aa4160aa1b5e8a8baa5694806dae5226"
+}

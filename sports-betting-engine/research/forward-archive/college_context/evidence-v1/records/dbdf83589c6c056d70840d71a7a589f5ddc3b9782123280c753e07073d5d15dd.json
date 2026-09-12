@@ -1,0 +1,24 @@
+{
+  "id": "dbdf83589c6c056d70840d71a7a589f5ddc3b9782123280c753e07073d5d15dd",
+  "schema": 1,
+  "teamId": "41",
+  "teamName": "UConn Huskies",
+  "season": 2026,
+  "eventId": "401858444",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.gamesPlayed.diagnostic",
+  "value": "VALIDATION_FAILED",
+  "effectiveFrom": "2026-09-12T15:08:54.837Z",
+  "effectiveTo": "2026-09-13T01:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858444",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.837Z",
+    "retrievedAt": "2026-09-12T15:08:54.837Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "98f07e880d30f9aa4a64c5922f7bc572aedd42e003a69a392a65ceda4034055a"
+}

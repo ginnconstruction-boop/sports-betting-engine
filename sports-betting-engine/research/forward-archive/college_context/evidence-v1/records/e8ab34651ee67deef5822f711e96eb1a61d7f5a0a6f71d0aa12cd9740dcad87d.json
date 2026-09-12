@@ -1,0 +1,24 @@
+{
+  "id": "e8ab34651ee67deef5822f711e96eb1a61d7f5a0a6f71d0aa12cd9740dcad87d",
+  "schema": 1,
+  "teamId": "276",
+  "teamName": "Marshall Thundering Herd",
+  "season": 2026,
+  "eventId": "401871045",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T15:08:54.993Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401871045",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T15:08:54.993Z",
+    "retrievedAt": "2026-09-12T15:08:54.993Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f73032eda2b408f5500ac0d6e20d3d9eb31fc365467322f09dd577ff643f0a50"
+}
