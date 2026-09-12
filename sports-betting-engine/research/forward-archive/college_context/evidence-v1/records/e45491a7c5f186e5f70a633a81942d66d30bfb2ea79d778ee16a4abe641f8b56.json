@@ -1,0 +1,24 @@
+{
+  "id": "e45491a7c5f186e5f70a633a81942d66d30bfb2ea79d778ee16a4abe641f8b56",
+  "schema": 1,
+  "teamId": "2710",
+  "teamName": "Western Illinois Leathernecks",
+  "season": 2026,
+  "eventId": "401858447",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-12T21:20:54.967Z",
+  "effectiveTo": "2026-09-13T05:15:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858447",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:54.967Z",
+    "retrievedAt": "2026-09-12T21:20:54.967Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "306610c40670cb1fbefec39b60995fcac55dc2fcf5a4fd9e229f72146e65915d"
+}

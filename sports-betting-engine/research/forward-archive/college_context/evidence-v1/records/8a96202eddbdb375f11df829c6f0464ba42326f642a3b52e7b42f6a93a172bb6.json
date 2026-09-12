@@ -1,0 +1,24 @@
+{
+  "id": "8a96202eddbdb375f11df829c6f0464ba42326f642a3b52e7b42f6a93a172bb6",
+  "schema": 1,
+  "teamId": "2132",
+  "teamName": "Cincinnati Bearcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.rosterComposite.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.337Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.337Z",
+    "retrievedAt": "2026-09-12T21:20:55.337Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e25a5bedcafe27e6f4e84fbc9922e7e5a02a3ffbcf493a20c0681abb548f02ea"
+}

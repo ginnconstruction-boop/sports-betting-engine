@@ -1,0 +1,24 @@
+{
+  "id": "5a35e4a173af9e74af5e5fdfc1b286776416d19c5475f80ebd5ce7048be0ead2",
+  "schema": 1,
+  "teamId": "2459",
+  "teamName": "Northern Illinois Huskies",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.339Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.339Z",
+    "retrievedAt": "2026-09-12T21:20:55.339Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "fd0010e2185a7c42f6e0e91972291a1f8f21314593e43e58275c1ee943c2393d"
+}

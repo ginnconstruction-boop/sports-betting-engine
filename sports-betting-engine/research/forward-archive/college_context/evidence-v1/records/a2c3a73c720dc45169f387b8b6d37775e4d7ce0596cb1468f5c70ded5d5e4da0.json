@@ -1,0 +1,24 @@
+{
+  "id": "a2c3a73c720dc45169f387b8b6d37775e4d7ce0596cb1468f5c70ded5d5e4da0",
+  "schema": 1,
+  "teamId": "309",
+  "teamName": "Louisiana Ragin' Cajuns",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "returning_production",
+  "field": "returning.sourceStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.339Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.339Z",
+    "retrievedAt": "2026-09-12T21:20:55.339Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c6fbb3be80bf30ee664457eeadc8e1214148af1bb886cbd909ca2036a8b18842"
+}

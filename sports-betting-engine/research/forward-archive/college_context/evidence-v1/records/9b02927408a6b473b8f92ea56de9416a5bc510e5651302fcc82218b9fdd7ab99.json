@@ -1,0 +1,24 @@
+{
+  "id": "9b02927408a6b473b8f92ea56de9416a5bc510e5651302fcc82218b9fdd7ab99",
+  "schema": 1,
+  "teamId": "2711",
+  "teamName": "Western Michigan Broncos",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.rosterComposite.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.337Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.337Z",
+    "retrievedAt": "2026-09-12T21:20:55.337Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "10ea144f8f3aa872aa87e18dd5195a571ac6884b5f718a9bbf0f01b05e5afdcf"
+}

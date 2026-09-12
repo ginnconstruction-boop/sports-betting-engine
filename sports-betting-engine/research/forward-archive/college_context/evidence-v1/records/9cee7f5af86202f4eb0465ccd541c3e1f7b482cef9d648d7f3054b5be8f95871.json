@@ -1,0 +1,24 @@
+{
+  "id": "9cee7f5af86202f4eb0465ccd541c3e1f7b482cef9d648d7f3054b5be8f95871",
+  "schema": 1,
+  "teamId": "59",
+  "teamName": "Georgia Tech Yellow Jackets",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.depthTier.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.337Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.337Z",
+    "retrievedAt": "2026-09-12T21:20:55.337Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ffbd91802b84a6eb949c572d74bf94580c4022c89bb9704e91fbe361842e9a36"
+}

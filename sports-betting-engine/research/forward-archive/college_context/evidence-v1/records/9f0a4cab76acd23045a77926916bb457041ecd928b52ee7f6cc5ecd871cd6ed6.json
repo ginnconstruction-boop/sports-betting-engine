@@ -1,0 +1,24 @@
+{
+  "id": "9f0a4cab76acd23045a77926916bb457041ecd928b52ee7f6cc5ecd871cd6ed6",
+  "schema": 1,
+  "teamId": "2426",
+  "teamName": "Navy Midshipmen",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:55.338Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.338Z",
+    "retrievedAt": "2026-09-12T21:20:55.338Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "58059cb13c0c2ef8d64f4ed0d4b413fa107d366d2cd3c869281b03d0f22b6cd2"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "8325575a423b9de576abcfe42095134a9931909975dff4d673af9fae66a3cfc9",
+  "schema": 1,
+  "teamId": "248",
+  "teamName": "Houston Cougars",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-12T21:20:55.337Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.337Z",
+    "retrievedAt": "2026-09-12T21:20:55.337Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "22a349d1a7b9b3fcc199f489ab9a8c91b1acae637397b40415dc3d2eafe222c6"
+}

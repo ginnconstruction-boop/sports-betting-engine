@@ -1,0 +1,24 @@
+{
+  "id": "f7170f3a768f8cba2a0c77982d8b6111449bd8af5995bde6a3f23a5f3d128b47",
+  "schema": 1,
+  "teamId": "68",
+  "teamName": "Boise State Broncos",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:55.337Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.337Z",
+    "retrievedAt": "2026-09-12T21:20:55.337Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "cc98402bb5bf1445cb82d7109113027208d8f5ad0772bfdbe11016a249ba2b95"
+}

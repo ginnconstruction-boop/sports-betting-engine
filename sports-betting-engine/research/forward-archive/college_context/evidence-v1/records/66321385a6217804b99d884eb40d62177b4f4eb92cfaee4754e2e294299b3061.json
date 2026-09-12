@@ -1,0 +1,24 @@
+{
+  "id": "66321385a6217804b99d884eb40d62177b4f4eb92cfaee4754e2e294299b3061",
+  "schema": 1,
+  "teamId": "2572",
+  "teamName": "Southern Miss Golden Eagles",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.ingestionStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.339Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.339Z",
+    "retrievedAt": "2026-09-12T21:20:55.339Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "fd0010e2185a7c42f6e0e91972291a1f8f21314593e43e58275c1ee943c2393d"
+}

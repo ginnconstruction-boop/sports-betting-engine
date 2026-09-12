@@ -1,0 +1,24 @@
+{
+  "id": "f40f69cee6f9bad792dade7287c6f9d695d9775a40875cc52ca1927485d8a4e1",
+  "schema": 1,
+  "teamId": "2459",
+  "teamName": "Northern Illinois Huskies",
+  "season": 2026,
+  "eventId": "401864503",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.provider",
+  "value": "Draft Kings",
+  "effectiveFrom": "2026-09-12T21:20:54.906Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864503",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:54.906Z",
+    "retrievedAt": "2026-09-12T21:20:54.906Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8d305dba46650476d96b4f51448871d5b4440451bdbbdc960578654c1e7006aa"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "8e821c517f859d3b9b9a55a4d14289e348e6612c3735f0750be7e8ee3a006b67",
+  "schema": 1,
+  "teamId": "2229",
+  "teamName": "Florida International Panthers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:55.337Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.337Z",
+    "retrievedAt": "2026-09-12T21:20:55.337Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "b9931a3ac742802670fbf84169a7827b56c053f76c69a63e87fdca57c2057be2"
+}

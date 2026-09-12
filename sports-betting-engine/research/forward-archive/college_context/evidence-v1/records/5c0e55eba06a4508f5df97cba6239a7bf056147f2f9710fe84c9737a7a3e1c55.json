@@ -1,0 +1,24 @@
+{
+  "id": "5c0e55eba06a4508f5df97cba6239a7bf056147f2f9710fe84c9737a7a3e1c55",
+  "schema": 1,
+  "teamId": "2572",
+  "teamName": "Southern Miss Golden Eagles",
+  "season": 2026,
+  "eventId": "401856671",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.gamesPlayed.diagnostic",
+  "value": "VALIDATION_FAILED",
+  "effectiveFrom": "2026-09-12T21:20:55.076Z",
+  "effectiveTo": "2026-09-13T05:45:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856671",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.076Z",
+    "retrievedAt": "2026-09-12T21:20:55.076Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "37d2988029e631c5c7691f6405494bccd270c0f88546c4d86c2a819b39d42161"
+}

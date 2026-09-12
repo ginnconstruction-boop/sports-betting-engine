@@ -1,0 +1,24 @@
+{
+  "id": "407b55e10d711fd5cd2fd01328f6d6071ebcb7dd2a8fffe433e8594519418575",
+  "schema": 1,
+  "teamId": "2504",
+  "teamName": "Prairie View A&M Panthers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FCS",
+  "effectiveFrom": "2026-09-12T21:20:55.339Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.339Z",
+    "retrievedAt": "2026-09-12T21:20:55.339Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "9bb8cd55d699f8ad269a7aee9cc1bfcc8bf5276455de3a12b4ce03b41818e0e9"
+}

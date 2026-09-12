@@ -1,0 +1,24 @@
+{
+  "id": "f7b6977c39d76d501f2b1f72b373eb38a18113da2d41b25e1fc5177ad8bf8464",
+  "schema": 1,
+  "teamId": "2405",
+  "teamName": "Monmouth Hawks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "returning_production",
+  "field": "returning.sourceStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.339Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.339Z",
+    "retrievedAt": "2026-09-12T21:20:55.339Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c6fbb3be80bf30ee664457eeadc8e1214148af1bb886cbd909ca2036a8b18842"
+}

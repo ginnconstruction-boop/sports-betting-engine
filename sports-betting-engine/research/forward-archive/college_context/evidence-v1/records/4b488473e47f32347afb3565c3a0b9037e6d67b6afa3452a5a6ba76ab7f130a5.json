@@ -1,0 +1,24 @@
+{
+  "id": "4b488473e47f32347afb3565c3a0b9037e6d67b6afa3452a5a6ba76ab7f130a5",
+  "schema": 1,
+  "teamId": "145",
+  "teamName": "Ole Miss Rebels",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.depthTier.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.338Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.338Z",
+    "retrievedAt": "2026-09-12T21:20:55.338Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e4bde9ef5c0cef7ab6b55d761a44235787172e25e459f5af7f3ec281fb88faa6"
+}

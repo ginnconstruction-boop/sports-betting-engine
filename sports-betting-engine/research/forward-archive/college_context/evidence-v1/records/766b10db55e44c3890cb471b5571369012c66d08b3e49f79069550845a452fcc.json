@@ -1,0 +1,24 @@
+{
+  "id": "766b10db55e44c3890cb471b5571369012c66d08b3e49f79069550845a452fcc",
+  "schema": 1,
+  "teamId": "2815",
+  "teamName": "Lindenwood Lions",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:55.338Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.338Z",
+    "retrievedAt": "2026-09-12T21:20:55.338Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c49f7c2e9411cbe8dd55577ffb4114f763040b7e25b6fc3b48d56441622d7fc1"
+}

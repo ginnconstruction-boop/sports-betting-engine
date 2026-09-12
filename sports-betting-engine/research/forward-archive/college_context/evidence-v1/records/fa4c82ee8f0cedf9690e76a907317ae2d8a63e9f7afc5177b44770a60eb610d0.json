@@ -1,0 +1,24 @@
+{
+  "id": "fa4c82ee8f0cedf9690e76a907317ae2d8a63e9f7afc5177b44770a60eb610d0",
+  "schema": 1,
+  "teamId": "195",
+  "teamName": "Ohio Bobcats",
+  "season": 2026,
+  "eventId": "401866418",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.temperatureF",
+  "value": 76,
+  "effectiveFrom": "2026-09-12T21:20:54.831Z",
+  "effectiveTo": "2026-09-13T04:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401866418",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:54.831Z",
+    "retrievedAt": "2026-09-12T21:20:54.831Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "4480a7cc6c5696b49affff1a5be42ac241a6c06f96cc5e304b9ff99445330d4b"
+}

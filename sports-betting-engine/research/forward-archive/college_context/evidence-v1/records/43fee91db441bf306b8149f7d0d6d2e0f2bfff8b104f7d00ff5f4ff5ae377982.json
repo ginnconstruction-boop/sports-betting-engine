@@ -1,0 +1,24 @@
+{
+  "id": "43fee91db441bf306b8149f7d0d6d2e0f2bfff8b104f7d00ff5f4ff5ae377982",
+  "schema": 1,
+  "teamId": "202",
+  "teamName": "Tulsa Golden Hurricane",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "transfers",
+  "field": "transfers.sourceStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.339Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.339Z",
+    "retrievedAt": "2026-09-12T21:20:55.339Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "de61fa014f8f4a17f4d50055e43999c0fe3441ea8e4c539ff987aabdb3ae3a5f"
+}

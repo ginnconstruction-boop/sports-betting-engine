@@ -1,0 +1,24 @@
+{
+  "id": "2813aa10aa54dcec291d2b6d722d4c16154b83b12b9543e007d283ff8b3d7a6b",
+  "schema": 1,
+  "teamId": "2132",
+  "teamName": "Cincinnati Bearcats",
+  "season": 2026,
+  "eventId": "401856786",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:54.739Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856786",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:54.739Z",
+    "retrievedAt": "2026-09-12T21:20:54.739Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "b5daa39e99e46b5222141c3824685fcc6000b1357ad3454a83a19e7503d54690"
+}

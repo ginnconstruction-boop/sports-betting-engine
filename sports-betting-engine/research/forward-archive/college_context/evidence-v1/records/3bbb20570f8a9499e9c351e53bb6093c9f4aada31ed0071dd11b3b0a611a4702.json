@@ -1,0 +1,24 @@
+{
+  "id": "3bbb20570f8a9499e9c351e53bb6093c9f4aada31ed0071dd11b3b0a611a4702",
+  "schema": 1,
+  "teamId": "239",
+  "teamName": "Baylor Bears",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "returning_production",
+  "field": "returning.sourceStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.339Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.339Z",
+    "retrievedAt": "2026-09-12T21:20:55.339Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c6fbb3be80bf30ee664457eeadc8e1214148af1bb886cbd909ca2036a8b18842"
+}

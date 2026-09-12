@@ -1,0 +1,24 @@
+{
+  "id": "fe7bb6e73fec0be19bf1c5eb7c6468be4d1c8aa04afdb47a6d173412c3b3a07b",
+  "schema": 1,
+  "teamId": "2579",
+  "teamName": "South Carolina Gamecocks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:55.337Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.337Z",
+    "retrievedAt": "2026-09-12T21:20:55.337Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "251ad110699081e74be35b4174af9d68ce0dd5569a766c7ce5363945f2ab7b25"
+}

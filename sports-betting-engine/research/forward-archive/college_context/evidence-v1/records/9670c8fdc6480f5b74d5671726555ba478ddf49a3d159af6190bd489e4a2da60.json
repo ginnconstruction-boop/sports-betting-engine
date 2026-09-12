@@ -1,0 +1,24 @@
+{
+  "id": "9670c8fdc6480f5b74d5671726555ba478ddf49a3d159af6190bd489e4a2da60",
+  "schema": 1,
+  "teamId": "275",
+  "teamName": "Wisconsin Badgers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "returning_production",
+  "field": "returning.ingestionStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.339Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.339Z",
+    "retrievedAt": "2026-09-12T21:20:55.339Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c6fbb3be80bf30ee664457eeadc8e1214148af1bb886cbd909ca2036a8b18842"
+}

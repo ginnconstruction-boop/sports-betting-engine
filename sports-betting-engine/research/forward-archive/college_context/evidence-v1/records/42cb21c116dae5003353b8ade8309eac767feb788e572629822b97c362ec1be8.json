@@ -1,0 +1,24 @@
+{
+  "id": "42cb21c116dae5003353b8ade8309eac767feb788e572629822b97c362ec1be8",
+  "schema": 1,
+  "teamId": "2005",
+  "teamName": "Air Force Falcons",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.rosterComposite.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.339Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.339Z",
+    "retrievedAt": "2026-09-12T21:20:55.339Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d18bcd176a962f9998b9e7a34d97001558ee90d581a2d3350352a882c5f2ddd0"
+}

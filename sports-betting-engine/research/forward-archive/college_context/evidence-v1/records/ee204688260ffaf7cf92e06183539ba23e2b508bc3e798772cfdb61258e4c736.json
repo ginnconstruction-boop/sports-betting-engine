@@ -1,0 +1,24 @@
+{
+  "id": "ee204688260ffaf7cf92e06183539ba23e2b508bc3e798772cfdb61258e4c736",
+  "schema": 1,
+  "teamId": "235",
+  "teamName": "Memphis Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "transfers",
+  "field": "transfers.ingestionStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.339Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.339Z",
+    "retrievedAt": "2026-09-12T21:20:55.339Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "de61fa014f8f4a17f4d50055e43999c0fe3441ea8e4c539ff987aabdb3ae3a5f"
+}

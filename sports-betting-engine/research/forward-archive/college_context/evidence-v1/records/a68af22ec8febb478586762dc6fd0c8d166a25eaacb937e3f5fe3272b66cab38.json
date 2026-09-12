@@ -1,0 +1,24 @@
+{
+  "id": "a68af22ec8febb478586762dc6fd0c8d166a25eaacb937e3f5fe3272b66cab38",
+  "schema": 1,
+  "teamId": "195",
+  "teamName": "Ohio Bobcats",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:55.337Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.337Z",
+    "retrievedAt": "2026-09-12T21:20:55.337Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "04509ab2e608a9701bbde5a7524e17176d43628bd8fd93c99ff9b9c5c25bf459"
+}

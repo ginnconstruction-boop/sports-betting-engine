@@ -1,0 +1,24 @@
+{
+  "id": "3e2268a1e096665b56a69d6e78dd051d5030bf02ee8266ebc8be7b75a88b831d",
+  "schema": 1,
+  "teamId": "2032",
+  "teamName": "Arkansas State Red Wolves",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "returning_production",
+  "field": "returning.ingestionStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.339Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.339Z",
+    "retrievedAt": "2026-09-12T21:20:55.339Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c6fbb3be80bf30ee664457eeadc8e1214148af1bb886cbd909ca2036a8b18842"
+}

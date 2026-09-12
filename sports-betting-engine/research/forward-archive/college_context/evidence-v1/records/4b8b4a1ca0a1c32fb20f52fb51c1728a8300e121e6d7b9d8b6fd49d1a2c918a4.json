@@ -1,0 +1,24 @@
+{
+  "id": "4b8b4a1ca0a1c32fb20f52fb51c1728a8300e121e6d7b9d8b6fd49d1a2c918a4",
+  "schema": 1,
+  "teamId": "99",
+  "teamName": "LSU Tigers",
+  "season": 2026,
+  "eventId": "401867796",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.yardsAllowedPerGame",
+  "value": 145,
+  "effectiveFrom": "2026-09-12T21:20:55.085Z",
+  "effectiveTo": "2026-09-13T05:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401867796",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.085Z",
+    "retrievedAt": "2026-09-12T21:20:55.085Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "195511f301a0358cd80e0fa98cdbf80e1199fffc1663ea48948a41b3158e7b6a"
+}

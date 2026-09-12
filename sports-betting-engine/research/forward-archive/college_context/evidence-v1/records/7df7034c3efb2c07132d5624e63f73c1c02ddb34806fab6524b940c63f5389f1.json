@@ -1,0 +1,24 @@
+{
+  "id": "7df7034c3efb2c07132d5624e63f73c1c02ddb34806fab6524b940c63f5389f1",
+  "schema": 1,
+  "teamId": "2247",
+  "teamName": "Georgia State Panthers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.depthTier.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.338Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.338Z",
+    "retrievedAt": "2026-09-12T21:20:55.338Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "83dfa8d11111f30756083f3e44d3a626006bd21054c8b2cae109a05a604eb419"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "f727be15c54983efb19778dc34bd5ca4dcbad9d37895a6addf13a854c7e518d7",
+  "schema": 1,
+  "teamId": "62",
+  "teamName": "Hawai'i Rainbow Warriors",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:55.339Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.339Z",
+    "retrievedAt": "2026-09-12T21:20:55.339Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9532dba6612e38888f1d70350a59860f210d30c3cf7dc28c079212c76a2ba342"
+}

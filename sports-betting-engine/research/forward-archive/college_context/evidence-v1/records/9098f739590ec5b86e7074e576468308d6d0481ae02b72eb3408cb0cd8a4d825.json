@@ -1,0 +1,24 @@
+{
+  "id": "9098f739590ec5b86e7074e576468308d6d0481ae02b72eb3408cb0cd8a4d825",
+  "schema": 1,
+  "teamId": "23",
+  "teamName": "San José State Spartans",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:55.339Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.339Z",
+    "retrievedAt": "2026-09-12T21:20:55.339Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "3800ad61d6174cd7aedeeaae770c5b300672c8b0c73d66e6cc248e8791a6ae44"
+}

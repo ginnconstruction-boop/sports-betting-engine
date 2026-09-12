@@ -1,0 +1,24 @@
+{
+  "id": "b52418b7b999796459dd0be7834993e69d4f134a32ad9240fd26f72349cdf9b3",
+  "schema": 1,
+  "teamId": "2698",
+  "teamName": "West Georgia Wolves",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.rosterComposite.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.338Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.338Z",
+    "retrievedAt": "2026-09-12T21:20:55.338Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "c69ce26ec00b84fbc1958594d9a2bc4a710ad3f521eed12aeb1082a8c131502b"
+}

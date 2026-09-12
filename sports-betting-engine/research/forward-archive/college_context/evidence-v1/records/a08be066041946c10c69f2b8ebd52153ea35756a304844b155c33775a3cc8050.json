@@ -1,0 +1,24 @@
+{
+  "id": "a08be066041946c10c69f2b8ebd52153ea35756a304844b155c33775a3cc8050",
+  "schema": 1,
+  "teamId": "2582",
+  "teamName": "Southern Jaguars",
+  "season": 2026,
+  "eventId": "401856787",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.feelsLikeF.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-12T21:20:54.848Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856787",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:54.848Z",
+    "retrievedAt": "2026-09-12T21:20:54.848Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "4f9fabd1a55e8a21bdac49609f5f170dc808b4122dde31c83a58a2cfc071e567"
+}

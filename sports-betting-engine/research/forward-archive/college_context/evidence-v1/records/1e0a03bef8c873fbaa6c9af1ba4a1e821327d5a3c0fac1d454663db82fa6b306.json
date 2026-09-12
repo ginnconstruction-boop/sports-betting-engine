@@ -1,0 +1,24 @@
+{
+  "id": "1e0a03bef8c873fbaa6c9af1ba4a1e821327d5a3c0fac1d454663db82fa6b306",
+  "schema": 1,
+  "teamId": "57",
+  "teamName": "Florida Gators",
+  "season": 2026,
+  "eventId": "401856672",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.precipitationProbability",
+  "value": 34,
+  "effectiveFrom": "2026-09-12T21:20:54.785Z",
+  "effectiveTo": "2026-09-13T03:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856672",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:54.785Z",
+    "retrievedAt": "2026-09-12T21:20:54.785Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "aadc20e5e95672b45996f9456df0eff16c79e82733eb94b50ab7b44c9c289b06"
+}

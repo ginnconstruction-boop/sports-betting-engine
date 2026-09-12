@@ -1,0 +1,24 @@
+{
+  "id": "9fbdfdcdd563a6c6f04352aa5413c0d43d2d6efcbdf3966c11e53b0c7e8d7a9d",
+  "schema": 1,
+  "teamId": "251",
+  "teamName": "Texas Longhorns",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:55.338Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.338Z",
+    "retrievedAt": "2026-09-12T21:20:55.338Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "14375cab1cf52f787eee561c0049795631dc0faa626e5ec53b673c4f3f147b7e"
+}

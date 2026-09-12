@@ -1,0 +1,24 @@
+{
+  "id": "cfc1d58b3473f2a9b4a7242b80a49cded1929ebbb8d045db3cbfd228a36516ff",
+  "schema": 1,
+  "teamId": "166",
+  "teamName": "New Mexico State Aggies",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "transfers",
+  "field": "transfers.ingestionStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.339Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.339Z",
+    "retrievedAt": "2026-09-12T21:20:55.339Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "de61fa014f8f4a17f4d50055e43999c0fe3441ea8e4c539ff987aabdb3ae3a5f"
+}

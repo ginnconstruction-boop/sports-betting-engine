@@ -1,0 +1,24 @@
+{
+  "id": "f010ec08d17cacadff2854b30995af2b9b8b0dcb9f3130d4a9909cf771170ca6",
+  "schema": 1,
+  "teamId": "55",
+  "teamName": "Jacksonville State Gamecocks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-12T21:20:55.337Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.337Z",
+    "retrievedAt": "2026-09-12T21:20:55.337Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "9e0fb90aaca768125580dc917793c49375ad2c10dae45a4e1cccf0d943c748a3"
+}

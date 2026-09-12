@@ -1,0 +1,24 @@
+{
+  "id": "91d4fc4a89a1636dcd044802dc286f65b4f4d329ad6378c36f6a54d935c46ac8",
+  "schema": 1,
+  "teamId": "235",
+  "teamName": "Memphis Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.ingestionStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.339Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.339Z",
+    "retrievedAt": "2026-09-12T21:20:55.339Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "fd0010e2185a7c42f6e0e91972291a1f8f21314593e43e58275c1ee943c2393d"
+}

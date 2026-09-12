@@ -1,0 +1,24 @@
+{
+  "id": "2feeaa11c26284f8c0ed147bc4ec6071887a8c333dbc9182e5054e479de98170",
+  "schema": 1,
+  "teamId": "275",
+  "teamName": "Wisconsin Badgers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.rosterComposite.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.338Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.338Z",
+    "retrievedAt": "2026-09-12T21:20:55.338Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "3daba976cd52e3345ac8bef7776d3050ddca2f211499e598b373198f6dfc8ea4"
+}

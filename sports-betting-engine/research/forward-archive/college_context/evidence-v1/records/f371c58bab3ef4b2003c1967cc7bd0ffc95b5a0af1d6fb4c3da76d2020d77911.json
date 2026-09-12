@@ -1,0 +1,24 @@
+{
+  "id": "f371c58bab3ef4b2003c1967cc7bd0ffc95b5a0af1d6fb4c3da76d2020d77911",
+  "schema": 1,
+  "teamId": "2641",
+  "teamName": "Texas Tech Red Raiders",
+  "season": 2026,
+  "eventId": "401856783",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:54.942Z",
+  "effectiveTo": "2026-09-13T05:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856783",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:54.942Z",
+    "retrievedAt": "2026-09-12T21:20:54.942Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9af27c97c4185404183daa08d6476e16e126e02907344ce72747fdf6c2b585ed"
+}

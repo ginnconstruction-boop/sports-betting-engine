@@ -1,0 +1,24 @@
+{
+  "id": "eb43cfb7132d588e91c650475d4a11f211f0d392104dc809d70af3036b139c11",
+  "schema": 1,
+  "teamId": "2711",
+  "teamName": "Western Michigan Broncos",
+  "season": 2026,
+  "eventId": "401866421",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.openingHomeSpread",
+  "value": -25.5,
+  "effectiveFrom": "2026-09-12T21:20:54.896Z",
+  "effectiveTo": "2026-09-13T04:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401866421",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:54.896Z",
+    "retrievedAt": "2026-09-12T21:20:54.896Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "02db2b1cd77e574442c199320da655ef836d2da374f6330ce35f546b4c5d1bff"
+}

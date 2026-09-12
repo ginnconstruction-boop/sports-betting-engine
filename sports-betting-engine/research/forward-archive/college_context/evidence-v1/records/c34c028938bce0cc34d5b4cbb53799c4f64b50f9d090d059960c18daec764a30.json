@@ -1,0 +1,24 @@
+{
+  "id": "c34c028938bce0cc34d5b4cbb53799c4f64b50f9d090d059960c18daec764a30",
+  "schema": 1,
+  "teamId": "2097",
+  "teamName": "Campbell Fighting Camels",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.rosterComposite.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.337Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.337Z",
+    "retrievedAt": "2026-09-12T21:20:55.337Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "bcd69fc5c3109390ba314493a88a42eaa02d0af016dc34efc91d6a61f8353028"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "cd4fdc9088e237bea54d23d016d4182a24e3b8c5ea82b8c580621d9729b85319",
+  "schema": 1,
+  "teamId": "2641",
+  "teamName": "Texas Tech Red Raiders",
+  "season": 2026,
+  "eventId": "401856783",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.gamesPlayed.diagnostic",
+  "value": "VALIDATION_FAILED",
+  "effectiveFrom": "2026-09-12T21:20:55.046Z",
+  "effectiveTo": "2026-09-13T05:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856783",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.046Z",
+    "retrievedAt": "2026-09-12T21:20:55.046Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "9af27c97c4185404183daa08d6476e16e126e02907344ce72747fdf6c2b585ed"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "c3d791f470b96330b33c1f8c6ce448d15b4cdd2959efb93d9499f8325b25822f",
+  "schema": 1,
+  "teamId": "2393",
+  "teamName": "Middle Tennessee Blue Raiders",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:55.338Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.338Z",
+    "retrievedAt": "2026-09-12T21:20:55.338Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ac188537968084193f7b9115c105e4ddff2628d338e8b251514a39a932cdcc00"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "42875be0979c81d75ab0eb566e75dcce17a9fcd4fbcccb9d32c14c415e8d9761",
+  "schema": 1,
+  "teamId": "2405",
+  "teamName": "Monmouth Hawks",
+  "season": 2026,
+  "eventId": "401866421",
+  "playerId": null,
+  "domain": "qb",
+  "field": "qb.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:54.733Z",
+  "effectiveTo": "2026-09-13T04:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401866421",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:54.733Z",
+    "retrievedAt": "2026-09-12T21:20:54.733Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "02db2b1cd77e574442c199320da655ef836d2da374f6330ce35f546b4c5d1bff"
+}

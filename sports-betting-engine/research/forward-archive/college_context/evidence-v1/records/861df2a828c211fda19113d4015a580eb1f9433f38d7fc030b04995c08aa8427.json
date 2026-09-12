@@ -1,0 +1,24 @@
+{
+  "id": "861df2a828c211fda19113d4015a580eb1f9433f38d7fc030b04995c08aa8427",
+  "schema": 1,
+  "teamId": "2097",
+  "teamName": "Campbell Fighting Camels",
+  "season": 2026,
+  "eventId": "401856672",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.indoor",
+  "value": false,
+  "effectiveFrom": "2026-09-12T21:20:54.785Z",
+  "effectiveTo": "2026-09-13T03:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856672",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:54.785Z",
+    "retrievedAt": "2026-09-12T21:20:54.785Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "aadc20e5e95672b45996f9456df0eff16c79e82733eb94b50ab7b44c9c289b06"
+}

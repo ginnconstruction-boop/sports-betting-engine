@@ -1,0 +1,24 @@
+{
+  "id": "cb1d755455dd87ad6f5059910f64742443ed65f981b8f2e528e5cff4644cab0f",
+  "schema": 1,
+  "teamId": "2229",
+  "teamName": "Florida International Panthers",
+  "season": 2026,
+  "eventId": "401866414",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.pointsPerGame",
+  "value": 9,
+  "effectiveFrom": "2026-09-12T21:20:54.977Z",
+  "effectiveTo": "2026-09-13T04:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401866414",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:54.977Z",
+    "retrievedAt": "2026-09-12T21:20:54.977Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d11304b9da73f430e75e5c736c32bd7d747f54eebae8ca801ae643ee9cd827fd"
+}

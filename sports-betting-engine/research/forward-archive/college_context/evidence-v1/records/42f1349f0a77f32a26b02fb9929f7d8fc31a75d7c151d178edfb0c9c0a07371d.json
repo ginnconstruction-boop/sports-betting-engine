@@ -1,0 +1,24 @@
+{
+  "id": "42f1349f0a77f32a26b02fb9929f7d8fc31a75d7c151d178edfb0c9c0a07371d",
+  "schema": 1,
+  "teamId": "66",
+  "teamName": "Iowa State Cyclones",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "transfers",
+  "field": "transfers.sourceStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.339Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.339Z",
+    "retrievedAt": "2026-09-12T21:20:55.339Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "de61fa014f8f4a17f4d50055e43999c0fe3441ea8e4c539ff987aabdb3ae3a5f"
+}

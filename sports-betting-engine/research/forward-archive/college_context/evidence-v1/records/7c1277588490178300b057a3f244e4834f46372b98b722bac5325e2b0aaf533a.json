@@ -1,0 +1,24 @@
+{
+  "id": "7c1277588490178300b057a3f244e4834f46372b98b722bac5325e2b0aaf533a",
+  "schema": 1,
+  "teamId": "6",
+  "teamName": "South Alabama Jaguars",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-12T21:20:55.337Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.337Z",
+    "retrievedAt": "2026-09-12T21:20:55.337Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "5dfda7edfa2efe3e96b2fae4cb8ed7c733ed03733fc9f691c462a2379117128f"
+}

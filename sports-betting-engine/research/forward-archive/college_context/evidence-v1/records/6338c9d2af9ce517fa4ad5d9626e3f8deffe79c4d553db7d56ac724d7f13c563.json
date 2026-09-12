@@ -1,0 +1,24 @@
+{
+  "id": "6338c9d2af9ce517fa4ad5d9626e3f8deffe79c4d553db7d56ac724d7f13c563",
+  "schema": 1,
+  "teamId": "2710",
+  "teamName": "Western Illinois Leathernecks",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:55.338Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.338Z",
+    "retrievedAt": "2026-09-12T21:20:55.338Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "0e2504860d2507eef0cb9422eca34dc2008272e128edb490eac8e9c9e32b875b"
+}

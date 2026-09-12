@@ -1,0 +1,24 @@
+{
+  "id": "84824493692c8f11f7d7a3b4f941bcc68711b449825feb55cdeefc8b2894df29",
+  "schema": 1,
+  "teamId": "30",
+  "teamName": "USC Trojans",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:55.339Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.339Z",
+    "retrievedAt": "2026-09-12T21:20:55.339Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "62c875ecf615ababe473dba9e1feadf87d9bd59ce7e39c95c07e22f3f8a45fdb"
+}

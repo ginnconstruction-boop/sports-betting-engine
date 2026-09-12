@@ -1,0 +1,24 @@
+{
+  "id": "85f85d15ccfdbf50e4b041445e1e8edc572008bfda3e846fcdfec7ed9881d6bd",
+  "schema": 1,
+  "teamId": "2582",
+  "teamName": "Southern Jaguars",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:55.337Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.337Z",
+    "retrievedAt": "2026-09-12T21:20:55.337Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e44ccafc3d933028a0a0e1257cfb40346a6782d7615ff17ef7b92c6299758af7"
+}

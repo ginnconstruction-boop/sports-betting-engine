@@ -1,0 +1,24 @@
+{
+  "id": "c840a839abb944c95eb5e4876f7ea12edccf0fe61d455a0b89fc3b292d20c66d",
+  "schema": 1,
+  "teamId": "189",
+  "teamName": "Bowling Green Falcons",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.depthTier.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.337Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.337Z",
+    "retrievedAt": "2026-09-12T21:20:55.337Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "b0d9fb4a6a5769aee09f8edb52feab32b78757d28a384a0a803ab143a1b4e7ff"
+}

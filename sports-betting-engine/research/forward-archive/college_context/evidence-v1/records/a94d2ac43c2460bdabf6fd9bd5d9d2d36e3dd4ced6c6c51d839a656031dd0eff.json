@@ -1,0 +1,24 @@
+{
+  "id": "a94d2ac43c2460bdabf6fd9bd5d9d2d36e3dd4ced6c6c51d839a656031dd0eff",
+  "schema": 1,
+  "teamId": "2348",
+  "teamName": "Louisiana Tech Bulldogs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.depthTier.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.338Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.338Z",
+    "retrievedAt": "2026-09-12T21:20:55.338Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f8c505dc7bf81d5cf88a407c5d7b5201ef016dd270ec00cb568585f06337a7ef"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "9c0e33a8bd550bff0f47503628251c498d8e1bb9264c56f0769c1335feb80def",
+  "schema": 1,
+  "teamId": "2711",
+  "teamName": "Western Michigan Broncos",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "transfers",
+  "field": "transfers.ingestionStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.339Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.339Z",
+    "retrievedAt": "2026-09-12T21:20:55.339Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "de61fa014f8f4a17f4d50055e43999c0fe3441ea8e4c539ff987aabdb3ae3a5f"
+}

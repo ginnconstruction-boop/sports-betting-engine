@@ -1603,6 +1603,240 @@
       "eventId": "401864578",
       "forecastAt": "2026-09-12T15:09:14.966Z",
       "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "4ef5b168e380a25d054328531cbee6cd8f1e105e931eeb69d5265e640f821eab",
+      "eventId": "401856672",
+      "forecastAt": "2026-09-12T21:21:01.574Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "7d28c3da2ff847142e07af6b90d0548986e4663e9975e7708064915532c93f9a",
+      "eventId": "401860881",
+      "forecastAt": "2026-09-12T21:21:01.780Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "90dc01a4e957c3ff6bc9034f85e92cfe5b3367533f9e01dee7ef23375c5b6da5",
+      "eventId": "401866414",
+      "forecastAt": "2026-09-12T21:21:01.968Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "c1f5e00ced04a05eabc559e8280cc0706352abdeb1fd61e9d3438c2b7a2a9cf2",
+      "eventId": "401866418",
+      "forecastAt": "2026-09-12T21:21:02.158Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "9ea9c0935643e9df7ecb4ac85232b0eee0cce77159c661dcba45856e44ec9ce3",
+      "eventId": "401866421",
+      "forecastAt": "2026-09-12T21:21:02.347Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "cdc46ab00bc0b863a34bff82cbd92c6957fc7a647cd727a05436bafa07d4d879",
+      "eventId": "401856680",
+      "forecastAt": "2026-09-12T21:21:02.537Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "200f2ddd113d6d0de20bf5b519ddbc125383a85197d3568891a2476a1e88e4f9",
+      "eventId": "401856681",
+      "forecastAt": "2026-09-12T21:21:02.729Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "6cf68e2401ba0c3eed286f0a09317bb57e3d144101fa59fa9aa75c75d18de71f",
+      "eventId": "401856786",
+      "forecastAt": "2026-09-12T21:21:02.918Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "9fe5948de93948ef6d504c07edec9c3216bec1635533dc11851cf48ccda23410",
+      "eventId": "401856787",
+      "forecastAt": "2026-09-12T21:21:03.108Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "b6efd327168b869ff7035df0d48d2d312fc633b0d5dfeb0d8543aec82733f06b",
+      "eventId": "401858441",
+      "forecastAt": "2026-09-12T21:21:03.298Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "085e548dd3c329075d759f2c7a5bd702d61572339bee28e6a1ff260d0873b55b",
+      "eventId": "401860882",
+      "forecastAt": "2026-09-12T21:21:03.486Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "e55e6839d5be7d1b5567464ea696ad141d931ca2a7981f8f6762150930e982bf",
+      "eventId": "401862707",
+      "forecastAt": "2026-09-12T21:21:03.679Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "355a2e15b9bf3df17b1e300ce3395b27081d121f0ade23a0fa04c2f2b664336e",
+      "eventId": "401864503",
+      "forecastAt": "2026-09-12T21:21:03.868Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "9f93a5b6f1e919877ea9a4b8c50314d1edc28ce2a0c0df873fdedf2661d3f4ba",
+      "eventId": "401864575",
+      "forecastAt": "2026-09-12T21:21:04.058Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "bbbefe7e022b7fa28d2d760ef09fa2a360cb0c8452a7083aad788789ef7454b7",
+      "eventId": "401868241",
+      "forecastAt": "2026-09-12T21:21:04.247Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "a5fa507ed8dc51234a6de7b78a5e279986bb05a6aa1b2ccd9d8ba13832a8ee9c",
+      "eventId": "401869955",
+      "forecastAt": "2026-09-12T21:21:04.435Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "d77c6e0cd1f5a457f38e40f0d8e052fd021b2466c9f0a9d85695d98ff1c33c66",
+      "eventId": "401871045",
+      "forecastAt": "2026-09-12T21:21:04.623Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "ef88f8e04422aec3609b1449706e6889feb57d1b5f4b864ebeaef917753d83ba",
+      "eventId": "401871046",
+      "forecastAt": "2026-09-12T21:21:04.809Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "e19bf15128717001e6bd2a6a79aa81c652a87f2ebc017f71c78927cdef8a0f0b",
+      "eventId": "401858443",
+      "forecastAt": "2026-09-12T21:21:04.999Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "4effad1c78d11f2efb23ff50386428308019c9d4eab16d543f39464d728aafd3",
+      "eventId": "401858447",
+      "forecastAt": "2026-09-12T21:21:05.189Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "5bc517061c776ff543ef53ca7648a6906eba50c1d16a7d853155c3c832872756",
+      "eventId": "401856682",
+      "forecastAt": "2026-09-12T21:21:05.381Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "92acdf6485973302cbbee742664f5d6b11fc22d2024fed9242223e74b65d4ab6",
+      "eventId": "401856783",
+      "forecastAt": "2026-09-12T21:21:05.578Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "5a4fd54fbf75b42b09191f7a3a70b79c7d57473513133a63e7616ff69a95d2dc",
+      "eventId": "401856788",
+      "forecastAt": "2026-09-12T21:21:05.768Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "00e71c0195100e1ce90e93ca8b0183447e5cf8bcd0a1db1077ce38be2fbc61b6",
+      "eventId": "401858219",
+      "forecastAt": "2026-09-12T21:21:05.960Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "09b9a4b3e57f9ec45a1fdb5384c5093e490ab852d3e645cb3e70adb3854a4d5c",
+      "eventId": "401862703",
+      "forecastAt": "2026-09-12T21:21:06.153Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "f4d75da9ef0b4413d19de2769c2c46f28b2bf290e9a31e0d630a642329fb10b7",
+      "eventId": "401867796",
+      "forecastAt": "2026-09-12T21:21:06.350Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "09cf76aa1bdd6eab1fd33c490fd5c0bfcf41c4553c955902b96f571916d01f10",
+      "eventId": "401868008",
+      "forecastAt": "2026-09-12T21:21:06.541Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "3b4575d9f6b7b68d5c316dd02bdb874f68943aa42f061756309fdac3adff0d43",
+      "eventId": "401856671",
+      "forecastAt": "2026-09-12T21:21:06.738Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "3c6c229868916c143521ddb9b2e0583fb3ad11e110081e03a3dae7e7ef8ebcc8",
+      "eventId": "401856676",
+      "forecastAt": "2026-09-12T21:21:06.929Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "7a81659bc8789134068e68d255eb55b303f3e6f370219feaef2bcfaa13984f87",
+      "eventId": "401856789",
+      "forecastAt": "2026-09-12T21:21:07.118Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "141e74b8a87a114e0dc1db89ca0cda00abe2bd57b538c4e287c0340a1be460dc",
+      "eventId": "401856784",
+      "forecastAt": "2026-09-12T21:21:07.308Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "64ec9b3e2ad37ca9cafc838c103bab88b38b8d0ead452ea7c13458518dc5457b",
+      "eventId": "401864504",
+      "forecastAt": "2026-09-12T21:21:07.497Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "b54d1845ee4fca650bbeefa9f9ad88bb8cb8f432b8c605b356a6bbdd3b0bce62",
+      "eventId": "401864505",
+      "forecastAt": "2026-09-12T21:21:07.686Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "35b67adc8daf7fb46605778b6121d9ceb9c98eaa3321391c12807a2e1e732077",
+      "eventId": "401864502",
+      "forecastAt": "2026-09-12T21:21:07.890Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "7676381abcb0225d2db26881becedd9c61cd5df9d38e9fdf6ab25c21af555878",
+      "eventId": "401856670",
+      "forecastAt": "2026-09-12T21:21:08.084Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "312f3052cacc4871f7c85b4a6cea8e913e98aea30ed661519a0865d2f3a71d12",
+      "eventId": "401860883",
+      "forecastAt": "2026-09-12T21:21:08.271Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "6aaa4422202ffb4fd91d5f683242773c7f6fd4f5ec8276c6080d0d67ddace562",
+      "eventId": "401864500",
+      "forecastAt": "2026-09-12T21:21:08.458Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "0dba7b16586c2fa8bf7e8aaa2891633148bebc5f5ab00a8dabdf207503357a15",
+      "eventId": "401858445",
+      "forecastAt": "2026-09-12T21:21:08.647Z",
+      "window": "ACTUAL_PREKICK"
+    },
+    {
+      "id": "c6c25939fe24d044f493af7b01cf5b34819b72faba76e59f034ee44376b19dfa",
+      "eventId": "401864578",
+      "forecastAt": "2026-09-12T21:21:08.835Z",
+      "window": "ACTUAL_PREKICK"
     }
   ],
   "finals": [],
@@ -3143,6 +3377,226 @@
     {
       "id": "a336e2160822eac235e3a6facd4fd5e9869422c2d0e74068f106bbb724995136",
       "failedAt": "2026-09-12T15:09:14.966Z"
+    },
+    {
+      "id": "02919837d75754dbecb8501cf3afbcc5d240bbd4581a337dc38575e67053848f",
+      "failedAt": "2026-09-12T21:20:57.207Z"
+    },
+    {
+      "id": "0ba14709fc2aaa12c560ac35b5b2d7f15898752946d18abcf671a8e46abec4bb",
+      "failedAt": "2026-09-12T21:20:57.207Z"
+    },
+    {
+      "id": "119a2b33191fb6f68b9b75d0662993fc5992c61eedfb19ce902a7f66407482d3",
+      "failedAt": "2026-09-12T21:20:57.207Z"
+    },
+    {
+      "id": "3e7a4a26886ce6ff66d4aa53d565d632399c242849b7b538cbbde8149b6522ea",
+      "failedAt": "2026-09-12T21:20:57.207Z"
+    },
+    {
+      "id": "408aeee84f09a01cadd5006c212788c278968688cc67856a8867497e7c29f7f4",
+      "failedAt": "2026-09-12T21:20:57.207Z"
+    },
+    {
+      "id": "51f2890712d69a42d2d2c758e6a21f08b2bcf644aa592700d5d247c07cfe4529",
+      "failedAt": "2026-09-12T21:20:57.207Z"
+    },
+    {
+      "id": "6be2890f988b4b4e402fa3b47d12f5b98a41d93383db838c15e7c8707780e6c8",
+      "failedAt": "2026-09-12T21:20:57.207Z"
+    },
+    {
+      "id": "7df35f236d435200ddf2ed9f3f858c9905d83d33d442bfb234b7d6b3983604de",
+      "failedAt": "2026-09-12T21:20:57.207Z"
+    },
+    {
+      "id": "90dfb31ad1e14b0d2681f48b7f971f00efd5a7d434959188f7695ebe150f4e14",
+      "failedAt": "2026-09-12T21:20:57.207Z"
+    },
+    {
+      "id": "9ea83c73b11c7e1b2e23a2ee47beddc27cec98bedc6b620a8142445cbd25bce5",
+      "failedAt": "2026-09-12T21:20:57.207Z"
+    },
+    {
+      "id": "ebdf0fc9b0d46ce881c464ce7407e0828e1cb1168a298d94a104f2ff6f7504bb",
+      "failedAt": "2026-09-12T21:20:57.207Z"
+    },
+    {
+      "id": "eceb591635dbcc1224f8e1dbb866cd750b5b2247a7d3a3ec78c6dd935d8638d7",
+      "failedAt": "2026-09-12T21:20:57.207Z"
+    },
+    {
+      "id": "f074846c5beb340979e70b03aba8a5b09c2dff3a60a22dbe3a0603b427d656f6",
+      "failedAt": "2026-09-12T21:20:57.207Z"
+    },
+    {
+      "id": "f12d05b8934fce20726ff4f8449bf65ddfab984c10bb501e6db3ebc626e0b6c3",
+      "failedAt": "2026-09-12T21:20:57.207Z"
+    },
+    {
+      "id": "f9917557cdd4f77ac519170ca5fd2afd895e3f28892b42d144631cc64be753f2",
+      "failedAt": "2026-09-12T21:20:57.207Z"
+    },
+    {
+      "id": "fafae954e60d5080fe89b5f2b0a91f6a6d4f0d91f581163e1e09aa06cefb80de",
+      "failedAt": "2026-09-12T21:20:57.207Z"
+    },
+    {
+      "id": "1e33ecf253b00629dd043a6866376a129bb86907b32b59a87c74bbf42e916372",
+      "failedAt": "2026-09-12T21:21:01.574Z"
+    },
+    {
+      "id": "7cf727ce4b39451a97b4f431f49c044834ad7add53a889ee4a9a886d3620d805",
+      "failedAt": "2026-09-12T21:21:01.780Z"
+    },
+    {
+      "id": "d83abdb0fd30a7196dc97feaef7183bd51df4633a36d77908ff9f27acb34b570",
+      "failedAt": "2026-09-12T21:21:01.968Z"
+    },
+    {
+      "id": "8c882b0452fbe1c6f6654292f6f4ba39f4f0c6468dfbaf4fa7f8eff1e42a1956",
+      "failedAt": "2026-09-12T21:21:02.158Z"
+    },
+    {
+      "id": "ca0595eb4a5b62b89e51a0e06feb5dd569c9d5b6ffefd1727ef92fd231ddaa31",
+      "failedAt": "2026-09-12T21:21:02.347Z"
+    },
+    {
+      "id": "7e9dfb8870590124aa1bc71285fa26772543c5fc6106ee1a7ac8584166969b28",
+      "failedAt": "2026-09-12T21:21:02.537Z"
+    },
+    {
+      "id": "40d6742c0949202dfb4116dff9271d381ee36dfc89d3d7d3437c1ed5a169993f",
+      "failedAt": "2026-09-12T21:21:02.729Z"
+    },
+    {
+      "id": "00902b4d7cb7b774e42e6518069803f46c48d034c773b5f7c240fbe2df1b2561",
+      "failedAt": "2026-09-12T21:21:02.918Z"
+    },
+    {
+      "id": "5c5454579fd7cc70788d7d350136ca2f3d692f626839d1720db8653fa6c12f65",
+      "failedAt": "2026-09-12T21:21:03.108Z"
+    },
+    {
+      "id": "341db4582a9eacf5ee97e8eb0ecc4005e9856fa04e55df1ec8bdf0067595ceef",
+      "failedAt": "2026-09-12T21:21:03.298Z"
+    },
+    {
+      "id": "34ce034432bcc0877d820aa75ff755b9c8d6f41bb8a56cb2f9acb071d150c4f8",
+      "failedAt": "2026-09-12T21:21:03.486Z"
+    },
+    {
+      "id": "0fe3674d5a22bcddebe8eb6ec4f7198e7915397c6da0d048ba1b27745965e544",
+      "failedAt": "2026-09-12T21:21:03.679Z"
+    },
+    {
+      "id": "91af8587aa38146aef31e9252b6bfc95d5aa5af772215d1c15c192e9ecb64a4f",
+      "failedAt": "2026-09-12T21:21:03.868Z"
+    },
+    {
+      "id": "0209b4454d7e71defc411887f17708d046fecaebd97ec64d29c75377b9cc8fe7",
+      "failedAt": "2026-09-12T21:21:04.058Z"
+    },
+    {
+      "id": "2f9a85e1615c18016ae742de1f93d6c6f99225e1c6b451417a4c9b540abcd581",
+      "failedAt": "2026-09-12T21:21:04.247Z"
+    },
+    {
+      "id": "b18b5429e439b6a64361ee35d661c956bb53af819addfe399343c46bfd1b6e4f",
+      "failedAt": "2026-09-12T21:21:04.435Z"
+    },
+    {
+      "id": "ae6dd789fbe87456fb8af8c29f9176769a8a0dcfe1da31f6db96c3825d9b622e",
+      "failedAt": "2026-09-12T21:21:04.623Z"
+    },
+    {
+      "id": "dc6a1ad6e918f66125cd456e9193975cae5c3c6f34a1b5819685a169d513c6d9",
+      "failedAt": "2026-09-12T21:21:04.809Z"
+    },
+    {
+      "id": "61c15d7c2551fba1bbf454b5c8264ce8cb35a8326e8b5ba55065fa875e8253be",
+      "failedAt": "2026-09-12T21:21:04.999Z"
+    },
+    {
+      "id": "048c280c17342f87506fd977c34179831ad7559db35a99819038d15bfcaf918e",
+      "failedAt": "2026-09-12T21:21:05.189Z"
+    },
+    {
+      "id": "423db7876d7981a085ab64abfeedd74b5a3d57c9806f89131056fd313a9e9900",
+      "failedAt": "2026-09-12T21:21:05.381Z"
+    },
+    {
+      "id": "9ffd0fadc186dfeafa553088235c8293a8d1a2714c05675ef5b47b2857cb087c",
+      "failedAt": "2026-09-12T21:21:05.578Z"
+    },
+    {
+      "id": "1f2b2ed9c0c3055014f32964f7e3641a3103e8a7addeb98d7ad23a55f4624b40",
+      "failedAt": "2026-09-12T21:21:05.768Z"
+    },
+    {
+      "id": "bad691a07bb78c9b444e7642272a427e6859c8c50790fe9b1206a45d62ccb14d",
+      "failedAt": "2026-09-12T21:21:05.960Z"
+    },
+    {
+      "id": "85dca1eca8be8c38c73b0d02b91fdc2e070e422d887cc619971b68e646f12be1",
+      "failedAt": "2026-09-12T21:21:06.153Z"
+    },
+    {
+      "id": "3211aa0f01902b7bf9a0bd28777ec7820f454e895e228360ec20de40405091d5",
+      "failedAt": "2026-09-12T21:21:06.350Z"
+    },
+    {
+      "id": "779360bfabad12dba4325407190215448711a8cd6010749180d84ea9883e7544",
+      "failedAt": "2026-09-12T21:21:06.541Z"
+    },
+    {
+      "id": "b1ac498536cdd19685ff22bd0cf7baaecf327619bfee7f5dcb4a666d3d485f54",
+      "failedAt": "2026-09-12T21:21:06.738Z"
+    },
+    {
+      "id": "c25702e1d1fc341d8ff791f3832e485a647137c3e68eef9b33b5ea0d2936e505",
+      "failedAt": "2026-09-12T21:21:06.929Z"
+    },
+    {
+      "id": "8fe49dd16ce3878dfc42b72e5d0183840bdc5688479d4bfc013d4f750058ca7b",
+      "failedAt": "2026-09-12T21:21:07.118Z"
+    },
+    {
+      "id": "31131f875dc4b2568a2fae65b984096d96f9e298f60e66bfade1b75101f7ffd4",
+      "failedAt": "2026-09-12T21:21:07.308Z"
+    },
+    {
+      "id": "92b34485f1dee86fbcdc82ff46aee1618d88ee06f76fcf135812996c345ee582",
+      "failedAt": "2026-09-12T21:21:07.497Z"
+    },
+    {
+      "id": "e39094c11b12381a3108da7e65d0a9659b52a46295eb936d9e4b00e9eceddf90",
+      "failedAt": "2026-09-12T21:21:07.686Z"
+    },
+    {
+      "id": "0c6887df5f9ee64f1c8ae2d0870e2974e70a30b8da347fcf0e7207982246a04a",
+      "failedAt": "2026-09-12T21:21:07.890Z"
+    },
+    {
+      "id": "b819ab7049cfc99cf5d6c76fecb0d9e7ecd6eba80e6141800c387cd8cc8de948",
+      "failedAt": "2026-09-12T21:21:08.084Z"
+    },
+    {
+      "id": "8305bf1501667cbd75521ce2c4dcdf2ce5294c706226c2d9deab4999b3c9a6ee",
+      "failedAt": "2026-09-12T21:21:08.271Z"
+    },
+    {
+      "id": "3c4fa29d10813d0d65cf4196c6073b5035efa0a402be8691ac147b45fd29a34b",
+      "failedAt": "2026-09-12T21:21:08.458Z"
+    },
+    {
+      "id": "1bd8a59544414e33896c27db4c72d05881afbb4e1c90a053b6ec94a48f05919d",
+      "failedAt": "2026-09-12T21:21:08.647Z"
+    },
+    {
+      "id": "564aee3028bc79085a46e59a7b7111e5ba28cb50ea9041bd70b33acae322a0ee",
+      "failedAt": "2026-09-12T21:21:08.835Z"
     }
   ]
 }

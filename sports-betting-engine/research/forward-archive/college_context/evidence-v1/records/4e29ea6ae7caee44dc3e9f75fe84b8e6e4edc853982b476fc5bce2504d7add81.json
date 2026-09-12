@@ -1,0 +1,24 @@
+{
+  "id": "4e29ea6ae7caee44dc3e9f75fe84b8e6e4edc853982b476fc5bce2504d7add81",
+  "schema": 1,
+  "teamId": "66",
+  "teamName": "Iowa State Cyclones",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:55.338Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.338Z",
+    "retrievedAt": "2026-09-12T21:20:55.338Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "41a964c5ac98ed67a131d6a289998e2c49c345bff2f1e39140ff3cdd2bfa824c"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "35bb4f4e0a6c0ab7b5a1c44f1647d8282ecfc71de8dc141bb9ddf5ebe66f12f1",
+  "schema": 1,
+  "teamId": "2579",
+  "teamName": "South Carolina Gamecocks",
+  "season": 2026,
+  "eventId": "401856680",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.movementPoints",
+  "value": -1,
+  "effectiveFrom": "2026-09-12T21:20:54.840Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856680",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:54.840Z",
+    "retrievedAt": "2026-09-12T21:20:54.840Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "dea88875f864680c4b0617341cc35e3b89f00498315fb0648ad91922b049fc88"
+}

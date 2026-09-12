@@ -1,0 +1,24 @@
+{
+  "id": "0b4ba7b7c484a40764466df373586a4a2859e805cdbb8b15a4ed6baffc3c57b7",
+  "schema": 1,
+  "teamId": "13",
+  "teamName": "Cal Poly Mustangs",
+  "season": 2026,
+  "eventId": "401864504",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:55.076Z",
+  "effectiveTo": "2026-09-13T07:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864504",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.076Z",
+    "retrievedAt": "2026-09-12T21:20:55.076Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "552d6f5d2bc589c28103cb1fbdc583929b4543fcb4a3f5b4eb88934d32b37278"
+}

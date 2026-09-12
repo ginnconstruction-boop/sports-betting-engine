@@ -1,0 +1,24 @@
+{
+  "id": "46da2d1e209f325c2081c303e7e52b7f254843a5053848164634c7c582a49c0d",
+  "schema": 1,
+  "teamId": "276",
+  "teamName": "Marshall Thundering Herd",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:55.338Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.338Z",
+    "retrievedAt": "2026-09-12T21:20:55.338Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "e564bc76bf991178bd08934286122f3b40768e6521652d2754ec1a4a80cd7e3c"
+}

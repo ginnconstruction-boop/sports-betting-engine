@@ -1,0 +1,24 @@
+{
+  "id": "14b15a29b72f81824c3b0e2eefe5d7fe528faffa1b44a75d510f6a37e7a35cee",
+  "schema": 1,
+  "teamId": "2628",
+  "teamName": "TCU Horned Frogs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:55.338Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.338Z",
+    "retrievedAt": "2026-09-12T21:20:55.338Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "57fdde2e356b73c742f1afe7bfcdd21c683f62e8a0f6b879850c72d98a6151c0"
+}

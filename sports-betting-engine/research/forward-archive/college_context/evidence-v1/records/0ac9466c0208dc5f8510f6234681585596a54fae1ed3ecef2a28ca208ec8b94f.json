@@ -1,0 +1,24 @@
+{
+  "id": "0ac9466c0208dc5f8510f6234681585596a54fae1ed3ecef2a28ca208ec8b94f",
+  "schema": 1,
+  "teamId": "2230",
+  "teamName": "Fordham Rams",
+  "season": 2026,
+  "eventId": "401868008",
+  "playerId": null,
+  "domain": "current_season",
+  "field": "current.yardsAllowedPerGame",
+  "value": 403.5,
+  "effectiveFrom": "2026-09-12T21:20:55.123Z",
+  "effectiveTo": "2026-09-13T05:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401868008",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.123Z",
+    "retrievedAt": "2026-09-12T21:20:55.123Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "af30e5085d15a0aceab91d68049776a6559541f45bc578f56ed70604f60ce676"
+}

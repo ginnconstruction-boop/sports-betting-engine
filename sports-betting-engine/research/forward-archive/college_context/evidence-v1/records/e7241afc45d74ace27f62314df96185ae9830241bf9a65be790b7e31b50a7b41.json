@@ -1,0 +1,24 @@
+{
+  "id": "e7241afc45d74ace27f62314df96185ae9830241bf9a65be790b7e31b50a7b41",
+  "schema": 1,
+  "teamId": "254",
+  "teamName": "Utah Utes",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:55.339Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.339Z",
+    "retrievedAt": "2026-09-12T21:20:55.339Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "98ca4dc37845bc37c7d8aed1da956c7b2e3c4293edd8b87f278e244ac4468252"
+}

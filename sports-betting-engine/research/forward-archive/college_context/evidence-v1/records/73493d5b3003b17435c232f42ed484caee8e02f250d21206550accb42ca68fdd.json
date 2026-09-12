@@ -1,0 +1,24 @@
+{
+  "id": "73493d5b3003b17435c232f42ed484caee8e02f250d21206550accb42ca68fdd",
+  "schema": 1,
+  "teamId": "8",
+  "teamName": "Arkansas Razorbacks",
+  "season": 2026,
+  "eventId": "401856670",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.provider",
+  "value": "Draft Kings",
+  "effectiveFrom": "2026-09-12T21:20:55.212Z",
+  "effectiveTo": "2026-09-13T08:15:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856670",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.212Z",
+    "retrievedAt": "2026-09-12T21:20:55.212Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "0d7dc0d719ed31dea1e5ac73c76918775123c7834ee6720c25693e6d8584c151"
+}

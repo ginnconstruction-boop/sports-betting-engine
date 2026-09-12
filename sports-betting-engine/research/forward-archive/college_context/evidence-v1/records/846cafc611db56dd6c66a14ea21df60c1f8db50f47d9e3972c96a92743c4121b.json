@@ -1,0 +1,24 @@
+{
+  "id": "846cafc611db56dd6c66a14ea21df60c1f8db50f47d9e3972c96a92743c4121b",
+  "schema": 1,
+  "teamId": "2640",
+  "teamName": "Texas Southern Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.depthTier.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.339Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.339Z",
+    "retrievedAt": "2026-09-12T21:20:55.339Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "169eeca3ea4a5e3ec4bfe1ca2f3a2e83f474cf203bbf9136dcf92a4c2efce8b4"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "d24843c7766e05429f4e511ac10c81f12c49acbce816e82ed72db685c1b7c8eb",
+  "schema": 1,
+  "teamId": "36",
+  "teamName": "Colorado State Rams",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:55.337Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.337Z",
+    "retrievedAt": "2026-09-12T21:20:55.337Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "3ee129fa19d5129eab9dfe63dda649715851a41951c183236b9fd51ec04cde07"
+}

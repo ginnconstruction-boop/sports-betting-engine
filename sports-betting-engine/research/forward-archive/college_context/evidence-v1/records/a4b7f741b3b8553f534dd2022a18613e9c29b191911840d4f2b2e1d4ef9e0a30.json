@@ -1,0 +1,24 @@
+{
+  "id": "a4b7f741b3b8553f534dd2022a18613e9c29b191911840d4f2b2e1d4ef9e0a30",
+  "schema": 1,
+  "teamId": "2710",
+  "teamName": "Western Illinois Leathernecks",
+  "season": 2026,
+  "eventId": "401858447",
+  "playerId": null,
+  "domain": "qb",
+  "field": "qb.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-12T21:20:54.967Z",
+  "effectiveTo": "2026-09-13T05:15:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858447",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:54.967Z",
+    "retrievedAt": "2026-09-12T21:20:54.967Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "306610c40670cb1fbefec39b60995fcac55dc2fcf5a4fd9e229f72146e65915d"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "335edf2e5a493a0915b084ccfed5183ced5ceef4f2eeadd6d0082f0c1d2b0c8e",
+  "schema": 1,
+  "teamId": "26",
+  "teamName": "UCLA Bruins",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:55.338Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.338Z",
+    "retrievedAt": "2026-09-12T21:20:55.338Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "07c058848223640f26b875f74e15f422b792dc4ffcc2bb0b8342ea8764c22a8f"
+}

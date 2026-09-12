@@ -1,0 +1,24 @@
+{
+  "id": "b8533b23e208b4b554c650b1bdc166a774e9105f711469718dbd1c4b536a559c",
+  "schema": 1,
+  "teamId": "2623",
+  "teamName": "Missouri State Bears",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-12T21:20:55.338Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.338Z",
+    "retrievedAt": "2026-09-12T21:20:55.338Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "d2fba4345e49a49bf04947e7e2ba352df261cd3f83a819eb0267ebeabbeb313a"
+}

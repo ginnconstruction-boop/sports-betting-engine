@@ -1,0 +1,24 @@
+{
+  "id": "d567814577e15a10f8f52918af4c65b87738eb57fa6083340dd081e17620cb44",
+  "schema": 1,
+  "teamId": "2287",
+  "teamName": "Illinois State Redbirds",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.rosterComposite.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.337Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.337Z",
+    "retrievedAt": "2026-09-12T21:20:55.337Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "293d1c3a49ba5558b88ff3e44297171211b786cc805dff0868e1a1bdd8d03a89"
+}

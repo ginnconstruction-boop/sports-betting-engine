@@ -1,0 +1,24 @@
+{
+  "id": "f2102f04b2b0e8cd4dd48c92cca98763585b6c2a96615cd9cb049019787f3025",
+  "schema": 1,
+  "teamId": "166",
+  "teamName": "New Mexico State Aggies",
+  "season": 2026,
+  "eventId": "401864578",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.windMph.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-12T21:20:55.259Z",
+  "effectiveTo": "2026-09-13T09:59:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864578",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.259Z",
+    "retrievedAt": "2026-09-12T21:20:55.259Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "80c09985d59a325b8f4753efd08ac9c3c59bac609ed07392470af09f177ad69b"
+}

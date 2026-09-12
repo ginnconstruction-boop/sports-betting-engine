@@ -1,0 +1,24 @@
+{
+  "id": "fa96ad933516fd6383d2ffd61f4962db6a29aa2ff519d1b8237e545eaf7a588f",
+  "schema": 1,
+  "teamId": "239",
+  "teamName": "Baylor Bears",
+  "season": 2026,
+  "eventId": "401856784",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.humidityPct.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-12T21:20:55.149Z",
+  "effectiveTo": "2026-09-13T06:08:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856784",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.149Z",
+    "retrievedAt": "2026-09-12T21:20:55.149Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f6e5c5061a1138ebfe76f227654f628f838a4bf30bbcb994bc1c59f3efe93e89"
+}

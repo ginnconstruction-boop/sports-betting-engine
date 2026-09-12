@@ -1,0 +1,24 @@
+{
+  "id": "de934287def9f1bc2fceb0fa735bc621169dbc7a80c243e88ad6e14a10ab0047",
+  "schema": 1,
+  "teamId": "16",
+  "teamName": "Sacramento State Hornets",
+  "season": 2026,
+  "eventId": "401860883",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.windMph.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-12T21:20:55.197Z",
+  "effectiveTo": "2026-09-13T08:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401860883",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.197Z",
+    "retrievedAt": "2026-09-12T21:20:55.197Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "1e6f817f7917f3e4df92331ee837c464fa2102e7f6b67fe010dd000fb8f3e6fc"
+}

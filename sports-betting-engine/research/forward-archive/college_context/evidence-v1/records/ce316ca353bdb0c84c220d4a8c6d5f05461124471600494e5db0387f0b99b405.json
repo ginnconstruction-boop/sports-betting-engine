@@ -1,0 +1,24 @@
+{
+  "id": "ce316ca353bdb0c84c220d4a8c6d5f05461124471600494e5db0387f0b99b405",
+  "schema": 1,
+  "teamId": "338",
+  "teamName": "Kennesaw State Owls",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.depthTier.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.338Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.338Z",
+    "retrievedAt": "2026-09-12T21:20:55.338Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "2d19b4f713b67a552cee28fd9fb2dc2404b4f6b03feab0003cdd488614f82251"
+}

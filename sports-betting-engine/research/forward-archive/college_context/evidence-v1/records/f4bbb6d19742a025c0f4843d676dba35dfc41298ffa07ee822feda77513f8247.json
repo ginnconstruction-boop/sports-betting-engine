@@ -1,0 +1,24 @@
+{
+  "id": "f4bbb6d19742a025c0f4843d676dba35dfc41298ffa07ee822feda77513f8247",
+  "schema": 1,
+  "teamId": "158",
+  "teamName": "Nebraska Cornhuskers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-12T21:20:55.337Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.337Z",
+    "retrievedAt": "2026-09-12T21:20:55.337Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "7574a27cffc443dfeabaf1be484a65638a9167df0e4ed6c269c402d36b715f65"
+}

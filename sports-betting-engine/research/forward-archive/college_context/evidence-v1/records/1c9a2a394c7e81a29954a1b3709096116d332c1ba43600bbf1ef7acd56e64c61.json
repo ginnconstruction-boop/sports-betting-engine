@@ -1,0 +1,24 @@
+{
+  "id": "1c9a2a394c7e81a29954a1b3709096116d332c1ba43600bbf1ef7acd56e64c61",
+  "schema": 1,
+  "teamId": "2426",
+  "teamName": "Navy Midshipmen",
+  "season": 2026,
+  "eventId": "401862703",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.humidityPct.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-12T21:20:55.133Z",
+  "effectiveTo": "2026-09-13T05:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401862703",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.133Z",
+    "retrievedAt": "2026-09-12T21:20:55.133Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ef0040f04e62f7b5caa5e962951bec112f518b38b937eddf440c5f6ef6ed3899"
+}

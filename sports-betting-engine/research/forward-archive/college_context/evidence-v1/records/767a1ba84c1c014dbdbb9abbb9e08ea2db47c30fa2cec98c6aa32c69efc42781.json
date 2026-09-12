@@ -1,0 +1,24 @@
+{
+  "id": "767a1ba84c1c014dbdbb9abbb9e08ea2db47c30fa2cec98c6aa32c69efc42781",
+  "schema": 1,
+  "teamId": "2459",
+  "teamName": "Northern Illinois Huskies",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-12T21:20:55.337Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.337Z",
+    "retrievedAt": "2026-09-12T21:20:55.337Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "fa38d31ac9cee41e65ea0f2b6fd980fe13a1f5453d58fa4815a7d88cd7772d40"
+}

@@ -1,0 +1,24 @@
+{
+  "id": "87ef1dd0d25fc22702d139f52d2af80a050336d921f707beaf4be47b712037d5",
+  "schema": 1,
+  "teamId": "189",
+  "teamName": "Bowling Green Falcons",
+  "season": 2026,
+  "eventId": "401858441",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:54.807Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858441",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:54.807Z",
+    "retrievedAt": "2026-09-12T21:20:54.807Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "1e2c3a7a75d7fd0ff5c16e3d3a45f4e6c6b9b2eb7c35297b5d3f5968a74ab2af"
+}

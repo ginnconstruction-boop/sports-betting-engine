@@ -1,0 +1,24 @@
+{
+  "id": "cdeec11edc1d8c5fde4ab1febab75d6239c008a790b215d4d9a84412c6139f1e",
+  "schema": 1,
+  "teamId": "2815",
+  "teamName": "Lindenwood Lions",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.sourceStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.339Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.339Z",
+    "retrievedAt": "2026-09-12T21:20:55.339Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "fd0010e2185a7c42f6e0e91972291a1f8f21314593e43e58275c1ee943c2393d"
+}

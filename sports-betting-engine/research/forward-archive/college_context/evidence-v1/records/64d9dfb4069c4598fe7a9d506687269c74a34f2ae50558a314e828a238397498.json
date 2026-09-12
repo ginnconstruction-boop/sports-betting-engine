@@ -1,0 +1,24 @@
+{
+  "id": "64d9dfb4069c4598fe7a9d506687269c74a34f2ae50558a314e828a238397498",
+  "schema": 1,
+  "teamId": "166",
+  "teamName": "New Mexico State Aggies",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-12T21:20:55.339Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.339Z",
+    "retrievedAt": "2026-09-12T21:20:55.339Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "15ae2c6157f8578e45175909afa029c6c9c8af4c022419162d60e7fb9aff10a8"
+}

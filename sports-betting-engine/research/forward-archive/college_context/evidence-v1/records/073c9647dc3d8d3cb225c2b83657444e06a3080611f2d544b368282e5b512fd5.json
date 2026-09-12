@@ -1,0 +1,24 @@
+{
+  "id": "073c9647dc3d8d3cb225c2b83657444e06a3080611f2d544b368282e5b512fd5",
+  "schema": 1,
+  "teamId": "2429",
+  "teamName": "Charlotte 49ers",
+  "season": 2026,
+  "eventId": "401856676",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:55.046Z",
+  "effectiveTo": "2026-09-13T05:45:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401856676",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.046Z",
+    "retrievedAt": "2026-09-12T21:20:55.046Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "112274880e648f4f5ac9909abf1c29a2d914a5fd4bf32befec96c724ccba7e36"
+}

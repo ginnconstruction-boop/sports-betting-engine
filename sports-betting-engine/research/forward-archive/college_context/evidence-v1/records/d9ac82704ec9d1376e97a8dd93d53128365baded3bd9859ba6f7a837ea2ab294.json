@@ -1,0 +1,24 @@
+{
+  "id": "d9ac82704ec9d1376e97a8dd93d53128365baded3bd9859ba6f7a837ea2ab294",
+  "schema": 1,
+  "teamId": "2534",
+  "teamName": "Sam Houston Bearkats",
+  "season": 2026,
+  "eventId": "401862707",
+  "playerId": null,
+  "domain": "weather",
+  "field": "weather.humidityPct.diagnostic",
+  "value": "SOURCE_FIELD_UNAVAILABLE",
+  "effectiveFrom": "2026-09-12T21:20:54.914Z",
+  "effectiveTo": "2026-09-13T05:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401862707",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:54.914Z",
+    "retrievedAt": "2026-09-12T21:20:54.914Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "0e118afee38dc5a8828be8ad2ba7c28e4ed0d3194b9b4c61854d824440e035bb"
+}

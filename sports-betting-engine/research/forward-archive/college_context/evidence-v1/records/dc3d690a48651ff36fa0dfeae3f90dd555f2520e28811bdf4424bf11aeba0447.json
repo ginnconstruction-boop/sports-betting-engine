@@ -1,0 +1,24 @@
+{
+  "id": "dc3d690a48651ff36fa0dfeae3f90dd555f2520e28811bdf4424bf11aeba0447",
+  "schema": 1,
+  "teamId": "2",
+  "teamName": "Auburn Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:55.338Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.338Z",
+    "retrievedAt": "2026-09-12T21:20:55.338Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "80e3ce82653d2553d50adc31ff58256ac8ea6984eef2e281359eb40a9f085ea1"
+}

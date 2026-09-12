@@ -1,0 +1,24 @@
+{
+  "id": "df09f21959d165823654ddf39bdc512cce30641617dd214c2211a86be3d604f6",
+  "schema": 1,
+  "teamId": "228",
+  "teamName": "Clemson Tigers",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:55.338Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.338Z",
+    "retrievedAt": "2026-09-12T21:20:55.338Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "8610b79bf630ace27f837ce8eda3c1161712ee491b57f98c3bbbe8d9e2b0959d"
+}

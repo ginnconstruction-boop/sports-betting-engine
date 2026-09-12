@@ -1,0 +1,24 @@
+{
+  "id": "77811428b0acdc54f4d06f111cd1f60db471de1f9e1e9d92570ccc9e6feaefd9",
+  "schema": 1,
+  "teamId": "2226",
+  "teamName": "Florida Atlantic Owls",
+  "season": 2026,
+  "eventId": "401862703",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-12T21:20:55.133Z",
+  "effectiveTo": "2026-09-13T05:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401862703",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.133Z",
+    "retrievedAt": "2026-09-12T21:20:55.133Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "ef0040f04e62f7b5caa5e962951bec112f518b38b937eddf440c5f6ef6ed3899"
+}

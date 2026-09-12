@@ -1,0 +1,24 @@
+{
+  "id": "258dddbd81b14af98e7f00b7b7709ec8557e56f74090c9daf7d70afbc18a81a0",
+  "schema": 1,
+  "teamId": "2717",
+  "teamName": "Western Carolina Catamounts",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.ingestionStatus",
+  "value": "PARTIAL_SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:55.337Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.337Z",
+    "retrievedAt": "2026-09-12T21:20:55.337Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "f8fb5c1295bd5054822d996805b0a681969ab0ac07ab51badf22a90e1272270d"
+}

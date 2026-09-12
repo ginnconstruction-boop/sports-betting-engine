@@ -1,0 +1,24 @@
+{
+  "id": "67f7de4e114a7f1b733169de4af1ae92d26a5f125ac072c4fb1bcf8516d33a50",
+  "schema": 1,
+  "teamId": "2229",
+  "teamName": "Florida International Panthers",
+  "season": 2026,
+  "eventId": "401866414",
+  "playerId": null,
+  "domain": "market",
+  "field": "market.provider",
+  "value": "Draft Kings",
+  "effectiveFrom": "2026-09-12T21:20:54.977Z",
+  "effectiveTo": "2026-09-13T04:00:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401866414",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:54.977Z",
+    "retrievedAt": "2026-09-12T21:20:54.977Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "d11304b9da73f430e75e5c736c32bd7d747f54eebae8ca801ae643ee9cd827fd"
+}

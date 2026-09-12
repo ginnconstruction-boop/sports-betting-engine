@@ -1,0 +1,24 @@
+{
+  "id": "1c2c556c24a2cc8582e5b47a52661ec80a48ee09a11450a0a24f0eda7781330c",
+  "schema": 1,
+  "teamId": "68",
+  "teamName": "Boise State Broncos",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "coaching",
+  "field": "coaching.ingestionStatus",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.339Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "CollegeFootballData",
+    "url": "https://api.collegefootballdata.com/",
+    "tier": 3,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.339Z",
+    "retrievedAt": "2026-09-12T21:20:55.339Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "fd0010e2185a7c42f6e0e91972291a1f8f21314593e43e58275c1ee943c2393d"
+}

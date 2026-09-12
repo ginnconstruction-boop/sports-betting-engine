@@ -1,0 +1,24 @@
+{
+  "id": "6c8fef6329c9eac7fa73dcc00cb61b7af62a9d1a016c7c556a96dacb9d1eb192",
+  "schema": 1,
+  "teamId": "2226",
+  "teamName": "Florida Atlantic Owls",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.sourceStatus",
+  "value": "SUCCESS",
+  "effectiveFrom": "2026-09-12T21:20:55.338Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.338Z",
+    "retrievedAt": "2026-09-12T21:20:55.338Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "441b8d67900f49a197f4229c599a7bb56058f95fe405bce32549930348b99f6e"
+}

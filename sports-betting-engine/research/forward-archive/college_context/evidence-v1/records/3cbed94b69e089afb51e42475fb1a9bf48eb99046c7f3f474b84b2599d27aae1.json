@@ -1,0 +1,24 @@
+{
+  "id": "3cbed94b69e089afb51e42475fb1a9bf48eb99046c7f3f474b84b2599d27aae1",
+  "schema": 1,
+  "teamId": "57",
+  "teamName": "Florida Gators",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.classification",
+  "value": "FBS",
+  "effectiveFrom": "2026-09-12T21:20:55.337Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.337Z",
+    "retrievedAt": "2026-09-12T21:20:55.337Z"
+  },
+  "verification": "CORROBORATED",
+  "rawPayloadHash": "16b8170bdbff0ee0a6bf051f5e139b9466238f1fecf642bc4543e3af9475732d"
+}

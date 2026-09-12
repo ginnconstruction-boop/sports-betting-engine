@@ -1,0 +1,24 @@
+{
+  "id": "4f09fc815f616d55fe5ec738a5bc1e20f6d98d79034c59e11990ea2825627d7d",
+  "schema": 1,
+  "teamId": "2294",
+  "teamName": "Iowa Hawkeyes",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.depthTier.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.338Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.338Z",
+    "retrievedAt": "2026-09-12T21:20:55.338Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "2224ffcea0ae96ed8d1233fc8e7f9d44894e21685c5b2c086457ea5dd21817bf"
+}

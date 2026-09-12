@@ -1,0 +1,24 @@
+{
+  "id": "44809cb1a73d72b21fbd21584fe1758fbb9a759988a18037d0ad27570e8d12e3",
+  "schema": 1,
+  "teamId": "21",
+  "teamName": "San Diego State Aztecs",
+  "season": 2026,
+  "eventId": null,
+  "playerId": null,
+  "domain": "talent",
+  "field": "talent.depthTier.diagnostic",
+  "value": "NO_PROVIDER_CONFIGURED",
+  "effectiveFrom": "2026-09-12T21:20:55.338Z",
+  "effectiveTo": null,
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.338Z",
+    "retrievedAt": "2026-09-12T21:20:55.338Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "16e6a595ada9a2fa0b2c9ca3a82fa5b0f24ac3e7a61ecff04d8ecc3f8b1c30f2"
+}

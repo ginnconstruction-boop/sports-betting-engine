@@ -1,0 +1,24 @@
+{
+  "id": "12b71f1821c614918991411e880e9b4eb6a0aac0948738c000bda97b20c6321c",
+  "schema": 1,
+  "teamId": "290",
+  "teamName": "Georgia Southern Eagles",
+  "season": 2026,
+  "eventId": "401858219",
+  "playerId": null,
+  "domain": "injuries",
+  "field": "injuries.ingestionStatus",
+  "value": "SOURCE_RETURNED_EMPTY",
+  "effectiveFrom": "2026-09-12T21:20:55.141Z",
+  "effectiveTo": "2026-09-13T05:30:00.000Z",
+  "source": {
+    "name": "ESPN",
+    "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401858219",
+    "tier": 2,
+    "reliability": "MEDIUM",
+    "publishedAt": "2026-09-12T21:20:55.141Z",
+    "retrievedAt": "2026-09-12T21:20:55.141Z"
+  },
+  "verification": "REPORTED",
+  "rawPayloadHash": "44406bd1d80736979039ddb8e99897e0ad09103442eb1c94cc541a398e6dde4e"
+}
