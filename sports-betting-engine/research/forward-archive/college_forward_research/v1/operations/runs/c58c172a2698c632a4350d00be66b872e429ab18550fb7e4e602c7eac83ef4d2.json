@@ -1,0 +1,25 @@
+{
+  "runId": "c58c172a2698c632a4350d00be66b872e429ab18550fb7e4e602c7eac83ef4d2",
+  "schemaVersion": "college-forward-operations-v1",
+  "captureEventId": "2026-09-15-0700-ct",
+  "trigger": "SCHEDULED_0700_CT",
+  "scheduledFor": "2026-09-15T12:00:00.000Z",
+  "startedAt": "2026-09-15T16:27:01.025Z",
+  "completedAt": "2026-09-15T16:27:01.709Z",
+  "dryRun": false,
+  "status": "DEGRADED",
+  "observations": [],
+  "requestPlan": [],
+  "metrics": {
+    "apiRequests": 3,
+    "cacheHits": 0,
+    "cfbdRequests": 0,
+    "marketRequests": 0
+  },
+  "deferred": [],
+  "providerFailures": [],
+  "discoveryFailures": [
+    "Odds-provider free event discovery failed: [getUpcomingEvents(americanfootball_ncaaf)] Invalid or unauthorized API key. Check ODDS_API_KEY."
+  ],
+  "idempotentRetry": false
+}
