@@ -1,0 +1,27 @@
+{
+  "runId": "2db486a119901fabef97afb1d4ef800067f0ef8e57b5e4204748f7f038f54636",
+  "schemaVersion": "college-forward-operations-v1",
+  "captureEventId": "2026-09-27-0700-ct",
+  "trigger": "SCHEDULED_0700_CT",
+  "scheduledFor": "2026-09-27T12:00:00.000Z",
+  "startedAt": "2026-09-27T16:33:02.385Z",
+  "completedAt": "2026-09-27T16:33:03.200Z",
+  "dryRun": false,
+  "status": "DEGRADED",
+  "observations": [],
+  "requestPlan": [],
+  "metrics": {
+    "apiRequests": 1,
+    "cacheHits": 0,
+    "cfbdRequests": 0,
+    "marketRequests": 0
+  },
+  "deferred": [],
+  "providerFailures": [],
+  "discoveryFailures": [
+    "Odds-provider free event discovery failed: [getUpcomingEvents(americanfootball_ncaaf)] Invalid or unauthorized API key. Check ODDS_API_KEY.",
+    "ESPN group 80 discovery failed: NFL data source returned HTTP 400",
+    "ESPN group 81 discovery failed: NFL data source returned HTTP 400"
+  ],
+  "idempotentRetry": false
+}
