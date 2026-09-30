@@ -307,6 +307,12 @@
       "captureEventId": "2026-09-30-0700-ct",
       "completedAt": "2026-09-30T17:42:50.242Z",
       "trigger": "SCHEDULED_0700_CT"
+    },
+    {
+      "id": "6aa8c7572eff352bc1899ab805a0d89239f935b0a60a9164e3ea39c6c655274a",
+      "captureEventId": "2026-09-30-1400-ct",
+      "completedAt": "2026-09-30T22:53:59.132Z",
+      "trigger": "SCHEDULED_1400_CT"
     }
   ]
 }
