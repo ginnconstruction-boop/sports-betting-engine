@@ -1,0 +1,11 @@
+{
+  "schemaVersion": "college-forward-monitoring-v1-manifest",
+  "generatedAt": "2026-10-13T01:12:45.000Z",
+  "artifactHash": "9b33ead8cfdac0053b2578759c762626efe33ab1595427ab07604af70b2c57e1",
+  "datasetHash": "460f3a866f4010c6af5f2b09eec77b5a373cce0da11afb19c2e6687ca2ead23e",
+  "files": [
+    "artifact.json",
+    "manifest.json",
+    "report.md"
+  ]
+}
