@@ -673,6 +673,12 @@
       "captureEventId": "2026-10-30-1400-ct",
       "completedAt": "2026-10-30T22:53:53.007Z",
       "trigger": "SCHEDULED_1400_CT"
+    },
+    {
+      "id": "b7c71263d2b79935fc6e81908c978ebe6854a66c78296e3b7ae534ba40d8f602",
+      "captureEventId": "2026-10-31-0700-ct",
+      "completedAt": "2026-10-31T16:56:04.654Z",
+      "trigger": "SCHEDULED_0700_CT"
     }
   ]
 }
