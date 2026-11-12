@@ -817,6 +817,12 @@
       "captureEventId": "2026-11-11-1400-ct",
       "completedAt": "2026-11-12T01:51:52.074Z",
       "trigger": "SCHEDULED_1400_CT"
+    },
+    {
+      "id": "d069f296d167dcbda04c802c2c2c1c0d6d04529950add2bc2b9cf91732f8fb86",
+      "captureEventId": "2026-11-12-0700-ct",
+      "completedAt": "2026-11-12T20:40:26.709Z",
+      "trigger": "SCHEDULED_0700_CT"
     }
   ]
 }
